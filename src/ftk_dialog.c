@@ -77,6 +77,8 @@ int ftk_dialog_run(FtkWidget* thiz)
 	return_val_if_fail(ftk_widget_type(thiz) == FTK_DIALOG, RET_FAIL);
 
 	ftk_main_loop_run(priv->main_loop);
+	ftk_main_loop_destroy(priv->main_loop);
+	priv->main_loop = NULL;
 
 	return ftk_widget_id(ftk_window_get_focus(thiz));
 }
