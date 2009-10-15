@@ -27,7 +27,8 @@ Ret idle(void* user_data)
 int main(int argc, char* argv[])
 {
 	FtkSource* source = NULL;
-	FtkMainLoop* thiz = ftk_main_loop_create();
+	FtkSourcesManager* sources_manager = ftk_sources_manager_create(64);
+	FtkMainLoop* thiz = ftk_main_loop_create(sources_manager);
 
 	source = ftk_source_idle_create(idle, NULL);
 	ftk_main_loop_add_source(thiz, source);
@@ -41,6 +42,7 @@ int main(int argc, char* argv[])
 	ftk_main_loop_run(thiz);
 	fflush(stdout);
 	ftk_main_loop_destroy(thiz);
+	ftk_sources_manager_destroy(sources_manager);
 
 	return 0;
 }

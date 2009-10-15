@@ -45,6 +45,7 @@ typedef struct _PrivInfo
 
 static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 {
+	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
 	switch(event->type)
 	{
@@ -58,7 +59,7 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			if(priv->button_down && priv->listener != NULL)
 			{
-				priv->listener(priv->ctx, thiz);
+				ret = priv->listener(priv->ctx, thiz);
 			}
 			priv->button_down = 0;
 			ftk_logd("%s: FTK_EVT_MOUSE_UP\n", __func__);
@@ -69,14 +70,14 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 			ftk_logd("%s: FTK_EVT_KEY_DOWN\n", __func__);
 			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
 			{
-				priv->listener(priv->ctx, thiz);
+				ret = priv->listener(priv->ctx, thiz);
 			}
 			break;
 		}
 		default:break;
 	}
 
-	return RET_OK;
+	return ret;
 }
 
 static Ret ftk_button_on_paint(FtkWidget* thiz)

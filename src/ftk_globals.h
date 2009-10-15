@@ -36,6 +36,7 @@
 #include "ftk_display.h"
 #include "ftk_wnd_manager.h"
 #include "ftk_bitmap_factory.h"
+#include "ftk_sources_manager.h"
 
 FtkFont*          ftk_default_font(void);
 FtkDisplay*       ftk_default_display(void);
@@ -43,6 +44,7 @@ FtkMainLoop*      ftk_default_main_loop(void);
 FtkLogLevel       ftk_default_log_level(void);
 FtkWndManager*    ftk_default_wnd_manager(void);
 FtkBitmapFactory* ftk_default_bitmap_factory(void);
+FtkSourcesManager* ftk_default_sources_manager(void);
 
 void ftk_set_font(FtkFont* font);
 void ftk_set_display(FtkDisplay* display);
@@ -50,6 +52,7 @@ void ftk_set_main_loop(FtkMainLoop* main_loop);
 void ftk_set_log_level(FtkLogLevel level);
 void ftk_set_wnd_manager(FtkWndManager* wnd_manager);
 void ftk_set_bitmap_factory(FtkBitmapFactory* bitmap_factory);
+void ftk_set_sources_manager(FtkSourcesManager* sources_manager);
 
 #endif/*FTK_GLOBALS_H*/
 

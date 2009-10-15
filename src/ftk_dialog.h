@@ -1,7 +1,7 @@
 /*
- * File: ftk_main_loop.h    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   main loop.
+ * File: ftk_dialog.h    
+ * Author: Li XianJing <xianjimli@hotmail.com>
+ * Brief:  dialog
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,23 +25,17 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-15 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_MAIN_LOOP_H
-#define FTK_MAIN_LOOP_H
 
-#include "ftk_sources_manager.h"
+#ifndef FTK_DIALOG_H
+#define FTK_DIALOG_H
+#include "ftk_window.h"
 
-struct _FtkMainLoop;
-typedef struct _FtkMainLoop FtkMainLoop;
+FtkWidget* ftk_dialog_create(int x, int y, int width, int height);
+int ftk_dialog_run(FtkWidget* thiz);
 
-FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager);
-Ret  ftk_main_loop_run(FtkMainLoop* thiz);
-Ret  ftk_main_loop_quit(FtkMainLoop* thiz);
-Ret  ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source);
-Ret  ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source);
-void ftk_main_loop_destroy(FtkMainLoop* thiz);
+#endif/*FTK_DIALOG_H*/
 
-#endif/*FTK_MAIN_LOOP_H*/
 

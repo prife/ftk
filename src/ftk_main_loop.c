@@ -28,6 +28,8 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+#include "ftk_log.h"
 #include "ftk_main_loop.h"
 
 #define MAX_SOURCES 32
@@ -38,7 +40,7 @@ struct _FtkMainLoop
 	int write_fd;
 	fd_set fdset;
 	int running;
-	FtkSource* sources[MAX_SOURCES];
+	FtkSourcesManager* sources_manager;
 };
 
 typedef enum _FtkRequestType
@@ -56,16 +58,19 @@ typedef struct _FtkRequest
 	void* data2;
 }FtkRequest;
 
-FtkMainLoop* ftk_main_loop_create()
+FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager)
 {
 	int pipes[2] = {0};
-	FtkMainLoop* thiz = (FtkMainLoop*)FTK_ZALLOC(sizeof(FtkMainLoop));
-	
+	FtkMainLoop* thiz = NULL;
+	return_val_if_fail(sources_manager != NULL, NULL);
+
+	thiz = (FtkMainLoop*)FTK_ZALLOC(sizeof(FtkMainLoop));
 	if(thiz != NULL)
 	{
 		pipe(pipes);
 		thiz->read_fd  = pipes[0];
 		thiz->write_fd = pipes[1];
+		thiz->sources_manager = sources_manager;
 		FD_ZERO(&thiz->fdset);
 	}
 
@@ -74,7 +79,6 @@ FtkMainLoop* ftk_main_loop_create()
 
 static Ret ftk_main_loop_handle_request(FtkMainLoop* thiz)
 {
-	int i = 0;
 	int ret = 0;
 	FtkRequest request = {0};
 
@@ -90,27 +94,12 @@ static Ret ftk_main_loop_handle_request(FtkMainLoop* thiz)
 		}
 		case FTK_REQUEST_ADD_SOURCE:
 		{
-			for(i = 0; i < MAX_SOURCES; i++)
-			{
-				if(thiz->sources[i] == NULL)
-				{
-					thiz->sources[i] = (FtkSource*)request.data;
-					break;
-				}
-			}
+			ftk_sources_manager_add(thiz->sources_manager, request.data);
 			break;
 		}
 		case FTK_REQUEST_REMOVE_SOURCE:
 		{
-			for(i = 0; i < MAX_SOURCES; i++)
-			{
-				if(thiz->sources[i] == request.data)
-				{
-					ftk_source_unref(thiz->sources[i]);
-					thiz->sources[i] = NULL;
-					break;
-				}
-			}
+			ftk_sources_manager_remove(thiz->sources_manager, request.data);
 			break;
 		}
 		default:break;
@@ -139,13 +128,9 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		FD_SET(thiz->read_fd, &thiz->fdset);
 
 		mfd = thiz->read_fd;
-		for(i = 0; i < MAX_SOURCES; i++)
+		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager); i++)
 		{
-			if((source = thiz->sources[i]) == NULL)
-			{
-				continue;
-			}
-
+			source = ftk_sources_manager_get(thiz->sources_manager, i);
 			if((fd = ftk_source_get_fd(source)) >= 0)
 			{
 				FD_SET(fd, &thiz->fdset);
@@ -164,20 +149,26 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		tv.tv_usec = (wait_time%1000) * 1000;
 		ret = select(mfd + 1, &thiz->fdset, NULL, NULL, &tv);
 		
-		for(i = 0; i < MAX_SOURCES; i++)
+		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
 		{
-			if((source = thiz->sources[i]) == NULL)
+			if(ftk_sources_manager_need_refresh(thiz->sources_manager))
 			{
-				continue;
+				break;
 			}
+
+			source = ftk_sources_manager_get(thiz->sources_manager, i);
 
 			if((fd = ftk_source_get_fd(source)) >= 0 && FD_ISSET(fd, &thiz->fdset))
 			{
 				if(ftk_source_dispatch(source) != RET_OK)
 				{
-					thiz->sources[i] = NULL;
-					ftk_source_unref(source);
-					printf("%s:%d remove %p\n", __func__, __LINE__, source);
+					/*as current is removed, the next will be move to current, so dont call i++*/
+					ftk_sources_manager_remove(thiz->sources_manager, source);
+					ftk_logd("%s:%d remove %p\n", __func__, __LINE__, source);
+				}
+				else
+				{
+					i++;
 				}
 				continue;
 			}
@@ -186,12 +177,18 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 			{
 				if(ftk_source_dispatch(source) != RET_OK)
 				{
-					thiz->sources[i] = NULL;
-					ftk_source_unref(source);
-					printf("%s:%d remove %p\n", __func__, __LINE__, source);
+					/*as current is removed, the next will be move to current, so dont call i++*/
+					ftk_sources_manager_remove(thiz->sources_manager, source);
+					ftk_logd("%s:%d remove %p\n", __func__, __LINE__, source);
+				}
+				else
+				{
+					i++;
 				}
 				continue;
 			}
+
+			i++;
 		}
 
 		if(FD_ISSET(thiz->read_fd, &thiz->fdset))
@@ -243,19 +240,8 @@ Ret ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source)
 
 void ftk_main_loop_destroy(FtkMainLoop* thiz)
 {
-	int i = 0;
-	FtkSource* source = NULL;
-
 	if(thiz != NULL)
 	{
-		for(i = 0; i < MAX_SOURCES; i++)
-		{
-			if((source = thiz->sources[i]) != NULL)
-			{
-				ftk_source_unref(source);
-			}
-		}
-
 		close(thiz->read_fd);
 		close(thiz->write_fd);
 		FTK_ZFREE(thiz, sizeof(FtkMainLoop));

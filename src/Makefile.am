@@ -8,12 +8,14 @@ libftk_la_SOURCES=\
 	fontdata.c            ftk_label.c               ftk_source_timer.c \
 	ftk_bitmap.c          ftk_font.c                ftk_main_loop.c     ftk_util.c \
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
-	ftk.c                 ftk_image_png_decoder.c   ftk_window.c \
-	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c 
+	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
+	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
+	ftk_dialog.c
 
-noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4\
+noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4 demo5 \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
-	bitmap_factory_test main_loop_test png_test log_test util_test 
+	bitmap_factory_test main_loop_test png_test log_test util_test \
+	sources_manager_test
 
 if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
@@ -30,6 +32,9 @@ endif
 
 INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\""
 MYLDFLAGS=.libs/libftk.a
+
+sources_manager_test_SOURCES=sources_manager_test.c
+sources_manager_test_LDFLAGS=$(MYLDFLAGS)
 
 util_test_SOURCES=util_test.c
 util_test_LDFLAGS=$(MYLDFLAGS)
@@ -63,6 +68,9 @@ demo3_LDFLAGS=$(MYLDFLAGS)
 
 demo4_SOURCES=demo4.c
 demo4_LDFLAGS=$(MYLDFLAGS)
+
+demo5_SOURCES=demo5.c
+demo5_LDFLAGS=$(MYLDFLAGS)
 
 canvas_test_SOURCES=canvas_test.c
 canvas_test_LDFLAGS=$(MYLDFLAGS)

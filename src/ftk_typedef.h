@@ -70,12 +70,16 @@ typedef enum _Ret
 	RET_CONTINUE,
 	RET_FOUND,
 	RET_NEXT,
+	RET_QUIT,
 	RET_OUT_OF_SPACE
 }Ret;
 
 typedef enum _FtkWidgetType
 {
 	FTK_WINDOW = 1,
+	FTK_DIALOG,
+	FTK_PANEL,
+	FTK_MENU,
 	FTK_LABEL,
 	FTK_BUTTON,
 	FTK_IMAGE,
@@ -107,6 +111,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 
 #define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
+#define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL
 
 #endif/*FTK_TYPEDEF_H*/
 

@@ -153,13 +153,14 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 {
+	Ret ret = RET_OK;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
 	{
 		case FTK_EVT_UPDATE:
 		{
-			ftk_window_update(thiz, &event->u.rect);
+			ret = ftk_window_update(thiz, &event->u.rect);
 			break;
 		}
 		case FTK_EVT_SHOW:
@@ -176,13 +177,13 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MOUSE_UP:
 		case FTK_EVT_MOUSE_MOVE:
 		{
-			ftk_window_on_mouse_event(thiz, event);
+			ret = ftk_window_on_mouse_event(thiz, event);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		case FTK_EVT_KEY_UP:
 		{
-			ftk_window_on_key_event(thiz, event);
+			ret = ftk_window_on_key_event(thiz, event);
 			break;
 		}
 		default:
@@ -192,7 +193,7 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 	}
 
-	return RET_OK;
+	return ret;
 }
 
 static Ret ftk_window_on_paint(FtkWidget* thiz)

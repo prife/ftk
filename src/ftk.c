@@ -75,7 +75,7 @@ static Ret ftk_init_input(void)
 		source = ftk_source_input_create(filename, (FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
 		if(source != NULL)
 		{
-			ftk_main_loop_add_source(ftk_default_main_loop(), source);
+			ftk_sources_manager_add(ftk_default_sources_manager(), source);
 		}
 	}
 	closedir(dir);
@@ -100,6 +100,12 @@ static Ret ftk_init_bitmap_factory(void)
 
 static void ftk_deinit(void)
 {
+	if(ftk_default_sources_manager() != NULL)
+	{
+		ftk_sources_manager_destroy(ftk_default_sources_manager());
+		ftk_set_sources_manager(NULL);
+	}
+
 	if(ftk_default_main_loop() != NULL)
 	{
 		ftk_main_loop_destroy(ftk_default_main_loop());
@@ -138,7 +144,9 @@ Ret ftk_init(int argc, char* argv[])
 {
 	FtkSource* source = NULL;
 	FtkDisplay* display = NULL;
-	ftk_set_main_loop(ftk_main_loop_create());
+
+	ftk_set_sources_manager(ftk_sources_manager_create(64));
+	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
 	ftk_set_wnd_manager(ftk_wnd_manager_create(ftk_default_main_loop()));
 
 	ftk_init_bitmap_factory();
@@ -155,7 +163,7 @@ Ret ftk_init(int argc, char* argv[])
 #ifdef USE_LINUX_X11
 	display = ftk_display_x11_create(&source, (FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
 	ftk_set_display(display);
-	ftk_main_loop_add_source(ftk_default_main_loop(), source);
+	ftk_sources_manager_add(ftk_default_sources_manager(), source);
 #endif
 
 	atexit(ftk_deinit);

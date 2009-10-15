@@ -39,6 +39,7 @@ struct _FtkGlobals
 	FtkLogLevel  log_level;
 	FtkWndManager* wnd_manager;
 	FtkBitmapFactory* bitmap_factory;
+	FtkSourcesManager* sources_manager;
 }g_globals;
 
 FtkFont*          ftk_default_font(void)
@@ -69,6 +70,11 @@ FtkWndManager*    ftk_default_wnd_manager(void)
 FtkBitmapFactory* ftk_default_bitmap_factory(void)
 {
 	return g_globals.bitmap_factory;
+}
+
+FtkSourcesManager* ftk_default_sources_manager(void)
+{
+	return g_globals.sources_manager;
 }
 
 void ftk_set_font(FtkFont* font)
@@ -113,3 +119,9 @@ void ftk_set_bitmap_factory(FtkBitmapFactory* bitmap_factory)
 	return;
 }
 
+void ftk_set_sources_manager(FtkSourcesManager* sources_manager)
+{
+	g_globals.sources_manager = sources_manager;
+
+	return;
+}

@@ -38,6 +38,7 @@ extern "C" {
 
 #include "ftk_log.h"
 #include "ftk_bitmap.h"
+#include "ftk_dialog.h"
 #include "ftk_window.h"
 #include "ftk_label.h"
 #include "ftk_image.h"

@@ -1,7 +1,7 @@
 /*
- * File: ftk_main_loop.h    
+ * File: ftk_sources_manager.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   main loop.
+ * Brief:   sources manager
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,23 +25,29 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-15 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_MAIN_LOOP_H
-#define FTK_MAIN_LOOP_H
 
-#include "ftk_sources_manager.h"
+#ifndef FTK_SOURCE_MANAGER_H
+#define FTK_SOURCE_MANAGER_H
 
-struct _FtkMainLoop;
-typedef struct _FtkMainLoop FtkMainLoop;
+#include "ftk_source.h"
 
-FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager);
-Ret  ftk_main_loop_run(FtkMainLoop* thiz);
-Ret  ftk_main_loop_quit(FtkMainLoop* thiz);
-Ret  ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source);
-Ret  ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source);
-void ftk_main_loop_destroy(FtkMainLoop* thiz);
+struct _FtkSourcesManager;
+typedef struct _FtkSourcesManager FtkSourcesManager;
 
-#endif/*FTK_MAIN_LOOP_H*/
+FtkSourcesManager* ftk_sources_manager_create(int max_source_nr);
+Ret  ftk_sources_manager_add(FtkSourcesManager* thiz, FtkSource* source);
+Ret  ftk_sources_manager_remove(FtkSourcesManager* thiz, FtkSource* source);
+int  ftk_sources_manager_get_count(FtkSourcesManager* thiz);
+FtkSource* ftk_sources_manager_get(FtkSourcesManager* thiz, int i);
+
+/*used for modal dialog, tell the default-main-loop break current loop and reselect.*/
+int ftk_sources_manager_need_refresh(FtkSourcesManager* thiz);
+Ret  ftk_sources_manager_set_need_refresh(FtkSourcesManager* thiz);
+
+void ftk_sources_manager_destroy(FtkSourcesManager* thiz);
+
+#endif/*FTK_SOURCE_MANAGER_H*/
 

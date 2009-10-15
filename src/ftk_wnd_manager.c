@@ -57,7 +57,7 @@ FtkWndManager* ftk_wnd_manager_create(FtkMainLoop* main_loop)
 		thiz->main_loop = main_loop;
 		thiz->primary_source = ftk_source_primary_create(
 			(FtkOnEvent)ftk_wnd_manager_dispatch, thiz);
-		ftk_main_loop_add_source(main_loop, thiz->primary_source);
+		ftk_sources_manager_add(ftk_default_sources_manager(), thiz->primary_source);
 	}
 
 	return thiz;
