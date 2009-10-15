@@ -40,6 +40,12 @@ typedef struct _FtkSourcesManager FtkSourcesManager;
 FtkSourcesManager* ftk_sources_manager_create(int max_source_nr);
 Ret  ftk_sources_manager_add(FtkSourcesManager* thiz, FtkSource* source);
 Ret  ftk_sources_manager_remove(FtkSourcesManager* thiz, FtkSource* source);
+
+Ret  ftk_sources_manager_add_async(FtkSourcesManager* thiz, FtkSource* source);
+Ret  ftk_sources_manager_remove_async(FtkSourcesManager* thiz, FtkSource* source);
+Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz);
+int  ftk_sources_manager_get_async_pipe(FtkSourcesManager* thiz);
+
 int  ftk_sources_manager_get_count(FtkSourcesManager* thiz);
 FtkSource* ftk_sources_manager_get(FtkSourcesManager* thiz, int i);
 

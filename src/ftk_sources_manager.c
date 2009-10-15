@@ -33,11 +33,25 @@
 
 struct _FtkSourcesManager
 {
+	int read_fd;
+	int write_fd;
 	int source_nr;
 	int max_source_nr;
 	int need_refresh;
 	FtkSource* sources[1];
 };
+
+typedef enum _FtkRequestType
+{
+	FTK_REQUEST_ADD_SOURCE,
+	FTK_REQUEST_REMOVE_SOURCE,
+}FtkRequestType;
+
+typedef struct _FtkRequest
+{
+	int   type;
+	void* data;
+}FtkRequest;
 
 #define MAX_SOURCES 32
 FtkSourcesManager* ftk_sources_manager_create(int max_source_nr)
@@ -49,6 +63,10 @@ FtkSourcesManager* ftk_sources_manager_create(int max_source_nr)
 
 	if(thiz != NULL)
 	{
+		int pipes[2] = {0};
+		pipe(pipes);
+		thiz->read_fd  = pipes[0];
+		thiz->write_fd = pipes[1];
 		thiz->max_source_nr = max_source_nr;
 	}
 
@@ -102,6 +120,65 @@ FtkSource* ftk_sources_manager_get(FtkSourcesManager* thiz, int i)
 	return_val_if_fail(thiz != NULL && i < thiz->source_nr, NULL);
 
 	return thiz->sources[i];
+}
+
+Ret  ftk_sources_manager_add_async(FtkSourcesManager* thiz, FtkSource* source)
+{
+	int ret = 0;
+	FtkRequest request = {0};
+	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
+
+	request.data = source;
+	request.type = FTK_REQUEST_ADD_SOURCE;
+	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
+
+	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
+}
+
+Ret  ftk_sources_manager_remove_async(FtkSourcesManager* thiz, FtkSource* source)
+{
+	int ret = 0;
+	FtkRequest request = {0};
+	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
+
+	request.data = source;
+	request.type = FTK_REQUEST_REMOVE_SOURCE;
+	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
+
+	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
+}
+
+Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz)
+{
+	int ret = 0;
+	FtkRequest request = {0};
+
+	ret = read(thiz->read_fd, &request, sizeof(FtkRequest));
+	return_val_if_fail(ret == sizeof(FtkRequest), RET_FAIL);
+
+	switch(request.type)
+	{
+		case FTK_REQUEST_ADD_SOURCE:
+		{
+			ftk_sources_manager_add(thiz, request.data);
+			break;
+		}
+		case FTK_REQUEST_REMOVE_SOURCE:
+		{
+			ftk_sources_manager_remove(thiz, request.data);
+			break;
+		}
+		default:break;
+	}
+
+	return RET_OK;
+}
+
+int  ftk_sources_manager_get_async_pipe(FtkSourcesManager* thiz)
+{
+	return_val_if_fail(thiz != NULL, -1);
+
+	return thiz->read_fd;
 }
 
 int ftk_sources_manager_need_refresh(FtkSourcesManager* thiz)

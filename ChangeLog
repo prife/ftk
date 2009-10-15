@@ -1,0 +1,3 @@
+2009-10-15 Li XianJing <xianjimli@hotmail.com>
+	* refactor main loop.
+	* add modal dialog support.

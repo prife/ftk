@@ -46,16 +46,12 @@ struct _FtkMainLoop
 typedef enum _FtkRequestType
 {
 	FTK_REQUEST_QUIT = 1,
-	FTK_REQUEST_ADD_SOURCE,
-	FTK_REQUEST_REMOVE_SOURCE,
 }FtkRequestType;
 
 typedef struct _FtkRequest
 {
 	int   type;
 	void* data;
-	void* data1;
-	void* data2;
 }FtkRequest;
 
 FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager)
@@ -92,16 +88,6 @@ static Ret ftk_main_loop_handle_request(FtkMainLoop* thiz)
 			thiz->running = 0;
 			break;
 		}
-		case FTK_REQUEST_ADD_SOURCE:
-		{
-			ftk_sources_manager_add(thiz->sources_manager, request.data);
-			break;
-		}
-		case FTK_REQUEST_REMOVE_SOURCE:
-		{
-			ftk_sources_manager_remove(thiz->sources_manager, request.data);
-			break;
-		}
 		default:break;
 	}
 
@@ -126,8 +112,11 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		n = 0;
 		FD_ZERO(&thiz->fdset);
 		FD_SET(thiz->read_fd, &thiz->fdset);
+		FD_SET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset);
+	
+		mfd = thiz->read_fd > ftk_sources_manager_get_async_pipe(thiz->sources_manager) ?
+			thiz->read_fd : ftk_sources_manager_get_async_pipe(thiz->sources_manager);
 
-		mfd = thiz->read_fd;
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager); i++)
 		{
 			source = ftk_sources_manager_get(thiz->sources_manager, i);
@@ -195,6 +184,11 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		{
 			ftk_main_loop_handle_request(thiz);
 		}
+
+		if(FD_ISSET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset))
+		{
+			ftk_sources_manager_handle_async(thiz->sources_manager);
+		}
 	}
 
 	return RET_OK;
@@ -214,28 +208,16 @@ Ret ftk_main_loop_quit(FtkMainLoop* thiz)
 
 Ret ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source)
 {
-	int ret = 0;
-	FtkRequest request = {0};
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 
-	request.data = source;
-	request.type = FTK_REQUEST_ADD_SOURCE;
-	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
-
-	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
+	return ftk_sources_manager_add_async(thiz->sources_manager, source);
 }
 
 Ret ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source)
 {
-	int ret = 0;
-	FtkRequest request = {0};
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 
-	request.data = source;
-	request.type = FTK_REQUEST_REMOVE_SOURCE;
-	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
-
-	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
+	return ftk_sources_manager_remove_async(thiz->sources_manager, source);
 }
 
 void ftk_main_loop_destroy(FtkMainLoop* thiz)

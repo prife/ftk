@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_globals.h"
 #include "ftk_wnd_manager.h"
 #include "ftk_source_primary.h"
 
