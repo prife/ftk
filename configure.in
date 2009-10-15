@@ -1,0 +1,56 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.60])
+AC_INIT(ftk, 0.1, xianjimli@hotmail.com)
+AC_CONFIG_SRCDIR([src/ftk_canvas.h])
+AC_CONFIG_HEADERS([config.h])
+AM_INIT_AUTOMAKE(ftk, 0.1)
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_LIBTOOL
+
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-ljpeg':
+AC_CHECK_LIB([jpeg], [main])
+# FIXME: Replace `main' with a function in `-lpng':
+AC_CHECK_LIB([png], [main])
+
+# Checks for header files.
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
+
+AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd],
+                    [use which display/input backend])])
+
+case "$with_backend" in
+	linux-x11*) 
+		backend="x11"
+		CFLAGS="$CFLAGS -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM=\"\\\"$with_backend\\\"\"";
+		LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -lX11 -lXext";;
+	linux-vlcd*)
+		backend="fb"
+		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
+	*)
+		backend="fb"
+		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE";;
+esac
+
+echo with_backend=$with_backend
+
+AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
+AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_C_INLINE
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_FUNC_MMAP
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([gettimeofday memset munmap select strdup strstr])
+
+AC_CONFIG_FILES([ftk.pc
+				Makefile
+                 src/Makefile])
+AC_OUTPUT
