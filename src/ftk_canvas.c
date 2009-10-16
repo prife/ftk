@@ -55,6 +55,14 @@ FtkCanvas* ftk_canvas_create(int w, int h, FtkColor clear_color)
 	return thiz;
 }
 
+Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc)
+{
+	return_val_if_fail(thiz != NULL && gc != NULL, RET_FAIL);
+
+	thiz->gc.mask = 0;
+	return ftk_gc_copy(&thiz->gc, gc);
+}
+
 Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc)
 {
 	return_val_if_fail(thiz != NULL && gc != NULL, RET_FAIL);
@@ -95,10 +103,24 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 	x = x < 0 ? 0 : x;
 	y = y < 0 ? 0 : y;
 	h = (y + h) < height ? h : (height - y);
-
-	for(i = 0; i < h; i++)
+	
+	if(thiz->gc.mask & FTK_GC_LINE_MASK)
 	{
-		bits[width * (y + i) + x] = thiz->gc.fg;
+		unsigned int line_mask = thiz->gc.line_mask;
+		for(i = 0; i < h; i++)
+		{
+			if(FTK_MASK_BITS(line_mask, i))
+			{
+				bits[width * (y + i) + x] = thiz->gc.fg;
+			}
+		}
+	}
+	else
+	{
+		for(i = 0; i < h; i++)
+		{
+			bits[width * (y + i) + x] = thiz->gc.fg;
+		}
 	}
 
 	return RET_OK;
@@ -120,10 +142,23 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	y = y < 0 ? 0 : y;
 	w = (x + w) < width ? w : width - x;
 	bits += y * width;
-
-	for(i = 0; i < w; i++)
+	if(thiz->gc.mask & FTK_GC_LINE_MASK)
 	{
-		bits[x+i] = thiz->gc.fg;
+		unsigned int line_mask = thiz->gc.line_mask;
+		for(i = 0; i < w; i++)
+		{
+			if(FTK_MASK_BITS(line_mask, i))
+			{
+				bits[x+i] = thiz->gc.fg;
+			}
+		}
+	}
+	else
+	{
+		for(i = 0; i < w; i++)
+		{
+			bits[x+i] = thiz->gc.fg;
+		}
 	}
 
 	return RET_OK;
@@ -208,14 +243,15 @@ Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
 
 	if(x1 == x2)
 	{
-		ret = ftk_canvas_draw_vline(thiz, x1, MIN(y1, y2), MAX(y1, y2));
+		ret = ftk_canvas_draw_vline(thiz, x1, MIN(y1, y2), MAX(y1, y2) - MIN(y1, y2));
 	}
 	else if(y1 == y2)
 	{
-		ret = ftk_canvas_draw_hline(thiz, y1, MIN(x1, x2), MAX(x1, x2));
+		ret = ftk_canvas_draw_hline(thiz, MIN(x1, x2), y1, MAX(x1, x2) - MIN(x1, x2));
 	}
 	else
 	{
+		/*FIXME: support line style.*/
 		ret = ftk_canvas_draw_normal_line(thiz, x1, y1, x2, y2);
 	}
 

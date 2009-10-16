@@ -56,7 +56,6 @@ int main(int argc, char* argv[])
 
 		FtkCanvas* thiz = ftk_canvas_create(rect.width, rect.height, color);
 		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
-
 		for(i = 0; i < ftk_display_height(display); i++)
 		{
 			if(gc.fg.r < 0xff)
@@ -84,13 +83,22 @@ int main(int argc, char* argv[])
 		ftk_canvas_draw_ellipse(thiz, 100, 50, 50, 50, 0);
 		ftk_canvas_draw_ellipse(thiz, 150, 50, 50, 50, 0);
 		ftk_canvas_draw_ellipse(thiz, 200, 50, 50, 50, 1);
-
+		unsigned int line_mask = 0xaaaaaaaa;
+		gc.line_mask = line_mask;
+		gc.mask = FTK_GC_LINE_MASK;
+		ftk_canvas_set_gc(thiz, &gc);
+		ftk_canvas_draw_line(thiz, 100, 200, 200, 200);
+		ftk_canvas_draw_line(thiz, 100, 200, 100, 300);
+		ftk_canvas_draw_line(thiz, 100, 300, 200, 300);
+		ftk_canvas_draw_line(thiz, 200, 200, 200, 300);
+		ftk_canvas_draw_line(thiz, 200, 200, 300, 300);
 		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
 
 		assert(ftk_canvas_font_height(thiz) == 16);
 		extent = ftk_canvas_get_extent(thiz, "李先静");
 		assert(strcmp(ftk_canvas_available(thiz, "李先静是", extent, &nr), "是") == 0 && nr == 3);
 		printf("extent=%d\n", ftk_canvas_get_extent(thiz, "李先静"));
+
 
 		ftk_bitmap_unref(bitmap);
 		ftk_canvas_destroy(thiz);

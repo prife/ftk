@@ -40,6 +40,7 @@ typedef struct _PrivInfo
 	FtkDisplay* display;
 	FtkWidget*  focus_widget;
 	FtkWndManager* wnd_manager;
+	int fullscreen;
 }PrivInfo;
 
 Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
@@ -234,7 +235,7 @@ static void ftk_window_destroy(FtkWidget* thiz)
 Ret        ftk_window_set_title(FtkWidget* thiz, const char* title)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && title != NULL, RET_FAIL);
+	return_val_if_fail(priv != NULL && title != NULL, RET_FAIL);
 
 	FTK_FREE(priv->title);
 	priv->title = strdup(title);
@@ -245,7 +246,7 @@ Ret        ftk_window_set_title(FtkWidget* thiz, const char* title)
 const char*ftk_window_get_title(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, NULL);
+	return_val_if_fail(priv != NULL, NULL);
 
 	return priv->title;
 }
@@ -255,12 +256,34 @@ Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	int xoffset = 0;
 	int yoffset = 0;
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, RET_FAIL);
+	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	xoffset = ftk_widget_left(thiz) + rect->x;
 	yoffset = ftk_widget_top(thiz) + rect->y;
 
 	return ftk_display_update(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
+}
+
+Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_OK);
+
+	if(priv->fullscreen != fullscreen)
+	{
+		priv->fullscreen = fullscreen;
+		ftk_wnd_manager_update(priv->display);
+	}
+
+	return RET_OK;
+}
+
+int        ftk_window_is_fullscreen(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, 0);
+
+	return priv->fullscreen;
 }
 
 FtkWidget* ftk_window_create(int x, int y, int width, int height)
@@ -307,17 +330,6 @@ FtkWidget* ftk_window_create(int x, int y, int width, int height)
 	}
 
 	return thiz;
-}
-
-Ret ftk_window_attach(FtkWidget* thiz, FtkWndManager* wnd_manager)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && wnd_manager != NULL, RET_FAIL);
-
-	priv->wnd_manager = wnd_manager;
-	ftk_wnd_manager_add(wnd_manager, thiz);
-
-	return RET_OK;
 }
 
 #ifdef FTK_WINDOW_TEST

@@ -38,6 +38,7 @@ struct _FtkCanvas;
 typedef struct _FtkCanvas FtkCanvas;
 
 FtkCanvas* ftk_canvas_create(int w, int h, FtkColor clear_color);
+Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc);
 Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc);
 Ret ftk_canvas_draw_point(FtkCanvas* thiz, int x, int y);
 Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2);

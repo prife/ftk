@@ -41,6 +41,8 @@ FtkWidget* ftk_window_get_focus(FtkWidget* thiz);
 Ret        ftk_window_set_title(FtkWidget* thiz, const char* title);
 const char*ftk_window_get_title(FtkWidget* thiz);
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);
-Ret        ftk_window_attach(FtkWidget* thiz, FtkWndManager* wnd_manager);
+Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
+int        ftk_window_is_fullscreen(FtkWidget* thiz);
 
 #endif/*FTK_WINDOW_H*/
+

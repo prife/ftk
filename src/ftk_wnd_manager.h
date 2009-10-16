@@ -43,6 +43,7 @@ Ret  ftk_wnd_manager_grab(FtkWndManager* thiz, FtkWidget* window);
 Ret  ftk_wnd_manager_add(FtkWndManager* thiz, FtkWidget* window);
 Ret  ftk_wnd_manager_remove(FtkWndManager* thiz, FtkWidget* window);
 Ret  ftk_wnd_manager_dispatch(FtkWndManager* thiz, FtkEvent* event);
+Ret  ftk_wnd_manager_update(FtkWndManager* thiz);
 Ret  ftk_wnd_manager_queue_event(FtkWndManager* thiz, FtkEvent* event);
 Ret  ftk_wnd_manager_add_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx);
 Ret  ftk_wnd_manager_remove_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx);

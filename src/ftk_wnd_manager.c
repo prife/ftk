@@ -203,6 +203,13 @@ Ret  ftk_wnd_manager_dispatch(FtkWndManager* thiz, FtkEvent* event)
 	return RET_OK;
 }
 
+Ret  ftk_wnd_manager_update(FtkWndManager* thiz)
+{
+	/*FIXME: relayout the windows and update to display*/
+
+	return RET_OK;
+}
+
 Ret  ftk_wnd_manager_queue_event(FtkWndManager* thiz, FtkEvent* event)
 {
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);

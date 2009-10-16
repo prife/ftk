@@ -100,8 +100,8 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define return_if_fail(p) if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
 #define return_val_if_fail(p, val) if(!(p)) {printf("%s:%d "#p" failed.\n", __func__, __LINE__); return (val);}
 
-#define MIN(x1, x2) (x1) < (x2) ? (x1) : (x2)
-#define MAX(x1, x2) (x1) > (x2) ? (x1) : (x2)
+#define MIN(x1, x2) ((x1) < (x2) ? (x1) : (x2))
+#define MAX(x1, x2) ((x1) > (x2) ? (x1) : (x2))
 #define FTK_MAX_WINDOWS 32
 #define FTK_FOCUS_COLOR(c) {c.r = 0xff; c.g = 0x80; c.b = 0x80; c.a = 0xff;};
 #define FTK_P_IN_R(x, y, r) (((x) >= (r)->x && (x)<((r)->x+(r)->width)) && ((y) >= (r)->y && (y) < ((r)->y + (r)->height)))
@@ -112,6 +112,8 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
 #define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL
+
+#define FTK_MASK_BITS(val32, index) (((val32) << ((index)%32)) & 0x80000000)
 
 #endif/*FTK_TYPEDEF_H*/
 
