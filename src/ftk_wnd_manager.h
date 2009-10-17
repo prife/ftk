@@ -1,7 +1,7 @@
 /*
  * File: ftk_wnd_manager.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   a simple window manager. 
+ * Brief:   window manager interface.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -38,16 +38,104 @@
 struct _FtkWndManager;
 typedef struct _FtkWndManager FtkWndManager;
 
-FtkWndManager* ftk_wnd_manager_create(FtkMainLoop* main_loop);
-Ret  ftk_wnd_manager_grab(FtkWndManager* thiz, FtkWidget* window);
-Ret  ftk_wnd_manager_add(FtkWndManager* thiz, FtkWidget* window);
-Ret  ftk_wnd_manager_remove(FtkWndManager* thiz, FtkWidget* window);
-Ret  ftk_wnd_manager_dispatch(FtkWndManager* thiz, FtkEvent* event);
-Ret  ftk_wnd_manager_update(FtkWndManager* thiz);
-Ret  ftk_wnd_manager_queue_event(FtkWndManager* thiz, FtkEvent* event);
-Ret  ftk_wnd_manager_add_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx);
-Ret  ftk_wnd_manager_remove_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx);
-void ftk_wnd_manager_destroy(FtkWndManager* thiz);
+typedef Ret  (*FtkWndManagerGrab)(FtkWndManager* thiz, FtkWidget* window);
+typedef Ret  (*FtkWndManagerUngrab)(FtkWndManager* thiz, FtkWidget* window);
+typedef Ret  (*FtkWndManagerAdd)(FtkWndManager* thiz, FtkWidget* window);
+typedef Ret  (*FtkWndManagerRemove)(FtkWndManager* thiz, FtkWidget* window);
+typedef Ret  (*FtkWndManagerUpdate)(FtkWndManager* thiz);
+typedef Ret  (*FtkWndManagerQueueEvent)(FtkWndManager* thiz, FtkEvent* event);
+typedef Ret  (*FtkWndManagerDispatchEvent)(FtkWndManager* thiz, FtkEvent* event);
+typedef Ret  (*FtkWndManagerAddGlobalListener)(FtkWndManager* thiz, FtkListener listener, void* ctx);
+typedef Ret  (*FtkWndManagerRemoveGlobalListener)(FtkWndManager* thiz, FtkListener listener, void* ctx);
+typedef void (*FtkWndManagerDestroy)(FtkWndManager* thiz);
+
+struct _FtkWndManager
+{
+	FtkWndManagerGrab                 grab;
+	FtkWndManagerUngrab               ungrab;
+	FtkWndManagerAdd                  add;
+	FtkWndManagerRemove               remove;
+	FtkWndManagerUpdate               update;
+	FtkWndManagerQueueEvent           queue_event;
+	FtkWndManagerDispatchEvent        dispatch_event;
+	FtkWndManagerAddGlobalListener    add_global_listener;
+	FtkWndManagerRemoveGlobalListener remove_global_listener;
+	FtkWndManagerDestroy              destroy;
+
+	char priv[1];
+};
+
+static inline Ret  ftk_wnd_manager_grab(FtkWndManager* thiz, FtkWidget* window)
+{
+	return_val_if_fail(thiz != NULL && thiz->grab != NULL, RET_FAIL);
+
+	return thiz->grab(thiz, window);
+}
+
+static inline Ret  ftk_wnd_manager_ungrab(FtkWndManager* thiz, FtkWidget* window)
+{
+	return_val_if_fail(thiz != NULL && thiz->ungrab != NULL, RET_FAIL);
+
+	return thiz->ungrab(thiz, window);
+}
+
+static inline Ret  ftk_wnd_manager_add(FtkWndManager* thiz, FtkWidget* window)
+{
+	return_val_if_fail(thiz != NULL && thiz->add != NULL, RET_FAIL);
+
+	return thiz->add(thiz, window);
+}
+
+static inline Ret  ftk_wnd_manager_remove(FtkWndManager* thiz, FtkWidget* window)
+{
+	return_val_if_fail(thiz != NULL && thiz->remove != NULL, RET_FAIL);
+
+	return thiz->remove(thiz, window);
+}
+
+static inline Ret  ftk_wnd_manager_update(FtkWndManager* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->update != NULL, RET_FAIL);
+
+	return thiz->update(thiz);
+}
+
+static inline Ret  ftk_wnd_manager_queue_event(FtkWndManager* thiz, FtkEvent* event)
+{
+	return_val_if_fail(thiz != NULL && thiz->queue_event != NULL, RET_FAIL);
+
+	return thiz->queue_event(thiz, event);
+}
+
+static inline Ret  ftk_wnd_manager_dispatch_event(FtkWndManager* thiz, FtkEvent* event)
+{
+	return_val_if_fail(thiz != NULL && thiz->dispatch_event != NULL, RET_FAIL);
+
+	return thiz->dispatch_event(thiz, event);
+}
+
+static inline Ret  ftk_wnd_manager_add_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx)
+{
+	return_val_if_fail(thiz != NULL && thiz->add_global_listener != NULL, RET_FAIL);
+
+	return thiz->add_global_listener(thiz, listener, ctx);
+}
+
+static inline Ret  ftk_wnd_manager_remove_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx)
+{
+	return_val_if_fail(thiz != NULL && thiz->remove_global_listener != NULL, RET_FAIL);
+
+	return thiz->remove_global_listener(thiz, listener, ctx);
+}
+
+static inline void ftk_wnd_manager_destroy(FtkWndManager* thiz)
+{
+	return_if_fail(thiz != NULL && thiz->destroy != NULL);
+
+	thiz->destroy(thiz);
+
+	return;
+}
 
 #endif/*FTK_WND_MANAGER_H*/
 

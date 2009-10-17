@@ -4,7 +4,7 @@ LINUX_NATIVE=ftk_display_fb.c ftk_source_input.c
 LINUX_X11=ftk_display_x11.c ftk_source_x11.c
 
 libftk_la_SOURCES=\
-	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager.c   \
+	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	fontdata.c            ftk_label.c               ftk_source_timer.c \
 	ftk_bitmap.c          ftk_font.c                ftk_main_loop.c     ftk_util.c \
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \

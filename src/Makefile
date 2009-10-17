@@ -66,9 +66,9 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libftk_la_LIBADD =
 am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
-	ftk_wnd_manager.c fontdata.c ftk_label.c ftk_source_timer.c \
-	ftk_bitmap.c ftk_font.c ftk_main_loop.c ftk_util.c \
-	ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
+	ftk_wnd_manager_default.c fontdata.c ftk_label.c \
+	ftk_source_timer.c ftk_bitmap.c ftk_font.c ftk_main_loop.c \
+	ftk_util.c ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
 	ftk_source_idle.c ftk_widget.c ftk.c ftk_image_png_decoder.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_display_x11.c \
@@ -78,7 +78,7 @@ am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
 am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
-	ftk_wnd_manager.lo fontdata.lo ftk_label.lo \
+	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font.lo ftk_main_loop.lo \
 	ftk_util.lo ftk_bitmap_factory.lo ftk_image_jpeg_decoder.lo \
 	ftk_source_idle.lo ftk_widget.lo ftk.lo \
@@ -257,13 +257,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -DUSE_LINUX_NATIVE -DPC_EMU
+CFLAGS = -g -O2 -DUSE_LINUX_NATIVE -DPC_EMU
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -274,7 +274,7 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -358,9 +358,9 @@ lib_LTLIBRARIES = libftk.la
 LINUX_NATIVE = ftk_display_fb.c ftk_source_input.c
 LINUX_X11 = ftk_display_x11.c ftk_source_x11.c
 libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
-	ftk_wnd_manager.c fontdata.c ftk_label.c ftk_source_timer.c \
-	ftk_bitmap.c ftk_font.c ftk_main_loop.c ftk_util.c \
-	ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
+	ftk_wnd_manager_default.c fontdata.c ftk_label.c \
+	ftk_source_timer.c ftk_bitmap.c ftk_font.c ftk_main_loop.c \
+	ftk_util.c ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
 	ftk_source_idle.c ftk_widget.c ftk.c ftk_image_png_decoder.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c $(am__append_1) \
@@ -597,7 +597,7 @@ include ./$(DEPDIR)/ftk_test.Po
 include ./$(DEPDIR)/ftk_util.Plo
 include ./$(DEPDIR)/ftk_widget.Plo
 include ./$(DEPDIR)/ftk_window.Plo
-include ./$(DEPDIR)/ftk_wnd_manager.Plo
+include ./$(DEPDIR)/ftk_wnd_manager_default.Plo
 include ./$(DEPDIR)/input_test.Po
 include ./$(DEPDIR)/label_test.Po
 include ./$(DEPDIR)/log_test.Po

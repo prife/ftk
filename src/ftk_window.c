@@ -222,7 +222,7 @@ static void ftk_window_destroy(FtkWidget* thiz)
 		event.type = FTK_EVT_WND_DESTROY;
 		event.widget = thiz;
 
-		ftk_wnd_manager_dispatch(ftk_default_wnd_manager(), &event);
+		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 
 		FTK_FREE(priv->title);
 		ftk_canvas_destroy(priv->canvas);
@@ -272,7 +272,7 @@ Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 	if(priv->fullscreen != fullscreen)
 	{
 		priv->fullscreen = fullscreen;
-		ftk_wnd_manager_update(priv->display);
+		ftk_wnd_manager_update(ftk_default_wnd_manager());
 	}
 
 	return RET_OK;
