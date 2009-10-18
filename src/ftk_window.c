@@ -288,6 +288,11 @@ int        ftk_window_is_fullscreen(FtkWidget* thiz)
 
 FtkWidget* ftk_window_create(int x, int y, int width, int height)
 {
+	return ftk_window_create_with_type(FTK_WINDOW, x, y, width, height);
+}
+
+FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height)
+{
 	FtkCanvas* canvas = NULL;
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	
@@ -310,7 +315,7 @@ FtkWidget* ftk_window_create(int x, int y, int width, int height)
 			priv->canvas  = canvas;
 			priv->display = ftk_default_display();
 
-			ftk_widget_init(thiz, 0, 0);
+			ftk_widget_init(thiz, type, 0);
 			ftk_widget_set_canvas(thiz, canvas);
 			ftk_widget_move(thiz, x, y);
 			ftk_widget_resize(thiz, width, height);

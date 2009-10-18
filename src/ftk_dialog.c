@@ -54,14 +54,13 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 {
-	FtkWidget* thiz = ftk_window_create(x, y, width, height);
+	FtkWidget* thiz = ftk_window_create_with_type(FTK_DIALOG, x, y, width, height);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[1] != NULL)
 	{
 		DECL_PRIV1(thiz, priv);
-		ftk_widget_set_type(thiz, FTK_DIALOG);
 		priv->parent_on_event = thiz->on_event;
 		thiz->on_event = ftk_dialog_on_event;
 		priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());

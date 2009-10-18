@@ -1,7 +1,7 @@
 /*
- * File: ftk_window.h    
+ * File: ftk_status_panel.c
  * Author: Li XianJing <xianjimli@hotmail.com>
- * Brief:  window 
+ * Brief:  ftk status panel
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,27 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-18 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_WINDOW_H
-#define FTK_WINDOW_H
+#include "ftk_window.h"
 
-#include "ftk_widget.h"
-#include "ftk_wnd_manager.h"
+FtkWidget* ftk_status_panel_create(int size)
+{
+	FtkWidget* thiz = ftk_window_create_with_type(FTK_PANEL, 0, 0, size, size);
+	
+	return thiz;
+}
 
-FtkWidget* ftk_window_create(int x, int y, int width, int height);
-FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height);
-Ret        ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget);
-FtkWidget* ftk_window_get_focus(FtkWidget* thiz);
-Ret        ftk_window_set_title(FtkWidget* thiz, const char* title);
-const char*ftk_window_get_title(FtkWidget* thiz);
-Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);
-Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
-int        ftk_window_is_fullscreen(FtkWidget* thiz);
+FtkWidget* ftk_status_panel_add(FtkWidget* thiz, int index)
+{
+}
+Ret        ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item);
 
-#endif/*FTK_WINDOW_H*/
+Ret        ftk_status_panel_item_set_text(FtkWidget* item, const char* text); 
+Ret        ftk_status_panel_item_set_bitmap(FtkWidget* item, FtkBitmap* bitmap);
+Ret        ftk_status_panel_item_set_clicked_listener(FtkWidget* item, FtkListener listener, void* ctx);
+
+#endif/*FTK_STATUS_PANEL_H*/
 
