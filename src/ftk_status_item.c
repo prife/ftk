@@ -1,7 +1,7 @@
 /*
- * File: ftk_button.c    
+ * File: ftk_status_item.c    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   button. 
+ * Brief:   item on the status panel. 
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,43 +25,41 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-20 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
 #include "ftk_log.h"
-#include "ftk_button.h"
+#include "ftk_status_item.h"
 
 typedef struct _PrivInfo
 {
-	int button_down;
 	char* text;
 	FtkListener listener;
 	void* listener_ctx;
+	int status_item_down;
 }PrivInfo;
 
-#define FTK_BUTTON_LEFT_MARGIN 3
-#define FTK_BUTTON_TOP_MARGIN  3
-
-static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
+static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
+
 	switch(event->type)
 	{
 		case FTK_EVT_MOUSE_DOWN:
 		{
-			priv->button_down = 1;
+			priv->status_item_down = 1;
 			ftk_logd("%s: FTK_EVT_MOUSE_DOWN\n", __func__);
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
-			if(priv->button_down && priv->listener != NULL)
+			if(priv->status_item_down && priv->listener != NULL)
 			{
 				ret = priv->listener(priv->listener_ctx, thiz);
 			}
-			priv->button_down = 0;
+			priv->status_item_down = 0;
 			ftk_logd("%s: FTK_EVT_MOUSE_UP\n", __func__);
 			break;
 		}
@@ -70,7 +68,7 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 			ftk_logd("%s: FTK_EVT_KEY_DOWN\n", __func__);
 			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
 			{
-				ret = priv->listener(priv->listener_ctx, thiz);
+				ret = priv->listener(priv->ctx, thiz);
 			}
 			break;
 		}
@@ -80,74 +78,31 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
-static Ret ftk_button_on_paint(FtkWidget* thiz)
+static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 {
 	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->text != NULL)
-	{
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, priv->text);
-		int dx = (width - fw)>>1;
-		int dy = (height + 12)>>1;
-	
-		assert(fh < height && fw < width);
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, priv->text);
-	}
-	
-	if(ftk_widget_get_gc(thiz)->bitmap != NULL)
-	{
-		/*if bitmap exist, clear the rect with backgroud color*/
-		gc.mask = FTK_GC_FG;
-		if(ftk_widget_is_focused(thiz))
-		{
-			FTK_FOCUS_COLOR(gc.fg);
-		}
-		else
-		{
-			gc.fg =ftk_widget_get_gc(thiz)->bg;
-		}
-		ftk_canvas_set_gc(canvas, &gc); 
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-	}
-	else
-	{
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-		gc.mask = FTK_GC_FG;
-		if(ftk_widget_is_focused(thiz))
-		{
-			FTK_FOCUS_COLOR(gc.fg);
-		}
-		else
-		{
-			gc.fg =ftk_widget_get_gc(thiz)->fg;
-			gc.fg.r += 0xb0;
-			gc.fg.g += 0xb0;
-			gc.fg.b += 0xb0;
-		}
-		ftk_canvas_set_gc(canvas, &gc); 
-		ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height-2, 0);
-	}
+	/*TODO*/
 
 	FTK_END_PAINT();
 }
 
-static void ftk_button_destroy(FtkWidget* thiz)
+static void ftk_status_item_destroy(FtkWidget* thiz)
 {
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
+		ftk_bitmap_unref(priv->bitmap);
 		FTK_FREE(priv->text);
-		FTK_FREE(priv);
+		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
 	return;
 }
 
-FtkWidget* ftk_button_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_status_item_create(int id, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -155,31 +110,33 @@ FtkWidget* ftk_button_create(int id, int x, int y, int width, int height)
 	{
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 
-		thiz->on_event = ftk_button_on_event;
-		thiz->on_paint = ftk_button_on_paint;
-		thiz->destroy  = ftk_button_destroy;
+		thiz->on_event = ftk_status_item_on_event;
+		thiz->on_paint = ftk_status_item_on_paint;
+		thiz->destroy  = ftk_status_item_destroy;
 
-		ftk_widget_init(thiz, FTK_BUTTON, id);
-		ftk_widget_move(thiz, x, y);
+		ftk_widget_init(thiz, FTK_STATUS_ITEM, id);
 		ftk_widget_resize(thiz, width, height);
 	}
 
 	return thiz;
 }
 
-Ret ftk_button_set_text(FtkWidget* thiz, const char* text)
+Ret ftk_status_item_set_text(FtkWidget* thiz, const char* text)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	FTK_FREE(priv->text);
-	priv->text = strdup(text);
+	if(priv->text != NULL)
+	{
+		priv->text = strdup(text);
+	}
 	ftk_widget_paint_self(thiz);
 
 	return RET_OK;
 }
 
-const char* ftk_button_get_text(FtkWidget* thiz)
+const char* ftk_status_item_get_text(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, NULL);
@@ -187,7 +144,37 @@ const char* ftk_button_get_text(FtkWidget* thiz)
 	return priv->text;
 }
 
-Ret ftk_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
+Ret         ftk_status_item_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(priv->bitmap != NULL)
+	{
+		ftk_bitmap_unref(priv->bitmap);
+		priv->bitmap = NULL;
+	}
+
+	if(bitmap != NULL)
+	{
+		ftk_bitmap_ref(bitmap);
+		priv->bitmap = bitmap;
+	}
+
+	ftk_widget_paint_self(thiz);
+
+	return RET_OK;
+}
+
+FtkBitmap*  ftk_status_item_get_bitmap(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, NULL);
+
+	return priv->bitmap;
+}
+
+Ret ftk_status_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);

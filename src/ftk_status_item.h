@@ -1,7 +1,7 @@
 /*
- * File: ftk_status_panel.h    
- * Author: Li XianJing <xianjimli@hotmail.com>
- * Brief:  ftk status panel
+ * File: ftk_status_item.h    
+ * Author:  Li XianJing <xianjimli@hotmail.com>
+ * Brief:   item on the status panel. 
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,17 +25,24 @@
 /*
  * History:
  * ================================================================
- * 2009-10-18 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-20 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_STATUS_PANEL_H
-#define FTK_STATUS_PANEL_H
-#include "ftk_window.h"
+#ifndef FTK_STATUS_ITEM_H
+#define FTK_STATUS_ITEM_H
 
-FtkWidget* ftk_status_panel_create(int size);
-Ret ftk_status_panel_add(FtkWidget* thiz, int index, FtkWidget* item);
-Ret ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item);
+#include "ftk_widget.h"
 
-#endif/*FTK_STATUS_PANEL_H*/
+FtkWidget* ftk_status_item_create(int id, int width, int height);
+
+Ret         ftk_status_item_set_text(FtkWidget* thiz, const char* text);
+const char* ftk_status_item_get_text(FtkWidget* thiz);
+
+Ret         ftk_status_item_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap);
+FtkBitmap*  ftk_status_item_get_bitmap(FtkWidget* thiz);
+
+Ret ftk_status_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+
+#endif/*FTK_STATUS_ITEM_H*/
 
