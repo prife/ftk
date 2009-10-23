@@ -34,6 +34,7 @@
 
 typedef struct _PrivInfo
 {
+	int pos;
 	char* text;
 	FtkListener listener;
 	void* listener_ctx;
@@ -124,7 +125,7 @@ FtkWidget* ftk_status_item_create(int id, int width, int height)
 Ret ftk_status_item_set_text(FtkWidget* thiz, const char* text)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, RET_FAIL);
+	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	FTK_FREE(priv->text);
 	if(priv->text != NULL)
@@ -139,7 +140,7 @@ Ret ftk_status_item_set_text(FtkWidget* thiz, const char* text)
 const char* ftk_status_item_get_text(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, NULL);
+	return_val_if_fail(priv != NULL, NULL);
 
 	return priv->text;
 }
@@ -147,7 +148,7 @@ const char* ftk_status_item_get_text(FtkWidget* thiz)
 Ret         ftk_status_item_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, RET_FAIL);
+	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	if(priv->bitmap != NULL)
 	{
@@ -169,15 +170,33 @@ Ret         ftk_status_item_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap)
 FtkBitmap*  ftk_status_item_get_bitmap(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, NULL);
+	return_val_if_fail(priv != NULL, NULL);
 
 	return priv->bitmap;
+}
+
+Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, NULL);
+
+	priv->pos = pos;
+
+	return RET_OK;
+}
+
+int         ftk_status_item_get_position(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, NULL);
+
+	return priv->pos;
 }
 
 Ret ftk_status_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, RET_FAIL);
+	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	priv->listener_ctx = ctx;
 	priv->listener = listener;
