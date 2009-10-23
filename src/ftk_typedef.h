@@ -116,5 +116,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 
 #define FTK_MASK_BITS(val32, index) (((val32) << ((index)%32)) & 0x80000000)
 
+#define FTK_INHERITE_FROM(parent) /*used as comment*/
+
 #endif/*FTK_TYPEDEF_H*/
 

@@ -215,6 +215,18 @@ void ftk_widget_resize(FtkWidget* thiz, int width, int height)
 	return;
 }
 
+void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	thiz->priv->left = x;
+	thiz->priv->top  = y;
+	thiz->priv->width = width;
+	thiz->priv->height = height;
+
+	return;
+}
+
 void ftk_widget_set_type(FtkWidget* thiz, int type)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);

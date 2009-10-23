@@ -29,6 +29,8 @@
  *
  */
 
+FTK_INHERITE_FROM(Window);
+
 #ifndef FTK_STATUS_PANEL_H
 #define FTK_STATUS_PANEL_H
 #include "ftk_window.h"
