@@ -71,8 +71,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_util.c ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
 	ftk_source_idle.c ftk_widget.c ftk.c ftk_image_png_decoder.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
-	ftk_image.c ftk_log.c ftk_dialog.c ftk_display_x11.c \
-	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
+	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
+	ftk_status_panel.c ftk_display_x11.c ftk_source_x11.c \
+	ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
@@ -84,7 +85,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_source_idle.lo ftk_widget.lo ftk.lo \
 	ftk_image_png_decoder.lo ftk_window.lo ftk_sources_manager.lo \
 	ftk_globals.lo ftk_button.lo ftk_image.lo ftk_log.lo \
-	ftk_dialog.lo $(am__objects_2) $(am__objects_4)
+	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
+	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 #am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 #	input_test$(EXEEXT)
@@ -363,8 +365,8 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_util.c ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
 	ftk_source_idle.c ftk_widget.c ftk.c ftk_image_png_decoder.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
-	ftk_image.c ftk_log.c ftk_dialog.c $(am__append_1) \
-	$(am__append_2)
+	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
+	ftk_status_panel.c $(am__append_1) $(am__append_2)
 #display_fb_test_SOURCES = display_fb_test.c
 #display_fb_test_LDFLAGS = $(MYLDFLAGS)
 #input_test_SOURCES = input_test.c
@@ -593,6 +595,8 @@ include ./$(DEPDIR)/ftk_source_primary.Plo
 include ./$(DEPDIR)/ftk_source_timer.Plo
 include ./$(DEPDIR)/ftk_source_x11.Plo
 include ./$(DEPDIR)/ftk_sources_manager.Plo
+include ./$(DEPDIR)/ftk_status_item.Plo
+include ./$(DEPDIR)/ftk_status_panel.Plo
 include ./$(DEPDIR)/ftk_test.Po
 include ./$(DEPDIR)/ftk_util.Plo
 include ./$(DEPDIR)/ftk_widget.Plo

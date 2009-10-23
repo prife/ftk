@@ -42,6 +42,12 @@ const char* ftk_status_item_get_text(FtkWidget* thiz);
 Ret         ftk_status_item_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap);
 FtkBitmap*  ftk_status_item_get_bitmap(FtkWidget* thiz);
 
+/*
+ * the position on the panel:
+ *  =0: N/A
+ *  >0: from first to last. eg. 1 means the first place. 2 means the second place.
+ *  <0: from last to first. eg. -1 means the last place.
+ **/
 Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos);
 int         ftk_status_item_get_position(FtkWidget* thiz);
 

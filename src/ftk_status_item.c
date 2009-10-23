@@ -36,6 +36,7 @@ typedef struct _PrivInfo
 {
 	int pos;
 	char* text;
+	FtkBitmap* bitmap;
 	FtkListener listener;
 	void* listener_ctx;
 	int status_item_down;
@@ -69,7 +70,7 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 			ftk_logd("%s: FTK_EVT_KEY_DOWN\n", __func__);
 			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
 			{
-				ret = priv->listener(priv->ctx, thiz);
+				ret = priv->listener(priv->listener_ctx, thiz);
 			}
 			break;
 		}
@@ -178,7 +179,7 @@ FtkBitmap*  ftk_status_item_get_bitmap(FtkWidget* thiz)
 Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(priv != NULL, NULL);
+	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	priv->pos = pos;
 
@@ -188,7 +189,7 @@ Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos)
 int         ftk_status_item_get_position(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(priv != NULL, NULL);
+	return_val_if_fail(priv != NULL, 0);
 
 	return priv->pos;
 }

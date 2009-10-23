@@ -89,7 +89,7 @@ FtkWidget* ftk_status_panel_create(int size)
 	return thiz;
 }
 
-static Ret ftk_status_panel_add_to(FtkWidget** array, size_t nr, index, FtkWidget* item)
+static Ret ftk_status_panel_add_to(FtkWidget** array, size_t nr, int index, FtkWidget* item)
 {
 	/*TODO*/
 	return RET_OK;
