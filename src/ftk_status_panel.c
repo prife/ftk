@@ -36,15 +36,43 @@
 typedef struct _PrivInfo
 {
 	int changed;
-	int first_nr;
-	int last_nr;
 	int mid_nr;
-	FtkWidget* first[FTK_PANEL_MAX_ITEM];	
-	FtkWidget* last[FTK_PANEL_MAX_ITEM];	
+	int last_nr;
+	int first_nr;
 	FtkWidget* mid[FTK_PANEL_MAX_ITEM];	
+	FtkWidget* last[FTK_PANEL_MAX_ITEM];	
+	FtkWidget* first[FTK_PANEL_MAX_ITEM];	
 	FtkWidgetOnEvent parent_on_event;
 	FtkWidgetOnPaint parent_on_paint;
+	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
+
+static Ret ftk_status_hide_all(FtkWidget* thiz)
+{
+	int i = 0;
+	int w = 0;
+	DECL_PRIV1(thiz, priv);
+
+	for(i = 0; i < priv->first_nr; i++)
+	{
+		w = ftk_widget_width(priv->first[i]);
+		ftk_widget_move_resize(priv->first[i], 0, 0, w, 0);
+	}
+	
+	for(i = 0; i < priv->mid_nr; i++)
+	{
+		w = ftk_widget_width(priv->mid[i]);
+		ftk_widget_move_resize(priv->mid[i], 0, 0, w, 0);
+	}
+	
+	for(i = 0; i < priv->last_nr; i++)
+	{
+		w = ftk_widget_width(priv->last[i]);
+		ftk_widget_move_resize(priv->last[i], 0, 0, w, 0);
+	}
+
+	return RET_OK;
+}
 
 static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 {
@@ -55,19 +83,22 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 	int h = 0;
 	int left = 0;
 	int right = 0;
+	
 	DECL_PRIV1(thiz, priv);
 
 	if(!priv->changed)
 	{
 		return RET_OK;
 	}
+
+	ftk_status_hide_all(thiz);
 	h = ftk_widget_height(thiz);
 	right = ftk_widget_width(thiz);
 
 	for(i = 0; i < priv->first_nr; i++)
 	{
 		w = ftk_widget_width(priv->first[i]);
-		if((x + w) >= right)
+		if((x + w) > right)
 		{
 			return RET_OK;
 		}
@@ -79,25 +110,25 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 	x = right;
 	for(i = 0; i < priv->last_nr; i++)
 	{
-		w = ftk_widget_width(priv->mid[i]);
+		w = ftk_widget_width(priv->last[i]);
 		if((x - w) < left)
 		{
 			return RET_OK;
 		}
 		x -= w;
-		ftk_widget_move_resize(priv->first[i], x, y, w, h);
+		ftk_widget_move_resize(priv->last[i], x, y, w, h);
 	}
 
 	right = x;
 	x = left;
-	for(i = 0; i < priv->last_nr; i++)
+	for(i = 0; i < priv->mid_nr; i++)
 	{
-		w = ftk_widget_width(priv->last[i]);
-		if((x + w) >= right)
+		w = ftk_widget_width(priv->mid[i]);
+		if((x + w) > right)
 		{
 			return RET_OK;
 		}
-		ftk_widget_move_resize(priv->first[i], x, y, w, h);
+		ftk_widget_move_resize(priv->mid[i], x, y, w, h);
 		x += w;
 	}
 	
@@ -120,6 +151,14 @@ static Ret  ftk_status_panel_on_paint(FtkWidget* thiz)
 	return priv->parent_on_paint(thiz);
 }
 
+static void ftk_status_panel_destroy(FtkWidget* thiz)
+{
+
+	/*TODO*/
+
+	return;
+}
+
 FtkWidget* ftk_status_panel_create(int size)
 {
 	FtkWidget* thiz = ftk_window_create_with_type(FTK_PANEL, 0, 0, size, size);
@@ -131,8 +170,10 @@ FtkWidget* ftk_status_panel_create(int size)
 		DECL_PRIV1(thiz, priv);
 		priv->parent_on_event = thiz->on_event;
 		priv->parent_on_paint = thiz->on_paint;
+		priv->parent_destroy  = thiz->destroy;
 		thiz->on_event = ftk_status_panel_on_event;
 		thiz->on_paint = ftk_status_panel_on_paint;
+		thiz->destroy  = ftk_status_panel_destroy;
 	}
 
 	return thiz;
