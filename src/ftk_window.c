@@ -166,7 +166,7 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SHOW:
 		{
-			ftk_widget_paint(thiz);
+			//ftk_widget_paint(thiz);
 			break;
 		}
 		case FTK_EVT_HIDE:

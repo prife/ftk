@@ -77,6 +77,8 @@ int ftk_widget_top(FtkWidget* thiz);
 int ftk_widget_left(FtkWidget* thiz);
 int ftk_widget_top_abs(FtkWidget* thiz);
 int ftk_widget_left_abs(FtkWidget* thiz);
+int ftk_widget_top_in_window(FtkWidget* thiz);
+int ftk_widget_left_in_window(FtkWidget* thiz);
 int ftk_widget_width(FtkWidget* thiz);
 int ftk_widget_height(FtkWidget* thiz);
 int ftk_widget_is_insensitive(FtkWidget* thiz);
@@ -88,6 +90,7 @@ FtkGc* ftk_widget_get_gc(FtkWidget* thiz);
 FtkCanvas* ftk_widget_canvas(FtkWidget* thiz);
 
 void ftk_widget_show(FtkWidget* thiz, int visible);
+void ftk_widget_set_visible(FtkWidget* thiz, int visible);
 void ftk_widget_move(FtkWidget* thiz, int x, int y);
 void ftk_widget_resize(FtkWidget* thiz, int width, int height);
 void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height);
@@ -125,8 +128,8 @@ void ftk_widget_unref_self(FtkWidget* thiz);
 Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);
 
 #define FTK_BEGIN_PAINT(x, y, width, height, canvas) \
-	int x = ftk_widget_left_abs(thiz);\
-	int y = ftk_widget_top_abs(thiz);\
+	int x = ftk_widget_left_in_window(thiz);\
+	int y = ftk_widget_top_in_window(thiz);\
 	int width  = ftk_widget_width(thiz);\
 	int height = ftk_widget_height(thiz);\
 	FtkCanvas* canvas = ftk_widget_canvas(thiz);

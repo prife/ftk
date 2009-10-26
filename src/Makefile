@@ -36,15 +36,15 @@ build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
 noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	demo1$(EXEEXT) demo2$(EXEEXT) demo3$(EXEEXT) demo4$(EXEEXT) \
-	demo5$(EXEEXT) canvas_test$(EXEEXT) ftk_test$(EXEEXT) \
-	bitmap_test$(EXEEXT) font_test$(EXEEXT) \
+	demo5$(EXEEXT) demo6$(EXEEXT) canvas_test$(EXEEXT) \
+	ftk_test$(EXEEXT) bitmap_test$(EXEEXT) font_test$(EXEEXT) \
 	primary_source_test$(EXEEXT) bitmap_factory_test$(EXEEXT) \
 	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
 	$(am__EXEEXT_1)
-am__append_1 = $(LINUX_X11)
-#am__append_2 = $(LINUX_NATIVE)
-#am__append_3 = display_fb_test input_test
+#am__append_1 = $(LINUX_X11)
+am__append_2 = $(LINUX_NATIVE)
+am__append_3 = display_fb_test input_test
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -75,9 +75,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_status_panel.c ftk_display_x11.c ftk_source_x11.c \
 	ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
-am__objects_2 = $(am__objects_1)
+#am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
-#am__objects_4 = $(am__objects_3)
+am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font.lo ftk_main_loop.lo \
@@ -88,8 +88,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
 	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
-#am__EXEEXT_1 = display_fb_test$(EXEEXT) \
-#	input_test$(EXEEXT)
+am__EXEEXT_1 = display_fb_test$(EXEEXT) \
+	input_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -139,9 +139,15 @@ demo5_LDADD = $(LDADD)
 demo5_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(demo5_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_demo6_OBJECTS = demo6.$(OBJEXT)
+demo6_OBJECTS = $(am_demo6_OBJECTS)
+demo6_LDADD = $(LDADD)
+demo6_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(demo6_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
-#am_display_fb_test_OBJECTS =  \
-#	display_fb_test.$(OBJEXT)
+am_display_fb_test_OBJECTS =  \
+	display_fb_test.$(OBJEXT)
 display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
 display_fb_test_LDADD = $(LDADD)
 display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -160,7 +166,7 @@ ftk_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(ftk_test_LDFLAGS) \
 	$(LDFLAGS) -o $@
 am__input_test_SOURCES_DIST = input_test.c
-#am_input_test_OBJECTS = input_test.$(OBJEXT)
+am_input_test_OBJECTS = input_test.$(OBJEXT)
 input_test_OBJECTS = $(am_input_test_OBJECTS)
 input_test_LDADD = $(LDADD)
 input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -229,7 +235,7 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(bitmap_test_SOURCES) $(canvas_test_SOURCES) $(demo1_SOURCES) \
 	$(demo2_SOURCES) $(demo3_SOURCES) $(demo4_SOURCES) \
-	$(demo5_SOURCES) $(display_fb_test_SOURCES) \
+	$(demo5_SOURCES) $(demo6_SOURCES) $(display_fb_test_SOURCES) \
 	$(font_test_SOURCES) $(ftk_test_SOURCES) $(input_test_SOURCES) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
@@ -239,12 +245,13 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(demo1_SOURCES) $(demo2_SOURCES) \
 	$(demo3_SOURCES) $(demo4_SOURCES) $(demo5_SOURCES) \
-	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(am__input_test_SOURCES_DIST) \
-	$(label_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
+	$(demo6_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
+	$(font_test_SOURCES) $(ftk_test_SOURCES) \
+	$(am__input_test_SOURCES_DIST) $(label_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(util_test_SOURCES) \
+	widget_test.c
 ftkHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(ftk_HEADERS)
 ETAGS = etags
@@ -259,13 +266,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g  -DUSE_LINUX_NATIVE -DPC_EMU
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -276,14 +283,14 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g -O2
+FFLAGS = -g 
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
+LDFLAGS = 
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -367,10 +374,10 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c $(am__append_1) $(am__append_2)
-#display_fb_test_SOURCES = display_fb_test.c
-#display_fb_test_LDFLAGS = $(MYLDFLAGS)
-#input_test_SOURCES = input_test.c
-#input_test_LDFLAGS = $(MYLDFLAGS)
+display_fb_test_SOURCES = display_fb_test.c
+display_fb_test_LDFLAGS = $(MYLDFLAGS)
+input_test_SOURCES = input_test.c
+input_test_LDFLAGS = $(MYLDFLAGS)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\""
 MYLDFLAGS = .libs/libftk.a
 sources_manager_test_SOURCES = sources_manager_test.c
@@ -399,6 +406,8 @@ demo4_SOURCES = demo4.c
 demo4_LDFLAGS = $(MYLDFLAGS)
 demo5_SOURCES = demo5.c
 demo5_LDFLAGS = $(MYLDFLAGS)
+demo6_SOURCES = demo6.c
+demo6_LDFLAGS = $(MYLDFLAGS)
 canvas_test_SOURCES = canvas_test.c
 canvas_test_LDFLAGS = $(MYLDFLAGS)
 ftk_test_SOURCES = ftk_test.c
@@ -519,6 +528,9 @@ demo4$(EXEEXT): $(demo4_OBJECTS) $(demo4_DEPENDENCIES)
 demo5$(EXEEXT): $(demo5_OBJECTS) $(demo5_DEPENDENCIES) 
 	@rm -f demo5$(EXEEXT)
 	$(demo5_LINK) $(demo5_OBJECTS) $(demo5_LDADD) $(LIBS)
+demo6$(EXEEXT): $(demo6_OBJECTS) $(demo6_DEPENDENCIES) 
+	@rm -f demo6$(EXEEXT)
+	$(demo6_LINK) $(demo6_OBJECTS) $(demo6_LDADD) $(LIBS)
 display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
 	@rm -f display_fb_test$(EXEEXT)
 	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
@@ -570,6 +582,7 @@ include ./$(DEPDIR)/demo2.Po
 include ./$(DEPDIR)/demo3.Po
 include ./$(DEPDIR)/demo4.Po
 include ./$(DEPDIR)/demo5.Po
+include ./$(DEPDIR)/demo6.Po
 include ./$(DEPDIR)/display_fb_test.Po
 include ./$(DEPDIR)/font_test.Po
 include ./$(DEPDIR)/fontdata.Plo

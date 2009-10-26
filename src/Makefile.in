@@ -36,8 +36,8 @@ build_triplet = @build@
 host_triplet = @host@
 noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	demo1$(EXEEXT) demo2$(EXEEXT) demo3$(EXEEXT) demo4$(EXEEXT) \
-	demo5$(EXEEXT) canvas_test$(EXEEXT) ftk_test$(EXEEXT) \
-	bitmap_test$(EXEEXT) font_test$(EXEEXT) \
+	demo5$(EXEEXT) demo6$(EXEEXT) canvas_test$(EXEEXT) \
+	ftk_test$(EXEEXT) bitmap_test$(EXEEXT) font_test$(EXEEXT) \
 	primary_source_test$(EXEEXT) bitmap_factory_test$(EXEEXT) \
 	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
@@ -139,6 +139,12 @@ demo5_LDADD = $(LDADD)
 demo5_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(demo5_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_demo6_OBJECTS = demo6.$(OBJEXT)
+demo6_OBJECTS = $(am_demo6_OBJECTS)
+demo6_LDADD = $(LDADD)
+demo6_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(demo6_LDFLAGS) \
+	$(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
 @FTK_BACKEND_FB_TRUE@am_display_fb_test_OBJECTS =  \
 @FTK_BACKEND_FB_TRUE@	display_fb_test.$(OBJEXT)
@@ -229,7 +235,7 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(bitmap_test_SOURCES) $(canvas_test_SOURCES) $(demo1_SOURCES) \
 	$(demo2_SOURCES) $(demo3_SOURCES) $(demo4_SOURCES) \
-	$(demo5_SOURCES) $(display_fb_test_SOURCES) \
+	$(demo5_SOURCES) $(demo6_SOURCES) $(display_fb_test_SOURCES) \
 	$(font_test_SOURCES) $(ftk_test_SOURCES) $(input_test_SOURCES) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
@@ -239,12 +245,13 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(demo1_SOURCES) $(demo2_SOURCES) \
 	$(demo3_SOURCES) $(demo4_SOURCES) $(demo5_SOURCES) \
-	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(am__input_test_SOURCES_DIST) \
-	$(label_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
+	$(demo6_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
+	$(font_test_SOURCES) $(ftk_test_SOURCES) \
+	$(am__input_test_SOURCES_DIST) $(label_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(util_test_SOURCES) \
+	widget_test.c
 ftkHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(ftk_HEADERS)
 ETAGS = etags
@@ -399,6 +406,8 @@ demo4_SOURCES = demo4.c
 demo4_LDFLAGS = $(MYLDFLAGS)
 demo5_SOURCES = demo5.c
 demo5_LDFLAGS = $(MYLDFLAGS)
+demo6_SOURCES = demo6.c
+demo6_LDFLAGS = $(MYLDFLAGS)
 canvas_test_SOURCES = canvas_test.c
 canvas_test_LDFLAGS = $(MYLDFLAGS)
 ftk_test_SOURCES = ftk_test.c
@@ -519,6 +528,9 @@ demo4$(EXEEXT): $(demo4_OBJECTS) $(demo4_DEPENDENCIES)
 demo5$(EXEEXT): $(demo5_OBJECTS) $(demo5_DEPENDENCIES) 
 	@rm -f demo5$(EXEEXT)
 	$(demo5_LINK) $(demo5_OBJECTS) $(demo5_LDADD) $(LIBS)
+demo6$(EXEEXT): $(demo6_OBJECTS) $(demo6_DEPENDENCIES) 
+	@rm -f demo6$(EXEEXT)
+	$(demo6_LINK) $(demo6_OBJECTS) $(demo6_LDADD) $(LIBS)
 display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
 	@rm -f display_fb_test$(EXEEXT)
 	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
@@ -570,6 +582,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo3.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo4.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo5.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo6.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/display_fb_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fontdata.Plo@am__quote@

@@ -141,6 +141,32 @@ int ftk_widget_left_abs(FtkWidget* thiz)
 	return left;
 }
 
+int ftk_widget_top_in_window(FtkWidget* thiz)
+{
+	int top = 0;
+	FtkWidget* iter = thiz;
+
+	for(; ftk_widget_parent(iter); iter = ftk_widget_parent(iter))
+	{
+		top += ftk_widget_top(iter);
+	}
+
+	return top;
+}
+
+int ftk_widget_left_in_window(FtkWidget* thiz)
+{
+	int left = 0;
+	FtkWidget* iter = thiz;
+
+	for(; ftk_widget_parent(iter); iter = ftk_widget_parent(iter))
+	{
+		left += ftk_widget_left(iter);
+	}
+
+	return left;
+}
+
 int ftk_widget_width(FtkWidget* thiz)
 {
 	return thiz != NULL && thiz->priv != NULL ? thiz->priv->width : 0;
@@ -286,6 +312,16 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 		/*FIXME: now, as ftk not support clip, repaint the whole parent surface.*/
 		ftk_widget_paint(ftk_widget_parent(thiz));
 	}
+
+	return;
+}
+
+void ftk_widget_set_visible(FtkWidget* thiz, int visible)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+	if(thiz->priv->visible == visible) return;
+	
+	thiz->priv->visible = visible;
 
 	return;
 }

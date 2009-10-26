@@ -107,6 +107,7 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
+	ftk_logv("%s: ox=%d oy=%d x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, x, y, w, h);
 	return_val_if_fail(bitmap != NULL, RET_FAIL);
 	return_val_if_fail(x < bitmap_width, RET_FAIL);
 	return_val_if_fail(y < bitmap_height, RET_FAIL);
@@ -124,7 +125,6 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	w += x;
 	h += y;
 
-	ftk_logv("%s: x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, w, h);
 	src += y * bitmap_width;
 	dst += yoffset * display_width;
 

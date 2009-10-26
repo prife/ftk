@@ -33,6 +33,7 @@
 #include "ftk_source_primary.h"
 #include "ftk_wnd_manager_default.h"
 
+#define FTK_STATUS_PANEL_HEIGHT 36
 #define FTK_MAX_GLOBAL_LISTENER 12
 
 typedef struct _PrivInfo
@@ -72,11 +73,38 @@ static Ret  ftk_wnd_manager_default_ungrab(FtkWndManager* thiz, FtkWidget* windo
 
 static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 {
+	int x = 0;
+	int y = 0;
+	int w = 0;
+	int h = 0;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 	return_val_if_fail((priv->top+1) < FTK_MAX_WINDOWS, RET_FAIL);
 
 	priv->windows[priv->top++] = window;
+
+	switch(ftk_widget_type(window))
+	{
+		case FTK_WINDOW:
+		{
+			y = FTK_STATUS_PANEL_HEIGHT;
+			w = ftk_display_width(ftk_default_display());
+			h = ftk_display_height(ftk_default_display()) - FTK_STATUS_PANEL_HEIGHT;
+
+			break;
+		}
+		case FTK_PANEL:
+		{
+			w = ftk_display_width(ftk_default_display());
+			h = FTK_STATUS_PANEL_HEIGHT;
+
+			break;
+		}
+	}
+	
+	ftk_widget_move_resize(window, x, y, w, h);
+
+	ftk_logd("type=%d %d %d %d %d\n", ftk_widget_type(window), x, y, w, h);
 
 	return RET_OK;
 }

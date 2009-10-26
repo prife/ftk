@@ -12,7 +12,7 @@ libftk_la_SOURCES=\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c
 
-noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4 demo5 \
+noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4 demo5 demo6 \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
 	sources_manager_test
@@ -71,6 +71,9 @@ demo4_LDFLAGS=$(MYLDFLAGS)
 
 demo5_SOURCES=demo5.c
 demo5_LDFLAGS=$(MYLDFLAGS)
+
+demo6_SOURCES=demo6.c
+demo6_LDFLAGS=$(MYLDFLAGS)
 
 canvas_test_SOURCES=canvas_test.c
 canvas_test_LDFLAGS=$(MYLDFLAGS)

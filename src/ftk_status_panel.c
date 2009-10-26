@@ -32,6 +32,7 @@
 #include "ftk_status_item.h"
 
 #define FTK_PANEL_MAX_ITEM 16
+#define FTK_PANEL_MARGIN 2
 
 typedef struct _PrivInfo
 {
@@ -50,25 +51,21 @@ typedef struct _PrivInfo
 static Ret ftk_status_hide_all(FtkWidget* thiz)
 {
 	int i = 0;
-	int w = 0;
 	DECL_PRIV1(thiz, priv);
 
 	for(i = 0; i < priv->first_nr; i++)
 	{
-		w = ftk_widget_width(priv->first[i]);
-		ftk_widget_move_resize(priv->first[i], 0, 0, w, 0);
+		ftk_widget_set_visible(priv->first[i], 0);
 	}
 	
 	for(i = 0; i < priv->mid_nr; i++)
 	{
-		w = ftk_widget_width(priv->mid[i]);
-		ftk_widget_move_resize(priv->mid[i], 0, 0, w, 0);
+		ftk_widget_set_visible(priv->mid[i], 0);
 	}
 	
 	for(i = 0; i < priv->last_nr; i++)
 	{
-		w = ftk_widget_width(priv->last[i]);
-		ftk_widget_move_resize(priv->last[i], 0, 0, w, 0);
+		ftk_widget_set_visible(priv->last[i], 0);
 	}
 
 	return RET_OK;
@@ -91,8 +88,10 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 		return RET_OK;
 	}
 
+
 	ftk_status_hide_all(thiz);
-	h = ftk_widget_height(thiz);
+	y = FTK_PANEL_MARGIN;
+	h = ftk_widget_height(thiz) - FTK_PANEL_MARGIN - FTK_PANEL_MARGIN;
 	right = ftk_widget_width(thiz);
 
 	for(i = 0; i < priv->first_nr; i++)
@@ -103,6 +102,7 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 			return RET_OK;
 		}
 		ftk_widget_move_resize(priv->first[i], x, y, w, h);
+		ftk_widget_set_visible(priv->first[i], 1);
 		x += w;
 	}
 
@@ -117,6 +117,7 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 		}
 		x -= w;
 		ftk_widget_move_resize(priv->last[i], x, y, w, h);
+		ftk_widget_set_visible(priv->last[i], 1);
 	}
 
 	right = x;
@@ -129,6 +130,7 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 			return RET_OK;
 		}
 		ftk_widget_move_resize(priv->mid[i], x, y, w, h);
+		ftk_widget_set_visible(priv->mid[i], 1);
 		x += w;
 	}
 	
@@ -159,9 +161,9 @@ static void ftk_status_panel_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_status_panel_create(int size)
+FtkWidget* ftk_status_panel_create(void)
 {
-	FtkWidget* thiz = ftk_window_create_with_type(FTK_PANEL, 0, 0, size, size);
+	FtkWidget* thiz = ftk_window_create_with_type(FTK_PANEL, 0, 0, 0, 0);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
@@ -243,6 +245,8 @@ Ret ftk_status_panel_add(FtkWidget* thiz, int index, FtkWidget* item)
 		priv->last_nr = ftk_status_panel_add_to(priv->last, priv->last_nr, index, item);
 	}
 
+	ftk_widget_append_child(thiz, item);
+
 	return RET_OK;
 }
 
@@ -254,6 +258,8 @@ Ret        ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item)
 	priv->first_nr = ftk_status_panel_remove_from(priv->first, priv->first_nr, item);
 	priv->mid_nr = ftk_status_panel_remove_from(priv->mid, priv->mid_nr, item);
 	priv->last_nr = ftk_status_panel_remove_from(priv->last, priv->last_nr, item);
+
+	ftk_widget_remove_child(thiz, item);
 
 	return RET_OK;
 }

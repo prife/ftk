@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
 	
-	FtkWidget* win = ftk_window_create(0, 0, 320, 480);
+	FtkWidget* win = ftk_window_create(0, 2, 320, 478);
 
 	FtkWidget* button = ftk_button_create(1001, 10, 30, 80, 30);
 	ftk_button_set_text(button, "show");
