@@ -10,7 +10,7 @@ libftk_la_SOURCES=\
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
 	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
-	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c
+	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c
 
 noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4 demo5 demo6 \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\

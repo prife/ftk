@@ -218,7 +218,12 @@ Ret ftk_widget_update(FtkWidget* thiz)
 
 FtkCanvas* ftk_widget_canvas(FtkWidget* thiz)
 {
-	return thiz != NULL && thiz->priv != NULL ? thiz->priv->canvas : NULL;
+	FtkWidget* toplevel = NULL;
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
+	
+	toplevel = ftk_widget_toplevel(thiz);
+
+	return toplevel->priv->canvas;
 }
 
 void ftk_widget_move(FtkWidget* thiz, int x, int y)

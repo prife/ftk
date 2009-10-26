@@ -403,7 +403,7 @@ Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str)
 		}
 		if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) continue;
 		if((x + glyph.x + glyph.w) >= width) break;
-		if((y + glyph.y + glyph.h) >= height) break;
+		if((y - glyph.y + glyph.h) >= height) break;
 
 		int offset = 0;
 		x = x + glyph.x;

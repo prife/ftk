@@ -28,20 +28,35 @@ static Ret button_default_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-int main(int argc, char* argv[])
+static void init_panel(void)
 {
 	FtkGc gc = {0};
+	FtkWidget* item = NULL;	
+	FtkWidget* panel = ftk_default_status_panel();
+
+	gc.mask = FTK_GC_BITMAP;
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "testdata/maps-32.png");
+	item = ftk_status_item_create(1, 32, 32);
+	ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+	ftk_status_panel_add(panel, -1, item);
+	ftk_widget_show(item, 1);
+	
+	item = ftk_status_item_create(1, 64, 32);
+	ftk_button_set_text(item, "Demo");
+	ftk_status_panel_add(panel, 1, item);
+	ftk_widget_show(item, 1);
+
+	ftk_widget_show(panel, 1);
+
+	return;
+}
+
+int main(int argc, char* argv[])
+{
 	ftk_init(argc, argv);
 	
 	FtkWidget* win = ftk_window_create(0, 2, 320, 478);
-	FtkWidget* close = ftk_status_item_create(1, 32, 32);
-	
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/home_32.png");
-	ftk_widget_set_gc(close, FTK_WIDGET_NORMAL, &gc);
-	ftk_status_panel_add(ftk_default_status_panel(), -1, close);
-	ftk_widget_show(ftk_default_status_panel(), 1);
-	ftk_widget_show(close, 1);
+	init_panel();
 	ftk_widget_show(win, 1);
 
 	ftk_run();

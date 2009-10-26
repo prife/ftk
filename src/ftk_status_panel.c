@@ -85,6 +85,7 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 
 	if(!priv->changed)
 	{
+		priv->changed = 0;
 		return RET_OK;
 	}
 
@@ -245,6 +246,7 @@ Ret ftk_status_panel_add(FtkWidget* thiz, int index, FtkWidget* item)
 		priv->last_nr = ftk_status_panel_add_to(priv->last, priv->last_nr, index, item);
 	}
 
+	priv->changed = 1;
 	ftk_widget_append_child(thiz, item);
 
 	return RET_OK;
@@ -259,6 +261,7 @@ Ret        ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item)
 	priv->mid_nr = ftk_status_panel_remove_from(priv->mid, priv->mid_nr, item);
 	priv->last_nr = ftk_status_panel_remove_from(priv->last, priv->last_nr, item);
 
+	priv->changed = 1;
 	ftk_widget_remove_child(thiz, item);
 
 	return RET_OK;

@@ -35,6 +35,8 @@ FTK_INHERITE_FROM(Window);
 #define FTK_STATUS_PANEL_H
 #include "ftk_window.h"
 
+#define FTK_STATUS_PANEL_HEIGHT 36
+
 FtkWidget* ftk_status_panel_create(void);
 Ret ftk_status_panel_add(FtkWidget* thiz, int index, FtkWidget* item);
 Ret ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item);

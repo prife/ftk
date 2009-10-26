@@ -30,6 +30,7 @@
  */
 
 #include "ftk_log.h"
+#include "ftk_style.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
 
@@ -43,6 +44,7 @@ typedef struct _PrivInfo
 	int fullscreen;
 }PrivInfo;
 
+static Ret ftk_window_realize(FtkWidget* thiz);
 Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 {
 	DECL_PRIV0(thiz, priv);
@@ -155,6 +157,7 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
+	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
@@ -166,7 +169,7 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SHOW:
 		{
-			//ftk_widget_paint(thiz);
+			ftk_window_realize(thiz);
 			break;
 		}
 		case FTK_EVT_HIDE:
@@ -195,6 +198,34 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 	}
 
 	return ret;
+}
+
+static Ret ftk_window_realize(FtkWidget* thiz)
+{
+	int w = ftk_widget_width(thiz);
+	int h = ftk_widget_height(thiz);
+	DECL_PRIV0(thiz, priv);
+	if(priv->canvas != NULL)
+	{
+		FtkBitmap* bitmap = ftk_canvas_bitmap(priv->canvas);
+		int canvas_w = ftk_bitmap_width(bitmap);
+		int canvas_h = ftk_bitmap_height(bitmap);
+
+		if(canvas_w != w || canvas_h != h)
+		{
+			ftk_canvas_destroy(priv->canvas);
+			priv->canvas = NULL;
+		}
+	}
+
+	if(priv->canvas == NULL)
+	{
+		FtkColor color = ftk_style_get_color(FTK_COLOR_WINDOW);
+		priv->canvas = ftk_canvas_create(w, h, color);
+	}
+	ftk_widget_set_canvas(thiz, priv->canvas);
+
+	return RET_OK;
 }
 
 static Ret ftk_window_on_paint(FtkWidget* thiz)
@@ -293,12 +324,10 @@ FtkWidget* ftk_window_create(int x, int y, int width, int height)
 
 FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height)
 {
-	FtkCanvas* canvas = NULL;
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	
 	if(thiz != NULL)
 	{
-		FtkColor color = {0};
 		thiz->priv_subclass[0] = FTK_ZALLOC(sizeof(PrivInfo));
 		do
 		{
@@ -307,16 +336,9 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 			{
 				break;
 			}
-			canvas = ftk_canvas_create(width, height, color);
-			if(canvas == NULL)
-			{
-				break;
-			}
-			priv->canvas  = canvas;
 			priv->display = ftk_default_display();
 
 			ftk_widget_init(thiz, type, 0);
-			ftk_widget_set_canvas(thiz, canvas);
 			ftk_widget_move(thiz, x, y);
 			ftk_widget_resize(thiz, width, height);
 
@@ -326,12 +348,6 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 
 			ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 		}while(0);
-
-		if(canvas == NULL)
-		{
-			FTK_FREE(thiz->priv_subclass[0]);
-			FTK_FREE(thiz);
-		}
 	}
 
 	return thiz;

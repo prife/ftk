@@ -31,9 +31,9 @@
 
 #include "ftk_globals.h"
 #include "ftk_source_primary.h"
+#include "ftk_status_panel.h"
 #include "ftk_wnd_manager_default.h"
 
-#define FTK_STATUS_PANEL_HEIGHT 36
 #define FTK_MAX_GLOBAL_LISTENER 12
 
 typedef struct _PrivInfo
