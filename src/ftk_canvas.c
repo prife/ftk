@@ -434,6 +434,7 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 {
 	int i = 0;
 	int j = 0;
+	int k = 0;
 	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 
 	int width  = ftk_bitmap_width(thiz->bitmap);
@@ -462,17 +463,17 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 
 	for(i = y; i < h; i++)
 	{
-		for(j = x; j < w; j++)
+		for(j = x, k = xoffset; j < w; j++, k++)
 		{
 			if(src[j].a == 0xff)
 			{
-				dst[j] = src[j];
+				dst[k] = src[j];
 			}
 			else
 			{
-				dst[j].r = (src[j].r * src[j].a + dst[j].r * (0xff - src[j].a)) >> 8;
-				dst[j].g = (src[j].g * src[j].a + dst[j].g * (0xff - src[j].a)) >> 8;
-				dst[j].b = (src[j].b * src[j].a + dst[j].b * (0xff - src[j].a)) >> 8;
+				dst[k].r = (src[j].r * src[j].a + dst[k].r * (0xff - src[j].a)) >> 8;
+				dst[k].g = (src[j].g * src[j].a + dst[k].g * (0xff - src[j].a)) >> 8;
+				dst[k].b = (src[j].b * src[j].a + dst[k].b * (0xff - src[j].a)) >> 8;
 			}
 		}
 		src += bitmap_width;
