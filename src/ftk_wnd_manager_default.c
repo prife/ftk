@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_globals.h"
 #include "ftk_source_primary.h"
 #include "ftk_status_panel.h"
@@ -43,6 +44,7 @@ typedef struct _PrivInfo
 	FtkSource*   primary_source;
 	FtkWidget*   windows[FTK_MAX_WINDOWS];
 	FtkWidget*   grab_widget;
+	FtkWidget*   focus_widget;
 
 	void* global_listeners_ctx[FTK_MAX_GLOBAL_LISTENER];
 	FtkListener global_listeners[FTK_MAX_GLOBAL_LISTENER];
@@ -149,12 +151,11 @@ static Ret  ftk_wnd_manager_default_remove(FtkWndManager* thiz, FtkWidget* windo
 	return RET_OK;
 }
 
-static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent* event)
+static Ret  ftk_wnd_manager_dispatch_globals(FtkWndManager* thiz, FtkEvent* event)
 {
 	int i = 0;
 	Ret ret = RET_OK;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	for(i = 0; i < FTK_MAX_GLOBAL_LISTENER; i++)
 	{
@@ -167,6 +168,44 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 				return ret;
 			}
 		}
+	}
+
+	return ret;
+}
+
+static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
+{
+	int i = 0;
+	DECL_PRIV(thiz, priv);
+	
+	i = priv->top;
+	for(; i > 0; i--)
+	{
+		FtkWidget* win = priv->windows[i-1];
+		if(ftk_widget_is_insensitive(win) || !ftk_widget_is_visible(win))
+		{
+			continue;
+		}
+			
+		if(x >= ftk_widget_left_abs(win) && y >= ftk_widget_top_abs(win)
+			&& x < (ftk_widget_left_abs(win)  + ftk_widget_width(win))
+			&& y < (ftk_widget_top_abs(win) + ftk_widget_height(win)))
+		{
+			return win;
+		}
+	}
+
+	return NULL;
+}
+
+static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent* event)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
+
+	if(ftk_wnd_manager_dispatch_globals(thiz, event) != RET_OK)
+	{
+		return RET_REMOVE;
 	}
 
 	if(event->type == FTK_EVT_WND_DESTROY)
@@ -184,50 +223,28 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	{
 		return ftk_widget_event(priv->grab_widget, event);
 	}
-#if 0
-	else if(event->type == FTK_EVT_MOUSE_DOWN || event->type == FTK_EVT_MOUSE_UP
+	
+	if(event->type == FTK_EVT_MOUSE_DOWN || event->type == FTK_EVT_MOUSE_UP
 		|| event->type == FTK_EVT_MOUSE_MOVE)
 	{
 		int x = event->u.mouse.x;
 		int y = event->u.mouse.y;
+		FtkWidget* target = ftk_wnd_manager_find_target(thiz, x, y);
 
-		int i = priv->top;
-		for(; i > 0; i--)
+		if(target != NULL)
 		{
-			FtkWidget* win = priv->windows[i-1];
-
-			if(ftk_widget_is_insensitive(win) || !ftk_widget_is_visible(win))
+			ftk_widget_event(target, event);
+			if(event->type == FTK_EVT_MOUSE_DOWN)
 			{
-				continue;
-			}
-			
-			if(x >= ftk_widget_left_abs(win) && y >= ftk_widget_top_abs(win)
-				&& x < (ftk_widget_left_abs(win)  + ftk_widget_width(win))
-				&& y < (ftk_widget_top_abs(win) + ftk_widget_height(win)))
-			{
-				if(event->type == FTK_EVT_MOUSE_DOWN)
-				{
-					ftk_wnd_manager_default_grab(thiz, win);
-				}
-				ftk_widget_event(win, event);
-				break;
+				priv->focus_widget = target;
 			}
 		}
 	}
-	else if(event->type == FTK_EVT_MOUSE_DOWN || event->type == FTK_EVT_MOUSE_UP)
+	else if(priv->focus_widget != NULL)
 	{
-		if(priv->top > 0)
-		{
-			ftk_widget_event(priv->windows[priv->top - 1], event);
-		}
+		ftk_widget_event(priv->focus_widget, event);
 	}
-#else
-	else if(priv->top > 0)
-	{
-		/*always send to the top window.*/
-		ftk_widget_event(priv->windows[priv->top - 1], event);
-	}
-#endif
+
 	return RET_OK;
 }
 

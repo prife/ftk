@@ -55,6 +55,11 @@ typedef enum _FtkWidgetState
 	FTK_WIDGET_STATE_NR
 }FtkWidgetState;
 
+typedef enum _FtkWidgetAttr
+{
+	FTK_ATTR_TRANSPARENT = 1,
+}FtkWidgetAttr;
+
 struct _FtkWdiget
 {
 	int ref;
@@ -88,6 +93,7 @@ int ftk_widget_id(FtkWidget* thiz);
 Ret ftk_widget_update(FtkWidget* thiz);
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz);
 FtkCanvas* ftk_widget_canvas(FtkWidget* thiz);
+int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr);
 
 void ftk_widget_show(FtkWidget* thiz, int visible);
 void ftk_widget_set_visible(FtkWidget* thiz, int visible);
@@ -103,6 +109,8 @@ void ftk_widget_set_parent(FtkWidget* thiz, FtkWidget* parent);
 void ftk_widget_append_child(FtkWidget* thiz, FtkWidget* child);
 void ftk_widget_append_sibling(FtkWidget* thiz, FtkWidget* next);
 void ftk_widget_remove_child(FtkWidget* thiz, FtkWidget* child);
+void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr);
+void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr);
 
 FtkWidget* ftk_widget_toplevel(FtkWidget* thiz);
 FtkWidget* ftk_widget_parent(FtkWidget* thiz);

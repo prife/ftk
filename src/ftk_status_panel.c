@@ -189,7 +189,7 @@ static int ftk_status_panel_add_to(FtkWidget** array, size_t nr, int pos, FtkWid
 
 	for(i = 0; i < nr; i++)
 	{
-		if(pos > ftk_status_item_get_position(array[i]))
+		if(pos < ftk_status_item_get_position(array[i]))
 		{
 			int j = nr - 1;
 			for(; j > i; j--)
@@ -198,7 +198,7 @@ static int ftk_status_panel_add_to(FtkWidget** array, size_t nr, int pos, FtkWid
 			}
 			array[i] = item;
 
-			return RET_OK;
+			return nr + 1;
 		}
 	}
 

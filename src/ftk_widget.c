@@ -43,7 +43,9 @@ struct _FtkWidgetInfo
 	int height;
 	int visible;
 
+	int painting;
 	FtkCanvas* canvas;
+	FtkWidgetAttr attr;
 	FtkWidgetState state;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
 };
@@ -224,6 +226,31 @@ FtkCanvas* ftk_widget_canvas(FtkWidget* thiz)
 	toplevel = ftk_widget_toplevel(thiz);
 
 	return toplevel->priv->canvas;
+}
+
+int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr)
+{
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, 0);
+
+	return thiz->priv->attr & attr;
+}
+
+void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	thiz->priv->attr |= attr;
+
+	return;
+}
+
+void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	thiz->priv->attr = (~attr) & thiz->priv->attr;
+
+	return;
 }
 
 void ftk_widget_move(FtkWidget* thiz, int x, int y)
@@ -624,27 +651,55 @@ void ftk_widget_unref(FtkWidget* thiz)
 	return;
 }
 
+static int ftk_widget_paint_called_by_parent(FtkWidget* thiz)
+{
+	FtkWidget* parent = thiz->parent;
+	
+	return parent != NULL ? parent->priv->painting : 0;
+}
+
 void ftk_widget_paint_self(FtkWidget* thiz)
 {
 	return_if_fail(thiz != NULL && thiz->on_paint != NULL);
 	
 	if(ftk_widget_is_visible(thiz) && ftk_widget_is_parent_visible(thiz))
 	{
+		FtkGc gc = {0};
+		FtkWidget* parent = thiz->parent;
 		FtkWidgetInfo* priv =  thiz->priv;
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
 		FtkBitmap* bitmap = priv->gc[priv->state].bitmap;
-		
-		if(bitmap != NULL)
+
+		priv->painting = 1;
+		if(ftk_widget_has_attr(thiz, FTK_ATTR_TRANSPARENT))
 		{
-			ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, width, height, x, y);
+			if(!ftk_widget_paint_called_by_parent(thiz) && parent != NULL)
+			{
+#if 1
+				gc.mask = FTK_GC_FG;
+				gc.fg = ftk_widget_get_gc(parent)->bg;
+				ftk_canvas_reset_gc(canvas, &gc); 
+				ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+#endif
+				bitmap = parent->priv->gc[parent->priv->state].bitmap;
+				if(bitmap != NULL)
+				{
+					ftk_canvas_draw_bitmap(canvas, bitmap, x, y, width, height, x, y);
+				}
+			}
 		}
 		else
 		{
-			FtkGc gc = {0};
 			gc.mask = FTK_GC_FG;
 			gc.fg = ftk_widget_get_gc(thiz)->bg;
-			ftk_canvas_set_gc(priv->canvas, &gc); 
-			ftk_canvas_draw_rect(priv->canvas, x, y, width, height, 1);
+			ftk_canvas_reset_gc(canvas, &gc); 
+			ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+		}
+
+		bitmap = priv->gc[priv->state].bitmap;
+		if(bitmap != NULL)
+		{
+			ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, width, height, x, y);
 		}
 
 		if(thiz->on_paint != NULL)
@@ -656,6 +711,8 @@ void ftk_widget_paint_self(FtkWidget* thiz)
 		{
 			ftk_widget_paint(thiz->children);
 		}
+		
+		priv->painting = 0;
 	}
 	
 	return;

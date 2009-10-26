@@ -29,8 +29,6 @@
  *
  */
 
-FTK_INHERITE_FROM(Button);
-
 #ifndef FTK_STATUS_ITEM_H
 #define FTK_STATUS_ITEM_H
 
@@ -46,6 +44,11 @@ FtkWidget* ftk_status_item_create(int id, int width, int height);
  **/
 Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos);
 int         ftk_status_item_get_position(FtkWidget* thiz);
+
+Ret         ftk_status_item_set_text(FtkWidget* thiz, const char* text);
+const char* ftk_status_item_get_text(FtkWidget* thiz);
+
+Ret ftk_status_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
 #endif/*FTK_STATUS_ITEM_H*/
 

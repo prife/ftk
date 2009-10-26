@@ -457,8 +457,8 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	w += x;
 	h += y;
 
-	src += y * bitmap_width + x;
-	dst += yoffset * width + xoffset;
+	src += y * bitmap_width;
+	dst += yoffset * width;
 
 	for(i = y; i < h; i++)
 	{
