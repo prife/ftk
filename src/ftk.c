@@ -166,7 +166,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_sources_manager_add(ftk_default_sources_manager(), source);
 #endif
 
-	ftk_set_status_panel(ftk_status_panel_create());
+	ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
 	atexit(ftk_deinit);
 
 	return RET_OK;

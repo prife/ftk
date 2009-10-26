@@ -89,12 +89,11 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 		return RET_OK;
 	}
 
-
-	ftk_status_hide_all(thiz);
 	y = FTK_PANEL_MARGIN;
 	h = ftk_widget_height(thiz) - FTK_PANEL_MARGIN - FTK_PANEL_MARGIN;
 	right = ftk_widget_width(thiz);
 
+	ftk_status_hide_all(thiz);
 	for(i = 0; i < priv->first_nr; i++)
 	{
 		w = ftk_widget_width(priv->first[i]);
@@ -156,15 +155,18 @@ static Ret  ftk_status_panel_on_paint(FtkWidget* thiz)
 
 static void ftk_status_panel_destroy(FtkWidget* thiz)
 {
+	int i = 0;
+	DECL_PRIV1(thiz, priv);
 
-	/*TODO*/
+	priv->parent_destroy(thiz);
+	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
 
 	return;
 }
 
-FtkWidget* ftk_status_panel_create(void)
+FtkWidget* ftk_status_panel_create(int size)
 {
-	FtkWidget* thiz = ftk_window_create_with_type(FTK_PANEL, 0, 0, 0, 0);
+	FtkWidget* thiz = ftk_window_create_with_type(FTK_PANEL, 0, 0, size, size);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));

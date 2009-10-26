@@ -1,7 +1,7 @@
 /*
  * File: ftk_status_item.c    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   status_item. 
+ * Brief:   status item. 
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -45,6 +45,7 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
+
 	switch(event->type)
 	{
 		case FTK_EVT_MOUSE_DOWN:
@@ -87,10 +88,10 @@ static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
 	{
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, priv->text);
 		int dx = 2;
 		int dy = (height + 12)>>1;
+		int fh = ftk_canvas_font_height(canvas);
+		int fw = ftk_canvas_get_extent(canvas, priv->text);
 	
 		assert(fh < height && fw < width);
 		ftk_canvas_draw_string(canvas, x + dx, y + dy, priv->text);
@@ -123,7 +124,7 @@ FtkWidget* ftk_status_item_create(int id, int width, int height)
 		thiz->on_paint = ftk_status_item_on_paint;
 		thiz->destroy  = ftk_status_item_destroy;
 
-		ftk_widget_init(thiz, FTK_BUTTON, id);
+		ftk_widget_init(thiz, FTK_STATUS_ITEM, id);
 		ftk_widget_move(thiz, 0, 0);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);

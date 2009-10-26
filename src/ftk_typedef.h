@@ -109,6 +109,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 
 #define FTK_SPACE_WIDTH        5
 #define FTK_MAX_IMAGE_DECODERS 8
+#define FTK_STATUS_PANEL_HEIGHT 36
 
 #define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
