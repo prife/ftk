@@ -132,9 +132,9 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 		}
 		case FTK_DIALOG:
 		{
-			x = 0;
+			x = FTK_DIALOG_MARGIN;
 			y = ftk_widget_top(window) + FTK_STATUS_PANEL_HEIGHT;
-			w = ftk_display_width(ftk_default_display());
+			w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
 			h = ftk_widget_height(window);
 
 			break;

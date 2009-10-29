@@ -97,6 +97,7 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 {
 	int i = 0;
 	int j = 0;
+	int k = 0;
 	int x = rect->x;
 	int y = rect->y;
 	int w = rect->width;
@@ -130,10 +131,10 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 
 	for(i = y; i < h; i++)
 	{
-		for(j = x; j < w; j++)
+		for(j = x, k = xoffset; j < w; j++, k++)
 		{
 			unsigned short pixel = ((src[j].r >> 3) << 11) | ((src[j].g >> 2) << 5) | (src[j].b >> 3);
-			dst[j] = pixel;
+			dst[k] = pixel;
 		}
 		src += bitmap_width;
 		dst += display_width;

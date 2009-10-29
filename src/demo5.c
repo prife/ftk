@@ -2,6 +2,8 @@
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
+	*(int*)ctx = ftk_widget_id(obj);
+
 	return RET_QUIT;
 }
 
@@ -28,17 +30,18 @@ static Ret button_default_clicked(void* ctx, void* obj)
 
 static void on_window_close(void* user_data)
 {
-	ftk_quit();
+	FtkEvent event = {0};
+	ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 
 	return ;
 }
 
 int main(int argc, char* argv[])
 {
+	int id = 0;
 	ftk_init(argc, argv);
 	
-	FtkWidget* dialog = ftk_dialog_create(0, 10, 320, 300);
-
+	FtkWidget* dialog = ftk_dialog_create(0, 30, 320, 300);
 	FtkWidget* button = ftk_button_create(1001, 10, 30, 80, 30);
 	ftk_button_set_text(button, "show");
 	ftk_widget_append_child(dialog, button);
@@ -57,29 +60,24 @@ int main(int argc, char* argv[])
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, dialog);
 	
-	button = ftk_button_create(1004, 10, 130, 80, 40);
+	button = ftk_button_create(1005, 20, 120, 80, 40);
 	ftk_button_set_text(button, "yes");
 	ftk_widget_append_child(dialog, button);
 	ftk_widget_show(button, 1);
-	ftk_button_set_clicked_listener(button, button_default_clicked, dialog);
+	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	
-	button = ftk_button_create(1005, 100, 130, 80, 40);
+	button = ftk_button_create(1006, 180, 120, 80, 40);
 	ftk_button_set_text(button, "no");
 	ftk_widget_append_child(dialog, button);
 	ftk_widget_show(button, 1);
-	ftk_button_set_clicked_listener(button, button_default_clicked, dialog);
-	
-	button = ftk_button_create(1006, 200, 130, 80, 40);
-	ftk_button_set_text(button, "quit");
-	ftk_widget_append_child(dialog, button);
-	ftk_widget_show(button, 1);
-	ftk_button_set_clicked_listener(button, button_quit_clicked, dialog);
+	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	ftk_window_set_focus(dialog, button);
 
+	ftk_window_set_title(dialog, "dialog demo");
 	ftk_widget_show(dialog, 1);
 	ftk_widget_set_user_data(dialog, on_window_close, dialog);
 
-	assert(ftk_dialog_run(dialog) == 1006);
+	assert(ftk_dialog_run(dialog) == id);
 
 	return 0;
 }

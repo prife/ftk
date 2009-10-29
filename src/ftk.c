@@ -245,11 +245,15 @@ static Ret button_close_top_clicked(void* ctx, void* obj)
 	FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
 	FtkWidget* top_window = ftk_widget_user_data(title_widget);
 
-	if(top_window != NULL)
+	if(top_window != NULL && ftk_widget_type(top_window) == FTK_WINDOW)
 	{
 		ftk_logd("%s: close window %s\n", __func__, ftk_window_get_title(top_window));
 		ftk_widget_unref(top_window);
 		ftk_widget_set_user_data(title_widget, NULL, NULL);
+	}
+	else
+	{
+		ftk_logd("%s: not normal window.\n", __func__);
 	}
 
 	return RET_OK;

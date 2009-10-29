@@ -58,6 +58,7 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	{
 		int i = 0;
 		int j = 0;
+		int k = 0;
 		int display_width  = priv->width;
 		int display_height = priv->height;
 		int x = rect != NULL ? rect->x : 0;
@@ -69,7 +70,7 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 		FtkColor* src = ftk_bitmap_bits(bitmap);
 		FtkColor* dst = (FtkColor*)priv->bits;
 
-		ftk_logv("%s: x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, w, h);
+		ftk_logv("%s: ox=%d oy=%d x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, x, y, w, h);
 		return_val_if_fail(x < bitmap_width, RET_FAIL);
 		return_val_if_fail(y < bitmap_height, RET_FAIL);
 		return_val_if_fail(xoffset < display_width, RET_FAIL);
@@ -88,11 +89,11 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 
 		for(i = y; i < h; i++)
 		{
-			for(j = x; j < w; j++)
+			for(j = x, k= xoffset; j < w; j++, k++)
 			{
-				dst[j] = src[j];
-				dst[j].r = src[j].b;
-				dst[j].b = src[j].r;
+				dst[k] = src[j];
+				dst[k].r = src[j].b;
+				dst[k].b = src[j].r;
 			}
 			src += bitmap_width;
 			dst += display_width;
