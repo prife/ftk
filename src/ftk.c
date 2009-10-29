@@ -195,15 +195,14 @@ void ftk_quit(void)
 
 static Ret on_wnd_manager_event(void* ctx, void* obj)
 {
-	FtkEvent* event = obj;
 	Ret ret = RET_OK;
-	FtkWidget* panel = ftk_default_status_panel();
-	FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
+	FtkEvent* event = obj;
 
 	switch(event->type)
 	{
 		case FTK_EVT_TOP_WND_CHANGED:
 		{
+			FtkWidget* panel = ftk_default_status_panel();
 			FtkWidget* top_window = event->widget;
 			FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
 
@@ -222,6 +221,8 @@ static Ret on_wnd_manager_event(void* ctx, void* obj)
 		}
 		case FTK_EVT_WND_CONFIG_CHANGED:
 		{
+			FtkWidget* panel = ftk_default_status_panel();
+			FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
 			FtkWidget* top_window = ftk_widget_user_data(title_widget);
 			if(top_window == event->widget)
 			{
@@ -264,6 +265,7 @@ static void ftk_init_panel(void)
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/status-bg.png");
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
+	ftk_gc_reset(&gc);
 
 	gc.mask = FTK_GC_BITMAP;
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/close-32.png");
@@ -273,13 +275,16 @@ static void ftk_init_panel(void)
 	ftk_status_panel_add(panel, -1, item);
 	ftk_widget_show(item, 1);
 	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
+	ftk_gc_reset(&gc);
 
+	gc.mask = FTK_GC_BITMAP;
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/flag-32.png");
 	item = ftk_status_item_create(IDC_ICON_ITEM, 32, 32);
 	ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
 	ftk_status_panel_add(panel, 1, item);
 	ftk_widget_show(item, 1);
+	ftk_gc_reset(&gc);
 
 	item = ftk_status_item_create(IDC_TITLE_ITEM, 160, 32);
 	ftk_status_panel_add(panel, 2, item);

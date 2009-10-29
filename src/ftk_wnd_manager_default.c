@@ -346,6 +346,7 @@ static Ret  ftk_wnd_manager_default_queue_event(FtkWndManager* thiz, FtkEvent* e
 {
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
+	return_val_if_fail(ftk_default_main_loop() != NULL, RET_FAIL);
 
 	return ftk_source_queue_event(priv->primary_source, event);
 }
@@ -396,8 +397,9 @@ static void ftk_wnd_manager_default_destroy(FtkWndManager* thiz)
 	{
 		for(i = 0; i < priv->top; i++)
 		{
-			ftk_widget_unref(priv->windows[i]);
-			priv->windows[i] = NULL;
+			FtkWidget* win = priv->windows[0];
+			ftk_wnd_manager_remove(thiz, win);
+			ftk_widget_unref(win);
 		}
 
 		FTK_ZFREE(thiz, sizeof(FtkWndManager));

@@ -627,11 +627,11 @@ void ftk_widget_destroy(FtkWidget* thiz)
 		{
 			ftk_gc_reset(thiz->priv->gc+i);
 		}
-		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
 		if(thiz->priv->user_data != NULL && thiz->priv->user_data_destroy != NULL)
 		{
 			thiz->priv->user_data_destroy(thiz->priv->user_data);
 		}
+		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
 	}
 

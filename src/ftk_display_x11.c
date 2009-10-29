@@ -142,7 +142,7 @@ static void ftk_display_x11_destroy(FtkDisplay* thiz)
 		XDestroyWindow(priv->display, priv->win);
 		XFreeGC(priv->display, priv->gc);
 		//XCloseDisplay(priv->display);
-
+		FTK_FREE(priv->bits);
 		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
 	}
 
