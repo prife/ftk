@@ -287,11 +287,11 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	}
 	else if(priv->grab_widget != NULL)
 	{
-		target = event->widget;
+		target = priv->grab_widget;
 	}
 	else if(priv->focus_widget != NULL)
 	{
-		target = event->widget;
+		target = priv->focus_widget;
 	}
 	
 	if(!ftk_widget_is_insensitive(target))

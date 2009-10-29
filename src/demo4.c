@@ -71,10 +71,9 @@ int main(int argc, char* argv[])
 	ftk_init(argc, argv);
 
 	width = ftk_display_width(ftk_default_display());
-	height = ftk_display_height(ftk_default_display());
+	height = ftk_display_height(ftk_default_display()) - FTK_STATUS_PANEL_HEIGHT;
 	gc.mask = FTK_GC_BITMAP;
 	win = ftk_window_create(0, 0, width, height);
-
 	for(i = 0; i < height/80; i++)
 	{
 		for(j = 0; j < width/80; j++)
@@ -94,7 +93,6 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-
 	ftk_window_set_title(win, "button demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);

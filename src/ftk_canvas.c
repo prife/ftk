@@ -137,7 +137,8 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	height = ftk_bitmap_height(thiz->bitmap);
 	bits   = ftk_bitmap_bits(thiz->bitmap);
 	return_val_if_fail(bits != NULL && x < width, RET_FAIL);
-	
+	return_val_if_fail(y < height, RET_FAIL);	
+
 	x = x < 0 ? 0 : x;
 	y = y < 0 ? 0 : y;
 	w = (x + w) < width ? w : width - x;
@@ -272,7 +273,10 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 	{
 		for(i = 0; i < h; i++)
 		{
-			ftk_canvas_draw_hline(thiz, x, (y+i), w);	
+			if((y + i) < height)
+			{
+				ftk_canvas_draw_hline(thiz, x, (y+i), w);	
+			}
 		}
 	}
 	else
@@ -563,6 +567,7 @@ void ftk_canvas_destroy(FtkCanvas* thiz)
 {
 	if(thiz != NULL)
 	{
+		ftk_gc_reset(&thiz->gc);
 		ftk_bitmap_unref(thiz->bitmap);
 		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
