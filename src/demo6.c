@@ -26,6 +26,18 @@ static Ret button_default_clicked(void* ctx, void* obj)
 
 
 static int g_index = 0;
+static void on_window_close(void* user_data)
+{
+	g_index--;
+
+	ftk_logd("%s: g_index=%d\n", __func__, g_index);
+	if(g_index == 0)
+	{
+		ftk_quit();
+	}
+
+	return ;
+}
 static void create_app_window(void)
 {
 	char title[32] = {0};
@@ -51,6 +63,7 @@ static void create_app_window(void)
 	
 	ftk_window_set_title(win, title);
 	ftk_widget_show(win, 1);
+	ftk_widget_set_user_data(win, on_window_close, win);
 
 	return;
 }
