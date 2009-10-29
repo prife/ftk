@@ -669,6 +669,7 @@ void ftk_widget_paint_self(FtkWidget* thiz)
 		FtkWidgetInfo* priv =  thiz->priv;
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
 		FtkBitmap* bitmap = priv->gc[priv->state].bitmap;
+		return_if_fail(canvas != NULL);
 
 		priv->painting = 1;
 		if(ftk_widget_has_attr(thiz, FTK_ATTR_TRANSPARENT))

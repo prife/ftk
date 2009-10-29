@@ -40,7 +40,6 @@ typedef struct _PrivInfo
 	FtkCanvas*  canvas;
 	FtkDisplay* display;
 	FtkWidget*  focus_widget;
-	FtkWndManager* wnd_manager;
 	int fullscreen;
 }PrivInfo;
 
@@ -169,11 +168,16 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SHOW:
 		{
+			FtkEvent event = {.type = FTK_EVT_SHOW, .widget = thiz};
 			ftk_window_realize(thiz);
+			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
+
 			break;
 		}
 		case FTK_EVT_HIDE:
 		{
+			FtkEvent event = {.type = FTK_EVT_HIDE, .widget = thiz};
+			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 			/*FIXME*/
 			break;
 		}
@@ -266,10 +270,14 @@ static void ftk_window_destroy(FtkWidget* thiz)
 Ret        ftk_window_set_title(FtkWidget* thiz, const char* title)
 {
 	DECL_PRIV0(thiz, priv);
+	FtkEvent event = {.type = FTK_EVT_WND_CONFIG_CHANGED};
 	return_val_if_fail(priv != NULL && title != NULL, RET_FAIL);
 
 	FTK_FREE(priv->title);
 	priv->title = strdup(title);
+
+	event.widget = thiz;
+	ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 
 	return RET_OK;
 }

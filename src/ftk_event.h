@@ -47,6 +47,8 @@ typedef enum _FtkEventType
 	FTK_EVT_SHOW,
 	FTK_EVT_UPDATE,
 	FTK_EVT_WND_DESTROY,
+	FTK_EVT_TOP_WND_CHANGED,
+	FTK_EVT_WND_CONFIG_CHANGED,
 }FtkEventType;
 
 typedef struct _FtkEvent

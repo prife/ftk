@@ -34,6 +34,7 @@
 #include "ftk_main_loop.h"
 #include "ftk_wnd_manager_default.h"
 #include "ftk_bitmap_factory.h"
+#include "ftk_status_panel.h"
 
 #ifdef USE_LINUX_NATIVE
 #include "ftk_display_fb.h"

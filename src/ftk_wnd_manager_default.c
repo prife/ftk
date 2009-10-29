@@ -73,6 +73,32 @@ static Ret  ftk_wnd_manager_default_ungrab(FtkWndManager* thiz, FtkWidget* windo
 	return RET_OK;
 }
 
+static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
+{
+	int i = 0;
+	DECL_PRIV(thiz, priv);
+	FtkWidget* win = NULL;
+	FtkEvent event = {.type = FTK_EVT_TOP_WND_CHANGED};
+
+	for(i = priv->top - 1; i >=0; i--)
+	{
+		win = priv->windows[i];
+		if((ftk_widget_type(win) == FTK_WINDOW || ftk_widget_type(win) == FTK_DIALOG)
+			&& ftk_widget_is_visible(win))
+		{
+			break;
+		}
+		else
+		{
+			win = NULL;
+		}
+	}
+	event.widget = win;
+	ftk_wnd_manager_queue_event(thiz, &event);
+
+	return RET_OK;
+}
+
 static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 {
 	int x = 0;
@@ -105,7 +131,6 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 	}
 	
 	ftk_widget_move_resize(window, x, y, w, h);
-
 	ftk_logd("type=%d %d %d %d %d\n", ftk_widget_type(window), x, y, w, h);
 
 	return RET_OK;
@@ -207,6 +232,30 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	{
 		return RET_REMOVE;
 	}
+	
+	switch(event->type)
+	{
+		case FTK_EVT_WND_DESTROY:
+		{
+			ftk_wnd_manager_default_remove(thiz, event->widget);
+			ftk_wnd_manager_update(thiz);
+			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+			
+			return RET_OK;
+		}
+		case FTK_EVT_HIDE:
+		{
+			ftk_wnd_manager_update(thiz);
+			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+			return RET_OK;
+		}
+		case FTK_EVT_SHOW:
+		{
+			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+			return RET_OK;
+		}
+		default:break;
+	}
 
 	if(event->type == FTK_EVT_WND_DESTROY)
 	{
@@ -250,8 +299,15 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 
 static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 {
-	//DECL_PRIV(thiz, priv);
-	/*FIXME: relayout the windows and update to display*/
+	int i = 0;
+	DECL_PRIV(thiz, priv);
+
+	/*FIXME: need optimization*/
+	for(i = 0; i < priv->top; i++)
+	{
+		FtkWidget* win = priv->windows[i];
+		ftk_widget_paint(win);
+	}
 
 	return RET_OK;
 }
