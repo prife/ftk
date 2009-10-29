@@ -91,6 +91,8 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 			for(j = x; j < w; j++)
 			{
 				dst[j] = src[j];
+				dst[j].r = src[j].b;
+				dst[j].b = src[j].r;
 			}
 			src += bitmap_width;
 			dst += display_width;
@@ -136,7 +138,7 @@ static void ftk_display_x11_destroy(FtkDisplay* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 
-		XDestroyImage(priv->ximage);
+//		XDestroyImage(priv->ximage);
 		XDestroyWindow(priv->display, priv->win);
 		XFreeGC(priv->display, priv->gc);
 		//XCloseDisplay(priv->display);
