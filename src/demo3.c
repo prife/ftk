@@ -9,6 +9,13 @@ static Ret timeout(void* ctx)
 	return RET_REMOVE;
 }
 
+static void on_window_close(void* user_data)
+{
+	ftk_quit();
+
+	return ;
+}
+
 int main(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
@@ -39,6 +46,7 @@ int main(int argc, char* argv[])
 	ftk_window_set_title(win, "demo3");
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	ftk_widget_show(win, 1);
+	ftk_widget_set_user_data(win, on_window_close, win);
 
 	ftk_run();
 
