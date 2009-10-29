@@ -130,6 +130,16 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 
 			break;
 		}
+		case FTK_DIALOG:
+		{
+			x = 0;
+			y = ftk_widget_top(window) + FTK_STATUS_PANEL_HEIGHT;
+			w = ftk_display_width(ftk_default_display());
+			h = ftk_widget_height(window);
+
+			break;
+		}
+		default:break;
 	}
 	
 	ftk_widget_move_resize(window, x, y, w, h);
