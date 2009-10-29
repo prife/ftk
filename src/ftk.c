@@ -35,6 +35,7 @@
 #include "ftk_wnd_manager_default.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_status_panel.h"
+#include "ftk_status_item.h"
 
 #ifdef USE_LINUX_NATIVE
 #include "ftk_display_fb.h"
@@ -55,6 +56,7 @@
 #endif
 
 static void ftk_deinit(void);
+static void ftk_init_panel(void);
 
 #ifdef USE_LINUX_NATIVE
 static Ret ftk_init_input(void)
@@ -168,6 +170,8 @@ Ret ftk_init(int argc, char* argv[])
 #endif
 
 	ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
+	ftk_init_panel();
+
 	atexit(ftk_deinit);
 
 	return RET_OK;
@@ -181,6 +185,108 @@ Ret ftk_run(void)
 void ftk_quit(void)
 {
 	ftk_main_loop_quit(ftk_default_main_loop());
+
+	return;
+}
+
+#define IDC_TITLE_ITEM 1000
+#define IDC_ICON_ITEM  1001
+#define IDC_CLOSE_ITEM 1002
+
+static Ret on_wnd_manager_event(void* ctx, void* obj)
+{
+	FtkEvent* event = obj;
+	Ret ret = RET_OK;
+	FtkWidget* panel = ftk_default_status_panel();
+	FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
+
+	switch(event->type)
+	{
+		case FTK_EVT_TOP_WND_CHANGED:
+		{
+			FtkWidget* top_window = event->widget;
+			FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
+
+			if(top_window != NULL)
+			{
+				ftk_status_item_set_text(title_widget, ftk_window_get_title(top_window));
+			}
+			else
+			{
+				ftk_status_item_set_text(title_widget, NULL);
+			}
+			ftk_widget_set_user_data(title_widget, NULL, top_window);
+			ftk_logd("top_window changed: %s\n", ftk_window_get_title(top_window));
+			ret = RET_REMOVE;
+			break;
+		}
+		case FTK_EVT_WND_CONFIG_CHANGED:
+		{
+			FtkWidget* top_window = ftk_widget_user_data(title_widget);
+			if(top_window == event->widget)
+			{
+				ftk_status_item_set_text(title_widget, ftk_window_get_title(top_window));
+			}
+			
+			ftk_logd("%s: config changed: %p %p\n", __func__, top_window, event->widget);
+			ret = RET_REMOVE;
+			break;
+		}
+		default:break;
+	}
+
+	return ret;
+}
+
+static Ret button_close_top_clicked(void* ctx, void* obj)
+{
+	FtkWidget* panel = ftk_default_status_panel();
+	FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
+	FtkWidget* top_window = ftk_widget_user_data(title_widget);
+
+	if(top_window != NULL)
+	{
+		ftk_logd("%s: close window %s\n", __func__, ftk_window_get_title(top_window));
+		ftk_widget_unref(top_window);
+		ftk_widget_set_user_data(title_widget, NULL, NULL);
+	}
+
+	return RET_OK;
+}
+
+static void ftk_init_panel(void)
+{
+	FtkGc gc = {0};
+	FtkWidget* item = NULL;	
+	FtkWidget* panel = ftk_default_status_panel();
+
+	gc.mask = FTK_GC_BITMAP;
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/status-bg.png");
+	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
+	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
+
+	gc.mask = FTK_GC_BITMAP;
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/close-32.png");
+	item = ftk_status_item_create(IDC_CLOSE_ITEM, 32, 32);
+	ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+	ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
+	ftk_status_panel_add(panel, -1, item);
+	ftk_widget_show(item, 1);
+	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
+
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/flag-32.png");
+	item = ftk_status_item_create(IDC_ICON_ITEM, 32, 32);
+	ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+	ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
+	ftk_status_panel_add(panel, 1, item);
+	ftk_widget_show(item, 1);
+
+	item = ftk_status_item_create(IDC_TITLE_ITEM, 160, 32);
+	ftk_status_panel_add(panel, 2, item);
+	ftk_widget_show(item, 1);
+
+	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), on_wnd_manager_event, NULL);
+	ftk_widget_show(panel, 1);
 
 	return;
 }

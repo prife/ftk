@@ -94,6 +94,7 @@ typedef enum _FtkLogLevel
 	FTK_LOG_E = 2,
 }FtkLogLevel;
 
+typedef void (*FtkDestroy)(void* user_data);
 typedef Ret (*FtkIdle)(void* user_data);
 typedef Ret (*FtkTimer)(void* user_data);
 typedef Ret (*FtkListener)(void* user_data, void* obj);

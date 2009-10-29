@@ -48,6 +48,8 @@ struct _FtkWidgetInfo
 	FtkWidgetAttr attr;
 	FtkWidgetState state;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
+	void* user_data;
+	FtkDestroy user_data_destroy;
 };
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz);
@@ -235,6 +237,13 @@ int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 	return thiz->priv->attr & attr;
 }
 
+void* ftk_widget_user_data(FtkWidget* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
+
+	return thiz->priv->user_data;
+}
+
 void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
@@ -249,6 +258,20 @@ void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->attr = (~attr) & thiz->priv->attr;
+
+	return;
+}
+
+void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	if(thiz->priv->user_data != NULL && thiz->priv->user_data_destroy != NULL)
+	{
+		thiz->priv->user_data_destroy(thiz->priv->user_data);
+	}
+	thiz->priv->user_data = data;
+	thiz->priv->user_data_destroy = destroy;
 
 	return;
 }
@@ -596,14 +619,18 @@ void ftk_widget_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		int i = 0;
+		if(thiz->destroy != NULL)
+		{
+			thiz->destroy(thiz);
+		}
 		for(i = 0; i < FTK_WIDGET_STATE_NR; i++)
 		{
 			ftk_gc_reset(thiz->priv->gc+i);
 		}
 		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
-		if(thiz->destroy != NULL)
+		if(thiz->priv->user_data != NULL && thiz->priv->user_data_destroy != NULL)
 		{
-			thiz->destroy(thiz);
+			thiz->priv->user_data_destroy(thiz->priv->user_data);
 		}
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
 	}

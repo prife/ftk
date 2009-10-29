@@ -156,7 +156,6 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
-	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
