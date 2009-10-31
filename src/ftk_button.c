@@ -83,6 +83,7 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_button_on_paint(FtkWidget* thiz)
 {
+	int i = 0;
 	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
@@ -100,9 +101,18 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		gc.mask = FTK_GC_FG;
 		gc.fg = ftk_widget_get_gc(thiz)->bg;
 		ftk_canvas_reset_gc(canvas, &gc); 
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
-		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+		ftk_canvas_draw_hline(canvas, x + 2, y, width-4);
+		ftk_canvas_draw_hline(canvas, x + 1, y + 1, width-2);
+		for(i = 2; i < height-4; i++)
+		{
+			ftk_canvas_draw_hline(canvas, x, y + i, width);
+		}
+		gc.fg.r -= 0x1f;
+		gc.fg.g -= 0x1f;
+		gc.fg.b -= 0x1f;
+		ftk_canvas_reset_gc(canvas, &gc); 
+		ftk_canvas_draw_hline(canvas, x + 1, y + i, width-2);
+		ftk_canvas_draw_hline(canvas, x + 2, y + i + 1, width-4);
 	}
 	
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
@@ -159,6 +169,7 @@ FtkWidget* ftk_button_create(int id, int x, int y, int width, int height)
 		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
 		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 	}
 
 	return thiz;
