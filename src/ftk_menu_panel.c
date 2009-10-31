@@ -35,6 +35,7 @@
 
 #define FTK_MENU_MAX_ITEM 16
 #define FTK_MENU_ITEM_HEIGHT 36
+#define FTK_MENU_ITEM_WIDTH 80
 
 typedef struct _PrivInfo
 {
@@ -50,10 +51,12 @@ static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 {
 	int i = 0;
 	int n = 0;
+	int w = 0;
 	FtkRect* rect = NULL;
 	DECL_PRIV1(thiz, priv);
 	int screen_width = ftk_display_width(ftk_default_display());
-	
+	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;	
+
 	for(i = 0; i < priv->items_nr; i++)
 	{
 		if(ftk_widget_is_visible(priv->items[i]))
@@ -67,137 +70,42 @@ static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 	rect = (FtkRect*)FTK_ALLOC(sizeof(FtkRect) * n);
 	return_val_if_fail(rect != NULL, NULL);
 
-	switch(n)
+	if(n < max_items_per_row)
 	{
-		case 1:
+		w = screen_width/n;
+		for(i = 0; i < n; i++)
 		{
-			rect[0].x = 0;
-			rect[0].y = 0;
-			rect[0].width = screen_width;
-			rect[0].height = FTK_MENU_ITEM_HEIGHT;
-
-			break;
+			rect[i].x = w * i;
+			rect[i].y = 0;
+			rect[i].width = w;
+			rect[i].height = FTK_MENU_ITEM_HEIGHT;
 		}
-		case 2:
-		{
-			rect[0].x = 0;
-			rect[0].y = 0;
-			rect[0].width = screen_width/2;
-			rect[0].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[1].x = screen_width/2;
-			rect[1].y = 0;
-			rect[1].width = screen_width/2;
-			rect[1].height = FTK_MENU_ITEM_HEIGHT;
+	}
+	else
+	{
+		int first_n = 0;
+		int second_n = 0;
+		n = n <= max_items_per_row * 2 ? n : max_items_per_row * 2;
+		
+		first_n = n/2;
+		second_n = (n+1)/2;
 
-			break;
+		w = screen_width/first_n;
+		for(i = 0; i < first_n; i++)
+		{
+			rect[i].x = w * i;
+			rect[i].y = 0;
+			rect[i].width = w;
+			rect[i].height = FTK_MENU_ITEM_HEIGHT;
 		}
-		case 3:
+		
+		w = screen_width/second_n;
+		for(i = 0; i < second_n; i++)
 		{
-			rect[0].x = 0;
-			rect[0].y = 0;
-			rect[0].width = screen_width/3;
-			rect[0].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[1].x = screen_width/3;
-			rect[1].y = 0;
-			rect[1].width = screen_width/3;
-			rect[1].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[2].x = 2 * screen_width/3;
-			rect[2].y = 0;
-			rect[2].width  = screen_width/3;
-			rect[2].height = FTK_MENU_ITEM_HEIGHT;
-
-			break;
-		}
-		case 4:
-		{
-			rect[0].x = 0;
-			rect[0].y = 0;
-			rect[0].width = screen_width/2;
-			rect[0].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[1].x = screen_width/2;
-			rect[1].y = 0;
-			rect[1].width = screen_width/2;
-			rect[1].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[2].x = 0;
-			rect[2].y = FTK_MENU_ITEM_HEIGHT;
-			rect[2].width = screen_width/2;
-			rect[2].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[3].x = screen_width/2;
-			rect[3].y = FTK_MENU_ITEM_HEIGHT;
-			rect[3].width = screen_width/2;
-			rect[3].height = FTK_MENU_ITEM_HEIGHT;
-
-			break;
-		}
-		case 5:
-		{
-			rect[0].x = 0;
-			rect[0].y = 0;
-			rect[0].width = screen_width/2;
-			rect[0].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[1].x = screen_width/2;
-			rect[1].y = 0;
-			rect[1].width = screen_width/2;
-			rect[1].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[2].x = 0;
-			rect[2].y = FTK_MENU_ITEM_HEIGHT;
-			rect[2].width = screen_width/3;
-			rect[2].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[3].x = screen_width/3;
-			rect[3].y = FTK_MENU_ITEM_HEIGHT;
-			rect[3].width = screen_width/3;
-			rect[3].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[4].x = 2 * screen_width/3;
-			rect[4].y = FTK_MENU_ITEM_HEIGHT;
-			rect[4].width  = screen_width/3;
-			rect[4].height = FTK_MENU_ITEM_HEIGHT;
-
-			break;
-		}
-		case 6:
-		default:
-		{
-			rect[0].x = 0;
-			rect[0].y = 0;
-			rect[0].width = screen_width/3;
-			rect[0].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[1].x = screen_width/3;
-			rect[1].y = 0;
-			rect[1].width = screen_width/3;
-			rect[1].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[2].x = 2 * screen_width/3;
-			rect[2].y = 0;
-			rect[2].width  = screen_width/3;
-			rect[2].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[3].x = 0;
-			rect[3].y = FTK_MENU_ITEM_HEIGHT;
-			rect[3].width = screen_width/3;
-			rect[3].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[4].x = screen_width/3;
-			rect[4].y = FTK_MENU_ITEM_HEIGHT;
-			rect[4].width = screen_width/3;
-			rect[4].height = FTK_MENU_ITEM_HEIGHT;
-			
-			rect[5].x = 2 * screen_width/3;
-			rect[5].y = FTK_MENU_ITEM_HEIGHT;
-			rect[5].width  = screen_width/3;
-			rect[5].height = FTK_MENU_ITEM_HEIGHT;
-
-			break;
+			rect[first_n + i].x = w * i;
+			rect[first_n + i].y = FTK_MENU_ITEM_HEIGHT;
+			rect[first_n + i].width = w;
+			rect[first_n + i].height = FTK_MENU_ITEM_HEIGHT;
 		}
 	}
 
