@@ -60,6 +60,7 @@ Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc)
 	return_val_if_fail(thiz != NULL && gc != NULL, RET_FAIL);
 
 	thiz->gc.mask = 0;
+
 	return ftk_gc_copy(&thiz->gc, gc);
 }
 
@@ -70,19 +71,43 @@ Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc)
 	return ftk_gc_copy(&thiz->gc, gc);
 }
 
+#define FTK_ALPHA_1(s, d, a) (d) = ((unsigned int)((d) * (0xff - (a)) + (s) * (a))) >> 8
+#define FTK_ALPHA(sc, dc, a) FTK_ALPHA_1(sc->r, dc->r, a); \
+	FTK_ALPHA_1(sc->g, dc->g, a); \
+	FTK_ALPHA_1(sc->b, dc->b, a);
+
+#define PUT_PIXEL(pdst, alpha) \
+	do\
+	{\
+		if(alpha != 0xff)\
+		{\
+			FtkColor* color = &(thiz->gc.fg);\
+			FTK_ALPHA(color, pdst, alpha);\
+		}\
+		else\
+		{\
+			pdst[0] = thiz->gc.fg;\
+		}\
+	}while(0);
+
 Ret ftk_canvas_draw_point(FtkCanvas* thiz, int x, int y)
 {
 	int width = 0;
 	int height = 0;
 	FtkColor* bits = NULL;
+	unsigned char alpha = 0;
+	FtkColor* pdst = NULL;
+
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	width  = ftk_bitmap_width(thiz->bitmap);
 	height = ftk_bitmap_height(thiz->bitmap);
 	bits   = ftk_bitmap_bits(thiz->bitmap);
 	return_val_if_fail(bits != NULL && x < width && y < height, RET_FAIL);
+	pdst = bits + y * width + x;
+	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
 
-	bits[y * width + x] = thiz->gc.fg;
+	PUT_PIXEL(pdst, alpha);
 
 	return RET_OK;
 }
@@ -93,12 +118,15 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 	int width = 0;
 	int height = 0;
 	FtkColor* bits = NULL;
+	unsigned char alpha = 0;
+	FtkColor* pdst = NULL;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	
 	width  = ftk_bitmap_width(thiz->bitmap);
 	height = ftk_bitmap_height(thiz->bitmap);
 	bits   = ftk_bitmap_bits(thiz->bitmap);
 	return_val_if_fail(bits != NULL && y < height, RET_FAIL);
+	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
 
 	x = x < 0 ? 0 : x;
 	y = y < 0 ? 0 : y;
@@ -111,7 +139,8 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 		{
 			if(FTK_MASK_BITS(line_mask, i))
 			{
-				bits[width * (y + i) + x] = thiz->gc.fg;
+				pdst = bits + width * (y + i) + x;
+				PUT_PIXEL(pdst, alpha);
 			}
 		}
 	}
@@ -119,7 +148,8 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 	{
 		for(i = 0; i < h; i++)
 		{
-			bits[width * (y + i) + x] = thiz->gc.fg;
+			pdst = bits + width * (y + i) + x;
+			PUT_PIXEL(pdst, alpha);
 		}
 	}
 
@@ -132,12 +162,16 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	int width = 0;
 	int height = 0;
 	FtkColor* bits = NULL;
+	unsigned char alpha = 0;
+	FtkColor* pdst = NULL;
+	
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	width  = ftk_bitmap_width(thiz->bitmap);
 	height = ftk_bitmap_height(thiz->bitmap);
 	bits   = ftk_bitmap_bits(thiz->bitmap);
 	return_val_if_fail(bits != NULL && x < width, RET_FAIL);
 	return_val_if_fail(y < height, RET_FAIL);	
+	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
 
 	x = x < 0 ? 0 : x;
 	y = y < 0 ? 0 : y;
@@ -150,7 +184,8 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 		{
 			if(FTK_MASK_BITS(line_mask, i))
 			{
-				bits[x+i] = thiz->gc.fg;
+				pdst = bits + x + i;
+				PUT_PIXEL(pdst, alpha);
 			}
 		}
 	}
@@ -158,7 +193,8 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	{
 		for(i = 0; i < w; i++)
 		{
-			bits[x+i] = thiz->gc.fg;
+			pdst = bits + x + i;
+			PUT_PIXEL(pdst, alpha);
 		}
 	}
 
@@ -173,9 +209,10 @@ static Ret ftk_canvas_draw_normal_line(FtkCanvas* thiz,
 {
     int dx, dy;
     int stepx, stepy;
+    FtkColor* pdst = NULL;
     int width = ftk_bitmap_width(thiz->bitmap);
 	FtkColor* bits = ftk_bitmap_bits(thiz->bitmap);
-
+	unsigned char alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
     /* Bresenham's line drawing algorithm */
 
     dx = x2 - x1;
@@ -202,7 +239,9 @@ static Ret ftk_canvas_draw_normal_line(FtkCanvas* thiz,
     dy <<= 1;
     dx <<= 1;
 
-	bits[y1 * width + x1] = thiz->gc.fg;
+	pdst = bits + y1 * width + x1;
+	PUT_PIXEL(pdst, alpha);
+    
     if (dx > dy) 
     {
         int fraction = dy - (dx >> 1);
@@ -215,7 +254,8 @@ static Ret ftk_canvas_draw_normal_line(FtkCanvas* thiz,
             }
             x1 += stepx;
             fraction += dy;
-			bits[y1 * width + x1] = thiz->gc.fg;
+            pdst = bits + y1 * width + x1;
+			PUT_PIXEL(pdst, alpha);
         }
     } 
     else 
@@ -230,7 +270,9 @@ static Ret ftk_canvas_draw_normal_line(FtkCanvas* thiz,
             }
             y1 += stepy;
             fraction += dx;
-			bits[y1 * width + x1] = thiz->gc.fg;
+
+            pdst = bits + y1 * width + x1;
+            PUT_PIXEL(pdst, alpha);
         }
     }
 	
@@ -269,6 +311,7 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 	height = ftk_bitmap_height(thiz->bitmap);
 	return_val_if_fail(x < width && y < height, RET_FAIL);
 
+	ftk_logd("a=%02x\n", thiz->gc.fg.a);
 	if(fill)
 	{
 		for(i = 0; i < h; i++)

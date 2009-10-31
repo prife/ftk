@@ -30,13 +30,8 @@
  */
 #include "ftk.h"
 
-int main(int argc, char* argv[])
+void test_misc(FtkDisplay* display, FtkFont* font)
 {
-	ftk_init(argc, argv);
-
-	FtkFont* font = ftk_default_font();
-	FtkDisplay* display = ftk_default_display();
-
 	if(display != NULL)
 	{
 		int i = 0;
@@ -104,6 +99,278 @@ int main(int argc, char* argv[])
 		ftk_canvas_destroy(thiz);
 	}
 
+	sleep(3);
+
+	return;
+}
+
+void test_draw_point(FtkDisplay* display)
+{
+	int i = 0;
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkRect rect = {0};
+	FtkColor color = {.a = 0xff};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+
+	rect.width = width;
+	rect.height = height;
+
+	color.r = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	for(i = 0; i < width; i++)
+	{
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_point(thiz, i, 10);
+	}
+	
+	color.g = 0xff;
+	color.r = 0;
+	for(i = 0; i < width; i++)
+	{
+		color.a = 0xff - (0xff & i);
+		gc.fg = color;
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_point(thiz, i, 20);
+	}
+	
+	color.r = 0;
+	color.g = 0;
+	color.b = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	gc.mask |= FTK_GC_ALPHA;
+	for(i = 0; i < width; i++)
+	{
+		gc.alpha = 0xff - (0xff & i);
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_point(thiz, i, 30);
+	}
+
+	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	
+	ftk_canvas_destroy(thiz);
+
+	sleep(3);
+
+	return;
+}
+
+void test_draw_vline(FtkDisplay* display)
+{
+	int i = 0;
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkRect rect = {0};
+	FtkColor color = {.a = 0xff};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+
+	rect.width = width;
+	rect.height = height;
+
+	color.r = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	for(i = 0; i < width; i++)
+	{
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_vline(thiz, i, 0, 20);
+	}
+	
+	color.g = 0xff;
+	color.r = 0;
+	for(i = 0; i < width; i++)
+	{
+		color.a = 0xff - (0xff & i);
+		gc.fg = color;
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_vline(thiz, i, 30, 20);
+	}
+	
+	color.r = 0;
+	color.g = 0;
+	color.b = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	gc.mask |= FTK_GC_ALPHA;
+	for(i = 0; i < width; i++)
+	{
+		gc.alpha = 0xff - (0xff & i);
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_vline(thiz, i, 60, 20);
+	}
+
+	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	
+	ftk_canvas_destroy(thiz);
+	sleep(3);
+
+	return;
+}
+
+void test_draw_hline(FtkDisplay* display)
+{
+	int i = 0;
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkRect rect = {0};
+	FtkColor color = {.a = 0xff};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+
+	rect.width = width;
+	rect.height = height;
+
+	color.r = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	for(i = 0; i < height; i++)
+	{
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_hline(thiz, 0, i, 20);
+	}
+	
+	color.g = 0xff;
+	color.r = 0;
+	for(i = 0; i < height; i++)
+	{
+		color.a = 0xff - (0xff & i);
+		gc.fg = color;
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_hline(thiz, 30, i, 20);
+	}
+	
+	color.r = 0;
+	color.g = 0;
+	color.b = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	gc.mask |= FTK_GC_ALPHA;
+	for(i = 0; i < height; i++)
+	{
+		gc.alpha = 0xff - (0xff & i);
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_hline(thiz, 60, i, 20);
+	}
+
+	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	
+	ftk_canvas_destroy(thiz);
+
+	sleep(3);
+
+	return;
+}
+
+void test_draw_line(FtkDisplay* display)
+{
+	int i = 0;
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkRect rect = {0};
+	FtkColor color = {.a = 0xff};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+
+	rect.width = width;
+	rect.height = height;
+
+	color.r = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	for(i = 0; i < height/2; i++)
+	{
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_line(thiz, 0, i, 20, i+10);
+	}
+	
+	color.g = 0xff;
+	color.r = 0;
+	for(i = 0; i < height/2; i++)
+	{
+		color.a = 0xff - (0xff & i);
+		gc.fg = color;
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_line(thiz, 30, i, 50, i+10);
+	}
+	
+	color.r = 0;
+	color.g = 0;
+	color.b = 0xff;
+	color.a = 0xff;
+	gc.fg = color;
+	gc.mask |= FTK_GC_ALPHA;
+	for(i = 0; i < height/2; i++)
+	{
+		gc.alpha = 0xff - (0xff & i);
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_line(thiz, 60, i, 80, i+10);
+	}
+
+	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	
+	ftk_canvas_destroy(thiz);
+
+	sleep(3);
+
+	return;
+}
+
+void test_draw_rect(FtkDisplay* display)
+{
+	int i = 0;
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkRect rect = {0};
+	FtkColor color = {.a = 0xff};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+
+	rect.width = width;
+	rect.height = height;
+
+	color.g = 0xff;
+	color.r = 0;
+	for(i = 0; i < 0xff; i += 4)
+	{
+		color.a = 0xff;
+		color.g = 0;
+		gc.fg = color;
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_rect(thiz, 0, 0, width, height, 1);
+		
+		color.a = 0xff - i;
+		color.g = 0xff;
+		gc.fg = color;
+		ftk_canvas_reset_gc(thiz, &gc);
+		ftk_canvas_draw_rect(thiz, 0, 0, width, height, 1);
+		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+		usleep(200000);
+	}
+	
+	ftk_canvas_destroy(thiz);
+
+	sleep(3);
+
+	return;
+}
+int main(int argc, char* argv[])
+{
+	ftk_init(argc, argv);
+
+	FtkFont* font = ftk_default_font();
+	FtkDisplay* display = ftk_default_display();
+
+#if 1
+	test_draw_point(display);
+	test_draw_line(display);
+	test_draw_hline(display);
+	test_draw_vline(display);
+#endif
+	test_draw_rect(display);
 	ftk_run();
 
 	return 0;

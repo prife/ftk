@@ -117,7 +117,6 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 
 	FtkColor* src = ftk_bitmap_bits(bitmap);
 	unsigned short* dst = priv->fb.bits;
-
 	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
 	w = (xoffset + w) < display_width  ? w : display_width  - xoffset;
 	h = (y + h) < bitmap_height ? h : bitmap_height - y;
