@@ -85,7 +85,6 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 
 	if(!priv->changed)
 	{
-		priv->changed = 0;
 		return RET_OK;
 	}
 
@@ -133,7 +132,9 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 		ftk_widget_set_visible(priv->mid[i], 1);
 		x += w;
 	}
-	
+
+	priv->changed = 0;
+
 	return RET_OK;
 }
 
@@ -147,6 +148,7 @@ static Ret  ftk_status_panel_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret  ftk_status_panel_on_paint(FtkWidget* thiz)
 {
 	DECL_PRIV1(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	ftk_status_panel_relayout(thiz);
 

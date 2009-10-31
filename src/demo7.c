@@ -17,13 +17,6 @@ static Ret button_close_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static Ret button_default_clicked(void* ctx, void* obj)
-{
-	printf("%s: button %s is clicked.\n", __func__, ftk_button_get_text(obj));
-
-	return RET_OK;
-}
-
 
 static int g_index = 0;
 static void on_window_close(void* user_data)
@@ -39,11 +32,26 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
+static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
+{
+	int i = 0;
+	for(i = 0; i < g_index && i < 6; i++)
+	{
+		char text[32] = {0};
+		FtkWidget* item = ftk_menu_item_create(1000);
+		snprintf(text, sizeof(text), "Menu%02d", i);
+		ftk_menu_item_set_text(item, text);
+		ftk_widget_show(item, 1);
+		ftk_menu_panel_add(menu_panel, item);
+	}
+
+	return i > 0 ? RET_OK : RET_FAIL;
+}
 
 static void create_app_window(void)
 {
 	char title[32] = {0};
-	FtkWidget* win = ftk_window_create(0, 2, 320, 478);
+	FtkWidget* win = ftk_app_window_create();
 	FtkWidget* label = NULL;
 	FtkWidget* button = ftk_button_create(1001, 10, 30, 120, 30);
 	ftk_button_set_text(button, "打开新窗口");
@@ -66,6 +74,8 @@ static void create_app_window(void)
 	ftk_window_set_title(win, title);
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
+	
+	ftk_app_window_set_on_prepare_options_menu(win, on_prepare_options_menu, win);
 
 	return;
 }

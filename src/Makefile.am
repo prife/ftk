@@ -10,12 +10,13 @@ libftk_la_SOURCES=\
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
 	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
-	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c
+	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c \
+	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c
 
 noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4 demo5 demo6 \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
-	sources_manager_test
+	sources_manager_test demo7
 
 if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
@@ -74,6 +75,9 @@ demo5_LDFLAGS=$(MYLDFLAGS)
 
 demo6_SOURCES=demo6.c
 demo6_LDFLAGS=$(MYLDFLAGS)
+
+demo7_SOURCES=demo7.c
+demo7_LDFLAGS=$(MYLDFLAGS)
 
 canvas_test_SOURCES=canvas_test.c
 canvas_test_LDFLAGS=$(MYLDFLAGS)

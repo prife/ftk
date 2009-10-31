@@ -264,13 +264,12 @@ static void ftk_init_panel(void)
 	FtkGc gc = {0};
 	FtkWidget* item = NULL;	
 	FtkWidget* panel = ftk_default_status_panel();
-
 	gc.mask = FTK_GC_BITMAP;
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/status-bg.png");
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
 	ftk_gc_reset(&gc);
-
+	
 	gc.mask = FTK_GC_BITMAP;
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/close-32.png");
 	item = ftk_status_item_create(IDC_CLOSE_ITEM, 32, 32);

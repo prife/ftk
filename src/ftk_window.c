@@ -134,7 +134,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 {
-	Ret ret = RET_FAIL;
+	Ret ret = RET_NO_TARGET;
 	FtkWidget* target = NULL;
 	
 	if((target = ftk_widget_find_target(thiz, event->u.mouse.x, event->u.mouse.y)) != NULL && target != thiz)
@@ -147,6 +147,10 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 		if(!ftk_widget_is_insensitive(target))
 		{
 			ret = ftk_widget_event(target, event);
+		}
+		else
+		{
+			ret = RET_IGNORED;
 		}
 	}
 

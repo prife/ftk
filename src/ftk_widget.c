@@ -703,12 +703,11 @@ void ftk_widget_paint_self(FtkWidget* thiz)
 		{
 			if(!ftk_widget_paint_called_by_parent(thiz) && parent != NULL)
 			{
-#if 1
+				/*fill backgroup with parent background*/
 				gc.mask = FTK_GC_FG;
 				gc.fg = ftk_widget_get_gc(parent)->bg;
 				ftk_canvas_reset_gc(canvas, &gc); 
 				ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
-#endif
 				bitmap = parent->priv->gc[parent->priv->state].bitmap;
 				if(bitmap != NULL)
 				{

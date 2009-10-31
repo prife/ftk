@@ -173,6 +173,7 @@ typedef enum _FtkKey
 	FTK_KEY_BLUETOOTH   =  0xFFA5,
 	FTK_KEY_WLAN        =  0xFFA6,
 	FTK_KEY_POWER       =  0xFFA7,
+	FTK_KEY_MENU        = FTK_KEY_F2,
 }FtkKey;
 
 #endif/*_FTK_KEY_H*/

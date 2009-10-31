@@ -1,7 +1,7 @@
 /*
- * File: ftk.h    
+ * File: ftk_menu_item.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   item on the menu panel. 
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,40 +25,21 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-30 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_H
-#define FTK_H
+#ifndef FTK_MENU_ITEM_H
+#define FTK_MENU_ITEM_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif/*__cplusplus*/
+#include "ftk_widget.h"
 
-#include "ftk_log.h"
-#include "ftk_bitmap.h"
-#include "ftk_dialog.h"
-#include "ftk_window.h"
-#include "ftk_app_window.h"
-#include "ftk_label.h"
-#include "ftk_image.h"
-#include "ftk_button.h"
-#include "ftk_globals.h"
-#include "ftk_source_idle.h"
-#include "ftk_source_timer.h"
-#include "ftk_status_panel.h"
-#include "ftk_status_item.h"
-#include "ftk_menu_panel.h"
-#include "ftk_menu_item.h"
+FtkWidget* ftk_menu_item_create(int id);
 
-Ret  ftk_init(int argc, char* argv[]);
-Ret  ftk_run(void);
-void ftk_quit(void);
+Ret         ftk_menu_item_set_text(FtkWidget* thiz, const char* text);
+const char* ftk_menu_item_get_text(FtkWidget* thiz);
 
-#ifdef __cplusplus
-}
-#endif/*__cplusplus*/
+Ret ftk_menu_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
-#endif/*FTK_H*/
+#endif/*FTK_MENU_ITEM_H*/
 

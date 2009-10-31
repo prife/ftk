@@ -1,0 +1,352 @@
+/*
+ * File: ftk_menu_panel.c
+ * Author: Li XianJing <xianjimli@hotmail.com>
+ * Brief:  ftk menu panel
+ *
+ * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
+ *
+ * Licensed under the Academic Free License version 2.1
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/*
+ * History:
+ * ================================================================
+ * 2009-10-30 Li XianJing <xianjimli@hotmail.com> created
+ *
+ */
+
+#include "ftk_window.h"
+#include "ftk_globals.h"
+#include "ftk_menu_item.h"
+
+#define FTK_MENU_MAX_ITEM 16
+#define FTK_MENU_ITEM_HEIGHT 36
+
+typedef struct _PrivInfo
+{
+	int changed;
+	int items_nr;
+	FtkWidget* items[FTK_MENU_MAX_ITEM];	
+	FtkWidgetOnEvent parent_on_event;
+	FtkWidgetOnPaint parent_on_paint;
+	FtkWidgetDestroy parent_destroy;
+}PrivInfo;
+
+static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
+{
+	int i = 0;
+	int n = 0;
+	FtkRect* rect = NULL;
+	DECL_PRIV1(thiz, priv);
+	int screen_width = ftk_display_width(ftk_default_display());
+	
+	for(i = 0; i < priv->items_nr; i++)
+	{
+		if(ftk_widget_is_visible(priv->items[i]))
+		{
+			n++;
+		}
+	}
+	return_val_if_fail(n > 0, NULL);
+
+	*nr = n;
+	rect = (FtkRect*)FTK_ALLOC(sizeof(FtkRect) * n);
+	return_val_if_fail(rect != NULL, NULL);
+
+	switch(n)
+	{
+		case 1:
+		{
+			rect[0].x = 0;
+			rect[0].y = 0;
+			rect[0].width = screen_width;
+			rect[0].height = FTK_MENU_ITEM_HEIGHT;
+
+			break;
+		}
+		case 2:
+		{
+			rect[0].x = 0;
+			rect[0].y = 0;
+			rect[0].width = screen_width/2;
+			rect[0].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[1].x = screen_width/2;
+			rect[1].y = 0;
+			rect[1].width = screen_width/2;
+			rect[1].height = FTK_MENU_ITEM_HEIGHT;
+
+			break;
+		}
+		case 3:
+		{
+			rect[0].x = 0;
+			rect[0].y = 0;
+			rect[0].width = screen_width/3;
+			rect[0].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[1].x = screen_width/3;
+			rect[1].y = 0;
+			rect[1].width = screen_width/3;
+			rect[1].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[2].x = 2 * screen_width/3;
+			rect[2].y = 0;
+			rect[2].width  = screen_width/3;
+			rect[2].height = FTK_MENU_ITEM_HEIGHT;
+
+			break;
+		}
+		case 4:
+		{
+			rect[0].x = 0;
+			rect[0].y = 0;
+			rect[0].width = screen_width/2;
+			rect[0].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[1].x = screen_width/2;
+			rect[1].y = 0;
+			rect[1].width = screen_width/2;
+			rect[1].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[2].x = 0;
+			rect[2].y = FTK_MENU_ITEM_HEIGHT;
+			rect[2].width = screen_width/2;
+			rect[2].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[3].x = screen_width/2;
+			rect[3].y = FTK_MENU_ITEM_HEIGHT;
+			rect[3].width = screen_width/2;
+			rect[3].height = FTK_MENU_ITEM_HEIGHT;
+
+			break;
+		}
+		case 5:
+		{
+			rect[0].x = 0;
+			rect[0].y = 0;
+			rect[0].width = screen_width/2;
+			rect[0].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[1].x = screen_width/2;
+			rect[1].y = 0;
+			rect[1].width = screen_width/2;
+			rect[1].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[2].x = 0;
+			rect[2].y = FTK_MENU_ITEM_HEIGHT;
+			rect[2].width = screen_width/3;
+			rect[2].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[3].x = screen_width/3;
+			rect[3].y = FTK_MENU_ITEM_HEIGHT;
+			rect[3].width = screen_width/3;
+			rect[3].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[4].x = 2 * screen_width/3;
+			rect[4].y = FTK_MENU_ITEM_HEIGHT;
+			rect[4].width  = screen_width/3;
+			rect[4].height = FTK_MENU_ITEM_HEIGHT;
+
+			break;
+		}
+		case 6:
+		default:
+		{
+			rect[0].x = 0;
+			rect[0].y = 0;
+			rect[0].width = screen_width/3;
+			rect[0].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[1].x = screen_width/3;
+			rect[1].y = 0;
+			rect[1].width = screen_width/3;
+			rect[1].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[2].x = 2 * screen_width/3;
+			rect[2].y = 0;
+			rect[2].width  = screen_width/3;
+			rect[2].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[3].x = 0;
+			rect[3].y = FTK_MENU_ITEM_HEIGHT;
+			rect[3].width = screen_width/3;
+			rect[3].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[4].x = screen_width/3;
+			rect[4].y = FTK_MENU_ITEM_HEIGHT;
+			rect[4].width = screen_width/3;
+			rect[4].height = FTK_MENU_ITEM_HEIGHT;
+			
+			rect[5].x = 2 * screen_width/3;
+			rect[5].y = FTK_MENU_ITEM_HEIGHT;
+			rect[5].width  = screen_width/3;
+			rect[5].height = FTK_MENU_ITEM_HEIGHT;
+
+			break;
+		}
+	}
+
+	return rect;
+}
+
+Ret ftk_menu_panel_relayout(FtkWidget* thiz)
+{
+	int i = 0;
+	int j = 0;
+	int nr = 0;
+	int h  = 0;
+	DECL_PRIV1(thiz, priv);
+	FtkRect* rects = ftk_menu_panel_calc_rects(thiz, &nr);
+	int screen_height = ftk_display_height(ftk_default_display());
+	int screen_width = ftk_display_width(ftk_default_display());
+	return_val_if_fail(priv->items_nr > 0 && rects != NULL && nr > 0, RET_FAIL);
+
+	h = nr > 3 ? FTK_MENU_ITEM_HEIGHT * 2 : FTK_MENU_ITEM_HEIGHT;
+
+	ftk_widget_move_resize(thiz, 0, screen_height - h, screen_width, h);
+
+	for(i = 0, j = 0; i < nr; j++)
+	{
+		if(ftk_widget_is_visible(priv->items[j]))
+		{
+			ftk_widget_move_resize(priv->items[j], rects[i].x, rects[i].y, rects[i].width, rects[i].height);
+			i++;
+		}
+	}
+
+	for(; j < priv->items_nr; j++)
+	{
+		ftk_widget_move_resize(priv->items[j], 0, 0, 0, 0);
+	}
+
+	return RET_OK;
+}
+
+static Ret  ftk_menu_panel_on_event(FtkWidget* thiz, FtkEvent* event)
+{
+	Ret ret = RET_OK;
+	DECL_PRIV1(thiz, priv);
+
+	if(event->type == FTK_EVT_KEY_UP && event->u.key.code == FTK_KEY_MENU)
+	{
+		ftk_widget_unref(thiz);
+
+		return ret;
+	}
+
+	if(event->type == FTK_EVT_SHOW)
+	{
+		ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
+	}
+
+	ret = priv->parent_on_event(thiz, event);
+
+	if(event->type == FTK_EVT_MOUSE_UP && ret != RET_IGNORED)
+	{
+		ftk_widget_unref(thiz);
+	}
+
+	return ret;
+}
+
+static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
+{
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
+
+	priv->parent_on_paint(thiz);
+
+	return RET_OK;
+}
+
+static void ftk_menu_panel_destroy(FtkWidget* thiz)
+{
+	DECL_PRIV1(thiz, priv);
+	FtkWidgetDestroy parent_destroy = priv->parent_destroy;
+	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
+	parent_destroy(thiz);
+
+	return;
+}
+
+FtkWidget* ftk_menu_panel_create(void)
+{
+	FtkWidget* thiz = ftk_window_create_with_type(FTK_MENU_PANEL, 0, 0, 0, 0);
+	return_val_if_fail(thiz != NULL, NULL);
+
+	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[1] != NULL)
+	{
+		DECL_PRIV1(thiz, priv);
+		priv->parent_on_event = thiz->on_event;
+		priv->parent_on_paint = thiz->on_paint;
+		priv->parent_destroy  = thiz->destroy;
+		thiz->on_event = ftk_menu_panel_on_event;
+		thiz->on_paint = ftk_menu_panel_on_paint;
+		thiz->destroy  = ftk_menu_panel_destroy;
+	}
+
+	return thiz;
+}
+
+
+Ret ftk_menu_panel_add(FtkWidget* thiz, FtkWidget* item)
+{
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(thiz != NULL && item != NULL, RET_FAIL);
+	return_val_if_fail(priv->items_nr < FTK_MENU_MAX_ITEM, RET_FAIL);
+
+	priv->items[priv->items_nr++] = item;
+	priv->changed = 1;
+	ftk_widget_append_child(thiz, item);
+
+	return RET_OK;
+}
+
+Ret        ftk_menu_panel_remove(FtkWidget* thiz, FtkWidget* item)
+{
+	int i = 0;
+	Ret ret = RET_FAIL;
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(thiz != NULL && item != NULL, RET_FAIL);
+
+	for(i = 0; i < priv->items_nr; i++)
+	{
+		if(priv->items[i] == item)
+		{
+			for(; i < priv->items_nr; i++)
+			{
+				priv->items[i] = priv->items[i+1];
+			}
+			priv->items_nr--;
+
+			ret = RET_OK;
+			break;
+		}
+	}
+
+	if(ret == RET_OK)
+	{
+		priv->changed = 1;
+		ftk_widget_remove_child(thiz, item);
+	}
+
+	return RET_OK;
+}
+
+

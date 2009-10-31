@@ -1,7 +1,7 @@
 /*
- * File: ftk.h    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * File: ftk_menu_panel.h    
+ * Author: Li XianJing <xianjimli@hotmail.com>
+ * Brief:  ftk menu panel
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,40 +25,20 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-18 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_H
-#define FTK_H
+FTK_INHERITE_FROM(Window);
 
-#ifdef __cplusplus
-extern "C" {
-#endif/*__cplusplus*/
-
-#include "ftk_log.h"
-#include "ftk_bitmap.h"
-#include "ftk_dialog.h"
+#ifndef FTK_MENU_PANEL_H
+#define FTK_MENU_PANEL_H
 #include "ftk_window.h"
-#include "ftk_app_window.h"
-#include "ftk_label.h"
-#include "ftk_image.h"
-#include "ftk_button.h"
-#include "ftk_globals.h"
-#include "ftk_source_idle.h"
-#include "ftk_source_timer.h"
-#include "ftk_status_panel.h"
-#include "ftk_status_item.h"
-#include "ftk_menu_panel.h"
-#include "ftk_menu_item.h"
 
-Ret  ftk_init(int argc, char* argv[]);
-Ret  ftk_run(void);
-void ftk_quit(void);
+FtkWidget* ftk_menu_panel_create(void);
+Ret ftk_menu_panel_relayout(FtkWidget* thiz);
+Ret ftk_menu_panel_add(FtkWidget* thiz, FtkWidget* item);
+Ret ftk_menu_panel_remove(FtkWidget* thiz, FtkWidget* item);
 
-#ifdef __cplusplus
-}
-#endif/*__cplusplus*/
-
-#endif/*FTK_H*/
+#endif/*FTK_MENU_PANEL_H*/
 

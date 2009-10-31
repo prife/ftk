@@ -30,14 +30,19 @@
  */
 #ifndef FTK_GC_H
 #define FTK_GC_H
+
 #include "ftk_font.h"
 #include "ftk_bitmap.h"
 
-#define FTK_GC_BG     1
-#define FTK_GC_FG     2
-#define FTK_GC_FONT   4
-#define FTK_GC_BITMAP 8
-#define FTK_GC_LINE_MASK 16
+enum _FtkGcMask
+{
+	FTK_GC_BG        = 1,
+	FTK_GC_FG        = 2,
+	FTK_GC_FONT      = 4,
+	FTK_GC_ALPHA     = 8,
+	FTK_GC_BITMAP    = 16,
+	FTK_GC_LINE_MASK = 32
+};
 
 typedef struct _FtkGc
 {
@@ -47,6 +52,7 @@ typedef struct _FtkGc
 	FtkColor   fg;
 	FtkFont*   font;
 	FtkBitmap* bitmap;
+	unsigned char alpha;
 	unsigned int line_mask;
 }FtkGc;
 
@@ -86,6 +92,11 @@ static inline Ret ftk_gc_copy(FtkGc* dst, FtkGc* src)
 	if(src->mask & FTK_GC_LINE_MASK)
 	{
 		dst->line_mask = src->line_mask;
+	}
+
+	if(src->mask & FTK_GC_ALPHA)
+	{
+		dst->alpha = src->alpha;
 	}
 
 	return RET_OK;

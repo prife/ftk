@@ -123,6 +123,15 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 
 			break;
 		}
+		case FTK_DIALOG:
+		{
+			x = FTK_DIALOG_MARGIN;
+			y = ftk_widget_top(window) + FTK_STATUS_PANEL_HEIGHT;
+			w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
+			h = ftk_widget_height(window);
+
+			break;
+		}
 		case FTK_STATUS_PANEL:
 		{
 			w = ftk_display_width(ftk_default_display());
@@ -130,12 +139,12 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 
 			break;
 		}
-		case FTK_DIALOG:
+		case FTK_MENU_PANEL:
 		{
-			x = FTK_DIALOG_MARGIN;
-			y = ftk_widget_top(window) + FTK_STATUS_PANEL_HEIGHT;
-			w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
+			w = ftk_display_width(ftk_default_display());
 			h = ftk_widget_height(window);
+			x = 0;
+			y = ftk_display_height(ftk_default_display()) - h;
 
 			break;
 		}
@@ -278,9 +287,9 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 		default:break;
 	}
 	
-	if(event->type == FTK_EVT_MOUSE_DOWN 
+	if((event->type == FTK_EVT_MOUSE_DOWN 
 		|| event->type == FTK_EVT_MOUSE_UP
-		|| event->type == FTK_EVT_MOUSE_MOVE)
+		|| event->type == FTK_EVT_MOUSE_MOVE) && priv->grab_widget == NULL)
 	{
 		int x = event->u.mouse.x;
 		int y = event->u.mouse.y;
@@ -303,7 +312,11 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	{
 		target = priv->focus_widget;
 	}
-	
+	else if(priv->top > 0)
+	{
+		target = priv->windows[priv->top - 1];
+	}
+
 	if(!ftk_widget_is_insensitive(target))
 	{
 		ftk_widget_event(target, event);

@@ -71,6 +71,8 @@ typedef enum _Ret
 	RET_FOUND,
 	RET_NEXT,
 	RET_QUIT,
+	RET_IGNORED,
+	RET_NO_TARGET,
 	RET_OUT_OF_SPACE
 }Ret;
 
