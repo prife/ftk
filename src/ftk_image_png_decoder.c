@@ -102,9 +102,9 @@ static FtkBitmap* load_png (const char *filename)
 			src = row_pointers[y];
 			for(x = 0; x < w; x++)
 			{
-				dst->b = src[0];
+				dst->r = src[0];
 				dst->g = src[1];
-				dst->r = src[2];
+				dst->b = src[2];
 				dst->a = src[3];
 				src +=4;
 				dst++;
