@@ -108,7 +108,6 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define MIN(x1, x2) ((x1) < (x2) ? (x1) : (x2))
 #define MAX(x1, x2) ((x1) > (x2) ? (x1) : (x2))
 #define FTK_MAX_WINDOWS 32
-#define FTK_FOCUS_COLOR(c) {c.r = 0xff; c.g = 0x80; c.b = 0x80; c.a = 0xff;};
 #define FTK_P_IN_R(x, y, r) (((x) >= (r)->x && (x)<((r)->x+(r)->width)) && ((y) >= (r)->y && (y) < ((r)->y + (r)->height)))
 
 #define FTK_SPACE_WIDTH        5

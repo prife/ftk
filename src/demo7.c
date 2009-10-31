@@ -65,12 +65,12 @@ static void create_app_window(void)
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_close_clicked, win);
 
-	snprintf(title, sizeof(title), "window%02d", g_index++);
-	label = ftk_label_create(1003, 100, 200, 120, 30);
-	ftk_label_set_text(label, title);
+	label = ftk_label_create(1003, 10, ftk_widget_height(win)/2, ftk_widget_width(win)-20, 30);
+	ftk_label_set_text(label, "press F2 to open menu");
 	ftk_widget_show(label, 1);
 	ftk_widget_append_child(win, label);
 	
+	snprintf(title, sizeof(title), "window%02d", g_index++);
 	ftk_window_set_title(win, title);
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);

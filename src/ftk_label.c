@@ -88,6 +88,7 @@ FtkWidget* ftk_label_create(int id, int x, int y, int width, int height)
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_insensitive(thiz, 1);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 	}
 
 	return thiz;

@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_style.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
 #include "ftk_menu_item.h"
@@ -174,8 +175,15 @@ static Ret  ftk_menu_panel_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 {
+	FtkGc gc = {.mask = FTK_GC_FG};
 	DECL_PRIV1(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
+
+	gc.fg = ftk_widget_get_gc(thiz)->fg;
+	ftk_canvas_set_gc(canvas, &gc);
+	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
 
 	priv->parent_on_paint(thiz);
 
@@ -200,6 +208,7 @@ FtkWidget* ftk_menu_panel_create(void)
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[1] != NULL)
 	{
+		FtkGc gc = {.mask = FTK_GC_BG | FTK_GC_FG};
 		DECL_PRIV1(thiz, priv);
 		priv->parent_on_event = thiz->on_event;
 		priv->parent_on_paint = thiz->on_paint;
@@ -207,6 +216,12 @@ FtkWidget* ftk_menu_panel_create(void)
 		thiz->on_event = ftk_menu_panel_on_event;
 		thiz->on_paint = ftk_menu_panel_on_paint;
 		thiz->destroy  = ftk_menu_panel_destroy;
+
+		gc.fg = ftk_style_get_color(FTK_COLOR_MENU_FG);
+		gc.bg = ftk_style_get_color(FTK_COLOR_MENU_BG);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 	}
 
 	return thiz;

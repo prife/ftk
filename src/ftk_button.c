@@ -30,6 +30,7 @@
  */
 
 #include "ftk_log.h"
+#include "ftk_style.h"
 #include "ftk_button.h"
 
 typedef struct _PrivInfo
@@ -86,6 +87,24 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
+	if(ftk_widget_get_gc(thiz)->bitmap != NULL)
+	{
+		if(ftk_widget_is_focused(thiz))
+		{
+			ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+			ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+		}
+	}
+	else
+	{
+		gc.mask = FTK_GC_FG;
+		gc.fg = ftk_widget_get_gc(thiz)->bg;
+		ftk_canvas_reset_gc(canvas, &gc); 
+		ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+		ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+	}
+	
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
 	{
@@ -96,40 +115,6 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 	
 		assert(fh < height && fw < width);
 		ftk_canvas_draw_string(canvas, x + dx, y + dy, priv->text);
-	}
-	
-	if(ftk_widget_get_gc(thiz)->bitmap != NULL)
-	{
-		/*if bitmap exist, clear the rect with backgroud color*/
-		gc.mask = FTK_GC_FG;
-		if(ftk_widget_is_focused(thiz))
-		{
-			FTK_FOCUS_COLOR(gc.fg);
-		}
-		else
-		{
-			gc.fg =ftk_widget_get_gc(thiz)->bg;
-		}
-		ftk_canvas_set_gc(canvas, &gc); 
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-	}
-	else
-	{
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-		gc.mask = FTK_GC_FG;
-		if(ftk_widget_is_focused(thiz))
-		{
-			FTK_FOCUS_COLOR(gc.fg);
-		}
-		else
-		{
-			gc.fg =ftk_widget_get_gc(thiz)->fg;
-			gc.fg.r += 0xb0;
-			gc.fg.g += 0xb0;
-			gc.fg.b += 0xb0;
-		}
-		ftk_canvas_set_gc(canvas, &gc); 
-		ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height-2, 0);
 	}
 
 	FTK_END_PAINT();
@@ -153,6 +138,7 @@ FtkWidget* ftk_button_create(int id, int x, int y, int width, int height)
 
 	if(thiz != NULL)
 	{
+		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 
 		thiz->on_event = ftk_button_on_event;
@@ -162,6 +148,17 @@ FtkWidget* ftk_button_create(int id, int x, int y, int width, int height)
 		ftk_widget_init(thiz, FTK_BUTTON, id);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
+
+		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
+		gc.bg = ftk_style_get_color(FTK_COLOR_BTNFACE);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
+		
+		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+		
+		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
+		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 	}
 
 	return thiz;
