@@ -1,3 +1,5 @@
+SUBDIRS=testdata icons
+
 lib_LTLIBRARIES=libftk.la
 
 LINUX_NATIVE=ftk_display_fb.c ftk_source_input.c
@@ -96,16 +98,27 @@ primary_source_test_LDFLAGS=$(MYLDFLAGS)
 
 ftkdir=$(includedir)/ftk
 ftk_HEADERS=\
-	ftk_bitmap_factory.h  ftk.h                     ftk_source_idle.h\
-	ftk_bitmap.h          ftk_image_decoder.h       \
-	ftk_button.h          ftk_image.h               \
-	ftk_canvas.h          ftk_source_timer.h\
-	ftk_display.h         ftk_key.h                 ftk_style.h\
-	ftk_label.h           ftk_typedef.h\
-	ftk_event.h           ftk_log.h                 ftk_util.h\
-	ftk_font.h            ftk_main_loop.h           ftk_widget.h\
-	ftk_gc.h              ftk_platform.h            ftk_window.h\
-	ftk_globals.h         ftk_source.h              ftk_wnd_manager.h
+	fontdata.h                ftk_log.h\
+	ftk_app_window.h          ftk_main_loop.h\
+	ftk_bitmap_factory.h      ftk_menu_item.h\
+	ftk_bitmap.h              ftk_menu_panel.h\
+	ftk_button.h              ftk_platform.h\
+	ftk_canvas.h              ftk_source.h\
+	ftk_dialog.h              ftk_source_idle.h\
+	ftk_display_fb.h          ftk_source_input.h\
+	ftk_display.h             ftk_source_primary.h\
+	ftk_display_x11.h         ftk_sources_manager.h\
+	ftk_event.h               ftk_source_timer.h\
+	ftk_font.h                ftk_source_x11.h\
+	ftk_gc.h                  ftk_status_item.h\
+	ftk_globals.h             ftk_status_panel.h\
+	ftk.h                     ftk_style.h\
+	ftk_image_decoder.h       ftk_typedef.h\
+	ftk_image.h               ftk_util.h\
+	ftk_image_jpeg_decoder.h  ftk_widget.h\
+	ftk_image_png_decoder.h   ftk_window.h\
+	ftk_key.h                 ftk_wnd_manager_default.h\
+	ftk_label.h               ftk_wnd_manager.h
 
 EXTRA_DIST=ftk_source_x11.h ftk_source_input.h ftk_display_fb.h \
 	ftk_display_x11.h ftk_source_primary.h fontdata.h \

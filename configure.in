@@ -52,5 +52,8 @@ AC_CHECK_FUNCS([gettimeofday memset munmap select strdup strstr])
 
 AC_CONFIG_FILES([ftk.pc
 				Makefile
-                 src/Makefile])
+                src/Makefile
+                src/testdata/Makefile
+                src/icons/Makefile
+                ])
 AC_OUTPUT

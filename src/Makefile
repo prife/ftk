@@ -42,9 +42,9 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
 	demo7$(EXEEXT) $(am__EXEEXT_1)
-#am__append_1 = $(LINUX_X11)
-am__append_2 = $(LINUX_NATIVE)
-am__append_3 = display_fb_test input_test
+am__append_1 = $(LINUX_X11)
+#am__append_2 = $(LINUX_NATIVE)
+#am__append_3 = display_fb_test input_test
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -76,9 +76,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_menu_item.c ftk_app_window.c ftk_display_x11.c \
 	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
-#am__objects_2 = $(am__objects_1)
+am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
-am__objects_4 = $(am__objects_3)
+#am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font.lo ftk_main_loop.lo \
@@ -90,8 +90,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
 	ftk_app_window.lo $(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
-am__EXEEXT_1 = display_fb_test$(EXEEXT) \
-	input_test$(EXEEXT)
+#am__EXEEXT_1 = display_fb_test$(EXEEXT) \
+#	input_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -154,8 +154,8 @@ demo7_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(demo7_LDFLAGS) \
 	$(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
-am_display_fb_test_OBJECTS =  \
-	display_fb_test.$(OBJEXT)
+#am_display_fb_test_OBJECTS =  \
+#	display_fb_test.$(OBJEXT)
 display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
 display_fb_test_LDADD = $(LDADD)
 display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -174,7 +174,7 @@ ftk_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(ftk_test_LDFLAGS) \
 	$(LDFLAGS) -o $@
 am__input_test_SOURCES_DIST = input_test.c
-am_input_test_OBJECTS = input_test.$(OBJEXT)
+#am_input_test_OBJECTS = input_test.$(OBJEXT)
 input_test_OBJECTS = $(am_input_test_OBJECTS)
 input_test_LDADD = $(LDADD)
 input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -261,10 +261,20 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
 	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
 	$(util_test_SOURCES) widget_test.c
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-dvi-recursive install-exec-recursive \
+	install-html-recursive install-info-recursive \
+	install-pdf-recursive install-ps-recursive install-recursive \
+	installcheck-recursive installdirs-recursive pdf-recursive \
+	ps-recursive uninstall-recursive
 ftkHEADERS_INSTALL = $(INSTALL_HEADER)
 HEADERS = $(ftk_HEADERS)
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = ${SHELL} /work/mine/googlecode/ftk/missing --run aclocal-1.10
 AMTAR = ${SHELL} /work/mine/googlecode/ftk/missing --run tar
@@ -275,13 +285,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -DUSE_LINUX_NATIVE -DPC_EMU
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -292,14 +302,14 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = 
+LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -372,6 +382,7 @@ sysconfdir = ${prefix}/etc
 target_alias = 
 top_builddir = ..
 top_srcdir = ..
+SUBDIRS = testdata icons
 lib_LTLIBRARIES = libftk.la
 LINUX_NATIVE = ftk_display_fb.c ftk_source_input.c
 LINUX_X11 = ftk_display_x11.c ftk_source_x11.c
@@ -385,10 +396,10 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c $(am__append_1) \
 	$(am__append_2)
-display_fb_test_SOURCES = display_fb_test.c
-display_fb_test_LDFLAGS = $(MYLDFLAGS)
-input_test_SOURCES = input_test.c
-input_test_LDFLAGS = $(MYLDFLAGS)
+#display_fb_test_SOURCES = display_fb_test.c
+#display_fb_test_LDFLAGS = $(MYLDFLAGS)
+#input_test_SOURCES = input_test.c
+#input_test_LDFLAGS = $(MYLDFLAGS)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\""
 MYLDFLAGS = .libs/libftk.a
 sources_manager_test_SOURCES = sources_manager_test.c
@@ -433,22 +444,33 @@ primary_source_test_SOURCES = primary_source_test.c
 primary_source_test_LDFLAGS = $(MYLDFLAGS)
 ftkdir = $(includedir)/ftk
 ftk_HEADERS = \
-	ftk_bitmap_factory.h  ftk.h                     ftk_source_idle.h\
-	ftk_bitmap.h          ftk_image_decoder.h       \
-	ftk_button.h          ftk_image.h               \
-	ftk_canvas.h          ftk_source_timer.h\
-	ftk_display.h         ftk_key.h                 ftk_style.h\
-	ftk_label.h           ftk_typedef.h\
-	ftk_event.h           ftk_log.h                 ftk_util.h\
-	ftk_font.h            ftk_main_loop.h           ftk_widget.h\
-	ftk_gc.h              ftk_platform.h            ftk_window.h\
-	ftk_globals.h         ftk_source.h              ftk_wnd_manager.h
+	fontdata.h                ftk_log.h\
+	ftk_app_window.h          ftk_main_loop.h\
+	ftk_bitmap_factory.h      ftk_menu_item.h\
+	ftk_bitmap.h              ftk_menu_panel.h\
+	ftk_button.h              ftk_platform.h\
+	ftk_canvas.h              ftk_source.h\
+	ftk_dialog.h              ftk_source_idle.h\
+	ftk_display_fb.h          ftk_source_input.h\
+	ftk_display.h             ftk_source_primary.h\
+	ftk_display_x11.h         ftk_sources_manager.h\
+	ftk_event.h               ftk_source_timer.h\
+	ftk_font.h                ftk_source_x11.h\
+	ftk_gc.h                  ftk_status_item.h\
+	ftk_globals.h             ftk_status_panel.h\
+	ftk.h                     ftk_style.h\
+	ftk_image_decoder.h       ftk_typedef.h\
+	ftk_image.h               ftk_util.h\
+	ftk_image_jpeg_decoder.h  ftk_widget.h\
+	ftk_image_png_decoder.h   ftk_window.h\
+	ftk_key.h                 ftk_wnd_manager_default.h\
+	ftk_label.h               ftk_wnd_manager.h
 
 EXTRA_DIST = ftk_source_x11.h ftk_source_input.h ftk_display_fb.h \
 	ftk_display_x11.h ftk_source_primary.h fontdata.h \
 	ftk_image_jpeg_decoder.h ftk_image_png_decoder.h
 
-all: all-am
+all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .c .lo .o .obj
@@ -690,6 +712,76 @@ uninstall-ftkHEADERS:
 	  rm -f "$(DESTDIR)$(ftkdir)/$$f"; \
 	done
 
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
+$(RECURSIVE_CLEAN_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
+	done
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
+	done
+
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
@@ -700,10 +792,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      tags="$$tags $$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -716,7 +821,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
@@ -763,22 +868,40 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(MKDIR_P) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	    distdir=`$(am__cd) $(distdir) && pwd`; \
+	    top_distdir=`$(am__cd) $(top_distdir) && pwd`; \
+	    (cd $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$top_distdir" \
+	        distdir="$$distdir/$$subdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
+	done
 check-am: all-am
-check: check-am
+check: check-recursive
 all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
-installdirs:
+installdirs: installdirs-recursive
+installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(ftkdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -794,70 +917,72 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	clean-noinstPROGRAMS mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
-info: info-am
+info: info-recursive
 
 info-am:
 
 install-data-am: install-ftkHEADERS
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
 install-exec-am: install-libLTLIBRARIES
 
-install-html: install-html-am
+install-html: install-html-recursive
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
 uninstall-am: uninstall-ftkHEADERS uninstall-libLTLIBRARIES
 
-.MAKE: install-am install-strip
+.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
+	install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
+.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
+	all all-am check check-am clean clean-generic \
 	clean-libLTLIBRARIES clean-libtool clean-noinstPROGRAMS ctags \
-	distclean distclean-compile distclean-generic \
+	ctags-recursive distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
@@ -865,11 +990,11 @@ uninstall-am: uninstall-ftkHEADERS uninstall-libLTLIBRARIES
 	install-html-am install-info install-info-am \
 	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
+	installcheck-am installdirs installdirs-am maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-ftkHEADERS \
-	uninstall-libLTLIBRARIES
+	tags tags-recursive uninstall uninstall-am \
+	uninstall-ftkHEADERS uninstall-libLTLIBRARIES
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
