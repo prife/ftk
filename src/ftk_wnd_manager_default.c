@@ -317,9 +317,11 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 		target = priv->windows[priv->top - 1];
 	}
 
-	if(!ftk_widget_is_insensitive(target))
+	if(target != NULL && !ftk_widget_is_insensitive(target))
 	{
+		ftk_widget_ref(target);
 		ftk_widget_event(target, event);
+		ftk_widget_unref(target);
 	}
 
 	return RET_OK;

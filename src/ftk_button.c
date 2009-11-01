@@ -136,7 +136,7 @@ static void ftk_button_destroy(FtkWidget* thiz)
 	{
 		DECL_PRIV0(thiz, priv);
 		FTK_FREE(priv->text);
-		FTK_FREE(priv);
+		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
 	return;
