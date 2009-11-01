@@ -78,6 +78,10 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	{
 		ftk_canvas_draw_hline(canvas, 0, height-i, width);
 	}
+	ftk_canvas_draw_vline(canvas, 0, 10, height - 20);
+	ftk_canvas_draw_vline(canvas, 1, 10, height - 20);
+	ftk_canvas_draw_vline(canvas, width-1, 10, height - 20);
+	ftk_canvas_draw_vline(canvas, width-2, 10, height - 20);
 	
 	ftk_canvas_get_pixel(canvas, 0, 0)->a = 0;
 	ftk_canvas_get_pixel(canvas, 1, 0)->a = 0;

@@ -115,6 +115,10 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	return_val_if_fail(xoffset < display_width, RET_FAIL);
 	return_val_if_fail(yoffset < display_height, RET_FAIL);
 
+	FtkColor dcolor;
+	FtkColor* pdst = NULL;
+	FtkColor* psrc = NULL;
+	unsigned short pixel = 0;
 	FtkColor* src = ftk_bitmap_bits(bitmap);
 	unsigned short* dst = priv->fb.bits;
 	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
@@ -132,9 +136,16 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	{
 		for(j = x, k = xoffset; j < w; j++, k++)
 		{
-			unsigned short pixel = ((src[j].r >> 3) << 11) | ((src[j].g >> 2) << 5) | (src[j].b >> 3);
+			dcolor.r = (dst[k] & 0xf800) >> 8;
+			dcolor.g = (dst[k] & 0x07e0) >> 3;
+			dcolor.b = (dst[k] & 0x1f) << 3;
+			psrc = src + j;
+			pdst = &dcolor;
+
+			FTK_ALPHA(psrc, pdst, psrc->a);
+
+			pixel = ((dcolor.r >> 3) << 11) | ((dcolor.g >> 2) << 5) | (dcolor.b >> 3);
 			dst[k] = pixel;
-			/*FIXME: support alpha chanel.*/
 		}
 		src += bitmap_width;
 		dst += display_width;
