@@ -193,7 +193,7 @@ void ftk_quit(void)
 #define IDC_ICON_ITEM  1001
 #define IDC_CLOSE_ITEM 1002
 
-static Ret on_wnd_manager_event(void* ctx, void* obj)
+static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 {
 	Ret ret = RET_OK;
 	FtkEvent* event = obj;
@@ -270,30 +270,39 @@ static void ftk_init_panel(void)
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
 	ftk_gc_reset(&gc);
 	
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/close-32.png");
 	item = ftk_status_item_create(IDC_CLOSE_ITEM, 32, 32);
-	ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
-	ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
-	ftk_status_panel_add(panel, -1, item);
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/close-32.png");
+	if(gc.bitmap != NULL)
+	{
+		gc.mask = FTK_GC_BITMAP;
+		ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
+		ftk_gc_reset(&gc);
+	}
+	ftk_status_item_set_position(item, -1);
+	ftk_status_panel_add(panel, item);
 	ftk_widget_show(item, 1);
 	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
-	ftk_gc_reset(&gc);
 
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/flag-32.png");
 	item = ftk_status_item_create(IDC_ICON_ITEM, 32, 32);
-	ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
-	ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
-	ftk_status_panel_add(panel, 1, item);
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "icons/flag-32.png");
+	if(gc.bitmap != NULL)
+	{
+		gc.mask = FTK_GC_BITMAP;
+		ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
+		ftk_gc_reset(&gc);
+	}
+	ftk_status_item_set_position(item, 1);
+	ftk_status_panel_add(panel, item);
 	ftk_widget_show(item, 1);
-	ftk_gc_reset(&gc);
 
 	item = ftk_status_item_create(IDC_TITLE_ITEM, 160, 32);
-	ftk_status_panel_add(panel, 2, item);
+	ftk_status_item_set_position(item, 2);
+	ftk_status_panel_add(panel, item);
 	ftk_widget_show(item, 1);
 
-	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), on_wnd_manager_event, NULL);
+	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), on_wnd_manager_global_event, NULL);
 	ftk_widget_show(panel, 1);
 
 	return;

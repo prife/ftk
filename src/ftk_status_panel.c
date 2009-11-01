@@ -231,22 +231,24 @@ static int ftk_status_panel_remove_from(FtkWidget** array, size_t nr, FtkWidget*
 	return nr;
 }
 
-Ret ftk_status_panel_add(FtkWidget* thiz, int index, FtkWidget* item)
+Ret ftk_status_panel_add(FtkWidget* thiz, FtkWidget* item)
 {
+	int pos = 0;
 	DECL_PRIV1(thiz, priv);
 	return_val_if_fail(thiz != NULL && item != NULL, RET_FAIL);
-	
-	if(index > 0)
+
+	pos = ftk_status_item_get_position(item);
+	if(pos > 0)
 	{
-		priv->first_nr = ftk_status_panel_add_to(priv->first, priv->first_nr, index, item);
+		priv->first_nr = ftk_status_panel_add_to(priv->first, priv->first_nr, pos, item);
 	}
-	else if(index == 0)
+	else if(pos == 0)
 	{
-		priv->mid_nr = ftk_status_panel_add_to(priv->mid, priv->mid_nr, index, item);
+		priv->mid_nr = ftk_status_panel_add_to(priv->mid, priv->mid_nr, pos, item);
 	}
 	else
 	{
-		priv->last_nr = ftk_status_panel_add_to(priv->last, priv->last_nr, index, item);
+		priv->last_nr = ftk_status_panel_add_to(priv->last, priv->last_nr, pos, item);
 	}
 
 	priv->changed = 1;

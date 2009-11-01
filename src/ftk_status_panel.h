@@ -36,7 +36,7 @@ FTK_INHERITE_FROM(Window);
 #include "ftk_window.h"
 
 FtkWidget* ftk_status_panel_create(int size);
-Ret ftk_status_panel_add(FtkWidget* thiz, int index, FtkWidget* item);
+Ret ftk_status_panel_add(FtkWidget* thiz, FtkWidget* item);
 Ret ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item);
 
 #endif/*FTK_STATUS_PANEL_H*/
