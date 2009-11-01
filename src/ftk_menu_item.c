@@ -84,7 +84,7 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 	FtkGc gc = {.mask =  FTK_GC_FG};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-
+	return_val_if_fail(width > 0 && height > 0, RET_FAIL);
 
 	if(ftk_widget_is_focused(thiz))
 	{

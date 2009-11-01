@@ -36,7 +36,7 @@
 
 #define FTK_MENU_MAX_ITEM 16
 #define FTK_MENU_ITEM_HEIGHT 48
-#define FTK_MENU_ITEM_WIDTH 80
+#define FTK_MENU_ITEM_WIDTH 100
 
 typedef struct _PrivInfo
 {
@@ -48,6 +48,22 @@ typedef struct _PrivInfo
 	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
 
+static int ftk_menu_panel_count_visible_items(FtkWidget* thiz)
+{
+	int i = 0;
+	int n = 0;
+	DECL_PRIV1(thiz, priv);
+	for(i = 0; i < priv->items_nr; i++)
+	{
+		if(ftk_widget_is_visible(priv->items[i]))
+		{
+			n++;
+		}
+	}
+
+	return n;
+}
+
 static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 {
 	int i = 0;
@@ -56,22 +72,16 @@ static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 	FtkRect* rect = NULL;
 	DECL_PRIV1(thiz, priv);
 	int screen_width = ftk_display_width(ftk_default_display());
-	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;	
-
-	for(i = 0; i < priv->items_nr; i++)
-	{
-		if(ftk_widget_is_visible(priv->items[i]))
-		{
-			n++;
-		}
-	}
+	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;
+	return_val_if_fail(priv->items_nr > 0, NULL);
+	n = ftk_menu_panel_count_visible_items(thiz);
 	return_val_if_fail(n > 0, NULL);
 
 	n = n <= max_items_per_row * 2 ? n : max_items_per_row * 2;
-	*nr = n;
 	rect = (FtkRect*)FTK_ALLOC(sizeof(FtkRect) * n);
 	return_val_if_fail(rect != NULL, NULL);
 
+	*nr = n;
 	if(n <= max_items_per_row)
 	{
 		w = screen_width/n;
@@ -124,9 +134,9 @@ Ret ftk_menu_panel_relayout(FtkWidget* thiz)
 	return_val_if_fail(priv->items_nr > 0 && rects != NULL && nr > 0, RET_FAIL);
 
 	h = nr > max_items_per_row ? FTK_MENU_ITEM_HEIGHT * 2 : FTK_MENU_ITEM_HEIGHT;
-
 	ftk_widget_move_resize(thiz, 0, screen_height - h, screen_width, h);
 
+	/*relayout the items*/
 	for(i = 0, j = 0; i < nr; j++)
 	{
 		if(ftk_widget_is_visible(priv->items[j]))
@@ -136,10 +146,13 @@ Ret ftk_menu_panel_relayout(FtkWidget* thiz)
 		}
 	}
 
+	/*hide items that there is no space for them*/
 	for(; j < priv->items_nr; j++)
 	{
 		ftk_widget_move_resize(priv->items[j], 0, 0, 0, 0);
 	}
+
+	FTK_FREE(rects);
 
 	return RET_OK;
 }
@@ -160,6 +173,11 @@ static Ret  ftk_menu_panel_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
 	}
+	
+	if(event->type == FTK_EVT_HIDE)
+	{
+		ftk_wnd_manager_ungrab(ftk_default_wnd_manager(), thiz);
+	}
 
 	ret = priv->parent_on_event(thiz, event);
 
@@ -176,19 +194,23 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	int i = 0;
 	int w = 0;
 	int nr = 0;
+	int first_row_nr = 0;
+	int second_row_nr = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
 	DECL_PRIV1(thiz, priv);
 	int screen_width = ftk_display_width(ftk_default_display());
 	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;	
-	FtkRect* rects = ftk_menu_panel_calc_rects(thiz, &nr);
-	int first_row_nr = 0;
-	int second_row_nr = 0;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	return_val_if_fail(priv != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
 
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
 	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+
+	/*draw grid*/
+	nr = ftk_menu_panel_count_visible_items(thiz);
+	nr = nr <= max_items_per_row * 2 ? nr : max_items_per_row * 2;
 
 	if(nr > max_items_per_row)
 	{
