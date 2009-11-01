@@ -418,7 +418,8 @@ static void ftk_wnd_manager_default_destroy(FtkWndManager* thiz)
 	DECL_PRIV(thiz, priv);
 	if(thiz != NULL)
 	{
-		for(i = 0; i < priv->top; i++)
+		int nr = priv->top;
+		for(i = 0; i < nr; i++)
 		{
 			FtkWidget* win = priv->windows[0];
 			ftk_wnd_manager_remove(thiz, win);

@@ -103,6 +103,8 @@ Ret  ftk_sources_manager_remove(FtkSourcesManager* thiz, FtkSource* source)
 			thiz->sources[i] = thiz->sources[i+1];
 		}
 		thiz->source_nr--;
+		thiz->sources[thiz->source_nr] = NULL;
+		ftk_source_unref(source);
 	}
 
 	return RET_OK;
