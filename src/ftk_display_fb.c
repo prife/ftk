@@ -134,6 +134,7 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 		{
 			unsigned short pixel = ((src[j].r >> 3) << 11) | ((src[j].g >> 2) << 5) | (src[j].b >> 3);
 			dst[k] = pixel;
+			/*FIXME: support alpha chanel.*/
 		}
 		src += bitmap_width;
 		dst += display_width;

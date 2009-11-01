@@ -94,7 +94,7 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 	}
 
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
-	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+//	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
 
 	if(priv->text != NULL)
 	{

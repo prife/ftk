@@ -35,7 +35,7 @@
 #include "ftk_menu_item.h"
 
 #define FTK_MENU_MAX_ITEM 16
-#define FTK_MENU_ITEM_HEIGHT 36
+#define FTK_MENU_ITEM_HEIGHT 48
 #define FTK_MENU_ITEM_WIDTH 80
 
 typedef struct _PrivInfo
@@ -67,11 +67,12 @@ static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 	}
 	return_val_if_fail(n > 0, NULL);
 
+	n = n <= max_items_per_row * 2 ? n : max_items_per_row * 2;
 	*nr = n;
 	rect = (FtkRect*)FTK_ALLOC(sizeof(FtkRect) * n);
 	return_val_if_fail(rect != NULL, NULL);
 
-	if(n < max_items_per_row)
+	if(n <= max_items_per_row)
 	{
 		w = screen_width/n;
 		for(i = 0; i < n; i++)
@@ -84,15 +85,11 @@ static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 	}
 	else
 	{
-		int first_n = 0;
-		int second_n = 0;
-		n = n <= max_items_per_row * 2 ? n : max_items_per_row * 2;
+		int first_row_nr = n/2;
+		int second_row_nr = (n+1)/2;
 		
-		first_n = n/2;
-		second_n = (n+1)/2;
-
-		w = screen_width/first_n;
-		for(i = 0; i < first_n; i++)
+		w = screen_width/first_row_nr;
+		for(i = 0; i < first_row_nr; i++)
 		{
 			rect[i].x = w * i;
 			rect[i].y = 0;
@@ -100,13 +97,13 @@ static FtkRect* ftk_menu_panel_calc_rects(FtkWidget* thiz, int* nr)
 			rect[i].height = FTK_MENU_ITEM_HEIGHT;
 		}
 		
-		w = screen_width/second_n;
-		for(i = 0; i < second_n; i++)
+		w = screen_width/second_row_nr;
+		for(i = 0; i < second_row_nr; i++)
 		{
-			rect[first_n + i].x = w * i;
-			rect[first_n + i].y = FTK_MENU_ITEM_HEIGHT;
-			rect[first_n + i].width = w;
-			rect[first_n + i].height = FTK_MENU_ITEM_HEIGHT;
+			rect[first_row_nr + i].x = w * i;
+			rect[first_row_nr + i].y = FTK_MENU_ITEM_HEIGHT;
+			rect[first_row_nr + i].width = w;
+			rect[first_row_nr + i].height = FTK_MENU_ITEM_HEIGHT;
 		}
 	}
 
@@ -123,9 +120,10 @@ Ret ftk_menu_panel_relayout(FtkWidget* thiz)
 	FtkRect* rects = ftk_menu_panel_calc_rects(thiz, &nr);
 	int screen_height = ftk_display_height(ftk_default_display());
 	int screen_width = ftk_display_width(ftk_default_display());
+	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;	
 	return_val_if_fail(priv->items_nr > 0 && rects != NULL && nr > 0, RET_FAIL);
 
-	h = nr > 3 ? FTK_MENU_ITEM_HEIGHT * 2 : FTK_MENU_ITEM_HEIGHT;
+	h = nr > max_items_per_row ? FTK_MENU_ITEM_HEIGHT * 2 : FTK_MENU_ITEM_HEIGHT;
 
 	ftk_widget_move_resize(thiz, 0, screen_height - h, screen_width, h);
 
@@ -175,15 +173,51 @@ static Ret  ftk_menu_panel_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 {
+	int i = 0;
+	int w = 0;
+	int nr = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
 	DECL_PRIV1(thiz, priv);
+	int screen_width = ftk_display_width(ftk_default_display());
+	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;	
+	FtkRect* rects = ftk_menu_panel_calc_rects(thiz, &nr);
+	int first_row_nr = 0;
+	int second_row_nr = 0;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
 
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
 	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+
+	if(nr > max_items_per_row)
+	{
+		first_row_nr = nr/2;
+		second_row_nr = (nr+1)/2;
+		ftk_canvas_draw_hline(canvas, 0, FTK_MENU_ITEM_HEIGHT, screen_width);
+	}
+	else
+	{
+		first_row_nr = nr;
+	}
+
+	if(first_row_nr > 0)
+	{
+		w = screen_width/first_row_nr;
+		for(i = 1; i < first_row_nr; i++)
+		{
+			ftk_canvas_draw_vline(canvas, i*w, 0, FTK_MENU_ITEM_HEIGHT);
+		}
+	}
+
+	if(second_row_nr > 0)
+	{
+		w = screen_width/second_row_nr;
+		for(i = 1; i < second_row_nr; i++)
+		{
+			ftk_canvas_draw_vline(canvas, i*w, FTK_MENU_ITEM_HEIGHT, FTK_MENU_ITEM_HEIGHT);
+		}
+	}
 
 	priv->parent_on_paint(thiz);
 

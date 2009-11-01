@@ -35,7 +35,7 @@ static void on_window_close(void* user_data)
 static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 {
 	int i = 0;
-	for(i = 0; i < g_index && i < 6; i++)
+	for(i = 0; i < g_index && i < 8; i++)
 	{
 		char text[32] = {0};
 		FtkWidget* item = ftk_menu_item_create(1000);
