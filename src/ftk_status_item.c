@@ -1,7 +1,7 @@
 /*
  * File: ftk_status_item.c    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   status item. 
+ * Brief:   item on the status panel. 
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
