@@ -157,7 +157,6 @@ static Ret  ftk_status_panel_on_paint(FtkWidget* thiz)
 
 static void ftk_status_panel_destroy(FtkWidget* thiz)
 {
-	int i = 0;
 	DECL_PRIV1(thiz, priv);
 	FtkWidgetDestroy parent_destroy = priv->parent_destroy;
 	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
