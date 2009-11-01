@@ -32,17 +32,16 @@
 #include "ftk_status_item.h"
 
 #define FTK_PANEL_MAX_ITEM 16
-#define FTK_PANEL_MARGIN 2
+#define FTK_PANEL_V_MARGIN 2
 
 typedef struct _PrivInfo
 {
-	int changed;
 	int mid_nr;
 	int last_nr;
 	int first_nr;
-	FtkWidget* mid[FTK_PANEL_MAX_ITEM];	
-	FtkWidget* last[FTK_PANEL_MAX_ITEM];	
-	FtkWidget* first[FTK_PANEL_MAX_ITEM];	
+	FtkWidget* mid[FTK_PANEL_MAX_ITEM];	 /*placed in the mid part*/
+	FtkWidget* last[FTK_PANEL_MAX_ITEM]; /*placed in the left part*/	
+	FtkWidget* first[FTK_PANEL_MAX_ITEM];/*placed in the right part*/
 	FtkWidgetOnEvent parent_on_event;
 	FtkWidgetOnPaint parent_on_paint;
 	FtkWidgetDestroy parent_destroy;
@@ -51,21 +50,25 @@ typedef struct _PrivInfo
 static Ret ftk_status_hide_all(FtkWidget* thiz)
 {
 	int i = 0;
+	int w = 0;
 	DECL_PRIV1(thiz, priv);
 
 	for(i = 0; i < priv->first_nr; i++)
 	{
-		ftk_widget_set_visible(priv->first[i], 0);
+		w = ftk_widget_width(priv->first[i]);
+		ftk_widget_move_resize(priv->first[i], 0, 0, w, 0);
 	}
 	
 	for(i = 0; i < priv->mid_nr; i++)
 	{
-		ftk_widget_set_visible(priv->mid[i], 0);
+		w = ftk_widget_width(priv->mid[i]);
+		ftk_widget_move_resize(priv->mid[i], 0, 0, w, 0);
 	}
 	
 	for(i = 0; i < priv->last_nr; i++)
 	{
-		ftk_widget_set_visible(priv->last[i], 0);
+		w = ftk_widget_width(priv->last[i]);
+		ftk_widget_move_resize(priv->last[i], 0, 0, w, 0);
 	}
 
 	return RET_OK;
@@ -83,16 +86,10 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 	
 	DECL_PRIV1(thiz, priv);
 
-	if(!priv->changed)
-	{
-		return RET_OK;
-	}
-
-	y = FTK_PANEL_MARGIN;
-	h = ftk_widget_height(thiz) - FTK_PANEL_MARGIN - FTK_PANEL_MARGIN;
+	y = FTK_PANEL_V_MARGIN;
+	h = ftk_widget_height(thiz) - 2 * FTK_PANEL_V_MARGIN;
 	right = ftk_widget_width(thiz);
 
-	ftk_status_hide_all(thiz);
 	for(i = 0; i < priv->first_nr; i++)
 	{
 		w = ftk_widget_width(priv->first[i]);
@@ -101,7 +98,6 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 			return RET_OK;
 		}
 		ftk_widget_move_resize(priv->first[i], x, y, w, h);
-		ftk_widget_set_visible(priv->first[i], 1);
 		x += w;
 	}
 
@@ -116,7 +112,6 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 		}
 		x -= w;
 		ftk_widget_move_resize(priv->last[i], x, y, w, h);
-		ftk_widget_set_visible(priv->last[i], 1);
 	}
 
 	right = x;
@@ -129,11 +124,8 @@ static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 			return RET_OK;
 		}
 		ftk_widget_move_resize(priv->mid[i], x, y, w, h);
-		ftk_widget_set_visible(priv->mid[i], 1);
 		x += w;
 	}
-
-	priv->changed = 0;
 
 	return RET_OK;
 }
@@ -148,7 +140,6 @@ static Ret  ftk_status_panel_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret  ftk_status_panel_on_paint(FtkWidget* thiz)
 {
 	DECL_PRIV1(thiz, priv);
-	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	ftk_status_panel_relayout(thiz);
 
@@ -158,9 +149,13 @@ static Ret  ftk_status_panel_on_paint(FtkWidget* thiz)
 static void ftk_status_panel_destroy(FtkWidget* thiz)
 {
 	DECL_PRIV1(thiz, priv);
-	FtkWidgetDestroy parent_destroy = priv->parent_destroy;
-	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
-	parent_destroy(thiz);
+
+	if(priv != NULL)
+	{
+		FtkWidgetDestroy parent_destroy = priv->parent_destroy;
+		FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
+		parent_destroy(thiz);
+	}
 
 	return;
 }
@@ -188,13 +183,13 @@ FtkWidget* ftk_status_panel_create(int size)
 static int ftk_status_panel_add_to(FtkWidget** array, size_t nr, int pos, FtkWidget* item)
 {
 	int i = 0;
-	return_val_if_fail(array != NULL && nr < FTK_PANEL_MAX_ITEM && item != NULL, nr);
+	return_val_if_fail(array != NULL && (nr + 1) < FTK_PANEL_MAX_ITEM && item != NULL, nr);
 
 	for(i = 0; i < nr; i++)
 	{
 		if(pos < ftk_status_item_get_position(array[i]))
 		{
-			int j = nr - 1;
+			int j = nr;
 			for(; j > i; j--)
 			{
 				array[j] = array[j - 1];
@@ -219,10 +214,11 @@ static int ftk_status_panel_remove_from(FtkWidget** array, size_t nr, FtkWidget*
 	{
 		if(array[i] == item)
 		{
-			for(; i < nr; i++)
+			for(; (i + 1)< nr; i++)
 			{
 				array[i] = array[i+1];
 			}
+			array[i] = NULL;
 
 			return nr - 1;
 		}
@@ -251,7 +247,6 @@ Ret ftk_status_panel_add(FtkWidget* thiz, FtkWidget* item)
 		priv->last_nr = ftk_status_panel_add_to(priv->last, priv->last_nr, pos, item);
 	}
 
-	priv->changed = 1;
 	ftk_widget_append_child(thiz, item);
 
 	return RET_OK;
@@ -266,7 +261,6 @@ Ret        ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item)
 	priv->mid_nr = ftk_status_panel_remove_from(priv->mid, priv->mid_nr, item);
 	priv->last_nr = ftk_status_panel_remove_from(priv->last, priv->last_nr, item);
 
-	priv->changed = 1;
 	ftk_widget_remove_child(thiz, item);
 
 	return RET_OK;

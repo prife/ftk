@@ -337,7 +337,6 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 	height = ftk_bitmap_height(thiz->bitmap);
 	return_val_if_fail(x < width && y < height, RET_FAIL);
 
-	ftk_logd("a=%02x\n", thiz->gc.fg.a);
 	if(fill)
 	{
 		for(i = 0; i < h; i++)
