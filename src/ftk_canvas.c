@@ -71,11 +71,6 @@ Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc)
 	return ftk_gc_copy(&thiz->gc, gc);
 }
 
-#define FTK_ALPHA_1(s, d, a) (d) = ((unsigned int)((d) * (0xff - (a)) + (s) * (a))) >> 8
-#define FTK_ALPHA(sc, dc, a) FTK_ALPHA_1(sc->r, dc->r, a); \
-	FTK_ALPHA_1(sc->g, dc->g, a); \
-	FTK_ALPHA_1(sc->b, dc->b, a);
-
 #define PUT_PIXEL(pdst, alpha) \
 	do\
 	{\
@@ -110,6 +105,37 @@ Ret ftk_canvas_draw_point(FtkCanvas* thiz, int x, int y)
 	PUT_PIXEL(pdst, alpha);
 
 	return RET_OK;
+}
+
+Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val)
+{
+	int width = 0;
+	int height = 0;
+	FtkColor* bits = NULL;
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	width  = ftk_bitmap_width(thiz->bitmap);
+	height = ftk_bitmap_height(thiz->bitmap);
+	bits   = ftk_bitmap_bits(thiz->bitmap);
+	return_val_if_fail(bits != NULL && x < width && y < height, RET_FAIL);
+	bits[y * width + x] = val;
+
+	return RET_OK;
+}
+
+FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y)
+{
+	int width = 0;
+	int height = 0;
+	FtkColor* bits = NULL;
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	width  = ftk_bitmap_width(thiz->bitmap);
+	height = ftk_bitmap_height(thiz->bitmap);
+	bits   = ftk_bitmap_bits(thiz->bitmap);
+	return_val_if_fail(bits != NULL && x < width && y < height, RET_FAIL);
+
+	return bits + y * width + x;
 }
 
 Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)

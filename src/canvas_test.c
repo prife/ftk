@@ -357,6 +357,35 @@ void test_draw_rect(FtkDisplay* display)
 
 	return;
 }
+
+void test_put_get_pixel(FtkDisplay* display)
+{
+	int i = 0;
+	int j = 0;
+	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+
+	for(i = 0; i < height; i++)
+	{
+		for(j = 0; j < width; j++)
+		{
+			FtkColor* colorp = NULL;
+			assert(ftk_canvas_put_pixel(thiz, j, i, color) == RET_OK);
+			assert((colorp = ftk_canvas_get_pixel(thiz, j, i)) != NULL);
+			assert(colorp->r == color.r);
+			assert(colorp->g == color.g);
+			assert(colorp->b == color.b);
+			assert(colorp->a == color.a);
+		}
+	}
+
+	ftk_canvas_destroy(thiz);
+
+	return;
+}
+
 int main(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
@@ -364,6 +393,7 @@ int main(int argc, char* argv[])
 	FtkFont* font = ftk_default_font();
 	FtkDisplay* display = ftk_default_display();
 
+	test_put_get_pixel(display);
 #if 1
 	test_draw_point(display);
 	test_draw_line(display);

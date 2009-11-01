@@ -91,9 +91,15 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 		{
 			for(j = x, k= xoffset; j < w; j++, k++)
 			{
-				dst[k] = src[j];
-				dst[k].r = src[j].b;
-				dst[k].b = src[j].r;
+				FtkColor* pdst = dst+k;
+				FtkColor* psrc = src+j;
+				FTK_ALPHA_1(psrc->r, pdst->b, psrc->a);
+				FTK_ALPHA_1(psrc->b, pdst->r, psrc->a);
+				FTK_ALPHA_1(psrc->g, pdst->g, psrc->a);
+
+				//dst[k]   = src[j];
+				//dst[k].r = src[j].b;
+				//dst[k].b = src[j].r;
 			}
 			src += bitmap_width;
 			dst += display_width;

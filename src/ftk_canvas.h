@@ -48,6 +48,9 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
 Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill);
 Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str);
 
+Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
+FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);
+
 Ret ftk_canvas_get_string_extent(FtkCanvas* thiz, const char* str, int* width);
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
 

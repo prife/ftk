@@ -37,6 +37,8 @@ typedef struct _PrivInfo
 {
 	FtkMainLoop* main_loop;
 	FtkWidgetOnEvent parent_on_event;
+	FtkWidgetOnPaint parent_on_paint;
+	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
 
 static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
@@ -52,6 +54,62 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 	return RET_OK;
 }
 
+static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
+{
+	int i = 0;
+	int j = 0;
+	FtkColor* pixel = NULL;
+	FtkGc gc = {.mask = FTK_GC_FG};
+	DECL_PRIV1(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	
+	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
+
+	gc.fg = ftk_widget_get_gc(thiz)->fg;
+	gc.fg.r -= 0x2f;
+	gc.fg.g -= 0x2f;
+	gc.fg.b -= 0x2f;
+	ftk_canvas_set_gc(canvas, &gc);
+	for(i = 0; i < 10; i++)
+	{
+		ftk_canvas_draw_hline(canvas, 0, i, width);
+	}
+	for(i = 0; i < 10; i++)
+	{
+		ftk_canvas_draw_hline(canvas, 0, height-i, width);
+	}
+	
+	ftk_canvas_get_pixel(canvas, 0, 0)->a = 0;
+	ftk_canvas_get_pixel(canvas, 1, 0)->a = 0;
+	ftk_canvas_get_pixel(canvas, 0, 1)->a = 0;
+	
+	ftk_canvas_get_pixel(canvas, width-1, 0)->a = 0;
+	ftk_canvas_get_pixel(canvas, width-2, 0)->a = 0;
+	ftk_canvas_get_pixel(canvas, width-1, 1)->a = 0;
+	
+	ftk_canvas_get_pixel(canvas, 0, height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, 1, height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, 0, height-2)->a = 0;
+	
+	ftk_canvas_get_pixel(canvas, width-1, height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, width-2, height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, width-1, height-2)->a = 0;
+
+	priv->parent_on_paint(thiz);
+
+	return RET_OK;
+}
+
+static void ftk_dialog_destroy(FtkWidget* thiz)
+{
+	DECL_PRIV1(thiz, priv);
+	FtkWidgetDestroy parent_destroy = priv->parent_destroy;
+	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
+	parent_destroy(thiz);
+
+	return;
+}
+
 FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 {
 	FtkWidget* thiz = ftk_window_create_with_type(FTK_DIALOG, x, y, width, height);
@@ -62,7 +120,12 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 	{
 		DECL_PRIV1(thiz, priv);
 		priv->parent_on_event = thiz->on_event;
+		priv->parent_on_paint = thiz->on_paint;
+		priv->parent_destroy  = thiz->destroy;
 		thiz->on_event = ftk_dialog_on_event;
+		thiz->on_paint = ftk_dialog_on_paint;
+		thiz->destroy  = ftk_dialog_destroy;
+
 		priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
 	}
 
