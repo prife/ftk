@@ -107,9 +107,9 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		{
 			ftk_canvas_draw_hline(canvas, x, y + i, width);
 		}
-		gc.fg.r -= 0x1f;
-		gc.fg.g -= 0x1f;
-		gc.fg.b -= 0x1f;
+		gc.fg.r -= 0x10;
+		gc.fg.g -= 0x10;
+		gc.fg.b -= 0x10;
 		ftk_canvas_reset_gc(canvas, &gc); 
 		ftk_canvas_draw_hline(canvas, x + 1, y + i, width-2);
 		ftk_canvas_draw_hline(canvas, x + 2, y + i + 1, width-4);
