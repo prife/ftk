@@ -28,6 +28,9 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+FTK_INHERITE_FROM(Widget)
+
 #ifndef FTK_LABEL_H
 #define FTK_LABEL_H
 

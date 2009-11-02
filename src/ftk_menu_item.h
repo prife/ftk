@@ -29,6 +29,8 @@
  *
  */
 
+FTK_INHERITE_FROM(Widget)
+
 #ifndef FTK_MENU_ITEM_H
 #define FTK_MENU_ITEM_H
 

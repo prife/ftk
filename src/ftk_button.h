@@ -29,6 +29,8 @@
  *
  */
 
+FTK_INHERITE_FROM(Widget)
+
 #ifndef FTK_BUTTON_H
 #define FTK_BUTTON_H
 
