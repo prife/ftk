@@ -33,6 +33,8 @@
 
 #include "ftk_widget.h"
 
+FTK_INHERITE_FROM(Widget)
+
 FtkWidget* ftk_image_create(int id, int x, int y, int width, int height);
 
 Ret ftk_image_set_image_file(FtkWidget* thiz, const char* image_file);

@@ -86,7 +86,7 @@ typedef enum _FtkWidgetType
 	FTK_LABEL,
 	FTK_BUTTON,
 	FTK_IMAGE,
-	FTK_EDIT,
+	FTK_ENTRY,
 	FTK_STATUS_ITEM
 }FtkWidgetType;
 

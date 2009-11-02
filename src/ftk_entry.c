@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_style.h"
 #include "ftk_entry.h"
 typedef struct _PrivInfo
 {
@@ -53,18 +54,23 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	
 	if(ftk_widget_is_focused(thiz))
 	{
-		gc.fg = ftk_style_get_color(FTK_COLOR_BORDER);
+		gc.fg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
 	}
 	else
 	{
-		gc.fg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
+		gc.fg = ftk_style_get_color(FTK_COLOR_BORDER);
 	}
 
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_hline(canvas, x + 2, y, width-4);
 	ftk_canvas_draw_hline(canvas, x + 1, y + 1, width-2);
-	ftk_canvas_draw_hline(canvas, x + 1, y + i, width-2);
-	ftk_canvas_draw_hline(canvas, x + 2, y + i + 1, width-4);
+	ftk_canvas_draw_vline(canvas, x, y + 2, height - 4);
+	ftk_canvas_draw_vline(canvas, x + 1, y + 1, height - 2);
+	
+	ftk_canvas_draw_vline(canvas, x+width-1, y + 2, height - 4);
+	ftk_canvas_draw_vline(canvas, x + width -2, y + 1, height - 2);
+	ftk_canvas_draw_hline(canvas, x + 1, y + height - 1, width-2);
+	ftk_canvas_draw_hline(canvas, x + 2, y + height - 2, width-4);
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
@@ -106,7 +112,6 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		ftk_widget_init(thiz, FTK_ENTRY, id);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_insensitive(thiz, 1);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 
 		gc.fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);

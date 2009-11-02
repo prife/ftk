@@ -29,12 +29,12 @@
  *
  */
 
-FTK_INHERITE_FROM(Widget)
-
 #ifndef FTK_MENU_ITEM_H
 #define FTK_MENU_ITEM_H
 
 #include "ftk_widget.h"
+
+FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_menu_item_create(int id);
 

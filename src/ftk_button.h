@@ -29,12 +29,12 @@
  *
  */
 
-FTK_INHERITE_FROM(Widget)
-
 #ifndef FTK_BUTTON_H
 #define FTK_BUTTON_H
 
 #include "ftk_widget.h"
+
+FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_button_create(int id, int x, int y, int width, int height);
 

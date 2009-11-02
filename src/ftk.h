@@ -43,6 +43,7 @@ extern "C" {
 #include "ftk_app_window.h"
 #include "ftk_label.h"
 #include "ftk_image.h"
+#include "ftk_entry.h"
 #include "ftk_button.h"
 #include "ftk_globals.h"
 #include "ftk_source_idle.h"

@@ -29,12 +29,12 @@
  *
  */
 
-FTK_INHERITE_FROM(Widget)
-
 #ifndef FTK_STATUS_ITEM_H
 #define FTK_STATUS_ITEM_H
 
 #include "ftk_widget.h"
+
+FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_status_item_create(int id, int width, int height);
 

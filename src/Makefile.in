@@ -41,7 +41,7 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	primary_source_test$(EXEEXT) bitmap_factory_test$(EXEEXT) \
 	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
-	demo7$(EXEEXT) $(am__EXEEXT_1)
+	demo7$(EXEEXT) demo_entry$(EXEEXT) $(am__EXEEXT_1)
 @FTK_BACKEND_X11_TRUE@am__append_1 = $(LINUX_X11)
 @FTK_BACKEND_FB_TRUE@am__append_2 = $(LINUX_NATIVE)
 @FTK_BACKEND_FB_TRUE@am__append_3 = display_fb_test input_test
@@ -73,7 +73,7 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
-	ftk_menu_item.c ftk_app_window.c ftk_display_x11.c \
+	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_display_x11.c \
 	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 @FTK_BACKEND_X11_TRUE@am__objects_2 = $(am__objects_1)
@@ -88,7 +88,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_globals.lo ftk_button.lo ftk_image.lo ftk_log.lo \
 	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
 	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
-	ftk_app_window.lo $(am__objects_2) $(am__objects_4)
+	ftk_app_window.lo ftk_entry.lo $(am__objects_2) \
+	$(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 @FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 @FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
@@ -153,6 +154,12 @@ demo7_LDADD = $(LDADD)
 demo7_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(demo7_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_demo_entry_OBJECTS = demo_entry.$(OBJEXT)
+demo_entry_OBJECTS = $(am_demo_entry_OBJECTS)
+demo_entry_LDADD = $(LDADD)
+demo_entry_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(demo_entry_LDFLAGS) $(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
 @FTK_BACKEND_FB_TRUE@am_display_fb_test_OBJECTS =  \
 @FTK_BACKEND_FB_TRUE@	display_fb_test.$(OBJEXT)
@@ -244,8 +251,8 @@ SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(bitmap_test_SOURCES) $(canvas_test_SOURCES) $(demo1_SOURCES) \
 	$(demo2_SOURCES) $(demo3_SOURCES) $(demo4_SOURCES) \
 	$(demo5_SOURCES) $(demo6_SOURCES) $(demo7_SOURCES) \
-	$(display_fb_test_SOURCES) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(input_test_SOURCES) \
+	$(demo_entry_SOURCES) $(display_fb_test_SOURCES) \
+	$(font_test_SOURCES) $(ftk_test_SOURCES) $(input_test_SOURCES) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
 	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
@@ -254,7 +261,7 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(demo1_SOURCES) $(demo2_SOURCES) \
 	$(demo3_SOURCES) $(demo4_SOURCES) $(demo5_SOURCES) \
-	$(demo6_SOURCES) $(demo7_SOURCES) \
+	$(demo6_SOURCES) $(demo7_SOURCES) $(demo_entry_SOURCES) \
 	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
 	$(ftk_test_SOURCES) $(am__input_test_SOURCES_DIST) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
@@ -394,7 +401,7 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
-	ftk_menu_item.c ftk_app_window.c $(am__append_1) \
+	ftk_menu_item.c ftk_app_window.c ftk_entry.c $(am__append_1) \
 	$(am__append_2)
 @FTK_BACKEND_FB_TRUE@display_fb_test_SOURCES = display_fb_test.c
 @FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)
@@ -432,6 +439,8 @@ demo6_SOURCES = demo6.c
 demo6_LDFLAGS = $(MYLDFLAGS)
 demo7_SOURCES = demo7.c
 demo7_LDFLAGS = $(MYLDFLAGS)
+demo_entry_SOURCES = demo_entry.c
+demo_entry_LDFLAGS = $(MYLDFLAGS)
 canvas_test_SOURCES = canvas_test.c
 canvas_test_LDFLAGS = $(MYLDFLAGS)
 ftk_test_SOURCES = ftk_test.c
@@ -569,6 +578,9 @@ demo6$(EXEEXT): $(demo6_OBJECTS) $(demo6_DEPENDENCIES)
 demo7$(EXEEXT): $(demo7_OBJECTS) $(demo7_DEPENDENCIES) 
 	@rm -f demo7$(EXEEXT)
 	$(demo7_LINK) $(demo7_OBJECTS) $(demo7_LDADD) $(LIBS)
+demo_entry$(EXEEXT): $(demo_entry_OBJECTS) $(demo_entry_DEPENDENCIES) 
+	@rm -f demo_entry$(EXEEXT)
+	$(demo_entry_LINK) $(demo_entry_OBJECTS) $(demo_entry_LDADD) $(LIBS)
 display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
 	@rm -f display_fb_test$(EXEEXT)
 	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
@@ -622,6 +634,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo5.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo6.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo7.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_entry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/display_fb_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fontdata.Plo@am__quote@
@@ -634,6 +647,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_dialog.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_display_fb.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_display_x11.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_entry.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_font.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_globals.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_image.Plo@am__quote@
