@@ -205,10 +205,16 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
 
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
+	gc.fg.r -=0x1f;
+	gc.fg.g -=0x1f;
+	gc.fg.b -=0x1f;
 	ftk_canvas_set_gc(canvas, &gc);
-	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+	ftk_canvas_draw_rect(canvas, x, y, width, height+1, 0);
+	ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height, 0);
 
 	/*draw grid*/
+	gc.fg = ftk_widget_get_gc(thiz)->fg;
+	ftk_canvas_set_gc(canvas, &gc);
 	nr = ftk_menu_panel_count_visible_items(thiz);
 	nr = nr <= max_items_per_row * 2 ? nr : max_items_per_row * 2;
 
