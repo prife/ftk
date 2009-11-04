@@ -591,7 +591,7 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 			continue;
 		}
 
-		extent += glyph.x + glyph.w + 1;
+		extent += glyph.x + glyph.w;
 	}
 
 	return extent;

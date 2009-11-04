@@ -60,6 +60,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
+			ftk_source_ref(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
@@ -82,7 +83,7 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	ftk_entry_compute_visible_range(thiz);
-	return_val_if_fail(priv->caret >= priv->visible_start && priv->caret < priv->visible_end, RET_FAIL);
+	return_val_if_fail(priv->caret >= priv->visible_start && priv->caret <= priv->visible_end, RET_FAIL);
 
 	if(ftk_widget_is_focused(thiz))
 	{
@@ -92,7 +93,7 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 		extent = ftk_canvas_get_extent(canvas, priv->text+priv->visible_start, priv->caret - priv->visible_start);
 
 		ftk_canvas_set_gc(canvas, &gc);
-		x += extent + FTK_ENTRY_LEFT_MARGIN - 1;
+		x += extent + FTK_ENTRY_LEFT_MARGIN;
 		y += FTK_ENTRY_TOP_MARGIN;
 		ftk_canvas_draw_vline(canvas, x, y, height - 2 * FTK_ENTRY_TOP_MARGIN);
 		FTK_END_PAINT();
@@ -185,8 +186,6 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 		priv->caret_timer = ftk_source_timer_create(500, ftk_entry_on_paint_caret, thiz);
-		ftk_source_ref(priv->caret_timer);
-
 	}
 
 	return thiz;
@@ -221,7 +220,7 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	
 	priv->visible_start = -1;
 	priv->visible_end = strlen(priv->text);
-	priv->caret = 1;
+	priv->caret = priv->visible_end;
 	ftk_widget_paint_self(thiz);
 
 	return RET_OK;
