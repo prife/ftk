@@ -36,7 +36,7 @@
 typedef struct _PrivInfo
 {
 	int   caret;
-	int   caret_blink;
+	int   caret_show;
 	int   visible_start;
 	int   visible_end;
 	char* text;
@@ -50,11 +50,60 @@ typedef struct _PrivInfo
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
 
+static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
+{
+	DECL_PRIV0(thiz, priv);
+	priv->caret_show = 0;
+	ftk_entry_on_paint_caret(thiz);
+	return_val_if_fail(priv->text != NULL, RET_OK);
+
+	/*FIXME: CJK*/
+	priv->caret += offset;
+	priv->caret = priv->caret < 0 ? 0 : priv->caret;
+	priv->caret = priv->caret > strlen(priv->text) ? strlen(priv->text) : priv->caret;
+
+	if((priv->caret) < priv->visible_start)
+	{
+		priv->visible_start = priv->caret;
+		priv->visible_end = -1;
+	}
+
+	if((priv->caret) > priv->visible_end)
+	{
+		priv->visible_end = priv->caret;
+		priv->visible_start = -1;
+	}
+
+	ftk_entry_compute_visible_range(thiz);
+	ftk_entry_on_paint_caret(thiz);
+	ftk_widget_paint_self(thiz);
+
+	return RET_OK;
+}
+
+static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
+{
+	DECL_PRIV0(thiz, priv);
+	switch(event->u.key.code)
+	{
+		case FTK_KEY_LEFT:
+		{
+			ftk_entry_move_caret(thiz, -1);
+			break;
+		}
+		case FTK_KEY_RIGHT:
+		{
+			ftk_entry_move_caret(thiz, 1);
+			break;
+		}
+	}
+	return RET_REMOVE;
+}
+
 static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
-
 
 	switch(event->type)
 	{
@@ -67,6 +116,12 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_FOCUS_OUT:
 		{
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
+			break;
+		}
+	//	case FTK_EVT_KEY_DOWN:
+		case FTK_EVT_KEY_UP:
+		{
+			return ftk_entry_handle_key_event(thiz, event);
 			break;
 		}
 		default:break;
@@ -87,13 +142,13 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 
 	if(ftk_widget_is_focused(thiz))
 	{
-		gc.fg = priv->caret_blink ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
-		priv->caret_blink = !priv->caret_blink;
+		gc.fg = priv->caret_show ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
+		priv->caret_show = !priv->caret_show;
 
 		extent = ftk_canvas_get_extent(canvas, priv->text+priv->visible_start, priv->caret - priv->visible_start);
 
 		ftk_canvas_set_gc(canvas, &gc);
-		x += extent + FTK_ENTRY_LEFT_MARGIN;
+		x += extent + FTK_ENTRY_LEFT_MARGIN - 1;
 		y += FTK_ENTRY_TOP_MARGIN;
 		ftk_canvas_draw_vline(canvas, x, y, height - 2 * FTK_ENTRY_TOP_MARGIN);
 		FTK_END_PAINT();
