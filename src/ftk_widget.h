@@ -132,7 +132,7 @@ void ftk_widget_destroy(FtkWidget* thiz);
 void ftk_widget_ref(FtkWidget* thiz);
 void ftk_widget_unref(FtkWidget* thiz);
 
-void ftk_widget_paint_self(FtkWidget* thiz);
+Ret  ftk_widget_paint_self(FtkWidget* thiz);
 void ftk_widget_ref_self(FtkWidget* thiz);
 void ftk_widget_unref_self(FtkWidget* thiz);
 Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);

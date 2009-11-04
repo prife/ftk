@@ -690,9 +690,9 @@ static int ftk_widget_paint_called_by_parent(FtkWidget* thiz)
 	return parent != NULL ? parent->priv->painting : 0;
 }
 
-void ftk_widget_paint_self(FtkWidget* thiz)
+Ret ftk_widget_paint_self(FtkWidget* thiz)
 {
-	return_if_fail(thiz != NULL && thiz->on_paint != NULL);
+	return_val_if_fail(thiz != NULL && thiz->on_paint != NULL, RET_FAIL);
 	
 	if(ftk_widget_is_visible(thiz) && ftk_widget_is_parent_visible(thiz))
 	{
@@ -747,7 +747,7 @@ void ftk_widget_paint_self(FtkWidget* thiz)
 		priv->painting = 0;
 	}
 	
-	return;
+	return RET_OK;
 }
 
 void ftk_widget_ref_self(FtkWidget* thiz)

@@ -497,7 +497,7 @@ Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int l
 		}
 
 		y = oy;
-		x = ox + glyph.x + glyph.w;
+		x = ox + glyph.x + glyph.w + 1;
 		ox = x;
 	}
 
@@ -584,14 +584,14 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 		if(code == ' ')
 		{
 			glyph.x = 0;
-			glyph.w = FTK_SPACE_WIDTH;
+			glyph.w = FTK_SPACE_WIDTH - 1;
 		}
 		else if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
 		{
 			continue;
 		}
 
-		extent += glyph.x + glyph.w;
+		extent += glyph.x + glyph.w + 1;
 	}
 
 	return extent;
@@ -605,6 +605,11 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
 
 	if(ftk_font_lookup(thiz->gc.font, unicode, &glyph) != RET_OK)
 	{
+		if(unicode == ' ')
+		{
+			return FTK_SPACE_WIDTH;
+		}
+
 		return 0;
 	}
 
