@@ -382,7 +382,8 @@ void ftk_widget_set_visible(FtkWidget* thiz, int visible)
 }
 
 void ftk_widget_set_focused(FtkWidget* thiz, int focused)
-{
+{	
+	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->state != FTK_WIDGET_INSENSITIVE)
@@ -390,6 +391,10 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 		thiz->priv->state = focused ? FTK_WIDGET_FOCUSED : FTK_WIDGET_NORMAL;
 	}
 	
+	event.type = focused ? FTK_EVT_FOCUS_IN : FTK_EVT_FOCUS_OUT;
+	event.widget = thiz;
+	ftk_widget_event(thiz, &event);
+
 	if(!ftk_widget_is_parent_visible(thiz))
 	{
 		return;

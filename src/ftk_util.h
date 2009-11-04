@@ -35,6 +35,8 @@
 #include "ftk_typedef.h"
 
 unsigned short utf8_get_char (const char *p, const char** next);
+unsigned short utf8_get_prev_char (const char *p, const char** prev);
+
 char* read_file(const char* file_name, int* length);
 
 #endif/*FTK_UTIL_H*/

@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
 	for(i = 0; *p; i++)
 	{
 		assert(codes[i] == utf8_get_char(p, &p));	
+		assert(codes[i] == utf8_get_prev_char(p, NULL));
 	}
 
 	return 0;

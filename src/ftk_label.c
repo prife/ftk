@@ -53,7 +53,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
 	{
-		ftk_canvas_draw_string(canvas, x + FTK_LABEL_LEFT_MARGIN, y+ftk_canvas_font_height(canvas), priv->text);
+		ftk_canvas_draw_string(canvas, x + FTK_LABEL_LEFT_MARGIN, y+ftk_canvas_font_height(canvas), priv->text, -1);
 	}
 
 	FTK_END_PAINT();

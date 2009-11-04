@@ -46,17 +46,19 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h);
 Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w);
 Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
 Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill);
-Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str);
+Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len);
 
 Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
 FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);
 
-Ret ftk_canvas_get_string_extent(FtkCanvas* thiz, const char* str, int* width);
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
 
 int ftk_canvas_font_height(FtkCanvas* thiz);
-int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str);
+int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len);
+int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode);
 const char* ftk_canvas_available(FtkCanvas* thiz, const char* str, int width, int* nr);
+const char* ftk_canvas_compute_string_visible_ranage(FtkCanvas* thiz, 
+	const char* start, int vstart, int vend, int width);
 
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
 void ftk_canvas_destroy(FtkCanvas* thiz);

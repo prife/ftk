@@ -126,6 +126,34 @@ unsigned short utf8_get_char (const char *p, const char** next)
   return result;
 }
 
+unsigned short utf8_get_prev_char (const char *p, const char** prev)
+{
+	int i = 0;
+	for(i = 1; i < 8; i++)
+	{
+		unsigned char val = p[-i];
+		if((val & 0x80) && !(val & 0x40))
+		{
+			continue;
+		}
+		else
+		{
+			if(prev != NULL)
+			{
+				*prev = p-i;
+			}
+			return utf8_get_char(p-i, NULL);
+		}
+	}
+
+	if(prev != NULL)
+	{
+		*prev = p;
+	}
+
+	return 0;
+}
+
 char* read_file(const char* file_name, int* length)
 {
 	struct stat st = {0};

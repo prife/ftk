@@ -31,18 +31,73 @@
 
 #include "ftk_style.h"
 #include "ftk_entry.h"
+#include "ftk_globals.h"
+
 typedef struct _PrivInfo
 {
 	int   caret;
+	int   caret_blink;
+	int   visible_start;
+	int   visible_end;
 	char* text;
 	char* preedit_text;
+	FtkSource* caret_timer;
 }PrivInfo;
 
-#define FTK_ENTRY_LEFT_MARGIN 3
+#define FTK_ENTRY_LEFT_MARGIN 4
 #define FTK_ENTRY_TOP_MARGIN  3
+
+static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
+static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
 
 static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 {
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
+
+
+	switch(event->type)
+	{
+		case FTK_EVT_FOCUS_IN:
+		{
+			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
+			break;
+		}
+		case FTK_EVT_FOCUS_OUT:
+		{
+			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
+			break;
+		}
+		default:break;
+	}
+	return RET_OK;
+}
+
+static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
+{
+	int extent = 0;
+	DECL_PRIV0(thiz, priv);
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	ftk_entry_compute_visible_range(thiz);
+	return_val_if_fail(priv->caret >= priv->visible_start && priv->caret < priv->visible_end, RET_FAIL);
+
+	if(ftk_widget_is_focused(thiz))
+	{
+		gc.fg = priv->caret_blink ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
+		priv->caret_blink = !priv->caret_blink;
+
+		extent = ftk_canvas_get_extent(canvas, priv->text+priv->visible_start, priv->caret - priv->visible_start);
+
+		ftk_canvas_set_gc(canvas, &gc);
+		x += extent + FTK_ENTRY_LEFT_MARGIN - 1;
+		y += FTK_ENTRY_TOP_MARGIN;
+		ftk_canvas_draw_vline(canvas, x, y, height - 2 * FTK_ENTRY_TOP_MARGIN);
+		FTK_END_PAINT();
+	}
+
 	return RET_OK;
 }
 
@@ -50,6 +105,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 {
 	FtkGc gc = {.mask = FTK_GC_FG};
 	DECL_PRIV0(thiz, priv);
+	int font_height = 0;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
 	if(ftk_widget_is_focused(thiz))
@@ -75,7 +131,13 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
 	{
-		ftk_canvas_draw_string(canvas, x + FTK_ENTRY_LEFT_MARGIN, y+ftk_canvas_font_height(canvas), priv->text);
+		ftk_entry_compute_visible_range(thiz);
+		font_height = ftk_canvas_font_height(canvas);
+		x += FTK_ENTRY_LEFT_MARGIN;
+		y += font_height + FTK_ENTRY_TOP_MARGIN;
+
+		ftk_canvas_draw_string(canvas, x, y, priv->text + priv->visible_start,
+			priv->visible_end - priv->visible_start);
 	}
 
 	FTK_END_PAINT();
@@ -103,6 +165,7 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 	{
 		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+		DECL_PRIV0(thiz, priv);
 
 		thiz->on_event = ftk_entry_on_event;
 		thiz->on_paint = ftk_entry_on_paint;
@@ -121,9 +184,31 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		
 		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+		priv->caret_timer = ftk_source_timer_create(500, ftk_entry_on_paint_caret, thiz);
+		ftk_source_ref(priv->caret_timer);
+
 	}
 
 	return thiz;
+}
+
+static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	int width = ftk_widget_width(thiz);
+	FtkCanvas* canvas = ftk_widget_canvas(thiz);
+	const char* vstart = NULL;
+	return_val_if_fail(thiz != NULL && priv->text != NULL, RET_FAIL);
+
+	if(priv->visible_start < 0 || priv->visible_end < 0)
+	{
+		vstart = ftk_canvas_compute_string_visible_ranage(canvas, priv->text, -1, strlen(priv->text), width);
+
+		priv->visible_start = vstart - priv->text;
+		priv->visible_end = strlen(priv->text);
+	}
+
+	return RET_OK;
 }
 
 Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
@@ -133,6 +218,10 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 
 	FTK_FREE(priv->text);
 	priv->text = strdup(text);
+	
+	priv->visible_start = -1;
+	priv->visible_end = strlen(priv->text);
+	priv->caret = 1;
 	ftk_widget_paint_self(thiz);
 
 	return RET_OK;

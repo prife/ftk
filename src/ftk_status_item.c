@@ -91,10 +91,10 @@ static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 		int dx = 2;
 		int dy = (height + 12)>>1;
 		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, priv->text);
+		int fw = ftk_canvas_get_extent(canvas, priv->text, -1);
 	
 		assert(fh < height && fw < width);
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, priv->text);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, priv->text, -1);
 	}
 
 	FTK_END_PAINT();

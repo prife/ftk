@@ -66,10 +66,10 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 		}
 		FtkBitmap* bitmap = ftk_bitmap_create(100, 100, color);
 		ftk_canvas_draw_bitmap(thiz, bitmap, 0, 0, 100, 100, 100, 100);
-		ftk_canvas_draw_string(thiz, 0, 240, " Jim is a Programmer.");
+		ftk_canvas_draw_string(thiz, 0, 240, " Jim is a Programmer.", -1);
 		gc.fg.b = 0xff;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_string(thiz, 0, 220, "李先静是一个程序员");
+		ftk_canvas_draw_string(thiz, 0, 220, "李先静是一个程序员", -1);
 	
 		ftk_canvas_draw_line(thiz, 0, 0, 100, 100);
 		ftk_canvas_draw_line(thiz, 100, 100, 200, 0);
@@ -90,9 +90,9 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
 
 		assert(ftk_canvas_font_height(thiz) == 16);
-		extent = ftk_canvas_get_extent(thiz, "李先静");
+		extent = ftk_canvas_get_extent(thiz, "李先静", -1);
 		assert(strcmp(ftk_canvas_available(thiz, "李先静是", extent, &nr), "是") == 0 && nr == 3);
-		printf("extent=%d\n", ftk_canvas_get_extent(thiz, "李先静"));
+		printf("extent=%d\n", ftk_canvas_get_extent(thiz, "李先静", -1));
 
 
 		ftk_bitmap_unref(bitmap);
@@ -386,6 +386,47 @@ void test_put_get_pixel(FtkDisplay* display)
 	return;
 }
 
+void test_font(FtkDisplay* display, FtkFont* font)
+{
+	int i = 0;
+	int j = 0;
+	FtkGc gc = {.mask = FTK_GC_FONT};
+	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	const char* str = "隐式声明与内建函数";
+	const char* other_side = NULL;
+	gc.font = font;
+	ftk_canvas_set_gc(thiz, &gc);
+	
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, 0, -1, 60);
+	assert(strcmp(other_side, "明与内建函数") == 0);
+
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, other_side-str, -1, 60);
+	assert(strcmp(other_side, "建函数") == 0);
+	
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, other_side-str, -1, 60);
+	assert(strcmp(other_side, "") == 0);
+
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	assert(strcmp(other_side, "建函数") == 0);
+	
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	assert(strcmp(other_side, "明与内建函数") == 0);
+	
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	assert(strcmp(other_side, str) == 0);
+	
+	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	assert(strcmp(other_side, str) == 0);
+
+	printf("other_side = %s\n", other_side);
+	ftk_canvas_destroy(thiz);
+
+	return;
+}
+
 int main(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
@@ -393,14 +434,15 @@ int main(int argc, char* argv[])
 	FtkFont* font = ftk_default_font();
 	FtkDisplay* display = ftk_default_display();
 
+	test_font(display, font);
+#if 0
 	test_put_get_pixel(display);
-#if 1
 	test_draw_point(display);
 	test_draw_line(display);
 	test_draw_hline(display);
 	test_draw_vline(display);
-#endif
 	test_draw_rect(display);
+#endif
 	ftk_run();
 
 	return 0;
