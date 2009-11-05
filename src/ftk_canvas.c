@@ -603,12 +603,13 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
 	FtkGlyph glyph = {0};
 	return_val_if_fail(thiz != NULL && thiz->gc.font != NULL, 0);
 
+	if(unicode == ' ')
+	{
+		return FTK_SPACE_WIDTH;
+	}
+
 	if(ftk_font_lookup(thiz->gc.font, unicode, &glyph) != RET_OK)
 	{
-		if(unicode == ' ')
-		{
-			return FTK_SPACE_WIDTH;
-		}
 
 		return 0;
 	}
@@ -638,7 +639,7 @@ const char* ftk_canvas_compute_string_visible_ranage(FtkCanvas* thiz, const char
 			if(extent > width) break;
 			width -= extent;
 		}
-
+	
 		return prev_iter;
 	}
 	else if(vend > 0)

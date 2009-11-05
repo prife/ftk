@@ -390,6 +390,8 @@ void test_font(FtkDisplay* display, FtkFont* font)
 {
 	int i = 0;
 	int j = 0;
+	int extent1 = 0;
+	int extent2 = 0;
 	FtkGc gc = {.mask = FTK_GC_FONT};
 	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
 	int width = ftk_display_width(display);
@@ -397,6 +399,7 @@ void test_font(FtkDisplay* display, FtkFont* font)
 	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
 	const char* str = "隐式声明与内建函数";
 	const char* other_side = NULL;
+	
 	gc.font = font;
 	ftk_canvas_set_gc(thiz, &gc);
 	
@@ -422,7 +425,19 @@ void test_font(FtkDisplay* display, FtkFont* font)
 	assert(strcmp(other_side, str) == 0);
 
 	printf("other_side = %s\n", other_side);
+	
+
+	str = "Single line editor, that means you can input a one line only.";
+	
+	for(i = 0; str[i]; i++)
+	{
+		extent1 += ftk_canvas_get_char_extent(thiz, str[i]);
+	}
+	extent2 = ftk_canvas_get_extent(thiz, str, -1);
+	assert(extent1 == extent2);
+
 	ftk_canvas_destroy(thiz);
+
 
 	return;
 }
