@@ -11,6 +11,14 @@ int main(int argc, char* argv[])
 		assert(codes[i] == utf8_get_char(p, &p));	
 		assert(codes[i] == utf8_get_prev_char(p, NULL));
 	}
+	assert(utf8_count_char(str, strlen(str)) == 9);
+	str = "abc";
+	assert(utf8_count_char(str, strlen(str)) == 3);
+	str = "abc中国";
+	assert(utf8_count_char(str, strlen(str)) == 5);
+	
+	str = "abc中国";
+	assert(utf8_count_char(str, 3) == 3);
 
 	return 0;
 }

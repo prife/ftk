@@ -154,6 +154,20 @@ unsigned short utf8_get_prev_char (const char *p, const char** prev)
 	return 0;
 }
 
+int utf8_count_char(const char *str, size_t length)
+{
+	int nr = 0;
+	const char* iter = str;
+	return_val_if_fail(str != NULL, 0);
+
+	while(utf8_get_char(iter, &iter) && (iter - str) <= length)
+	{
+		nr++;
+	}
+
+	return nr;
+}
+
 char* read_file(const char* file_name, int* length)
 {
 	struct stat st = {0};

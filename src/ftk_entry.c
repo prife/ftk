@@ -84,7 +84,7 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 	return RET_OK;
 }
 
-static Ret ftk_entry_get_offset_by_pos(FtkWidget* thiz, int x)
+static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 {
 	DECL_PRIV0(thiz, priv);
 	int offset = 0;
@@ -99,13 +99,21 @@ static Ret ftk_entry_get_offset_by_pos(FtkWidget* thiz, int x)
 	{
 		return RET_OK;
 	}
+	else if(offset < 0)
+	{
+		offset = - utf8_count_char(end, -offset);
+	}
+	else if(offset > 0)
+	{
+		offset = utf8_count_char(TB_TEXT + priv->caret, offset);
+	}
 	
 	return ftk_entry_move_caret(thiz, offset);
 }
 
 static Ret ftk_entry_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
 {
-	return ftk_entry_get_offset_by_pos(thiz, event->u.mouse.x);
+	return ftk_entry_get_offset_by_pointer(thiz, event->u.mouse.x);
 }
 
 static Ret ftk_entry_input_char(FtkWidget* thiz, char c)
