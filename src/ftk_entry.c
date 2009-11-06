@@ -1,7 +1,7 @@
 /*
  * File: ftk_entry.c    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   single enditor
+ * Brief:   single line editor
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
