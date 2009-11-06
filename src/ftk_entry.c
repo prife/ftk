@@ -40,6 +40,10 @@ typedef struct _PrivInfo
 	int   caret_visible;
 	int   visible_start;
 	int   visible_end;
+	int   selected_start;
+	int   selected_end;
+	int   preedit_start;
+	int   preedit_end;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
 }PrivInfo;
@@ -382,5 +386,4 @@ const char* ftk_entry_get_text(FtkWidget* thiz)
 
 	return TB_TEXT;
 }
-
 
