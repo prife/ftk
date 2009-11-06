@@ -41,7 +41,8 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	primary_source_test$(EXEEXT) bitmap_factory_test$(EXEEXT) \
 	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
-	demo7$(EXEEXT) demo_entry$(EXEEXT) $(am__EXEEXT_1)
+	demo7$(EXEEXT) demo_entry$(EXEEXT) text_buffer_test$(EXEEXT) \
+	$(am__EXEEXT_1)
 @FTK_BACKEND_X11_TRUE@am__append_1 = $(LINUX_X11)
 @FTK_BACKEND_FB_TRUE@am__append_2 = $(LINUX_NATIVE)
 @FTK_BACKEND_FB_TRUE@am__append_3 = display_fb_test input_test
@@ -73,8 +74,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
-	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_display_x11.c \
-	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
+	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
+	ftk_display_x11.c ftk_source_x11.c ftk_display_fb.c \
+	ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 @FTK_BACKEND_X11_TRUE@am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
@@ -88,8 +90,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_globals.lo ftk_button.lo ftk_image.lo ftk_log.lo \
 	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
 	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
-	ftk_app_window.lo ftk_entry.lo $(am__objects_2) \
-	$(am__objects_4)
+	ftk_app_window.lo ftk_entry.lo ftk_text_buffer.lo \
+	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 @FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 @FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
@@ -223,6 +225,12 @@ sources_manager_test_LDADD = $(LDADD)
 sources_manager_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(sources_manager_test_LDFLAGS) $(LDFLAGS) -o $@
+am_text_buffer_test_OBJECTS = text_buffer_test.$(OBJEXT)
+text_buffer_test_OBJECTS = $(am_text_buffer_test_OBJECTS)
+text_buffer_test_LDADD = $(LDADD)
+text_buffer_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(text_buffer_test_LDFLAGS) $(LDFLAGS) -o $@
 am_util_test_OBJECTS = util_test.$(OBJEXT)
 util_test_OBJECTS = $(am_util_test_OBJECTS)
 util_test_LDADD = $(LDADD)
@@ -256,7 +264,7 @@ SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
 	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
+	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
 DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(demo1_SOURCES) $(demo2_SOURCES) \
@@ -267,7 +275,7 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
 	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
+	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -401,8 +409,8 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
-	ftk_menu_item.c ftk_app_window.c ftk_entry.c $(am__append_1) \
-	$(am__append_2)
+	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
+	$(am__append_1) $(am__append_2)
 @FTK_BACKEND_FB_TRUE@display_fb_test_SOURCES = display_fb_test.c
 @FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)
 @FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
@@ -411,6 +419,8 @@ INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\""
 MYLDFLAGS = .libs/libftk.a
 sources_manager_test_SOURCES = sources_manager_test.c
 sources_manager_test_LDFLAGS = $(MYLDFLAGS)
+text_buffer_test_SOURCES = text_buffer_test.c
+text_buffer_test_LDFLAGS = $(MYLDFLAGS)
 util_test_SOURCES = util_test.c
 util_test_LDFLAGS = $(MYLDFLAGS)
 log_test_SOURCES = log_test.c
@@ -611,6 +621,9 @@ primary_source_test$(EXEEXT): $(primary_source_test_OBJECTS) $(primary_source_te
 sources_manager_test$(EXEEXT): $(sources_manager_test_OBJECTS) $(sources_manager_test_DEPENDENCIES) 
 	@rm -f sources_manager_test$(EXEEXT)
 	$(sources_manager_test_LINK) $(sources_manager_test_OBJECTS) $(sources_manager_test_LDADD) $(LIBS)
+text_buffer_test$(EXEEXT): $(text_buffer_test_OBJECTS) $(text_buffer_test_DEPENDENCIES) 
+	@rm -f text_buffer_test$(EXEEXT)
+	$(text_buffer_test_LINK) $(text_buffer_test_OBJECTS) $(text_buffer_test_LDADD) $(LIBS)
 util_test$(EXEEXT): $(util_test_OBJECTS) $(util_test_DEPENDENCIES) 
 	@rm -f util_test$(EXEEXT)
 	$(util_test_LINK) $(util_test_OBJECTS) $(util_test_LDADD) $(LIBS)
@@ -668,6 +681,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_status_panel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_style.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_text_buffer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_widget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_window.Plo@am__quote@
@@ -679,6 +693,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/png_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/primary_source_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources_manager_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text_buffer_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/widget_test.Po@am__quote@
 

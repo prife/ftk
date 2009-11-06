@@ -1,7 +1,7 @@
 /*
- * File: ftk_platform.h    
+ * File: ftk_text_buffer.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   text buffer
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,42 +25,30 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-06 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_PLATFORM_H
-#define FTK_PLATFORM_H
 
-#ifdef WIN32
-#include <windows.h>
-#define FTK_FONT "./unicode.fnt"
-#endif
+#ifndef FTK_TEXT_BUFFER_H
+#define FTK_TEXT_BUFFER_H
 
-#ifdef LINUX
-#include <linux/input.h>
-#include <sys/select.h>
-#endif
+#include "ftk_typedef.h"
 
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <dirent.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+typedef struct _FtkTextBuffer
+{
+	char* buffer;
+	size_t length;
+	size_t buffer_length;
+}FtkTextBuffer;
 
-#define FTK_ALLOC(s)       malloc(s)
-#define FTK_REALLOC(p, s)  realloc(p, s)
-#define FTK_ZALLOC(s)      calloc(1, s)
-#define FTK_FREE(p)        if(p) {free(p);}
-#define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p);}
+FtkTextBuffer* ftk_text_buffer_create(size_t init_buffer_length);
 
-#endif/*FTK_PLATFORM_H*/
+Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text);
+Ret  ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length);
+Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count);
+int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count);
+
+void ftk_text_buffer_destroy(FtkTextBuffer* thiz);
+
+#endif/*FTK_TEXT_BUFFER_H*/
 
