@@ -42,7 +42,7 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
 	demo7$(EXEEXT) demo_entry$(EXEEXT) text_buffer_test$(EXEEXT) \
-	$(am__EXEEXT_1)
+	icon_cache_test$(EXEEXT) $(am__EXEEXT_1)
 am__append_1 = $(LINUX_X11)
 #am__append_2 = $(LINUX_NATIVE)
 #am__append_3 = display_fb_test input_test
@@ -75,8 +75,8 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_display_x11.c ftk_source_x11.c ftk_display_fb.c \
-	ftk_source_input.c
+	ftk_icon_cache.c ftk_display_x11.c ftk_source_x11.c \
+	ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
@@ -91,7 +91,7 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
 	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
 	ftk_app_window.lo ftk_entry.lo ftk_text_buffer.lo \
-	$(am__objects_2) $(am__objects_4)
+	ftk_icon_cache.lo $(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 #am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 #	input_test$(EXEEXT)
@@ -182,6 +182,12 @@ ftk_test_LDADD = $(LDADD)
 ftk_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(ftk_test_LDFLAGS) \
 	$(LDFLAGS) -o $@
+am_icon_cache_test_OBJECTS = icon_cache_test.$(OBJEXT)
+icon_cache_test_OBJECTS = $(am_icon_cache_test_OBJECTS)
+icon_cache_test_LDADD = $(LDADD)
+icon_cache_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(icon_cache_test_LDFLAGS) $(LDFLAGS) -o $@
 am__input_test_SOURCES_DIST = input_test.c
 #am_input_test_OBJECTS = input_test.$(OBJEXT)
 input_test_OBJECTS = $(am_input_test_OBJECTS)
@@ -260,7 +266,8 @@ SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(demo2_SOURCES) $(demo3_SOURCES) $(demo4_SOURCES) \
 	$(demo5_SOURCES) $(demo6_SOURCES) $(demo7_SOURCES) \
 	$(demo_entry_SOURCES) $(display_fb_test_SOURCES) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) $(input_test_SOURCES) \
+	$(font_test_SOURCES) $(ftk_test_SOURCES) \
+	$(icon_cache_test_SOURCES) $(input_test_SOURCES) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
 	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
@@ -271,11 +278,12 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(demo3_SOURCES) $(demo4_SOURCES) $(demo5_SOURCES) \
 	$(demo6_SOURCES) $(demo7_SOURCES) $(demo_entry_SOURCES) \
 	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(am__input_test_SOURCES_DIST) \
-	$(label_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
+	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
+	$(am__input_test_SOURCES_DIST) $(label_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
+	$(util_test_SOURCES) widget_test.c
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -300,13 +308,13 @@ AUTOMAKE = ${SHELL} /broncho/lab/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -317,7 +325,7 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -410,13 +418,15 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	$(am__append_1) $(am__append_2)
+	ftk_icon_cache.c $(am__append_1) $(am__append_2)
 #display_fb_test_SOURCES = display_fb_test.c
 #display_fb_test_LDFLAGS = $(MYLDFLAGS)
 #input_test_SOURCES = input_test.c
 #input_test_LDFLAGS = $(MYLDFLAGS)
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\""
+INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\""
 MYLDFLAGS = .libs/libftk.a
+icon_cache_test_SOURCES = icon_cache_test.c
+icon_cache_test_LDFLAGS = $(MYLDFLAGS)
 sources_manager_test_SOURCES = sources_manager_test.c
 sources_manager_test_LDFLAGS = $(MYLDFLAGS)
 text_buffer_test_SOURCES = text_buffer_test.c
@@ -600,6 +610,9 @@ font_test$(EXEEXT): $(font_test_OBJECTS) $(font_test_DEPENDENCIES)
 ftk_test$(EXEEXT): $(ftk_test_OBJECTS) $(ftk_test_DEPENDENCIES) 
 	@rm -f ftk_test$(EXEEXT)
 	$(ftk_test_LINK) $(ftk_test_OBJECTS) $(ftk_test_LDADD) $(LIBS)
+icon_cache_test$(EXEEXT): $(icon_cache_test_OBJECTS) $(icon_cache_test_DEPENDENCIES) 
+	@rm -f icon_cache_test$(EXEEXT)
+	$(icon_cache_test_LINK) $(icon_cache_test_OBJECTS) $(icon_cache_test_LDADD) $(LIBS)
 input_test$(EXEEXT): $(input_test_OBJECTS) $(input_test_DEPENDENCIES) 
 	@rm -f input_test$(EXEEXT)
 	$(input_test_LINK) $(input_test_OBJECTS) $(input_test_LDADD) $(LIBS)
@@ -663,6 +676,7 @@ include ./$(DEPDIR)/ftk_display_x11.Plo
 include ./$(DEPDIR)/ftk_entry.Plo
 include ./$(DEPDIR)/ftk_font.Plo
 include ./$(DEPDIR)/ftk_globals.Plo
+include ./$(DEPDIR)/ftk_icon_cache.Plo
 include ./$(DEPDIR)/ftk_image.Plo
 include ./$(DEPDIR)/ftk_image_jpeg_decoder.Plo
 include ./$(DEPDIR)/ftk_image_png_decoder.Plo
@@ -686,6 +700,7 @@ include ./$(DEPDIR)/ftk_util.Plo
 include ./$(DEPDIR)/ftk_widget.Plo
 include ./$(DEPDIR)/ftk_window.Plo
 include ./$(DEPDIR)/ftk_wnd_manager_default.Plo
+include ./$(DEPDIR)/icon_cache_test.Po
 include ./$(DEPDIR)/input_test.Po
 include ./$(DEPDIR)/label_test.Po
 include ./$(DEPDIR)/log_test.Po

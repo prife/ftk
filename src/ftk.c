@@ -153,7 +153,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
 
 	ftk_init_bitmap_factory();
-
+	ftk_set_icon_cache(ftk_icon_cache_create());
 	ftk_set_font(ftk_font_create(FTK_FONT, 0));
 
 #ifdef USE_LINUX_NATIVE
