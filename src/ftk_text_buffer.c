@@ -134,7 +134,7 @@ Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count)
 	int length = 0;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, RET_FAIL);
 	return_val_if_fail(offset <= thiz->length && offset >= 0, 0);
-	return_val_if_fail((offset + count) < thiz->length && (offset + count) >= 0, RET_FAIL);
+	return_val_if_fail((offset + count) <= thiz->length && (offset + count) >= 0, RET_FAIL);
 
 	length = ftk_text_buffer_chars_bytes(thiz, offset, count);
 	return_val_if_fail(length != 0, RET_FAIL);
@@ -161,7 +161,7 @@ int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count)
 	const char* offset_p = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, 0);
 	return_val_if_fail(offset <= thiz->length && offset >= 0, 0);
-	return_val_if_fail((offset + count) < thiz->length && (offset + count) >= 0, 0);
+	return_val_if_fail((offset + count) <= thiz->length && (offset + count) >= 0, 0);
 
 	offset_p = thiz->buffer + offset;
 	iter = offset_p;

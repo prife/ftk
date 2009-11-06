@@ -32,6 +32,7 @@
 #include "ftk_style.h"
 #include "ftk_entry.h"
 #include "ftk_globals.h"
+#include "ftk_text_buffer.h"
 
 typedef struct _PrivInfo
 {
@@ -39,13 +40,19 @@ typedef struct _PrivInfo
 	int   caret_visible;
 	int   visible_start;
 	int   visible_end;
-	char* text;
 	char* preedit_text;
 	FtkSource* caret_timer;
+	FtkTextBuffer* text_buffer;
 }PrivInfo;
 
 #define FTK_ENTRY_LEFT_MARGIN 4
 #define FTK_ENTRY_TOP_MARGIN  4
+#define HAS_TEXT(priv) priv != NULL \
+	&& priv->text_buffer != NULL \
+	&& priv->text_buffer->length > 0 \
+	&& priv->text_buffer != NULL
+#define TB_TEXT priv->text_buffer->buffer
+#define TB_LENGTH priv->text_buffer->length
 
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
@@ -55,12 +62,11 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 	DECL_PRIV0(thiz, priv);
 	priv->caret_visible = 0;
 	ftk_entry_on_paint_caret(thiz);
-	return_val_if_fail(priv->text != NULL, RET_OK);
+	return_val_if_fail(HAS_TEXT(priv), RET_OK);
 
-	/*FIXME: CJK*/
-	priv->caret += offset;
+	priv->caret += ftk_text_buffer_chars_bytes(priv->text_buffer, priv->caret, offset);
 	priv->caret = priv->caret < 0 ? 0 : priv->caret;
-	priv->caret = priv->caret > strlen(priv->text) ? strlen(priv->text) : priv->caret;
+	priv->caret = priv->caret >  TB_LENGTH ? TB_LENGTH : priv->caret;
 
 	if((priv->caret) < priv->visible_start)
 	{
@@ -73,8 +79,43 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 		priv->visible_start = -1;
 	}
 
-
 	ftk_widget_paint_self(thiz);
+
+	return RET_OK;
+}
+
+static Ret ftk_entry_get_offset_by_pos(FtkWidget* thiz, int x)
+{
+	DECL_PRIV0(thiz, priv);
+	int offset = 0;
+	const char* end = NULL;
+	FtkCanvas* canvas = ftk_widget_canvas(thiz);
+	int width = x - ftk_widget_left(thiz) - FTK_ENTRY_LEFT_MARGIN;
+
+	end = ftk_canvas_compute_string_visible_ranage(canvas, TB_TEXT, priv->visible_start, -1, width);
+	offset = end - TB_TEXT - priv->caret;
+
+	if(offset == 0)
+	{
+		return RET_OK;
+	}
+	
+	return ftk_entry_move_caret(thiz, offset);
+}
+
+static Ret ftk_entry_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
+{
+	return ftk_entry_get_offset_by_pos(thiz, event->u.mouse.x);
+}
+
+static Ret ftk_entry_input_char(FtkWidget* thiz, char c)
+{
+	char str[2] = {0};
+	DECL_PRIV0(thiz, priv);
+	
+	str[0] = c;
+	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+	ftk_entry_move_caret(thiz, 1);	
 
 	return RET_OK;
 }
@@ -82,6 +123,8 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
+	DECL_PRIV0(thiz, priv);
+
 	switch(event->u.key.code)
 	{
 		case FTK_KEY_LEFT:
@@ -96,7 +139,28 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 			ret = RET_REMOVE;
 			break;
 		}
-		default:break;
+		case FTK_KEY_UP:
+		case FTK_KEY_DOWN:break;
+		case FTK_KEY_DELETE:
+		{
+			ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, 1);
+			ftk_entry_move_caret(thiz, 0);
+			break;
+		}
+		case FTK_KEY_BACKSPACE:
+		{
+			ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, -1);
+			ftk_entry_move_caret(thiz, -1);
+			break;
+		}
+		default:
+		{
+			if(isprint(event->u.key.code & 0xff))
+			{
+				ftk_entry_input_char(thiz, event->u.key.code);
+			}
+			break;
+		}
 	}
 
 	return ret;
@@ -127,6 +191,11 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 			ret = ftk_entry_handle_key_event(thiz, event);
 			break;
 		}
+		case FTK_EVT_MOUSE_UP:
+		{
+			ret = ftk_entry_handle_mouse_evevnt(thiz, event);
+			break;
+		}
 		default:break;
 	}
 
@@ -148,7 +217,7 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
 		priv->caret_visible = !priv->caret_visible;
 
-		extent = ftk_canvas_get_extent(canvas, priv->text+priv->visible_start, priv->caret - priv->visible_start);
+		extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, priv->caret - priv->visible_start);
 
 		ftk_canvas_reset_gc(canvas, &gc);
 		x += extent + FTK_ENTRY_LEFT_MARGIN - 1;
@@ -188,14 +257,14 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_draw_hline(canvas, x + 2, y + height - 2, width-4);
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->text != NULL)
+	if(priv->text_buffer != NULL)
 	{
 		ftk_entry_compute_visible_range(thiz);
 		font_height = ftk_canvas_font_height(canvas);
 		x += FTK_ENTRY_LEFT_MARGIN;
 		y += font_height ;
 
-		ftk_canvas_draw_string(canvas, x, y, priv->text + priv->visible_start,
+		ftk_canvas_draw_string(canvas, x, y, TB_TEXT + priv->visible_start,
 			priv->visible_end - priv->visible_start);
 	}
 	ftk_entry_on_paint_caret(thiz);
@@ -209,8 +278,8 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 	{
 		DECL_PRIV0(thiz, priv);
 
-		FTK_FREE(priv->text);
 		FTK_FREE(priv->preedit_text);
+		ftk_text_buffer_destroy(priv->text_buffer);
 		FTK_FREE(priv);
 	}
 
@@ -245,6 +314,7 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 		priv->caret_timer = ftk_source_timer_create(500, ftk_entry_on_paint_caret, thiz);
+		priv->text_buffer = ftk_text_buffer_create(128);
 	}
 
 	return thiz;
@@ -256,20 +326,20 @@ static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
 	int width = ftk_widget_width(thiz);
 	FtkCanvas* canvas = ftk_widget_canvas(thiz);
 	const char* other_side = NULL;
-	return_val_if_fail(thiz != NULL && priv->text != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && priv->text_buffer != NULL, RET_FAIL);
 
 	if(priv->visible_start < 0 || priv->visible_end < 0)
 	{
-		other_side = ftk_canvas_compute_string_visible_ranage(canvas, priv->text, 
+		other_side = ftk_canvas_compute_string_visible_ranage(canvas, TB_TEXT, 
 			priv->visible_start, priv->visible_end, width - 2 * FTK_ENTRY_LEFT_MARGIN);
 
 		if(priv->visible_start < 0)
 		{
-			priv->visible_start = other_side - priv->text;
+			priv->visible_start = other_side - TB_TEXT;
 		}
 		else if(priv->visible_end < 0)
 		{
-			priv->visible_end = other_side - priv->text;
+			priv->visible_end = other_side - TB_TEXT;
 		}
 	}
 
@@ -281,11 +351,10 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
-	FTK_FREE(priv->text);
-	priv->text = strdup(text);
-	
+	ftk_text_buffer_delete(priv->text_buffer, 0, TB_LENGTH);
+	ftk_text_buffer_insert(priv->text_buffer, 0, text);	
 	priv->visible_start = -1;
-	priv->visible_end = strlen(priv->text);
+	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;
 	ftk_widget_paint_self(thiz);
 
@@ -297,7 +366,7 @@ const char* ftk_entry_get_text(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, NULL);
 
-	return priv->text;
+	return TB_TEXT;
 }
 
 
