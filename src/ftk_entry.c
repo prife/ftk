@@ -40,7 +40,6 @@ typedef struct _PrivInfo
 	int   caret_visible;
 	int   visible_start;
 	int   visible_end;
-	char* preedit_text;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
 }PrivInfo;
@@ -91,6 +90,7 @@ static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 	const char* end = NULL;
 	FtkCanvas* canvas = ftk_widget_canvas(thiz);
 	int width = x - ftk_widget_left(thiz) - FTK_ENTRY_LEFT_MARGIN;
+	return_val_if_fail(width >= 0, RET_FAIL);
 
 	end = ftk_canvas_compute_string_visible_ranage(canvas, TB_TEXT, priv->visible_start, -1, width);
 	offset = end - TB_TEXT - priv->caret;
@@ -118,10 +118,9 @@ static Ret ftk_entry_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_entry_input_char(FtkWidget* thiz, char c)
 {
-	char str[2] = {0};
+	char str[2] = {c, 0};
 	DECL_PRIV0(thiz, priv);
 	
-	str[0] = c;
 	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
 	ftk_entry_move_caret(thiz, 1);	
 
@@ -193,10 +192,18 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
-	//	case FTK_EVT_KEY_DOWN:
+		case FTK_EVT_KEY_DOWN:
 		case FTK_EVT_KEY_UP:
 		{
-			ret = ftk_entry_handle_key_event(thiz, event);
+			if(event->type == FTK_EVT_KEY_DOWN)
+			{
+				ret = ftk_entry_handle_key_event(thiz, event);
+			}
+			else
+			{
+				ret = event->u.key.code == FTK_KEY_LEFT || event->u.key.code == FTK_KEY_RIGHT 
+					? RET_REMOVE : RET_OK;
+			}
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
@@ -286,7 +293,6 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 	{
 		DECL_PRIV0(thiz, priv);
 
-		FTK_FREE(priv->preedit_text);
 		ftk_text_buffer_destroy(priv->text_buffer);
 		FTK_FREE(priv);
 	}
