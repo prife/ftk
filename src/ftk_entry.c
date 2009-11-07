@@ -96,7 +96,7 @@ static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 	int width = x - ftk_widget_left(thiz) - FTK_ENTRY_LEFT_MARGIN;
 	return_val_if_fail(width >= 0, RET_FAIL);
 
-	end = ftk_canvas_compute_string_visible_ranage(canvas, TB_TEXT, priv->visible_start, -1, width);
+	end = ftk_canvas_compute_string_visible_range(canvas, TB_TEXT, priv->visible_start, -1, width);
 	offset = end - TB_TEXT - priv->caret;
 
 	if(offset == 0)
@@ -348,7 +348,7 @@ static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
 
 	if(priv->visible_start < 0 || priv->visible_end < 0)
 	{
-		other_side = ftk_canvas_compute_string_visible_ranage(canvas, TB_TEXT, 
+		other_side = ftk_canvas_compute_string_visible_range(canvas, TB_TEXT, 
 			priv->visible_start, priv->visible_end, width - 2 * FTK_ENTRY_LEFT_MARGIN);
 
 		if(priv->visible_start < 0)

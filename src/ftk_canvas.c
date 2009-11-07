@@ -619,7 +619,7 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
 	return extent;
 }
 
-const char* ftk_canvas_compute_string_visible_ranage(FtkCanvas* thiz, const char* start, int vstart, int vend, int width)
+const char* ftk_canvas_compute_string_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width)
 {
 	int extent = 0;
 	unsigned short unicode = 0;
@@ -633,7 +633,7 @@ const char* ftk_canvas_compute_string_visible_ranage(FtkCanvas* thiz, const char
 		{
 			prev_iter = iter;
 			unicode = utf8_get_char(iter, &iter);
-			if(unicode == 0) break;
+			if(unicode == 0 || unicode == 0xffff) break;
 
 			extent = ftk_canvas_get_char_extent(thiz, unicode);
 			if(extent > width) break;

@@ -36,7 +36,7 @@ typedef struct _PrivInfo
 }PrivInfo;
 
 #define FTK_LABEL_LEFT_MARGIN 3
-#define FTK_LABEL_TOP_MARGIN  3
+#define FTK_LABEL_TOP_MARGIN  1
 
 static Ret ftk_label_on_event(FtkWidget* thiz, FtkEvent* event)
 {
@@ -45,15 +45,32 @@ static Ret ftk_label_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_label_on_paint(FtkWidget* thiz)
 {
+	int i = 0;
+	int rows = 0;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
-	(void)width;
-	(void)height;
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
 	{
-		ftk_canvas_draw_string(canvas, x + FTK_LABEL_LEFT_MARGIN, y+ftk_canvas_font_height(canvas), priv->text, -1);
+		int start = 0;
+		const char* end = NULL;
+		
+		x += FTK_LABEL_LEFT_MARGIN;
+		width -= FTK_LABEL_LEFT_MARGIN * 2;
+		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
+	
+		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+		for(i = 0; i < rows; i++)
+		{
+			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;
+			end = ftk_canvas_compute_string_visible_range(canvas, priv->text, start, -1, width);
+			ftk_canvas_draw_string(canvas, x, y, priv->text + start, end - priv->text - start);
+			if(*end == '\0')
+			{
+				break;
+			}
+			start = end - priv->text;
+		}
 	}
 
 	FTK_END_PAINT();

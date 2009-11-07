@@ -16,10 +16,10 @@ libftk_la_SOURCES=\
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c
 
-noinst_PROGRAMS=label_test widget_test demo1 demo2 demo3 demo4 demo5 demo6 \
+noinst_PROGRAMS=label_test widget_test demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
-	sources_manager_test demo7 demo_entry text_buffer_test icon_cache_test
+	sources_manager_test demo_menu demo_entry text_buffer_test icon_cache_test
 
 if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
@@ -67,26 +67,26 @@ label_test_LDFLAGS=$(MYLDFLAGS)
 widget_test_SOURCE=widget_test.c
 widget_test_LDFLAGS=$(MYLDFLAGS)
 
-demo1_SOURCES=demo1.c
-demo1_LDFLAGS=$(MYLDFLAGS)
+demo_label_SOURCES=demo_label.c
+demo_label_LDFLAGS=$(MYLDFLAGS)
 
-demo2_SOURCES=demo2.c
-demo2_LDFLAGS=$(MYLDFLAGS)
+demo_button_SOURCES=demo_button.c
+demo_button_LDFLAGS=$(MYLDFLAGS)
 
-demo3_SOURCES=demo3.c
-demo3_LDFLAGS=$(MYLDFLAGS)
+demo_image_SOURCES=demo_image.c
+demo_image_LDFLAGS=$(MYLDFLAGS)
 
-demo4_SOURCES=demo4.c
-demo4_LDFLAGS=$(MYLDFLAGS)
+demo_image_button_SOURCES=demo_image_button.c
+demo_image_button_LDFLAGS=$(MYLDFLAGS)
 
-demo5_SOURCES=demo5.c
-demo5_LDFLAGS=$(MYLDFLAGS)
+demo_dialog_SOURCES=demo_dialog.c
+demo_dialog_LDFLAGS=$(MYLDFLAGS)
 
-demo6_SOURCES=demo6.c
-demo6_LDFLAGS=$(MYLDFLAGS)
+demo_multi_win_SOURCES=demo_multi_win.c
+demo_multi_win_LDFLAGS=$(MYLDFLAGS)
 
-demo7_SOURCES=demo7.c
-demo7_LDFLAGS=$(MYLDFLAGS)
+demo_menu_SOURCES=demo_menu.c
+demo_menu_LDFLAGS=$(MYLDFLAGS)
 
 demo_entry_SOURCES=demo_entry.c
 demo_entry_LDFLAGS=$(MYLDFLAGS)

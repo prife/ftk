@@ -403,25 +403,25 @@ void test_font(FtkDisplay* display, FtkFont* font)
 	gc.font = font;
 	ftk_canvas_set_gc(thiz, &gc);
 	
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, 0, -1, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, 0, -1, 60);
 	assert(strcmp(other_side, "明与内建函数") == 0);
 
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, other_side-str, -1, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, other_side-str, -1, 60);
 	assert(strcmp(other_side, "建函数") == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, other_side-str, -1, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, other_side-str, -1, 60);
 	assert(strcmp(other_side, "") == 0);
 
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, "建函数") == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, "明与内建函数") == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, str) == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_ranage(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, str) == 0);
 
 	printf("other_side = %s\n", other_side);
