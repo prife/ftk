@@ -389,7 +389,6 @@ void test_put_get_pixel(FtkDisplay* display)
 void test_font(FtkDisplay* display, FtkFont* font)
 {
 	int i = 0;
-	int j = 0;
 	int extent1 = 0;
 	int extent2 = 0;
 	FtkGc gc = {.mask = FTK_GC_FONT};
@@ -438,6 +437,24 @@ void test_font(FtkDisplay* display, FtkFont* font)
 
 	ftk_canvas_destroy(thiz);
 
+	return;
+}
+
+static void test_fill_bg(FtkDisplay* display)
+{
+	FtkRect rect = {0};
+	FtkGc gc = {.mask = FTK_GC_FONT};
+	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkBitmap* bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_pressed.9.png");
+	ftk_style_fill_background(thiz, 10, 10, 100, 60, bitmap);
+	
+	rect.width = width;
+	rect.height = height;
+	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);
+	ftk_canvas_destroy(thiz);
 
 	return;
 }
@@ -449,8 +466,9 @@ int main(int argc, char* argv[])
 	FtkFont* font = ftk_default_font();
 	FtkDisplay* display = ftk_default_display();
 
-	test_font(display, font);
+	test_fill_bg(display);
 #if 0
+	test_font(display, font);
 	test_put_get_pixel(display);
 	test_draw_point(display);
 	test_draw_line(display);
