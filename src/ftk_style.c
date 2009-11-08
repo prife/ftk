@@ -24,7 +24,6 @@ FtkColor ftk_style_get_color(FtkColorIndex index)
 Ret ftk_style_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
 {
 	int i = 0;
-	int n = 0;
 	int ox = 0;
 	int oy = 0;
 	int ow = 0;

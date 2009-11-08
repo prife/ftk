@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
 #include "ftk_menu_panel.h"

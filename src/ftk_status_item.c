@@ -81,7 +81,6 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 {
-	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 

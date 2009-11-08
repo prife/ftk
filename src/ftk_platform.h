@@ -39,6 +39,7 @@
 #ifdef LINUX
 #include <linux/input.h>
 #include <sys/select.h>
+#include <ctype.h>
 #endif
 
 #include <stdio.h>

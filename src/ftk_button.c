@@ -33,6 +33,7 @@
 #include "ftk_style.h"
 #include "ftk_button.h"
 #include "ftk_globals.h"
+#include "ftk_window.h"
 #include "ftk_icon_cache.h"
 
 typedef struct _PrivInfo
@@ -91,8 +92,6 @@ static const char* bg_imgs[FTK_WIDGET_STATE_NR] =
 
 static Ret ftk_button_on_paint(FtkWidget* thiz)
 {
-	int i = 0;
-	FtkGc gc = {0};
 	FtkBitmap* bitmap = NULL;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);

@@ -436,6 +436,7 @@ void test_font(FtkDisplay* display, FtkFont* font)
 	assert(extent1 == extent2);
 
 	ftk_canvas_destroy(thiz);
+	sleep(3);
 
 	return;
 }
@@ -443,7 +444,6 @@ void test_font(FtkDisplay* display, FtkFont* font)
 static void test_fill_bg(FtkDisplay* display)
 {
 	FtkRect rect = {0};
-	FtkGc gc = {.mask = FTK_GC_FONT};
 	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
@@ -460,6 +460,8 @@ static void test_fill_bg(FtkDisplay* display)
 	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);
 	ftk_canvas_destroy(thiz);
 
+	sleep(3);
+	
 	return;
 }
 
@@ -471,7 +473,7 @@ int main(int argc, char* argv[])
 	FtkDisplay* display = ftk_default_display();
 
 	test_fill_bg(display);
-#if 0
+#if 1 
 	test_font(display, font);
 	test_put_get_pixel(display);
 	test_draw_point(display);

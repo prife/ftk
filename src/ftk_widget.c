@@ -408,7 +408,6 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 
 void ftk_widget_set_active(FtkWidget* thiz, int active)
 {	
-	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
@@ -724,7 +723,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 		FtkWidgetInfo* priv =  thiz->priv;
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
 		FtkBitmap* bitmap = priv->gc[priv->state].bitmap;
-		return_if_fail(canvas != NULL);
+		return_val_if_fail(canvas != NULL, RET_FAIL);
 
 		priv->painting = 1;
 		if(ftk_widget_has_attr(thiz, FTK_ATTR_TRANSPARENT))

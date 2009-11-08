@@ -91,7 +91,6 @@ static const char* bg_imgs[FTK_WIDGET_STATE_NR] =
 
 static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 {
-	FtkGc gc = {.mask =  FTK_GC_FG};
 	DECL_PRIV0(thiz, priv);
 	FtkBitmap* bitmap = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);

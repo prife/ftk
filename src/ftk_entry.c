@@ -29,10 +29,12 @@
  *
  */
 
+#include "ftk_util.h"
 #include "ftk_style.h"
 #include "ftk_entry.h"
 #include "ftk_globals.h"
 #include "ftk_text_buffer.h"
+#include "ftk_source_timer.h"
 
 typedef struct _PrivInfo
 {
@@ -231,6 +233,7 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 
 	return_val_if_fail(priv->caret >= priv->visible_start && priv->caret <= priv->visible_end, RET_FAIL);
 
+	(void)width;
 	if(ftk_widget_is_focused(thiz))
 	{
 		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;

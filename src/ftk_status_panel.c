@@ -47,33 +47,6 @@ typedef struct _PrivInfo
 	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
 
-static Ret ftk_status_hide_all(FtkWidget* thiz)
-{
-	int i = 0;
-	int w = 0;
-	DECL_PRIV1(thiz, priv);
-
-	for(i = 0; i < priv->first_nr; i++)
-	{
-		w = ftk_widget_width(priv->first[i]);
-		ftk_widget_move_resize(priv->first[i], 0, 0, w, 0);
-	}
-	
-	for(i = 0; i < priv->mid_nr; i++)
-	{
-		w = ftk_widget_width(priv->mid[i]);
-		ftk_widget_move_resize(priv->mid[i], 0, 0, w, 0);
-	}
-	
-	for(i = 0; i < priv->last_nr; i++)
-	{
-		w = ftk_widget_width(priv->last[i]);
-		ftk_widget_move_resize(priv->last[i], 0, 0, w, 0);
-	}
-
-	return RET_OK;
-}
-
 static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 {
 	int i = 0;

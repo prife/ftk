@@ -76,7 +76,7 @@ Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text
 	int str_len = 0;
 	size_t length = 0;
 	char* dst = NULL;
-	char* src = NULL;
+	const char* src = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL && text != NULL, RET_FAIL);	
 	str_len = strlen(text);
 	return_val_if_fail(ftk_text_buffer_extend(thiz, str_len) == RET_OK, RET_FAIL);
