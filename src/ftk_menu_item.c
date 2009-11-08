@@ -53,11 +53,13 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MOUSE_DOWN:
 		{
 			priv->menu_item_down = 1;
+			ftk_widget_set_active(thiz, 1);
 			ftk_logd("%s: FTK_EVT_MOUSE_DOWN\n", __func__);
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
+			ftk_widget_set_active(thiz, 0);
 			if(priv->menu_item_down && priv->listener != NULL)
 			{
 				ret = priv->listener(priv->listener_ctx, thiz);
