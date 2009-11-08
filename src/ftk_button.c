@@ -32,10 +32,11 @@
 #include "ftk_log.h"
 #include "ftk_style.h"
 #include "ftk_button.h"
+#include "ftk_globals.h"
+#include "ftk_icon_cache.h"
 
 typedef struct _PrivInfo
 {
-	int button_down;
 	char* text;
 	FtkListener listener;
 	void* listener_ctx;
@@ -52,23 +53,22 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_EVT_MOUSE_DOWN:
 		{
-			priv->button_down = 1;
-			ftk_logd("%s: FTK_EVT_MOUSE_DOWN\n", __func__);
+			ftk_widget_set_active(thiz, 1);
+			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
-			if(priv->button_down && priv->listener != NULL)
+			ftk_widget_set_active(thiz, 0);
+			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+			if(priv->listener != NULL)
 			{
 				ret = priv->listener(priv->listener_ctx, thiz);
 			}
-			priv->button_down = 0;
-			ftk_logd("%s: FTK_EVT_MOUSE_UP\n", __func__);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
-			ftk_logd("%s: FTK_EVT_KEY_DOWN\n", __func__);
 			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
 			{
 				ret = priv->listener(priv->listener_ctx, thiz);
@@ -81,40 +81,27 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
+static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
+{
+	[FTK_WIDGET_NORMAL] = "btn_default_normal.png",
+	[FTK_WIDGET_ACTIVE] = "btn_default_pressed.png",
+	[FTK_WIDGET_INSENSITIVE] = "btn_default_normal_disable.png",
+	[FTK_WIDGET_FOCUSED] = "btn_default_selected.png"
+};
+
 static Ret ftk_button_on_paint(FtkWidget* thiz)
 {
 	int i = 0;
 	FtkGc gc = {0};
+	FtkBitmap* bitmap = NULL;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
-	if(ftk_widget_get_gc(thiz)->bitmap != NULL)
+	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
 	{
-		if(ftk_widget_is_focused(thiz))
-		{
-			ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-			ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-		}
+		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
+		ftk_style_fill_background_image(canvas, FTK_BG_FOUR_CORNER, x, y, width, height, bitmap);
 	}
-	else
-	{
-		gc.mask = FTK_GC_FG;
-		gc.fg = ftk_widget_get_gc(thiz)->bg;
-		ftk_canvas_reset_gc(canvas, &gc); 
-		ftk_canvas_draw_hline(canvas, x + 2, y, width-4);
-		ftk_canvas_draw_hline(canvas, x + 1, y + 1, width-2);
-		for(i = 2; i < height-4; i++)
-		{
-			ftk_canvas_draw_hline(canvas, x, y + i, width);
-		}
-		gc.fg.r -= 0x10;
-		gc.fg.g -= 0x10;
-		gc.fg.b -= 0x10;
-		ftk_canvas_reset_gc(canvas, &gc); 
-		ftk_canvas_draw_hline(canvas, x + 1, y + i, width-2);
-		ftk_canvas_draw_hline(canvas, x + 2, y + i + 1, width-4);
-	}
-	
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
 	{

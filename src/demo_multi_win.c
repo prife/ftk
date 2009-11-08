@@ -45,13 +45,13 @@ static void create_app_window(void)
 	char title[32] = {0};
 	FtkWidget* win = ftk_window_create(0, 2, 320, 478);
 	FtkWidget* label = NULL;
-	FtkWidget* button = ftk_button_create(1001, 10, 30, 120, 30);
+	FtkWidget* button = ftk_button_create(1001, 10, 30, 120, 50);
 	ftk_button_set_text(button, "打开新窗口");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_open_clicked, win);
 
-	button = ftk_button_create(1002, 180, 30, 120, 30);
+	button = ftk_button_create(1002, 180, 30, 120, 50);
 	ftk_button_set_text(button, "关闭当前窗口");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);

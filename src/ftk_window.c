@@ -40,6 +40,7 @@ typedef struct _PrivInfo
 	FtkCanvas*  canvas;
 	FtkDisplay* display;
 	FtkWidget*  focus_widget;
+	FtkWidget*  grab_widget;
 	int fullscreen;
 }PrivInfo;
 
@@ -75,6 +76,29 @@ FtkWidget* ftk_window_get_focus(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL, NULL);
 
 	return priv->focus_widget;
+}
+
+Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->grab_widget = grab_widget;
+
+	return RET_OK;
+}
+
+Ret ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(grab_widget == priv->grab_widget)
+	{
+		priv->grab_widget = NULL;
+	}
+
+	return RET_OK;
 }
 
 static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
@@ -136,7 +160,13 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_NO_TARGET;
 	FtkWidget* target = NULL;
-	
+	DECL_PRIV0(thiz, priv);
+
+	if(priv->grab_widget != NULL)
+	{
+		return ftk_widget_event(priv->grab_widget, event);
+	}
+
 	if((target = ftk_widget_find_target(thiz, event->u.mouse.x, event->u.mouse.y)) != NULL && target != thiz)
 	{
 		if(event->type == FTK_EVT_MOUSE_DOWN && !ftk_widget_is_insensitive(target))

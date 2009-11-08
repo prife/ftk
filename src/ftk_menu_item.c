@@ -32,6 +32,8 @@
 #include "ftk_log.h"
 #include "ftk_style.h"
 #include "ftk_menu_item.h"
+#include "ftk_globals.h"
+#include "ftk_icon_cache.h"
 
 typedef struct _PrivInfo
 {
@@ -79,23 +81,27 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
+static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
+{
+	[FTK_WIDGET_ACTIVE] = "menuitem_background_pressed.png",
+	[FTK_WIDGET_FOCUSED] = "menuitem_background_focus.png"
+};
+
 static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 {
 	FtkGc gc = {.mask =  FTK_GC_FG};
 	DECL_PRIV0(thiz, priv);
+	FtkBitmap* bitmap = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(width > 0 && height > 0, RET_FAIL);
 
-	if(ftk_widget_is_focused(thiz))
+	if(bg_imgs[ftk_widget_state(thiz)] != NULL)
 	{
-		gc.fg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
-		ftk_canvas_reset_gc(canvas, &gc); 
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
+		ftk_style_fill_background_image(canvas, FTK_BG_FOUR_CORNER, x, y, width, height, bitmap);
 	}
 
-	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
-//	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-
+	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	if(priv->text != NULL)
 	{
 		int fh = ftk_canvas_font_height(canvas);

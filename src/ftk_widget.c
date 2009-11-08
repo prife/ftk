@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_style.h"
 #include "ftk_bitmap.h"
 #include "ftk_widget.h"
 #include "ftk_globals.h"
@@ -68,37 +69,24 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id)
 		priv->id     = id;
 		priv->type   = type;
 		priv->gc[FTK_WIDGET_NORMAL].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_NORMAL].fg.a = 0xff;
-		priv->gc[FTK_WIDGET_NORMAL].fg.r = 0x00;
-		priv->gc[FTK_WIDGET_NORMAL].fg.g = 0x00;
-		priv->gc[FTK_WIDGET_NORMAL].fg.b = 0x00;
+		priv->gc[FTK_WIDGET_NORMAL].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
+		priv->gc[FTK_WIDGET_NORMAL].bg = ftk_style_get_color(FTK_COLOR_WINDOW);
 		priv->gc[FTK_WIDGET_NORMAL].font = ftk_default_font();
-		priv->gc[FTK_WIDGET_NORMAL].bg.a = 0xff;
-		priv->gc[FTK_WIDGET_NORMAL].bg.r = 0xe0;
-		priv->gc[FTK_WIDGET_NORMAL].bg.g = 0xd0;
-		priv->gc[FTK_WIDGET_NORMAL].bg.b = 0xe0;
 		
 		priv->gc[FTK_WIDGET_FOCUSED].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_FOCUSED].fg.a = 0xff;
-		priv->gc[FTK_WIDGET_FOCUSED].fg.r = 0x00;
-		priv->gc[FTK_WIDGET_FOCUSED].fg.g = 0x00;
-		priv->gc[FTK_WIDGET_FOCUSED].fg.b = 0x00;
+		priv->gc[FTK_WIDGET_FOCUSED].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
+		priv->gc[FTK_WIDGET_FOCUSED].bg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
 		priv->gc[FTK_WIDGET_FOCUSED].font = ftk_default_font();
-		priv->gc[FTK_WIDGET_FOCUSED].bg.a = 0xff;
-		priv->gc[FTK_WIDGET_FOCUSED].bg.r = 0xe0;
-		priv->gc[FTK_WIDGET_FOCUSED].bg.g = 0xd0;
-		priv->gc[FTK_WIDGET_FOCUSED].bg.b = 0xe0;
+		
+		priv->gc[FTK_WIDGET_ACTIVE].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
+		priv->gc[FTK_WIDGET_ACTIVE].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
+		priv->gc[FTK_WIDGET_ACTIVE].bg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
+		priv->gc[FTK_WIDGET_ACTIVE].font = ftk_default_font();
 		
 		priv->gc[FTK_WIDGET_INSENSITIVE].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_INSENSITIVE].fg.a = 0xff;
-		priv->gc[FTK_WIDGET_INSENSITIVE].fg.r = 0x00;
-		priv->gc[FTK_WIDGET_INSENSITIVE].fg.g = 0x00;
-		priv->gc[FTK_WIDGET_INSENSITIVE].fg.b = 0x00;
+		priv->gc[FTK_WIDGET_INSENSITIVE].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
+		priv->gc[FTK_WIDGET_INSENSITIVE].bg = ftk_style_get_color(FTK_COLOR_WINDOW);
 		priv->gc[FTK_WIDGET_INSENSITIVE].font = ftk_default_font();
-		priv->gc[FTK_WIDGET_INSENSITIVE].bg.a = 0xff;
-		priv->gc[FTK_WIDGET_INSENSITIVE].bg.r = 0xe0;
-		priv->gc[FTK_WIDGET_INSENSITIVE].bg.g = 0xd0;
-		priv->gc[FTK_WIDGET_INSENSITIVE].bg.b = 0xe0;
 	}
 
 	return;
@@ -196,6 +184,11 @@ int ftk_widget_is_focused(FtkWidget* thiz)
 	return thiz != NULL && thiz->priv != NULL && thiz->priv->state == FTK_WIDGET_FOCUSED;
 }
 
+int ftk_widget_is_active(FtkWidget* thiz)
+{
+	return thiz != NULL && thiz->priv != NULL && thiz->priv->state == FTK_WIDGET_ACTIVE;
+}
+
 int ftk_widget_id(FtkWidget* thiz)
 {
 	return thiz != NULL && thiz->priv != NULL ? thiz->priv->id : 0;
@@ -235,6 +228,13 @@ int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 	return_val_if_fail(thiz != NULL && thiz->priv != NULL, 0);
 
 	return thiz->priv->attr & attr;
+}
+
+FtkWidgetState ftk_widget_state(FtkWidget* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, 0);
+
+	return thiz->priv->state;
 }
 
 void* ftk_widget_user_data(FtkWidget* thiz)
@@ -386,15 +386,38 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
-	if(thiz->priv->state != FTK_WIDGET_INSENSITIVE)
+	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
 	{
-		thiz->priv->state = focused ? FTK_WIDGET_FOCUSED : FTK_WIDGET_NORMAL;
+		return;
 	}
-	
+
+	thiz->priv->state = focused ? FTK_WIDGET_FOCUSED : FTK_WIDGET_NORMAL;
 	event.type = focused ? FTK_EVT_FOCUS_IN : FTK_EVT_FOCUS_OUT;
 	event.widget = thiz;
 	ftk_widget_event(thiz, &event);
 
+	if(!ftk_widget_is_parent_visible(thiz))
+	{
+		return;
+	}
+
+	ftk_widget_paint_self(thiz);
+
+	return;
+}
+
+void ftk_widget_set_active(FtkWidget* thiz, int active)
+{	
+	FtkEvent event = {0};
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
+	{
+		return;
+	}
+
+	thiz->priv->state = active ? FTK_WIDGET_ACTIVE : FTK_WIDGET_FOCUSED;
+	
 	if(!ftk_widget_is_parent_visible(thiz))
 	{
 		return;

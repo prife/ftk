@@ -39,6 +39,8 @@ FtkWidget* ftk_window_create(int x, int y, int width, int height);
 FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height);
 Ret        ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget);
 FtkWidget* ftk_window_get_focus(FtkWidget* thiz);
+Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget);
+Ret        ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget);
 Ret        ftk_window_set_title(FtkWidget* thiz, const char* title);
 const char*ftk_window_get_title(FtkWidget* thiz);
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);

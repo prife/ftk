@@ -21,7 +21,7 @@ FtkColor ftk_style_get_color(FtkColorIndex index)
 	return s_colors[index];
 }
 
-Ret ftk_style_fill_background(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
+Ret ftk_style_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
 {
 	int i = 0;
 	int n = 0;
@@ -96,13 +96,62 @@ Ret ftk_style_fill_background(FtkCanvas* canvas, int x, int y, int w, int h, Ftk
 	return RET_OK;
 }
 
-Ret ftk_style_fill_button_background(FtkWidget* button)
+Ret ftk_style_fill_background_normal(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
 {
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	w = bw < w ? bw : w;
+	h = bh < h ? bh : h;
+
+	return ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, w, h, x, y);
+}
+
+Ret ftk_style_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
+{
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+
+	if(bw > w && bh > h)
+	{
+		return ftk_style_fill_background_normal(canvas, x, y, w, h, bitmap);
+	}
+
+	/*TODO*/
 	return RET_OK;
 }
 
-Ret ftk_style_fill_menu_item_button_background(FtkWidget* button)
+Ret ftk_style_fill_background_center(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
 {
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	int ox = bw < w ? x + (w - bw)/2 : x;
+	int oy = bh < h ? y + (h - bw)/2 : y;
+	int bx = bw < w ? 0 : (bw - w)/2;
+	int by = bh < h ? 0 : (bh - h)/2;
+	w = bw < w ? bw : w;
+	h = bh < h ? bh : h;
 
-	return RET_OK;
+	return ftk_canvas_draw_bitmap(canvas, bitmap, bx, by, w, h, ox, oy);
 }
+
+
+Ret ftk_style_fill_background_image(FtkCanvas* canvas, FtkBgStyle style, int x, int y, int w, int h, FtkBitmap* bitmap)
+{
+	Ret ret = RET_FAIL;
+	return_val_if_fail(canvas != NULL && bitmap != NULL, ret);
+
+	switch(style)
+	{
+		case FTK_BG_TILE: 
+			ret = ftk_style_fill_background_tile(canvas, x, y, w, h, bitmap);break;
+		case FTK_BG_CENTER: 
+			ret = ftk_style_fill_background_center(canvas, x, y, w, h, bitmap);break;
+		case FTK_BG_FOUR_CORNER:
+			ret = ftk_style_fill_background_four_corner(canvas, x, y, w, h, bitmap);break;
+		default:
+			ret = ftk_style_fill_background_normal(canvas, x, y, w, h, bitmap);break;
+	}
+
+	return ret;
+}
+

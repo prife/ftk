@@ -40,20 +40,19 @@ int main(int argc, char* argv[])
 	ftk_init(argc, argv);
 	
 	FtkWidget* win = ftk_window_create(0, 2, 320, 478);
-
-	FtkWidget* button = ftk_button_create(1001, 10, 30, 80, 30);
+	FtkWidget* button = ftk_button_create(1001, 10, 30, 80, 50);
 	ftk_button_set_text(button, "show");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_show_clicked, win);
 
-	button = ftk_button_create(1002, 100, 30, 80, 30);
+	button = ftk_button_create(1002, 100, 30, 80, 50);
 	ftk_button_set_text(button, "hide");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_hide_clicked, win);
 	
-	button = ftk_button_create(1003, 200, 30, 80, 30);
+	button = ftk_button_create(1003, 200, 30, 80, 50);
 	ftk_button_set_text(button, "按钮测试");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
@@ -65,13 +64,13 @@ int main(int argc, char* argv[])
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
-	button = ftk_button_create(1005, 100, 130, 80, 40);
+	button = ftk_button_create(1005, 180, 130, 80, 40);
 	ftk_button_set_text(button, "no");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
-	button = ftk_button_create(1006, 200, 130, 80, 40);
+	button = ftk_button_create(1006, 120, 200, 80, 80);
 	ftk_button_set_text(button, "quit");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);

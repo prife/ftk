@@ -23,9 +23,15 @@ typedef enum _FtkColorIndex
 
 FtkColor ftk_style_get_color(FtkColorIndex index);
 
-Ret ftk_style_fill_button_background(FtkWidget* button);
-Ret ftk_style_fill_menu_item_button_background(FtkWidget* button);
-Ret ftk_style_fill_background(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap);
+typedef enum _FtkBgStyle
+{
+	FTK_BG_NORMAL = 0,
+	FTK_BG_TILE,
+	FTK_BG_CENTER,
+	FTK_BG_FOUR_CORNER
+}FtkBgStyle;
+
+Ret ftk_style_fill_background_image(FtkCanvas* canvas, FtkBgStyle style, int x, int y, int w, int h, FtkBitmap* bitmap);
 
 #endif/*FTK_STYLE_H*/
 

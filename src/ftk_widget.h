@@ -51,6 +51,7 @@ typedef enum _FtkWidgetState
 {
 	FTK_WIDGET_NORMAL = 0,
 	FTK_WIDGET_FOCUSED,
+	FTK_WIDGET_ACTIVE,
 	FTK_WIDGET_INSENSITIVE,
 	FTK_WIDGET_STATE_NR
 }FtkWidgetState;
@@ -89,11 +90,13 @@ int ftk_widget_height(FtkWidget* thiz);
 int ftk_widget_is_insensitive(FtkWidget* thiz);
 int ftk_widget_is_visible(FtkWidget* thiz);
 int ftk_widget_is_focused(FtkWidget* thiz);
+int ftk_widget_is_active(FtkWidget* thiz);
 int ftk_widget_id(FtkWidget* thiz);
 Ret ftk_widget_update(FtkWidget* thiz);
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz);
 FtkCanvas* ftk_widget_canvas(FtkWidget* thiz);
 int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr);
+FtkWidgetState ftk_widget_state(FtkWidget* thiz);
 void* ftk_widget_user_data(FtkWidget* thiz);
 
 void ftk_widget_show(FtkWidget* thiz, int visible);
@@ -104,6 +107,7 @@ void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height
 void ftk_widget_set_type(FtkWidget* thiz, int type);
 void ftk_widget_set_insensitive(FtkWidget* thiz, int insensitive);
 void ftk_widget_set_focused(FtkWidget* thiz, int focused);
+void ftk_widget_set_active(FtkWidget* thiz, int active);
 void ftk_widget_set_id(FtkWidget* thiz, int id);
 void ftk_widget_set_canvas(FtkWidget* thiz, FtkCanvas* canvas);
 void ftk_widget_set_parent(FtkWidget* thiz, FtkWidget* parent);
