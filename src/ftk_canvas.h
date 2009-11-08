@@ -34,6 +34,14 @@
 
 #include "ftk_gc.h"
 
+typedef enum _FtkBgStyle
+{
+	FTK_BG_NORMAL = 0,
+	FTK_BG_TILE,
+	FTK_BG_CENTER,
+	FTK_BG_FOUR_CORNER
+}FtkBgStyle;
+
 struct _FtkCanvas;
 typedef struct _FtkCanvas FtkCanvas;
 
@@ -59,6 +67,8 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode);
 const char* ftk_canvas_available(FtkCanvas* thiz, const char* str, int width, int* nr);
 const char* ftk_canvas_compute_string_visible_range(FtkCanvas* thiz, 
 	const char* start, int vstart, int vend, int width);
+Ret ftk_canvas_fill_background_image(FtkCanvas* canvas, FtkBgStyle style, 
+	int x, int y, int w, int h, FtkBitmap* bitmap);
 
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
 void ftk_canvas_destroy(FtkCanvas* thiz);

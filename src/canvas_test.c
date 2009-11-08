@@ -449,12 +449,12 @@ static void test_fill_bg(FtkDisplay* display)
 	int height = ftk_display_height(display);
 	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
 	FtkBitmap* bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_pressed.9.png");
-	ftk_style_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 10, 10, 100, 60, bitmap);
-	ftk_style_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 120, 10, 40, 60, bitmap);
+	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 10, 10, 100, 60, bitmap);
+	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 120, 10, 40, 60, bitmap);
 	
-	ftk_style_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 10, 80, 20, 20, bitmap);
-	ftk_style_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 30, 80, 40, 20, bitmap);
-	ftk_style_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 80, 80, 60, 20, bitmap);
+	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 10, 80, 20, 20, bitmap);
+	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 30, 80, 40, 20, bitmap);
+	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 80, 80, 60, 20, bitmap);
 	rect.width = width;
 	rect.height = height;
 	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);

@@ -30,7 +30,7 @@
  */
 
 #include "ftk_log.h"
-#include "ftk_style.h"
+#include "ftk_canvas.h"
 #include "ftk_menu_item.h"
 #include "ftk_globals.h"
 #include "ftk_icon_cache.h"
@@ -99,7 +99,7 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 	if(bg_imgs[ftk_widget_state(thiz)] != NULL)
 	{
 		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
-		ftk_style_fill_background_image(canvas, FTK_BG_FOUR_CORNER, x, y, width, height, bitmap);
+		ftk_canvas_fill_background_image(canvas, FTK_BG_FOUR_CORNER, x, y, width, height, bitmap);
 	}
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
