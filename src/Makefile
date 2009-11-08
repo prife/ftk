@@ -45,9 +45,9 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	demo_menu$(EXEEXT) demo_entry$(EXEEXT) \
 	text_buffer_test$(EXEEXT) icon_cache_test$(EXEEXT) \
 	$(am__EXEEXT_1)
-am__append_1 = $(LINUX_X11)
-#am__append_2 = $(LINUX_NATIVE)
-#am__append_3 = display_fb_test input_test
+#am__append_1 = $(LINUX_X11)
+am__append_2 = $(LINUX_NATIVE)
+am__append_3 = display_fb_test input_test
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -80,9 +80,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_icon_cache.c ftk_display_x11.c ftk_source_x11.c \
 	ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
-am__objects_2 = $(am__objects_1)
+#am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
-#am__objects_4 = $(am__objects_3)
+am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font.lo ftk_main_loop.lo \
@@ -95,8 +95,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_app_window.lo ftk_entry.lo ftk_text_buffer.lo \
 	ftk_icon_cache.lo $(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
-#am__EXEEXT_1 = display_fb_test$(EXEEXT) \
-#	input_test$(EXEEXT)
+am__EXEEXT_1 = display_fb_test$(EXEEXT) \
+	input_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -165,8 +165,8 @@ demo_multi_win_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_multi_win_LDFLAGS) $(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
-#am_display_fb_test_OBJECTS =  \
-#	display_fb_test.$(OBJEXT)
+am_display_fb_test_OBJECTS =  \
+	display_fb_test.$(OBJEXT)
 display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
 display_fb_test_LDADD = $(LDADD)
 display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -191,7 +191,7 @@ icon_cache_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(icon_cache_test_LDFLAGS) $(LDFLAGS) -o $@
 am__input_test_SOURCES_DIST = input_test.c
-#am_input_test_OBJECTS = input_test.$(OBJEXT)
+am_input_test_OBJECTS = input_test.$(OBJEXT)
 input_test_OBJECTS = $(am_input_test_OBJECTS)
 input_test_LDADD = $(LDADD)
 input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -313,13 +313,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g  -DUSE_LINUX_NATIVE -DPC_EMU
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -330,14 +330,14 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g -O2
+FFLAGS = -g 
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
+LDFLAGS = 
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -424,10 +424,10 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
 	ftk_icon_cache.c $(am__append_1) $(am__append_2)
-#display_fb_test_SOURCES = display_fb_test.c
-#display_fb_test_LDFLAGS = $(MYLDFLAGS)
-#input_test_SOURCES = input_test.c
-#input_test_LDFLAGS = $(MYLDFLAGS)
+display_fb_test_SOURCES = display_fb_test.c
+display_fb_test_LDFLAGS = $(MYLDFLAGS)
+input_test_SOURCES = input_test.c
+input_test_LDFLAGS = $(MYLDFLAGS)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\""
 MYLDFLAGS = .libs/libftk.a
 icon_cache_test_SOURCES = icon_cache_test.c

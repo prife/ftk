@@ -50,16 +50,23 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 
 static void create_app_window(void)
 {
+	int width = 0;
+	int height = 0;
 	char title[32] = {0};
 	FtkWidget* win = ftk_app_window_create();
 	FtkWidget* label = NULL;
-	FtkWidget* button = ftk_button_create(1001, 10, 30, 120, 50);
+	FtkWidget* button = NULL;
+
+	width = ftk_widget_width(win);
+	height = ftk_widget_height(win);
+
+	button = ftk_button_create(1001, 0, height/6, width/3, 50);
 	ftk_button_set_text(button, "打开新窗口");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_open_clicked, win);
 
-	button = ftk_button_create(1002, 180, 30, 120, 50);
+	button = ftk_button_create(1002, 2*width/3, height/6, width/3, 50);
 	ftk_button_set_text(button, "关闭当前窗口");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);

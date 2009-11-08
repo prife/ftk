@@ -36,29 +36,34 @@ static void on_window_close(void* user_data)
 
 int main(int argc, char* argv[])
 {
+	int width = 0;
+	int height = 0;
 	TimerInfo info = {.times=5, };
 	ftk_init(argc, argv);
 	
 	FtkSource* timer = ftk_source_timer_create(1000, timeout, &info);
-	FtkWidget* win = ftk_window_create(0, 0, 320, 480);
+	FtkWidget* win = ftk_app_window_create();
 
-	FtkWidget* label = ftk_label_create(1001, 10, 30, 160, 20);
+	width = ftk_widget_width(win);
+	height = ftk_widget_height(win);
+
+	FtkWidget* label = ftk_label_create(1001, 10, 30, width - 20, 20);
 	ftk_label_set_text(label, "中文文本");
 	ftk_widget_append_child(win, label);
 	ftk_widget_show(label, 1);
 	
-	label = ftk_label_create(1002, 10, 60, 160, 20);
+	label = ftk_label_create(1002, 10, 60, width - 20, 20);
 	ftk_label_set_text(label, "English Text");
 	ftk_widget_append_child(win, label);
 	ftk_widget_show(label, 1);
 #if 1
-	label = ftk_label_create(1004, 10, 240, 300, 120);
+	label = ftk_label_create(1004, 10, height/2, width, 120);
 	ftk_label_set_text(label, "中英文混合多行文本显示:the linux mobile development.话说当下何观察领了知府台旨下厅来，随即到机密房里，与众人商议。众多做公的道：“若说这个石碣村湖荡，紧靠着梁山泊，都是茫茫荡荡，芦苇水港。");
 	ftk_widget_append_child(win, label);
 	ftk_widget_show(label, 1);
 #endif
 	
-	label = ftk_label_create(1003, 50, 200, 200, 20);
+	label = ftk_label_create(1003, 50, 160, width, 20);
 	ftk_widget_append_child(win, label);
 	ftk_widget_show(label, 1);
 	info.label = label;
@@ -73,3 +78,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+

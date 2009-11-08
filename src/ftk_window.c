@@ -109,6 +109,12 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 
 	if(priv->focus_widget == NULL)
 	{
+		if(FTK_EVT_KEY_UP == event->type 
+		&& (event->u.key.code == FTK_KEY_RIGHT || event->u.key.code == FTK_KEY_DOWN))
+		{
+			ftk_window_set_focus(thiz, thiz->children);
+		}
+
 		return RET_OK;
 	}
 
