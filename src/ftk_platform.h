@@ -60,8 +60,8 @@
 #define FTK_ALLOC(s)       malloc(s)
 #define FTK_REALLOC(p, s)  realloc(p, s)
 #define FTK_ZALLOC(s)      calloc(1, s)
-#define FTK_FREE(p)        if(p) {free(p);}
-#define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p);}
+#define FTK_FREE(p)        if(p) {free(p); p = NULL;}
+#define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
 
 #endif/*FTK_PLATFORM_H*/
 

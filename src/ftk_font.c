@@ -55,7 +55,7 @@ static Ret ftk_font_load(FtkFont* thiz, const char* filename)
 		ftk_logd("%s: w=%d h=%d\n", __func__, font_data_get_width(thiz->fontdata), font_data_get_height(thiz->fontdata));
 	}
 	
-	return RET_OK;
+	return buffer != NULL ? RET_OK : RET_FAIL;
 }
 
 FtkFont*  ftk_font_create (const char* filename, size_t size)
@@ -73,12 +73,6 @@ FtkFont*  ftk_font_create (const char* filename, size_t size)
 		{
 			thiz->filename = strdup(filename);
 		}
-	}
-
-	if(ret != RET_OK)
-	{
-		ftk_font_destroy(thiz);
-		thiz = NULL;
 	}
 
 	return thiz;
@@ -104,7 +98,7 @@ void      ftk_font_destroy(FtkFont* thiz)
 	{
 		FTK_FREE(thiz->filename);
 		font_data_destroy(thiz->fontdata);
-		FTK_ZFREE(thiz, sizeof(thiz));
+		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
 
 	return;

@@ -155,11 +155,12 @@ Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph)
 {
     int low    = 0;
     int mid    = 0;
-    int high   = thiz->header.char_nr;
+    int high   = 0;
     int result = 0;
 
     return_val_if_fail(thiz != NULL && glyph != NULL, RET_FAIL);
 
+    high = thiz->header.char_nr;
     while(low <= high)
     {
         mid  = low + ((high - low) >> 1);

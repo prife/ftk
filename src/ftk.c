@@ -133,6 +133,12 @@ static void ftk_deinit(void)
 		ftk_set_font(NULL);
 	}
 
+	if(ftk_default_icon_cache() != NULL)
+	{
+		ftk_icon_cache_destroy(ftk_default_icon_cache());
+		ftk_set_icon_cache(NULL);
+	}
+
 	if(ftk_default_display() != NULL)
 	{
 		ftk_display_destroy(ftk_default_display());
@@ -145,8 +151,10 @@ static void ftk_deinit(void)
 
 Ret ftk_init(int argc, char* argv[])
 {
+	FtkFont* font = NULL;
 	FtkSource* source = NULL;
 	FtkDisplay* display = NULL;
+	char filename[260] = {0};
 
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
@@ -154,7 +162,24 @@ Ret ftk_init(int argc, char* argv[])
 
 	ftk_init_bitmap_factory();
 	ftk_set_icon_cache(ftk_icon_cache_create());
-	ftk_set_font(ftk_font_create(FTK_FONT, 0));
+
+	snprintf(filename, sizeof(filename), "./data/%s", FTK_FONT);
+	if((font = ftk_font_create(filename, 0)) == NULL)
+	{
+		snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
+		font = ftk_font_create(filename, 0);
+	}
+
+	if(font != NULL)
+	{
+		ftk_set_font(font);
+	}
+	else
+	{
+		ftk_deinit();
+		ftk_logd("load font failed.\n");
+		exit(0);
+	}
 
 #ifdef USE_LINUX_NATIVE
 	(void)source;
