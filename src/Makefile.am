@@ -1,4 +1,4 @@
-SUBDIRS=testdata icons
+SUBDIRS=testdata icons data
 
 lib_LTLIBRARIES=libftk.la
 

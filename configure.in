@@ -55,5 +55,6 @@ AC_CONFIG_FILES([ftk.pc
                 src/Makefile
                 src/testdata/Makefile
                 src/icons/Makefile
+                src/data/Makefile
                 ])
 AC_OUTPUT
