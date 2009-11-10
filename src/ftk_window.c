@@ -42,6 +42,7 @@ typedef struct _PrivInfo
 	FtkWidget*  focus_widget;
 	FtkWidget*  grab_widget;
 	int fullscreen;
+	int update_disabled;
 }PrivInfo;
 
 static Ret ftk_window_realize(FtkWidget* thiz);
@@ -335,7 +336,10 @@ Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	int yoffset = 0;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
-
+	if(priv->update_disabled)
+	{
+		return RET_FAIL;
+	}
 	xoffset = ftk_widget_left(thiz) + rect->x;
 	yoffset = ftk_widget_top(thiz) + rect->y;
 
@@ -406,6 +410,26 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 	}
 
 	return thiz;
+}
+
+Ret        ftk_window_disable_update(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->update_disabled = 1;
+
+	return RET_OK;
+}
+
+Ret        ftk_window_enable_update(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->update_disabled = 0;
+
+	return RET_OK;
 }
 
 #ifdef FTK_WINDOW_TEST
