@@ -201,6 +201,7 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 		}
 		else
 		{
+			ftk_logd("%s: open %s failed.\n", __func__, filename);
 			free(thiz);
 			thiz = NULL;
 		}

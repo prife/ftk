@@ -128,8 +128,6 @@ static unsigned short s_key_map[0x100] =
 	[KEY_REPLY]       =  FTK_KEY_REPLY,
 	[KEY_SAVE]        =  FTK_KEY_SAVE,
 	[KEY_BATTERY]     =  FTK_KEY_BATTERY,
-	[KEY_BLUETOOTH]   =  FTK_KEY_BLUETOOTH,
-	[KEY_WLAN]        =  FTK_KEY_WLAN,
 	[KEY_POWER]       =  FTK_KEY_POWER,
 };
 

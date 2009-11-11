@@ -32,7 +32,9 @@
 #define FTK_DISPLAY_FB_H
 #include "ftk_display.h"
 
+#ifndef FTK_FB_NAME
 #define FTK_FB_NAME "/dev/fb0"
+#endif
 
 FtkDisplay* ftk_display_fb_create(const char* filename);
 
