@@ -40,6 +40,7 @@ typedef Ret (*FtkDisplayUpdate)(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* re
 typedef int (*FtkDisplayWidth)(FtkDisplay* thiz);
 typedef int (*FtkDisplayHeight)(FtkDisplay* thiz);
 typedef int (*FtkDisplayBitsPerPixel)(FtkDisplay* thiz);
+typedef Ret (*FtkDisplaySnap)(FtkDisplay* thiz, FtkBitmap** bitmap);
 typedef void (*FtkDisplayDestroy)(FtkDisplay* thiz);
 
 struct _FtkDisplay
@@ -48,6 +49,7 @@ struct _FtkDisplay
 	FtkDisplayWidth        width;
 	FtkDisplayHeight       height;
 	FtkDisplayBitsPerPixel bits_per_pixel;
+	FtkDisplaySnap         snap;
 	FtkDisplayDestroy destroy;
 
 	char priv[1];
