@@ -17,7 +17,7 @@ LOCAL_SRC_FILES := \
 	fontdata.c
 
 LOCAL_CFLAGS += -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"./ftk\"" \
-	-DFTK_FB_NAME="\"/dev/graphics/fb0\""
+	-DFTK_FB_NAME="\"/dev/graphics/fb0\"" -DUSE_LINUX_NATIVE
 LOCAL_C_INCLUDES := external/jpeg external/libpng external/zlib
 LOCAL_MODULE:=libftk
 include $(BUILD_STATIC_LIBRARY)
@@ -28,3 +28,26 @@ LOCAL_MODULE := demo_button
 LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
 include $(BUILD_EXECUTABLE)
 
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= demo_label.c
+LOCAL_MODULE := demo_label
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= demo_entry.c
+LOCAL_MODULE := demo_entry
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= demo_dialog.c
+LOCAL_MODULE := demo_dialog
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+LOCAL_SRC_FILES:= demo_menu.c
+LOCAL_MODULE := demo_menu
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+include $(BUILD_EXECUTABLE)

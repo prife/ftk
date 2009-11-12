@@ -177,7 +177,7 @@ Ret ftk_init(int argc, char* argv[])
 	else
 	{
 		ftk_deinit();
-		ftk_logd("load font failed.\n");
+		ftk_loge("load font failed.\n");
 		exit(0);
 	}
 
@@ -186,6 +186,11 @@ Ret ftk_init(int argc, char* argv[])
 	(void)display;
 	ftk_init_input();
 	ftk_set_display(ftk_display_fb_create(FTK_FB_NAME));
+	if(ftk_default_display() == NULL)
+	{
+		ftk_loge("open display failed.\n");
+		exit(0);
+	}
 #endif
 
 #ifdef USE_LINUX_X11
