@@ -117,6 +117,7 @@ void ftk_widget_remove_child(FtkWidget* thiz, FtkWidget* child);
 void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr);
 void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr);
 void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data);
+void ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
 
 FtkWidget* ftk_widget_toplevel(FtkWidget* thiz);
 FtkWidget* ftk_widget_parent(FtkWidget* thiz);
@@ -125,10 +126,6 @@ FtkWidget* ftk_widget_next(FtkWidget* thiz);
 FtkWidget* ftk_widget_child(FtkWidget* thiz);
 FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id);
 FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y);
-
-void    ftk_widget_set_bg_color(FtkWidget* thiz, FtkWidgetState state, FtkColor color);
-void    ftk_widget_set_fg_color(FtkWidget* thiz, FtkWidgetState state, FtkColor color);
-void    ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
 
 void ftk_widget_paint(FtkWidget* thiz);
 void ftk_widget_destroy(FtkWidget* thiz);
