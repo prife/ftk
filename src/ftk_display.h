@@ -83,6 +83,13 @@ static inline int ftk_display_bits_per_pixel(FtkDisplay* thiz)
 	return thiz->bits_per_pixel(thiz);
 }
 
+static inline Ret ftk_display_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
+{
+	return_val_if_fail(thiz != NULL && thiz->snap != NULL, RET_FAIL);
+
+	return thiz->snap(thiz, bitmap);
+}
+
 static inline void ftk_display_destroy(FtkDisplay* thiz)
 {
 	if(thiz != NULL && thiz->destroy != NULL)

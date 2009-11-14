@@ -469,11 +469,19 @@ int main(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
 
+	FtkRect rect = {0};
+	FtkBitmap* bitmap = NULL;
 	FtkFont* font = ftk_default_font();
 	FtkDisplay* display = ftk_default_display();
 
-	test_fill_bg(display);
+	rect.width = ftk_display_width(display);
+	rect.height = ftk_display_height(display);
 #if 1 
+	test_draw_vline(display);
+	ftk_display_snap(display, &bitmap);
+	test_draw_hline(display);
+	ftk_display_update(display, bitmap, &rect, 0, 0);
+	test_fill_bg(display);
 	test_font(display, font);
 	test_put_get_pixel(display);
 	test_draw_point(display);
@@ -481,6 +489,7 @@ int main(int argc, char* argv[])
 	test_draw_hline(display);
 	test_draw_vline(display);
 	test_draw_rect(display);
+	ftk_bitmap_unref(bitmap);
 #endif
 	ftk_run();
 

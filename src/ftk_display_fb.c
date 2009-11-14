@@ -175,11 +175,46 @@ static int ftk_display_fb_bits_per_pixel(FtkDisplay* thiz)
 	return 2;
 }
 
+static Ret ftk_display_fb_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
+{
+	FtkColor bg = {.a=0xff};
+	DECL_PRIV(thiz, priv);
+	FtkColor* dst = NULL;
+	int x = 0;
+	int y = 0;
+	int w = fb_width(&priv->fb);
+	int h = fb_height(&priv->fb);
+	unsigned short* src = priv->fb.bits;
+
+	*bitmap = ftk_bitmap_create(w, h, bg);
+	return_val_if_fail(thiz != *bitmap, RET_FAIL);
+
+	dst = ftk_bitmap_bits(*bitmap);
+
+	for(y = 0; y < h; y++)
+	{
+		for(x = 0; x < w; x++)
+		{
+			dst->r = (*src >> 8) & 0xf1;
+			dst->g = (*src >> 3) & 0xf6;
+			dst->b = (*src << 3) & 0xff;
+
+			dst++;
+			src++;
+		}
+	}
+
+	return RET_OK;
+}
+
 static void ftk_display_fb_destroy(FtkDisplay* thiz)
 {
-	DECL_PRIV(thiz, priv);
-	fb_close(&priv->fb);
-	free(thiz);
+	if(thiz != NULL)
+	{
+		DECL_PRIV(thiz, priv);
+		fb_close(&priv->fb);
+		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
+	}
 
 	return;
 }
@@ -197,6 +232,7 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			thiz->width    = ftk_display_fb_width;
 			thiz->height   = ftk_display_fb_height;
 			thiz->bits_per_pixel = ftk_display_fb_bits_per_pixel;
+			thiz->snap     = ftk_display_fb_snap;
 			thiz->destroy = ftk_display_fb_destroy;
 		}
 		else
