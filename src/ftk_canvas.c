@@ -360,7 +360,6 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 
 Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 {
-	int i = 0;
 	int width  = 0;
 	int height = 0;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
@@ -648,7 +647,7 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
 	return extent;
 }
 
-const char* ftk_canvas_compute_string_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width)
+const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width)
 {
 	int extent = 0;
 	unsigned short unicode = 0;
@@ -690,44 +689,6 @@ const char* ftk_canvas_compute_string_visible_range(FtkCanvas* thiz, const char*
 		
 	return start;
 }
-
-const char* ftk_canvas_available(FtkCanvas* thiz, const char* str, int width, int* nr)
-{
-	FtkGlyph glyph = {0};
-	const char* ret = str;
-	unsigned short code = 0;
-
-	return_val_if_fail(thiz != NULL && str != NULL && nr != NULL && thiz->gc.font != NULL, NULL);
-
-	while(*str)
-	{
-		ret = str;
-		code = utf8_get_char(str, &str);
-
-		if(code == ' ')
-		{
-			glyph.x = 0;
-			glyph.w = FTK_SPACE_WIDTH;
-		}
-		else if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK)
-		{
-			continue;
-		}
-
-		width -= glyph.x + glyph.w + 1;
-		if(width >= 0)
-		{
-			(*nr)++;
-		}
-		else
-		{
-			break;
-		}
-	}
-
-	return ret;
-}
-
 
 void ftk_canvas_destroy(FtkCanvas* thiz)
 {
@@ -854,7 +815,7 @@ Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, int w, in
 }
 
 
-Ret ftk_canvas_fill_background_image(FtkCanvas* canvas, FtkBgStyle style, int x, int y, int w, int h, FtkBitmap* bitmap)
+Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h)
 {
 	Ret ret = RET_FAIL;
 	return_val_if_fail(canvas != NULL && bitmap != NULL, ret);

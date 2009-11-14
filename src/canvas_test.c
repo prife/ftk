@@ -35,7 +35,6 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 	if(display != NULL)
 	{
 		int i = 0;
-		int nr = 0;
 		FtkGc gc = {0};
 		int extent = 0;
 		FtkColor color = {0x0, 0, 0, 0x0};
@@ -91,7 +90,6 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 
 		assert(ftk_canvas_font_height(thiz) == 16);
 		extent = ftk_canvas_get_extent(thiz, "李先静", -1);
-		assert(strcmp(ftk_canvas_available(thiz, "李先静是", extent, &nr), "是") == 0 && nr == 3);
 		printf("extent=%d\n", ftk_canvas_get_extent(thiz, "李先静", -1));
 
 
@@ -402,25 +400,25 @@ void test_font(FtkDisplay* display, FtkFont* font)
 	gc.font = font;
 	ftk_canvas_set_gc(thiz, &gc);
 	
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, 0, -1, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, 0, -1, 60);
 	assert(strcmp(other_side, "明与内建函数") == 0);
 
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, other_side-str, -1, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, other_side-str, -1, 60);
 	assert(strcmp(other_side, "建函数") == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, other_side-str, -1, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, other_side-str, -1, 60);
 	assert(strcmp(other_side, "") == 0);
 
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, "建函数") == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, "明与内建函数") == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, str) == 0);
 	
-	other_side = ftk_canvas_compute_string_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
 	assert(strcmp(other_side, str) == 0);
 
 	printf("other_side = %s\n", other_side);
@@ -449,12 +447,12 @@ static void test_fill_bg(FtkDisplay* display)
 	int height = ftk_display_height(display);
 	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
 	FtkBitmap* bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_pressed.9.png");
-	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 10, 10, 100, 60, bitmap);
-	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 120, 10, 40, 60, bitmap);
+	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 10, 10, 100, 60);
+	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 120, 10, 40, 60);
 	
-	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 10, 80, 20, 20, bitmap);
-	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 30, 80, 40, 20, bitmap);
-	ftk_canvas_fill_background_image(thiz, FTK_BG_FOUR_CORNER, 80, 80, 60, 20, bitmap);
+	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 10, 80, 20, 20);
+	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 30, 80, 40, 20);
+	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 80, 80, 60, 20);
 	rect.width = width;
 	rect.height = height;
 	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);

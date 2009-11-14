@@ -156,7 +156,6 @@ int  ftk_text_buffer_char_bytes(FtkTextBuffer* thiz, size_t offset, int backward
 
 int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count)
 {
-	int i = 0;
 	const char* iter = NULL;
 	const char* offset_p = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, 0);

@@ -321,13 +321,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -338,7 +338,7 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -437,7 +437,7 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 #display_fb_test_LDFLAGS = $(MYLDFLAGS)
 #input_test_SOURCES = input_test.c
 #input_test_LDFLAGS = $(MYLDFLAGS)
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\""
+INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS = .libs/libftk.a
 demo_expand_SOURCES = demo_expand.c
 demo_expand_LDFLAGS = $(MYLDFLAGS)

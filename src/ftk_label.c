@@ -63,7 +63,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		for(i = 0; i < rows; i++)
 		{
 			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;
-			end = ftk_canvas_compute_string_visible_range(canvas, priv->text, start, -1, width);
+			end = ftk_canvas_calc_str_visible_range(canvas, priv->text, start, -1, width);
 			ftk_canvas_draw_string(canvas, x, y, priv->text + start, end - priv->text - start);
 			if(*end == '\0')
 			{

@@ -245,7 +245,7 @@ static Ret  ftk_animator_expand_start(FtkAnimator* thiz, FtkWidget* win, int syn
 	}
 	else
 	{
-		FtkSource* timer = ftk_source_timer_create(step_duration, ftk_animator_expand_step, thiz);
+		FtkSource* timer = ftk_source_timer_create(step_duration, (FtkTimer)ftk_animator_expand_step, thiz);
 		ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	}
 
@@ -283,8 +283,6 @@ FtkAnimator* ftk_animator_expand_create(void)
 
 	if(thiz != NULL)
 	{
-		DECL_PRIV(thiz, priv);
-
 		thiz->stop      = ftk_animator_expand_stop;
 		thiz->start     = ftk_animator_expand_start;
 		thiz->set_param = ftk_animator_expand_set_param;

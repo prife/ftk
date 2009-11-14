@@ -35,7 +35,7 @@ input_test_SOURCES=input_test.c
 input_test_LDFLAGS=$(MYLDFLAGS)
 endif
 
-INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\""
+INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS=.libs/libftk.a
 
 demo_expand_SOURCES=demo_expand.c

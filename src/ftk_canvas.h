@@ -48,6 +48,7 @@ typedef struct _FtkCanvas FtkCanvas;
 FtkCanvas* ftk_canvas_create(int w, int h, FtkColor clear_color);
 Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc);
 Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc);
+
 Ret ftk_canvas_draw_point(FtkCanvas* thiz, int x, int y);
 Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2);
 Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h);
@@ -57,21 +58,18 @@ Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int 
 Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill);
 Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len);
 
-Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
-FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);
-
-Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
-
 int ftk_canvas_font_height(FtkCanvas* thiz);
 int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len);
 int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode);
-const char* ftk_canvas_available(FtkCanvas* thiz, const char* str, int width, int* nr);
-const char* ftk_canvas_compute_string_visible_range(FtkCanvas* thiz, 
-	const char* start, int vstart, int vend, int width);
-Ret ftk_canvas_fill_background_image(FtkCanvas* canvas, FtkBgStyle style, 
-	int x, int y, int w, int h, FtkBitmap* bitmap);
+const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width);
+
+Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h);
+Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
 
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
+FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);
+Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
+
 void ftk_canvas_destroy(FtkCanvas* thiz);
 
 #endif/*FTK_CANVAS_H*/

@@ -437,7 +437,7 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 @FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)
 @FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
 @FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\""
+INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS = .libs/libftk.a
 demo_expand_SOURCES = demo_expand.c
 demo_expand_LDFLAGS = $(MYLDFLAGS)

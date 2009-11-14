@@ -98,7 +98,7 @@ static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 	int width = x - ftk_widget_left(thiz) - FTK_ENTRY_LEFT_MARGIN;
 	return_val_if_fail(width >= 0, RET_FAIL);
 
-	end = ftk_canvas_compute_string_visible_range(canvas, TB_TEXT, priv->visible_start, -1, width);
+	end = ftk_canvas_calc_str_visible_range(canvas, TB_TEXT, priv->visible_start, -1, width);
 	offset = end - TB_TEXT - priv->caret;
 
 	if(offset == 0)
@@ -334,7 +334,7 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		
 		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
-		priv->caret_timer = ftk_source_timer_create(500, ftk_entry_on_paint_caret, thiz);
+		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
 	}
 
@@ -351,7 +351,7 @@ static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
 
 	if(priv->visible_start < 0 || priv->visible_end < 0)
 	{
-		other_side = ftk_canvas_compute_string_visible_range(canvas, TB_TEXT, 
+		other_side = ftk_canvas_calc_str_visible_range(canvas, TB_TEXT, 
 			priv->visible_start, priv->visible_end, width - 2 * FTK_ENTRY_LEFT_MARGIN);
 
 		if(priv->visible_start < 0)

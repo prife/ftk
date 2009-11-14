@@ -100,7 +100,7 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
 	{
 		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
-		ftk_canvas_fill_background_image(canvas, FTK_BG_FOUR_CORNER, x, y, width, height, bitmap);
+		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
 	}
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text != NULL)
