@@ -25,6 +25,13 @@ static Ret button_to_down_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret button_to_up_clicked(void* ctx, void* obj)
+{
+	create_ani_window(FTK_ANI_TO_UP, 0);
+
+	return RET_OK;
+}
+
 static Ret button_close_clicked(void* ctx, void* obj)
 {
 	FtkWidget* win = ctx;
@@ -54,11 +61,18 @@ static void create_ani_window(int type, int sync)
 	int width = 0;
 	int height = 0;
 	FtkGc gc = {.mask = FTK_GC_BITMAP};
+	FtkWidget* button = NULL;
 	FtkWidget* win = ftk_app_window_create();
 	FtkAnimator* ani = ftk_animator_expand_create();
 	
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
+	button = ftk_button_create(1001, width/3, height/3, width/3, 50);
+	ftk_button_set_text(button, "关闭");
+	ftk_widget_append_child(win, button);
+	ftk_widget_show(button, 1);
+	ftk_button_set_clicked_listener(button, button_close_clicked, win);
+
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "testdata/jpeg1.jpg");
 	ftk_widget_set_gc(win, FTK_WIDGET_NORMAL, &gc);
 	switch(type)
@@ -72,6 +86,11 @@ static void create_ani_window(int type, int sync)
 		case FTK_ANI_TO_DOWN:
 		{
 			ftk_animator_set_param(ani, type, 100, height, 50, 200);
+			break;
+		}
+		case FTK_ANI_TO_UP:
+		{
+			ftk_animator_set_param(ani, type, height - 100, ftk_widget_top(win), 50, 200);
 			break;
 		}
 		default:break;
@@ -110,6 +129,12 @@ static void create_app_window(void)
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_east_south_clicked, win);
+
+	button = ftk_button_create(1002, 2*width/3, height/6 + 80, width/3, 50);
+	ftk_button_set_text(button, "向上伸展");
+	ftk_widget_append_child(win, button);
+	ftk_widget_show(button, 1);
+	ftk_button_set_clicked_listener(button, button_to_up_clicked, win);
 
 	snprintf(title, sizeof(title), "window%02d", g_index++);
 	label = ftk_label_create(1003, width/4, height/2, width/2, 30);
