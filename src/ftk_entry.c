@@ -67,7 +67,12 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 	DECL_PRIV0(thiz, priv);
 	priv->caret_visible = 0;
 	ftk_entry_on_paint_caret(thiz);
-	return_val_if_fail(HAS_TEXT(priv), RET_OK);
+
+	if(!HAS_TEXT(priv))
+	{
+		priv->caret = 0;
+		return RET_OK;
+	}
 
 	priv->caret += ftk_text_buffer_chars_bytes(priv->text_buffer, priv->caret, offset);
 	priv->caret = priv->caret < 0 ? 0 : priv->caret;
@@ -162,8 +167,10 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_KEY_BACKSPACE:
 		{
-			ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, -1);
-			ftk_entry_move_caret(thiz, -1);
+			if(ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, -1) == RET_OK)
+			{
+				ftk_entry_move_caret(thiz, -1);
+			}
 			break;
 		}
 		default:
