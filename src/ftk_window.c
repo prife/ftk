@@ -280,11 +280,7 @@ static Ret ftk_window_on_paint(FtkWidget* thiz)
 	rect.width  = ftk_widget_width(thiz);
 	rect.height = ftk_widget_height(thiz);
 
-	ftk_display_update(priv->display, 
-		ftk_canvas_bitmap(priv->canvas), &rect, 
-		ftk_widget_left(thiz), ftk_widget_top(thiz));
-
-	return RET_OK;
+	return ftk_window_update(thiz, &rect);
 }
 
 static void ftk_window_destroy(FtkWidget* thiz)
@@ -336,7 +332,8 @@ Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	int yoffset = 0;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
-	if(priv->update_disabled)
+
+	if(priv->update_disabled || !ftk_widget_is_visible(thiz))
 	{
 		return RET_FAIL;
 	}

@@ -1,10 +1,11 @@
 #include "ftk.h"
 #include "ftk_animator_expand.h"
 
+static void create_ani_window(void);
 static void create_app_window(void);
 static Ret button_open_clicked(void* ctx, void* obj)
 {
-	create_app_window();
+	create_ani_window();
 
 	return RET_OK;
 }
@@ -32,6 +33,22 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
+static void create_ani_window(void)
+{
+	char title[32] = {0};
+	int width = 0;
+	int height = 0;
+	FtkGc gc = {.mask = FTK_GC_BITMAP};
+	FtkWidget* win = ftk_app_window_create();
+	FtkAnimator* ani = ftk_animator_expand_create();
+
+	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), "testdata/jpeg1.jpg");
+	ftk_widget_set_gc(win, FTK_WIDGET_NORMAL, &gc);
+	ftk_animator_set_param(ani, FTK_ANI_TO_RIGHT, 10, 320, 32, 500);
+	ftk_animator_start(ani, win, 0);
+
+	return;
+}
 
 static void create_app_window(void)
 {
@@ -66,12 +83,7 @@ static void create_app_window(void)
 	ftk_window_set_title(win, title);
 	ftk_widget_set_user_data(win, on_window_close, win);
 	
-
-	FtkAnimator* ani = ftk_animator_expand_create();
-	ftk_animator_set_param(ani, FTK_ANI_TO_RIGHT, 10, 320, 32, 1000);
-	ftk_animator_start(ani, win, 1);
-
-	//ftk_widget_show(win, 1);
+	ftk_widget_show(win, 1);
 
 	return;
 }

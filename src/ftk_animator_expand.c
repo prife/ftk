@@ -67,38 +67,26 @@ static Ret  ftk_animator_expand_init(FtkAnimator* thiz)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv->stop == 0, ret);
 
+	priv->x = ftk_widget_left_abs(priv->win);
+	priv->y = ftk_widget_top_abs(priv->win);
+	
 	switch(priv->type)
 	{
-		case FTK_ANI_TO_LEFT:
-		{
-			break;
-		}
 		case FTK_ANI_TO_RIGHT:
 		{
-			priv->x = 0;
-			priv->y = ftk_widget_top_abs(priv->win);
 			priv->h = ftk_widget_height(priv->win);
 			priv->w = priv->start;
 			break;
 		}
 		case FTK_ANI_TO_DOWN:
 		{
-			priv->y += priv->step;
-			ret = priv->y <= priv->end ? RET_OK : RET_FAIL;
+			priv->w = ftk_widget_width(priv->win);
+			priv->h = priv->start;
 			break;
 		}
-		case FTK_ANI_TO_UP:
+		default:
 		{
-			priv->y += priv->step;
-			ret = priv->y >= priv->end ? RET_OK : RET_FAIL;
-			break;
-		}
-		case FTK_ANI_TO_EAST_SOUTH:
-		case FTK_ANI_TO_EAST_NORTH:
-		{
-			priv->w += priv->step;
-			priv->h += (priv->h * priv->step)/priv->w;
-			ret = priv->w >= priv->end ? RET_OK : RET_FAIL;
+			ret = RET_FAIL;
 			break;
 		}
 	}
@@ -113,38 +101,19 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 
 	switch(priv->type)
 	{
-		case FTK_ANI_TO_LEFT:
+		case FTK_ANI_TO_DOWN:
 		{
-			priv->x += priv->step;
-			ret = priv->x >= priv->end ? RET_OK : RET_FAIL;
+			ret = priv->h < priv->end ? RET_OK : RET_FAIL;
+			priv->h += priv->step;
 			break;
 		}
 		case FTK_ANI_TO_RIGHT:
 		{
-			ret = priv->w <= priv->end ? RET_OK : RET_FAIL;
+			ret = priv->w < priv->end ? RET_OK : RET_FAIL;
 			priv->w += priv->step;
 			break;
 		}
-		case FTK_ANI_TO_DOWN:
-		{
-			priv->y += priv->step;
-			ret = priv->y <= priv->end ? RET_OK : RET_FAIL;
-			break;
-		}
-		case FTK_ANI_TO_UP:
-		{
-			priv->y += priv->step;
-			ret = priv->y >= priv->end ? RET_OK : RET_FAIL;
-			break;
-		}
-		case FTK_ANI_TO_EAST_SOUTH:
-		case FTK_ANI_TO_EAST_NORTH:
-		{
-			priv->w += priv->step;
-			priv->h += (priv->h * priv->step)/priv->w;
-			ret = priv->w >= priv->end ? RET_OK : RET_FAIL;
-			break;
-		}
+		default:break;
 	}
 
 	return ret;
