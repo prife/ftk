@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	
 	width = ftk_widget_width(dialog);
 	height = ftk_widget_height(dialog);
-	label = ftk_label_create(1005, width/4, height/4, width/2, 20);
+	label = ftk_label_create(1005, width/6, height/4, 5*width/6, 20);
 	ftk_label_set_text(label, "Are you sure to quit?");
 	ftk_widget_append_child(dialog, label);
 	ftk_widget_show(label, 1);
