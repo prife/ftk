@@ -35,18 +35,17 @@
 
 typedef struct _PrivInfo
 {
-	FtkExpandType type;
 	int start;
 	int end;
 	int step;
-	int duration;
 	int stop;
+	int duration;
+	FtkExpandType type;
 
 	int x;
 	int y;
 	int w;
 	int h;
-	int *var;
 	FtkWidget* win;
 	FtkCanvas* canvas;
 	FtkBitmap* snap;
@@ -63,17 +62,21 @@ static Ret  ftk_animator_expand_stop(FtkAnimator* thiz)
 
 static Ret  ftk_animator_expand_init(FtkAnimator* thiz)
 {
-	Ret ret = RET_FAIL;
-	DECL_PRIV(thiz, priv);
 	int w = 0;
 	int h = 0;
+	int x = 0;
+	int y = 0;
+	Ret ret = RET_FAIL;
+	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv->stop == 0, ret);
 
-	priv->x = ftk_widget_left_abs(priv->win);
-	priv->y = ftk_widget_top_abs(priv->win);
 	w = ftk_widget_width(priv->win);
 	h = ftk_widget_height(priv->win);
+	x = ftk_widget_left(priv->win);
+	y = ftk_widget_top(priv->win);
 
+	priv->x = x;
+	priv->y = y;
 	switch(priv->type)
 	{
 		case FTK_ANI_TO_RIGHT:
@@ -88,28 +91,30 @@ static Ret  ftk_animator_expand_init(FtkAnimator* thiz)
 			priv->h = priv->start;
 			break;
 		}
-		case FTK_ANI_TO_UP:
-		{
-			priv->w = w;
-			priv->y = priv->start;
-			priv->h = ftk_widget_top_abs(priv->win) + h - priv->y;
-			break;
-		}
 		case FTK_ANI_TO_EAST_NORTH:
 		{
 			priv->w = priv->start;
 			priv->h = priv->start * h/w;
-			priv->y = ftk_widget_top_abs(priv->win) + h - priv->h;
+			priv->y = y + h - priv->h;
 			break;
 		}
 		case FTK_ANI_TO_EAST_SOUTH:
-		default:
 		{
 			priv->w = priv->start;
 			priv->h = priv->start * h/w;
 			break;
 		}
+		default:
+		case FTK_ANI_TO_UP:
+		{
+			priv->w = w;
+			priv->y = priv->start;
+			priv->h = y + h - priv->y;
+			break;
+		}
 	}
+
+	ftk_widget_ref(priv->win);
 	ftk_widget_show(priv->win, 1);
 
 	return ret;
@@ -139,29 +144,29 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 			priv->w += priv->step;
 			break;
 		}
-		case FTK_ANI_TO_UP:
-		{
-			ret = priv->y > priv->end ? RET_OK : RET_FAIL;
-			priv->y += priv->step;
-			priv->h = ftk_widget_top_abs(priv->win) + h - priv->y;
-			break;
-		}
 		case FTK_ANI_TO_EAST_NORTH:
 		{
 			ret = priv->w < priv->end ? RET_OK : RET_FAIL;
 			priv->w += priv->step;
 			priv->h = priv->w * h/w;
-			priv->y = ftk_widget_top_abs(priv->win) + h - priv->h;
+			priv->y = y + h - priv->h;
 			
 			break;
 		}
 		case FTK_ANI_TO_EAST_SOUTH:
-		default:
 		{
 			ret = priv->w < priv->end ? RET_OK : RET_FAIL;
 			priv->w += priv->step;
 			priv->h += priv->step * h/w;
 
+			break;
+		}
+		default:
+		case FTK_ANI_TO_UP:
+		{
+			ret = priv->y > priv->end ? RET_OK : RET_FAIL;
+			priv->y += priv->step;
+			priv->h  = y + h - priv->y;
 			break;
 		}
 	}
@@ -174,8 +179,6 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 
 static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 {
-	int width    = 0;
-	int height   = 0;
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
 	FtkBitmap* bitmap = NULL;
@@ -184,16 +187,15 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 	{
 		ftk_canvas_destroy(priv->canvas);
 		ftk_bitmap_unref(priv->snap);
+		ftk_window_enable_update(priv->win);
+		ftk_widget_unref(priv->win);
 		priv->canvas = NULL;
 		priv->snap   = NULL;
-		ftk_window_enable_update(priv->win);
-		
+		priv->win    = NULL;
+
 		return RET_REMOVE;
 	}
 
-	width  = ftk_bitmap_width(priv->snap);
-	height = ftk_bitmap_height(priv->snap);
-	
 	bitmap = ftk_canvas_bitmap(ftk_widget_canvas(priv->win));
 	ftk_canvas_draw_bitmap(priv->canvas, bitmap, 0, 0, priv->w, priv->h, priv->x, priv->y);
 
@@ -208,10 +210,10 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 
 static Ret  ftk_animator_expand_start(FtkAnimator* thiz, FtkWidget* win, int sync)
 {
-	DECL_PRIV(thiz, priv);
 	int width = 0;
 	int height = 0;
 	int step_duration = 0;
+	DECL_PRIV(thiz, priv);
 	FtkColor bg = {.a = 0xff};
 
 	return_val_if_fail(win != NULL, RET_FAIL);
@@ -291,5 +293,4 @@ FtkAnimator* ftk_animator_expand_create(void)
 
 	return thiz;
 }
-
 
