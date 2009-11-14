@@ -46,6 +46,8 @@ const char*ftk_window_get_title(FtkWidget* thiz);
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);
 Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
 int        ftk_window_is_fullscreen(FtkWidget* thiz);
+
+/*for animator*/
 Ret        ftk_window_disable_update(FtkWidget* thiz);
 Ret        ftk_window_enable_update(FtkWidget* thiz);
 

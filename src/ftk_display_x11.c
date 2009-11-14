@@ -139,6 +139,20 @@ static int ftk_display_x11_bits_per_pixel(FtkDisplay* thiz)
 	return 2;
 }
 
+static Ret ftk_display_x11_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
+{
+	DECL_PRIV(thiz, priv);
+	FtkColor bg = {.a = 0xff};
+	return_val_if_fail(bitmap != NULL, RET_FAIL);
+
+	*bitmap = ftk_bitmap_create(priv->width, priv->height, bg);
+	return_val_if_fail(*bitmap != NULL, RET_FAIL);
+
+	memcpy(ftk_bitmap_bits(*bitmap), priv->bits, priv->width * priv->height * priv->pixelsize);
+
+	return RET_FAIL;
+}
+
 static void ftk_display_x11_destroy(FtkDisplay* thiz)
 {
 	if(thiz != NULL)
@@ -183,11 +197,12 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 	{
 		DECL_PRIV(thiz, priv);
 		thiz->update   = ftk_display_x11_update;
+		thiz->snap     = ftk_display_x11_snap;
 		thiz->width	   = ftk_display_x11_width;
 		thiz->height   = ftk_display_x11_height;
 		thiz->bits_per_pixel = ftk_display_x11_bits_per_pixel;
 		thiz->destroy  = ftk_display_x11_destroy;
-
+	
 		priv->gc      = gc;
 		priv->win     = win;
 		priv->width   = width;
