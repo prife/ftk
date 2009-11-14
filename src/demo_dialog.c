@@ -18,23 +18,28 @@ static void on_window_close(void* user_data)
 int main(int argc, char* argv[])
 {
 	int id = 0;
+	int width = 0;
+	int height = 0;
 	FtkWidget* label = NULL;
 	FtkWidget* button = NULL;
 	ftk_init(argc, argv);
 	
 	FtkWidget* dialog = ftk_dialog_create(0, 80, 320, 240);
-	label = ftk_label_create(1005, 20, 60, 300, 20);
+	
+	width = ftk_widget_width(dialog);
+	height = ftk_widget_height(dialog);
+	label = ftk_label_create(1005, width/4, height/4, width/2, 20);
 	ftk_label_set_text(label, "Are you sure to quit?");
 	ftk_widget_append_child(dialog, label);
 	ftk_widget_show(label, 1);
 
-	button = ftk_button_create(1005, 20, 140, 80, 50);
+	button = ftk_button_create(1005, width/4, height/2, width/6, 50);
 	ftk_button_set_text(button, "yes");
 	ftk_widget_append_child(dialog, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	
-	button = ftk_button_create(1006, 180, 140, 80, 50);
+	button = ftk_button_create(1006, width/2, height/2, width/6, 50);
 	ftk_button_set_text(button, "no");
 	ftk_widget_append_child(dialog, button);
 	ftk_widget_show(button, 1);
