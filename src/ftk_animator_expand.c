@@ -95,6 +95,13 @@ static Ret  ftk_animator_expand_init(FtkAnimator* thiz)
 			priv->h = ftk_widget_top_abs(priv->win) + h - priv->y;
 			break;
 		}
+		case FTK_ANI_TO_EAST_NORTH:
+		{
+			priv->w = priv->start;
+			priv->h = priv->start * h/w;
+			priv->y = ftk_widget_top_abs(priv->win) + h - priv->h;
+			break;
+		}
 		case FTK_ANI_TO_EAST_SOUTH:
 		default:
 		{
@@ -112,6 +119,8 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 {
 	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
+	int x = ftk_widget_left(priv->win);
+	int y = ftk_widget_top(priv->win);
 	int w = ftk_widget_width(priv->win);
 	int h = ftk_widget_height(priv->win);
 	return_val_if_fail(priv->stop == 0, ret);
@@ -137,6 +146,15 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 			priv->h = ftk_widget_top_abs(priv->win) + h - priv->y;
 			break;
 		}
+		case FTK_ANI_TO_EAST_NORTH:
+		{
+			ret = priv->w < priv->end ? RET_OK : RET_FAIL;
+			priv->w += priv->step;
+			priv->h = priv->w * h/w;
+			priv->y = ftk_widget_top_abs(priv->win) + h - priv->h;
+			
+			break;
+		}
 		case FTK_ANI_TO_EAST_SOUTH:
 		default:
 		{
@@ -147,6 +165,9 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 			break;
 		}
 	}
+
+	priv->x = priv->x >= x ? priv->x : x;
+	priv->y = priv->y >= y ? priv->y : y;
 
 	return ret;
 }

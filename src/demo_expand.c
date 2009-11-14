@@ -11,6 +11,13 @@ static Ret button_to_east_south_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret button_to_east_north_clicked(void* ctx, void* obj)
+{
+	create_ani_window(FTK_ANI_TO_EAST_NORTH, 1);
+
+	return RET_OK;
+}
+
 static Ret button_to_right_clicked(void* ctx, void* obj)
 {
 	create_ani_window(FTK_ANI_TO_RIGHT, 0);
@@ -79,6 +86,7 @@ static void create_ani_window(int type, int sync)
 	{
 		case FTK_ANI_TO_RIGHT:
 		case FTK_ANI_TO_EAST_SOUTH:
+		case FTK_ANI_TO_EAST_NORTH:
 		{
 			ftk_animator_set_param(ani, type, 100, width, 50, 200);
 			break;
@@ -106,7 +114,6 @@ static void create_app_window(void)
 	int width = 0;
 	int height = 0;
 	FtkWidget* win = ftk_app_window_create();
-	FtkWidget* label = NULL;
 	FtkWidget* button = NULL;
 	
 	width = ftk_widget_width(win);
@@ -131,17 +138,18 @@ static void create_app_window(void)
 	ftk_button_set_clicked_listener(button, button_to_east_south_clicked, win);
 
 	button = ftk_button_create(1002, 2*width/3, height/6 + 80, width/3, 50);
+	ftk_button_set_text(button, "向左上伸展");
+	ftk_widget_append_child(win, button);
+	ftk_widget_show(button, 1);
+	ftk_button_set_clicked_listener(button, button_to_east_north_clicked, win);
+	
+	button = ftk_button_create(1002, width/3, height/6 + 160, width/3, 50);
 	ftk_button_set_text(button, "向上伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_up_clicked, win);
 
-	snprintf(title, sizeof(title), "window%02d", g_index++);
-	label = ftk_label_create(1003, width/4, height/2, width/2, 30);
-	ftk_label_set_text(label, title);
-	ftk_widget_show(label, 1);
-	ftk_widget_append_child(win, label);
-	
+	snprintf(title, sizeof(title), "伸展动画效果测试", g_index++);
 	ftk_window_set_title(win, title);
 	ftk_widget_set_user_data(win, on_window_close, win);
 	
