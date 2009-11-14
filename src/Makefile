@@ -44,7 +44,7 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
 	demo_menu$(EXEEXT) demo_entry$(EXEEXT) \
 	text_buffer_test$(EXEEXT) icon_cache_test$(EXEEXT) \
-	$(am__EXEEXT_1)
+	demo_expand$(EXEEXT) $(am__EXEEXT_1)
 #am__append_1 = $(LINUX_X11)
 am__append_2 = $(LINUX_NATIVE)
 am__append_3 = display_fb_test input_test
@@ -77,8 +77,8 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_icon_cache.c ftk_display_x11.c ftk_source_x11.c \
-	ftk_display_fb.c ftk_source_input.c
+	ftk_icon_cache.c ftk_animator_expand.c ftk_display_x11.c \
+	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 #am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
@@ -93,7 +93,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
 	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
 	ftk_app_window.lo ftk_entry.lo ftk_text_buffer.lo \
-	ftk_icon_cache.lo $(am__objects_2) $(am__objects_4)
+	ftk_icon_cache.lo ftk_animator_expand.lo $(am__objects_2) \
+	$(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 	input_test$(EXEEXT)
@@ -134,6 +135,12 @@ demo_entry_LDADD = $(LDADD)
 demo_entry_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_entry_LDFLAGS) $(LDFLAGS) -o $@
+am_demo_expand_OBJECTS = demo_expand.$(OBJEXT)
+demo_expand_OBJECTS = $(am_demo_expand_OBJECTS)
+demo_expand_LDADD = $(LDADD)
+demo_expand_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(demo_expand_LDFLAGS) $(LDFLAGS) -o $@
 am_demo_image_OBJECTS = demo_image.$(OBJEXT)
 demo_image_OBJECTS = $(am_demo_image_OBJECTS)
 demo_image_LDADD = $(LDADD)
@@ -266,29 +273,30 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(bitmap_test_SOURCES) $(canvas_test_SOURCES) \
 	$(demo_button_SOURCES) $(demo_dialog_SOURCES) \
-	$(demo_entry_SOURCES) $(demo_image_SOURCES) \
-	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
-	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
-	$(display_fb_test_SOURCES) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
-	$(input_test_SOURCES) $(label_test_SOURCES) \
-	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
-	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
-	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
-DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
-	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(demo_button_SOURCES) \
-	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
+	$(demo_entry_SOURCES) $(demo_expand_SOURCES) \
 	$(demo_image_SOURCES) $(demo_image_button_SOURCES) \
 	$(demo_label_SOURCES) $(demo_menu_SOURCES) \
-	$(demo_multi_win_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
+	$(demo_multi_win_SOURCES) $(display_fb_test_SOURCES) \
 	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(am__input_test_SOURCES_DIST) \
+	$(icon_cache_test_SOURCES) $(input_test_SOURCES) \
 	$(label_test_SOURCES) $(log_test_SOURCES) \
 	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
 	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
 	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
+DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
+	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
+	$(canvas_test_SOURCES) $(demo_button_SOURCES) \
+	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
+	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
+	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
+	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
+	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
+	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
+	$(am__input_test_SOURCES_DIST) $(label_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
+	$(util_test_SOURCES) widget_test.c
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -423,13 +431,16 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_icon_cache.c $(am__append_1) $(am__append_2)
+	ftk_icon_cache.c ftk_animator_expand.c $(am__append_1) \
+	$(am__append_2)
 display_fb_test_SOURCES = display_fb_test.c
 display_fb_test_LDFLAGS = $(MYLDFLAGS)
 input_test_SOURCES = input_test.c
 input_test_LDFLAGS = $(MYLDFLAGS)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\""
 MYLDFLAGS = .libs/libftk.a
+demo_expand_SOURCES = demo_expand.c
+demo_expand_LDFLAGS = $(MYLDFLAGS)
 icon_cache_test_SOURCES = icon_cache_test.c
 icon_cache_test_LDFLAGS = $(MYLDFLAGS)
 sources_manager_test_SOURCES = sources_manager_test.c
@@ -591,6 +602,9 @@ demo_dialog$(EXEEXT): $(demo_dialog_OBJECTS) $(demo_dialog_DEPENDENCIES)
 demo_entry$(EXEEXT): $(demo_entry_OBJECTS) $(demo_entry_DEPENDENCIES) 
 	@rm -f demo_entry$(EXEEXT)
 	$(demo_entry_LINK) $(demo_entry_OBJECTS) $(demo_entry_LDADD) $(LIBS)
+demo_expand$(EXEEXT): $(demo_expand_OBJECTS) $(demo_expand_DEPENDENCIES) 
+	@rm -f demo_expand$(EXEEXT)
+	$(demo_expand_LINK) $(demo_expand_OBJECTS) $(demo_expand_LDADD) $(LIBS)
 demo_image$(EXEEXT): $(demo_image_OBJECTS) $(demo_image_DEPENDENCIES) 
 	@rm -f demo_image$(EXEEXT)
 	$(demo_image_LINK) $(demo_image_OBJECTS) $(demo_image_LDADD) $(LIBS)
@@ -661,6 +675,7 @@ include ./$(DEPDIR)/canvas_test.Po
 include ./$(DEPDIR)/demo_button.Po
 include ./$(DEPDIR)/demo_dialog.Po
 include ./$(DEPDIR)/demo_entry.Po
+include ./$(DEPDIR)/demo_expand.Po
 include ./$(DEPDIR)/demo_image.Po
 include ./$(DEPDIR)/demo_image_button.Po
 include ./$(DEPDIR)/demo_label.Po
@@ -670,6 +685,7 @@ include ./$(DEPDIR)/display_fb_test.Po
 include ./$(DEPDIR)/font_test.Po
 include ./$(DEPDIR)/fontdata.Plo
 include ./$(DEPDIR)/ftk.Plo
+include ./$(DEPDIR)/ftk_animator_expand.Plo
 include ./$(DEPDIR)/ftk_app_window.Plo
 include ./$(DEPDIR)/ftk_bitmap.Plo
 include ./$(DEPDIR)/ftk_bitmap_factory.Plo

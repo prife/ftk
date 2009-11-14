@@ -32,15 +32,25 @@
 #ifndef FTK_ANIMATOR_H
 #define FTK_ANIMATOR_H
 
-#include "ftk_widget.h"
+#include "ftk_window.h"
 
 struct _FtkAnimator;
 typedef struct _FtkAnimator FtkAnimator;
 
 typedef Ret  (*FtkAnimatorStop)(FtkAnimator* thiz);
 typedef Ret  (*FtkAnimatorStart)(FtkAnimator* thiz, FtkWidget* win, int sync);
-typedef Ret  (*FtkAnimatorSetParam)(FtkAnimator* thiz, int start, int end, int step, int duration);
+typedef Ret  (*FtkAnimatorSetParam)(FtkAnimator* thiz, int type, int start, int end, int step, int duration);
 typedef void (*FtkAnimatorDestroy)(FtkAnimator* thiz);
+
+typedef enum _FtkExpandType
+{
+	FTK_ANI_TO_LEFT = 0,
+	FTK_ANI_TO_RIGHT,
+	FTK_ANI_TO_DOWN,
+	FTK_ANI_TO_UP,
+	FTK_ANI_TO_EAST_SOUTH,
+	FTK_ANI_TO_EAST_NORTH,
+}FtkExpandType;
 
 struct _FtkAnimator
 {
@@ -62,17 +72,17 @@ static inline Ret  ftk_animator_start(FtkAnimator* thiz, FtkWidget* win, int syn
 {
 	return_val_if_fail(thiz != NULL && thiz->stop != NULL, RET_FAIL);
 
-	return thiz->start(thiz, sync);
+	return thiz->start(thiz, win, sync);
 }
 
-static inline Ret  ftk_animator_set_param(FtkAnimator* thiz, int start, int end, int step, int duration)
+static inline Ret  ftk_animator_set_param(FtkAnimator* thiz, int type, int start, int end, int step, int duration)
 {
 	return_val_if_fail(thiz != NULL && thiz->stop != NULL, RET_FAIL);
 
-	return thiz->set_param(thiz, start, end, step, duration);
+	return thiz->set_param(thiz, type, start, end, step, duration);
 }
 
-static inline void (*FtkAnimatorDestroy)(FtkAnimator* thiz)
+static inline void ftk_animator_destroy(FtkAnimator* thiz)
 {
 	if(thiz != NULL && thiz->destroy != NULL)
 	{
