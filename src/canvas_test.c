@@ -319,7 +319,7 @@ void test_draw_line(FtkDisplay* display)
 	return;
 }
 
-void test_draw_rect(FtkDisplay* display)
+void test_alpha(FtkDisplay* display)
 {
 	int i = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
@@ -465,6 +465,60 @@ static void test_fill_bg(FtkDisplay* display)
 	return;
 }
 
+static void test_draw_rect(FtkDisplay* display)
+{
+	int i = 0;
+	FtkColor color = {.a = 0xff};
+	FtkRect rect = {0};
+	int width = ftk_display_width(display);
+	int height = ftk_display_height(display);
+	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	gc.fg.a = 0xff;
+
+	gc.fg.r = 0xff;
+	for(i = 0; i < width/8; i++)
+	{
+		gc.fg.r -= 0x10;
+		ftk_canvas_set_gc(thiz, &gc);
+		ftk_canvas_draw_rect(thiz, width * i/8, 0, width/8 - 1, height/8 - 1, 1);
+	}
+	
+	gc.fg.r = 0xff;
+	for(i = 0; i < width/8; i++)
+	{
+		gc.fg.r -= 0x10;
+		gc.fg.b += 0x10;
+		ftk_canvas_set_gc(thiz, &gc);
+		ftk_canvas_draw_rect(thiz, width * i/8, height/8, width/8 - 1, height/8 - 1, 0);
+	}
+	
+	gc.fg.r = 0xff;
+	for(i = 0; i < width/8; i++)
+	{
+		gc.fg.r -= 0x10;
+		ftk_canvas_set_gc(thiz, &gc);
+		ftk_canvas_draw_round_rect(thiz, width * i/8, height/4, width/8 - 1, height/8 - 1, 1);
+	}
+	
+	gc.fg.r = 0xff;
+	for(i = 0; i < width/8; i++)
+	{
+		gc.fg.r -= 0x10;
+		gc.fg.b += 0x10;
+		ftk_canvas_set_gc(thiz, &gc);
+		ftk_canvas_draw_round_rect(thiz, width * i/8, 3*height/8, width/8 - 1, height/8 - 1, 0);
+	}
+	rect.width = width;
+	rect.height = height;
+	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);
+	ftk_canvas_destroy(thiz);
+
+	sleep(3);
+
+	return;
+}
+
 int main(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
@@ -476,7 +530,10 @@ int main(int argc, char* argv[])
 
 	rect.width = ftk_display_width(display);
 	rect.height = ftk_display_height(display);
-#if 1 
+#if 0
+#else	
+	test_draw_rect(display);
+	test_alpha(display);
 	test_draw_vline(display);
 	ftk_display_snap(display, &bitmap);
 	test_draw_hline(display);
@@ -488,7 +545,6 @@ int main(int argc, char* argv[])
 	test_draw_line(display);
 	test_draw_hline(display);
 	test_draw_vline(display);
-	test_draw_rect(display);
 	ftk_bitmap_unref(bitmap);
 #endif
 	ftk_run();

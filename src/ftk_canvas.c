@@ -358,6 +358,35 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 	return RET_OK;
 }
 
+Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
+{
+	int i = 0;
+	int width  = 0;
+	int height = 0;
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+	width  = ftk_bitmap_width(thiz->bitmap);
+	height = ftk_bitmap_height(thiz->bitmap);
+	return_val_if_fail(x < width && y < height, RET_FAIL);
+	return_val_if_fail(w > 8 && h > 8, RET_FAIL);
+
+	ftk_canvas_draw_hline(thiz, x + 2, y, w-4);
+	ftk_canvas_draw_hline(thiz, x + 1, y + 1, w-2);
+	ftk_canvas_draw_vline(thiz, x, y + 2, h - 4);
+	ftk_canvas_draw_vline(thiz, x + 1, y + 1, h - 2);
+
+	ftk_canvas_draw_vline(thiz, x+w-1, y + 2, h - 4);
+	ftk_canvas_draw_vline(thiz, x + w -2, y + 1, h - 2);
+	ftk_canvas_draw_hline(thiz, x + 1, y + h - 1, w-2);
+	ftk_canvas_draw_hline(thiz, x + 2, y + h - 2, w-4);
+
+	if(fill)
+	{
+		ftk_canvas_draw_rect(thiz, x + 2, y + 2, w - 4, h - 4, fill);
+	}
+
+	return RET_OK;
+}
+
 #define SET_PIXEL(x, y) bits[(y)*(width) + (x)] = thiz->gc.fg
 Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill)
 {

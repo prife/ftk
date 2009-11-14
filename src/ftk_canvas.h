@@ -53,6 +53,7 @@ Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2);
 Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h);
 Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w);
 Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
+Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
 Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill);
 Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len);
 
