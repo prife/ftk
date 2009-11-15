@@ -44,9 +44,22 @@ static Ret ftk_progress_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 {
+	int i = 0;
+	int finish_width = 0;
+	FtkGc gc = {.mask = FTK_GC_FG};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+
+	gc.fg = ftk_widget_get_gc(thiz)->bg;
+	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_round_rect(canvas, x, y, width, height, 1);
+	
+	gc.fg = ftk_widget_get_gc(thiz)->fg;
+	ftk_canvas_set_gc(canvas, &gc);
+	finish_width = width * priv->percent/100;
+
+	ftk_canvas_draw_round_rect(canvas, x, y, finish_width, height, 1);
+
 	FTK_END_PAINT();
 
 	return RET_OK;
@@ -95,9 +108,14 @@ Ret ftk_progress_bar_set_percent(FtkWidget* thiz, int percent)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	return_val_if_fail(percent >=0 && percent <= 100, RET_FAIL);
+	return_val_if_fail(percent >=0, RET_FAIL);
 
-	priv->percent = percent;
+	percent = percent > 100 ? 100 : percent;
+	if(percent != priv->percent)
+	{
+		priv->percent = percent;
+		ftk_widget_paint_self(thiz);
+	}
 
 	return RET_OK;
 }
