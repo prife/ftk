@@ -53,6 +53,7 @@ extern "C" {
 #include "ftk_status_item.h"
 #include "ftk_menu_panel.h"
 #include "ftk_menu_item.h"
+#include "ftk_progress_bar.h"
 
 Ret  ftk_init(int argc, char* argv[]);
 Ret  ftk_run(void);

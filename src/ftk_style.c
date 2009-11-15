@@ -14,6 +14,8 @@ static const FtkColor s_colors[FTK_COLOR_NR] =
 	[FTK_COLOR_BTNTEXT]      = {.a=0xff, .r=0x00, .g=0x00,.b=0x00},
 	[FTK_COLOR_MENU_BG]      = {.a=0xff, .r=0xff, .g=0xff,.b=0xff},
 	[FTK_COLOR_MENU_FG]      = {.a=0xff, .r=0xcc, .g=0xc9,.b=0xb8},
+	[FTK_COLOR_PROGRESS_BAR_BG] = {.a=0xff, .r=0x9d, .g=0x9e,.b=0x9d},
+	[FTK_COLOR_PROGRESS_BAR_FG] = {.a=0x80, .r=0xff, .g=0xd3,.b=0x00},
 };
 
 FtkColor ftk_style_get_color(FtkColorIndex index)

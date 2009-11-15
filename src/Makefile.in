@@ -44,7 +44,8 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
 	demo_menu$(EXEEXT) demo_entry$(EXEEXT) \
 	text_buffer_test$(EXEEXT) icon_cache_test$(EXEEXT) \
-	demo_expand$(EXEEXT) $(am__EXEEXT_1)
+	demo_expand$(EXEEXT) demo_progress_bar$(EXEEXT) \
+	$(am__EXEEXT_1)
 @FTK_BACKEND_X11_TRUE@am__append_1 = $(LINUX_X11)
 @FTK_BACKEND_FB_TRUE@am__append_2 = $(LINUX_NATIVE)
 @FTK_BACKEND_FB_TRUE@am__append_3 = display_fb_test input_test
@@ -172,6 +173,12 @@ demo_multi_win_LDADD = $(LDADD)
 demo_multi_win_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_multi_win_LDFLAGS) $(LDFLAGS) -o $@
+am_demo_progress_bar_OBJECTS = demo_progress_bar.$(OBJEXT)
+demo_progress_bar_OBJECTS = $(am_demo_progress_bar_OBJECTS)
+demo_progress_bar_LDADD = $(LDADD)
+demo_progress_bar_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(demo_progress_bar_LDFLAGS) $(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
 @FTK_BACKEND_FB_TRUE@am_display_fb_test_OBJECTS =  \
 @FTK_BACKEND_FB_TRUE@	display_fb_test.$(OBJEXT)
@@ -277,13 +284,14 @@ SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(demo_entry_SOURCES) $(demo_expand_SOURCES) \
 	$(demo_image_SOURCES) $(demo_image_button_SOURCES) \
 	$(demo_label_SOURCES) $(demo_menu_SOURCES) \
-	$(demo_multi_win_SOURCES) $(display_fb_test_SOURCES) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(input_test_SOURCES) \
-	$(label_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
+	$(demo_multi_win_SOURCES) $(demo_progress_bar_SOURCES) \
+	$(display_fb_test_SOURCES) $(font_test_SOURCES) \
+	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
+	$(input_test_SOURCES) $(label_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
+	$(util_test_SOURCES) widget_test.c
 DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(demo_button_SOURCES) \
@@ -291,6 +299,7 @@ DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
 	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
 	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
+	$(demo_progress_bar_SOURCES) \
 	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
 	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
 	$(am__input_test_SOURCES_DIST) $(label_test_SOURCES) \
@@ -440,6 +449,8 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 @FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS = .libs/libftk.a
+demo_progress_bar_SOURCES = demo_progress_bar.c
+demo_progress_bar_LDFLAGS = $(MYLDFLAGS)
 demo_expand_SOURCES = demo_expand.c
 demo_expand_LDFLAGS = $(MYLDFLAGS)
 icon_cache_test_SOURCES = icon_cache_test.c
@@ -621,6 +632,9 @@ demo_menu$(EXEEXT): $(demo_menu_OBJECTS) $(demo_menu_DEPENDENCIES)
 demo_multi_win$(EXEEXT): $(demo_multi_win_OBJECTS) $(demo_multi_win_DEPENDENCIES) 
 	@rm -f demo_multi_win$(EXEEXT)
 	$(demo_multi_win_LINK) $(demo_multi_win_OBJECTS) $(demo_multi_win_LDADD) $(LIBS)
+demo_progress_bar$(EXEEXT): $(demo_progress_bar_OBJECTS) $(demo_progress_bar_DEPENDENCIES) 
+	@rm -f demo_progress_bar$(EXEEXT)
+	$(demo_progress_bar_LINK) $(demo_progress_bar_OBJECTS) $(demo_progress_bar_LDADD) $(LIBS)
 display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
 	@rm -f display_fb_test$(EXEEXT)
 	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
@@ -682,6 +696,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_label.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_menu.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_multi_win.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_progress_bar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/display_fb_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fontdata.Plo@am__quote@

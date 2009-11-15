@@ -15,13 +15,13 @@ libftk_la_SOURCES=\
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c \
-	ftk_progress_bar.c
+	ftk_progress_bar.c    
 
 noinst_PROGRAMS=label_test widget_test demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
 	sources_manager_test demo_menu demo_entry text_buffer_test icon_cache_test \
-	demo_expand
+	demo_expand demo_progress_bar
 
 if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
@@ -38,6 +38,9 @@ endif
 
 INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS=.libs/libftk.a
+
+demo_progress_bar_SOURCES=demo_progress_bar.c
+demo_progress_bar_LDFLAGS=$(MYLDFLAGS)
 
 demo_expand_SOURCES=demo_expand.c
 demo_expand_LDFLAGS=$(MYLDFLAGS)

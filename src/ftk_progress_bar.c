@@ -44,6 +44,10 @@ static Ret ftk_progress_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 {
+	DECL_PRIV0(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	ftk_canvas_draw_round_rect(canvas, x, y, width, height, 1);
+	FTK_END_PAINT();
 
 	return RET_OK;
 }
