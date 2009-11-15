@@ -77,8 +77,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_icon_cache.c ftk_animator_expand.c ftk_display_x11.c \
-	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
+	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
+	ftk_display_x11.c ftk_source_x11.c ftk_display_fb.c \
+	ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
@@ -93,8 +94,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
 	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
 	ftk_app_window.lo ftk_entry.lo ftk_text_buffer.lo \
-	ftk_icon_cache.lo ftk_animator_expand.lo $(am__objects_2) \
-	$(am__objects_4)
+	ftk_icon_cache.lo ftk_animator_expand.lo ftk_progress_bar.lo \
+	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 #am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 #	input_test$(EXEEXT)
@@ -321,13 +322,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -338,7 +339,7 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -431,8 +432,8 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
 	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
 	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_icon_cache.c ftk_animator_expand.c $(am__append_1) \
-	$(am__append_2)
+	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
+	$(am__append_1) $(am__append_2)
 #display_fb_test_SOURCES = display_fb_test.c
 #display_fb_test_LDFLAGS = $(MYLDFLAGS)
 #input_test_SOURCES = input_test.c
@@ -706,6 +707,7 @@ include ./$(DEPDIR)/ftk_log.Plo
 include ./$(DEPDIR)/ftk_main_loop.Plo
 include ./$(DEPDIR)/ftk_menu_item.Plo
 include ./$(DEPDIR)/ftk_menu_panel.Plo
+include ./$(DEPDIR)/ftk_progress_bar.Plo
 include ./$(DEPDIR)/ftk_source_idle.Plo
 include ./$(DEPDIR)/ftk_source_input.Plo
 include ./$(DEPDIR)/ftk_source_primary.Plo
