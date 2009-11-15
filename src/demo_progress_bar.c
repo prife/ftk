@@ -37,17 +37,30 @@ int main(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	
 	width = width - 20;
-	progress_bar = ftk_progress_bar_create(1001, 10, 30, width, 20);
+	progress_bar = ftk_progress_bar_create(1001, 10, height/6, width, 20);
 	ftk_progress_bar_set_percent(progress_bar, 20);
 	ftk_widget_append_child(win, progress_bar);
 	ftk_widget_show(progress_bar, 1);
+	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
+	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
+	
+	progress_bar = ftk_progress_bar_create(1001, 10, height/3, width, 20);
+	ftk_progress_bar_set_percent(progress_bar, 20);
+	ftk_widget_append_child(win, progress_bar);
+	ftk_widget_show(progress_bar, 1);
+	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
+	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
+	
+	progress_bar = ftk_progress_bar_create(1001, 10, height/2, width, 20);
+	ftk_progress_bar_set_percent(progress_bar, 20);
+	ftk_widget_append_child(win, progress_bar);
+	ftk_widget_show(progress_bar, 1);
+	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
+	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
 	ftk_window_set_title(win, "progress_bar demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
-
-	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
-	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
 	ftk_run();
 
