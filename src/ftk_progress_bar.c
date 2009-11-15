@@ -49,6 +49,7 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 	FtkGc gc = {.mask = FTK_GC_FG};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	return_val_if_fail(width > 4 && height > 4, RET_FAIL);
 
 	gc.fg = ftk_widget_get_gc(thiz)->bg;
 	ftk_canvas_set_gc(canvas, &gc);
@@ -58,10 +59,10 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, &gc);
 	finish_width = width * priv->percent/100;
 
-	ftk_canvas_draw_round_rect(canvas, x, y, finish_width, height, 1);
+	ftk_canvas_draw_round_rect(canvas, x+1, y+1, finish_width-2, height-2, 1);
 	if(finish_width < width && finish_width > 2)
 	{
-		ftk_canvas_draw_rect(canvas, x + finish_width - 2, y, 2, height, 1);
+		ftk_canvas_draw_rect(canvas, x + finish_width - 2, y+1, 2, height-2, 1);
 	}
 	FTK_END_PAINT();
 

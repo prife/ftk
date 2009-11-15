@@ -39,7 +39,6 @@
 
 typedef struct _PrivInfo
 {
-	char* text;
 	FtkListener listener;
 	void* listener_ctx;
 }PrivInfo;
@@ -94,7 +93,6 @@ static const char* bg_imgs[FTK_WIDGET_STATE_NR] =
 static Ret ftk_button_on_paint(FtkWidget* thiz)
 {
 	FtkBitmap* bitmap = NULL;
-	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
@@ -103,15 +101,16 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
 	}
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->text != NULL)
+	if(ftk_widget_get_text(thiz) != NULL)
 	{
+		const char* text = ftk_widget_get_text(thiz);
 		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, priv->text, -1);
+		int fw = ftk_canvas_get_extent(canvas, text, -1);
 		int dx = (width - fw)>>1;
 		int dy = (height + 12)>>1;
 	
 		assert(fh < height && fw < width);
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, priv->text, -1);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, text, -1);
 	}
 
 	FTK_END_PAINT();
@@ -122,7 +121,6 @@ static void ftk_button_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
-		FTK_FREE(priv->text);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
@@ -160,26 +158,6 @@ FtkWidget* ftk_button_create(int id, int x, int y, int width, int height)
 	}
 
 	return thiz;
-}
-
-Ret ftk_button_set_text(FtkWidget* thiz, const char* text)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
-
-	FTK_FREE(priv->text);
-	priv->text = strdup(text);
-	ftk_widget_paint_self(thiz);
-
-	return RET_OK;
-}
-
-const char* ftk_button_get_text(FtkWidget* thiz)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, NULL);
-
-	return priv->text;
 }
 
 Ret ftk_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)

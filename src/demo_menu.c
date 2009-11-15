@@ -40,7 +40,7 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 		char text[32] = {0};
 		FtkWidget* item = ftk_menu_item_create(1000);
 		snprintf(text, sizeof(text), "Menu%02d", i);
-		ftk_menu_item_set_text(item, text);
+		ftk_widget_set_text(item, text);
 		ftk_widget_show(item, 1);
 		ftk_menu_panel_add(menu_panel, item);
 	}
@@ -61,13 +61,13 @@ static void create_app_window(void)
 	height = ftk_widget_height(win);
 
 	button = ftk_button_create(1001, 0, height/6, width/3, 50);
-	ftk_button_set_text(button, "打开新窗口");
+	ftk_widget_set_text(button, "打开新窗口");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_open_clicked, win);
 
 	button = ftk_button_create(1002, 2*width/3, height/6, width/3, 50);
-	ftk_button_set_text(button, "关闭当前窗口");
+	ftk_widget_set_text(button, "关闭当前窗口");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_close_clicked, win);

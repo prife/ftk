@@ -69,7 +69,7 @@ static void create_ani_window(int type, int sync)
 	height = ftk_widget_height(win);
 	
 	button = ftk_button_create(1001, width/3, height/3, width/3, 50);
-	ftk_button_set_text(button, "关闭");
+	ftk_widget_set_text(button, "关闭");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_close_clicked, win);
@@ -123,37 +123,37 @@ static void create_app_window(void)
 	height = ftk_widget_height(win);
 
 	button = ftk_button_create(1001, 0, height/6, width/3, 50);
-	ftk_button_set_text(button, "向右伸展");
+	ftk_widget_set_text(button, "向右伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_right_clicked, win);
 
 	button = ftk_button_create(1002, 2*width/3, height/6, width/3, 50);
-	ftk_button_set_text(button, "向下伸展");
+	ftk_widget_set_text(button, "向下伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_down_clicked, win);
 
 	button = ftk_button_create(1001, 0, height/6 + 80, width/3, 50);
-	ftk_button_set_text(button, "向右下伸展");
+	ftk_widget_set_text(button, "向右下伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_east_south_clicked, win);
 
 	button = ftk_button_create(1002, 2*width/3, height/6 + 80, width/3, 50);
-	ftk_button_set_text(button, "向左上伸展");
+	ftk_widget_set_text(button, "向左上伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_east_north_clicked, win);
 	
 	button = ftk_button_create(1002, 0, height/6 + 160, width/3, 50);
-	ftk_button_set_text(button, "向上伸展");
+	ftk_widget_set_text(button, "向上伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_up_clicked, win);
 	
 	button = ftk_button_create(1002, 2*width/3, height/6 + 160, width/3, 50);
-	ftk_button_set_text(button, "退出");
+	ftk_widget_set_text(button, "退出");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);

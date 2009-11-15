@@ -34,13 +34,13 @@ int main(int argc, char* argv[])
 	ftk_widget_show(label, 1);
 
 	button = ftk_button_create(1005, width/4, height/2, width/6, 50);
-	ftk_button_set_text(button, "yes");
+	ftk_widget_set_text(button, "yes");
 	ftk_widget_append_child(dialog, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	
 	button = ftk_button_create(1006, width/2, height/2, width/6, 50);
-	ftk_button_set_text(button, "no");
+	ftk_widget_set_text(button, "no");
 	ftk_widget_append_child(dialog, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);

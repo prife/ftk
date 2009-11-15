@@ -23,7 +23,7 @@ static Ret button_show_clicked(void* ctx, void* obj)
 
 static Ret button_default_clicked(void* ctx, void* obj)
 {
-	printf("%s: button %s is clicked.\n", __func__, ftk_button_get_text(obj));
+	printf("%s: button %s is clicked.\n", __func__, ftk_widget_get_text(obj));
 
 	return RET_OK;
 }
@@ -50,37 +50,37 @@ int main(int argc, char* argv[])
 	
 	width = width/3 - 10;
 	button = ftk_button_create(1001,0, 30, width, 50);
-	ftk_button_set_text(button, "show");
+	ftk_widget_set_text(button, "show");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_show_clicked, win);
 
 	button = ftk_button_create(1002, width + 10, 30, width, 50);
-	ftk_button_set_text(button, "hide");
+	ftk_widget_set_text(button, "hide");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_hide_clicked, win);
 	
 	button = ftk_button_create(1003, 2*(width + 10), 30, width, 50);
-	ftk_button_set_text(button, "按钮测试");
+	ftk_widget_set_text(button, "按钮测试");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
 	button = ftk_button_create(1004, 0, 130, width, 40);
-	ftk_button_set_text(button, "yes");
+	ftk_widget_set_text(button, "yes");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
 	button = ftk_button_create(1005, 2*(width + 10), 130, width, 40);
-	ftk_button_set_text(button, "no");
+	ftk_widget_set_text(button, "no");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
 	button = ftk_button_create(1006, width + 10, height/2, width, 80);
-	ftk_button_set_text(button, "quit");
+	ftk_widget_set_text(button, "quit");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);

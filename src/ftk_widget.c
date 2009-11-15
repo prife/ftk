@@ -50,6 +50,7 @@ struct _FtkWidgetInfo
 	FtkWidgetState state;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
 	void* user_data;
+	char* text;
 	FtkDestroy user_data_destroy;
 };
 
@@ -242,6 +243,13 @@ void* ftk_widget_user_data(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
 
 	return thiz->priv->user_data;
+}
+
+const char* ftk_widget_get_text(FtkWidget* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
+
+	return thiz->priv->text;
 }
 
 void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
@@ -604,6 +612,21 @@ void    ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 	return;
 }
 
+void ftk_widget_set_text(FtkWidget* thiz, const char* text)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+	
+	FTK_FREE(thiz->priv->text);
+
+	if(text != NULL)
+	{
+		thiz->priv->text = strdup(text);
+	}
+	ftk_widget_paint_self(thiz);
+
+	return;
+}
+
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz)
 {
 	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
@@ -658,6 +681,7 @@ void ftk_widget_destroy(FtkWidget* thiz)
 		{
 			thiz->priv->user_data_destroy(thiz->priv->user_data);
 		}
+		FTK_FREE(thiz->priv->text);
 		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
 	}
