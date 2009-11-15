@@ -103,8 +103,9 @@ static const char* radio_bg_imgs[FTK_WIDGET_STATE_NR] =
 static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 {
 	FtkBitmap* bitmap = NULL;
+	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	const char** bg_images = priv->radio ? radio_bg_imgs : check_bg_imgs;
+	const char** bg_imgs = priv->radio ? radio_bg_imgs : check_bg_imgs;
 
 	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
 	{
@@ -145,6 +146,7 @@ FtkWidget* ftk_check_button_create_ex(int id, int x, int y, int width, int heigh
 
 	if(thiz != NULL)
 	{
+		DECL_PRIV0(thiz, priv);
 		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 

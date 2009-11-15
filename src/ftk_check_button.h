@@ -37,7 +37,7 @@
 FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_check_button_create(int id, int x, int y, int width, int height);
-FtkWidget* ftk_radio_button_create(int id, int x, int y, int width, int height, FtkWidget* group);
+FtkWidget* ftk_radio_button_create(int id, int x, int y, int width, int height);
 int        ftk_check_button_get_checked(FtkWidget* thiz);
 Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked);
 Ret        ftk_check_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
