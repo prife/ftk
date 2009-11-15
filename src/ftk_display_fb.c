@@ -187,7 +187,7 @@ static Ret ftk_display_fb_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
 	unsigned short* src = priv->fb.bits;
 
 	*bitmap = ftk_bitmap_create(w, h, bg);
-	return_val_if_fail(thiz != *bitmap, RET_FAIL);
+	return_val_if_fail(thiz != NULL && NULL != *bitmap, RET_FAIL);
 
 	dst = ftk_bitmap_bits(*bitmap);
 

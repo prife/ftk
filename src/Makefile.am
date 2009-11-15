@@ -15,7 +15,7 @@ libftk_la_SOURCES=\
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c \
-	ftk_progress_bar.c    
+	ftk_progress_bar.c    ftk_radio_group.c
 
 noinst_PROGRAMS=label_test widget_test demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
