@@ -104,6 +104,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 {
 	FtkBitmap* bitmap = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	const char** bg_images = priv->radio ? radio_bg_imgs : check_bg_imgs;
 
 	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
 	{
@@ -177,12 +178,9 @@ FtkWidget* ftk_check_button_create(int id, int x, int y, int width, int height)
 	return ftk_check_button_create_ex(id, x, y, width, height, 0);	
 }
 
-FtkWidget* ftk_radio_button_create(int id, int x, int y, int width, int height, FtkWidget* group)
+FtkWidget* ftk_radio_button_create(int id, int x, int y, int width, int height)
 {
-	FtkWidget* thiz = ftk_check_button_create_ex(id, x, y, width, height, 1);	
-
-	
-	return thiz;
+	return ftk_check_button_create_ex(id, x, y, width, height, 1);	
 }
 
 int        ftk_check_button_get_checked(FtkWidget* thiz)
@@ -198,7 +196,11 @@ Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	priv->checked = checked;
+	if(priv->checked != checked)
+	{
+		priv->checked = checked;
+		ftk_widget_paint_self(thiz);
+	}
 
 	return RET_OK;
 }
