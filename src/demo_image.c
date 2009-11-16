@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	ftk_widget_append_child(win, image);
 	ftk_widget_show(image, 1);
 
-	ftk_window_set_title(win, "image demo");
+	ftk_widget_set_text(win, "image demo");
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);

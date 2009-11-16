@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	ftk_window_set_focus(win, button);
 
-	ftk_window_set_title(win, "button demo");
+	ftk_widget_set_text(win, "button demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 

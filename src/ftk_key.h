@@ -176,4 +176,5 @@ typedef enum _FtkKey
 	FTK_KEY_MENU        = FTK_KEY_F2,
 }FtkKey;
 
+#define FTK_IS_ACTIVE_KEY(key) ((key) == FTK_KEY_ENTER || (key) == FTK_KEY_SPACE)
 #endif/*_FTK_KEY_H*/

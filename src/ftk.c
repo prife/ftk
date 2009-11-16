@@ -238,14 +238,14 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 
 			if(top_window != NULL)
 			{
-				ftk_status_item_set_text(title_widget, ftk_window_get_title(top_window));
+				ftk_status_item_set_text(title_widget, ftk_widget_get_text(top_window));
 			}
 			else
 			{
 				ftk_status_item_set_text(title_widget, NULL);
 			}
 			ftk_widget_set_user_data(title_widget, NULL, top_window);
-			ftk_logd("top_window changed: %s\n", ftk_window_get_title(top_window));
+			ftk_logd("top_window changed: %s\n", ftk_widget_get_text(top_window));
 			ret = RET_REMOVE;
 			break;
 		}
@@ -256,7 +256,7 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 			FtkWidget* top_window = ftk_widget_user_data(title_widget);
 			if(top_window == event->widget)
 			{
-				ftk_status_item_set_text(title_widget, ftk_window_get_title(top_window));
+				ftk_status_item_set_text(title_widget, ftk_widget_get_text(top_window));
 			}
 			
 			ftk_logd("%s: config changed: %p %p\n", __func__, top_window, event->widget);
@@ -277,7 +277,7 @@ static Ret button_close_top_clicked(void* ctx, void* obj)
 
 	if(top_window != NULL && ftk_widget_type(top_window) == FTK_WINDOW)
 	{
-		ftk_logd("%s: close window %s\n", __func__, ftk_window_get_title(top_window));
+		ftk_logd("%s: close window %s\n", __func__, ftk_widget_get_text(top_window));
 		ftk_widget_unref(top_window);
 		ftk_widget_set_user_data(title_widget, NULL, NULL);
 	}

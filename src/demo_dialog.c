@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	ftk_window_set_focus(dialog, button);
 
-	ftk_window_set_title(dialog, "dialog demo");
+	ftk_widget_set_text(dialog, "dialog demo");
 	ftk_widget_show(dialog, 1);
 	ftk_widget_set_user_data(dialog, on_window_close, dialog);
 

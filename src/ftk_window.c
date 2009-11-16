@@ -36,7 +36,6 @@
 
 typedef struct _PrivInfo
 {
-	char* title;
 	FtkCanvas*  canvas;
 	FtkDisplay* display;
 	FtkWidget*  focus_widget;
@@ -294,35 +293,11 @@ static void ftk_window_destroy(FtkWidget* thiz)
 
 		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 
-		FTK_FREE(priv->title);
 		ftk_canvas_destroy(priv->canvas);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
 	return;
-}
-
-Ret        ftk_window_set_title(FtkWidget* thiz, const char* title)
-{
-	DECL_PRIV0(thiz, priv);
-	FtkEvent event = {.type = FTK_EVT_WND_CONFIG_CHANGED};
-	return_val_if_fail(priv != NULL && title != NULL, RET_FAIL);
-
-	FTK_FREE(priv->title);
-	priv->title = strdup(title);
-
-	event.widget = thiz;
-	ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
-
-	return RET_OK;
-}
-
-const char*ftk_window_get_title(FtkWidget* thiz)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(priv != NULL, NULL);
-
-	return priv->title;
 }
 
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
@@ -441,8 +416,8 @@ int main(int argc, char* argv[])
 	ftk_window_set_focus(thiz, NULL);
 	assert(ftk_window_get_focus(thiz) == NULL);
 
-	ftk_window_set_title(thiz, "HelloWorld.");
-	assert(strcmp(ftk_window_get_title(thiz), "HelloWorld.") == 0);
+	ftk_widget_set_text(thiz, "HelloWorld.");
+	assert(strcmp(ftk_widget_get_text(thiz), "HelloWorld.") == 0);
 	ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_show(thiz, 1);
 	ftk_widget_paint(thiz);

@@ -41,7 +41,7 @@ static Ret button_to_up_clicked(void* ctx, void* obj)
 static Ret button_close_clicked(void* ctx, void* obj)
 {
 	FtkWidget* win = ctx;
-	ftk_logd("%s: close window %s\n", __func__, ftk_window_get_title(win));
+	ftk_logd("%s: close window %s\n", __func__, ftk_widget_get_text(win));
 	ftk_widget_unref(win);
 
 	return RET_OK;
@@ -51,7 +51,7 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 {
 	FtkWidget* win = ctx;
 	ftk_widget_unref(win);
-	ftk_logd("%s: close window %s\n", __func__, ftk_window_get_title(win));
+	ftk_logd("%s: close window %s\n", __func__, ftk_widget_get_text(win));
 
 	return RET_OK;
 }
@@ -159,7 +159,7 @@ static void create_app_window(void)
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 
 	snprintf(title, sizeof(title), "伸展动画效果测试");
-	ftk_window_set_title(win, title);
+	ftk_widget_set_text(win, title);
 	ftk_widget_set_user_data(win, on_window_close, win);
 		
 	ftk_widget_show(win, 1);

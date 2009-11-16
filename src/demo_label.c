@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 	ftk_widget_show(label, 1);
 	info.label = label;
 	
-	ftk_window_set_title(win, "label demo");
+	ftk_widget_set_text(win, "label demo");
 
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	ftk_widget_show(win, 1);

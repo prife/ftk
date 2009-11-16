@@ -106,6 +106,7 @@ typedef Ret (*FtkIdle)(void* user_data);
 typedef Ret (*FtkTimer)(void* user_data);
 typedef Ret (*FtkListener)(void* user_data, void* obj);
 
+#define FTK_CALL_LISTENER(listener, u, o) if(listener != NULL) {listener(u, o);}
 #define return_if_fail(p) if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
 #define return_val_if_fail(p, val) if(!(p)) {printf("%s:%d "#p" failed.\n", __func__, __LINE__); return (val);}
 

@@ -11,7 +11,7 @@ static Ret button_open_clicked(void* ctx, void* obj)
 static Ret button_close_clicked(void* ctx, void* obj)
 {
 	FtkWidget* win = ctx;
-	ftk_logd("%s: close window %s\n", __func__, ftk_window_get_title(win));
+	ftk_logd("%s: close window %s\n", __func__, ftk_widget_get_text(win));
 	ftk_widget_unref(win);
 
 	return RET_OK;
@@ -62,7 +62,7 @@ static void create_app_window(void)
 	ftk_widget_show(label, 1);
 	ftk_widget_append_child(win, label);
 	
-	ftk_window_set_title(win, title);
+	ftk_widget_set_text(win, title);
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 

@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 	ftk_widget_append_child(win, entry);
 	ftk_widget_show(entry, 1);
 
-	ftk_window_set_title(win, "entry demo");
+	ftk_widget_set_text(win, "entry demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 

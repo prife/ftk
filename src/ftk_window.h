@@ -41,8 +41,6 @@ Ret        ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget);
 FtkWidget* ftk_window_get_focus(FtkWidget* thiz);
 Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget);
 Ret        ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget);
-Ret        ftk_window_set_title(FtkWidget* thiz, const char* title);
-const char*ftk_window_get_title(FtkWidget* thiz);
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);
 Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
 int        ftk_window_is_fullscreen(FtkWidget* thiz);

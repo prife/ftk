@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
-	ftk_window_set_title(win, "progress_bar demo");
+	ftk_widget_set_text(win, "progress_bar demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 

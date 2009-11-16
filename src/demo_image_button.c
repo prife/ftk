@@ -93,7 +93,7 @@ int main(int argc, char* argv[])
 			}
 		}
 	}
-	ftk_window_set_title(win, "image button demo");
+	ftk_widget_set_text(win, "image button demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 
