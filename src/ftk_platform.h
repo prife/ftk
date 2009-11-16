@@ -62,6 +62,7 @@
 #define FTK_ZALLOC(s)      calloc(1, s)
 #define FTK_FREE(p)        if(p) {free(p); p = NULL;}
 #define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
+#define FTK_STRDUP(p)      p != NULL ? strdup(p) : NULL
 
 #endif/*FTK_PLATFORM_H*/
 

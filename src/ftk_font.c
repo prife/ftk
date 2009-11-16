@@ -71,7 +71,7 @@ FtkFont*  ftk_font_create (const char* filename, size_t size)
 		}
 		else
 		{
-			thiz->filename = strdup(filename);
+			thiz->filename = FTK_STRDUP(filename);
 		}
 	}
 

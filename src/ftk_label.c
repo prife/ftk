@@ -117,7 +117,7 @@ Ret ftk_label_set_text(FtkWidget* thiz, const char* text)
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	FTK_FREE(priv->text);
-	priv->text = strdup(text);
+	priv->text = FTK_STRDUP(text);
 	ftk_widget_paint_self(thiz);
 
 	return RET_OK;

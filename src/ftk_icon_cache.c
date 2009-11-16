@@ -91,7 +91,7 @@ static Ret ftk_icon_cache_add(FtkIconCache* thiz, const char* filename, FtkBitma
 	{
 		ftk_bitmap_ref(bitmap);
 		thiz->pairs[thiz->nr].bitmap = bitmap;
-		thiz->pairs[thiz->nr].filename = strdup(filename);
+		thiz->pairs[thiz->nr].filename = FTK_STRDUP(filename);
 		thiz->nr++;
 	}
 

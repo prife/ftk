@@ -620,7 +620,7 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 
 	if(text != NULL)
 	{
-		thiz->priv->text = strdup(text);
+		thiz->priv->text = FTK_STRDUP(text);
 	}
 	ftk_widget_paint_self(thiz);
 
