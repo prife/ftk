@@ -10,6 +10,7 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 static Ret button_hide_clicked(void* ctx, void* obj)
 {
 	ftk_widget_show(ftk_widget_lookup(ctx, 1003), 0);
+	ftk_check_button_set_checked(obj, !ftk_check_button_get_checked(obj));
 
 	return RET_OK;
 }
@@ -17,6 +18,7 @@ static Ret button_hide_clicked(void* ctx, void* obj)
 static Ret button_show_clicked(void* ctx, void* obj)
 {
 	ftk_widget_show(ftk_widget_lookup(ctx, 1003), 1);
+	ftk_check_button_set_checked(obj, !ftk_check_button_get_checked(obj));
 
 	return RET_OK;
 }
