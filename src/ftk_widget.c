@@ -206,8 +206,8 @@ Ret ftk_widget_update(FtkWidget* thiz)
 
 	priv =  thiz->priv;
 	event.type = FTK_EVT_UPDATE;
-	event.u.rect.x = priv->left;
-	event.u.rect.y = priv->top;
+	event.u.rect.x = ftk_widget_left_in_window(thiz);
+	event.u.rect.y = ftk_widget_top_in_window(thiz);
 	event.u.rect.width = priv->width;
 	event.u.rect.height = priv->height;
 		

@@ -36,6 +36,7 @@
 #include "ftk_style.h"
 #include "ftk_icon_cache.h"
 #include "ftk_check_button.h"
+#include "ftk_radio_group.h"
 
 typedef struct _PrivInfo
 {
@@ -65,10 +66,20 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			ftk_widget_set_active(thiz, 0);
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+			if(priv->radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_RADIO_GROUP)
+			{
+				ftk_radio_group_set_checked(ftk_widget_parent(thiz), thiz);
+			}
+			else
+			{
+				ftk_check_button_set_checked(thiz, !priv->checked);
+			}
+			
 			if(priv->listener != NULL)
 			{
 				ret = priv->listener(priv->listener_ctx, thiz);
 			}
+			
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
