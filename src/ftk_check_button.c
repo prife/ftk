@@ -50,6 +50,23 @@ typedef struct _PrivInfo
 #define FTK_BUTTON_LEFT_MARGIN 3
 #define FTK_BUTTON_TOP_MARGIN  3
 
+static Ret ftk_check_button_check(FtkWidget* thiz)
+{
+	Ret ret = RET_OK;
+	DECL_PRIV0(thiz, priv);
+	
+	if(priv->radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_RADIO_GROUP)
+	{
+		ret = ftk_radio_group_set_checked(ftk_widget_parent(thiz), thiz);
+	}
+	else
+	{
+		ret = ftk_check_button_set_checked(thiz, !priv->checked);
+	}
+
+	return ret;
+}
+
 static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
@@ -66,27 +83,25 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			ftk_widget_set_active(thiz, 0);
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
-			if(priv->radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_RADIO_GROUP)
-			{
-				ftk_radio_group_set_checked(ftk_widget_parent(thiz), thiz);
-			}
-			else
-			{
-				ftk_check_button_set_checked(thiz, !priv->checked);
-			}
-			
-			if(priv->listener != NULL)
-			{
-				ret = priv->listener(priv->listener_ctx, thiz);
-			}
-			
+			ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+			ftk_check_button_check(thiz);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
-			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
-				ret = priv->listener(priv->listener_ctx, thiz);
+				ftk_widget_set_active(thiz, 1);
+			}
+			break;
+		}
+		case FTK_EVT_KEY_UP:
+		{
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
+			{
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+				ftk_widget_set_active(thiz, 0);
+				ftk_check_button_check(thiz);
 			}
 			break;
 		}

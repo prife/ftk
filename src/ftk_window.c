@@ -45,12 +45,13 @@ typedef struct _PrivInfo
 }PrivInfo;
 
 static Ret ftk_window_realize(FtkWidget* thiz);
+
 Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && thiz != focus_widget, RET_FAIL);
 
-	if(priv->focus_widget == focus_widget)
+	if(priv->focus_widget == focus_widget || focus_widget->children != NULL)
 	{
 		return RET_OK;
 	}
@@ -101,10 +102,88 @@ Ret ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget)
 	return RET_OK;
 }
 
+static FtkWidget* ftk_window_find_prev_focus(FtkWidget* focus_widget, int move_prev)
+{
+	FtkWidget* temp = NULL;
+	FtkWidget* parent = NULL;
+	FtkWidget* iter = move_prev ? ftk_widget_prev(focus_widget) : focus_widget;
+
+	for(; iter != NULL; iter = ftk_widget_prev(iter))
+	{
+		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter))
+		{
+			continue;
+		}
+
+		if(iter->children != NULL)
+		{
+			temp = ftk_window_find_prev_focus(ftk_widget_last_child(iter), 0);
+			if(temp != NULL)
+			{
+				return temp;
+			}
+		}
+		else
+		{
+			return iter;
+		}
+	}
+
+	parent = ftk_widget_parent(focus_widget);
+	if(parent != NULL && parent->prev != NULL)
+	{
+		temp = ftk_window_find_prev_focus(parent->prev, 0);
+		if(temp != NULL)
+		{
+			return temp;
+		}
+	}
+	
+	return focus_widget;
+}
+
+static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_next)
+{
+	FtkWidget* temp = NULL;
+	FtkWidget* parent = NULL;
+	FtkWidget* iter = move_next ? ftk_widget_next(focus_widget) : focus_widget;
+	for(; iter != NULL; iter = ftk_widget_next(iter))
+	{
+		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter))
+		{
+			continue;
+		}
+
+		if(iter->children != NULL)
+		{
+			temp = ftk_window_find_next_focus(iter->children, 0);
+			if(temp != NULL)
+			{
+				return temp;
+			}
+		}
+		else
+		{
+			return iter;
+		}
+	}
+
+	parent = ftk_widget_parent(focus_widget);
+	if(parent != NULL && parent->next != NULL)
+	{
+		temp = ftk_window_find_next_focus(parent->next, 0);
+		if(temp != NULL)
+		{
+			return temp;
+		}
+	}
+	
+	return focus_widget;
+}
+
 static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_FAIL;
-	FtkWidget* iter = NULL;
 	DECL_PRIV0(thiz, priv);
 
 	if(priv->focus_widget == NULL)
@@ -130,30 +209,17 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_LEFT:
 		case FTK_KEY_UP:
 		{
-			iter = priv->focus_widget;
-			while((iter = ftk_widget_prev(iter)) != NULL)
-			{
-				if(!ftk_widget_is_insensitive(iter) && ftk_widget_is_visible(iter))
-				{
-					ftk_window_set_focus(thiz, iter);
-					break;
-				}
-			}
+			FtkWidget* focus_widget = ftk_window_find_prev_focus(priv->focus_widget, 1);
+			ftk_window_set_focus(thiz, focus_widget);
 			break;
 		}
 		case FTK_KEY_DOWN:
 		case FTK_KEY_RIGHT:
 		case FTK_KEY_TAB:
 		{
-			iter = priv->focus_widget;
-			while((iter = ftk_widget_next(iter)) != NULL)
-			{
-				if(!ftk_widget_is_insensitive(iter) && ftk_widget_is_visible(iter))
-				{
-					ftk_window_set_focus(thiz, iter);
-					break;
-				}
-			}
+			FtkWidget* focus_widget = ftk_window_find_next_focus(priv->focus_widget, 1);
+			ftk_window_set_focus(thiz, focus_widget);
+
 			break;
 		}
 		default:break;

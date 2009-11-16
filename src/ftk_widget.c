@@ -568,6 +568,18 @@ FtkWidget* ftk_widget_child(FtkWidget* thiz)
 	return thiz != NULL ? thiz->children : NULL;
 }
 
+FtkWidget* ftk_widget_last_child(FtkWidget* thiz)
+{
+	FtkWidget* iter = NULL;
+	return_val_if_fail(thiz != NULL && thiz->children != NULL, NULL);
+
+	for(iter = thiz->children; iter->next != NULL; iter = iter->next)
+	{
+	}
+
+	return iter;
+}
+
 FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id)
 {
 	FtkWidget* iter = thiz;

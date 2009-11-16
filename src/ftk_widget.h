@@ -126,6 +126,7 @@ FtkWidget* ftk_widget_parent(FtkWidget* thiz);
 FtkWidget* ftk_widget_prev(FtkWidget* thiz);
 FtkWidget* ftk_widget_next(FtkWidget* thiz);
 FtkWidget* ftk_widget_child(FtkWidget* thiz);
+FtkWidget* ftk_widget_last_child(FtkWidget* thiz);
 FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id);
 FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y);
 

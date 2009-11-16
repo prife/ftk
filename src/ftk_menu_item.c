@@ -34,6 +34,7 @@
 #include "ftk_menu_item.h"
 #include "ftk_globals.h"
 #include "ftk_icon_cache.h"
+#include "ftk_window.h"
 
 typedef struct _PrivInfo
 {

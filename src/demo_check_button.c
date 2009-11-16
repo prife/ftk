@@ -45,16 +45,9 @@ int main(int argc, char* argv[])
 	ftk_widget_show(button, 1);
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
-	group = ftk_radio_group_create(2000, 0, 90, width, height - 200);
+	group = ftk_radio_group_create(2000, 0, 90, 2 * width, 60);
 	ftk_widget_show(group, 1);
 	ftk_widget_append_child(win, group);
-	
-	button = ftk_radio_button_create(1002, width + 10, 10, width, 50);
-	ftk_widget_set_text(button, "Female");
-	ftk_widget_append_child(group, button);
-	ftk_widget_show(button, 1);
-	ftk_check_button_set_clicked_listener(button, button_clicked, win);
-	
 	
 	button = ftk_radio_button_create(1001,0, 10, width, 50);
 	ftk_widget_set_text(button, "Male");
@@ -62,7 +55,13 @@ int main(int argc, char* argv[])
 	ftk_widget_show(button, 1);
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 
-	button = ftk_button_create(1006, width + 10, height/2, width, 80);
+	button = ftk_radio_button_create(1002, width + 10, 10, width, 50);
+	ftk_widget_set_text(button, "Female");
+	ftk_widget_append_child(group, button);
+	ftk_widget_show(button, 1);
+	ftk_check_button_set_clicked_listener(button, button_clicked, win);
+	
+	button = ftk_button_create(1006, width/2, height/2 + 10, width, 80);
 	ftk_widget_set_text(button, "quit");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
