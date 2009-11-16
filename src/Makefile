@@ -45,10 +45,10 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	demo_menu$(EXEEXT) demo_entry$(EXEEXT) \
 	text_buffer_test$(EXEEXT) icon_cache_test$(EXEEXT) \
 	demo_expand$(EXEEXT) demo_progress_bar$(EXEEXT) \
-	$(am__EXEEXT_1)
-am__append_1 = $(LINUX_X11)
-#am__append_2 = $(LINUX_NATIVE)
-#am__append_3 = display_fb_test input_test
+	demo_check_button$(EXEEXT) $(am__EXEEXT_1)
+#am__append_1 = $(LINUX_X11)
+am__append_2 = $(LINUX_NATIVE)
+am__append_3 = display_fb_test input_test
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -82,9 +82,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_radio_group.c ftk_check_button.c ftk_display_x11.c \
 	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
-am__objects_2 = $(am__objects_1)
+#am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
-#am__objects_4 = $(am__objects_3)
+am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font.lo ftk_main_loop.lo \
@@ -99,8 +99,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_radio_group.lo ftk_check_button.lo $(am__objects_2) \
 	$(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
-#am__EXEEXT_1 = display_fb_test$(EXEEXT) \
-#	input_test$(EXEEXT)
+am__EXEEXT_1 = display_fb_test$(EXEEXT) \
+	input_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -126,6 +126,12 @@ demo_button_LDADD = $(LDADD)
 demo_button_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_button_LDFLAGS) $(LDFLAGS) -o $@
+am_demo_check_button_OBJECTS = demo_check_button.$(OBJEXT)
+demo_check_button_OBJECTS = $(am_demo_check_button_OBJECTS)
+demo_check_button_LDADD = $(LDADD)
+demo_check_button_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(demo_check_button_LDFLAGS) $(LDFLAGS) -o $@
 am_demo_dialog_OBJECTS = demo_dialog.$(OBJEXT)
 demo_dialog_OBJECTS = $(am_demo_dialog_OBJECTS)
 demo_dialog_LDADD = $(LDADD)
@@ -181,8 +187,8 @@ demo_progress_bar_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_progress_bar_LDFLAGS) $(LDFLAGS) -o $@
 am__display_fb_test_SOURCES_DIST = display_fb_test.c
-#am_display_fb_test_OBJECTS =  \
-#	display_fb_test.$(OBJEXT)
+am_display_fb_test_OBJECTS =  \
+	display_fb_test.$(OBJEXT)
 display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
 display_fb_test_LDADD = $(LDADD)
 display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -207,7 +213,7 @@ icon_cache_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(icon_cache_test_LDFLAGS) $(LDFLAGS) -o $@
 am__input_test_SOURCES_DIST = input_test.c
-#am_input_test_OBJECTS = input_test.$(OBJEXT)
+am_input_test_OBJECTS = input_test.$(OBJEXT)
 input_test_OBJECTS = $(am_input_test_OBJECTS)
 input_test_LDADD = $(LDADD)
 input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -281,26 +287,26 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
 	$(bitmap_test_SOURCES) $(canvas_test_SOURCES) \
-	$(demo_button_SOURCES) $(demo_dialog_SOURCES) \
-	$(demo_entry_SOURCES) $(demo_expand_SOURCES) \
-	$(demo_image_SOURCES) $(demo_image_button_SOURCES) \
-	$(demo_label_SOURCES) $(demo_menu_SOURCES) \
-	$(demo_multi_win_SOURCES) $(demo_progress_bar_SOURCES) \
-	$(display_fb_test_SOURCES) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
-	$(input_test_SOURCES) $(label_test_SOURCES) \
-	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
-	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
-	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
-DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
-	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(demo_button_SOURCES) \
+	$(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
 	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
 	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
-	$(demo_progress_bar_SOURCES) \
+	$(demo_progress_bar_SOURCES) $(display_fb_test_SOURCES) \
+	$(font_test_SOURCES) $(ftk_test_SOURCES) \
+	$(icon_cache_test_SOURCES) $(input_test_SOURCES) \
+	$(label_test_SOURCES) $(log_test_SOURCES) \
+	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
+	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
+	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
+DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
+	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
+	$(canvas_test_SOURCES) $(demo_button_SOURCES) \
+	$(demo_check_button_SOURCES) $(demo_dialog_SOURCES) \
+	$(demo_entry_SOURCES) $(demo_expand_SOURCES) \
+	$(demo_image_SOURCES) $(demo_image_button_SOURCES) \
+	$(demo_label_SOURCES) $(demo_menu_SOURCES) \
+	$(demo_multi_win_SOURCES) $(demo_progress_bar_SOURCES) \
 	$(am__display_fb_test_SOURCES_DIST) $(font_test_SOURCES) \
 	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
 	$(am__input_test_SOURCES_DIST) $(label_test_SOURCES) \
@@ -332,7 +338,7 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g -O2 -DUSE_LINUX_NATIVE -DPC_EMU
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -356,7 +362,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
+LDFLAGS = 
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -445,12 +451,14 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
 	ftk_radio_group.c ftk_check_button.c $(am__append_1) \
 	$(am__append_2)
-#display_fb_test_SOURCES = display_fb_test.c
-#display_fb_test_LDFLAGS = $(MYLDFLAGS)
-#input_test_SOURCES = input_test.c
-#input_test_LDFLAGS = $(MYLDFLAGS)
+display_fb_test_SOURCES = display_fb_test.c
+display_fb_test_LDFLAGS = $(MYLDFLAGS)
+input_test_SOURCES = input_test.c
+input_test_LDFLAGS = $(MYLDFLAGS)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS = .libs/libftk.a
+demo_check_button_SOURCES = demo_check_button.c
+demo_check_button_LDFLAGS = $(MYLDFLAGS)
 demo_progress_bar_SOURCES = demo_progress_bar.c
 demo_progress_bar_LDFLAGS = $(MYLDFLAGS)
 demo_expand_SOURCES = demo_expand.c
@@ -610,6 +618,9 @@ canvas_test$(EXEEXT): $(canvas_test_OBJECTS) $(canvas_test_DEPENDENCIES)
 demo_button$(EXEEXT): $(demo_button_OBJECTS) $(demo_button_DEPENDENCIES) 
 	@rm -f demo_button$(EXEEXT)
 	$(demo_button_LINK) $(demo_button_OBJECTS) $(demo_button_LDADD) $(LIBS)
+demo_check_button$(EXEEXT): $(demo_check_button_OBJECTS) $(demo_check_button_DEPENDENCIES) 
+	@rm -f demo_check_button$(EXEEXT)
+	$(demo_check_button_LINK) $(demo_check_button_OBJECTS) $(demo_check_button_LDADD) $(LIBS)
 demo_dialog$(EXEEXT): $(demo_dialog_OBJECTS) $(demo_dialog_DEPENDENCIES) 
 	@rm -f demo_dialog$(EXEEXT)
 	$(demo_dialog_LINK) $(demo_dialog_OBJECTS) $(demo_dialog_LDADD) $(LIBS)
@@ -690,6 +701,7 @@ include ./$(DEPDIR)/bitmap_factory_test.Po
 include ./$(DEPDIR)/bitmap_test.Po
 include ./$(DEPDIR)/canvas_test.Po
 include ./$(DEPDIR)/demo_button.Po
+include ./$(DEPDIR)/demo_check_button.Po
 include ./$(DEPDIR)/demo_dialog.Po
 include ./$(DEPDIR)/demo_entry.Po
 include ./$(DEPDIR)/demo_expand.Po

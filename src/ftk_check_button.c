@@ -41,6 +41,7 @@ typedef struct _PrivInfo
 {
 	int radio;
 	int checked;
+	int icon_at_right;
 	FtkListener listener;
 	void* listener_ctx;
 }PrivInfo;
@@ -84,45 +85,85 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
-static const char* check_bg_imgs[FTK_WIDGET_STATE_NR] = 
+static const char* check_bg_on_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL] = "btn_default_normal.png",
-	[FTK_WIDGET_ACTIVE] = "btn_default_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_default_normal_disable.png",
-	[FTK_WIDGET_FOCUSED] = "btn_default_selected.png"
+	[FTK_WIDGET_NORMAL]      = "btn_check_on.png",
+	[FTK_WIDGET_ACTIVE]      = "btn_check_on_pressed.png",
+	[FTK_WIDGET_INSENSITIVE] = "btn_check_on_disable.png",
+	[FTK_WIDGET_FOCUSED]     = "btn_check_on_selected.png"
 };
 
-static const char* radio_bg_imgs[FTK_WIDGET_STATE_NR] = 
+static const char* check_bg_off_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL] = "btn_default_normal.png",
-	[FTK_WIDGET_ACTIVE] = "btn_default_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_default_normal_disable.png",
-	[FTK_WIDGET_FOCUSED] = "btn_default_selected.png"
+	[FTK_WIDGET_NORMAL]      = "btn_check_off.png",
+	[FTK_WIDGET_ACTIVE]      = "btn_check_off_pressed.png",
+	[FTK_WIDGET_INSENSITIVE] = "btn_check_off_disable.png",
+	[FTK_WIDGET_FOCUSED]     = "btn_check_off_selected.png"
+};
+
+static const char* radio_bg_on_imgs[FTK_WIDGET_STATE_NR] = 
+{
+	[FTK_WIDGET_NORMAL]      = "btn_radio_on.png",
+	[FTK_WIDGET_ACTIVE]      = "btn_radio_on_pressed.png",
+	[FTK_WIDGET_INSENSITIVE] = "btn_radio_on.png",
+	[FTK_WIDGET_FOCUSED]     = "btn_radio_on_selected.png"
+};
+
+static const char* radio_bg_off_imgs[FTK_WIDGET_STATE_NR] = 
+{
+	[FTK_WIDGET_NORMAL]      = "btn_radio_off.png",
+	[FTK_WIDGET_ACTIVE]      = "btn_radio_off_pressed.png",
+	[FTK_WIDGET_INSENSITIVE] = "btn_radio_off.png",
+	[FTK_WIDGET_FOCUSED]     = "btn_radio_off_selected.png"
 };
 
 static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 {
+	int icon_x = 0;
+	int icon_y = 0;
+	int icon_w = 0;
+	int icon_h = 0;
+
 	FtkBitmap* bitmap = NULL;
 	DECL_PRIV0(thiz, priv);
+	const char** bg_imgs = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	const char** bg_imgs = priv->radio ? radio_bg_imgs : check_bg_imgs;
-
-	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
+	
+	if(priv->radio)
 	{
-		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
-		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
+		bg_imgs = priv->checked ? radio_bg_on_imgs : radio_bg_off_imgs;
+	}
+	else
+	{
+		bg_imgs = priv->checked ? check_bg_on_imgs : check_bg_off_imgs;
+	}
+
+	bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
+	
+	if(bitmap != NULL)
+	{
+		icon_w = ftk_bitmap_width(bitmap);
+		icon_h = ftk_bitmap_height(bitmap);
+		assert(icon_w <= width && icon_h <= height);
+
+		if(priv->icon_at_right)
+		{
+		}
+		else
+		{
+			icon_x = FTK_BUTTON_LEFT_MARGIN;
+			icon_y = (height - icon_h) / 2;
+		}
+		ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, icon_w, icon_h, x + icon_x, y + icon_y);
 	}
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		const char* text = ftk_widget_get_text(thiz);
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, text, -1);
-		int dx = (width - fw)>>1;
 		int dy = (height + 12)>>1;
+		int dx = priv->icon_at_right ? FTK_BUTTON_LEFT_MARGIN : icon_w + 2 * FTK_BUTTON_LEFT_MARGIN;
 	
-		assert(fh < height && fw < width);
 		ftk_canvas_draw_string(canvas, x + dx, y + dy, text, -1);
 	}
 
@@ -146,10 +187,10 @@ FtkWidget* ftk_check_button_create_ex(int id, int x, int y, int width, int heigh
 
 	if(thiz != NULL)
 	{
-		DECL_PRIV0(thiz, priv);
 		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 
+		DECL_PRIV0(thiz, priv);
 		priv->radio = radio;
 		thiz->on_event = ftk_check_button_on_event;
 		thiz->on_paint = ftk_check_button_on_paint;
@@ -191,6 +232,20 @@ int        ftk_check_button_get_checked(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL, 0);
 
 	return priv->checked;
+}
+
+Ret ftk_check_button_set_icon_position(FtkWidget* thiz, int at_right)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(priv->icon_at_right != at_right)
+	{
+		priv->icon_at_right = at_right;
+		ftk_widget_paint_self(thiz);
+	}
+
+	return RET_OK;
 }
 
 Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked)

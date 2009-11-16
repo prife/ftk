@@ -21,7 +21,7 @@ noinst_PROGRAMS=label_test widget_test demo_label demo_button demo_image demo_im
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
 	sources_manager_test demo_menu demo_entry text_buffer_test icon_cache_test \
-	demo_expand demo_progress_bar
+	demo_expand demo_progress_bar demo_check_button
 
 if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
@@ -38,6 +38,9 @@ endif
 
 INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
 MYLDFLAGS=.libs/libftk.a
+
+demo_check_button_SOURCES=demo_check_button.c
+demo_check_button_LDFLAGS=$(MYLDFLAGS)
 
 demo_progress_bar_SOURCES=demo_progress_bar.c
 demo_progress_bar_LDFLAGS=$(MYLDFLAGS)
