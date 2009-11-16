@@ -1,7 +1,16 @@
-1.code review and test.
-2.optimize
-3.window manager/more widget.
-4.document.
-5.port to windows.
-6.Javascript and XML binding.
-7.a lightweight browser.
+o basic widget.
+  listview
+  scrollbar.
+
+o input method
+o screen rotate
+o mouse cursor
+o cairo
+
+o document
+o port to windows.
+o Javascript and XML binding.
+o port j2me
+o port webkit
+o desktop env.
+
