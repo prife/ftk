@@ -147,6 +147,7 @@ static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_n
 	FtkWidget* temp = NULL;
 	FtkWidget* parent = NULL;
 	FtkWidget* iter = move_next ? ftk_widget_next(focus_widget) : focus_widget;
+
 	for(; iter != NULL; iter = ftk_widget_next(iter))
 	{
 		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter))
@@ -185,6 +186,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_FAIL;
 	DECL_PRIV0(thiz, priv);
+	FtkWidget* focus_widget = NULL;
 
 	if(priv->focus_widget == NULL)
 	{
@@ -209,7 +211,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_LEFT:
 		case FTK_KEY_UP:
 		{
-			FtkWidget* focus_widget = ftk_window_find_prev_focus(priv->focus_widget, 1);
+			focus_widget = ftk_window_find_prev_focus(priv->focus_widget, 1);
 			ftk_window_set_focus(thiz, focus_widget);
 			break;
 		}
@@ -217,7 +219,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_RIGHT:
 		case FTK_KEY_TAB:
 		{
-			FtkWidget* focus_widget = ftk_window_find_next_focus(priv->focus_widget, 1);
+			focus_widget = ftk_window_find_next_focus(priv->focus_widget, 1);
 			ftk_window_set_focus(thiz, focus_widget);
 
 			break;
@@ -276,14 +278,12 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			FtkEvent event = {.type = FTK_EVT_SHOW, .widget = thiz};
 			ftk_window_realize(thiz);
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
-
 			break;
 		}
 		case FTK_EVT_HIDE:
 		{
 			FtkEvent event = {.type = FTK_EVT_HIDE, .widget = thiz};
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
-			/*FIXME*/
 			break;
 		}
 		case FTK_EVT_MOUSE_DOWN:
@@ -311,9 +311,10 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_window_realize(FtkWidget* thiz)
 {
+	DECL_PRIV0(thiz, priv);
 	int w = ftk_widget_width(thiz);
 	int h = ftk_widget_height(thiz);
-	DECL_PRIV0(thiz, priv);
+
 	if(priv->canvas != NULL)
 	{
 		FtkBitmap* bitmap = ftk_canvas_bitmap(priv->canvas);
