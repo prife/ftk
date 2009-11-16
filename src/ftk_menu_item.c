@@ -46,33 +46,35 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
-
 	switch(event->type)
 	{
 		case FTK_EVT_MOUSE_DOWN:
 		{
-			priv->menu_item_down = 1;
 			ftk_widget_set_active(thiz, 1);
-			ftk_logd("%s: FTK_EVT_MOUSE_DOWN\n", __func__);
+			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
 			ftk_widget_set_active(thiz, 0);
-			if(priv->menu_item_down && priv->listener != NULL)
-			{
-				ret = priv->listener(priv->listener_ctx, thiz);
-			}
-			priv->menu_item_down = 0;
-			ftk_logd("%s: FTK_EVT_MOUSE_UP\n", __func__);
+			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+			ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
-			ftk_logd("%s: FTK_EVT_KEY_DOWN\n", __func__);
-			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
-				ret = priv->listener(priv->listener_ctx, thiz);
+				ftk_widget_set_active(thiz, 1);
+			}
+			break;
+		}
+		case FTK_EVT_KEY_UP:
+		{
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
+			{
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+				ftk_widget_set_active(thiz, 0);
 			}
 			break;
 		}

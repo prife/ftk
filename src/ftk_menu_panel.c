@@ -181,7 +181,8 @@ static Ret  ftk_menu_panel_on_event(FtkWidget* thiz, FtkEvent* event)
 
 	ret = priv->parent_on_event(thiz, event);
 
-	if(event->type == FTK_EVT_MOUSE_UP && ret != RET_IGNORED)
+	if((event->type == FTK_EVT_MOUSE_UP && ret != RET_IGNORED)
+		|| (event->type == FTK_EVT_KEY_UP && FTK_IS_ACTIVE_KEY(event->u.key.code)))
 	{
 		ftk_widget_unref(thiz);
 	}

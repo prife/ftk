@@ -62,7 +62,7 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			ftk_widget_set_active(thiz, 0);
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
-			FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+			ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
@@ -70,7 +70,6 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
 				ftk_widget_set_active(thiz, 1);
-				FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 			}
 			break;
 		}
@@ -78,6 +77,7 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 				ftk_widget_set_active(thiz, 0);
 			}
 			break;
