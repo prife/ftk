@@ -29,11 +29,12 @@
  *
  */
 
-FTK_INHERITE_FROM(Window);
 
 #ifndef FTK_MENU_PANEL_H
 #define FTK_MENU_PANEL_H
 #include "ftk_window.h"
+
+FTK_INHERITE_FROM(Window);
 
 FtkWidget* ftk_menu_panel_create(void);
 Ret ftk_menu_panel_relayout(FtkWidget* thiz);

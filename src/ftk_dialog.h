@@ -33,6 +33,8 @@
 #define FTK_DIALOG_H
 #include "ftk_window.h"
 
+FTK_INHERITE_FROM(Window)
+
 FtkWidget* ftk_dialog_create(int x, int y, int width, int height);
 int ftk_dialog_run(FtkWidget* thiz);
 
