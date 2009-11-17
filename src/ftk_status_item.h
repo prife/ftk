@@ -44,12 +44,8 @@ FtkWidget* ftk_status_item_create(int id, int width, int height);
  *  >0: from first to last. eg. 1 means the first place. 2 means the second place.
  *  <0: from last to first. eg. -1 means the last place.
  **/
-Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos);
-int         ftk_status_item_get_position(FtkWidget* thiz);
-
-Ret         ftk_status_item_set_text(FtkWidget* thiz, const char* text);
-const char* ftk_status_item_get_text(FtkWidget* thiz);
-
+Ret ftk_status_item_set_position(FtkWidget* thiz, int pos);
+int ftk_status_item_get_position(FtkWidget* thiz);
 Ret ftk_status_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
 #endif/*FTK_STATUS_ITEM_H*/

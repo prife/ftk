@@ -30,13 +30,12 @@
  */
 
 #include "ftk_log.h"
+#include "ftk_window.h"
 #include "ftk_status_item.h"
 
 typedef struct _PrivInfo
 {
 	int pos;
-	char* text;
-	int status_item_down;
 	FtkListener listener;
 	void* listener_ctx;
 }PrivInfo;
@@ -45,31 +44,35 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
-
 	switch(event->type)
 	{
 		case FTK_EVT_MOUSE_DOWN:
 		{
-			priv->status_item_down = 1;
-			ftk_logd("%s: FTK_EVT_MOUSE_DOWN\n", __func__);
+			ftk_widget_set_active(thiz, 1);
+			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
-			if(priv->status_item_down && priv->listener != NULL)
-			{
-				ret = priv->listener(priv->listener_ctx, thiz);
-			}
-			priv->status_item_down = 0;
-			ftk_logd("%s: FTK_EVT_MOUSE_UP\n", __func__);
+			ftk_widget_set_active(thiz, 0);
+			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+			ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
-			ftk_logd("%s: FTK_EVT_KEY_DOWN\n", __func__);
-			if(priv->listener != NULL && event->u.key.code == FTK_KEY_ENTER)
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
-				ret = priv->listener(priv->listener_ctx, thiz);
+				ftk_widget_set_active(thiz, 1);
+			}
+			break;
+		}
+		case FTK_EVT_KEY_UP:
+		{
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
+			{
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+				ftk_widget_set_active(thiz, 0);
 			}
 			break;
 		}
@@ -81,19 +84,18 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 {
-	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->text != NULL)
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
+	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		int dx = 2;
 		int dy = height/2;
 		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, priv->text, -1);
+		int fw = ftk_canvas_get_extent(canvas, ftk_widget_get_text(thiz), -1);
 	
 		assert(fh < height && fw < width);
-		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, priv->text, -1, 1);
+		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
 	}
 
 	FTK_END_PAINT();
@@ -104,7 +106,6 @@ static void ftk_status_item_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
-		FTK_FREE(priv->text);
 		FTK_FREE(priv);
 	}
 
@@ -130,26 +131,6 @@ FtkWidget* ftk_status_item_create(int id, int width, int height)
 	}
 
 	return thiz;
-}
-
-Ret ftk_status_item_set_text(FtkWidget* thiz, const char* text)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
-
-	FTK_FREE(priv->text);
-	priv->text = FTK_STRDUP(text);
-	ftk_widget_paint_self(thiz);
-
-	return RET_OK;
-}
-
-const char* ftk_status_item_get_text(FtkWidget* thiz)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, NULL);
-
-	return priv->text;
 }
 
 Ret         ftk_status_item_set_position(FtkWidget* thiz, int pos)

@@ -145,6 +145,7 @@ static void ftk_deinit(void)
 		ftk_set_display(NULL);
 	}
 
+	ftk_logd("%s: ftk exit.\n", __func__);
 	return;
 }
 
@@ -237,11 +238,11 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 
 			if(top_window != NULL)
 			{
-				ftk_status_item_set_text(title_widget, ftk_widget_get_text(top_window));
+				ftk_widget_set_text(title_widget, ftk_widget_get_text(top_window));
 			}
 			else
 			{
-				ftk_status_item_set_text(title_widget, NULL);
+				ftk_widget_set_text(title_widget, NULL);
 			}
 			ftk_widget_set_user_data(title_widget, NULL, top_window);
 			ftk_logd("top_window changed: %s\n", ftk_widget_get_text(top_window));
@@ -255,7 +256,7 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 			FtkWidget* top_window = ftk_widget_user_data(title_widget);
 			if(top_window == event->widget)
 			{
-				ftk_status_item_set_text(title_widget, ftk_widget_get_text(top_window));
+				ftk_widget_set_text(title_widget, ftk_widget_get_text(top_window));
 			}
 			
 			ftk_logd("%s: config changed: %p %p\n", __func__, top_window, event->widget);
@@ -296,6 +297,7 @@ static void ftk_init_panel(void)
 	gc.mask = FTK_GC_BITMAP;
 	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "status-bg.png");
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
+	ftk_widget_set_gc(panel, FTK_WIDGET_ACTIVE, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
 	ftk_gc_reset(&gc);
 	
@@ -305,6 +307,7 @@ static void ftk_init_panel(void)
 	{
 		gc.mask = FTK_GC_BITMAP;
 		ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+		ftk_widget_set_gc(item, FTK_WIDGET_ACTIVE, &gc);
 		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
 		ftk_gc_reset(&gc);
 	}
@@ -319,6 +322,7 @@ static void ftk_init_panel(void)
 	{
 		gc.mask = FTK_GC_BITMAP;
 		ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
+		ftk_widget_set_gc(item, FTK_WIDGET_ACTIVE, &gc);
 		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
 		ftk_gc_reset(&gc);
 	}
