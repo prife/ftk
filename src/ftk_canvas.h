@@ -57,6 +57,7 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
 Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
 Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill);
 Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len);
+Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, int len, int vcenter);
 
 int ftk_canvas_font_height(FtkCanvas* thiz);
 int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len);

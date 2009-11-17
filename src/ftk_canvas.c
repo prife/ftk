@@ -466,7 +466,7 @@ Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fi
 	return RET_OK;
 }
 
-Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len)
+Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, int len, int vcenter)
 {
 	int i = 0;
 	int j = 0;
@@ -504,6 +504,8 @@ Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int l
 			continue;
 		}
 		if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) continue;
+		
+		glyph.y = vcenter ? glyph.y >> 1 : glyph.y;
 		if((x + glyph.x + glyph.w) >= width) break;
 		if((y - glyph.y + glyph.h) >= height) break;
 
@@ -530,6 +532,11 @@ Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int l
 	}
 
 	return RET_OK;
+}
+
+Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len)
+{
+	return ftk_canvas_draw_string_ex(thiz, x, y, str, len, 0);
 }
 
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)

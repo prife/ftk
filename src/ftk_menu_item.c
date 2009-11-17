@@ -110,10 +110,10 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 		int fh = ftk_canvas_font_height(canvas);
 		int fw = ftk_canvas_get_extent(canvas, text, -1);
 		int dx = (width - fw)>>1;
-		int dy = (height + 12)>>1;
+		int dy = height>>1;
 	
 		assert(fh < height && fw < width);
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, text, -1);
+		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
 	}
 	
 	FTK_END_PAINT();

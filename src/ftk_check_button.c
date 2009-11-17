@@ -174,11 +174,11 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		dy = (height + 12)/2;
+		dy = height/2;
 		dx = priv->icon_at_right ? 2 : icon_w;
 		
 		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1);
+		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
 	}
 
 	FTK_END_PAINT();
