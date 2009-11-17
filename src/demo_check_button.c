@@ -61,14 +61,31 @@ int main(int argc, char* argv[])
 	ftk_widget_show(button, 1);
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
-	button = ftk_button_create(1006, width/2, height/2 + 10, width, 80);
+	group = ftk_radio_group_create(2000, 0, 160, 2 * width, 60);
+	ftk_widget_show(group, 1);
+	ftk_widget_append_child(win, group);
+	button = ftk_radio_button_create(1001,0, 10, width, 50);
+	ftk_widget_set_text(button, "1(图标在右加)");
+	ftk_widget_append_child(group, button);
+	ftk_check_button_set_icon_position(button, 1);
+	ftk_widget_show(button, 1);
+	ftk_check_button_set_clicked_listener(button, button_clicked, win);
+
+	button = ftk_radio_button_create(1002, width + 10, 10, width, 50);
+	ftk_widget_set_text(button, "2(图标在右边)");
+	ftk_widget_append_child(group, button);
+	ftk_check_button_set_icon_position(button, 1);
+	ftk_widget_show(button, 1);
+	ftk_check_button_set_clicked_listener(button, button_clicked, win);
+	
+	button = ftk_button_create(1006, width/2, 3*height/4, width, 80);
 	ftk_widget_set_text(button, "quit");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	ftk_window_set_focus(win, button);
 
-	ftk_widget_set_text(win, "button demo");
+	ftk_widget_set_text(win, "check button demo");
 	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 

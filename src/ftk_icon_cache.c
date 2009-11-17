@@ -55,6 +55,7 @@ static FtkBitmap* ftk_icon_cache_find(FtkIconCache* thiz, const char* filename)
 	{
 		if(strcmp(filename, thiz->pairs[i].filename) == 0)
 		{
+			ftk_bitmap_ref(thiz->pairs[i].bitmap);
 			return thiz->pairs[i].bitmap;
 		}
 	}

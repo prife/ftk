@@ -40,22 +40,19 @@
 
 typedef struct _PrivInfo
 {
-	int radio;
 	int checked;
+	int is_radio;
 	int icon_at_right;
 	FtkListener listener;
 	void* listener_ctx;
 }PrivInfo;
-
-#define FTK_BUTTON_LEFT_MARGIN 3
-#define FTK_BUTTON_TOP_MARGIN  3
 
 static Ret ftk_check_button_check(FtkWidget* thiz)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
 	
-	if(priv->radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_RADIO_GROUP)
+	if(priv->is_radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_RADIO_GROUP)
 	{
 		ret = ftk_radio_group_set_checked(ftk_widget_parent(thiz), thiz);
 	}
@@ -81,9 +78,9 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
-			ftk_widget_set_active(thiz, 0);
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
 			ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+			ftk_widget_set_active(thiz, 0);
 			ftk_check_button_check(thiz);
 			break;
 		}
@@ -145,8 +142,8 @@ static const char* radio_bg_off_imgs[FTK_WIDGET_STATE_NR] =
 
 static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 {
-	int icon_x = 0;
-	int icon_y = 0;
+	int dx = 0;
+	int dy = 0;
 	int icon_w = 0;
 	int icon_h = 0;
 
@@ -155,7 +152,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 	const char** bg_imgs = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
-	if(priv->radio)
+	if(priv->is_radio)
 	{
 		bg_imgs = priv->checked ? radio_bg_on_imgs : radio_bg_off_imgs;
 	}
@@ -165,32 +162,23 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 	}
 
 	bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
-	
-	if(bitmap != NULL)
-	{
-		icon_w = ftk_bitmap_width(bitmap);
-		icon_h = ftk_bitmap_height(bitmap);
-		assert(icon_w <= width && icon_h <= height);
+	return_val_if_fail(bitmap != NULL, RET_FAIL);
 
-		if(priv->icon_at_right)
-		{
-		}
-		else
-		{
-			icon_x = FTK_BUTTON_LEFT_MARGIN;
-			icon_y = (height - icon_h) / 2;
-		}
-		ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, icon_w, icon_h, x + icon_x, y + icon_y);
-	}
+	icon_w = ftk_bitmap_width(bitmap);
+	icon_h = ftk_bitmap_height(bitmap);
+	assert((icon_w) <= width && icon_h <= height);
 
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+	dy = (height - icon_h) / 2;
+	dx = priv->icon_at_right ? width - icon_w : 0;
+	ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, icon_w, icon_h, x + dx, y + dy);
+
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		const char* text = ftk_widget_get_text(thiz);
-		int dy = (height + 12)>>1;
-		int dx = priv->icon_at_right ? FTK_BUTTON_LEFT_MARGIN : icon_w + 2 * FTK_BUTTON_LEFT_MARGIN;
-	
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, text, -1);
+		dy = (height + 12)/2;
+		dx = priv->icon_at_right ? 2 : icon_w;
+		
+		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1);
 	}
 
 	FTK_END_PAINT();
@@ -217,7 +205,7 @@ FtkWidget* ftk_check_button_create_ex(int id, int x, int y, int width, int heigh
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 
 		DECL_PRIV0(thiz, priv);
-		priv->radio = radio;
+		priv->is_radio = radio;
 		thiz->on_event = ftk_check_button_on_event;
 		thiz->on_paint = ftk_check_button_on_paint;
 		thiz->destroy  = ftk_check_button_destroy;

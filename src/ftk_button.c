@@ -43,9 +43,6 @@ typedef struct _PrivInfo
 	void* listener_ctx;
 }PrivInfo;
 
-#define FTK_BUTTON_LEFT_MARGIN 3
-#define FTK_BUTTON_TOP_MARGIN  3
-
 static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
