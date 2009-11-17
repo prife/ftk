@@ -216,6 +216,7 @@ Ret ftk_run(void)
 void ftk_quit(void)
 {
 	ftk_main_loop_quit(ftk_default_main_loop());
+	ftk_logd("%s\n", __func__);
 
 	return;
 }
