@@ -148,7 +148,6 @@ static void ftk_deinit(void)
 	return;
 }
 
-
 Ret ftk_init(int argc, char* argv[])
 {
 	FtkFont* font = NULL;

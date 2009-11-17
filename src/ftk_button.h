@@ -1,7 +1,7 @@
 /*
  * File: ftk_button.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   button widget 
+ * Brief:   button
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -37,7 +37,6 @@
 FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_button_create(int id, int x, int y, int width, int height);
-
 Ret ftk_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
 #endif/*FTK_BUTTON_H*/

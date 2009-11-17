@@ -30,11 +30,11 @@
  */
 
 #include "ftk_log.h"
+#include "ftk_style.h"
+#include "ftk_window.h"
 #include "ftk_canvas.h"
 #include "ftk_button.h"
 #include "ftk_globals.h"
-#include "ftk_window.h"
-#include "ftk_style.h"
 #include "ftk_icon_cache.h"
 
 typedef struct _PrivInfo
@@ -98,21 +98,24 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 	FtkBitmap* bitmap = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
+	/*Icon button has its own background images*/
 	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
 	{
 		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
 		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
+		ftk_bitmap_unref(bitmap);
 	}
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		const char* text = ftk_widget_get_text(thiz);
 		int fh = ftk_canvas_font_height(canvas);
 		int fw = ftk_canvas_get_extent(canvas, text, -1);
 		int dx = (width - fw)>>1;
-		int dy = (height)/2;
+		int dy = height/2;
 	
 		assert(fh < height && fw < width);
+		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
 	}
 
