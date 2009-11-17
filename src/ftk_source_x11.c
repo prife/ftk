@@ -126,7 +126,7 @@ static const int s_key_map[] =
 
 static int ftk_source_x11_keymap(FtkSource* thiz, Display* display, int keycode)
 {
-	/*FIXME:*/
+	/*FIXME: complete the keymap table.*/
 	ftk_logd("%03x --> %03x %c\n", keycode, s_key_map[0xff&keycode], (char)s_key_map[0xff&keycode]);
 	return s_key_map[0xff&keycode] ? s_key_map[0xff&keycode] : keycode;
 }

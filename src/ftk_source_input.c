@@ -45,6 +45,8 @@ typedef struct _PrivInfo
 }PrivInfo;
 
 #include <linux/input.h>
+
+/*FIXME: complete the keymap table.*/
 static unsigned short s_key_map[0x100] = 
 {
 	[KEY_1]           =  FTK_KEY_1,
