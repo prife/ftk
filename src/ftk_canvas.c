@@ -774,7 +774,7 @@ Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int 
 		bits = ftk_bitmap_bits(bitmap) + bw * tile_h;
 		for(i = 0; i < tile_w; i++)
 		{
-			gc.fg = bits[ bw/2 + i];
+			gc.fg = bits[ (bw >> 1) + i];
 			ftk_canvas_set_gc(canvas, &gc);
 			ftk_canvas_draw_vline(canvas, ox + i, oy, oh);
 		}

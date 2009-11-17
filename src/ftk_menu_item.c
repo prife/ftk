@@ -103,7 +103,7 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
 	}
 
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz));
 	if(ftk_widget_get_text(thiz))
 	{
 		const char* text = ftk_widget_get_text(thiz);

@@ -106,6 +106,7 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		ftk_bitmap_unref(bitmap);
 	}
 
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		const char* text = ftk_widget_get_text(thiz);
@@ -115,7 +116,6 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		int dy = height/2;
 	
 		assert(fh < height && fw < width);
-		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
 	}
 
