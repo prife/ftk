@@ -335,7 +335,7 @@ static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent*
 	{
 		event->u.key.code = priv->shift_down ? event->u.key.code - FTK_KEY_A + FTK_KEY_a : event->u.key.code;
 	}
-	else
+	else if(event->u.key.code < 0xff)
 	{
 		if(priv->shift_down && key_tanslate_table[event->u.key.code & 0xff]) 
 		{

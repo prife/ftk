@@ -175,7 +175,7 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		default:
 		{
-			if(isprint(event->u.key.code & 0xff))
+			if(event->u.key.code < 0xff && isprint(event->u.key.code))
 			{
 				ftk_entry_input_char(thiz, event->u.key.code);
 			}
