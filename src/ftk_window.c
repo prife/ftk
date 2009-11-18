@@ -477,7 +477,7 @@ int main(int argc, char* argv[])
 {
 	FtkGc gc = {0};
 	gc.mask = FTK_GC_FONT;
-	gc.font = ftk_font_create("./unicode.fnt", 16);
+	gc.font = ftk_font_default_create("./unicode.fnt", 0, 0, 16);
 	FtkDisplay* display = ftk_display_fb_create(FTK_FB_NAME);
 	FtkWidget* thiz = ftk_window_create(display, 100, 0, 0, 320, 480);
 	ftk_window_set_focus(thiz, NULL);

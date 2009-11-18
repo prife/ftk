@@ -4,7 +4,7 @@ int main(int argc, char* argv[])
 {
 	FtkGlyph glyph = {0};
 	unsigned short c = 'a';
-	FtkFont* font = ftk_font_create("./unicode.fnt", 16);
+	FtkFont* font = ftk_font_default_create("./unicode.fnt", 0, 0, 16);
 	for(c = 'a'; c != 'z'; c++)
 	{
 		assert(ftk_font_lookup(font, c, &glyph) == RET_OK);

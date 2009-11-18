@@ -53,11 +53,11 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void)
 	if(thiz != NULL)
 	{
 #ifdef HAS_JPEG
-		ftk_bitmap_factory_add_decoder(ftk_default_bitmap_factory(), ftk_image_jpeg_decoder_create());	
+		ftk_bitmap_factory_add_decoder(thiz, ftk_image_jpeg_decoder_create());	
 #endif
 
 #ifdef HAS_PNG
-		ftk_bitmap_factory_add_decoder(ftk_default_bitmap_factory(), ftk_image_png_decoder_create());
+		ftk_bitmap_factory_add_decoder(thiz, ftk_image_png_decoder_create());
 #endif
 	}
 

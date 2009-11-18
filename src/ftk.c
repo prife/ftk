@@ -36,6 +36,7 @@
 #include "ftk_bitmap_factory.h"
 #include "ftk_status_panel.h"
 #include "ftk_status_item.h"
+#include "ftk_font_default.h"
 
 #ifdef USE_LINUX_NATIVE
 #include "ftk_display_fb.h"
@@ -150,10 +151,10 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_icon_cache(ftk_icon_cache_create());
 
 	snprintf(filename, sizeof(filename), "./data/%s", FTK_FONT);
-	if((font = ftk_font_create(filename, 0)) == NULL)
+	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
 	{
 		snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
-		font = ftk_font_create(filename, 0);
+		font = ftk_font_default_create(filename, 0, 0, 0);
 	}
 
 	if(font != NULL)

@@ -71,34 +71,34 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libftk_la_LIBADD =
 am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_wnd_manager_default.c fontdata.c ftk_label.c \
-	ftk_source_timer.c ftk_bitmap.c ftk_font.c ftk_main_loop.c \
-	ftk_util.c ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
-	ftk_source_idle.c ftk_widget.c ftk.c ftk_image_png_decoder.c \
-	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
-	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
-	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
-	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
-	ftk_radio_group.c ftk_check_button.c ftk_linux.c \
-	ftk_display_x11.c ftk_source_x11.c ftk_display_fb.c \
-	ftk_source_input.c
+	ftk_source_timer.c ftk_bitmap.c ftk_font_default.c \
+	ftk_main_loop.c ftk_util.c ftk_bitmap_factory.c \
+	ftk_image_jpeg_decoder.c ftk_source_idle.c ftk_widget.c ftk.c \
+	ftk_image_png_decoder.c ftk_window.c ftk_sources_manager.c \
+	ftk_globals.c ftk_button.c ftk_image.c ftk_log.c ftk_dialog.c \
+	ftk_status_item.c ftk_status_panel.c ftk_style.c \
+	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
+	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
+	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
+	ftk_linux.c ftk_display_x11.c ftk_source_x11.c \
+	ftk_display_fb.c ftk_source_input.c
 am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
 #am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
 am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
-	ftk_source_timer.lo ftk_bitmap.lo ftk_font.lo ftk_main_loop.lo \
-	ftk_util.lo ftk_bitmap_factory.lo ftk_image_jpeg_decoder.lo \
-	ftk_source_idle.lo ftk_widget.lo ftk.lo \
-	ftk_image_png_decoder.lo ftk_window.lo ftk_sources_manager.lo \
-	ftk_globals.lo ftk_button.lo ftk_image.lo ftk_log.lo \
-	ftk_dialog.lo ftk_status_item.lo ftk_status_panel.lo \
-	ftk_style.lo ftk_menu_panel.lo ftk_menu_item.lo \
-	ftk_app_window.lo ftk_entry.lo ftk_text_buffer.lo \
-	ftk_icon_cache.lo ftk_animator_expand.lo ftk_progress_bar.lo \
-	ftk_radio_group.lo ftk_check_button.lo ftk_linux.lo \
-	$(am__objects_2) $(am__objects_4)
+	ftk_source_timer.lo ftk_bitmap.lo ftk_font_default.lo \
+	ftk_main_loop.lo ftk_util.lo ftk_bitmap_factory.lo \
+	ftk_image_jpeg_decoder.lo ftk_source_idle.lo ftk_widget.lo \
+	ftk.lo ftk_image_png_decoder.lo ftk_window.lo \
+	ftk_sources_manager.lo ftk_globals.lo ftk_button.lo \
+	ftk_image.lo ftk_log.lo ftk_dialog.lo ftk_status_item.lo \
+	ftk_status_panel.lo ftk_style.lo ftk_menu_panel.lo \
+	ftk_menu_item.lo ftk_app_window.lo ftk_entry.lo \
+	ftk_text_buffer.lo ftk_icon_cache.lo ftk_animator_expand.lo \
+	ftk_progress_bar.lo ftk_radio_group.lo ftk_check_button.lo \
+	ftk_linux.lo $(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 	input_test$(EXEEXT)
@@ -442,16 +442,16 @@ LINUX_NATIVE = ftk_display_fb.c ftk_source_input.c
 LINUX_X11 = ftk_display_x11.c ftk_source_x11.c
 libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_wnd_manager_default.c fontdata.c ftk_label.c \
-	ftk_source_timer.c ftk_bitmap.c ftk_font.c ftk_main_loop.c \
-	ftk_util.c ftk_bitmap_factory.c ftk_image_jpeg_decoder.c \
-	ftk_source_idle.c ftk_widget.c ftk.c ftk_image_png_decoder.c \
-	ftk_window.c ftk_sources_manager.c ftk_globals.c ftk_button.c \
-	ftk_image.c ftk_log.c ftk_dialog.c ftk_status_item.c \
-	ftk_status_panel.c ftk_style.c ftk_menu_panel.c \
-	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
-	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
-	ftk_radio_group.c ftk_check_button.c ftk_linux.c \
-	$(am__append_1) $(am__append_2)
+	ftk_source_timer.c ftk_bitmap.c ftk_font_default.c \
+	ftk_main_loop.c ftk_util.c ftk_bitmap_factory.c \
+	ftk_image_jpeg_decoder.c ftk_source_idle.c ftk_widget.c ftk.c \
+	ftk_image_png_decoder.c ftk_window.c ftk_sources_manager.c \
+	ftk_globals.c ftk_button.c ftk_image.c ftk_log.c ftk_dialog.c \
+	ftk_status_item.c ftk_status_panel.c ftk_style.c \
+	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
+	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
+	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
+	ftk_linux.c $(am__append_1) $(am__append_2)
 display_fb_test_SOURCES = display_fb_test.c
 display_fb_test_LDFLAGS = $(MYLDFLAGS)
 input_test_SOURCES = input_test.c
@@ -727,7 +727,7 @@ include ./$(DEPDIR)/ftk_dialog.Plo
 include ./$(DEPDIR)/ftk_display_fb.Plo
 include ./$(DEPDIR)/ftk_display_x11.Plo
 include ./$(DEPDIR)/ftk_entry.Plo
-include ./$(DEPDIR)/ftk_font.Plo
+include ./$(DEPDIR)/ftk_font_default.Plo
 include ./$(DEPDIR)/ftk_globals.Plo
 include ./$(DEPDIR)/ftk_icon_cache.Plo
 include ./$(DEPDIR)/ftk_image.Plo

@@ -1,7 +1,7 @@
 /*
  * File: ftk_font.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   font interface.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -28,6 +28,7 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
 #ifndef FTK_FONT_H
 #define FTK_FONT_H
 
@@ -46,10 +47,39 @@ typedef struct _FtkGlyph
 struct _FtkFont;
 typedef struct _FtkFont FtkFont;
 
-FtkFont* ftk_font_create (const char* filename, size_t size);
-int      ftk_font_height(FtkFont* thiz);
-Ret      ftk_font_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* glyph);
-void     ftk_font_destroy(FtkFont* thiz);
+typedef int  (*FtkFontHeight)(FtkFont* thiz);
+typedef Ret  (*FtkFontLookup)(FtkFont* thiz, unsigned short code, FtkGlyph* glyph);
+typedef void (*FtkFontDestroy)(FtkFont* thiz);
+
+struct _FtkFont
+{
+	FtkFontHeight  height;
+	FtkFontLookup  lookup;
+	FtkFontDestroy destroy;
+
+	char priv[1];
+};
+
+static inline int      ftk_font_height(FtkFont* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->height != NULL, 16);
+
+	return thiz->height(thiz);
+}
+
+static inline Ret ftk_font_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* glyph)
+{
+	return_val_if_fail(thiz != NULL && thiz->lookup != NULL, RET_FAIL);
+
+	return thiz->lookup(thiz, code, glyph);
+}
+
+static inline void     ftk_font_destroy(FtkFont* thiz)
+{
+	return_if_fail(thiz != NULL && thiz->destroy != NULL);
+
+	return thiz->destroy(thiz);
+}
 
 #endif/*FTK_FONT_H*/
 

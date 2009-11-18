@@ -29,6 +29,7 @@
  *
  */
 #include <signal.h>
+#include <execinfo.h>
 #include "ftk_typedef.h"
 
 static void signal_handler(int sig)
@@ -75,8 +76,9 @@ void ftk_install_crash_signal(void)
 
 int ftk_set_tty_mode(int graphics)
 {
-    int fd, r = 0;
+    int r = 0;
 #ifndef PC_EMU
+	int fd = 0;
     fd = open("/dev/tty0", O_RDWR | O_SYNC);
     if (fd < 0)
         return -1;

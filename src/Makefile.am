@@ -8,7 +8,7 @@ LINUX_X11=ftk_display_x11.c ftk_source_x11.c
 libftk_la_SOURCES=\
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	fontdata.c            ftk_label.c               ftk_source_timer.c \
-	ftk_bitmap.c          ftk_font.c                ftk_main_loop.c     ftk_util.c \
+	ftk_bitmap.c          ftk_font_default.c        ftk_main_loop.c     ftk_util.c \
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
 	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
