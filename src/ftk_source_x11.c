@@ -133,8 +133,8 @@ static const int s_key_map[] =
 
 static int ftk_source_x11_keymap(FtkSource* thiz, Display* display, int keycode)
 {
-	/*FIXME: complete the keymap table.*/
 	ftk_logd("0x%03x --> 0x%03x %c\n", keycode, s_key_map[0xff&keycode], (char)s_key_map[0xff&keycode]);
+
 	return s_key_map[0xff&keycode] ? s_key_map[0xff&keycode] : keycode;
 }
 
@@ -245,12 +245,12 @@ FtkSource* ftk_source_x11_create(FtkDisplay* display, FtkOnEvent on_event, void*
 		thiz->destroy  = ftk_source_x11_destroy;
 
 		thiz->ref = 1;
+		priv->ctx = ctx;
+		priv->on_event = on_event;
 		priv->display = display;
 		priv->fd  = ConnectionNumber(ftk_display_x11_get_xdisplay(display));
 		priv->win = (Window)ftk_display_x11_get_xwindow(display);
-		priv->on_event = on_event;
-		priv->ctx = ctx;
-		printf("%s: fd=%d\n", __func__, priv->fd);
+
 		XSetErrorHandler(on_x11_error);
 	}
 

@@ -103,6 +103,19 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 	return RET_OK;
 }
 
+static int ftk_wnd_manager_get_status_bar_height(FtkWndManager* thiz)
+{
+	(void)thiz;
+	if(ftk_default_status_panel() != NULL)
+	{
+		return ftk_widget_height(ftk_default_status_panel());
+	}
+	else
+	{
+		return 0;
+	}
+}
+
 static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 {
 	int x = 0;
@@ -119,16 +132,16 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 	{
 		case FTK_WINDOW:
 		{
-			y = FTK_STATUS_PANEL_HEIGHT;
+			y = ftk_wnd_manager_get_status_bar_height(thiz);
 			w = ftk_display_width(ftk_default_display());
-			h = ftk_display_height(ftk_default_display()) - FTK_STATUS_PANEL_HEIGHT;
+			h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);
 
 			break;
 		}
 		case FTK_DIALOG:
 		{
 			x = FTK_DIALOG_MARGIN;
-			y = ftk_widget_top(window) + FTK_STATUS_PANEL_HEIGHT;
+			y = ftk_widget_top(window) + ftk_wnd_manager_get_status_bar_height(thiz);
 			w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
 			h = ftk_widget_height(window);
 
@@ -259,28 +272,28 @@ static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
 
 static const unsigned char key_tanslate_table[0xff] = 
 {
+	[FTK_KEY_1]             =  FTK_KEY_EXCLAM,
+	[FTK_KEY_2]             =  FTK_KEY_AT,
+	[FTK_KEY_3]             =  FTK_KEY_NUMBERSIGN,
+	[FTK_KEY_4]             =  FTK_KEY_DOLLAR,
+	[FTK_KEY_5]             =  FTK_KEY_PERCENT,
+	[FTK_KEY_6]             =  FTK_KEY_ASCIICIRCUM,
+	[FTK_KEY_7]             =  FTK_KEY_AMPERSAND,
+	[FTK_KEY_8]             =  FTK_KEY_ASTERISK,
+	[FTK_KEY_9]             =  FTK_KEY_PARENLEFT,
+	[FTK_KEY_0]             =  FTK_KEY_PARENRIGHT,
+	[FTK_KEY_MINUS]         =  FTK_KEY_UNDERSCORE,
+	[FTK_KEY_EQUAL]         =  FTK_KEY_PLUS,
+	[FTK_KEY_COMMA]         =  FTK_KEY_LESS,
+	[FTK_KEY_DOT]           =  FTK_KEY_GREATER,
+	[FTK_KEY_SLASH]         =  FTK_KEY_QUESTION,
+	[FTK_KEY_BACKSLASH]     =  FTK_KEY_OR,
+	[FTK_KEY_BRACKETLEFT]   =  FTK_KEY_LEFTBRACE,
+	[FTK_KEY_BRACKETRIGHT]  =  FTK_KEY_RIGHTBRACE,
+	[FTK_KEY_GRAVE]         =  FTK_KEY_NOT,
+	[FTK_KEY_SEMICOLON]     =  FTK_KEY_COLON,
+	[FTK_KEY_QUOTERIGHT]    =  FTK_KEY_QUOTEDBL,
 	{0},
-	[FTK_KEY_1] = FTK_KEY_EXCLAM,
-	[FTK_KEY_2] = FTK_KEY_AT,
-	[FTK_KEY_3] = FTK_KEY_NUMBERSIGN,
-	[FTK_KEY_4] = FTK_KEY_DOLLAR,
-	[FTK_KEY_5] = FTK_KEY_PERCENT,
-	[FTK_KEY_6] = FTK_KEY_ASCIICIRCUM,
-	[FTK_KEY_7] = FTK_KEY_AMPERSAND,
-	[FTK_KEY_8] = FTK_KEY_ASTERISK,
-	[FTK_KEY_9] = FTK_KEY_PARENLEFT,
-	[FTK_KEY_0] = FTK_KEY_PARENRIGHT,
-	[FTK_KEY_MINUS] = FTK_KEY_UNDERSCORE,
-	[FTK_KEY_EQUAL] = FTK_KEY_PLUS,
-	[FTK_KEY_COMMA] = FTK_KEY_LESS,
-	[FTK_KEY_DOT] = FTK_KEY_GREATER,
-	[FTK_KEY_SLASH] = FTK_KEY_QUESTION,
-	[FTK_KEY_BACKSLASH] = FTK_KEY_OR,
-	[FTK_KEY_BRACKETLEFT] = FTK_KEY_LEFTBRACE,
-	[FTK_KEY_BRACKETRIGHT] = FTK_KEY_RIGHTBRACE,
-	[FTK_KEY_GRAVE] = FTK_KEY_NOT,
-	[FTK_KEY_SEMICOLON] = FTK_KEY_COLON,
-	[FTK_KEY_QUOTERIGHT] = FTK_KEY_QUOTEDBL,
 };
 
 static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent* event)
@@ -329,6 +342,7 @@ static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent*
 			event->u.key.code = key_tanslate_table[event->u.key.code & 0xff];
 		}
 	}
+
 	return RET_OK;
 }
 
