@@ -7,6 +7,13 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
+static Ret button_quit_clicked(void* ctx, void* obj)
+{
+	ftk_quit();
+
+	return RET_OK;
+}
+
 static Ret update_progress(void* ctx)
 {
 	int percent = 0;
@@ -27,6 +34,7 @@ int main(int argc, char* argv[])
 	int width = 0;
 	int height = 0;
 	FtkWidget* win = NULL;
+	FtkWidget* button = NULL;
 	FtkWidget* progress_bar = NULL;
 	FtkSource* timer = NULL;
 
@@ -57,6 +65,13 @@ int main(int argc, char* argv[])
 	ftk_widget_show(progress_bar, 1);
 	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
+
+	button = ftk_button_create(1006, width/4, 3*height/4, width/2, 80);
+	ftk_widget_set_text(button, "quit");
+	ftk_widget_append_child(win, button);
+	ftk_widget_show(button, 1);
+	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
+	ftk_window_set_focus(win, button);
 
 	ftk_widget_set_text(win, "progress_bar demo");
 	ftk_widget_show(win, 1);
