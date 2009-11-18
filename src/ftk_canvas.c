@@ -539,6 +539,52 @@ Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int l
 	return ftk_canvas_draw_string_ex(thiz, x, y, str, len, 0);
 }
 
+Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)
+{
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	FtkColor* src = NULL;
+	FtkColor* dst = NULL;
+	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
+
+	int width  = ftk_bitmap_width(thiz->bitmap);
+	int height = ftk_bitmap_height(thiz->bitmap);
+	int bitmap_width   = ftk_bitmap_width(bitmap);
+	int bitmap_height  = ftk_bitmap_height(bitmap);
+
+	return_val_if_fail(x < bitmap_width, RET_FAIL);
+	return_val_if_fail(y < bitmap_height, RET_FAIL);
+	return_val_if_fail(xoffset < width, RET_FAIL);
+	return_val_if_fail(yoffset < height, RET_FAIL);
+
+	src = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_bits(thiz->bitmap);
+
+	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
+	w = (xoffset + w) < width  ? w : width  - xoffset;
+	h = (y + h) < bitmap_height ? h : bitmap_height - y;
+	h = (yoffset + h) < height ? h : height - yoffset;
+	
+	w += x;
+	h += y;
+
+	src += y * bitmap_width;
+	dst += yoffset * width;
+
+	for(i = y; i < h; i++)
+	{
+		for(j = x, k = xoffset; j < w; j++, k++)
+		{
+			dst[k] = src[j];
+		}
+		src += bitmap_width;
+		dst += width;
+	}
+
+	return RET_OK;
+}
+
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)
 {
 	int i = 0;
