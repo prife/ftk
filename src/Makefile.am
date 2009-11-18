@@ -37,7 +37,7 @@ input_test_LDFLAGS=$(MYLDFLAGS)
 endif
 
 INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
-MYLDFLAGS=.libs/libftk.a
+MYLDFLAGS=.libs/libftk.a -lpng -ljpeg
 
 demo_check_button_SOURCES=demo_check_button.c
 demo_check_button_LDFLAGS=$(MYLDFLAGS)

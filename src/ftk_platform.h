@@ -40,6 +40,9 @@
 #include <linux/input.h>
 #include <sys/select.h>
 #include <ctype.h>
+#include <linux/fb.h>
+#include <linux/kd.h>
+int  ftk_set_tty_mode(int graphics);
 #endif
 
 #include <stdio.h>

@@ -65,3 +65,15 @@ void ftk_install_crash_signal(void)
 	return ;
 }
 
+int ftk_set_tty_mode(int graphics)
+{
+    int fd, r = 0;
+#ifndef PC_EMU
+    fd = open("/dev/tty0", O_RDWR | O_SYNC);
+    if (fd < 0)
+        return -1;
+    r = ioctl(fd, KDSETMODE, (void*) (graphics ? KD_GRAPHICS : KD_TEXT));
+    close(fd);
+#endif
+    return r;
+}

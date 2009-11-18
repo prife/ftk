@@ -214,6 +214,7 @@ static void ftk_display_fb_destroy(FtkDisplay* thiz)
 		DECL_PRIV(thiz, priv);
 		fb_close(&priv->fb);
 		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
+		ftk_set_tty_mode(0);
 	}
 
 	return;
@@ -241,6 +242,7 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			free(thiz);
 			thiz = NULL;
 		}
+		ftk_set_tty_mode(1);
 	}
 		
 	return thiz;
