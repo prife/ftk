@@ -1,7 +1,7 @@
 /*
  * File: ftk.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief: ftk global init, mainloop and deinit functions.  
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *

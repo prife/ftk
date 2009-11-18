@@ -40,6 +40,8 @@
 typedef struct _PrivInfo
 {
 	int top;
+	int caplock;
+	int shift_down;
 	FtkMainLoop* main_loop;
 	FtkSource*   primary_source;
 	FtkWidget*   grab_widget;
@@ -255,11 +257,59 @@ static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
 	return NULL;
 }
 
+static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent* event)
+{
+	DECL_PRIV(thiz, priv);
+	if(event->type == FTK_EVT_KEY_DOWN)
+	{
+		if(event->u.key.code == FTK_KEY_LEFTSHIFT || event->u.key.code == FTK_KEY_RIGHTSHIFT)
+		{
+			priv->shift_down = 1;
+		}
+	}
+
+	if(event->type == FTK_EVT_KEY_UP)
+	{
+		if(event->u.key.code == FTK_KEY_CAPSLOCK)
+		{
+			priv->caplock = !priv->caplock;
+		}
+
+		if(event->u.key.code == FTK_KEY_LEFTSHIFT || event->u.key.code == FTK_KEY_RIGHTSHIFT)
+		{
+			priv->shift_down = 0;
+		}
+	}
+
+	/*CAPLOCK translate*/
+	if(event->u.key.code >= FTK_KEY_a && event->u.key.code <= FTK_KEY_z)
+	{
+		event->u.key.code = priv->caplock ? event->u.key.code - FTK_KEY_a + FTK_KEY_A : event->u.key.code;
+	}
+	
+	/*SHIFT translate*/
+	if(event->u.key.code >= FTK_KEY_a && event->u.key.code <= FTK_KEY_z)
+	{
+		event->u.key.code = priv->shift_down ? event->u.key.code - FTK_KEY_a + FTK_KEY_A : event->u.key.code;
+	}
+	else if(event->u.key.code >= FTK_KEY_A && event->u.key.code <= FTK_KEY_Z)
+	{
+		event->u.key.code = priv->shift_down ? event->u.key.code - FTK_KEY_A + FTK_KEY_a : event->u.key.code;
+	}
+
+	return RET_OK;
+}
+
 static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent* event)
 {
 	DECL_PRIV(thiz, priv);
 	FtkWidget* target = NULL;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
+
+	if(event->type == FTK_EVT_KEY_DOWN || event->type == FTK_EVT_KEY_UP)
+	{
+		ftk_wnd_manager_default_key_translate(thiz, event);
+	}
 
 	if(ftk_wnd_manager_dispatch_globals(thiz, event) != RET_OK)
 	{
