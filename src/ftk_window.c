@@ -203,7 +203,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 	
 	if(ret == RET_REMOVE || event->type == FTK_EVT_KEY_DOWN)
 	{
-		return RET_OK;
+		return ret;
 	}
 
 	switch(event->u.key.code)
@@ -212,7 +212,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_UP:
 		{
 			focus_widget = ftk_window_find_prev_focus(priv->focus_widget, 1);
-			ftk_window_set_focus(thiz, focus_widget);
+			ret = ftk_window_set_focus(thiz, focus_widget);
 			break;
 		}
 		case FTK_KEY_DOWN:
@@ -220,14 +220,14 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_TAB:
 		{
 			focus_widget = ftk_window_find_next_focus(priv->focus_widget, 1);
-			ftk_window_set_focus(thiz, focus_widget);
+			ret = ftk_window_set_focus(thiz, focus_widget);
 
 			break;
 		}
 		default:break;
 	}
 
-	return RET_OK;
+	return ret;
 }
 
 static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
