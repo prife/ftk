@@ -257,6 +257,32 @@ static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
 	return NULL;
 }
 
+static const unsigned char key_tanslate_table[0xff] = 
+{
+	{0},
+	[FTK_KEY_1] = FTK_KEY_EXCLAM,
+	[FTK_KEY_2] = FTK_KEY_AT,
+	[FTK_KEY_3] = FTK_KEY_NUMBERSIGN,
+	[FTK_KEY_4] = FTK_KEY_DOLLAR,
+	[FTK_KEY_5] = FTK_KEY_PERCENT,
+	[FTK_KEY_6] = FTK_KEY_ASCIICIRCUM,
+	[FTK_KEY_7] = FTK_KEY_AMPERSAND,
+	[FTK_KEY_8] = FTK_KEY_ASTERISK,
+	[FTK_KEY_9] = FTK_KEY_PARENLEFT,
+	[FTK_KEY_0] = FTK_KEY_PARENRIGHT,
+	[FTK_KEY_MINUS] = FTK_KEY_UNDERSCORE,
+	[FTK_KEY_EQUAL] = FTK_KEY_PLUS,
+	[FTK_KEY_COMMA] = FTK_KEY_LESS,
+	[FTK_KEY_DOT] = FTK_KEY_GREATER,
+	[FTK_KEY_SLASH] = FTK_KEY_QUESTION,
+	[FTK_KEY_BACKSLASH] = FTK_KEY_OR,
+	[FTK_KEY_BRACKETLEFT] = FTK_KEY_LEFTBRACE,
+	[FTK_KEY_BRACKETRIGHT] = FTK_KEY_RIGHTBRACE,
+	[FTK_KEY_GRAVE] = FTK_KEY_NOT,
+	[FTK_KEY_SEMICOLON] = FTK_KEY_COLON,
+	[FTK_KEY_QUOTERIGHT] = FTK_KEY_QUOTEDBL,
+};
+
 static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent* event)
 {
 	DECL_PRIV(thiz, priv);
@@ -296,7 +322,13 @@ static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent*
 	{
 		event->u.key.code = priv->shift_down ? event->u.key.code - FTK_KEY_A + FTK_KEY_a : event->u.key.code;
 	}
-
+	else
+	{
+		if(priv->shift_down && key_tanslate_table[event->u.key.code & 0xff]) 
+		{
+			event->u.key.code = key_tanslate_table[event->u.key.code & 0xff];
+		}
+	}
 	return RET_OK;
 }
 
