@@ -132,6 +132,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 	FTK_ALPHA_1(sc->g, dc->g, a); \
 	FTK_ALPHA_1(sc->b, dc->b, a);
 
+#define FTK_STOCK_IMG_SUFFIX ".png"
 
 #endif/*FTK_TYPEDEF_H*/
 

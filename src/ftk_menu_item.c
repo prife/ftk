@@ -87,8 +87,8 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_ACTIVE] = "menuitem_background_pressed.png",
-	[FTK_WIDGET_FOCUSED] = "menuitem_background_focus.png"
+	[FTK_WIDGET_ACTIVE] = "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_FOCUSED] = "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX
 };
 
 static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
@@ -101,6 +101,7 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 	{
 		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
 		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
+		ftk_bitmap_unref(bitmap);
 	}
 
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz));

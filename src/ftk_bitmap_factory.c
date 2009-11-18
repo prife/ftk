@@ -31,6 +31,14 @@
 
 #include "ftk_log.h"
 #include "ftk_bitmap_factory.h"
+#ifdef HAS_JPEG
+#include "ftk_image_jpeg_decoder.h"
+#endif
+
+#ifdef HAS_PNG
+#include "ftk_image_png_decoder.h"
+#endif
+
 
 struct _FtkBitmapFactory
 {
@@ -41,6 +49,17 @@ struct _FtkBitmapFactory
 FtkBitmapFactory* ftk_bitmap_factory_create(void)
 {
 	FtkBitmapFactory* thiz = (FtkBitmapFactory*)calloc(1, sizeof(FtkBitmapFactory));
+
+	if(thiz != NULL)
+	{
+#ifdef HAS_JPEG
+		ftk_bitmap_factory_add_decoder(ftk_default_bitmap_factory(), ftk_image_jpeg_decoder_create());	
+#endif
+
+#ifdef HAS_PNG
+		ftk_bitmap_factory_add_decoder(ftk_default_bitmap_factory(), ftk_image_png_decoder_create());
+#endif
+	}
 
 	return thiz;
 }

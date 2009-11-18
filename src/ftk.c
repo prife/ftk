@@ -47,14 +47,6 @@
 #include "ftk_source_x11.h"
 #endif
 
-#ifdef HAS_JPEG
-#include "ftk_image_jpeg_decoder.h"
-#endif
-
-#ifdef HAS_PNG
-#include "ftk_image_png_decoder.h"
-#endif
-
 static void ftk_deinit(void);
 static void ftk_init_panel(void);
 
@@ -90,14 +82,7 @@ static Ret ftk_init_input(void)
 static Ret ftk_init_bitmap_factory(void)
 {
 	ftk_set_bitmap_factory(ftk_bitmap_factory_create());
-#ifdef HAS_JPEG
-	ftk_bitmap_factory_add_decoder(ftk_default_bitmap_factory(), ftk_image_jpeg_decoder_create());	
-#endif
-
-#ifdef HAS_PNG
-	ftk_bitmap_factory_add_decoder(ftk_default_bitmap_factory(), ftk_image_png_decoder_create());
-#endif
-
+	
 	return RET_OK;
 }
 
@@ -297,14 +282,14 @@ static void ftk_init_panel(void)
 	FtkWidget* item = NULL;	
 	FtkWidget* panel = ftk_default_status_panel();
 	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "status-bg.png");
+	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "status-bg"FTK_STOCK_IMG_SUFFIX);
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_ACTIVE, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
 	ftk_gc_reset(&gc);
 	
 	item = ftk_status_item_create(IDC_CLOSE_ITEM, 32, 32);
-	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "close-32.png");
+	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "close-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)
 	{
 		gc.mask = FTK_GC_BITMAP;
@@ -319,7 +304,7 @@ static void ftk_init_panel(void)
 	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
 
 	item = ftk_status_item_create(IDC_ICON_ITEM, 32, 32);
-	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32.png");
+	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)
 	{
 		gc.mask = FTK_GC_BITMAP;

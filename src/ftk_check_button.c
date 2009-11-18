@@ -110,34 +110,34 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static const char* check_bg_on_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_check_on.png",
-	[FTK_WIDGET_ACTIVE]      = "btn_check_on_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_check_on_disable.png",
-	[FTK_WIDGET_FOCUSED]     = "btn_check_on_selected.png"
+	[FTK_WIDGET_NORMAL]      = "btn_check_on"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_ACTIVE]      = "btn_check_on_pressed"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_INSENSITIVE] = "btn_check_on_disable"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_FOCUSED]     = "btn_check_on_selected"FTK_STOCK_IMG_SUFFIX
 };
 
 static const char* check_bg_off_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_check_off.png",
-	[FTK_WIDGET_ACTIVE]      = "btn_check_off_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_check_off_disable.png",
-	[FTK_WIDGET_FOCUSED]     = "btn_check_off_selected.png"
+	[FTK_WIDGET_NORMAL]      = "btn_check_off"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_ACTIVE]      = "btn_check_off_pressed"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_INSENSITIVE] = "btn_check_off_disable"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_FOCUSED]     = "btn_check_off_selected"FTK_STOCK_IMG_SUFFIX
 };
 
 static const char* radio_bg_on_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_radio_on.png",
-	[FTK_WIDGET_ACTIVE]      = "btn_radio_on_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_radio_on.png",
-	[FTK_WIDGET_FOCUSED]     = "btn_radio_on_selected.png"
+	[FTK_WIDGET_NORMAL]      = "btn_radio_on"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_ACTIVE]      = "btn_radio_on_pressed"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_INSENSITIVE] = "btn_radio_on"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_FOCUSED]     = "btn_radio_on_selected"FTK_STOCK_IMG_SUFFIX
 };
 
 static const char* radio_bg_off_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_radio_off.png",
-	[FTK_WIDGET_ACTIVE]      = "btn_radio_off_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_radio_off.png",
-	[FTK_WIDGET_FOCUSED]     = "btn_radio_off_selected.png"
+	[FTK_WIDGET_NORMAL]      = "btn_radio_off"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_ACTIVE]      = "btn_radio_off_pressed"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_INSENSITIVE] = "btn_radio_off"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_FOCUSED]     = "btn_radio_off_selected"FTK_STOCK_IMG_SUFFIX
 };
 
 static Ret ftk_check_button_on_paint(FtkWidget* thiz)
@@ -171,6 +171,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 	dy = (height - icon_h) / 2;
 	dx = priv->icon_at_right ? width - icon_w : 0;
 	ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, icon_w, icon_h, x + dx, y + dy);
+	ftk_bitmap_unref(bitmap);
 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{

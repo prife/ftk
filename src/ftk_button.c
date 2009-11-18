@@ -87,10 +87,10 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL] = "btn_default_normal.png",
-	[FTK_WIDGET_ACTIVE] = "btn_default_pressed.png",
-	[FTK_WIDGET_INSENSITIVE] = "btn_default_normal_disable.png",
-	[FTK_WIDGET_FOCUSED] = "btn_default_selected.png"
+	[FTK_WIDGET_NORMAL] = "btn_default_normal"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_ACTIVE] = "btn_default_pressed"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_INSENSITIVE] = "btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX,
+	[FTK_WIDGET_FOCUSED] = "btn_default_selected"FTK_STOCK_IMG_SUFFIX
 };
 
 static Ret ftk_button_on_paint(FtkWidget* thiz)
