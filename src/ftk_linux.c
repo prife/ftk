@@ -55,13 +55,21 @@ static void signal_handler(int sig)
 	return;
 }
 
+static void signal_int_handler(int sig)
+{
+	exit(0);
+
+	return;
+}
+
 void ftk_install_crash_signal(void)
 {
 	signal(SIGABRT, signal_handler);
 	signal(SIGSEGV, signal_handler);
 	signal(SIGILL, signal_handler);
 	signal(SIGKILL, signal_handler);
-	
+	signal(SIGINT, signal_int_handler);
+
 	return ;
 }
 
