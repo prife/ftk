@@ -96,7 +96,7 @@ static const int s_key_map[] =
 	[0x2d] = FTK_KEY_k,
 	[0x2e] = FTK_KEY_l,
 	[0x2f] = FTK_KEY_SEMICOLON,
-	[0x30] = FTK_KEY_QUOTELEFT,
+	[0x30] = FTK_KEY_QUOTERIGHT,
 	[0x31] = FTK_KEY_GRAVE, 
 	[0x32] = FTK_KEY_LEFTSHIFT,
 	[0x34] = FTK_KEY_z,
@@ -134,7 +134,7 @@ static const int s_key_map[] =
 static int ftk_source_x11_keymap(FtkSource* thiz, Display* display, int keycode)
 {
 	/*FIXME: complete the keymap table.*/
-	ftk_logd("%03x --> %03x %c\n", keycode, s_key_map[0xff&keycode], (char)s_key_map[0xff&keycode]);
+	ftk_logd("0x%03x --> 0x%03x %c\n", keycode, s_key_map[0xff&keycode], (char)s_key_map[0xff&keycode]);
 	return s_key_map[0xff&keycode] ? s_key_map[0xff&keycode] : keycode;
 }
 
