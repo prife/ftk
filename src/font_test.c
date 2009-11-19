@@ -1,4 +1,4 @@
-#include "ftk_font.h"
+#include "ftk_font_default.h"
 
 int main(int argc, char* argv[])
 {
