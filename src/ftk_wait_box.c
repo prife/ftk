@@ -30,36 +30,33 @@
  */
 
 #include "ftk_wait_box.h"
+#include "ftk_source_timer.h"
 
 typedef struct _PrivInfo
 {
-	int index;
+	int offset;
+	int waiting;
 	FtkSource* timer;
+	FtkBitmap* bitmap;
 }PrivInfo;
 
 static Ret ftk_wait_box_on_event(FtkWidget* thiz, FtkEvent* event)
 {
-	return RTE_OK;
+	return RET_OK;
 }
-
-static const char** images[] = 
-{
-	"wait0"FTK_STOCK_IMG_SUFFIX,
-	"wait1"FTK_STOCK_IMG_SUFFIX,
-	"wait2"FTK_STOCK_IMG_SUFFIX,
-	"wait3"FTK_STOCK_IMG_SUFFIX,
-};
 
 static Ret ftk_wait_box_on_paint(FtkWidget* thiz)
 {
 	FtkBitmap* bitmap = NULL;
 	DECL_PRIV0(thiz, priv);
+	int bitmap_w = ftk_bitmap_width(priv->bitmap);
+	int bitmap_h = ftk_bitmap_height(priv->bitmap);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	priv->index = priv->index %s (sizeof(images)/sizeof(images[0]));
 
-	bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), images[priv->index]);
+	priv->offset = priv->offset < bitmap_h ? priv->offset : 0;
+	ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, priv->offset, bitmap_w, bitmap_w, x, y);
+	priv->offset += bitmap_w;
 
-	priv->index++;
 	FTK_END_PAINT();
 }
 
@@ -68,28 +65,38 @@ static void ftk_wait_box_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
+		ftk_bitmap_unref(priv->bitmap);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
 	return;
 }
 
-FtkWidget* ftk_wait_box_create(int id, int x, int y, int w, int h)
+FtkWidget* ftk_wait_box_create(int id, int x, int y)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
 	if(thiz != NULL)
 	{
+		int w = 0;
 		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+		DECL_PRIV0(thiz, priv);
 
 		thiz->on_event = ftk_wait_box_on_event;
 		thiz->on_paint = ftk_wait_box_on_paint;
 		thiz->destroy  = ftk_wait_box_destroy;
 
+		priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "wait_box"FTK_STOCK_IMG_SUFFIX);
+		assert(priv->bitmap != NULL);
+		
+		w = ftk_bitmap_width(priv->bitmap);
 		ftk_widget_init(thiz, FTK_WAIT_BOX, id);
 		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
+		ftk_widget_resize(thiz, w, w);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+
+		priv->timer = ftk_source_timer_create(500, ftk_widget_paint, thiz);
 	}
 
 	return thiz;
@@ -98,14 +105,24 @@ FtkWidget* ftk_wait_box_create(int id, int x, int y, int w, int h)
 Ret ftk_wait_box_start_waiting(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+	return_val_if_fail(!priv->waiting, RET_FAIL);
 
-	return RET_OK;
+	priv->offset = 0;
+	priv->waiting = 1;
+	ftk_source_ref(priv->timer);
+
+	return ftk_main_loop_add_source(ftk_default_main_loop(), priv->timer);
 }
 
 Ret ftk_wait_box_stop_waiting(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+	return_val_if_fail(priv->waiting, RET_FAIL);
+	
+	priv->waiting = 0;
 
-	return RET_OK;
+	return ftk_main_loop_remove_source(ftk_default_main_loop(), priv->timer);
 }
 

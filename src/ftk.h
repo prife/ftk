@@ -47,6 +47,7 @@ extern "C" {
 #include "ftk_entry.h"
 #include "ftk_button.h"
 #include "ftk_globals.h"
+#include "ftk_wait_box.h"
 #include "ftk_source_idle.h"
 #include "ftk_source_timer.h"
 #include "ftk_status_panel.h"

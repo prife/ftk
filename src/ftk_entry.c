@@ -52,10 +52,10 @@ typedef struct _PrivInfo
 
 #define FTK_ENTRY_LEFT_MARGIN 4
 #define FTK_ENTRY_TOP_MARGIN  4
-#define HAS_TEXT(priv) priv != NULL \
+#define HAS_TEXT(priv) (priv != NULL \
 	&& priv->text_buffer != NULL \
-	&& priv->text_buffer->length > 0 \
-	&& priv->text_buffer != NULL
+	&& priv->text_buffer->length > 0) 
+
 #define TB_TEXT priv->text_buffer->buffer
 #define TB_LENGTH priv->text_buffer->length
 

@@ -36,7 +36,7 @@
 
 FTK_INHERITE_FROM(WIDGET)
 
-FtkWidget* ftk_wait_box_create(int id, int x, int y, int w, int h);
+FtkWidget* ftk_wait_box_create(int id, int x, int y);
 Ret ftk_wait_box_start_waiting(FtkWidget* thiz);
 Ret ftk_wait_box_stop_waiting(FtkWidget* thiz);
 
