@@ -34,7 +34,7 @@
 
 #include "ftk_widget.h"
 
-FTK_INHERITE_FROM(WIDGET)
+FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_wait_box_create(int id, int x, int y);
 Ret ftk_wait_box_start_waiting(FtkWidget* thiz);

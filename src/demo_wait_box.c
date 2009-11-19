@@ -51,14 +51,12 @@ int main(int argc, char* argv[])
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_start_clicked, wait_box);
-	ftk_window_set_focus(win, button);
 	
 	button = ftk_button_create(1006, 2*width/3, height/2, width/3, 50);
 	ftk_widget_set_text(button, "stop");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_stop_clicked, wait_box);
-	ftk_window_set_focus(win, button);
 
 	button = ftk_button_create(1006, width/4, 3*height/4, width/2, 80);
 	ftk_widget_set_text(button, "quit");
