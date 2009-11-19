@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_globals.h"
 #include "ftk_wait_box.h"
 #include "ftk_source_timer.h"
 
@@ -47,7 +48,6 @@ static Ret ftk_wait_box_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_wait_box_on_paint(FtkWidget* thiz)
 {
-	FtkBitmap* bitmap = NULL;
 	DECL_PRIV0(thiz, priv);
 	int bitmap_w = ftk_bitmap_width(priv->bitmap);
 	int bitmap_h = ftk_bitmap_height(priv->bitmap);
@@ -102,7 +102,7 @@ FtkWidget* ftk_wait_box_create(int id, int x, int y)
 		ftk_widget_resize(thiz, w, w);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 
-		priv->timer = ftk_source_timer_create(500, ftk_widget_paint, thiz);
+		priv->timer = ftk_source_timer_create(500, (FtkTimer)ftk_widget_paint, thiz);
 	}
 
 	return thiz;
