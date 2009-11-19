@@ -17,8 +17,8 @@ o build:
   make
 
 o run:
-  cd src
-  ./demo1
+  cd src/demos
+  ./demo_button
  
 
 
