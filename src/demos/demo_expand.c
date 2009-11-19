@@ -58,6 +58,7 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 
 static void create_ani_window(int type, int sync)
 {
+	int delta = 0;
 	int width = 0;
 	int height = 0;
 	FtkWidget* button = NULL;
@@ -67,7 +68,8 @@ static void create_ani_window(int type, int sync)
 	
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
-	
+	delta = height/6;
+
 	button = ftk_button_create(1001, width/3, height/3, width/3, 50);
 	ftk_widget_set_text(button, "关闭");
 	ftk_widget_append_child(win, button);
@@ -84,17 +86,17 @@ static void create_ani_window(int type, int sync)
 		case FTK_ANI_TO_EAST_SOUTH:
 		case FTK_ANI_TO_EAST_NORTH:
 		{
-			ftk_animator_set_param(ani, type, 100, width, 80, 200);
+			ftk_animator_set_param(ani, type, 100, width, delta, 200);
 			break;
 		}
 		case FTK_ANI_TO_DOWN:
 		{
-			ftk_animator_set_param(ani, type, 100, height, 80, 200);
+			ftk_animator_set_param(ani, type, 100, height, delta, 200);
 			break;
 		}
 		case FTK_ANI_TO_UP:
 		{
-			ftk_animator_set_param(ani, type, height - 100, ftk_widget_top(win), 80, 200);
+			ftk_animator_set_param(ani, type, height - 100, ftk_widget_top(win), delta, 200);
 			break;
 		}
 		default:break;
@@ -122,37 +124,37 @@ static void create_app_window(void)
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-	button = ftk_button_create(1001, 0, height/6, width/3, 50);
+	button = ftk_button_create(1001, 5, height/6, width/2, 50);
 	ftk_widget_set_text(button, "向右伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_right_clicked, win);
 
-	button = ftk_button_create(1002, 2*width/3, height/6, width/3, 50);
+	button = ftk_button_create(1002, width/2, height/6, width/2-5, 50);
 	ftk_widget_set_text(button, "向下伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_down_clicked, win);
 
-	button = ftk_button_create(1001, 0, height/6 + 80, width/3, 50);
+	button = ftk_button_create(1001, 5, height/6 + 60, width/2-5, 50);
 	ftk_widget_set_text(button, "向右下伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_east_south_clicked, win);
 
-	button = ftk_button_create(1002, 2*width/3, height/6 + 80, width/3, 50);
+	button = ftk_button_create(1002, width/2, height/6 + 60, width/2-5, 50);
 	ftk_widget_set_text(button, "向左上伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_east_north_clicked, win);
 	
-	button = ftk_button_create(1002, 0, height/6 + 160, width/3, 50);
+	button = ftk_button_create(1002, 5, height/6 + 120, width/2-5, 50);
 	ftk_widget_set_text(button, "向上伸展");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_to_up_clicked, win);
 	
-	button = ftk_button_create(1002, 2*width/3, height/6 + 160, width/3, 50);
+	button = ftk_button_create(1002, width/2, height/6 + 120, width/2-5, 50);
 	ftk_widget_set_text(button, "退出");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);

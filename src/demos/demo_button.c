@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
-	button = ftk_button_create(1006, width + 10, height/2, width, 80);
+	button = ftk_button_create(1006, width + 10, height/2, width, 60);
 	ftk_widget_set_text(button, "quit");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);

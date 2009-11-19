@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
-	button = ftk_button_create(1006, width/4, 3*height/4, width/2, 80);
+	button = ftk_button_create(1006, width/4, 3*height/4, width/2, 60);
 	ftk_widget_set_text(button, "quit");
 	ftk_widget_append_child(win, button);
 	ftk_widget_show(button, 1);

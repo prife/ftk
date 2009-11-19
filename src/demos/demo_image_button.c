@@ -78,10 +78,13 @@ int main(int argc, char* argv[])
 	{
 		for(j = 0; j < width/80; j++)
 		{
-			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[i + 1]);
+			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[i + 2]);
 			button = ftk_button_create(1000, j * 80, i * 80, ftk_bitmap_width(gc.bitmap), ftk_bitmap_height(gc.bitmap));
 			ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
+			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[1]);
 			ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
+			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[0]);
+			ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
 			ftk_widget_append_child(win, button);
 			ftk_widget_show(button, 1);
 			ftk_bitmap_unref(gc.bitmap);
