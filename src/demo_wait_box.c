@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	
-	wait_box = ftk_wait_box_create(1001, width/2 - 16, 16);
+	wait_box = ftk_wait_box_create(1001, width/2 - 16, height/4);
 	ftk_widget_append_child(win, wait_box);
 	ftk_widget_show(wait_box, 1);
 	
