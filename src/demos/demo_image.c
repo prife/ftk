@@ -24,22 +24,22 @@ int main(int argc, char* argv[])
 	FtkWidget* win = ftk_window_create(0, 0, 320, 480);
 
 	FtkWidget* image = ftk_image_create(1001, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, "testdata/png1.png");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/png1.png");
 	ftk_widget_append_child(win, image);
 	ftk_widget_show(image, 1);
 	
 	image = ftk_image_create(1001, ftk_widget_width(win)/2, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, "testdata/png2.png");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/png2.png");
 	ftk_widget_append_child(win, image);
 	ftk_widget_show(image, 1);
 	
 	image = ftk_image_create(1001, 0, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, "testdata/png3.png");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/png3.png");
 	ftk_widget_append_child(win, image);
 	ftk_widget_show(image, 1);
 	
 	image = ftk_image_create(1001, ftk_widget_width(win)/2, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, "testdata/jpeg1.jpg");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/jpeg1.jpg");
 	ftk_widget_append_child(win, image);
 	ftk_widget_show(image, 1);
 

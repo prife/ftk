@@ -15,7 +15,6 @@
 @SET_MAKE@
 
 
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -34,22 +33,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
-	demo_label$(EXEEXT) demo_button$(EXEEXT) demo_image$(EXEEXT) \
-	demo_image_button$(EXEEXT) demo_dialog$(EXEEXT) \
-	demo_multi_win$(EXEEXT) canvas_test$(EXEEXT) ftk_test$(EXEEXT) \
-	bitmap_test$(EXEEXT) font_test$(EXEEXT) \
-	primary_source_test$(EXEEXT) bitmap_factory_test$(EXEEXT) \
-	main_loop_test$(EXEEXT) png_test$(EXEEXT) log_test$(EXEEXT) \
-	util_test$(EXEEXT) sources_manager_test$(EXEEXT) \
-	demo_menu$(EXEEXT) demo_entry$(EXEEXT) \
-	text_buffer_test$(EXEEXT) icon_cache_test$(EXEEXT) \
-	demo_expand$(EXEEXT) demo_progress_bar$(EXEEXT) \
-	demo_check_button$(EXEEXT) demo_wait_box$(EXEEXT) \
-	$(am__EXEEXT_1)
-@FTK_BACKEND_X11_TRUE@am__append_1 = $(LINUX_X11)
-@FTK_BACKEND_FB_TRUE@am__append_2 = $(LINUX_NATIVE)
-@FTK_BACKEND_FB_TRUE@am__append_3 = display_fb_test input_test
+@FTK_BACKEND_FB_TRUE@am__append_1 = $(LINUX_NATIVE)
+@FTK_BACKEND_X11_TRUE@am__append_2 = $(LINUX_X11)
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -81,12 +66,12 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
 	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
 	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
-	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_display_x11.c \
-	ftk_source_x11.c ftk_display_fb.c ftk_source_input.c
-am__objects_1 = ftk_display_x11.lo ftk_source_x11.lo
-@FTK_BACKEND_X11_TRUE@am__objects_2 = $(am__objects_1)
-am__objects_3 = ftk_display_fb.lo ftk_source_input.lo
-@FTK_BACKEND_FB_TRUE@am__objects_4 = $(am__objects_3)
+	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_display_fb.c \
+	ftk_source_input.c ftk_display_x11.c ftk_source_x11.c
+am__objects_1 = ftk_display_fb.lo ftk_source_input.lo
+@FTK_BACKEND_FB_TRUE@am__objects_2 = $(am__objects_1)
+am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo
+@FTK_BACKEND_X11_TRUE@am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font_default.lo \
@@ -102,186 +87,6 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_linux.lo ftk_gesture.lo ftk_wait_box.lo $(am__objects_2) \
 	$(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
-@FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
-@FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
-PROGRAMS = $(noinst_PROGRAMS)
-am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
-bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
-bitmap_factory_test_LDADD = $(LDADD)
-bitmap_factory_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(bitmap_factory_test_LDFLAGS) $(LDFLAGS) -o $@
-am_bitmap_test_OBJECTS = bitmap_test.$(OBJEXT)
-bitmap_test_OBJECTS = $(am_bitmap_test_OBJECTS)
-bitmap_test_LDADD = $(LDADD)
-bitmap_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(bitmap_test_LDFLAGS) $(LDFLAGS) -o $@
-am_canvas_test_OBJECTS = canvas_test.$(OBJEXT)
-canvas_test_OBJECTS = $(am_canvas_test_OBJECTS)
-canvas_test_LDADD = $(LDADD)
-canvas_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(canvas_test_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_button_OBJECTS = demo_button.$(OBJEXT)
-demo_button_OBJECTS = $(am_demo_button_OBJECTS)
-demo_button_LDADD = $(LDADD)
-demo_button_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_button_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_check_button_OBJECTS = demo_check_button.$(OBJEXT)
-demo_check_button_OBJECTS = $(am_demo_check_button_OBJECTS)
-demo_check_button_LDADD = $(LDADD)
-demo_check_button_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_check_button_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_dialog_OBJECTS = demo_dialog.$(OBJEXT)
-demo_dialog_OBJECTS = $(am_demo_dialog_OBJECTS)
-demo_dialog_LDADD = $(LDADD)
-demo_dialog_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_dialog_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_entry_OBJECTS = demo_entry.$(OBJEXT)
-demo_entry_OBJECTS = $(am_demo_entry_OBJECTS)
-demo_entry_LDADD = $(LDADD)
-demo_entry_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_entry_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_expand_OBJECTS = demo_expand.$(OBJEXT)
-demo_expand_OBJECTS = $(am_demo_expand_OBJECTS)
-demo_expand_LDADD = $(LDADD)
-demo_expand_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_expand_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_image_OBJECTS = demo_image.$(OBJEXT)
-demo_image_OBJECTS = $(am_demo_image_OBJECTS)
-demo_image_LDADD = $(LDADD)
-demo_image_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_image_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_image_button_OBJECTS = demo_image_button.$(OBJEXT)
-demo_image_button_OBJECTS = $(am_demo_image_button_OBJECTS)
-demo_image_button_LDADD = $(LDADD)
-demo_image_button_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_image_button_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_label_OBJECTS = demo_label.$(OBJEXT)
-demo_label_OBJECTS = $(am_demo_label_OBJECTS)
-demo_label_LDADD = $(LDADD)
-demo_label_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_label_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_menu_OBJECTS = demo_menu.$(OBJEXT)
-demo_menu_OBJECTS = $(am_demo_menu_OBJECTS)
-demo_menu_LDADD = $(LDADD)
-demo_menu_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_menu_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_multi_win_OBJECTS = demo_multi_win.$(OBJEXT)
-demo_multi_win_OBJECTS = $(am_demo_multi_win_OBJECTS)
-demo_multi_win_LDADD = $(LDADD)
-demo_multi_win_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_multi_win_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_progress_bar_OBJECTS = demo_progress_bar.$(OBJEXT)
-demo_progress_bar_OBJECTS = $(am_demo_progress_bar_OBJECTS)
-demo_progress_bar_LDADD = $(LDADD)
-demo_progress_bar_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_progress_bar_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_wait_box_OBJECTS = demo_wait_box.$(OBJEXT)
-demo_wait_box_OBJECTS = $(am_demo_wait_box_OBJECTS)
-demo_wait_box_LDADD = $(LDADD)
-demo_wait_box_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_wait_box_LDFLAGS) $(LDFLAGS) -o $@
-am__display_fb_test_SOURCES_DIST = display_fb_test.c
-@FTK_BACKEND_FB_TRUE@am_display_fb_test_OBJECTS =  \
-@FTK_BACKEND_FB_TRUE@	display_fb_test.$(OBJEXT)
-display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
-display_fb_test_LDADD = $(LDADD)
-display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(display_fb_test_LDFLAGS) $(LDFLAGS) -o $@
-am_font_test_OBJECTS = font_test.$(OBJEXT)
-font_test_OBJECTS = $(am_font_test_OBJECTS)
-font_test_LDADD = $(LDADD)
-font_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(font_test_LDFLAGS) $(LDFLAGS) -o $@
-am_ftk_test_OBJECTS = ftk_test.$(OBJEXT)
-ftk_test_OBJECTS = $(am_ftk_test_OBJECTS)
-ftk_test_LDADD = $(LDADD)
-ftk_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(ftk_test_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_icon_cache_test_OBJECTS = icon_cache_test.$(OBJEXT)
-icon_cache_test_OBJECTS = $(am_icon_cache_test_OBJECTS)
-icon_cache_test_LDADD = $(LDADD)
-icon_cache_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(icon_cache_test_LDFLAGS) $(LDFLAGS) -o $@
-am__input_test_SOURCES_DIST = input_test.c
-@FTK_BACKEND_FB_TRUE@am_input_test_OBJECTS = input_test.$(OBJEXT)
-input_test_OBJECTS = $(am_input_test_OBJECTS)
-input_test_LDADD = $(LDADD)
-input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(input_test_LDFLAGS) $(LDFLAGS) -o $@
-am_label_test_OBJECTS = label_test.$(OBJEXT)
-label_test_OBJECTS = $(am_label_test_OBJECTS)
-label_test_LDADD = $(LDADD)
-label_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(label_test_LDFLAGS) $(LDFLAGS) -o $@
-am_log_test_OBJECTS = log_test.$(OBJEXT)
-log_test_OBJECTS = $(am_log_test_OBJECTS)
-log_test_LDADD = $(LDADD)
-log_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(log_test_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_main_loop_test_OBJECTS = main_loop_test.$(OBJEXT)
-main_loop_test_OBJECTS = $(am_main_loop_test_OBJECTS)
-main_loop_test_LDADD = $(LDADD)
-main_loop_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(main_loop_test_LDFLAGS) $(LDFLAGS) -o $@
-am_png_test_OBJECTS = png_test.$(OBJEXT)
-png_test_OBJECTS = $(am_png_test_OBJECTS)
-png_test_LDADD = $(LDADD)
-png_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(png_test_LDFLAGS) \
-	$(LDFLAGS) -o $@
-am_primary_source_test_OBJECTS = primary_source_test.$(OBJEXT)
-primary_source_test_OBJECTS = $(am_primary_source_test_OBJECTS)
-primary_source_test_LDADD = $(LDADD)
-primary_source_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(primary_source_test_LDFLAGS) $(LDFLAGS) -o $@
-am_sources_manager_test_OBJECTS = sources_manager_test.$(OBJEXT)
-sources_manager_test_OBJECTS = $(am_sources_manager_test_OBJECTS)
-sources_manager_test_LDADD = $(LDADD)
-sources_manager_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(sources_manager_test_LDFLAGS) $(LDFLAGS) -o $@
-am_text_buffer_test_OBJECTS = text_buffer_test.$(OBJEXT)
-text_buffer_test_OBJECTS = $(am_text_buffer_test_OBJECTS)
-text_buffer_test_LDADD = $(LDADD)
-text_buffer_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(text_buffer_test_LDFLAGS) $(LDFLAGS) -o $@
-am_util_test_OBJECTS = util_test.$(OBJEXT)
-util_test_OBJECTS = $(am_util_test_OBJECTS)
-util_test_LDADD = $(LDADD)
-util_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(util_test_LDFLAGS) $(LDFLAGS) -o $@
-widget_test_SOURCES = widget_test.c
-widget_test_OBJECTS = widget_test.$(OBJEXT)
-widget_test_LDADD = $(LDADD)
-widget_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(widget_test_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -294,36 +99,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libftk_la_SOURCES) $(bitmap_factory_test_SOURCES) \
-	$(bitmap_test_SOURCES) $(canvas_test_SOURCES) \
-	$(demo_button_SOURCES) $(demo_check_button_SOURCES) \
-	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
-	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
-	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
-	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
-	$(demo_progress_bar_SOURCES) $(demo_wait_box_SOURCES) \
-	$(display_fb_test_SOURCES) $(font_test_SOURCES) \
-	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
-	$(input_test_SOURCES) $(label_test_SOURCES) \
-	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
-	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
-	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c
-DIST_SOURCES = $(am__libftk_la_SOURCES_DIST) \
-	$(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(demo_button_SOURCES) \
-	$(demo_check_button_SOURCES) $(demo_dialog_SOURCES) \
-	$(demo_entry_SOURCES) $(demo_expand_SOURCES) \
-	$(demo_image_SOURCES) $(demo_image_button_SOURCES) \
-	$(demo_label_SOURCES) $(demo_menu_SOURCES) \
-	$(demo_multi_win_SOURCES) $(demo_progress_bar_SOURCES) \
-	$(demo_wait_box_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(am__input_test_SOURCES_DIST) \
-	$(label_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(text_buffer_test_SOURCES) $(util_test_SOURCES) widget_test.c
+SOURCES = $(libftk_la_SOURCES)
+DIST_SOURCES = $(am__libftk_la_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -445,7 +222,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = testdata icons data
+SUBDIRS = . testdata icons data demos test
 lib_LTLIBRARIES = libftk.la
 LINUX_NATIVE = ftk_display_fb.c ftk_source_input.c
 LINUX_X11 = ftk_display_x11.c ftk_source_x11.c
@@ -462,66 +239,9 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
 	ftk_linux.c ftk_gesture.c ftk_wait_box.c $(am__append_1) \
 	$(am__append_2)
-@FTK_BACKEND_FB_TRUE@display_fb_test_SOURCES = display_fb_test.c
-@FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)
-@FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
-@FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
-MYLDFLAGS = .libs/libftk.a -lpng -ljpeg
-demo_wait_box_SOURCES = demo_wait_box.c
-demo_wait_box_LDFLAGS = $(MYLDFLAGS)
-demo_check_button_SOURCES = demo_check_button.c
-demo_check_button_LDFLAGS = $(MYLDFLAGS)
-demo_progress_bar_SOURCES = demo_progress_bar.c
-demo_progress_bar_LDFLAGS = $(MYLDFLAGS)
-demo_expand_SOURCES = demo_expand.c
-demo_expand_LDFLAGS = $(MYLDFLAGS)
-icon_cache_test_SOURCES = icon_cache_test.c
-icon_cache_test_LDFLAGS = $(MYLDFLAGS)
-sources_manager_test_SOURCES = sources_manager_test.c
-sources_manager_test_LDFLAGS = $(MYLDFLAGS)
-text_buffer_test_SOURCES = text_buffer_test.c
-text_buffer_test_LDFLAGS = $(MYLDFLAGS)
-util_test_SOURCES = util_test.c
-util_test_LDFLAGS = $(MYLDFLAGS)
-log_test_SOURCES = log_test.c
-log_test_LDFLAGS = $(MYLDFLAGS)
-png_test_SOURCES = png_test.c
-png_test_LDFLAGS = $(MYLDFLAGS)
-font_test_SOURCES = font_test.c
-font_test_LDFLAGS = $(MYLDFLAGS)
-bitmap_test_SOURCES = bitmap_test.c
-bitmap_test_LDFLAGS = $(MYLDFLAGS)
-label_test_SOURCES = label_test.c
-label_test_LDFLAGS = $(MYLDFLAGS)
-widget_test_SOURCE = widget_test.c
-widget_test_LDFLAGS = $(MYLDFLAGS)
-demo_label_SOURCES = demo_label.c
-demo_label_LDFLAGS = $(MYLDFLAGS)
-demo_button_SOURCES = demo_button.c
-demo_button_LDFLAGS = $(MYLDFLAGS)
-demo_image_SOURCES = demo_image.c
-demo_image_LDFLAGS = $(MYLDFLAGS)
-demo_image_button_SOURCES = demo_image_button.c
-demo_image_button_LDFLAGS = $(MYLDFLAGS)
-demo_dialog_SOURCES = demo_dialog.c
-demo_dialog_LDFLAGS = $(MYLDFLAGS)
-demo_multi_win_SOURCES = demo_multi_win.c
-demo_multi_win_LDFLAGS = $(MYLDFLAGS)
-demo_menu_SOURCES = demo_menu.c
-demo_menu_LDFLAGS = $(MYLDFLAGS)
-demo_entry_SOURCES = demo_entry.c
-demo_entry_LDFLAGS = $(MYLDFLAGS)
-canvas_test_SOURCES = canvas_test.c
-canvas_test_LDFLAGS = $(MYLDFLAGS)
-ftk_test_SOURCES = ftk_test.c
-ftk_test_LDFLAGS = $(MYLDFLAGS)
-bitmap_factory_test_SOURCES = bitmap_factory_test.c
-bitmap_factory_test_LDFLAGS = $(MYLDFLAGS)
-main_loop_test_SOURCES = main_loop_test.c
-main_loop_test_LDFLAGS = $(MYLDFLAGS)
-primary_source_test_SOURCES = primary_source_test.c
-primary_source_test_LDFLAGS = $(MYLDFLAGS)
+INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
+	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX
+
 ftkdir = $(includedir)/ftk
 ftk_HEADERS = \
 	fontdata.h                ftk_log.h\
@@ -613,123 +333,12 @@ clean-libLTLIBRARIES:
 libftk.la: $(libftk_la_OBJECTS) $(libftk_la_DEPENDENCIES) 
 	$(LINK) -rpath $(libdir) $(libftk_la_OBJECTS) $(libftk_la_LIBADD) $(LIBS)
 
-clean-noinstPROGRAMS:
-	@list='$(noinst_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-bitmap_factory_test$(EXEEXT): $(bitmap_factory_test_OBJECTS) $(bitmap_factory_test_DEPENDENCIES) 
-	@rm -f bitmap_factory_test$(EXEEXT)
-	$(bitmap_factory_test_LINK) $(bitmap_factory_test_OBJECTS) $(bitmap_factory_test_LDADD) $(LIBS)
-bitmap_test$(EXEEXT): $(bitmap_test_OBJECTS) $(bitmap_test_DEPENDENCIES) 
-	@rm -f bitmap_test$(EXEEXT)
-	$(bitmap_test_LINK) $(bitmap_test_OBJECTS) $(bitmap_test_LDADD) $(LIBS)
-canvas_test$(EXEEXT): $(canvas_test_OBJECTS) $(canvas_test_DEPENDENCIES) 
-	@rm -f canvas_test$(EXEEXT)
-	$(canvas_test_LINK) $(canvas_test_OBJECTS) $(canvas_test_LDADD) $(LIBS)
-demo_button$(EXEEXT): $(demo_button_OBJECTS) $(demo_button_DEPENDENCIES) 
-	@rm -f demo_button$(EXEEXT)
-	$(demo_button_LINK) $(demo_button_OBJECTS) $(demo_button_LDADD) $(LIBS)
-demo_check_button$(EXEEXT): $(demo_check_button_OBJECTS) $(demo_check_button_DEPENDENCIES) 
-	@rm -f demo_check_button$(EXEEXT)
-	$(demo_check_button_LINK) $(demo_check_button_OBJECTS) $(demo_check_button_LDADD) $(LIBS)
-demo_dialog$(EXEEXT): $(demo_dialog_OBJECTS) $(demo_dialog_DEPENDENCIES) 
-	@rm -f demo_dialog$(EXEEXT)
-	$(demo_dialog_LINK) $(demo_dialog_OBJECTS) $(demo_dialog_LDADD) $(LIBS)
-demo_entry$(EXEEXT): $(demo_entry_OBJECTS) $(demo_entry_DEPENDENCIES) 
-	@rm -f demo_entry$(EXEEXT)
-	$(demo_entry_LINK) $(demo_entry_OBJECTS) $(demo_entry_LDADD) $(LIBS)
-demo_expand$(EXEEXT): $(demo_expand_OBJECTS) $(demo_expand_DEPENDENCIES) 
-	@rm -f demo_expand$(EXEEXT)
-	$(demo_expand_LINK) $(demo_expand_OBJECTS) $(demo_expand_LDADD) $(LIBS)
-demo_image$(EXEEXT): $(demo_image_OBJECTS) $(demo_image_DEPENDENCIES) 
-	@rm -f demo_image$(EXEEXT)
-	$(demo_image_LINK) $(demo_image_OBJECTS) $(demo_image_LDADD) $(LIBS)
-demo_image_button$(EXEEXT): $(demo_image_button_OBJECTS) $(demo_image_button_DEPENDENCIES) 
-	@rm -f demo_image_button$(EXEEXT)
-	$(demo_image_button_LINK) $(demo_image_button_OBJECTS) $(demo_image_button_LDADD) $(LIBS)
-demo_label$(EXEEXT): $(demo_label_OBJECTS) $(demo_label_DEPENDENCIES) 
-	@rm -f demo_label$(EXEEXT)
-	$(demo_label_LINK) $(demo_label_OBJECTS) $(demo_label_LDADD) $(LIBS)
-demo_menu$(EXEEXT): $(demo_menu_OBJECTS) $(demo_menu_DEPENDENCIES) 
-	@rm -f demo_menu$(EXEEXT)
-	$(demo_menu_LINK) $(demo_menu_OBJECTS) $(demo_menu_LDADD) $(LIBS)
-demo_multi_win$(EXEEXT): $(demo_multi_win_OBJECTS) $(demo_multi_win_DEPENDENCIES) 
-	@rm -f demo_multi_win$(EXEEXT)
-	$(demo_multi_win_LINK) $(demo_multi_win_OBJECTS) $(demo_multi_win_LDADD) $(LIBS)
-demo_progress_bar$(EXEEXT): $(demo_progress_bar_OBJECTS) $(demo_progress_bar_DEPENDENCIES) 
-	@rm -f demo_progress_bar$(EXEEXT)
-	$(demo_progress_bar_LINK) $(demo_progress_bar_OBJECTS) $(demo_progress_bar_LDADD) $(LIBS)
-demo_wait_box$(EXEEXT): $(demo_wait_box_OBJECTS) $(demo_wait_box_DEPENDENCIES) 
-	@rm -f demo_wait_box$(EXEEXT)
-	$(demo_wait_box_LINK) $(demo_wait_box_OBJECTS) $(demo_wait_box_LDADD) $(LIBS)
-display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
-	@rm -f display_fb_test$(EXEEXT)
-	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
-font_test$(EXEEXT): $(font_test_OBJECTS) $(font_test_DEPENDENCIES) 
-	@rm -f font_test$(EXEEXT)
-	$(font_test_LINK) $(font_test_OBJECTS) $(font_test_LDADD) $(LIBS)
-ftk_test$(EXEEXT): $(ftk_test_OBJECTS) $(ftk_test_DEPENDENCIES) 
-	@rm -f ftk_test$(EXEEXT)
-	$(ftk_test_LINK) $(ftk_test_OBJECTS) $(ftk_test_LDADD) $(LIBS)
-icon_cache_test$(EXEEXT): $(icon_cache_test_OBJECTS) $(icon_cache_test_DEPENDENCIES) 
-	@rm -f icon_cache_test$(EXEEXT)
-	$(icon_cache_test_LINK) $(icon_cache_test_OBJECTS) $(icon_cache_test_LDADD) $(LIBS)
-input_test$(EXEEXT): $(input_test_OBJECTS) $(input_test_DEPENDENCIES) 
-	@rm -f input_test$(EXEEXT)
-	$(input_test_LINK) $(input_test_OBJECTS) $(input_test_LDADD) $(LIBS)
-label_test$(EXEEXT): $(label_test_OBJECTS) $(label_test_DEPENDENCIES) 
-	@rm -f label_test$(EXEEXT)
-	$(label_test_LINK) $(label_test_OBJECTS) $(label_test_LDADD) $(LIBS)
-log_test$(EXEEXT): $(log_test_OBJECTS) $(log_test_DEPENDENCIES) 
-	@rm -f log_test$(EXEEXT)
-	$(log_test_LINK) $(log_test_OBJECTS) $(log_test_LDADD) $(LIBS)
-main_loop_test$(EXEEXT): $(main_loop_test_OBJECTS) $(main_loop_test_DEPENDENCIES) 
-	@rm -f main_loop_test$(EXEEXT)
-	$(main_loop_test_LINK) $(main_loop_test_OBJECTS) $(main_loop_test_LDADD) $(LIBS)
-png_test$(EXEEXT): $(png_test_OBJECTS) $(png_test_DEPENDENCIES) 
-	@rm -f png_test$(EXEEXT)
-	$(png_test_LINK) $(png_test_OBJECTS) $(png_test_LDADD) $(LIBS)
-primary_source_test$(EXEEXT): $(primary_source_test_OBJECTS) $(primary_source_test_DEPENDENCIES) 
-	@rm -f primary_source_test$(EXEEXT)
-	$(primary_source_test_LINK) $(primary_source_test_OBJECTS) $(primary_source_test_LDADD) $(LIBS)
-sources_manager_test$(EXEEXT): $(sources_manager_test_OBJECTS) $(sources_manager_test_DEPENDENCIES) 
-	@rm -f sources_manager_test$(EXEEXT)
-	$(sources_manager_test_LINK) $(sources_manager_test_OBJECTS) $(sources_manager_test_LDADD) $(LIBS)
-text_buffer_test$(EXEEXT): $(text_buffer_test_OBJECTS) $(text_buffer_test_DEPENDENCIES) 
-	@rm -f text_buffer_test$(EXEEXT)
-	$(text_buffer_test_LINK) $(text_buffer_test_OBJECTS) $(text_buffer_test_LDADD) $(LIBS)
-util_test$(EXEEXT): $(util_test_OBJECTS) $(util_test_DEPENDENCIES) 
-	@rm -f util_test$(EXEEXT)
-	$(util_test_LINK) $(util_test_OBJECTS) $(util_test_LDADD) $(LIBS)
-widget_test$(EXEEXT): $(widget_test_OBJECTS) $(widget_test_DEPENDENCIES) 
-	@rm -f widget_test$(EXEEXT)
-	$(widget_test_LINK) $(widget_test_OBJECTS) $(widget_test_LDADD) $(LIBS)
-
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitmap_factory_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitmap_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/canvas_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_button.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_check_button.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_dialog.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_entry.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_expand.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_image.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_image_button.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_label.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_menu.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_multi_win.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_progress_bar.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_wait_box.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/display_fb_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fontdata.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_animator_expand.Plo@am__quote@
@@ -767,24 +376,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_status_item.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_status_panel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_style.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_text_buffer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_wait_box.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_widget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_window.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_wnd_manager_default.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icon_cache_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/input_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/label_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main_loop_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/png_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/primary_source_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources_manager_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text_buffer_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/widget_test.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -1006,7 +603,7 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-recursive
-all-am: Makefile $(LTLIBRARIES) $(PROGRAMS) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs: installdirs-recursive
 installdirs-am:
 	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(ftkdir)"; do \
@@ -1039,7 +636,7 @@ maintainer-clean-generic:
 clean: clean-recursive
 
 clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
-	clean-noinstPROGRAMS mostlyclean-am
+	mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
@@ -1100,8 +697,8 @@ uninstall-am: uninstall-ftkHEADERS uninstall-libLTLIBRARIES
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool clean-noinstPROGRAMS ctags \
-	ctags-recursive distclean distclean-compile distclean-generic \
+	clean-libLTLIBRARIES clean-libtool ctags ctags-recursive \
+	distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \

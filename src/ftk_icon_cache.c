@@ -69,10 +69,10 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 	FtkBitmap* bitmap = NULL;
 	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
 
-	snprintf(path, sizeof(path), "%s/icons/%s", DATA_DIR, filename);
+	snprintf(path, sizeof(path), "%s/icons/%s", LOCAL_DATA_DIR, filename);
 	if((bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path)) == NULL)
 	{
-		snprintf(path, sizeof(path), "./icons/%s", filename);
+		snprintf(path, sizeof(path), "%s/icons/%s", DATA_DIR, filename);
 		bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
 	}
 	

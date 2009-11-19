@@ -1,4 +1,4 @@
-SUBDIRS=testdata icons data
+SUBDIRS=. testdata icons data demos test
 
 lib_LTLIBRARIES=libftk.la
 
@@ -18,108 +18,16 @@ libftk_la_SOURCES=\
 	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c ftk_linux.c \
 	ftk_gesture.c         ftk_wait_box.c             
 
-noinst_PROGRAMS=label_test widget_test demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
-	canvas_test ftk_test bitmap_test font_test primary_source_test\
-	bitmap_factory_test main_loop_test png_test log_test util_test \
-	sources_manager_test demo_menu demo_entry text_buffer_test icon_cache_test \
-	demo_expand demo_progress_bar demo_check_button demo_wait_box
+if FTK_BACKEND_FB
+libftk_la_SOURCES+=$(LINUX_NATIVE)
+endif
 
 if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
 endif
 
-if FTK_BACKEND_FB
-libftk_la_SOURCES+=$(LINUX_NATIVE)
-noinst_PROGRAMS+=display_fb_test input_test
-display_fb_test_SOURCES=display_fb_test.c
-display_fb_test_LDFLAGS=$(MYLDFLAGS)
-input_test_SOURCES=input_test.c
-input_test_LDFLAGS=$(MYLDFLAGS)
-endif
-
-INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX
-MYLDFLAGS=.libs/libftk.a -lpng -ljpeg
-
-demo_wait_box_SOURCES=demo_wait_box.c
-demo_wait_box_LDFLAGS=$(MYLDFLAGS)
-
-demo_check_button_SOURCES=demo_check_button.c
-demo_check_button_LDFLAGS=$(MYLDFLAGS)
-
-demo_progress_bar_SOURCES=demo_progress_bar.c
-demo_progress_bar_LDFLAGS=$(MYLDFLAGS)
-
-demo_expand_SOURCES=demo_expand.c
-demo_expand_LDFLAGS=$(MYLDFLAGS)
-
-icon_cache_test_SOURCES=icon_cache_test.c
-icon_cache_test_LDFLAGS=$(MYLDFLAGS)
-
-sources_manager_test_SOURCES=sources_manager_test.c
-sources_manager_test_LDFLAGS=$(MYLDFLAGS)
-
-text_buffer_test_SOURCES=text_buffer_test.c
-text_buffer_test_LDFLAGS=$(MYLDFLAGS)
-
-util_test_SOURCES=util_test.c
-util_test_LDFLAGS=$(MYLDFLAGS)
-
-log_test_SOURCES=log_test.c
-log_test_LDFLAGS=$(MYLDFLAGS)
-
-png_test_SOURCES=png_test.c
-png_test_LDFLAGS=$(MYLDFLAGS)
-
-font_test_SOURCES=font_test.c
-font_test_LDFLAGS=$(MYLDFLAGS)
-
-bitmap_test_SOURCES=bitmap_test.c
-bitmap_test_LDFLAGS=$(MYLDFLAGS)
-
-label_test_SOURCES=label_test.c
-label_test_LDFLAGS=$(MYLDFLAGS)
-
-widget_test_SOURCE=widget_test.c
-widget_test_LDFLAGS=$(MYLDFLAGS)
-
-demo_label_SOURCES=demo_label.c
-demo_label_LDFLAGS=$(MYLDFLAGS)
-
-demo_button_SOURCES=demo_button.c
-demo_button_LDFLAGS=$(MYLDFLAGS)
-
-demo_image_SOURCES=demo_image.c
-demo_image_LDFLAGS=$(MYLDFLAGS)
-
-demo_image_button_SOURCES=demo_image_button.c
-demo_image_button_LDFLAGS=$(MYLDFLAGS)
-
-demo_dialog_SOURCES=demo_dialog.c
-demo_dialog_LDFLAGS=$(MYLDFLAGS)
-
-demo_multi_win_SOURCES=demo_multi_win.c
-demo_multi_win_LDFLAGS=$(MYLDFLAGS)
-
-demo_menu_SOURCES=demo_menu.c
-demo_menu_LDFLAGS=$(MYLDFLAGS)
-
-demo_entry_SOURCES=demo_entry.c
-demo_entry_LDFLAGS=$(MYLDFLAGS)
-
-canvas_test_SOURCES=canvas_test.c
-canvas_test_LDFLAGS=$(MYLDFLAGS)
-
-ftk_test_SOURCES=ftk_test.c
-ftk_test_LDFLAGS=$(MYLDFLAGS)
-
-bitmap_factory_test_SOURCES=bitmap_factory_test.c
-bitmap_factory_test_LDFLAGS=$(MYLDFLAGS)
-
-main_loop_test_SOURCES=main_loop_test.c
-main_loop_test_LDFLAGS=$(MYLDFLAGS)
-
-primary_source_test_SOURCES=primary_source_test.c
-primary_source_test_LDFLAGS=$(MYLDFLAGS)
+INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
+	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX
 
 ftkdir=$(includedir)/ftk
 ftk_HEADERS=\

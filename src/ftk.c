@@ -150,7 +150,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_init_bitmap_factory();
 	ftk_set_icon_cache(ftk_icon_cache_create());
 
-	snprintf(filename, sizeof(filename), "./data/%s", FTK_FONT);
+	snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
 	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
 	{
 		snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
