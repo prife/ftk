@@ -53,9 +53,12 @@ static Ret ftk_wait_box_on_paint(FtkWidget* thiz)
 	int bitmap_h = ftk_bitmap_height(priv->bitmap);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
-	priv->offset = priv->offset < bitmap_h ? priv->offset : 0;
-	ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, priv->offset, bitmap_w, bitmap_w, x, y);
-	priv->offset += bitmap_w;
+	if(priv->waiting)
+	{
+		priv->offset = priv->offset < bitmap_h ? priv->offset : 0;
+		ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, priv->offset, bitmap_w, bitmap_w, x, y);
+		priv->offset += bitmap_w;
+	}
 
 	FTK_END_PAINT();
 }
