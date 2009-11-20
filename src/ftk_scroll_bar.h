@@ -36,7 +36,7 @@
 FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int height);
-Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int max_value, int value, int page_delta);
+Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int value, int max_value, int page_delta);
 Ret ftk_scroll_bar_set_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 int ftk_scroll_bar_get_value(FtkWidget* thiz);
 int ftk_scroll_bar_get_max_value(FtkWidget* thiz);

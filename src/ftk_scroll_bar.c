@@ -37,6 +37,10 @@ typedef struct _PrivInfo
 	int value;
 	int max_value;
 	int page_delta;
+	int mouse_pressed;
+	int pressed_x;
+	int pressed_y;
+	int vertical;
 	void* listener_ctx;
 	FtkBitmap* bitmap;
 	FtkListener listener;
@@ -44,6 +48,34 @@ typedef struct _PrivInfo
 
 static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 {
+	DECL_PRIV0(thiz, priv);
+	switch(event->type)
+	{
+		case FTK_EVT_MOUSE_DOWN:
+		{
+			priv->mouse_pressed = 1;		
+			priv->pressed_x = event->u.mouse.x;
+			priv->pressed_y = event->u.mouse.y;
+			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
+			break;
+		}
+		case FTK_EVT_MOUSE_MOVE:
+		{
+			int value = 0;
+			if(priv->mouse_pressed)
+			{
+			}
+			break;
+		}
+		case FTK_EVT_MOUSE_UP:
+		{
+			priv->mouse_pressed = 0;
+			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+			break;
+		}
+		default:break;
+	}
+
 	return RET_OK;
 }
 
@@ -59,7 +91,7 @@ static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
 
 	bitmap_width = ftk_bitmap_width(priv->bitmap);
 	bitmap_height = ftk_bitmap_height(priv->bitmap);
-	if(width < height)
+	if(priv->vertical)
 	{
 		dy = height * priv->value / priv->max_value;
 		dy = (dy + bitmap_height) < height ? dy : height - bitmap_height;
@@ -101,6 +133,7 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 		if(width < height)
 		{
 			/*vertical*/
+			priv->vertical = 1;
 			priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), 
 				"scrollbar_handle_vertical"FTK_STOCK_IMG_SUFFIX);
 			width = ftk_bitmap_width(priv->bitmap);
@@ -108,6 +141,7 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 		}
 		else
 		{
+			priv->vertical = 0;
 			priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), 
 				"scrollbar_handle_horizontal"FTK_STOCK_IMG_SUFFIX);
 
@@ -125,7 +159,7 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 	return thiz;
 }
 
-Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int max_value, int value, int page_delta)
+Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int value, int max_value, int page_delta)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);

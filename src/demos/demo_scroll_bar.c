@@ -30,8 +30,10 @@ int main(int argc, char* argv[])
 	
 	width = width - 20;
 	scroll_bar = ftk_scroll_bar_create(win, width/2, 10, 0, height/2);
+	ftk_scroll_bar_set_param(scroll_bar, 10, 100, 10);	
 	
 	scroll_bar = ftk_scroll_bar_create(win, 10, height/2, width-20, 20);
+	ftk_scroll_bar_set_param(scroll_bar, 10, 100, 10);	
 	
 	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);
 	ftk_widget_set_text(button, "quit");
