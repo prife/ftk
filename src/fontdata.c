@@ -276,10 +276,6 @@ void font_data_destroy(FontData* thiz)
 			free(thiz->glyphs);
 			free(thiz->data);
 		}
-		else
-		{
-			free(thiz->org_data);
-		}
 		free(thiz);
 	}
 

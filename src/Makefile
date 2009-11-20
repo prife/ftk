@@ -66,8 +66,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
 	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
 	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
-	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_display_fb.c \
-	ftk_source_input.c ftk_display_x11.c ftk_source_x11.c
+	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_mmap_linux.c \
+	ftk_display_fb.c ftk_source_input.c ftk_display_x11.c \
+	ftk_source_x11.c
 am__objects_1 = ftk_display_fb.lo ftk_source_input.lo
 #am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo
@@ -84,8 +85,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_menu_item.lo ftk_app_window.lo ftk_entry.lo \
 	ftk_text_buffer.lo ftk_icon_cache.lo ftk_animator_expand.lo \
 	ftk_progress_bar.lo ftk_radio_group.lo ftk_check_button.lo \
-	ftk_linux.lo ftk_gesture.lo ftk_wait_box.lo $(am__objects_2) \
-	$(am__objects_4)
+	ftk_linux.lo ftk_gesture.lo ftk_wait_box.lo ftk_mmap_linux.lo \
+	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -125,13 +126,13 @@ AUTOMAKE = ${SHELL} /broncho/lab/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x240\""
+CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x240\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -142,7 +143,7 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g -O2
+FFLAGS = -g 
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -237,8 +238,8 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
 	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
 	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
-	ftk_linux.c ftk_gesture.c ftk_wait_box.c $(am__append_1) \
-	$(am__append_2)
+	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_mmap_linux.c \
+	$(am__append_1) $(am__append_2)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX
 
@@ -365,6 +366,7 @@ include ./$(DEPDIR)/ftk_log.Plo
 include ./$(DEPDIR)/ftk_main_loop.Plo
 include ./$(DEPDIR)/ftk_menu_item.Plo
 include ./$(DEPDIR)/ftk_menu_panel.Plo
+include ./$(DEPDIR)/ftk_mmap_linux.Plo
 include ./$(DEPDIR)/ftk_progress_bar.Plo
 include ./$(DEPDIR)/ftk_radio_group.Plo
 include ./$(DEPDIR)/ftk_source_idle.Plo

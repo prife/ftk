@@ -1,7 +1,7 @@
 /*
- * File: ftk.h    
+ * File: ftk_mmap.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief: ftk global init, mainloop and deinit functions.  
+ * Brief:   wrap mmap.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,47 +25,22 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-20 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_H
-#define FTK_H
+#ifndef FTK_MMAP_H
+#define FTK_MMAP_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif/*__cplusplus*/
+#include "ftk_typedef.h"
 
-#include "ftk_log.h"
-#include "ftk_mmap.h"
-#include "ftk_bitmap.h"
-#include "ftk_dialog.h"
-#include "ftk_window.h"
-#include "ftk_style.h"
-#include "ftk_app_window.h"
-#include "ftk_label.h"
-#include "ftk_image.h"
-#include "ftk_entry.h"
-#include "ftk_button.h"
-#include "ftk_globals.h"
-#include "ftk_wait_box.h"
-#include "ftk_source_idle.h"
-#include "ftk_source_timer.h"
-#include "ftk_status_panel.h"
-#include "ftk_status_item.h"
-#include "ftk_menu_panel.h"
-#include "ftk_menu_item.h"
-#include "ftk_progress_bar.h"
-#include "ftk_check_button.h"
-#include "ftk_radio_group.h"
+struct _FtkMmap;
+typedef struct _FtkMmap FtkMmap;
 
-Ret  ftk_init(int argc, char* argv[]);
-Ret  ftk_run(void);
-void ftk_quit(void);
+FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size);
+void*    ftk_mmap_data(FtkMmap* thiz);
+size_t   ftk_mmap_length(FtkMmap* thiz);
+void     ftk_mmap_destroy(FtkMmap* thiz);
 
-#ifdef __cplusplus
-}
-#endif/*__cplusplus*/
-
-#endif/*FTK_H*/
+#endif/*FTK_MMAP_H*/
 
