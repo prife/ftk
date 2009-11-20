@@ -44,7 +44,6 @@ static Ret ftk_progress_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 {
-	int i = 0;
 	int fg_width = 0;
 	DECL_PRIV0(thiz, priv);
 	FtkGc gc = {.mask = FTK_GC_FG};
@@ -79,7 +78,7 @@ static void ftk_progress_bar_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_progress_bar_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -92,7 +91,7 @@ FtkWidget* ftk_progress_bar_create(int id, int x, int y, int width, int height)
 		thiz->on_paint = ftk_progress_bar_on_paint;
 		thiz->destroy  = ftk_progress_bar_destroy;
 
-		ftk_widget_init(thiz, FTK_PROGRESS_BAR, id);
+		ftk_widget_init(thiz, FTK_PROGRESS_BAR, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
@@ -102,6 +101,7 @@ FtkWidget* ftk_progress_bar_create(int id, int x, int y, int width, int height)
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;

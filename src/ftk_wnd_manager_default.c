@@ -293,7 +293,6 @@ static const unsigned char key_tanslate_table[0xff] =
 	[FTK_KEY_GRAVE]         =  FTK_KEY_NOT,
 	[FTK_KEY_SEMICOLON]     =  FTK_KEY_COLON,
 	[FTK_KEY_QUOTERIGHT]    =  FTK_KEY_QUOTEDBL,
-	{0},
 };
 
 static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent* event)

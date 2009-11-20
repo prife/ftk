@@ -32,6 +32,7 @@
 #include "ftk_log.h"
 #include "ftk_window.h"
 #include "ftk_status_item.h"
+#include "ftk_status_panel.h"
 
 typedef struct _PrivInfo
 {
@@ -112,7 +113,7 @@ static void ftk_status_item_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_status_item_create(int id, int width, int height)
+FtkWidget* ftk_status_item_create(FtkWidget* parent, int pos, int width)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -124,10 +125,12 @@ FtkWidget* ftk_status_item_create(int id, int width, int height)
 		thiz->on_paint = ftk_status_item_on_paint;
 		thiz->destroy  = ftk_status_item_destroy;
 
-		ftk_widget_init(thiz, FTK_STATUS_ITEM, id);
+		ftk_widget_init(thiz, FTK_STATUS_ITEM, 0);
 		ftk_widget_move(thiz, 0, 0);
-		ftk_widget_resize(thiz, width, height);
+		ftk_widget_resize(thiz, width, 0);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_status_item_set_position(thiz, pos);
+		ftk_status_panel_add(parent, thiz);
 	}
 
 	return thiz;

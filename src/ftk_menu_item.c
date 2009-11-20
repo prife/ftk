@@ -34,7 +34,7 @@
 #include "ftk_menu_item.h"
 #include "ftk_globals.h"
 #include "ftk_icon_cache.h"
-#include "ftk_window.h"
+#include "ftk_menu_panel.h"
 
 typedef struct _PrivInfo
 {
@@ -131,7 +131,7 @@ static void ftk_menu_item_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_menu_item_create(int id)
+FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -143,8 +143,9 @@ FtkWidget* ftk_menu_item_create(int id)
 		thiz->on_paint = ftk_menu_item_on_paint;
 		thiz->destroy  = ftk_menu_item_destroy;
 
-		ftk_widget_init(thiz, FTK_MENU_ITEM, id);
+		ftk_widget_init(thiz, FTK_MENU_ITEM, 0);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_menu_panel_add(parent, thiz);
 	}
 
 	return thiz;

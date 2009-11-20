@@ -44,26 +44,20 @@ static void create_app_window(void)
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-	button = ftk_button_create(1001, 0, height/6, width/3, 50);
+	button = ftk_button_create(win, 0, height/6, width/3, 50);
 	ftk_widget_set_text(button, "创建窗口");
-	ftk_widget_append_child(win, button);
-	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_open_clicked, win);
 
-	button = ftk_button_create(1002, 2*width/3, height/6, width/3, 50);
+	button = ftk_button_create(win, 2*width/3, height/6, width/3, 50);
 	ftk_widget_set_text(button, "关闭窗口");
-	ftk_widget_append_child(win, button);
-	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_close_clicked, win);
 
 	snprintf(title, sizeof(title), "window%02d", g_index++);
-	label = ftk_label_create(1003, width/4, height/2, width/2, 30);
+	label = ftk_label_create(win, width/4, height/2, width/2, 30);
 	ftk_label_set_text(label, title);
-	ftk_widget_show(label, 1);
-	ftk_widget_append_child(win, label);
 	
 	ftk_widget_set_text(win, title);
-	ftk_widget_show(win, 1);
+	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 
 	return;

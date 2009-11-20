@@ -314,7 +314,7 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -329,7 +329,7 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		thiz->destroy  = ftk_entry_destroy;
 
 		height = ftk_font_height(ftk_default_font()) + FTK_ENTRY_TOP_MARGIN * 2;
-		ftk_widget_init(thiz, FTK_ENTRY, id);
+		ftk_widget_init(thiz, FTK_ENTRY, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
@@ -343,6 +343,7 @@ FtkWidget* ftk_entry_create(int id, int x, int y, int width, int height)
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
+		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;

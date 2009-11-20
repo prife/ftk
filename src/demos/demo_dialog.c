@@ -28,26 +28,20 @@ int main(int argc, char* argv[])
 	
 	width = ftk_widget_width(dialog);
 	height = ftk_widget_height(dialog);
-	label = ftk_label_create(1005, width/6, height/4, 5*width/6, 20);
+	label = ftk_label_create(dialog, width/6, height/4, 5*width/6, 20);
 	ftk_label_set_text(label, "Are you sure to quit?");
-	ftk_widget_append_child(dialog, label);
-	ftk_widget_show(label, 1);
 
-	button = ftk_button_create(1005, width/6, height/2, width/3, 50);
+	button = ftk_button_create(dialog, width/6, height/2, width/3, 50);
 	ftk_widget_set_text(button, "yes");
-	ftk_widget_append_child(dialog, button);
-	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	
-	button = ftk_button_create(1006, width/2, height/2, width/3, 50);
+	button = ftk_button_create(dialog, width/2, height/2, width/3, 50);
 	ftk_widget_set_text(button, "no");
-	ftk_widget_append_child(dialog, button);
-	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
 	ftk_window_set_focus(dialog, button);
 
 	ftk_widget_set_text(dialog, "dialog demo");
-	ftk_widget_show(dialog, 1);
+	ftk_widget_show_all(dialog, 1);
 	ftk_widget_set_user_data(dialog, on_window_close, dialog);
 
 	assert(ftk_dialog_run(dialog) == id);

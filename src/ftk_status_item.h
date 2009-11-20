@@ -36,7 +36,7 @@
 
 FTK_INHERITE_FROM(Widget)
 
-FtkWidget* ftk_status_item_create(int id, int width, int height);
+FtkWidget* ftk_status_item_create(FtkWidget* parent, int pos, int width);
 
 /*
  * the position on the panel:

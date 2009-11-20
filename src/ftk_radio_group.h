@@ -36,7 +36,7 @@
 
 FTK_INHERITE_FROM(Widget)
 
-FtkWidget* ftk_radio_group_create(int id, int x, int y, int width, int height);
+FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, int height);
 Ret  ftk_radio_group_set_checked(FtkWidget* thiz, FtkWidget* radio);
 
 #endif/*FTK_RADIO_GROUP_H*/

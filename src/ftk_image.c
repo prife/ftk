@@ -72,7 +72,7 @@ static void ftk_image_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_image_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_image_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -84,10 +84,11 @@ FtkWidget* ftk_image_create(int id, int x, int y, int width, int height)
 		thiz->on_paint = ftk_image_on_paint;
 		thiz->destroy  = ftk_image_destroy;
 
-		ftk_widget_init(thiz, FTK_IMAGE, id);
+		ftk_widget_init(thiz, FTK_IMAGE, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_insensitive(thiz, 1);
+		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;

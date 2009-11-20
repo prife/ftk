@@ -89,7 +89,7 @@ static void ftk_label_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_label_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -101,11 +101,12 @@ FtkWidget* ftk_label_create(int id, int x, int y, int width, int height)
 		thiz->on_paint = ftk_label_on_paint;
 		thiz->destroy  = ftk_label_destroy;
 
-		ftk_widget_init(thiz, FTK_LABEL, id);
+		ftk_widget_init(thiz, FTK_LABEL, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_insensitive(thiz, 1);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;

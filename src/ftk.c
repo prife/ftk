@@ -289,7 +289,8 @@ static void ftk_init_panel(void)
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
 	ftk_gc_reset(&gc);
 	
-	item = ftk_status_item_create(IDC_CLOSE_ITEM, 32, 32);
+	item = ftk_status_item_create(panel, -1, 32);
+	ftk_widget_set_id(item, IDC_CLOSE_ITEM);
 	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "close-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)
 	{
@@ -299,12 +300,11 @@ static void ftk_init_panel(void)
 		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
 		ftk_gc_reset(&gc);
 	}
-	ftk_status_item_set_position(item, -1);
-	ftk_status_panel_add(panel, item);
 	ftk_widget_show(item, 1);
 	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
 
-	item = ftk_status_item_create(IDC_ICON_ITEM, 32, 32);
+	item = ftk_status_item_create(panel, 1, 32);
+	ftk_widget_set_id(item, IDC_ICON_ITEM);
 	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)
 	{
@@ -314,13 +314,10 @@ static void ftk_init_panel(void)
 		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
 		ftk_gc_reset(&gc);
 	}
-	ftk_status_item_set_position(item, 1);
-	ftk_status_panel_add(panel, item);
 	ftk_widget_show(item, 1);
 
-	item = ftk_status_item_create(IDC_TITLE_ITEM, 160, 32);
-	ftk_status_item_set_position(item, 2);
-	ftk_status_panel_add(panel, item);
+	item = ftk_status_item_create(panel, 2, 160);
+	ftk_widget_set_id(item, IDC_TITLE_ITEM);
 	ftk_widget_show(item, 1);
 
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), on_wnd_manager_global_event, NULL);

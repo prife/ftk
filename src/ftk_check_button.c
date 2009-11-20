@@ -196,7 +196,7 @@ static void ftk_check_button_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_check_button_create_ex(int id, int x, int y, int width, int height, int radio)
+FtkWidget* ftk_check_button_create_ex(FtkWidget* parent, int x, int y, int width, int height, int radio)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
@@ -211,7 +211,7 @@ FtkWidget* ftk_check_button_create_ex(int id, int x, int y, int width, int heigh
 		thiz->on_paint = ftk_check_button_on_paint;
 		thiz->destroy  = ftk_check_button_destroy;
 
-		ftk_widget_init(thiz, FTK_BUTTON, id);
+		ftk_widget_init(thiz, FTK_BUTTON, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
@@ -226,19 +226,20 @@ FtkWidget* ftk_check_button_create_ex(int id, int x, int y, int width, int heigh
 		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;
 }
 
-FtkWidget* ftk_check_button_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_check_button_create(FtkWidget* parent, int x, int y, int width, int height)
 {
-	return ftk_check_button_create_ex(id, x, y, width, height, 0);	
+	return ftk_check_button_create_ex(parent, x, y, width, height, 0);	
 }
 
-FtkWidget* ftk_radio_button_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_radio_button_create(FtkWidget* parent, int x, int y, int width, int height)
 {
-	return ftk_check_button_create_ex(id, x, y, width, height, 1);	
+	return ftk_check_button_create_ex(parent, x, y, width, height, 1);	
 }
 
 int        ftk_check_button_get_checked(FtkWidget* thiz)

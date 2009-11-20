@@ -36,7 +36,7 @@
 
 FTK_INHERITE_FROM(Widget)
 
-FtkWidget* ftk_progress_bar_create(int id, int x, int y, int width, int height);
+FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, int height);
 Ret ftk_progress_bar_set_percent(FtkWidget* thiz, int percent);
 int ftk_progress_bar_get_percent(FtkWidget* thiz);
 

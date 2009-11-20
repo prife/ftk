@@ -379,6 +379,25 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 	return;
 }
 
+void ftk_widget_show_all(FtkWidget* thiz, int visible)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+		
+	if(thiz->children != NULL)
+	{
+		ftk_widget_show_all(thiz->children, visible);
+	}
+
+	if(thiz->next != NULL)
+	{
+		ftk_widget_show_all(thiz->next, visible);
+	}
+
+	ftk_widget_show(thiz, visible);
+
+	return;
+}
+
 void ftk_widget_set_visible(FtkWidget* thiz, int visible)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);

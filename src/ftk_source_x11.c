@@ -133,7 +133,6 @@ static const int s_key_map[] =
 	[0x6a] = FTK_KEY_INSERT,
 	[0x6b] = FTK_KEY_DELETE,
 	[0x71] = FTK_KEY_RIGHTALT,
-	{0}
 };
 
 static int ftk_source_x11_keymap(FtkSource* thiz, Display* display, int keycode)

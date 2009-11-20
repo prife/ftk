@@ -48,38 +48,30 @@ int main(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-	FtkWidget* label = ftk_label_create(1001, 10, 10, width - 20, 20);
+	FtkWidget* label = ftk_label_create(win, 10, 10, width - 20, 20);
 	ftk_label_set_text(label, "中文文本");
-	ftk_widget_append_child(win, label);
-	ftk_widget_show(label, 1);
 	
-	label = ftk_label_create(1002, 10, 40, width - 20, 20);
+	label = ftk_label_create(win, 10, 40, width - 20, 20);
 	ftk_label_set_text(label, "English Text");
 	assert(strcmp(ftk_label_get_text(label), "English Text") == 0);
-	ftk_widget_append_child(win, label);
-	ftk_widget_show(label, 1);
 	
 	gc.bg.a = 0xff;
 	gc.bg.r = 0xF0;
 	gc.bg.g = 0xF0;
 	gc.bg.b = 0x80;
-	label = ftk_label_create(1004, 10, height/2, width - 20, 120);
+	label = ftk_label_create(win, 10, height/2, width - 20, 120);
 	ftk_widget_set_gc(label, FTK_WIDGET_INSENSITIVE, &gc);
 	ftk_widget_unset_attr(label, FTK_ATTR_TRANSPARENT);
 	ftk_label_set_text(label, "中英文混合多行文本显示:the linux mobile development.带有背景颜色");
-	ftk_widget_append_child(win, label);
-	ftk_widget_show(label, 1);
 	
-	label = ftk_label_create(1003, 50, height/2-30, width, 20);
-	ftk_widget_append_child(win, label);
-	ftk_widget_show(label, 1);
+	label = ftk_label_create(win, 50, height/2-30, width, 20);
 	info.label = label;
 	
 	ftk_widget_set_text(win, "label demo");
+	ftk_widget_show_all(win, 1);
 
-	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
-	ftk_widget_show(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
+	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
 	ftk_run();
 

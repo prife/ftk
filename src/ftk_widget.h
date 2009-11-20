@@ -101,6 +101,7 @@ void* ftk_widget_user_data(FtkWidget* thiz);
 const char* ftk_widget_get_text(FtkWidget* thiz);
 
 void ftk_widget_show(FtkWidget* thiz, int visible);
+void ftk_widget_show_all(FtkWidget* thiz, int visible);
 void ftk_widget_set_visible(FtkWidget* thiz, int visible);
 void ftk_widget_move(FtkWidget* thiz, int x, int y);
 void ftk_widget_resize(FtkWidget* thiz, int width, int height);

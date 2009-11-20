@@ -47,7 +47,7 @@ static void ftk_radio_group_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_radio_group_create(int id, int x, int y, int width, int height)
+FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 		
@@ -57,9 +57,10 @@ FtkWidget* ftk_radio_group_create(int id, int x, int y, int width, int height)
 		thiz->on_paint = ftk_radio_group_on_paint;
 		thiz->destroy  = ftk_radio_group_destroy;
 
-		ftk_widget_init(thiz, FTK_RADIO_GROUP, id);
+		ftk_widget_init(thiz, FTK_RADIO_GROUP, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
+		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;

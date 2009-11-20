@@ -59,7 +59,7 @@ static Ret  ftk_app_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		if(priv->on_prepare_options_menu(priv->on_prepare_options_menu_ctx, menu_panel) == RET_OK)
 		{
 			ftk_menu_panel_relayout(menu_panel);
-			ftk_widget_show(menu_panel, 1);
+			ftk_widget_show_all(menu_panel, 1);
 		}
 		else
 		{

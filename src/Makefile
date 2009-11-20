@@ -33,8 +33,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
-#am__append_1 = $(LINUX_NATIVE)
-am__append_2 = $(LINUX_X11)
+am__append_1 = $(LINUX_NATIVE)
+#am__append_2 = $(LINUX_X11)
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -69,9 +69,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_display_fb.c \
 	ftk_source_input.c ftk_display_x11.c ftk_source_x11.c
 am__objects_1 = ftk_display_fb.lo ftk_source_input.lo
-#am__objects_2 = $(am__objects_1)
+am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo
-am__objects_4 = $(am__objects_3)
+#am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font_default.lo \
@@ -125,7 +125,7 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:240x320\""
+CFLAGS = -g -O2 -DUSE_LINUX_NATIVE -DPC_EMU
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -149,7 +149,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
+LDFLAGS = 
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool

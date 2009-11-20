@@ -78,14 +78,13 @@ static void ftk_wait_box_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_wait_box_create(int id, int x, int y)
+FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 
 	if(thiz != NULL)
 	{
 		int w = 0;
-		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
 		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 		DECL_PRIV0(thiz, priv);
 
@@ -97,10 +96,11 @@ FtkWidget* ftk_wait_box_create(int id, int x, int y)
 		assert(priv->bitmap != NULL);
 		
 		w = ftk_bitmap_width(priv->bitmap);
-		ftk_widget_init(thiz, FTK_WAIT_BOX, id);
+		ftk_widget_init(thiz, FTK_WAIT_BOX, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, w, w);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_append_child(parent, thiz);
 
 		priv->timer = ftk_source_timer_create(500, (FtkTimer)ftk_widget_paint, thiz);
 	}

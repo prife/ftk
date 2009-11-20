@@ -37,7 +37,7 @@
 
 FTK_INHERITE_FROM(Widget)
 
-FtkWidget* ftk_label_create(int id, int x, int y, int width, int height);
+FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
 Ret ftk_label_set_text(FtkWidget* thiz, const char* text);
 const char* ftk_label_get_text(FtkWidget* thiz);
 
