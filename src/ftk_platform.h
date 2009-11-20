@@ -66,7 +66,7 @@
 #define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
 #define FTK_STRDUP(p)      p != NULL ? strdup(p) : NULL
 
-int  ftk_platform_init(int argc, char* argv);
+int  ftk_platform_init(int argc, char** argv);
 void ftk_platform_deinit(void);
 
 #endif/*FTK_PLATFORM_H*/

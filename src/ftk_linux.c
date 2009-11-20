@@ -88,7 +88,7 @@ static int ftk_set_tty_mode(int graphics)
     return r;
 }
 
-int ftk_platform_init(int argc, char* argv)
+int ftk_platform_init(int argc, char** argv)
 {
 	ftk_set_tty_mode(1);
 	ftk_install_crash_signal();

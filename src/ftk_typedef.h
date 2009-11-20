@@ -92,7 +92,8 @@ typedef enum _FtkWidgetType
 	FTK_PROGRESS_BAR,
 	FTK_RADIO_GROUP,
 	FTK_RADIO_BUTTON,
-	FTK_CHECK_BUTTON
+	FTK_CHECK_BUTTON,
+	FTK_SCROLL_BAR
 }FtkWidgetType;
 
 typedef enum _FtkLogLevel

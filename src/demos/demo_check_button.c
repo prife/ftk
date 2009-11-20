@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	ftk_widget_set_text(button, "hide");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
-	group = ftk_radio_group_create(win, 0, 90, 2 * width, 60);
+	group = ftk_radio_group_create(win, 0, 60, 2 * width, 60);
 	
 	button = ftk_radio_button_create(group,0, 10, width, 50);
 	ftk_widget_set_text(button, "Male");
@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	ftk_widget_set_text(button, "Female");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
-	group = ftk_radio_group_create(win, 0, 160, 2 * width, 60);
+	group = ftk_radio_group_create(win, 0, 120, 2 * width, 60);
 
 	button = ftk_radio_button_create(group,0, 10, width, 50);
 	ftk_widget_set_text(button, "1(图标右)");

@@ -39,7 +39,7 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int max_value, int value, int page_delta);
 Ret ftk_scroll_bar_set_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 int ftk_scroll_bar_get_value(FtkWidget* thiz);
-Ret ftk_scroll_bar_get_max_value(FtkWidget* thiz);
+int ftk_scroll_bar_get_max_value(FtkWidget* thiz);
 Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value);
 
 #endif/*FTK_SCROLL_BAR_H*/

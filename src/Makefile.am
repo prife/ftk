@@ -15,8 +15,8 @@ libftk_la_SOURCES=\
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c \
-	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c ftk_linux.c \
-	ftk_gesture.c         ftk_wait_box.c            ftk_mmap_linux.c
+	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c  ftk_linux.c \
+	ftk_gesture.c         ftk_wait_box.c            ftk_mmap_linux.c    ftk_scroll_bar.c
 
 if FTK_BACKEND_FB
 libftk_la_SOURCES+=$(LINUX_NATIVE)

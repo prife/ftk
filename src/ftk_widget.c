@@ -770,7 +770,6 @@ static int ftk_widget_paint_called_by_parent(FtkWidget* thiz)
 Ret ftk_widget_paint_self(FtkWidget* thiz)
 {
 	return_val_if_fail(thiz != NULL && thiz->on_paint != NULL, RET_FAIL);
-	return_val_if_fail(thiz->priv->width > 0 && thiz->priv->height > 0, RET_FAIL);
 
 	if(ftk_widget_is_visible(thiz) && ftk_widget_is_parent_visible(thiz))
 	{
@@ -780,6 +779,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
 		FtkBitmap* bitmap = priv->gc[priv->state].bitmap;
 		return_val_if_fail(canvas != NULL, RET_FAIL);
+		return_val_if_fail(thiz->priv->width > 0 && thiz->priv->height > 0, RET_FAIL);
 
 		priv->painting = 1;
 		if(ftk_widget_has_attr(thiz, FTK_ATTR_TRANSPARENT))

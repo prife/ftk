@@ -36,6 +36,8 @@ typedef struct _PrivInfo
 	int value;
 	int max_value;
 	int page_delta;
+	void* listener_ctx;
+	FtkListener listener;
 }PrivInfo;
 
 static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
@@ -46,9 +48,8 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	int bitmap_w = ftk_bitmap_width(priv->bitmap);
-	int bitmap_h = ftk_bitmap_height(priv->bitmap);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	/*TODO*/
 
 	FTK_END_PAINT();
 }
@@ -72,16 +73,13 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
-		int w = 0;
-		DECL_PRIV0(thiz, priv);
-
 		thiz->on_event = ftk_scroll_bar_on_event;
 		thiz->on_paint = ftk_scroll_bar_on_paint;
 		thiz->destroy  = ftk_scroll_bar_destroy;
 
 		ftk_widget_init(thiz, FTK_SCROLL_BAR, 0);
 		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, w, w);
+		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}
@@ -91,22 +89,54 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 
 Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int max_value, int value, int page_delta)
 {
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+	return_val_if_fail(value < max_value && page_delta < max_value, RET_FAIL);
+
+	priv->value = value;
+	priv->max_value = max_value;
+	priv->page_delta = page_delta;
+	ftk_widget_paint_self(thiz);	
+
+	return RET_OK;
 }
 
 Ret ftk_scroll_bar_set_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
 {
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->listener = listener;
+	priv->listener_ctx = ctx;
+
+	return RET_OK;
 }
 
 int ftk_scroll_bar_get_value(FtkWidget* thiz)
 {
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, 0);
+
+	return priv->value;
 }
 
-Ret ftk_scroll_bar_get_max_value(FtkWidget* thiz);
+int ftk_scroll_bar_get_max_value(FtkWidget* thiz)
 {
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, 0);
+
+	return priv->max_value;
 }
 
 Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value)
 {
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+	
+	priv->value = value;
+	ftk_widget_paint_self(thiz);	
+
+	return RET_OK;
 }
 
 
