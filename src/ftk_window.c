@@ -243,12 +243,14 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 
 	if((target = ftk_widget_find_target(thiz, event->u.mouse.x, event->u.mouse.y)) != NULL && target != thiz)
 	{
-		if(event->type == FTK_EVT_MOUSE_DOWN && !ftk_widget_is_insensitive(target))
+		if(event->type == FTK_EVT_MOUSE_DOWN 
+			&& !ftk_widget_is_insensitive(target)
+			&& ftk_widget_is_visible(target))
 		{
 			ftk_window_set_focus(thiz, target);
 		}
 
-		if(!ftk_widget_is_insensitive(target))
+		if(!ftk_widget_is_insensitive(target) && ftk_widget_is_visible(target))
 		{
 			ret = ftk_widget_event(target, event);
 		}
