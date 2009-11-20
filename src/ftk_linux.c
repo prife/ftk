@@ -63,18 +63,18 @@ static void signal_int_handler(int sig)
 	return;
 }
 
-void ftk_install_crash_signal(void)
+static void ftk_install_crash_signal(void)
 {
 	signal(SIGABRT, signal_handler);
 	signal(SIGSEGV, signal_handler);
-	signal(SIGILL, signal_handler);
+	signal(SIGILL,  signal_handler);
 	signal(SIGKILL, signal_handler);
-	signal(SIGINT, signal_int_handler);
+	signal(SIGINT,  signal_int_handler);
 
 	return ;
 }
 
-int ftk_set_tty_mode(int graphics)
+static int ftk_set_tty_mode(int graphics)
 {
     int r = 0;
 #ifndef PC_EMU
@@ -86,4 +86,19 @@ int ftk_set_tty_mode(int graphics)
     close(fd);
 #endif
     return r;
+}
+
+int ftk_platform_init(int argc, char* argv)
+{
+	ftk_set_tty_mode(1);
+	ftk_install_crash_signal();
+
+	return RET_OK;
+}
+
+void ftk_platform_deinit(void)
+{
+	ftk_set_tty_mode(0);
+
+	return;
 }

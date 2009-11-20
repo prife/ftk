@@ -131,6 +131,8 @@ static void ftk_deinit(void)
 		ftk_set_display(NULL);
 	}
 
+	ftk_platform_deinit();
+
 	ftk_logd("%s: ftk exit.\n", __func__);
 	return;
 }
@@ -142,7 +144,8 @@ Ret ftk_init(int argc, char* argv[])
 	FtkDisplay* display = NULL;
 	char filename[260] = {0};
 
-	ftk_install_crash_signal();
+	ftk_platform_init(argc, argv);
+
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
