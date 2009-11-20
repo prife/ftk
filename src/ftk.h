@@ -58,6 +58,7 @@ extern "C" {
 #include "ftk_progress_bar.h"
 #include "ftk_check_button.h"
 #include "ftk_radio_group.h"
+#include "ftk_scroll_bar.h"
 
 Ret  ftk_init(int argc, char* argv[]);
 Ret  ftk_run(void);

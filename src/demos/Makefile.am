@@ -3,7 +3,11 @@ INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="
 MYLDFLAGS=$(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
 
 noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
-	demo_menu demo_entry demo_expand demo_progress_bar demo_check_button demo_wait_box
+	demo_menu demo_entry demo_expand demo_progress_bar demo_check_button demo_wait_box \
+	demo_scroll_bar
+
+demo_scroll_bar_SOURCES=demo_scroll_bar.c
+demo_scroll_bar_LDFLAGS=$(MYLDFLAGS)
 
 demo_wait_box_SOURCES=demo_wait_box.c
 demo_wait_box_LDFLAGS=$(MYLDFLAGS)

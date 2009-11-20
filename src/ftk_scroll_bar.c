@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_globals.h"
 #include "ftk_scroll_bar.h"
 
 typedef struct _PrivInfo
@@ -37,6 +38,7 @@ typedef struct _PrivInfo
 	int max_value;
 	int page_delta;
 	void* listener_ctx;
+	FtkBitmap* bitmap;
 	FtkListener listener;
 }PrivInfo;
 
@@ -47,9 +49,28 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
 {
+	int dx = 0;
+	int dy = 0;
+	int bitmap_width = 0;
+	int bitmap_height = 0;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	/*TODO*/
+	return_val_if_fail(priv->bitmap != NULL, RET_FAIL);
+
+	bitmap_width = ftk_bitmap_width(priv->bitmap);
+	bitmap_height = ftk_bitmap_height(priv->bitmap);
+	if(width < height)
+	{
+		dy = height * priv->value / priv->max_value;
+		dy = (dy + bitmap_height) < height ? dy : height - bitmap_height;
+	}
+	else
+	{
+		dx = width * priv->value / priv->max_value;
+		dx = (dx + bitmap_width) < width ? dx : width - bitmap_width;
+	}
+
+	ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, 0, bitmap_width, bitmap_height, x + dx, y + dy);
 
 	FTK_END_PAINT();
 }
@@ -73,9 +94,26 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
+		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_scroll_bar_on_event;
 		thiz->on_paint = ftk_scroll_bar_on_paint;
 		thiz->destroy  = ftk_scroll_bar_destroy;
+		if(width < height)
+		{
+			/*vertical*/
+			priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), 
+				"scrollbar_handle_vertical"FTK_STOCK_IMG_SUFFIX);
+			width = ftk_bitmap_width(priv->bitmap);
+			assert(width < height);
+		}
+		else
+		{
+			priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), 
+				"scrollbar_handle_horizontal"FTK_STOCK_IMG_SUFFIX);
+
+			height = ftk_bitmap_height(priv->bitmap);	
+			assert(width > height);
+		}
 
 		ftk_widget_init(thiz, FTK_SCROLL_BAR, 0);
 		ftk_widget_move(thiz, x, y);
