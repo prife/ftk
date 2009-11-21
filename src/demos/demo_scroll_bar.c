@@ -14,6 +14,13 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret scroll_bar_on_scroll(void* ctx, void* scroll_bar)
+{
+	ftk_logd("%s: value=%d\n", __func__, ftk_scroll_bar_get_value(scroll_bar));
+
+	return RET_OK;
+}
+
 int main(int argc, char* argv[])
 {
 	int width = 0;
@@ -28,14 +35,41 @@ int main(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	
-	width = width - 20;
-	scroll_bar = ftk_scroll_bar_create(win, width/2, 10, 0, height/2);
-	ftk_scroll_bar_set_param(scroll_bar, 10, 100, 10);	
+	/*v*/
+	scroll_bar = ftk_scroll_bar_create(win, width/8, 5, 0, height/2);
+	ftk_scroll_bar_set_param(scroll_bar, 0, 120, 120);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
+
+	scroll_bar = ftk_scroll_bar_create(win, width/4, 5, 0, height/2);
+	ftk_scroll_bar_set_param(scroll_bar, 40, 120, 60);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
 	
-	scroll_bar = ftk_scroll_bar_create(win, 10, height/2, width-20, 20);
-	ftk_scroll_bar_set_param(scroll_bar, 10, 100, 10);	
+	scroll_bar = ftk_scroll_bar_create(win, 3*width/8, 5, 0, height/2);
+	ftk_scroll_bar_set_param(scroll_bar, 110, 120, 30);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
 	
-	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);
+	scroll_bar = ftk_scroll_bar_create(win, width/2, 5, 0, height/2);
+	ftk_scroll_bar_set_param(scroll_bar, 120, 120, 20);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
+
+	/*h*/
+	scroll_bar = ftk_scroll_bar_create(win, 5, height/2 + 10, width - 10, 0);
+	ftk_scroll_bar_set_param(scroll_bar, 120, 120, 20);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
+	
+	scroll_bar = ftk_scroll_bar_create(win, 5, height/2 + 30, width - 10, 0);
+	ftk_scroll_bar_set_param(scroll_bar, 110, 120, 30);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
+	
+	scroll_bar = ftk_scroll_bar_create(win, 5, height/2 + 50, width - 10, 0);
+	ftk_scroll_bar_set_param(scroll_bar, 40, 120, 60);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
+	
+	scroll_bar = ftk_scroll_bar_create(win, 5, height/2 + 80, width - 10, 0);
+	ftk_scroll_bar_set_param(scroll_bar, 0, 120, 120);	
+	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
+	
+	button = ftk_button_create(win, width/4, height - 55, width/2, 50);
 	ftk_widget_set_text(button, "quit");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	ftk_window_set_focus(win, button);

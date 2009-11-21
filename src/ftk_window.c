@@ -110,7 +110,8 @@ static FtkWidget* ftk_window_find_prev_focus(FtkWidget* focus_widget, int move_p
 
 	for(; iter != NULL; iter = ftk_widget_prev(iter))
 	{
-		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter))
+		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter) 
+			|| ftk_widget_has_attr(iter, FTK_ATTR_NO_FOCUS))
 		{
 			continue;
 		}
@@ -150,7 +151,8 @@ static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_n
 
 	for(; iter != NULL; iter = ftk_widget_next(iter))
 	{
-		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter))
+		if(ftk_widget_is_insensitive(iter) || !ftk_widget_is_visible(iter)
+			|| ftk_widget_has_attr(iter, FTK_ATTR_NO_FOCUS))
 		{
 			continue;
 		}
@@ -245,7 +247,8 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		if(event->type == FTK_EVT_MOUSE_DOWN 
 			&& !ftk_widget_is_insensitive(target)
-			&& ftk_widget_is_visible(target))
+			&& ftk_widget_is_visible(target)
+			&& !ftk_widget_has_attr(target, FTK_ATTR_NO_FOCUS))
 		{
 			ftk_window_set_focus(thiz, target);
 		}
