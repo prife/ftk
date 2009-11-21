@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 	ftk_scroll_bar_set_param(scroll_bar, 0, 120, 120);	
 	ftk_scroll_bar_set_listener(scroll_bar, scroll_bar_on_scroll, NULL);
 	
-	button = ftk_button_create(win, width/4, height - 55, width/2, 50);
+	button = ftk_button_create(win, 2*width/3, height/4, width/3-5, 50);
 	ftk_widget_set_text(button, "quit");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	ftk_window_set_focus(win, button);

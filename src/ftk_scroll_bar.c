@@ -35,16 +35,19 @@
 
 typedef struct _PrivInfo
 {
-	int value;
-	int max_value;
-	int page_delta;
-	int mouse_pressed;
-	int drag_enabled;
-	int vertical;
 	int tracker_pos;
 	int tracker_size;
-	void* listener_ctx;
+
+	int drag_enabled;
+	int mouse_pressed;
+	int last_mouse_pos;
+
+	int value;
+	int vertical;
+	int max_value;
+	int page_delta;
 	FtkBitmap* bitmap;
+	void* listener_ctx;
 	FtkListener listener;
 }PrivInfo;
 
@@ -66,8 +69,10 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			int pos = 0;
 			int value = 0;
+
 			x = event->u.mouse.x;
 			y = event->u.mouse.y;
+
 			priv->mouse_pressed = 1;
 			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
 
@@ -77,37 +82,39 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 			if(!priv->drag_enabled)
 			{
 				value = pos < priv->tracker_pos ? priv->value - priv->page_delta : priv->value + priv->page_delta;
+				ftk_scroll_bar_set_value(thiz, value);
 			}
-			
-			ftk_scroll_bar_set_value(thiz, value);
+		
+			priv->last_mouse_pos = pos;
 
 			break;
 		}
 		case FTK_EVT_MOUSE_MOVE:
 		{
+			int pos = 0;
+			int delta =0;
 			int value = 0;
 			int width = 0;
 			int height = 0;
+			
+			if(!priv->drag_enabled) break;
+			
 			x = event->u.mouse.x;
 			y = event->u.mouse.y;
-			
-			if(!priv->drag_enabled)
-			{
-				break;
-			}
-			
+			pos = priv->vertical ? y : x;
+			delta = pos - priv->last_mouse_pos;
+
 			width = ftk_widget_width(thiz);
 			height = ftk_widget_height(thiz);
-			if(priv->vertical)
-			{
-				value = priv->max_value * (y - ftk_widget_top_abs(thiz))/height;
-			}
-			else
-			{
-				value = priv->max_value * (x - ftk_widget_left_abs(thiz))/width;
-			}
 
-			ftk_scroll_bar_set_value(thiz, value);
+			value = priv->vertical ? priv->max_value * delta/height : priv->max_value * delta/width;
+
+			if(value != 0)
+			{
+				value += priv->value;
+				priv->last_mouse_pos = pos;
+				ftk_scroll_bar_set_value(thiz, value);
+			}
 
 			break;
 		}
@@ -116,6 +123,7 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 			priv->drag_enabled = 0;
 			priv->mouse_pressed = 0;
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+
 			break;
 		}
 		default:break;
@@ -130,11 +138,12 @@ static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
 	int dx = 0;
 	int dy = 0;
 	int fill_size = 0;
+	int half_size = 0;
 	int bitmap_width = 0;
 	int bitmap_height = 0;
-	int half_size = 0;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+
 	return_val_if_fail(priv->bitmap != NULL, RET_FAIL);
 
 	bitmap_width = ftk_bitmap_width(priv->bitmap);
@@ -289,7 +298,7 @@ Ret ftk_scroll_bar_inc(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	value = priv->value + 1;
-	
+
 	return ftk_scroll_bar_set_value(thiz, value);
 }
 
@@ -299,7 +308,7 @@ Ret ftk_scroll_bar_dec(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	value = priv->value - 1;
-
+	
 	return ftk_scroll_bar_set_value(thiz, value);
 }
 
@@ -328,8 +337,8 @@ Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	value = value < 0 ? 0 : value;
-	value = value < priv->max_value ? value : priv->max_value;
-
+	value = (value + priv->page_delta) < priv->max_value ? value : priv->max_value - priv->page_delta;
+	
 	if(value != priv->value)
 	{
 		priv->value = value;
@@ -339,5 +348,4 @@ Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value)
 
 	return RET_OK;
 }
-
 

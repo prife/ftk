@@ -185,7 +185,8 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 	ftk_logd("%s width=%d height=%d\n", __func__, width, height);
 	win = XCreateSimpleWindow(display, RootWindow(display, screen),
 		0, 0, width, height, 3, BlackPixel(display, screen), WhitePixel(display, screen));
-	XSelectInput(display, win, ExposureMask|KeyPressMask |KeyReleaseMask| ButtonPressMask |ButtonReleaseMask| StructureNotifyMask);
+	XSelectInput(display, win, ExposureMask|KeyPressMask |KeyReleaseMask| ButtonPressMask 
+		|ButtonReleaseMask|StructureNotifyMask | PointerMotionMask);
 	gc = XCreateGC(display, win, 0, NULL);
 	XMapWindow(display, win);
 
