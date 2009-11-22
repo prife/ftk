@@ -93,13 +93,18 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 			{
 				FtkColor* pdst = dst+k;
 				FtkColor* psrc = src+j;
-				FTK_ALPHA_1(psrc->r, pdst->b, psrc->a);
-				FTK_ALPHA_1(psrc->b, pdst->r, psrc->a);
-				FTK_ALPHA_1(psrc->g, pdst->g, psrc->a);
-
-				//dst[k]   = src[j];
-				//dst[k].r = src[j].b;
-				//dst[k].b = src[j].r;
+				if(psrc->a == 0xff)
+				{
+					pdst->b = psrc->r;
+					pdst->g = psrc->g;
+					pdst->r = psrc->b;
+				}
+				else
+				{
+					FTK_ALPHA_1(psrc->r, pdst->b, psrc->a);
+					FTK_ALPHA_1(psrc->b, pdst->r, psrc->a);
+					FTK_ALPHA_1(psrc->g, pdst->g, psrc->a);
+				}
 			}
 			src += bitmap_width;
 			dst += display_width;
@@ -161,10 +166,10 @@ static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	{
 		for(ox =0; ox < w; ox++)
 		{
-			dst[ox].a =0xff;
-			dst[ox].r   = src[ox].b;
-			dst[ox].g   = src[ox].g;
-			dst[ox].b   = src[ox].r;
+			dst[ox].a = 0xff;
+			dst[ox].r = src[ox].b;
+			dst[ox].g = src[ox].g;
+			dst[ox].b = src[ox].r;
 		}
 		src += ftk_display_width(thiz);
 		dst += ftk_bitmap_width(bitmap);
@@ -238,6 +243,7 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 
 		assert(priv->pixelsize == 4);
 		priv->bits = calloc(1, width * height * priv->pixelsize);
+		memset(priv->bits, 0xff, width * height * priv->pixelsize);
 		/*FIXME: force to 32bit*/
 		priv->ximage = XCreateImage(display, priv->visual, priv->depth, ZPixmap,
 			0, (char*)priv->bits, width, height,

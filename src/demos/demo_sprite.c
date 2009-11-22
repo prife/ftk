@@ -38,6 +38,18 @@ Ret on_move(void* ctx, void* obj)
 	return RET_OK;
 }
 
+Ret move_cursor(void* ctx, void* obj)
+{
+	FtkEvent* event = obj;
+
+	if(event->type == FTK_EVT_MOUSE_MOVE)
+	{
+		ftk_sprite_move(ctx, event->u.mouse.x, event->u.mouse.y);
+	}
+
+	return RET_OK;
+}
+
 int main(int argc, char* argv[])
 {
 	int width = 0;
@@ -61,14 +73,20 @@ int main(int argc, char* argv[])
 	ftk_widget_set_text(win, "sprite demo");
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
-
+#if 0
 	sprite = ftk_sprite_create();
 	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	ftk_sprite_set_icon(sprite, icon);
 	ftk_sprite_set_move_listener(sprite, on_move, NULL);
 	ftk_sprite_show(sprite, 1);
-	
 	ftk_main_loop_add_source(ftk_default_main_loop(), ftk_source_timer_create(500, timer, sprite));
+#endif
+	sprite = ftk_sprite_create();
+	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "cursor"FTK_STOCK_IMG_SUFFIX);
+	ftk_sprite_set_icon(sprite, icon);
+	ftk_sprite_show(sprite, 1);
+	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), move_cursor, sprite);
+
 	ftk_run();
 
 	return 0;
