@@ -31,6 +31,13 @@ static Ret timer(void* user_data)
 	return x < ftk_display_width(display) && y < ftk_display_height(display) ? RET_OK : RET_REMOVE;
 }
 
+Ret on_move(void* ctx, void* obj)
+{
+	ftk_logd("%s: %d %d\n", __func__, ftk_sprite_get_x(obj), ftk_sprite_get_y(obj));
+
+	return RET_OK;
+}
+
 int main(int argc, char* argv[])
 {
 	int width = 0;
@@ -58,6 +65,7 @@ int main(int argc, char* argv[])
 	sprite = ftk_sprite_create();
 	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	ftk_sprite_set_icon(sprite, icon);
+	ftk_sprite_set_move_listener(sprite, on_move, NULL);
 	ftk_sprite_show(sprite, 1);
 	
 	ftk_main_loop_add_source(ftk_default_main_loop(), ftk_source_timer_create(500, timer, sprite));

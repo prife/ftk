@@ -70,7 +70,7 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 		FtkColor* src = ftk_bitmap_bits(bitmap);
 		FtkColor* dst = (FtkColor*)priv->bits;
 
-		ftk_logv("%s: ox=%d oy=%d x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, x, y, w, h);
+//		ftk_logv("%s: ox=%d oy=%d x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, x, y, w, h);
 		return_val_if_fail(x < bitmap_width, RET_FAIL);
 		return_val_if_fail(y < bitmap_height, RET_FAIL);
 		return_val_if_fail(xoffset < display_width, RET_FAIL);
@@ -139,18 +139,38 @@ static int ftk_display_x11_bits_per_pixel(FtkDisplay* thiz)
 	return 2;
 }
 
-static Ret ftk_display_x11_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
+static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
+	int ox = 0;
+	int oy = 0;
 	DECL_PRIV(thiz, priv);
-	FtkColor bg = {.a = 0xff};
-	return_val_if_fail(bitmap != NULL, RET_FAIL);
+	int w = ftk_display_width(thiz);
+	int h = ftk_display_height(thiz);
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	FtkColor* src = (FtkColor*)priv->bits;
+	FtkColor* dst = ftk_bitmap_bits(bitmap);
 
-	*bitmap = ftk_bitmap_create(priv->width, priv->height, bg);
-	return_val_if_fail(*bitmap != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && NULL != dst, RET_FAIL);
 
-	memcpy(ftk_bitmap_bits(*bitmap), priv->bits, priv->width * priv->height * priv->pixelsize);
+	w = (x + bw) < w ? bw : w - x;
+	h = (y + bh) < h ? bh : h - y;
 
-	return RET_FAIL;
+	src += y * ftk_display_width(thiz) + x;
+	for(oy = 0; oy < h; oy++)
+	{
+		for(ox =0; ox < w; ox++)
+		{
+			dst[ox].a =0xff;
+			dst[ox].r   = src[ox].b;
+			dst[ox].g   = src[ox].g;
+			dst[ox].b   = src[ox].r;
+		}
+		src += ftk_display_width(thiz);
+		dst += ftk_bitmap_width(bitmap);
+	}
+
+	return RET_OK;
 }
 
 static void ftk_display_x11_destroy(FtkDisplay* thiz)

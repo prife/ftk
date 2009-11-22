@@ -54,8 +54,8 @@ static Ret  ftk_sprite_backup(FtkSprite* thiz)
 {
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	return_val_if_fail(thiz->icon != NULL && thiz->snap != NULL, RET_FAIL);
-
+	return_val_if_fail(thiz->snap != NULL, RET_FAIL);
+	
 	return ftk_display_snap(display, thiz->x, thiz->y, thiz->snap);
 }
 
@@ -64,7 +64,7 @@ static Ret  ftk_sprite_restore(FtkSprite* thiz)
 	FtkRect rect = {0};
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	return_val_if_fail(thiz->icon != NULL && thiz->snap != NULL, RET_FAIL);
+	return_val_if_fail(thiz->snap != NULL, RET_FAIL);
 	
 	rect.width = ftk_bitmap_width(thiz->snap);
 	rect.height = ftk_bitmap_height(thiz->snap);
@@ -77,7 +77,7 @@ static Ret  ftk_sprite_paint(FtkSprite* thiz)
 	FtkRect rect = {0};
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	return_val_if_fail(thiz->icon != NULL && thiz->snap != NULL, RET_FAIL);
+	return_val_if_fail(thiz->icon != NULL, RET_FAIL);
 	
 	rect.width = ftk_bitmap_width(thiz->icon);
 	rect.height = ftk_bitmap_height(thiz->icon);
@@ -156,7 +156,7 @@ Ret  ftk_sprite_move(FtkSprite* thiz, int x, int y)
 	if(thiz->visible)
 	{
 		ftk_sprite_backup(thiz);
-	//	ret = ftk_sprite_paint(thiz);
+		ret = ftk_sprite_paint(thiz);
 	}
 
 	FTK_CALL_LISTENER(thiz->listener, thiz->listener_ctx, thiz);
