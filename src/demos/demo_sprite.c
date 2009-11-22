@@ -24,7 +24,6 @@ static Ret timer(void* user_data)
 	x = ftk_sprite_get_x(sprite);
 	y = ftk_sprite_get_y(sprite);
 
-	x += 5;
 	y += 5;
 	ftk_sprite_move(sprite, x, y);
 
@@ -73,14 +72,15 @@ int main(int argc, char* argv[])
 	ftk_widget_set_text(win, "sprite demo");
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
-#if 0
+
 	sprite = ftk_sprite_create();
 	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	ftk_sprite_set_icon(sprite, icon);
+	ftk_sprite_move(sprite, width/2, 0);
 	ftk_sprite_set_move_listener(sprite, on_move, NULL);
 	ftk_sprite_show(sprite, 1);
-	ftk_main_loop_add_source(ftk_default_main_loop(), ftk_source_timer_create(500, timer, sprite));
-#endif
+	ftk_main_loop_add_source(ftk_default_main_loop(), ftk_source_timer_create(200, timer, sprite));
+
 	sprite = ftk_sprite_create();
 	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "cursor"FTK_STOCK_IMG_SUFFIX);
 	ftk_sprite_set_icon(sprite, icon);
