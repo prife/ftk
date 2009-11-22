@@ -522,6 +522,7 @@ int main(int argc, char* argv[])
 	ftk_init(argc, argv);
 
 	FtkRect rect = {0};
+	FtkColor bg = {.a = 0xff};
 	FtkBitmap* bitmap = NULL;
 	FtkFont* font = ftk_default_font();
 	FtkDisplay* display = ftk_default_display();
@@ -533,7 +534,8 @@ int main(int argc, char* argv[])
 	test_draw_rect(display);
 	test_alpha(display);
 	test_draw_vline(display);
-	ftk_display_snap(display, &bitmap);
+	bitmap = ftk_bitmap_create(ftk_display_width(display), ftk_display_height(display), bg);
+	ftk_display_snap(display, 0, 0, bitmap);
 	test_draw_hline(display);
 	ftk_display_update(display, bitmap, &rect, 0, 0);
 	test_fill_bg(display);

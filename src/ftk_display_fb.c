@@ -175,33 +175,34 @@ static int ftk_display_fb_bits_per_pixel(FtkDisplay* thiz)
 	return 2;
 }
 
-static Ret ftk_display_fb_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
+static Ret ftk_display_fb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
-	FtkColor bg = {.a=0xff};
+	int ox = 0;
+	int oy = 0;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = NULL;
-	int x = 0;
-	int y = 0;
-	int w = fb_width(&priv->fb);
-	int h = fb_height(&priv->fb);
+	int w = ftk_display_width(thiz);
+	int h = ftk_display_height(thiz);
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
 	unsigned short* src = priv->fb.bits;
+	FtkColor* dst = ftk_bitmap_bits(bitmap);
 
-	*bitmap = ftk_bitmap_create(w, h, bg);
-	return_val_if_fail(thiz != NULL && NULL != *bitmap, RET_FAIL);
+	return_val_if_fail(thiz != NULL && NULL != dst, RET_FAIL);
 
-	dst = ftk_bitmap_bits(*bitmap);
+	w = (x + bw) < w ? bw : w - x;
+	h = (y + bh) < h ? bh : h - y;
 
-	for(y = 0; y < h; y++)
+	src += y * ftk_display_width(thiz) + x;
+	for(oy = 0; oy < h; oy++)
 	{
-		for(x = 0; x < w; x++)
+		for(ox =0; ox < w; ox++)
 		{
-			dst->r = (*src >> 8) & 0xf1;
-			dst->g = (*src >> 3) & 0xf6;
-			dst->b = (*src << 3) & 0xff;
-
-			dst++;
-			src++;
+			dst[ox].r = (src[ox] >> 8) & 0xf1;
+			dst[ox].g = (src[ox] >> 3) & 0xf6;
+			dst[ox].b = (src[ox] << 3) & 0xff;
 		}
+		src += ftk_display_width(thiz);
+		dst += ftk_bitmap_width(bitmap);
 	}
 
 	return RET_OK;
