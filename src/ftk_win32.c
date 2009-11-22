@@ -1,7 +1,7 @@
 /*
- * File: ftk_platform.h    
+ * File: ftk_win32.c
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   win32 specific functions.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,30 +25,41 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-22 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_PLATFORM_H
-#define FTK_PLATFORM_H
-
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
 #include <string.h>
+#include <windows.h>
 
-#include "ftk_linux.h"
-#include "ftk_win32.h"
+int ftk_platform_init(int argc, char** argv)
+{
 
-#define FTK_ALLOC(s)       malloc(s)
-#define FTK_REALLOC(p, s)  realloc(p, s)
-#define FTK_ZALLOC(s)      calloc(1, s)
-#define FTK_FREE(p)        if(p) {free(p); p = NULL;}
-#define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
-#define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
+	return RET_OK;
+}
 
-int  ftk_platform_init(int argc, char** argv);
-void ftk_platform_deinit(void);
+void ftk_platform_deinit(void)
+{
 
-#endif/*FTK_PLATFORM_H*/
+	return;
+}
+
+char* ftk_strncpy(char *dest, const char *src, size_t n)
+{
+	return strncpy(dest, src, n);
+}
+
+char* ftk_strdup(const char *s)
+{
+	return strdup(s);
+}
+
+int   ftk_snprintf(char *str, size_t size, const char *format, ...)
+{
+	return 0;
+}
+
+int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap)
+{
+	return 0;
+}
 

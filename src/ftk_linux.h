@@ -1,7 +1,8 @@
+
 /*
- * File: ftk_platform.h    
+ * File: ftk_linux.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   linux specific functions.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,30 +26,30 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-22 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_PLATFORM_H
-#define FTK_PLATFORM_H
 
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+#ifndef FTK_LINUX_H
+#define FTK_LINUX_H
 
-#include "ftk_linux.h"
-#include "ftk_win32.h"
+#ifdef LINUX
+#include <fcntl.h>
+#include <dirent.h>
+#include <sys/types.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <linux/fb.h>
+#include <linux/kd.h>
+#include <linux/input.h>
+#include <sys/select.h>
+#define ftk_strdup    strdup
+#define ftk_strncpy   strncpy
+#define ftk_snprintf  snprintf
+#define ftk_vsnprintf vsnprintf 
+#endif
 
-#define FTK_ALLOC(s)       malloc(s)
-#define FTK_REALLOC(p, s)  realloc(p, s)
-#define FTK_ZALLOC(s)      calloc(1, s)
-#define FTK_FREE(p)        if(p) {free(p); p = NULL;}
-#define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
-#define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
-
-int  ftk_platform_init(int argc, char** argv);
-void ftk_platform_deinit(void);
-
-#endif/*FTK_PLATFORM_H*/
+#endif/*FTK_LINUX_H*/
 

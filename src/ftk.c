@@ -67,7 +67,7 @@ static Ret ftk_init_input(void)
 		if(iter->d_name[0] == '.') continue;
 		if(!(iter->d_type & DT_CHR)) continue;
 
-		snprintf(filename, sizeof(filename), "/dev/input/%s", iter->d_name);
+		ftk_snprintf(filename, sizeof(filename), "/dev/input/%s", iter->d_name);
 		source = ftk_source_input_create(filename, (FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
 		if(source != NULL)
 		{
@@ -153,10 +153,10 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_init_bitmap_factory();
 	ftk_set_icon_cache(ftk_icon_cache_create());
 
-	snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
 	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
 	{
-		snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
+		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
 		font = ftk_font_default_create(filename, 0, 0, 0);
 	}
 
