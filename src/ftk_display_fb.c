@@ -142,8 +142,14 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 			psrc = src + j;
 			pdst = &dcolor;
 
-			FTK_ALPHA(psrc, pdst, psrc->a);
-
+			if(psrc->a == 0xff)
+			{
+				*pdst = *psrc;
+			}
+			else
+			{
+				FTK_ALPHA(psrc, pdst, psrc->a);
+			}
 			pixel = ((dcolor.r >> 3) << 11) | ((dcolor.g >> 2) << 5) | (dcolor.b >> 3);
 			dst[k] = pixel;
 		}
@@ -197,6 +203,7 @@ static Ret ftk_display_fb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* 
 	{
 		for(ox =0; ox < w; ox++)
 		{
+			dst[ox].a = 0xff;
 			dst[ox].r = (src[ox] >> 8) & 0xf1;
 			dst[ox].g = (src[ox] >> 3) & 0xf6;
 			dst[ox].b = (src[ox] << 3) & 0xff;

@@ -129,7 +129,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 
 #define FTK_INHERITE_FROM(parent) /*used as comment*/
 
-#define FTK_ALPHA_1(s, d, a) (d) = ((unsigned int)((d) * (0xff - (a)) + (s) * (a))) >> 8
+#define FTK_ALPHA_1(s, d, a) (d) = ((unsigned int)((d) * (0xff - (a)) + (s) * (a)) + 0xff) >> 8
 #define FTK_ALPHA(sc, dc, a) FTK_ALPHA_1(sc->r, dc->r, a); \
 	FTK_ALPHA_1(sc->g, dc->g, a); \
 	FTK_ALPHA_1(sc->b, dc->b, a);
