@@ -299,8 +299,11 @@ static void ftk_init_panel(void)
 	{
 		gc.mask = FTK_GC_BITMAP;
 		ftk_widget_set_gc(item, FTK_WIDGET_NORMAL, &gc);
-		ftk_widget_set_gc(item, FTK_WIDGET_ACTIVE, &gc);
 		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
+		ftk_gc_reset(&gc);
+		gc.mask = FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "close-pressed-32"FTK_STOCK_IMG_SUFFIX);
+		ftk_widget_set_gc(item, FTK_WIDGET_ACTIVE, &gc);
 		ftk_gc_reset(&gc);
 	}
 	ftk_widget_show(item, 1);

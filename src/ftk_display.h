@@ -43,6 +43,10 @@ typedef int (*FtkDisplayBitsPerPixel)(FtkDisplay* thiz);
 typedef Ret (*FtkDisplaySnap)(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap);
 typedef void (*FtkDisplayDestroy)(FtkDisplay* thiz);
 
+#define FTK_DISPLAY_LISTENER_NR 16
+typedef Ret (*FtkDisplayOnUpdate)(void* ctx, FtkDisplay* display, int before,
+	FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset);
+
 struct _FtkDisplay
 {
 	FtkDisplayUpdate       update;
@@ -50,16 +54,35 @@ struct _FtkDisplay
 	FtkDisplayHeight       height;
 	FtkDisplayBitsPerPixel bits_per_pixel;
 	FtkDisplaySnap         snap;
-	FtkDisplayDestroy destroy;
+	FtkDisplayDestroy      destroy;
+
+	FtkDisplayOnUpdate on_update[FTK_DISPLAY_LISTENER_NR];
+	void* on_update_ctx[FTK_DISPLAY_LISTENER_NR];
 
 	char priv[1];
 };
+
+Ret ftk_display_reg_update_listener(FtkDisplay* thiz, FtkDisplayOnUpdate on_update, void* ctx);
+Ret ftk_display_unreg_update_listener(FtkDisplay* thiz, FtkDisplayOnUpdate on_update, void* ctx);
+Ret ftk_display_notify(FtkDisplay* thiz, int before, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset);
 
 static inline Ret ftk_display_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
 	return_val_if_fail(thiz != NULL && thiz->update != NULL, RET_FAIL);
 
 	return thiz->update(thiz, bitmap, rect, xoffset, yoffset);
+}
+
+static inline Ret ftk_display_update_and_notify(FtkDisplay* thiz, 
+	FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
+{
+	Ret ret = RET_OK;
+	return_val_if_fail(thiz != NULL && thiz->update != NULL, RET_FAIL);
+	ftk_display_notify(thiz, 1, bitmap, rect, xoffset, yoffset);
+	ret = thiz->update(thiz, bitmap, rect, xoffset, yoffset);
+	ftk_display_notify(thiz, 0, bitmap, rect, xoffset, yoffset);
+
+	return ret;
 }
 
 static inline int ftk_display_width(FtkDisplay* thiz)

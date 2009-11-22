@@ -72,8 +72,9 @@ static Ret  ftk_sprite_restore(FtkSprite* thiz)
 	return ftk_display_update(display, thiz->snap, &rect, thiz->x, thiz->y);
 }
 
-static Ret  ftk_sprite_paint(FtkSprite* thiz)
+static Ret  ftk_sprite_paint(FtkSprite* thiz, int notify)
 {
+	Ret ret = RET_OK;
 	FtkRect rect = {0};
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(thiz != NULL, RET_FAIL);
@@ -82,7 +83,16 @@ static Ret  ftk_sprite_paint(FtkSprite* thiz)
 	rect.width = ftk_bitmap_width(thiz->icon);
 	rect.height = ftk_bitmap_height(thiz->icon);
 
-	return ftk_display_update(display, thiz->icon, &rect, thiz->x, thiz->y);
+	if(notify)
+	{
+		ret = ftk_display_update_and_notify(display, thiz->icon, &rect, thiz->x, thiz->y);
+	}
+	else
+	{
+		ret = ftk_display_update(display, thiz->icon, &rect, thiz->x, thiz->y);
+	}
+
+	return ret;
 }
 
 Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon)
@@ -101,10 +111,34 @@ Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon)
 	if(thiz->visible)
 	{
 		ftk_sprite_restore(thiz);
-		ret = ftk_sprite_paint(thiz);
+		ret = ftk_sprite_paint(thiz, 1);
 	}
 
 	return ret;
+}
+
+Ret ftk_sprite_on_display_update(void* ctx, FtkDisplay* display, int before,
+	FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
+{
+	FtkSprite* thiz = ctx;
+	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
+
+	if(bitmap == thiz->icon || bitmap == thiz->snap)
+	{
+		return RET_OK;
+	}
+
+	if(before)
+	{
+		ftk_sprite_restore(thiz);
+	}
+	else
+	{
+		ftk_sprite_backup(thiz);
+		ftk_sprite_paint(thiz, 0);
+	}
+
+	return RET_OK;
 }
 
 Ret  ftk_sprite_show(FtkSprite* thiz, int show)
@@ -118,10 +152,12 @@ Ret  ftk_sprite_show(FtkSprite* thiz, int show)
 	if(thiz->visible)
 	{
 		ftk_sprite_backup(thiz);
-		ret = ftk_sprite_paint(thiz);
+		ret = ftk_sprite_paint(thiz, 1);
+		ftk_display_reg_update_listener(ftk_default_display(), ftk_sprite_on_display_update, thiz);
 	}
 	else
 	{
+		ftk_display_unreg_update_listener(ftk_default_display(), ftk_sprite_on_display_update, thiz);
 		ret = ftk_sprite_restore(thiz);
 	}
 
@@ -156,7 +192,7 @@ Ret  ftk_sprite_move(FtkSprite* thiz, int x, int y)
 	if(thiz->visible)
 	{
 		ftk_sprite_backup(thiz);
-		ret = ftk_sprite_paint(thiz);
+		ret = ftk_sprite_paint(thiz, 1);
 	}
 
 	FTK_CALL_LISTENER(thiz->listener, thiz->listener_ctx, thiz);

@@ -67,7 +67,7 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
 	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
 	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_mmap_linux.c \
-	ftk_scroll_bar.c ftk_sprite.c ftk_display_fb.c \
+	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_display_fb.c \
 	ftk_source_input.c ftk_display_x11.c ftk_source_x11.c
 am__objects_1 = ftk_display_fb.lo ftk_source_input.lo
 #am__objects_2 = $(am__objects_1)
@@ -86,8 +86,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_text_buffer.lo ftk_icon_cache.lo ftk_animator_expand.lo \
 	ftk_progress_bar.lo ftk_radio_group.lo ftk_check_button.lo \
 	ftk_linux.lo ftk_gesture.lo ftk_wait_box.lo ftk_mmap_linux.lo \
-	ftk_scroll_bar.lo ftk_sprite.lo $(am__objects_2) \
-	$(am__objects_4)
+	ftk_scroll_bar.lo ftk_sprite.lo ftk_display.lo \
+	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -127,13 +127,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -144,7 +144,7 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
@@ -240,7 +240,8 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
 	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
 	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_mmap_linux.c \
-	ftk_scroll_bar.c ftk_sprite.c $(am__append_1) $(am__append_2)
+	ftk_scroll_bar.c ftk_sprite.c ftk_display.c $(am__append_1) \
+	$(am__append_2)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX
 
@@ -351,6 +352,7 @@ include ./$(DEPDIR)/ftk_button.Plo
 include ./$(DEPDIR)/ftk_canvas.Plo
 include ./$(DEPDIR)/ftk_check_button.Plo
 include ./$(DEPDIR)/ftk_dialog.Plo
+include ./$(DEPDIR)/ftk_display.Plo
 include ./$(DEPDIR)/ftk_display_fb.Plo
 include ./$(DEPDIR)/ftk_display_x11.Plo
 include ./$(DEPDIR)/ftk_entry.Plo

@@ -386,7 +386,7 @@ Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	xoffset = ftk_widget_left(thiz) + rect->x;
 	yoffset = ftk_widget_top(thiz) + rect->y;
 
-	return ftk_display_update(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
+	return ftk_display_update_and_notify(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
 }
 
 Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
