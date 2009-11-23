@@ -29,7 +29,8 @@
  *
  */
 
-#include "ftk_widget.h"
+#include "ftk_xul.h"
+#include "ftk_xml_parser.h"
 
 FtkWidget* ftk_xul_load(const char* xml, int length)
 {
