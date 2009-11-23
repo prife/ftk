@@ -483,7 +483,7 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 	const char* iter = str;
 	return_val_if_fail(thiz != NULL && str != NULL, RET_FAIL);
 
-	len = len >= 0 ? len : strlen(str);
+	len = len >= 0 ? len : (int)strlen(str);
 	width  = ftk_bitmap_width(thiz->bitmap);
 	height = ftk_bitmap_height(thiz->bitmap);
 	bits   = ftk_bitmap_bits(thiz->bitmap);
@@ -495,6 +495,7 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 
 	while(*iter && (iter - str) < len)
 	{
+		int offset = 0;
 		code = utf8_get_char(iter, &iter);
 
 		if(code == 0x20)
@@ -509,7 +510,6 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 		if((x + glyph.x + glyph.w) >= width) break;
 		if((y - glyph.y + glyph.h) >= height) break;
 
-		int offset = 0;
 		x = x + glyph.x;
 		y = y - glyph.y;
 		for(i = 0; i < glyph.h; i++,y++)
@@ -546,13 +546,13 @@ Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int 
 	int k = 0;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
-	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 
 	int width  = ftk_bitmap_width(thiz->bitmap);
 	int height = ftk_bitmap_height(thiz->bitmap);
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
+	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 	return_val_if_fail(x < bitmap_width, RET_FAIL);
 	return_val_if_fail(y < bitmap_height, RET_FAIL);
 	return_val_if_fail(xoffset < width, RET_FAIL);
@@ -658,7 +658,7 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 	const char* iter = str;
 	return_val_if_fail(thiz != NULL && str != NULL && thiz->gc.font != NULL, 0);
 	
-	len = len >= 0 ? len : strlen(str);
+	len = len >= 0 ? len : (int)strlen(str);
 	while(*iter && (iter - str) < len)
 	{
 		code = utf8_get_char(iter, &iter);
@@ -762,13 +762,14 @@ Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int 
 	int oy = 0;
 	int ow = 0;
 	int oh = 0;
-	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkGc gc = {0};
 	FtkColor* bits = NULL;
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 	int tile_w = bw < w ? bw >> 1 : w >> 1;
 	int tile_h = bh < h ? bh >> 1 : h >> 1;
 	
+	gc.mask = FTK_GC_FG;
 	ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, tile_w, tile_h, x, y);
 	ftk_canvas_draw_bitmap(canvas, bitmap, bw - tile_w, 0, tile_w, tile_h, x + w - tile_w, y);
 	ftk_canvas_draw_bitmap(canvas, bitmap, 0, bh - tile_h, tile_w, tile_h, x, y + h - tile_h);

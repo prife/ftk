@@ -81,10 +81,11 @@ static void ftk_source_timer_calc_timer(PrivInfo* priv)
 
 static Ret ftk_source_timer_dispatch(FtkSource* thiz)
 {
+	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv->action != NULL, RET_REMOVE);
 
-	Ret ret = priv->action(priv->user_data);
+	ret = priv->action(priv->user_data);
 	if(ret == RET_OK)
 	{
 		ftk_source_timer_calc_timer(priv);
