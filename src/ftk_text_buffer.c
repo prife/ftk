@@ -78,7 +78,7 @@ Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text
 	char* dst = NULL;
 	const char* src = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL && text != NULL, RET_FAIL);	
-	str_len = strlen(text);
+	str_len = (int)strlen(text);
 	return_val_if_fail(ftk_text_buffer_extend(thiz, str_len) == RET_OK, RET_FAIL);
 	return_val_if_fail(offset <= thiz->length, RET_FAIL);
 
@@ -108,7 +108,7 @@ Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text
 
 Ret  ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length)
 {
-	int i = 0;
+	size_t i = 0;
 	char* dst = NULL;
 	char* src = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL && offset < thiz->length, RET_FAIL);
@@ -133,8 +133,8 @@ Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count)
 {
 	int length = 0;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, RET_FAIL);
-	return_val_if_fail(offset <= thiz->length && offset >= 0, 0);
-	return_val_if_fail((offset + count) <= thiz->length && (offset + count) >= 0, RET_FAIL);
+	return_val_if_fail(offset <= (int)thiz->length && offset >= 0, 0);
+	return_val_if_fail((offset + count) <= (int)thiz->length && (offset + count) >= 0, RET_FAIL);
 
 	length = ftk_text_buffer_chars_bytes(thiz, offset, count);
 	return_val_if_fail(length != 0, RET_FAIL);
@@ -159,8 +159,8 @@ int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count)
 	const char* iter = NULL;
 	const char* offset_p = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, 0);
-	return_val_if_fail(offset <= thiz->length && offset >= 0, 0);
-	return_val_if_fail((offset + count) <= thiz->length && (offset + count) >= 0, 0);
+	return_val_if_fail(offset <= (int)thiz->length && offset >= 0, 0);
+	return_val_if_fail((offset + count) <= (int)thiz->length && (offset + count) >= 0, 0);
 
 	offset_p = thiz->buffer + offset;
 	iter = offset_p;
