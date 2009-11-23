@@ -33,6 +33,10 @@
 #define FTK_WIN32_H
 
 #ifdef WIN32
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
 #include <io.h>
 #include <windows.h>
 #define inline 
@@ -42,11 +46,6 @@
 #define LOCAL_DATA_DIR ""
 #define usleep Sleep
 #define pipe(fds) _pipe(fds, 2, 0)
-
-struct timeval {
-	time_t tv_sec;     /* seconds */
-	time_t tv_usec;    /* microseconds */
-};
 
 struct timezone {
 	int tz_minuteswest;     /* minutes west of Greenwich */

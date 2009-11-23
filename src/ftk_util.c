@@ -160,31 +160,11 @@ int utf8_count_char(const char *str, size_t length)
 	const char* iter = str;
 	return_val_if_fail(str != NULL, 0);
 
-	while(utf8_get_char(iter, &iter) && (iter - str) <= length)
+	while(utf8_get_char(iter, &iter) && (iter - str) <= (int)length)
 	{
 		nr++;
 	}
 
 	return nr;
-}
-
-char* read_file(const char* file_name, int* length)
-{
-	struct stat st = {0};
-	if(stat(file_name, &st))
-	{
-		return NULL;
-	}
-	else
-	{
-		char* buffer = malloc(st.st_size + 1);
-		FILE* fp = fopen(file_name, "rb");
-		fread(buffer, 1, st.st_size, fp);
-		fclose(fp);
-		buffer[st.st_size] = '\0';
-		*length = st.st_size;
-
-		return buffer;
-	}
 }
 

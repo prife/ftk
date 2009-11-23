@@ -775,10 +775,11 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 	if(ftk_widget_is_visible(thiz) && ftk_widget_is_parent_visible(thiz))
 	{
 		FtkGc gc = {0};
+		FtkBitmap* bitmap = NULL;
 		FtkWidget* parent = thiz->parent;
 		FtkWidgetInfo* priv =  thiz->priv;
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
-		FtkBitmap* bitmap = priv->gc[priv->state].bitmap;
+		bitmap = priv->gc[priv->state].bitmap;
 		return_val_if_fail(canvas != NULL, RET_FAIL);
 		return_val_if_fail(thiz->priv->width > 0 && thiz->priv->height > 0, RET_FAIL);
 
