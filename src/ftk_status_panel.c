@@ -49,13 +49,13 @@ typedef struct _PrivInfo
 
 static Ret ftk_status_panel_relayout(FtkWidget* thiz)
 {
-	int i = 0;
 	int x = 0;
 	int y = 0;
 	int w = 0;
 	int h = 0;
 	int left = 0;
 	int right = 0;
+	size_t i = 0;
 	
 	DECL_PRIV1(thiz, priv);
 
