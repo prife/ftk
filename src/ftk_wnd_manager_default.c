@@ -80,8 +80,8 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 	int i = 0;
 	DECL_PRIV(thiz, priv);
 	FtkWidget* win = NULL;
-	FtkEvent event = {.type = FTK_EVT_TOP_WND_CHANGED};
-
+	FtkEvent event = {0};
+	event.type = FTK_EVT_TOP_WND_CHANGED;
 	/*find the topest app/dialog window*/
 	for(i = priv->top - 1; i >=0; i--)
 	{
