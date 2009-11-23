@@ -1,5 +1,5 @@
 /*
- * File:    xml_builder.h
+ * File:    ftk_xml_builder.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   xml builder interface.
  *
@@ -34,33 +34,31 @@
 #ifndef XML_BUILDER_H
 #define XML_BUILDER_H
 
-DECLS_BEGIN
+struct _FtkXmlBuilder;
+typedef struct _FtkXmlBuilder FtkXmlBuilder;
 
-struct _XmlBuilder;
-typedef struct _XmlBuilder XmlBuilder;
+typedef void (*FtkXmlBuilderOnStartElementFunc)(FtkXmlBuilder* thiz, const char* tag, const char** attrs);
+typedef void (*FtkXmlBuilderOnEndElementFunc)(FtkXmlBuilder* thiz, const char* tag);
+typedef void (*FtkXmlBuilderOnTextFunc)(FtkXmlBuilder* thiz, const char* text, size_t length);
+typedef void (*FtkXmlBuilderOnCommentFunc)(FtkXmlBuilder* thiz, const char* text, size_t length);
+typedef void (*FtkXmlBuilderOnPiElementFunc)(FtkXmlBuilder* thiz, const char* tag, const char** attrs);
+typedef void (*FtkXmlBuilderOnErrorFunc)(FtkXmlBuilder* thiz, int line, int row, const char* message);
+typedef void (*FtkXmlBuilderDestroyFunc)(FtkXmlBuilder* thiz);
 
-typedef void (*XmlBuilderOnStartElementFunc)(XmlBuilder* thiz, const char* tag, const char** attrs);
-typedef void (*XmlBuilderOnEndElementFunc)(XmlBuilder* thiz, const char* tag);
-typedef void (*XmlBuilderOnTextFunc)(XmlBuilder* thiz, const char* text, size_t length);
-typedef void (*XmlBuilderOnCommentFunc)(XmlBuilder* thiz, const char* text, size_t length);
-typedef void (*XmlBuilderOnPiElementFunc)(XmlBuilder* thiz, const char* tag, const char** attrs);
-typedef void (*XmlBuilderOnErrorFunc)(XmlBuilder* thiz, int line, int row, const char* message);
-typedef void (*XmlBuilderDestroyFunc)(XmlBuilder* thiz);
-
-struct _XmlBuilder
+struct _FtkXmlBuilder
 {
-	XmlBuilderOnStartElementFunc on_start_element;
-	XmlBuilderOnEndElementFunc   on_end_element;
-	XmlBuilderOnTextFunc         on_text;
-	XmlBuilderOnCommentFunc      on_comment;
-	XmlBuilderOnPiElementFunc    on_pi_element;
-	XmlBuilderOnErrorFunc        on_error;
-	XmlBuilderDestroyFunc        destroy;
+	FtkXmlBuilderOnStartElementFunc on_start_element;
+	FtkXmlBuilderOnEndElementFunc   on_end_element;
+	FtkXmlBuilderOnTextFunc         on_text;
+	FtkXmlBuilderOnCommentFunc      on_comment;
+	FtkXmlBuilderOnPiElementFunc    on_pi_element;
+	FtkXmlBuilderOnErrorFunc        on_error;
+	FtkXmlBuilderDestroyFunc        destroy;
 
 	char priv[1];
 };
 
-static inline void xml_builder_on_start_element(XmlBuilder* thiz, const char* tag, const char** attrs)
+static inline void ftk_xml_builder_on_start_element(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	return_if_fail(thiz != NULL && thiz->on_start_element != NULL);
 
@@ -69,7 +67,7 @@ static inline void xml_builder_on_start_element(XmlBuilder* thiz, const char* ta
 	return;
 }
 
-static inline void xml_builder_on_end_element(XmlBuilder* thiz, const char* tag)
+static inline void ftk_xml_builder_on_end_element(FtkXmlBuilder* thiz, const char* tag)
 {
 	return_if_fail(thiz != NULL && thiz->on_end_element != NULL);
 
@@ -78,7 +76,7 @@ static inline void xml_builder_on_end_element(XmlBuilder* thiz, const char* tag)
 	return;
 }
 
-static inline void xml_builder_on_text(XmlBuilder* thiz, const char* text, size_t length)
+static inline void ftk_xml_builder_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
 {
 	return_if_fail(thiz != NULL && thiz->on_text != NULL);
 
@@ -87,7 +85,7 @@ static inline void xml_builder_on_text(XmlBuilder* thiz, const char* text, size_
 	return;
 }
 
-static inline void xml_builder_on_comment(XmlBuilder* thiz, const char* text, size_t length)
+static inline void ftk_xml_builder_on_comment(FtkXmlBuilder* thiz, const char* text, size_t length)
 {
 	return_if_fail(thiz != NULL);
 
@@ -99,7 +97,7 @@ static inline void xml_builder_on_comment(XmlBuilder* thiz, const char* text, si
 	return;
 }
 
-static inline void xml_builder_on_pi_element(XmlBuilder* thiz, const char* tag, const char** attrs)
+static inline void ftk_xml_builder_on_pi_element(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	return_if_fail(thiz != NULL);
 	
@@ -111,7 +109,7 @@ static inline void xml_builder_on_pi_element(XmlBuilder* thiz, const char* tag, 
 	return;
 }
 
-static inline void xml_builder_on_error(XmlBuilder* thiz, int line, int row, const char* message)
+static inline void ftk_xml_builder_on_error(FtkXmlBuilder* thiz, int line, int row, const char* message)
 {
 	return_if_fail(thiz != NULL);
 
@@ -123,7 +121,7 @@ static inline void xml_builder_on_error(XmlBuilder* thiz, int line, int row, con
 	return;
 }
 
-static inline void xml_builder_destroy(XmlBuilder* thiz)
+static inline void ftk_xml_builder_destroy(FtkXmlBuilder* thiz)
 {
 	if(thiz != NULL && thiz->destroy != NULL)
 	{
@@ -132,8 +130,6 @@ static inline void xml_builder_destroy(XmlBuilder* thiz)
 
 	return;
 }
-
-DECLS_END
 
 #endif/*XML_BUILDER_H*/
 

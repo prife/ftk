@@ -1,5 +1,5 @@
 /*
- * File:    xml_builder_dump.h
+ * File:    ftk_xml_builder_dump.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   xml builder dump implementation.
  *
@@ -31,13 +31,9 @@
 
 #ifndef XML_BUILDER_DUMP_H
 #define XML_BUILDER_DUMP_H
-#include "xml_builder.h"
+#include "ftk_xml_builder.h"
 
-DECLS_BEGIN
-
-XmlBuilder* xml_builder_dump_create(FILE* fp);
-
-DECLS_END
+FtkXmlBuilder* ftk_xml_builder_dump_create(FILE* fp);
 
 #endif/*XML_BUILDER_DUMP_H*/
 

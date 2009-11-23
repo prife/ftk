@@ -5,7 +5,8 @@ MYLDFLAGS=$(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
 noinst_PROGRAMS=label_test widget_test \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
-	sources_manager_test text_buffer_test icon_cache_test 
+	sources_manager_test text_buffer_test icon_cache_test  \
+	xml_parser_test
 
 if FTK_BACKEND_FB
 noinst_PROGRAMS +=display_fb_test input_test
@@ -14,6 +15,9 @@ display_fb_test_LDFLAGS=$(MYLDFLAGS)
 input_test_SOURCES=input_test.c
 input_test_LDFLAGS=$(MYLDFLAGS)
 endif
+
+xml_parser_test_SOURCES=xml_builder_dump.c  xml_parser_test.c
+xml_parser_test_LDFLAGS=$(MYLDFLAGS)
 
 icon_cache_test_SOURCES=icon_cache_test.c
 icon_cache_test_LDFLAGS=$(MYLDFLAGS)

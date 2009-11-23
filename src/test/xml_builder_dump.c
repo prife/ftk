@@ -1,5 +1,5 @@
 /*
- * File:    xml_builder_dump.c
+ * File:    ftk_xml_builder_dump.c
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   xml builder dump implementation.
  *
@@ -36,7 +36,7 @@ typedef struct _PrivInfo
 	FILE* fp;
 }PrivInfo;
 
-static void xml_builder_dump_on_start_element(XmlBuilder* thiz, const char* tag, const char** attrs)
+static void ftk_xml_builder_dump_on_start_element(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	int i = 0;
 	PrivInfo* priv = (PrivInfo*)thiz->priv;
@@ -51,7 +51,7 @@ static void xml_builder_dump_on_start_element(XmlBuilder* thiz, const char* tag,
 	return;
 }
 
-static void xml_builder_dump_on_end_element(XmlBuilder* thiz, const char* tag)
+static void ftk_xml_builder_dump_on_end_element(FtkXmlBuilder* thiz, const char* tag)
 {
 	PrivInfo* priv = (PrivInfo*)thiz->priv;
 	fprintf(priv->fp, "</%s>\n", tag);
@@ -59,7 +59,7 @@ static void xml_builder_dump_on_end_element(XmlBuilder* thiz, const char* tag)
 	return;
 }
 
-static void xml_builder_dump_on_text(XmlBuilder* thiz, const char* text, size_t length)
+static void ftk_xml_builder_dump_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
 {
 	PrivInfo* priv = (PrivInfo*)thiz->priv;
 	fwrite(text, length, 1, priv->fp);
@@ -67,7 +67,7 @@ static void xml_builder_dump_on_text(XmlBuilder* thiz, const char* text, size_t 
 	return;
 }
 
-static void xml_builder_dump_on_comment(XmlBuilder* thiz, const char* text, size_t length)
+static void ftk_xml_builder_dump_on_comment(FtkXmlBuilder* thiz, const char* text, size_t length)
 {
 	PrivInfo* priv = (PrivInfo*)thiz->priv;
 	fprintf(priv->fp, "<!--");
@@ -77,7 +77,7 @@ static void xml_builder_dump_on_comment(XmlBuilder* thiz, const char* text, size
 	return;
 }
 
-static void xml_builder_dump_on_pi_element(XmlBuilder* thiz, const char* tag, const char** attrs)
+static void ftk_xml_builder_dump_on_pi_element(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	int i = 0;
 	PrivInfo* priv = (PrivInfo*)thiz->priv;
@@ -92,14 +92,14 @@ static void xml_builder_dump_on_pi_element(XmlBuilder* thiz, const char* tag, co
 	return;
 }
 
-static void xml_builder_dump_on_error(XmlBuilder* thiz, int line, int row, const char* message)
+static void ftk_xml_builder_dump_on_error(FtkXmlBuilder* thiz, int line, int row, const char* message)
 {
 	fprintf(stderr, "(%d,%d) %s\n", line, row, message);
 
 	return;
 }
 
-static void xml_builder_dump_destroy(XmlBuilder* thiz)
+static void ftk_xml_builder_dump_destroy(FtkXmlBuilder* thiz)
 {
 	if(thiz != NULL)
 	{
@@ -109,21 +109,21 @@ static void xml_builder_dump_destroy(XmlBuilder* thiz)
 	return;
 }
 
-XmlBuilder* xml_builder_dump_create(FILE* fp)
+FtkXmlBuilder* ftk_xml_builder_dump_create(FILE* fp)
 {
-	XmlBuilder* thiz = (XmlBuilder*)calloc(1, sizeof(XmlBuilder));
+	FtkXmlBuilder* thiz = (FtkXmlBuilder*)calloc(1, sizeof(FtkXmlBuilder));
 
 	if(thiz != NULL)
 	{
 		PrivInfo* priv = (PrivInfo*)thiz->priv;
 
-		thiz->on_start_element  = xml_builder_dump_on_start_element;
-		thiz->on_end_element    = xml_builder_dump_on_end_element;
-		thiz->on_text           = xml_builder_dump_on_text;
-		thiz->on_comment        = xml_builder_dump_on_comment;
-		thiz->on_pi_element     = xml_builder_dump_on_pi_element;
-		thiz->on_error          = xml_builder_dump_on_error;
-		thiz->destroy           = xml_builder_dump_destroy;
+		thiz->on_start_element  = ftk_xml_builder_dump_on_start_element;
+		thiz->on_end_element    = ftk_xml_builder_dump_on_end_element;
+		thiz->on_text           = ftk_xml_builder_dump_on_text;
+		thiz->on_comment        = ftk_xml_builder_dump_on_comment;
+		thiz->on_pi_element     = ftk_xml_builder_dump_on_pi_element;
+		thiz->on_error          = ftk_xml_builder_dump_on_error;
+		thiz->destroy           = ftk_xml_builder_dump_destroy;
 
 		priv->fp = fp != NULL ? fp : stdout;
 	}
@@ -137,15 +137,15 @@ int main(int argc, char* argv[])
 	const char* pi_attrs[] = {"version", "1.0", "encoding", "utf-8", NULL};
 	const char* root_attrs[] = {"name", "lixianjing", "blog", "http://www.limodev.cn/blog",NULL};
 
-	XmlBuilder* thiz = xml_builder_dump_create(stdout);
+	FtkXmlBuilder* thiz = ftk_xml_builder_dump_create(stdout);
 
-	xml_builder_on_pi_element(thiz, "xml", pi_attrs);
-	xml_builder_on_comment(thiz,"comment", 6);
-	xml_builder_on_start_element(thiz, "programmer", root_attrs);
-	xml_builder_on_text(thiz,"text", 4);
-	xml_builder_on_end_element(thiz, "programmer");
+	ftk_xml_builder_on_pi_element(thiz, "xml", pi_attrs);
+	ftk_xml_builder_on_comment(thiz,"comment", 6);
+	ftk_xml_builder_on_start_element(thiz, "programmer", root_attrs);
+	ftk_xml_builder_on_text(thiz,"text", 4);
+	ftk_xml_builder_on_end_element(thiz, "programmer");
 
-	xml_builder_destroy(thiz);
+	ftk_xml_builder_destroy(thiz);
 
 	return 0;
 }
