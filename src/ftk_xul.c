@@ -155,6 +155,85 @@ static FtkXulWidgetCreate ftk_xul_find_creator(const char* name)
 	return NULL;
 }
 
+typedef int (*FtkXulVarGetter)(FtkXmlBuilder* thiz);
+
+typedef struct _VarGetter
+{
+	const char* name;
+	FtkXulVarGetter get;
+}VarGetter;
+
+static int ftk_xul_builder_get_parent_width(FtkXmlBuilder* thiz)
+{
+	DECL_PRIV(thiz, priv);
+	
+	return ftk_widget_width(ftk_widget_parent(priv->current));
+}
+
+static int ftk_xul_builder_get_parent_height(FtkXmlBuilder* thiz)
+{
+	DECL_PRIV(thiz, priv);
+
+	return ftk_widget_height(ftk_widget_parent(priv->current));
+}
+
+static int ftk_xul_builder_get_window_width(FtkXmlBuilder* thiz)
+{
+	DECL_PRIV(thiz, priv);
+
+	return ftk_widget_width(priv->root);
+}
+
+static int ftk_xul_builder_get_window_height(FtkXmlBuilder* thiz)
+{
+	DECL_PRIV(thiz, priv);
+
+	return ftk_widget_height(priv->root);
+}
+
+static int ftk_xul_builder_get_display_width(FtkXmlBuilder* thiz)
+{
+	return ftk_display_width(ftk_default_display());
+}
+
+static int ftk_xul_builder_get_display_height(FtkXmlBuilder* thiz)
+{
+	return ftk_display_height(ftk_default_display());
+}
+
+static const VarGetter s_var_getters[] = 
+{
+	{"pw",             ftk_xul_builder_get_parent_width},
+	{"parent_width",   ftk_xul_builder_get_parent_width},
+	{"ph",             ftk_xul_builder_get_parent_height},
+	{"parent_height",  ftk_xul_builder_get_parent_height},
+	{"ww",             ftk_xul_builder_get_window_width},
+	{"window_width",   ftk_xul_builder_get_window_width},
+	{"wh",             ftk_xul_builder_get_window_height},
+	{"window_height",  ftk_xul_builder_get_window_height},
+	{"dw",             ftk_xul_builder_get_display_width},
+	{"display_width",  ftk_xul_builder_get_display_width},
+	{"dh",             ftk_xul_builder_get_display_height},
+	{"display_height", ftk_xul_builder_get_display_height},
+	{NULL, NULL} 
+};
+
+static FtkXulVarGetter ftk_xul_find_getter(const char* name)
+{
+	int i = 0;
+	return_val_if_fail(name != NULL, NULL);
+
+	for(i = 0; s_var_getters[i].name != NULL; i++)
+	{
+		if(strcmp(s_var_getters[i].name, name) == 0)
+		{
+			return s_var_getters[i].get;
+		}
+	}
+
+	return NULL;
+}
+
 static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** attrs, FtkWidgetCreateInfo* info)
 {
 	int i = 0;
