@@ -41,6 +41,7 @@
 #define DATA_DIR ""
 #define LOCAL_DATA_DIR ""
 #define usleep Sleep
+#define pipe(fds) _pipe(fds, 2, 0)
 
 struct timeval {
 	time_t tv_sec;     /* seconds */

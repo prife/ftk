@@ -36,9 +36,9 @@
 
 typedef struct _PrivInfo
 {
-	int mid_nr;
-	int last_nr;
-	int first_nr;
+	size_t mid_nr;
+	size_t last_nr;
+	size_t first_nr;
 	FtkWidget* mid[FTK_PANEL_MAX_ITEM];	 /*placed in the mid part*/
 	FtkWidget* last[FTK_PANEL_MAX_ITEM]; /*placed in the left part*/	
 	FtkWidget* first[FTK_PANEL_MAX_ITEM];/*placed in the right part*/
