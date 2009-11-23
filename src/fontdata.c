@@ -115,10 +115,10 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 
 		if(thiz->glyphs[i].code > glyph->code || thiz->glyphs[i].code == 0)
 		{
-			int size = glyph->w * glyph->h;
+			size_t size = glyph->w * glyph->h;
 			if(thiz->glyphs[i].code > glyph->code)
 			{
-				int k = 0;
+				size_t k = 0;
 				for(k = thiz->header.char_nr - 1; k > i; k--)
 				{
 					thiz->glyphs[k] = thiz->glyphs[k-1];
