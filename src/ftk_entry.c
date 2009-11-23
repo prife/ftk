@@ -57,7 +57,7 @@ typedef struct _PrivInfo
 	&& priv->text_buffer->length > 0) 
 
 #define TB_TEXT priv->text_buffer->buffer
-#define TB_LENGTH priv->text_buffer->length
+#define TB_LENGTH (int)(priv->text_buffer->length)
 
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
