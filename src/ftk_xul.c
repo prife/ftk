@@ -29,12 +29,238 @@
  *
  */
 
+#include "ftk.h"
 #include "ftk_xul.h"
 #include "ftk_xml_parser.h"
 
+typedef struct _PrivInfo
+{
+	FtkWidget* root;
+	FtkWidget* current;
+}PrivInfo;
+
+typedef struct _FtkWidgetCreateInfo
+{
+	int id;
+	int x;
+	int y;
+	int w;
+	int h;
+	const char* value;
+	FtkWidget* parent;
+	FtkGc gcs[FTK_WIDGET_STATE_NR];
+}FtkWidgetCreateInfo;
+
+typedef FtkWidget* (*FtkXulWidgetCreate)(FtkWidgetCreateInfo* info);
+
+typedef struct _WidgetCreator
+{
+	const char* name;
+	FtkXulWidgetCreate create;
+}WidgetCreator;
+
+static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_label_create(info->parent, info->x, info->y, info->w, info->h);
+	ftk_widget_set_id(widget, info->id);
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_button_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_button_create(info->parent, info->x, info->y, info->w, info->h);
+	ftk_widget_set_id(widget, info->id);
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_entry_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_entry_create(info->parent, info->x, info->y, info->w, info->h);
+	ftk_widget_set_id(widget, info->id);
+
+	return widget;
+}
+
+static const WidgetCreator s_widget_creaters[] = 
+{
+	{"label",   ftk_xul_label_create},
+	{"entry",   ftk_xul_entry_create},
+	{"button",  ftk_xul_button_create},
+	{NULL, NULL},
+};
+
+static FtkXulWidgetCreate ftk_xul_find_creator(const char* name)
+{
+	int i = 0;
+	return_val_if_fail(name != NULL, NULL);
+
+	for(i = 0; s_widget_creaters[i].name != NULL; i++)
+	{
+		if(strcmp(s_widget_creaters[i].name, name) == 0)
+		{
+			return s_widget_creaters[i].create;
+		}
+	}
+
+	return NULL;
+}
+
+static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** attrs, FtkWidgetCreateInfo* info)
+{
+	int i = 0;
+	const char* name = NULL;
+	const char* value = NULL;
+	return_if_fail(attrs != NULL && info != NULL);
+
+	for(i = 0; attrs[i] != NULL; i += 2)
+	{
+		name = attrs[i];
+		value = attrs[i+1];
+
+		switch(name[0])
+		{
+			case 'i':
+			{
+				info->id = atoi(value);
+				break;
+			}
+			case 'x':
+			{
+				info->x = atoi(value);
+				break;
+			}
+			case 'y':
+			{
+				info->y = atoi(value);
+				break;
+			}
+			case 'w':
+			{
+				info->w = atoi(value);
+				break;
+			}
+			case 'h':
+			{
+				info->h = atoi(value);
+				break;
+			}
+			case 'v':
+			{
+				info->value = value;
+				break;
+			}
+			default:break;/*TODO: handle other attrs*/
+		}
+	}
+
+	return;
+}
+
+static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
+{
+	FtkWidgetCreateInfo info = {0};
+	FtkWidget* widget = NULL;
+	DECL_PRIV(thiz, priv);
+	FtkXulWidgetCreate create = ftk_xul_find_creator(tag);
+
+	return_if_fail(create != NULL && attrs != NULL);
+
+	ftk_xul_builder_init_widget_info(thiz, attrs, &info);
+
+	info.parent = priv->current;
+	widget = create(&info);
+
+	return;
+}
+
+static void ftk_xul_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
+{
+	DECL_PRIV(thiz, priv);
+
+	priv->current = ftk_widget_parent(priv->current);
+
+	return;
+}
+
+static void ftk_xul_builder_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
+{
+	return;
+}
+
+static void ftk_xul_builder_on_comment(FtkXmlBuilder* thiz, const char* text, size_t length)
+{
+	return;
+}
+
+static void ftk_xul_builder_on_pi(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
+{
+	return;
+}
+
+static void ftk_xul_builder_on_error(FtkXmlBuilder* thiz, int line, int row, const char* message)
+{
+	return;
+}
+
+static void ftk_xul_builder_destroy(FtkXmlBuilder* thiz)
+{
+	if(thiz != NULL)
+	{
+		FTK_ZFREE(thiz, sizeof(FtkXmlBuilder) + sizeof(PrivInfo));
+	}
+
+	return;
+}
+
+static FtkXmlBuilder* ftk_xul_builder_create(void)
+{
+	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(PrivInfo));
+
+	if(thiz != NULL)
+	{
+		thiz->on_start_element = ftk_xul_builder_on_start;
+		thiz->on_end_element   = ftk_xul_builder_on_end;
+		thiz->on_text          = ftk_xul_builder_on_text;
+		thiz->on_comment       = ftk_xul_builder_on_comment;
+		thiz->on_pi_element    = ftk_xul_builder_on_pi;
+		thiz->on_error         = ftk_xul_builder_on_error;
+		thiz->destroy          = ftk_xul_builder_destroy;
+	}
+
+	return thiz;
+}
+
 FtkWidget* ftk_xul_load(const char* xml, int length)
 {
-	return NULL;
+	FtkWidget* widget = NULL;
+	FtkXmlParser* parser = NULL;
+	FtkXmlBuilder* builder = NULL;
+	return_val_if_fail(xml != NULL, NULL);
+
+	parser  = ftk_xml_parser_create();
+	return_val_if_fail(parser != NULL, NULL);
+
+	builder = ftk_xul_builder_create();
+
+	if(builder != NULL)
+	{
+		PrivInfo* priv = builder->priv;
+		ftk_xml_parser_set_builder(parser, builder);
+		ftk_xml_parser_parse(parser, xml);
+		widget = priv->root;
+	}
+	ftk_xml_builder_destroy(builder);
+	ftk_xml_parser_destroy(parser);
+
+	return widget;
 }
 
 
