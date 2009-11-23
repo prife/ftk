@@ -29,12 +29,12 @@
  *
  */
 #include <string.h>
-#include <windows.h>
+#include "ftk_win32.h"
 
 int ftk_platform_init(int argc, char** argv)
 {
 
-	return RET_OK;
+	return 0;
 }
 
 void ftk_platform_deinit(void)
@@ -63,9 +63,8 @@ int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 	return 0;
 }
 
-#ifndef HAVE_GETTIMEOFDAY
+#define EPOCHFILETIME 0
 int gettimeofday(struct timeval *tv, struct timezone *tz)
-#ifdef _WINDOWS
 {
     FILETIME        ft;
     LARGE_INTEGER   li;
@@ -96,12 +95,8 @@ int gettimeofday(struct timeval *tv, struct timezone *tz)
     }
 
     return 0;
-
-#else /* !defined(_WINDOWS) */
-    errno = ENOSYS;
-    return -1;
-#endif /* _WINDOWS */
-#endif /* HAVE_GETTIMEOFDAY */
 }
+
+
 
 
