@@ -35,6 +35,7 @@
 
 typedef struct _PrivInfo
 {
+	int skip_end_tag;
 	FtkWidget* root;
 	FtkWidget* current;
 }PrivInfo;
@@ -65,6 +66,10 @@ static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 
 	widget = ftk_label_create(info->parent, info->x, info->y, info->w, info->h);
 	ftk_widget_set_id(widget, info->id);
+	if(info->value != NULL)
+	{
+		ftk_widget_set_text(widget, info->value);
+	}
 
 	return widget;
 }
@@ -75,6 +80,10 @@ static FtkWidget* ftk_xul_button_create(FtkWidgetCreateInfo* info)
 
 	widget = ftk_button_create(info->parent, info->x, info->y, info->w, info->h);
 	ftk_widget_set_id(widget, info->id);
+	if(info->value != NULL)
+	{
+		ftk_widget_set_text(widget, info->value);
+	}
 
 	return widget;
 }
@@ -85,6 +94,37 @@ static FtkWidget* ftk_xul_entry_create(FtkWidgetCreateInfo* info)
 
 	widget = ftk_entry_create(info->parent, info->x, info->y, info->w, info->h);
 	ftk_widget_set_id(widget, info->id);
+	
+	if(info->value != NULL)
+	{
+		ftk_entry_set_text(widget, info->value);
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_window_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_app_window_create();
+	if(info->value != NULL)
+	{
+		ftk_widget_set_text(widget, info->value);
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_dialog_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_dialog_create(info->x, info->y, info->w, info->h);
+	if(info->value != NULL)
+	{
+		ftk_widget_set_text(widget, info->value);
+	}
 
 	return widget;
 }
@@ -94,6 +134,8 @@ static const WidgetCreator s_widget_creaters[] =
 	{"label",   ftk_xul_label_create},
 	{"entry",   ftk_xul_entry_create},
 	{"button",  ftk_xul_button_create},
+	{"window",   ftk_xul_window_create},
+	{"dialog",   ftk_xul_dialog_create},
 	{NULL, NULL},
 };
 
@@ -118,8 +160,10 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 	int i = 0;
 	const char* name = NULL;
 	const char* value = NULL;
+	DECL_PRIV(thiz, priv);
 	return_if_fail(attrs != NULL && info != NULL);
 
+	info->parent = priv->current;
 	for(i = 0; attrs[i] != NULL; i += 2)
 	{
 		name = attrs[i];
@@ -164,6 +208,12 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 	return;
 }
 
+static void ftk_xul_builder_reset_widget_info(FtkXmlBuilder* thiz, FtkWidgetCreateInfo* info)
+{
+	/*TODO*/
+	return;
+}
+
 static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	FtkWidgetCreateInfo info = {0};
@@ -171,12 +221,20 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 	DECL_PRIV(thiz, priv);
 	FtkXulWidgetCreate create = ftk_xul_find_creator(tag);
 
+	priv->skip_end_tag = 1;
 	return_if_fail(create != NULL && attrs != NULL);
 
 	ftk_xul_builder_init_widget_info(thiz, attrs, &info);
-
-	info.parent = priv->current;
 	widget = create(&info);
+	ftk_xul_builder_reset_widget_info(thiz, &info);
+	return_if_fail(widget != NULL);
+
+	priv->current = widget;
+	priv->skip_end_tag = 0;
+	if(priv->root == NULL)
+	{
+	 	priv->root = widget;
+	}
 
 	return;
 }
@@ -185,7 +243,10 @@ static void ftk_xul_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
 {
 	DECL_PRIV(thiz, priv);
 
-	priv->current = ftk_widget_parent(priv->current);
+	if(!priv->skip_end_tag)
+	{
+		priv->current = ftk_widget_parent(priv->current);
+	}
 
 	return;
 }
@@ -252,7 +313,7 @@ FtkWidget* ftk_xul_load(const char* xml, int length)
 
 	if(builder != NULL)
 	{
-		PrivInfo* priv = builder->priv;
+		PrivInfo* priv = (PrivInfo*)builder->priv;
 		ftk_xml_parser_set_builder(parser, builder);
 		ftk_xml_parser_parse(parser, xml);
 		widget = priv->root;

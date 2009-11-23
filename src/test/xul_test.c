@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	{
 		win = ftk_xul_load(t1, strlen(t1));
 	}
-	ftk_widget_show(win, 1);
+	ftk_widget_show_all(win, 1);
 
 	ftk_run();
 

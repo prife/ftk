@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
-	<button id="1" x="10" y="10" w="60" h="50" v="OK" />
-	<entry  id="2" x="70" y="10" w="60" h="30" v="OK" />
+	<button id="1" x="10" y="10" w="80" h="50" v="OK" />
+	<entry  id="2" x="10" y="60" w="160" h="30" v="single line editor" />
+	<label  id="3" x="10" y="90" w="160" h="30" v="static text" />
 </window>

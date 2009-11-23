@@ -30,10 +30,6 @@
  */
 
 #include "ftk_label.h"
-typedef struct _PrivInfo
-{
-	char* text;
-}PrivInfo;
 
 #define FTK_LABEL_LEFT_MARGIN 3
 #define FTK_LABEL_TOP_MARGIN  1
@@ -47,13 +43,13 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 {
 	int i = 0;
 	int rows = 0;
-	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
-	if(priv->text != NULL)
+	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		int start = 0;
 		const char* end = NULL;
+		const char* text = ftk_widget_get_text(thiz);
 		
 		x += FTK_LABEL_LEFT_MARGIN;
 		width -= FTK_LABEL_LEFT_MARGIN * 2;
@@ -63,13 +59,13 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		for(i = 0; i < rows; i++)
 		{
 			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;
-			end = ftk_canvas_calc_str_visible_range(canvas, priv->text, start, -1, width);
-			ftk_canvas_draw_string(canvas, x, y, priv->text + start, end - priv->text - start);
+			end = ftk_canvas_calc_str_visible_range(canvas, text, start, -1, width);
+			ftk_canvas_draw_string(canvas, x, y, text + start, end - text - start);
 			if(*end == '\0')
 			{
 				break;
 			}
-			start = end - priv->text;
+			start = end - text;
 		}
 	}
 
@@ -78,14 +74,6 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 
 static void ftk_label_destroy(FtkWidget* thiz)
 {
-	if(thiz != NULL)
-	{
-		DECL_PRIV0(thiz, priv);
-
-		FTK_FREE(priv->text);
-		FTK_FREE(priv);
-	}
-
 	return;
 }
 
@@ -94,46 +82,17 @@ FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int heig
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	return_val_if_fail(thiz != NULL, NULL);
 
-	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
-	if(thiz->priv_subclass[0] != NULL)
-	{
-		thiz->on_event = ftk_label_on_event;
-		thiz->on_paint = ftk_label_on_paint;
-		thiz->destroy  = ftk_label_destroy;
+	thiz->on_event = ftk_label_on_event;
+	thiz->on_paint = ftk_label_on_paint;
+	thiz->destroy  = ftk_label_destroy;
 
-		ftk_widget_init(thiz, FTK_LABEL, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_insensitive(thiz, 1);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
-		ftk_widget_append_child(parent, thiz);
-	}
-	else
-	{
-		FTK_FREE(thiz);
-	}
+	ftk_widget_init(thiz, FTK_LABEL, 0);
+	ftk_widget_move(thiz, x, y);
+	ftk_widget_resize(thiz, width, height);
+	ftk_widget_set_insensitive(thiz, 1);
+	ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+	ftk_widget_append_child(parent, thiz);
 
 	return thiz;
 }
-
-Ret ftk_label_set_text(FtkWidget* thiz, const char* text)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
-
-	FTK_FREE(priv->text);
-	priv->text = FTK_STRDUP(text);
-	ftk_widget_paint_self(thiz);
-
-	return RET_OK;
-}
-
-const char* ftk_label_get_text(FtkWidget* thiz)
-{
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, NULL);
-
-	return priv->text;
-}
-
 

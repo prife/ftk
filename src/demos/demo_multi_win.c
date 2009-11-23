@@ -54,7 +54,7 @@ static void create_app_window(void)
 
 	snprintf(title, sizeof(title), "window%02d", g_index++);
 	label = ftk_label_create(win, width/4, height/2, width/2, 30);
-	ftk_label_set_text(label, title);
+	ftk_widget_set_text(label, title);
 	
 	ftk_widget_set_text(win, title);
 	ftk_widget_show_all(win, 1);
