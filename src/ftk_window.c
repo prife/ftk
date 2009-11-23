@@ -85,6 +85,14 @@ Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget)
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	priv->grab_widget = grab_widget;
+	if(priv->grab_widget != NULL)
+	{
+		ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
+	}
+	else
+	{
+		ftk_wnd_manager_ungrab(ftk_default_wnd_manager(), thiz);
+	}
 
 	return RET_OK;
 }
@@ -97,6 +105,7 @@ Ret ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget)
 	if(grab_widget == priv->grab_widget)
 	{
 		priv->grab_widget = NULL;
+		ftk_wnd_manager_ungrab(ftk_default_wnd_manager(), thiz);
 	}
 
 	return RET_OK;
