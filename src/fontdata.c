@@ -103,7 +103,7 @@ FontData* font_data_load(char* data, int length)
 
 Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 {
-	int i = 0;
+	size_t i = 0;
 	return_val_if_fail(thiz != NULL && glyph != NULL && thiz->new_created, RET_FAIL);
 	
 	for(i = 0; i < thiz->header.char_nr; i++)
@@ -127,7 +127,7 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 
 			if((thiz->data_size + size) >= thiz->data_buffer_size)
 			{
-				int data_buffer_size = thiz->data_buffer_size + (thiz->data_buffer_size >> 1) + (size << 4);
+				size_t data_buffer_size = thiz->data_buffer_size + (thiz->data_buffer_size >> 1) + (size << 4);
 				unsigned char* data = (unsigned char*)realloc(thiz->data, data_buffer_size);
 				if(data != NULL)
 				{
@@ -169,7 +169,7 @@ Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph)
         if(result == 0)
         {
 			*glyph = thiz->glyphs[mid];
-			glyph->data = (int)(thiz->glyphs[mid].data) + thiz->data;
+			glyph->data = (unsigned char*)(thiz->data + (int)(thiz->glyphs[mid].data));
 
             return RET_OK;
         }
@@ -242,7 +242,7 @@ void font_data_set_author(FontData* thiz, const char* author)
 {
 	return_if_fail(thiz != NULL);
 	
-	strncpy(thiz->header.author, author, sizeof(thiz->header.author));
+	ftk_strncpy(thiz->header.author, author, sizeof(thiz->header.author));
 
 	return;
 }
@@ -251,7 +251,7 @@ void font_data_set_family(FontData* thiz, const char* family)
 {
 	return_if_fail(thiz != NULL);
 	
-	strncpy(thiz->header.family, family, sizeof(thiz->header.family));
+	ftk_strncpy(thiz->header.family, family, sizeof(thiz->header.family));
 
 	return;
 }
@@ -260,7 +260,7 @@ void font_data_set_style(FontData* thiz, const char* style)
 {
 	return_if_fail(thiz != NULL);
 	
-	strncpy(thiz->header.style, style, sizeof(thiz->header.style));
+	ftk_strncpy(thiz->header.style, style, sizeof(thiz->header.style));
 
 	return;
 }
