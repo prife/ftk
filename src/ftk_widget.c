@@ -33,6 +33,7 @@
 #include "ftk_bitmap.h"
 #include "ftk_widget.h"
 #include "ftk_globals.h"
+#include "ftk_canvas.h"
 
 struct _FtkWidgetInfo
 {

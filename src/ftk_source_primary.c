@@ -108,10 +108,11 @@ FtkSource* ftk_source_primary_create(FtkOnEvent on_event, void* user_data)
 
 Ret ftk_source_queue_event(FtkSource* thiz, FtkEvent* event)
 {
+	int ret = 0;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
-	int ret = write(priv->write_fd, event, sizeof(FtkEvent));
+	ret = write(priv->write_fd, event, sizeof(FtkEvent));
 
 	return ret == sizeof(FtkEvent) ? RET_OK : RET_FAIL;
 }

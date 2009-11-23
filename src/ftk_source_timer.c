@@ -46,11 +46,12 @@ static int ftk_source_timer_get_fd(FtkSource* thiz)
 
 static int ftk_source_timer_check(FtkSource* thiz)
 {
+	int t = 0;
 	DECL_PRIV(thiz, priv);
 	struct timeval now = {0};
 	gettimeofday(&now, NULL);
 	
-	int t = (priv->next_time.tv_sec - now.tv_sec)*1000 + (priv->next_time.tv_usec - now.tv_usec)/1000;
+	t = (priv->next_time.tv_sec - now.tv_sec)*1000 + (priv->next_time.tv_usec - now.tv_usec)/1000;
 	if(t < 0) t = 0;
 
 	return t;

@@ -280,14 +280,18 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SHOW:
 		{
-			FtkEvent event = {.type = FTK_EVT_SHOW, .widget = thiz};
+			FtkEvent event = {0};
+			event.type = FTK_EVT_SHOW;
+			event.widget = thiz;
 			ftk_window_realize(thiz);
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 			break;
 		}
 		case FTK_EVT_HIDE:
 		{
-			FtkEvent event = {.type = FTK_EVT_HIDE, .widget = thiz};
+			FtkEvent event = {0};
+			event.type = FTK_EVT_HIDE;
+			event.widget = thiz;
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 			break;
 		}
