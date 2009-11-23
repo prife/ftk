@@ -134,11 +134,11 @@ static void ftk_menu_item_destroy(FtkWidget* thiz)
 FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
-
 		thiz->on_event = ftk_menu_item_on_event;
 		thiz->on_paint = ftk_menu_item_on_paint;
 		thiz->destroy  = ftk_menu_item_destroy;
@@ -146,6 +146,10 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 		ftk_widget_init(thiz, FTK_MENU_ITEM, 0);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_menu_panel_add(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

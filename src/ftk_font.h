@@ -78,7 +78,9 @@ static inline void     ftk_font_destroy(FtkFont* thiz)
 {
 	return_if_fail(thiz != NULL && thiz->destroy != NULL);
 
-	return thiz->destroy(thiz);
+	thiz->destroy(thiz);
+
+	return;
 }
 
 #endif/*FTK_FONT_H*/

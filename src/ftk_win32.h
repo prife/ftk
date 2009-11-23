@@ -37,6 +37,9 @@
 #define inline 
 #define __func__ __FILE__
 #define FTK_FONT "./unicode.fnt"
+#define DATA_DIR ""
+#define LCOAL_DATA_DIR ""
+#define usleep Sleep
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 char* ftk_strdup(const char *s);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);

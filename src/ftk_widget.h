@@ -49,11 +49,11 @@ typedef void (*FtkWidgetDestroy)(FtkWidget* thiz);
 
 typedef enum _FtkWidgetState
 {
-	FTK_WIDGET_NORMAL = 0,
-	FTK_WIDGET_FOCUSED,
-	FTK_WIDGET_ACTIVE,
-	FTK_WIDGET_INSENSITIVE,
-	FTK_WIDGET_STATE_NR
+	FTK_WIDGET_NORMAL      = 0,
+	FTK_WIDGET_FOCUSED     = 1,
+	FTK_WIDGET_ACTIVE      = 2,
+	FTK_WIDGET_INSENSITIVE = 3,
+	FTK_WIDGET_STATE_NR    = 4
 }FtkWidgetState;
 
 typedef enum _FtkWidgetAttr

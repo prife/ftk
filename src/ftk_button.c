@@ -87,10 +87,10 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL] = "btn_default_normal"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_ACTIVE] = "btn_default_pressed"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_INSENSITIVE] = "btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_FOCUSED] = "btn_default_selected"FTK_STOCK_IMG_SUFFIX
+	"btn_default_normal"FTK_STOCK_IMG_SUFFIX,
+	"btn_default_selected"FTK_STOCK_IMG_SUFFIX,
+	"btn_default_pressed"FTK_STOCK_IMG_SUFFIX,
+	"btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX
 };
 
 static Ret ftk_button_on_paint(FtkWidget* thiz)
@@ -136,11 +136,13 @@ static void ftk_button_destroy(FtkWidget* thiz)
 FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
-
-	if(thiz != NULL)
+	return_val_if_fail(thiz != NULL, NULL);
+	
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+		FtkGc gc ={0};
+		gc.mask = FTK_GC_FG | FTK_GC_BG;
 
 		thiz->on_event = ftk_button_on_event;
 		thiz->on_paint = ftk_button_on_paint;
@@ -162,6 +164,10 @@ FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int hei
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

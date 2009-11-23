@@ -132,6 +132,11 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 
 		priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
 	}
+	else
+	{
+		ftk_widget_destroy(thiz);
+		thiz = NULL;
+	}
 
 	return thiz;
 }

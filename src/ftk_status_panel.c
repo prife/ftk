@@ -149,6 +149,11 @@ FtkWidget* ftk_status_panel_create(int size)
 		thiz->on_paint = ftk_status_panel_on_paint;
 		thiz->destroy  = ftk_status_panel_destroy;
 	}
+	else
+	{
+		ftk_widget_destroy(thiz);
+		thiz = NULL;
+	}
 
 	return thiz;
 }

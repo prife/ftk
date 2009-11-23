@@ -419,19 +419,20 @@ FtkWidget* ftk_window_create(int x, int y, int width, int height)
 FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
-	
-	if(thiz != NULL)
+	return_val_if_fail(thiz != NULL, NULL);
+
+	thiz->priv_subclass[0] = FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		thiz->priv_subclass[0] = FTK_ZALLOC(sizeof(PrivInfo));
 		do
 		{
-			FtkGc gc = {.mask = FTK_GC_BG | FTK_GC_FG};
-
+			FtkGc gc = {0};
 			DECL_PRIV0(thiz, priv);	
 			if(priv == NULL)
 			{
 				break;
 			}
+			gc.mask = FTK_GC_BG | FTK_GC_FG;
 			priv->display = ftk_default_display();
 
 			ftk_widget_init(thiz, type, 0);
@@ -450,6 +451,10 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 			ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 			ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 		}while(0);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

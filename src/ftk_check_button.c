@@ -110,34 +110,34 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static const char* check_bg_on_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_check_on"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_ACTIVE]      = "btn_check_on_pressed"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_INSENSITIVE] = "btn_check_on_disable"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_FOCUSED]     = "btn_check_on_selected"FTK_STOCK_IMG_SUFFIX
+	"btn_check_on"FTK_STOCK_IMG_SUFFIX,
+	"btn_check_on_selected"FTK_STOCK_IMG_SUFFIX,
+	"btn_check_on_pressed"FTK_STOCK_IMG_SUFFIX,
+	"btn_check_on_disable"FTK_STOCK_IMG_SUFFIX
 };
 
 static const char* check_bg_off_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_check_off"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_ACTIVE]      = "btn_check_off_pressed"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_INSENSITIVE] = "btn_check_off_disable"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_FOCUSED]     = "btn_check_off_selected"FTK_STOCK_IMG_SUFFIX
+	"btn_check_off"FTK_STOCK_IMG_SUFFIX,
+	"btn_check_off_selected"FTK_STOCK_IMG_SUFFIX,
+	"btn_check_off_pressed"FTK_STOCK_IMG_SUFFIX,
+	"btn_check_off_disable"FTK_STOCK_IMG_SUFFIX
 };
 
 static const char* radio_bg_on_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_radio_on"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_ACTIVE]      = "btn_radio_on_pressed"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_INSENSITIVE] = "btn_radio_on"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_FOCUSED]     = "btn_radio_on_selected"FTK_STOCK_IMG_SUFFIX
+	"btn_radio_on"FTK_STOCK_IMG_SUFFIX,
+	"btn_radio_on_selected"FTK_STOCK_IMG_SUFFIX,
+	"btn_radio_on_pressed"FTK_STOCK_IMG_SUFFIX,
+	"btn_radio_on"FTK_STOCK_IMG_SUFFIX
 };
 
 static const char* radio_bg_off_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_NORMAL]      = "btn_radio_off"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_ACTIVE]      = "btn_radio_off_pressed"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_INSENSITIVE] = "btn_radio_off"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_FOCUSED]     = "btn_radio_off_selected"FTK_STOCK_IMG_SUFFIX
+	"btn_radio_off"FTK_STOCK_IMG_SUFFIX,
+	"btn_radio_off_selected"FTK_STOCK_IMG_SUFFIX,
+	"btn_radio_off_pressed"FTK_STOCK_IMG_SUFFIX,
+	"btn_radio_off"FTK_STOCK_IMG_SUFFIX,
 };
 
 static Ret ftk_check_button_on_paint(FtkWidget* thiz)
@@ -199,13 +199,15 @@ static void ftk_check_button_destroy(FtkWidget* thiz)
 FtkWidget* ftk_check_button_create_ex(FtkWidget* parent, int x, int y, int width, int height, int radio)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
-	if(thiz != NULL)
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
-
+		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
+		gc.mask = FTK_GC_FG | FTK_GC_BG;
+
 		priv->is_radio = radio;
 		thiz->on_event = ftk_check_button_on_event;
 		thiz->on_paint = ftk_check_button_on_paint;
@@ -227,6 +229,10 @@ FtkWidget* ftk_check_button_create_ex(FtkWidget* parent, int x, int y, int width
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

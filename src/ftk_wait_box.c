@@ -81,11 +81,12 @@ static void ftk_wait_box_destroy(FtkWidget* thiz)
 FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
-	if(thiz != NULL)
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
 		int w = 0;
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 		DECL_PRIV0(thiz, priv);
 
 		thiz->on_event = ftk_wait_box_on_event;
@@ -103,6 +104,10 @@ FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
 		ftk_widget_append_child(parent, thiz);
 
 		priv->timer = ftk_source_timer_create(500, (FtkTimer)ftk_widget_paint, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

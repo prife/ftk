@@ -54,7 +54,6 @@ static Ret  ftk_app_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		&& event->u.key.code == FTK_KEY_MENU
 		&& priv->on_prepare_options_menu != NULL)
 	{
-		ftk_logd("%s\n", __func__);
 		FtkWidget* menu_panel = ftk_menu_panel_create();
 		if(priv->on_prepare_options_menu(priv->on_prepare_options_menu_ctx, menu_panel) == RET_OK)
 		{
@@ -65,6 +64,7 @@ static Ret  ftk_app_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			ftk_widget_unref(menu_panel);
 		}
+		ftk_logd("%s\n", __func__);
 
 		return RET_REMOVE;
 	}

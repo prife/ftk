@@ -92,11 +92,11 @@ static void ftk_label_destroy(FtkWidget* thiz)
 FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
-	if(thiz != NULL)
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
-
 		thiz->on_event = ftk_label_on_event;
 		thiz->on_paint = ftk_label_on_paint;
 		thiz->destroy  = ftk_label_destroy;
@@ -107,6 +107,10 @@ FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int heig
 		ftk_widget_set_insensitive(thiz, 1);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

@@ -214,13 +214,14 @@ static Ret  ftk_animator_expand_start(FtkAnimator* thiz, FtkWidget* win, int syn
 	int height = 0;
 	int step_duration = 0;
 	DECL_PRIV(thiz, priv);
-	FtkColor bg = {.a = 0xff};
+	FtkColor bg = {0};
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(win != NULL, RET_FAIL);
 	return_val_if_fail(priv->step != 0, RET_FAIL);
 	return_val_if_fail(priv->duration > 0, RET_FAIL);
 	return_val_if_fail(priv->start != priv->end, RET_FAIL);
 
+	bg.a = 0xff;
 	priv->snap = ftk_bitmap_create(ftk_display_width(display), ftk_display_height(display), bg);
 	ftk_display_snap(ftk_default_display(), 0, 0, priv->snap);
 	return_val_if_fail(priv->snap != NULL, RET_FAIL);

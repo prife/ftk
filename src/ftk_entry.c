@@ -234,13 +234,14 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 {
 	int extent = 0;
 	DECL_PRIV0(thiz, priv);
-	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkGc gc = {0};
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	return_val_if_fail(priv->caret >= priv->visible_start && priv->caret <= priv->visible_end, RET_FAIL);
 
 	(void)width;
+	gc.mask = FTK_GC_FG;
 	if(ftk_widget_is_focused(thiz))
 	{
 		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
@@ -260,11 +261,12 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 
 static Ret ftk_entry_on_paint(FtkWidget* thiz)
 {
-	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
 	int font_height = 0;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	
+
+	gc.mask = FTK_GC_FG;
 	if(ftk_widget_is_focused(thiz))
 	{
 		gc.fg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
@@ -317,13 +319,15 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
-	if(thiz != NULL)
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
 
+		gc.mask = FTK_GC_FG | FTK_GC_BG;
 		thiz->on_event = ftk_entry_on_event;
 		thiz->on_paint = ftk_entry_on_paint;
 		thiz->destroy  = ftk_entry_destroy;
@@ -344,6 +348,10 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
 		ftk_widget_append_child(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

@@ -197,7 +197,7 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	int nr = 0;
 	int first_row_nr = 0;
 	int second_row_nr = 0;
-	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkGc gc = {0};
 	DECL_PRIV1(thiz, priv);
 	int screen_width = ftk_display_width(ftk_default_display());
 	int max_items_per_row = screen_width/FTK_MENU_ITEM_WIDTH;	
@@ -205,6 +205,7 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
 
+	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
 	gc.fg.r -=0x1f;
 	gc.fg.g -=0x1f;
@@ -271,7 +272,7 @@ FtkWidget* ftk_menu_panel_create(void)
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[1] != NULL)
 	{
-		FtkGc gc = {.mask = FTK_GC_BG | FTK_GC_FG};
+		FtkGc gc = {0};
 		DECL_PRIV1(thiz, priv);
 		priv->parent_on_event = thiz->on_event;
 		priv->parent_on_paint = thiz->on_paint;
@@ -280,11 +281,17 @@ FtkWidget* ftk_menu_panel_create(void)
 		thiz->on_paint = ftk_menu_panel_on_paint;
 		thiz->destroy  = ftk_menu_panel_destroy;
 
+		gc.mask = FTK_GC_BG | FTK_GC_FG;
 		gc.fg = ftk_style_get_color(FTK_COLOR_MENU_FG);
 		gc.bg = ftk_style_get_color(FTK_COLOR_MENU_BG);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+	}
+	else
+	{
+		ftk_widget_destroy(thiz);
+		thiz = NULL;
 	}
 
 	return thiz;

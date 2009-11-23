@@ -116,11 +116,11 @@ static void ftk_status_item_destroy(FtkWidget* thiz)
 FtkWidget* ftk_status_item_create(FtkWidget* parent, int pos, int width)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
-	if(thiz != NULL)
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
-
 		thiz->on_event = ftk_status_item_on_event;
 		thiz->on_paint = ftk_status_item_on_paint;
 		thiz->destroy  = ftk_status_item_destroy;
@@ -131,6 +131,10 @@ FtkWidget* ftk_status_item_create(FtkWidget* parent, int pos, int width)
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_status_item_set_position(thiz, pos);
 		ftk_status_panel_add(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;

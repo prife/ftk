@@ -46,10 +46,11 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 {
 	int fg_width = 0;
 	DECL_PRIV0(thiz, priv);
-	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkGc gc = {0};
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(width > 4 && height > 4, RET_FAIL);
 
+	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_widget_get_gc(thiz)->bg;
 	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_round_rect(canvas, x, y, width, height, 1);
@@ -81,11 +82,13 @@ static void ftk_progress_bar_destroy(FtkWidget* thiz)
 FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+	return_val_if_fail(thiz != NULL, NULL);
 
-	if(thiz != NULL)
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {.mask = FTK_GC_FG | FTK_GC_BG};
-		thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+		FtkGc gc = {0};
+		gc.mask = FTK_GC_FG | FTK_GC_BG;
 
 		thiz->on_event = ftk_progress_bar_on_event;
 		thiz->on_paint = ftk_progress_bar_on_paint;
@@ -102,6 +105,10 @@ FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, i
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
+	}
+	else
+	{
+		FTK_FREE(thiz);
 	}
 
 	return thiz;
