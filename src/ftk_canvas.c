@@ -590,20 +590,22 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 
+	FtkColor* src = NULL;
+	FtkColor* dst = NULL;
 	int width  = ftk_bitmap_width(thiz->bitmap);
 	int height = ftk_bitmap_height(thiz->bitmap);
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
+	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 	return_val_if_fail(x < bitmap_width, RET_FAIL);
 	return_val_if_fail(y < bitmap_height, RET_FAIL);
 	return_val_if_fail(xoffset < width, RET_FAIL);
 	return_val_if_fail(yoffset < height, RET_FAIL);
 
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-	FtkColor* dst = ftk_bitmap_bits(thiz->bitmap);
+	src = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_bits(thiz->bitmap);
 
 	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
 	w = (xoffset + w) < width  ? w : width  - xoffset;
