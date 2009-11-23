@@ -45,6 +45,7 @@
 #include <linux/kd.h>
 #include <linux/input.h>
 #include <sys/select.h>
+#include <sys/time.h>
 #define ftk_strdup    strdup
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf

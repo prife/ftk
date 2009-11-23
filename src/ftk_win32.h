@@ -33,6 +33,7 @@
 #define FTK_WIN32_H
 
 #ifdef WIN32
+#include <io.h>
 #include <windows.h>
 #define inline 
 #define __func__ __FILE__
@@ -40,10 +41,22 @@
 #define DATA_DIR ""
 #define LOCAL_DATA_DIR ""
 #define usleep Sleep
+
+struct timeval {
+	time_t tv_sec;     /* seconds */
+	time_t tv_usec;    /* microseconds */
+};
+
+struct timezone {
+	int tz_minuteswest;     /* minutes west of Greenwich */
+	int tz_dsttime;         /* type of DST correction */
+};
+
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 char* ftk_strdup(const char *s);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);
 int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap);
+int   gettimeofday(struct timeval *tv, struct timezone *tz);
 
 #endif
 

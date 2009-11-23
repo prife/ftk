@@ -158,16 +158,16 @@ FtkWidget* ftk_status_panel_create(int size)
 	return thiz;
 }
 
-static int ftk_status_panel_add_to(FtkWidget** array, size_t nr, int pos, FtkWidget* item)
+static size_t ftk_status_panel_add_to(FtkWidget** array, size_t nr, int pos, FtkWidget* item)
 {
-	int i = 0;
+	size_t i = 0;
 	return_val_if_fail(array != NULL && (nr + 1) < FTK_PANEL_MAX_ITEM && item != NULL, nr);
 
 	for(i = 0; i < nr; i++)
 	{
 		if(pos < ftk_status_item_get_position(array[i]))
 		{
-			int j = nr;
+			size_t j = nr;
 			for(; j > i; j--)
 			{
 				array[j] = array[j - 1];
@@ -183,9 +183,9 @@ static int ftk_status_panel_add_to(FtkWidget** array, size_t nr, int pos, FtkWid
 	return nr;
 }
 
-static int ftk_status_panel_remove_from(FtkWidget** array, size_t nr, FtkWidget* item)
+static size_t ftk_status_panel_remove_from(FtkWidget** array, size_t nr, FtkWidget* item)
 {
-	int i = 0;
+	size_t i = 0;
 	return_val_if_fail(array != NULL && nr < FTK_PANEL_MAX_ITEM && item != NULL, nr);
 
 	for(i = 0; i < nr; i++)

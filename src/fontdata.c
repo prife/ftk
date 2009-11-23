@@ -78,7 +78,7 @@ FontData* font_data_create(int char_nr, Encoding encoding)
 	return thiz;
 }
 
-FontData* font_data_load(char* data, int length)
+FontData* font_data_load(char* data, size_t length)
 {
 	FontData* thiz = font_data_create(0, 0);
 

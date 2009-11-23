@@ -87,8 +87,10 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
 {
-	[FTK_WIDGET_ACTIVE] = "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX,
-	[FTK_WIDGET_FOCUSED] = "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX
+	NULL,
+	"menuitem_background_focus"FTK_STOCK_IMG_SUFFIX,
+	"menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX,
+	NULL
 };
 
 static Ret ftk_menu_item_on_paint(FtkWidget* thiz)

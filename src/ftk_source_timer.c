@@ -28,7 +28,6 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#include <sys/time.h>
 #include "ftk_typedef.h"
 #include "ftk_source_timer.h"
 

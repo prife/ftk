@@ -98,9 +98,10 @@ static Ret  ftk_sprite_paint(FtkSprite* thiz, int notify)
 Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon)
 {
 	Ret ret = RET_FAIL;
-	FtkColor bg = {.a = 0xff};
+	FtkColor bg = {0};
 	return_val_if_fail(thiz != NULL && icon != NULL, RET_FAIL);
 	
+	bg.a = 0xff;
 	thiz->icon = icon;
 	if(thiz->snap != NULL)
 	{

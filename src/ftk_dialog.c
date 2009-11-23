@@ -57,7 +57,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 {
 	int i = 0;
-	FtkGc gc = {.mask = FTK_GC_FG};
+	FtkGc gc = {0};
 	DECL_PRIV1(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
@@ -65,6 +65,7 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 
 	(void)x;
 	(void)y;
+	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
 	gc.fg.r -= 0x2f;
 	gc.fg.g -= 0x2f;
