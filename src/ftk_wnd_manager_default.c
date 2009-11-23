@@ -270,7 +270,8 @@ static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
 	return NULL;
 }
 
-static const unsigned char key_tanslate_table[0xff] = 
+#ifdef FTK_SUPPORT_C99
+static const unsigned char const key_tanslate_table[0xff] = 
 {
 	[FTK_KEY_1]             =  FTK_KEY_EXCLAM,
 	[FTK_KEY_2]             =  FTK_KEY_AT,
@@ -294,6 +295,35 @@ static const unsigned char key_tanslate_table[0xff] =
 	[FTK_KEY_SEMICOLON]     =  FTK_KEY_COLON,
 	[FTK_KEY_QUOTERIGHT]    =  FTK_KEY_QUOTEDBL,
 };
+#else
+static unsigned char key_tanslate_table[0xff] = {0};
+static void key_tanslate_table_init(void)
+{
+	key_tanslate_table[FTK_KEY_1]             =  FTK_KEY_EXCLAM;
+	key_tanslate_table[FTK_KEY_2]             =  FTK_KEY_AT;
+	key_tanslate_table[FTK_KEY_3]             =  FTK_KEY_NUMBERSIGN;
+	key_tanslate_table[FTK_KEY_4]             =  FTK_KEY_DOLLAR;
+	key_tanslate_table[FTK_KEY_5]             =  FTK_KEY_PERCENT;
+	key_tanslate_table[FTK_KEY_6]             =  FTK_KEY_ASCIICIRCUM;
+	key_tanslate_table[FTK_KEY_7]             =  FTK_KEY_AMPERSAND;
+	key_tanslate_table[FTK_KEY_8]             =  FTK_KEY_ASTERISK;
+	key_tanslate_table[FTK_KEY_9]             =  FTK_KEY_PARENLEFT;
+	key_tanslate_table[FTK_KEY_0]             =  FTK_KEY_PARENRIGHT;
+	key_tanslate_table[FTK_KEY_MINUS]         =  FTK_KEY_UNDERSCORE;
+	key_tanslate_table[FTK_KEY_EQUAL]         =  FTK_KEY_PLUS;
+	key_tanslate_table[FTK_KEY_COMMA]         =  FTK_KEY_LESS;
+	key_tanslate_table[FTK_KEY_DOT]           =  FTK_KEY_GREATER;
+	key_tanslate_table[FTK_KEY_SLASH]         =  FTK_KEY_QUESTION;
+	key_tanslate_table[FTK_KEY_BACKSLASH]     =  FTK_KEY_OR;
+	key_tanslate_table[FTK_KEY_BRACKETLEFT]   =  FTK_KEY_LEFTBRACE;
+	key_tanslate_table[FTK_KEY_BRACKETRIGHT]  =  FTK_KEY_RIGHTBRACE;
+	key_tanslate_table[FTK_KEY_GRAVE]         =  FTK_KEY_NOT;
+	key_tanslate_table[FTK_KEY_SEMICOLON]     =  FTK_KEY_COLON;
+	key_tanslate_table[FTK_KEY_QUOTERIGHT]    =  FTK_KEY_QUOTEDBL;
+
+	return;
+}
+#endif
 
 static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent* event)
 {
@@ -553,6 +583,11 @@ FtkWndManager* ftk_wnd_manager_default_create(FtkMainLoop* main_loop)
 		thiz->add_global_listener    = ftk_wnd_manager_default_add_global_listener;
 		thiz->remove_global_listener = ftk_wnd_manager_default_remove_global_listener;
 		thiz->destroy                = ftk_wnd_manager_default_destroy;
+
+
+#ifndef FTK_SUPPORT_C99
+	key_tanslate_table_init();
+#endif
 	}
 
 	return thiz;

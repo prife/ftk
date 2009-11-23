@@ -243,7 +243,7 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c $(am__append_1) \
 	$(am__append_2)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
-	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX
+	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99
 
 ftkdir = $(includedir)/ftk
 ftk_HEADERS = \

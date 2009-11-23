@@ -28,7 +28,7 @@ libftk_la_SOURCES+=$(LINUX_X11)
 endif
 
 INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
-	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX
+	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99
 
 ftkdir=$(includedir)/ftk
 ftk_HEADERS=\
