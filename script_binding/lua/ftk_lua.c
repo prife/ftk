@@ -29,10 +29,12 @@
  *
  */
 
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 #include "ftk.h"
 #include "ftk_xul.h"
 #include "ftk_lua.h"
-#include "lauxlib.h"
 
 static int ltk_init(lua_State *L)
 {
@@ -76,13 +78,56 @@ static int ltk_widget_show_all(lua_State *L)
 	return 1;
 }
 
+static lua_State* s_current_L = NULL;
+static Ret ltk_listener(void* user_data, void* obj)
+{
+	Ret ret = RET_OK;
+	const char* func = user_data;
+	lua_State *L = s_current_L;
+
+	lua_getglobal(L, func);
+	lua_pushlightuserdata(L, obj);
+	lua_call(L, 1, 1);
+	ret = (int)lua_tonumber(L, -1);
+	lua_pop(L, 1);
+	
+	return ret;
+}
+
+static int ltk_button_set_clicked_listener(lua_State *L)
+{
+	size_t len = 0;
+	Ret ret = RET_OK;
+	FtkWidget* button  = lua_touserdata(L, 1);
+	const char* func = luaL_checklstring(L, 2, &len); 
+	ret = ftk_button_set_clicked_listener(button, ltk_listener, (void*)func);
+	lua_pushinteger(L, ret);
+	
+	return 1;
+}
+
+static int ltk_widget_lookup(lua_State *L)
+{
+	FtkWidget* widget  = lua_touserdata(L, 1);
+	int id = lua_tointeger(L, 2);
+	
+	widget = ftk_widget_lookup(widget, id);
+
+	lua_pushlightuserdata(L, widget);
+
+	return 1;
+}
+
 static const struct luaL_reg mylib [] =
 {
-	{"ftk_init", ltk_init},
-	{"ftk_run",  ltk_run},
-	{"ftk_quit", ltk_quit},
-	{"ftk_xul_load", ltk_xul_load},
-	{"ftk_widget_show_all", ltk_widget_show_all},
+	{"ftk_init",               ltk_init},
+	{"ftk_run",                ltk_run},
+	{"ftk_quit",               ltk_quit},
+	{"ftk_xul_load",           ltk_xul_load},
+	{"ftk_widget_lookup",      ltk_widget_lookup},
+	{"ftk_widget_show_all",    ltk_widget_show_all},
+	{"ftk_button_set_clicked_listener", ltk_button_set_clicked_listener},
+
 	{NULL, NULL}
 };
 
@@ -94,6 +139,8 @@ int ftk_lua_init(lua_State *L)
 	{
 		lua_register(L, lib->name, lib->func);
 	}
+
+	s_current_L = L;
 
 	return 1;
 }
