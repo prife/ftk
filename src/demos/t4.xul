@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<window value="xul demo1">
+<window value="Image">
 	<image  id="1" x="5" y="5" w="$ww-10" h="3*$wh/4-5" value="../testdata/jpeg1.jpg" />
 	
 	<button id="99" x="5" y="3*$wh/4" w="$ww/2-5" h="50" value="Save" />

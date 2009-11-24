@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<window value="xul demo1">
+<window value="Radio button">
 	<radio_group x="0" y="0" w="$ww" h="$wh/3">
 	<radio_button  id="1" x="5" y="10" w="$ww/2" h="50" checked="1" value="Radio Option1" />
 	<radio_button  id="3" x="5" y="60" w="$ww/2" h="50" checked="0" value="Radio Option2" />
