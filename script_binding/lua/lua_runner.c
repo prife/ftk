@@ -28,3 +28,19 @@
  * 2009-11-22 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+#include "ftk_lua.h"
+
+const char LUA_SCRIPT[] = 
+"ftk_init()"
+"ftk_run()";
+
+int main(int argc, char* argv[])
+{
+	lua_State *L = lua_open();
+	luaL_openlibs(L);
+	ftk_lua_init(L);
+	luaL_dostring(L, LUA_SCRIPT);
+	lua_close(L);
+	return 0;
+}

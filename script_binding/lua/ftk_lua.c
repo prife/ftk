@@ -31,10 +31,7 @@
 
 #include "ftk.h"
 #include "ftk_lua.h"
-
-Ret  ftk_init(int argc, char* argv[]);
-Ret  ftk_run(void);
-void ftk_quit(void);
+#include "lauxlib.h"
 
 static int ltk_init(lua_State *L)
 {
@@ -67,7 +64,12 @@ static const struct luaL_reg mylib [] =
 
 int ftk_lua_init(lua_State *L) 
 {
-	luaL_openlib(L, "mylib", mylib, 0);
+  const luaL_Reg *lib = mylib;
+  for (; lib->func; lib++) {
+    lua_pushcfunction(L, lib->func);
+    lua_pushstring(L, lib->name);
+    lua_call(L, 1, 0);
+  }
 
 	return 1;
 }

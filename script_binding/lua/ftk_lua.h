@@ -31,10 +31,11 @@
 
 #ifndef FTK_LUA_H
 #define FTK_LUA_H
-#include "lapi.h"
+#include "lua.h"
+#include "lauxlib.h"
 #include "ftk_typedef.h"
 
-int ftk_lua_init(lua_State *L) 
+int ftk_lua_init(lua_State *L);
 
 #endif/*FTK_LUA_H*/
 
