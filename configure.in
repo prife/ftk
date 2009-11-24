@@ -58,5 +58,8 @@ AC_CONFIG_FILES([ftk.pc
                 src/data/Makefile
                 src/demos/Makefile
                 src/test/Makefile
+                script_binding/Makefile
+                script_binding/lua/Makefile
+                script_binding/lua/lua/Makefile
                 ])
 AC_OUTPUT
