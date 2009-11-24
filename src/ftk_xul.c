@@ -53,7 +53,9 @@ typedef struct _FtkWidgetCreateInfo
 	const char* value;
 	FtkWidget* parent;
 	FtkGc gcs[FTK_WIDGET_STATE_NR];
-
+	
+	/*check button*/
+	int checked;
 	/*scroll bar*/
 	int max_value;
 	int page_delta;
@@ -111,6 +113,10 @@ static FtkWidget* ftk_xul_wait_box_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_wait_box_create(info->parent, info->x, info->y);
+	if(info->value != NULL && atoi(info->value))
+	{
+		ftk_wait_box_start_waiting(widget);
+	}
 
 	return widget;
 }
@@ -144,7 +150,12 @@ static FtkWidget* ftk_xul_radio_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_radio_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_check_button_set_checked(widget, atoi(info->value));
+		ftk_widget_set_text(widget, info->value);
+	}
+	
+	if(info->checked)
+	{
+		ftk_check_button_set_checked(widget, info->checked);
 	}
 
 	return widget;
@@ -157,7 +168,12 @@ static FtkWidget* ftk_xul_check_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_check_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_check_button_set_checked(widget, atoi(info->value));
+		ftk_widget_set_text(widget, info->value);
+	}
+	
+	if(info->checked)
+	{
+		ftk_check_button_set_checked(widget, info->checked);
 	}
 
 	return widget;
@@ -420,6 +436,11 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			case 'p':
 			{
 				info->page_delta = atoi(value);
+				break;
+			}
+			case 'c':
+			{
+				info->checked = atoi(value);
 				break;
 			}
 			case 'b':

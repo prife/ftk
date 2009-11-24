@@ -731,6 +731,7 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 		while(width > 0 && iter >= start)
 		{
 			prev_iter = iter;
+			if(iter <= start) break;
 			unicode = utf8_get_prev_char(iter, &iter);
 			if(unicode == 0 || iter < start) break;
 
