@@ -30,6 +30,7 @@
  */
 
 #include "ftk.h"
+#include "ftk_xul.h"
 #include "ftk_lua.h"
 #include "lauxlib.h"
 
@@ -54,22 +55,45 @@ static int ltk_quit(lua_State *L)
 	return 1;
 }
 
+static int ltk_xul_load(lua_State *L)
+{
+	size_t len = 0;
+	const char* xml = luaL_checklstring(L, 1, &len);
+	FtkWidget* widget = ftk_xul_load(xml, len);
+
+	lua_pushlightuserdata(L, widget);
+
+	return 1;
+}
+
+static int ltk_widget_show_all(lua_State *L)
+{
+	FtkWidget* widget = lua_touserdata(L, 1);
+	int visible = lua_tointeger(L, 2);
+
+	ftk_widget_show_all(widget, visible);
+
+	return 1;
+}
+
 static const struct luaL_reg mylib [] =
 {
-	{"ltk_init", ltk_init},
-	{"ltk_run",  ltk_run},
-	{"ltk_quit", ltk_quit},
+	{"ftk_init", ltk_init},
+	{"ftk_run",  ltk_run},
+	{"ftk_quit", ltk_quit},
+	{"ftk_xul_load", ltk_xul_load},
+	{"ftk_widget_show_all", ltk_widget_show_all},
 	{NULL, NULL}
 };
 
 int ftk_lua_init(lua_State *L) 
 {
-  const luaL_Reg *lib = mylib;
-  for (; lib->func; lib++) {
-    lua_pushcfunction(L, lib->func);
-    lua_pushstring(L, lib->name);
-    lua_call(L, 1, 0);
-  }
+	const luaL_Reg *lib = mylib;
+	
+	for (; lib->func; lib++) 
+	{
+		lua_register(L, lib->name, lib->func);
+	}
 
 	return 1;
 }

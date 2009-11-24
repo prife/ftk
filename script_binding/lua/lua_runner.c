@@ -29,18 +29,26 @@
  *
  */
 
+#include "lualib.h"
 #include "ftk_lua.h"
-
-const char LUA_SCRIPT[] = 
-"ftk_init()"
-"ftk_run()";
+#include "ftk_mmap.h"
 
 int main(int argc, char* argv[])
 {
-	lua_State *L = lua_open();
+	lua_State *L = NULL;
+
+	if(argc != 2)
+	{
+		printf("Usage: %s lua\n", argv[0]);
+
+		return 0;
+	}
+
+	L = lua_open();
 	luaL_openlibs(L);
 	ftk_lua_init(L);
-	luaL_dostring(L, LUA_SCRIPT);
+	luaL_dofile(L, argv[1]);
 	lua_close(L);
+
 	return 0;
 }
