@@ -31,6 +31,7 @@
 
 #include "ftk.h"
 #include "ftk_xul.h"
+#include "ftk_expr.h"
 #include "ftk_xml_parser.h"
 
 typedef struct _PrivInfo
@@ -38,6 +39,7 @@ typedef struct _PrivInfo
 	int skip_end_tag;
 	FtkWidget* root;
 	FtkWidget* current;
+	char processed_value[128];
 }PrivInfo;
 
 typedef struct _FtkWidgetCreateInfo
@@ -218,20 +220,48 @@ static const VarGetter s_var_getters[] =
 	{NULL, NULL} 
 };
 
-static FtkXulVarGetter ftk_xul_find_getter(const char* name)
+static int ftk_xul_find_getter(const char* name)
 {
 	int i = 0;
 	return_val_if_fail(name != NULL, NULL);
 
 	for(i = 0; s_var_getters[i].name != NULL; i++)
 	{
-		if(strcmp(s_var_getters[i].name, name) == 0)
+		if(strncmp(s_var_getters[i].name, name, strlen(s_var_getters[i].name)) == 0)
 		{
-			return s_var_getters[i].get;
+			return i;
 		}
 	}
 
-	return NULL;
+	return -1;
+}
+
+static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const char* value)
+{
+	int i = 0;
+	int dst = 0;
+	DECL_PRIV(thiz, priv);
+	const char* iter = NULL;
+	return_val_if_fail(value != NULL, NULL);
+
+	for(iter = value; *iter && dst < sizeof(priv->processed_value); iter++)
+	{
+		if(*iter == '$')
+		{
+			if((i = ftk_xul_find_getter(iter+1)) >= 0)
+			{
+				dst += snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
+					"%d", s_var_getters[i].get(thiz));
+				iter += strlen(s_var_getters[i].name);
+				continue;
+			}
+		}
+
+		priv->processed_value[dst++] = *iter;
+	}
+	priv->processed_value[dst] = '\0';
+
+	return priv->processed_value;
 }
 
 static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** attrs, FtkWidgetCreateInfo* info)
@@ -257,22 +287,26 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'x':
 			{
-				info->x = atoi(value);
+				value = ftk_xul_builder_preprocess_value(thiz, value);
+				info->x = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'y':
 			{
-				info->y = atoi(value);
+				value = ftk_xul_builder_preprocess_value(thiz, value);
+				info->y = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'w':
 			{
-				info->w = atoi(value);
+				value = ftk_xul_builder_preprocess_value(thiz, value);
+				info->w = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'h':
 			{
-				info->h = atoi(value);
+				value = ftk_xul_builder_preprocess_value(thiz, value);
+				info->h = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'v':
