@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<window>
-	<button id="1" x="10" y="10" w="$ww/2" h="50" v="OK" />
-	<entry  id="2" x="10" y="60" w="$ww-20" h="30" v="single line editor" />
-	<label  id="3" x="10" y="90" w="160" h="30" v="static text" />
+<window value="xul demo1">
+	<label  id="1" x="5" y="5" w="$ww/4" h="30" value="Name" />
+	<entry  id="2" x="$ww/4+5" y="5" w="3*$ww/4-15" h="30" value="Li XianJing" />
+	
+	<label  id="1" x="5" y="40" w="$ww/4" h="30" value="EMail" />
+	<entry  id="2" x="$ww/4+5" y="40" w="3*$ww/4-15" h="30" value="xianjimli@hotmail.com" />
+	
+	<label  id="1" x="5" y="75" w="$ww/4" h="30" value="Mobile" />
+	<entry  id="2" x="$ww/4+5" y="75" w="3*$ww/4-15" h="30" value="+8613911112222" />
+	
+	<button id="20" x="5" y="3*$wh/4" w="$ww/2-5" h="50" value="Save" />
+	<button id="21" x="$ww/2" y="3*$wh/4" w="$ww/2-5" h="50" value="Quit" />
 </window>

@@ -36,9 +36,9 @@
 
 typedef struct _PrivInfo
 {
-	int skip_end_tag;
 	FtkWidget* root;
 	FtkWidget* current;
+	int  meet_start_tag;
 	char processed_value[128];
 }PrivInfo;
 
@@ -49,9 +49,14 @@ typedef struct _FtkWidgetCreateInfo
 	int y;
 	int w;
 	int h;
+	int visible;
 	const char* value;
 	FtkWidget* parent;
 	FtkGc gcs[FTK_WIDGET_STATE_NR];
+
+	/*scroll bar*/
+	int max_value;
+	int page_delta;
 }FtkWidgetCreateInfo;
 
 typedef FtkWidget* (*FtkXulWidgetCreate)(FtkWidgetCreateInfo* info);
@@ -67,7 +72,6 @@ static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_label_create(info->parent, info->x, info->y, info->w, info->h);
-	ftk_widget_set_id(widget, info->id);
 	if(info->value != NULL)
 	{
 		ftk_widget_set_text(widget, info->value);
@@ -81,7 +85,6 @@ static FtkWidget* ftk_xul_button_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_button_create(info->parent, info->x, info->y, info->w, info->h);
-	ftk_widget_set_id(widget, info->id);
 	if(info->value != NULL)
 	{
 		ftk_widget_set_text(widget, info->value);
@@ -95,11 +98,92 @@ static FtkWidget* ftk_xul_entry_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_entry_create(info->parent, info->x, info->y, info->w, info->h);
-	ftk_widget_set_id(widget, info->id);
-	
 	if(info->value != NULL)
 	{
 		ftk_entry_set_text(widget, info->value);
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_wait_box_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_wait_box_create(info->parent, info->x, info->y);
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_progress_bar_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_progress_bar_create(info->parent, info->x, info->y, info->w, info->h);
+	if(info->value != NULL)
+	{
+		ftk_progress_bar_set_percent(widget, atoi(info->value));
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_radio_group_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_radio_group_create(info->parent, info->x, info->y, info->w, info->h);
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_radio_button_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_radio_button_create(info->parent, info->x, info->y, info->w, info->h);
+	if(info->value != NULL)
+	{
+		ftk_check_button_set_checked(widget, atoi(info->value));
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_check_button_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_check_button_create(info->parent, info->x, info->y, info->w, info->h);
+	if(info->value != NULL)
+	{
+		ftk_check_button_set_checked(widget, atoi(info->value));
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_image_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_image_create(info->parent, info->x, info->y, info->w, info->h);
+	if(info->value != NULL)
+	{
+		ftk_image_set_image_file(widget, info->value);
+	}
+
+	return widget;
+}
+
+static FtkWidget* ftk_xul_scroll_bar_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_scroll_bar_create(info->parent, info->x, info->y, info->w, info->h);
+	if(info->value != NULL)
+	{
+		ftk_scroll_bar_set_param(widget, atoi(info->value), info->max_value, info->page_delta);
 	}
 
 	return widget;
@@ -133,11 +217,18 @@ static FtkWidget* ftk_xul_dialog_create(FtkWidgetCreateInfo* info)
 
 static const WidgetCreator s_widget_creaters[] = 
 {
-	{"label",   ftk_xul_label_create},
-	{"entry",   ftk_xul_entry_create},
-	{"button",  ftk_xul_button_create},
-	{"window",   ftk_xul_window_create},
-	{"dialog",   ftk_xul_dialog_create},
+	{"label",        ftk_xul_label_create},
+	{"entry",        ftk_xul_entry_create},
+	{"button",       ftk_xul_button_create},
+	{"wait_box",     ftk_xul_wait_box_create},
+	{"progress_bar", ftk_xul_progress_bar_create},
+	{"radio_group",  ftk_xul_radio_group_create},
+	{"radio_button", ftk_xul_radio_button_create},
+	{"check_button", ftk_xul_check_button_create},
+	{"image",        ftk_xul_image_create},
+	{"scroll_bar",   ftk_xul_scroll_bar_create},
+	{"window",       ftk_xul_window_create},
+	{"dialog",       ftk_xul_dialog_create},
 	{NULL, NULL},
 };
 
@@ -223,7 +314,7 @@ static const VarGetter s_var_getters[] =
 static int ftk_xul_find_getter(const char* name)
 {
 	int i = 0;
-	return_val_if_fail(name != NULL, NULL);
+	return_val_if_fail(name != NULL, 0);
 
 	for(i = 0; s_var_getters[i].name != NULL; i++)
 	{
@@ -311,7 +402,34 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'v':
 			{
-				info->value = value;
+				if(name[1] == 'a')
+				{
+					info->value = value;
+				}
+				else if(name[1] == 'i')
+				{
+					info->visible = atoi(value);
+				}
+				break;
+			}
+			case 'm':
+			{
+				info->max_value = atoi(value);
+				break;
+			}
+			case 'p':
+			{
+				info->page_delta = atoi(value);
+				break;
+			}
+			case 'b':
+			{
+				/*TODO: backgroup*/
+				break;
+			}
+			case 'f':
+			{
+				/*TODO: foreground*/
 				break;
 			}
 			default:break;/*TODO: handle other attrs*/
@@ -329,21 +447,29 @@ static void ftk_xul_builder_reset_widget_info(FtkXmlBuilder* thiz, FtkWidgetCrea
 
 static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
-	FtkWidgetCreateInfo info = {0};
-	FtkWidget* widget = NULL;
 	DECL_PRIV(thiz, priv);
+	FtkWidget* widget = NULL;
+	FtkWidgetCreateInfo info = {0};
 	FtkXulWidgetCreate create = ftk_xul_find_creator(tag);
-
-	priv->skip_end_tag = 1;
-	return_if_fail(create != NULL && attrs != NULL);
+	
+	priv->meet_start_tag = 0;
+	return_if_fail(create != NULL && attrs != NULL && thiz != NULL);
 
 	ftk_xul_builder_init_widget_info(thiz, attrs, &info);
-	widget = create(&info);
+	if((widget = create(&info)) != NULL)
+	{
+		ftk_widget_set_id(widget, info.id);
+		if(info.visible)
+		{
+			ftk_widget_show(widget, info.visible);
+		}
+	}
 	ftk_xul_builder_reset_widget_info(thiz, &info);
 	return_if_fail(widget != NULL);
 
 	priv->current = widget;
-	priv->skip_end_tag = 0;
+	priv->meet_start_tag = 1;
+
 	if(priv->root == NULL)
 	{
 	 	priv->root = widget;
@@ -356,7 +482,7 @@ static void ftk_xul_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
 {
 	DECL_PRIV(thiz, priv);
 
-	if(!priv->skip_end_tag)
+	if(priv->meet_start_tag)
 	{
 		priv->current = ftk_widget_parent(priv->current);
 	}
