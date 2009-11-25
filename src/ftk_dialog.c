@@ -62,7 +62,7 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
-
+#if 0
 	(void)x;
 	(void)y;
 	gc.mask = FTK_GC_FG;
@@ -99,7 +99,7 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	ftk_canvas_get_pixel(canvas, width-1, height-1)->a = 0;
 	ftk_canvas_get_pixel(canvas, width-2, height-1)->a = 0;
 	ftk_canvas_get_pixel(canvas, width-1, height-2)->a = 0;
-
+#endif
 	priv->parent_on_paint(thiz);
 
 	return RET_OK;

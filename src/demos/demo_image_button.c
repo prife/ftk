@@ -80,6 +80,10 @@ int main(int argc, char* argv[])
 		{
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[i + 2]);
 			button = ftk_button_create(win, j * 80, i * 80, ftk_bitmap_width(gc.bitmap), ftk_bitmap_height(gc.bitmap));
+			if(i == 0)
+			{
+				ftk_widget_unset_attr(button, FTK_ATTR_TRANSPARENT);
+			}
 			ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[1]);
 			ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);

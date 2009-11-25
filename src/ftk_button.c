@@ -85,26 +85,9 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
-static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
-{
-	"btn_default_normal"FTK_STOCK_IMG_SUFFIX,
-	"btn_default_selected"FTK_STOCK_IMG_SUFFIX,
-	"btn_default_pressed"FTK_STOCK_IMG_SUFFIX,
-	"btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX
-};
-
 static Ret ftk_button_on_paint(FtkWidget* thiz)
 {
-	FtkBitmap* bitmap = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-
-	/*Icon button has its own background images*/
-	if(ftk_widget_get_gc(thiz)->bitmap == NULL)
-	{
-		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
-		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
-		ftk_bitmap_unref(bitmap);
-	}
 
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
@@ -142,7 +125,6 @@ FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int hei
 	if(thiz->priv_subclass[0] != NULL)
 	{
 		FtkGc gc ={0};
-		gc.mask = FTK_GC_FG | FTK_GC_BG;
 
 		thiz->on_event = ftk_button_on_event;
 		thiz->on_paint = ftk_button_on_paint;
@@ -152,17 +134,35 @@ FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int hei
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
+		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_normal"FTK_STOCK_IMG_SUFFIX);
 		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
 		gc.bg = ftk_style_get_color(FTK_COLOR_BTNFACE);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
+		ftk_gc_reset(&gc);
 		
+		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX);
 		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
+		gc.bg = ftk_style_get_color(FTK_COLOR_BTNFACE);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+		ftk_gc_reset(&gc);
 		
+		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_selected"FTK_STOCK_IMG_SUFFIX);
 		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
 		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_gc_reset(&gc);
+
+		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_pressed"FTK_STOCK_IMG_SUFFIX);
+		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
+		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
+		ftk_gc_reset(&gc);
+
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 		ftk_widget_append_child(parent, thiz);
 	}
 	else

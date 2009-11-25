@@ -705,14 +705,17 @@ void ftk_widget_destroy(FtkWidget* thiz)
 		{
 			thiz->destroy(thiz);
 		}
+
 		for(i = 0; i < FTK_WIDGET_STATE_NR; i++)
 		{
 			ftk_gc_reset(thiz->priv->gc+i);
 		}
+
 		if(thiz->priv->user_data != NULL && thiz->priv->user_data_destroy != NULL)
 		{
 			thiz->priv->user_data_destroy(thiz->priv->user_data);
 		}
+
 		FTK_FREE(thiz->priv->text);
 		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
@@ -778,6 +781,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 		FtkBitmap* bitmap = NULL;
 		FtkWidget* parent = thiz->parent;
 		FtkWidgetInfo* priv =  thiz->priv;
+		
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
 		bitmap = priv->gc[priv->state].bitmap;
 		return_val_if_fail(canvas != NULL, RET_FAIL);
@@ -789,6 +793,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 			if(!ftk_widget_paint_called_by_parent(thiz) && parent != NULL)
 			{
 				/*fill backgroup with parent background*/
+				/*FIXME: if parent bg image is not filled in normal mode, it doesn't work.*/
 				gc.mask = FTK_GC_FG;
 				gc.fg = ftk_widget_get_gc(parent)->bg;
 				ftk_canvas_reset_gc(canvas, &gc); 
@@ -811,7 +816,22 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 		bitmap = priv->gc[priv->state].bitmap;
 		if(bitmap != NULL)
 		{
-			ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, width, height, x, y);
+			if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_CENTER))
+			{
+				ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_CENTER, x, y, width, height);
+			}
+			else if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_TILE))
+			{
+				ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_TILE, x, y, width, height);
+			}
+			else if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_FOUR_CORNER))
+			{
+				ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
+			}
+			else
+			{
+				ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_NORMAL, x, y, width, height);
+			}
 		}
 
 		if(thiz->on_paint != NULL)
@@ -857,3 +877,4 @@ Ret ftk_widget_event(FtkWidget* thiz, FtkEvent* event)
 
 	return thiz->on_event(thiz, event);
 }
+

@@ -59,7 +59,10 @@ typedef enum _FtkWidgetState
 typedef enum _FtkWidgetAttr
 {
 	FTK_ATTR_TRANSPARENT = 1,
-	FTK_ATTR_NO_FOCUS = 2,
+	FTK_ATTR_NO_FOCUS    = 2,
+	FTK_ATTR_BG_CENTER   = 4,
+	FTK_ATTR_BG_TILE     = 8,
+	FTK_ATTR_BG_FOUR_CORNER = 16,
 }FtkWidgetAttr;
 
 struct _FtkWdiget

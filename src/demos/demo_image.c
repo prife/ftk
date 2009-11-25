@@ -24,16 +24,19 @@ int main(int argc, char* argv[])
 	FtkWidget* win = ftk_window_create(0, 0, 320, 480);
 
 	FtkWidget* image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, TESTDATA_DIR"/png1.png");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/earth.png");
 	
 	image = ftk_image_create(win, ftk_widget_width(win)/2, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, TESTDATA_DIR"/png2.png");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/Calculator.png");
+	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
 	
 	image = ftk_image_create(win, 0, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, TESTDATA_DIR"/png3.png");
+	ftk_image_set_image_file(image, TESTDATA_DIR"/Calculator.png");
+	ftk_widget_set_attr(image, FTK_ATTR_BG_CENTER);
 	
 	image = ftk_image_create(win, ftk_widget_width(win)/2, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image_file(image, TESTDATA_DIR"/jpeg1.jpg");
+	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
 
 	ftk_widget_set_text(win, "image demo");
 	ftk_widget_show_all(win, 1);

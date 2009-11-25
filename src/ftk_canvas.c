@@ -837,14 +837,17 @@ Ret ftk_canvas_fill_background_normal(FtkCanvas* canvas, int x, int y, int w, in
 {
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
-	w = bw < w ? bw : w;
-	h = bh < h ? bh : h;
+
+	w = FTK_MIN(bw, w);
+	h = FTK_MAX(bh, h);
 
 	return ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, w, h, x, y);
 }
 
 Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
 {
+	int dx = 0;
+	int dy = 0;
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 
@@ -853,7 +856,14 @@ Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int 
 		return ftk_canvas_fill_background_normal(canvas, x, y, w, h, bitmap);
 	}
 
-	/*TODO*/
+	for(dy = 0; dy < h; dy += bh)
+	{
+		for(dx = 0; dx < w; dx += bw)
+		{
+			ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, bw, bh, x + dx, y + dy);
+		}
+	}
+	
 	return RET_OK;
 }
 
@@ -865,8 +875,9 @@ Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, int w, in
 	int oy = bh < h ? y + (h - bw)/2 : y;
 	int bx = bw < w ? 0 : (bw - w)/2;
 	int by = bh < h ? 0 : (bh - h)/2;
-	w = bw < w ? bw : w;
-	h = bh < h ? bh : h;
+	
+	w = FTK_MIN(bw, w);
+	h = FTK_MAX(bh, h);
 
 	return ftk_canvas_draw_bitmap(canvas, bitmap, bx, by, w, h, ox, oy);
 }

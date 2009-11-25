@@ -32,11 +32,6 @@
 #include "ftk_image.h"
 #include "ftk_globals.h"
 
-typedef struct _PrivInfo
-{
-	FtkBitmap* bitmap;
-}PrivInfo;
-
 static Ret ftk_image_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	return RET_OK;
@@ -44,31 +39,12 @@ static Ret ftk_image_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_image_on_paint(FtkWidget* thiz)
 {
-	DECL_PRIV0(thiz, priv);
-	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->bitmap != NULL)
-	{
-		ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, 0, width, height, x, y);
-	}
-	else
-	{
-		ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
-	}
-
 	FTK_END_PAINT();
 }
 
 static void ftk_image_destroy(FtkWidget* thiz)
 {
-	if(thiz != NULL)
-	{
-		DECL_PRIV0(thiz, priv);
-		ftk_bitmap_unref(priv->bitmap);
-		FTK_FREE(priv);
-	}
-
 	return;
 }
 
@@ -77,38 +53,34 @@ FtkWidget* ftk_image_create(FtkWidget* parent, int x, int y, int width, int heig
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	return_val_if_fail(thiz != NULL, NULL);
 
-	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
-	if(thiz->priv_subclass[0] != NULL)
-	{
-		thiz->on_event = ftk_image_on_event;
-		thiz->on_paint = ftk_image_on_paint;
-		thiz->destroy  = ftk_image_destroy;
+	thiz->on_event = ftk_image_on_event;
+	thiz->on_paint = ftk_image_on_paint;
+	thiz->destroy  = ftk_image_destroy;
 
-		ftk_widget_init(thiz, FTK_IMAGE, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_insensitive(thiz, 1);
-		ftk_widget_append_child(parent, thiz);
-	}
-	else
-	{
-		FTK_FREE(thiz);
-	}
+	ftk_widget_init(thiz, FTK_IMAGE, 0);
+	ftk_widget_move(thiz, x, y);
+	ftk_widget_resize(thiz, width, height);
+	ftk_widget_set_insensitive(thiz, 1);
+	ftk_widget_append_child(parent, thiz);
 
 	return thiz;
 }
 
 Ret ftk_image_set_image_file(FtkWidget* thiz, const char* image_file)
 {
-	DECL_PRIV0(thiz, priv);
+	FtkGc gc = {0};
+	FtkBitmap* bitmap = NULL;
 	return_val_if_fail(thiz != NULL && image_file != NULL, RET_FAIL);
 
-	if(priv->bitmap != NULL)
+	bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), image_file);
+	if(bitmap != NULL)
 	{
-		ftk_bitmap_unref(priv->bitmap);
+		gc.mask = FTK_GC_BITMAP;
+		gc.bitmap = bitmap;
+		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+		ftk_bitmap_unref(bitmap);
 	}
 
-	priv->bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), image_file);
 	ftk_widget_paint_self(thiz);
 
 	return RET_OK;

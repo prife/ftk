@@ -38,7 +38,8 @@ noinst_PROGRAMS = demo_label$(EXEEXT) demo_button$(EXEEXT) \
 	demo_menu$(EXEEXT) demo_entry$(EXEEXT) demo_expand$(EXEEXT) \
 	demo_progress_bar$(EXEEXT) demo_check_button$(EXEEXT) \
 	demo_wait_box$(EXEEXT) demo_scroll_bar$(EXEEXT) \
-	demo_sprite$(EXEEXT) demo_xul$(EXEEXT)
+	demo_sprite$(EXEEXT) demo_xul$(EXEEXT) \
+	demo_transparent$(EXEEXT)
 subdir = src/demos
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -127,6 +128,12 @@ demo_sprite_LDADD = $(LDADD)
 demo_sprite_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_sprite_LDFLAGS) $(LDFLAGS) -o $@
+am_demo_transparent_OBJECTS = demo_transparent.$(OBJEXT)
+demo_transparent_OBJECTS = $(am_demo_transparent_OBJECTS)
+demo_transparent_LDADD = $(LDADD)
+demo_transparent_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(demo_transparent_LDFLAGS) $(LDFLAGS) -o $@
 am_demo_wait_box_OBJECTS = demo_wait_box.$(OBJEXT)
 demo_wait_box_OBJECTS = $(am_demo_wait_box_OBJECTS)
 demo_wait_box_LDADD = $(LDADD)
@@ -157,16 +164,16 @@ SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
 	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
 	$(demo_progress_bar_SOURCES) $(demo_scroll_bar_SOURCES) \
-	$(demo_sprite_SOURCES) $(demo_wait_box_SOURCES) \
-	$(demo_xul_SOURCES)
+	$(demo_sprite_SOURCES) $(demo_transparent_SOURCES) \
+	$(demo_wait_box_SOURCES) $(demo_xul_SOURCES)
 DIST_SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
 	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
 	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
 	$(demo_progress_bar_SOURCES) $(demo_scroll_bar_SOURCES) \
-	$(demo_sprite_SOURCES) $(demo_wait_box_SOURCES) \
-	$(demo_xul_SOURCES)
+	$(demo_sprite_SOURCES) $(demo_transparent_SOURCES) \
+	$(demo_wait_box_SOURCES) $(demo_xul_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -280,6 +287,8 @@ INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR
 	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\""
 
 MYLDFLAGS = $(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
+demo_transparent_SOURCES = demo_transparent.c
+demo_transparent_LDFLAGS = $(MYLDFLAGS)
 demo_xul_SOURCES = demo_xul.c
 demo_xul_LDFLAGS = $(MYLDFLAGS)
 demo_sprite_SOURCES = demo_sprite.c
@@ -389,6 +398,9 @@ demo_scroll_bar$(EXEEXT): $(demo_scroll_bar_OBJECTS) $(demo_scroll_bar_DEPENDENC
 demo_sprite$(EXEEXT): $(demo_sprite_OBJECTS) $(demo_sprite_DEPENDENCIES) 
 	@rm -f demo_sprite$(EXEEXT)
 	$(demo_sprite_LINK) $(demo_sprite_OBJECTS) $(demo_sprite_LDADD) $(LIBS)
+demo_transparent$(EXEEXT): $(demo_transparent_OBJECTS) $(demo_transparent_DEPENDENCIES) 
+	@rm -f demo_transparent$(EXEEXT)
+	$(demo_transparent_LINK) $(demo_transparent_OBJECTS) $(demo_transparent_LDADD) $(LIBS)
 demo_wait_box$(EXEEXT): $(demo_wait_box_OBJECTS) $(demo_wait_box_DEPENDENCIES) 
 	@rm -f demo_wait_box$(EXEEXT)
 	$(demo_wait_box_LINK) $(demo_wait_box_OBJECTS) $(demo_wait_box_LDADD) $(LIBS)
@@ -415,6 +427,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_progress_bar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_scroll_bar.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_sprite.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_transparent.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_wait_box.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_xul.Po@am__quote@
 
