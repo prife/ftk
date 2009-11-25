@@ -145,6 +145,16 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 
 	switch(event->u.key.code)
 	{
+		case FTK_KEY_HOME:
+		{
+			ftk_entry_move_caret(thiz, -priv->caret);
+			break;
+		}
+		case FTK_KEY_END:
+		{
+			ftk_entry_move_caret(thiz, TB_LENGTH-priv->caret);
+			break;
+		}
 		case FTK_KEY_LEFT:
 		{
 			ftk_entry_move_caret(thiz, -1);
