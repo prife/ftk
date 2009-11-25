@@ -56,6 +56,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 {
+	int h = 0;
 	int i = 0;
 	FtkGc gc = {0};
 	DECL_PRIV1(thiz, priv);
@@ -71,18 +72,21 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	gc.fg.g -= 0x2f;
 	gc.fg.b -= 0x2f;
 	ftk_canvas_set_gc(canvas, &gc);
-	for(i = 0; i < 10; i++)
+	for(i = 0; i < FTK_DIALOG_TITLE_HEIGHT; i++)
 	{
 		ftk_canvas_draw_hline(canvas, 0, i, width);
 	}
-	for(i = 0; i < 10; i++)
+	
+	for(i = 0; i < FTK_DIALOG_MARGIN; i++)
 	{
 		ftk_canvas_draw_hline(canvas, 0, height-i, width);
 	}
-	ftk_canvas_draw_vline(canvas, 0, 10, height - 20);
-	ftk_canvas_draw_vline(canvas, 1, 10, height - 20);
-	ftk_canvas_draw_vline(canvas, width-1, 10, height - 20);
-	ftk_canvas_draw_vline(canvas, width-2, 10, height - 20);
+
+	h = height - FTK_DIALOG_TITLE_HEIGHT - FTK_DIALOG_MARGIN;
+	ftk_canvas_draw_vline(canvas, 0, FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, 1, FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, width-1, FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, width-2, FTK_DIALOG_TITLE_HEIGHT, h+1);
 	
 	ftk_canvas_get_pixel(canvas, 0, 0)->a = 0;
 	ftk_canvas_get_pixel(canvas, 1, 0)->a = 0;

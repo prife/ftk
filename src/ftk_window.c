@@ -374,12 +374,7 @@ static Ret ftk_window_realize(FtkWidget* thiz)
 
 static Ret ftk_window_on_paint(FtkWidget* thiz)
 {
-	FtkRect rect = {0};
-	
-	rect.width  = ftk_widget_width(thiz);
-	rect.height = ftk_widget_height(thiz);
-
-	return ftk_window_update(thiz, &rect);
+	return RET_OK;
 }
 
 static void ftk_window_destroy(FtkWidget* thiz)

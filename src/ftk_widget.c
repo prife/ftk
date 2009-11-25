@@ -625,11 +625,26 @@ void ftk_widget_paint(FtkWidget* thiz)
 		return;
 	}
 
+	if(ftk_widget_parent(thiz) == NULL)
+	{
+		ftk_window_disable_update(thiz);
+	}
+
 	ftk_widget_paint_self(thiz);
 
 	if(ftk_widget_next(thiz) != NULL)
 	{
 		ftk_widget_paint(ftk_widget_next(thiz));
+	}
+
+	if(ftk_widget_parent(thiz) == NULL)
+	{
+		FtkRect rect = {0};
+	
+		rect.width  = ftk_widget_width(thiz);
+		rect.height = ftk_widget_height(thiz);
+		ftk_window_enable_update(thiz);
+		ftk_window_update(thiz, &rect);
 	}
 
 	return;
@@ -798,6 +813,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 				gc.fg = ftk_widget_get_gc(parent)->bg;
 				ftk_canvas_reset_gc(canvas, &gc); 
 				ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+
 				bitmap = parent->priv->gc[parent->priv->state].bitmap;
 				if(bitmap != NULL)
 				{

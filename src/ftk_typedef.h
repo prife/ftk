@@ -117,10 +117,12 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_MAX_WINDOWS 32
 #define FTK_P_IN_R(x, y, r) (((x) >= (r)->x && (x)<((r)->x+(r)->width)) && ((y) >= (r)->y && (y) < ((r)->y + (r)->height)))
 
-#define FTK_SPACE_WIDTH        5
-#define FTK_MAX_IMAGE_DECODERS 8
+#define FTK_SPACE_WIDTH         5
+#define FTK_MAX_IMAGE_DECODERS  8
 #define FTK_STATUS_PANEL_HEIGHT 36
-#define FTK_DIALOG_MARGIN 8
+#define FTK_DIALOG_MARGIN       8
+#define FTK_DIALOG_TITLE_HEIGHT 30
+
 #define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
 #define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL

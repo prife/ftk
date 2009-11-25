@@ -55,7 +55,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		width -= FTK_LABEL_LEFT_MARGIN * 2;
 		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
 	
-		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
+		ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 		for(i = 0; i < rows; i++)
 		{
 			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;

@@ -89,6 +89,7 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 		if((ftk_widget_type(win) == FTK_WINDOW || ftk_widget_type(win) == FTK_DIALOG)
 			&& ftk_widget_is_visible(win))
 		{
+			priv->focus_widget = win;
 			break;
 		}
 		else

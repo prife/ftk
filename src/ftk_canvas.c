@@ -519,10 +519,13 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 				unsigned char data = glyph.data[i * glyph.w + j];
 				offset = y * width + x;
 				bg = bits[offset];
-				color.r = ((fg.r * data) + (bg.r * (0xff - data)))/0xff;
-				color.g = ((fg.g * data) + (bg.g * (0xff - data)))/0xff;
-				color.b = ((fg.b * data) + (bg.b * (0xff - data)))/0xff;
-				bits[offset] = color;
+				if(data)
+				{
+					color.r = ((fg.r * data) + (bg.r * (0xff - data)))/0xff;
+					color.g = ((fg.g * data) + (bg.g * (0xff - data)))/0xff;
+					color.b = ((fg.b * data) + (bg.b * (0xff - data)))/0xff;
+					bits[offset] = color;
+				}
 			}
 		}
 
