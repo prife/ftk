@@ -56,7 +56,7 @@ typedef struct _FtkWidgetCreateInfo
 	int visible;
 	const char* value;
 	FtkWidget* parent;
-	FtkGc gcs[FTK_WIDGET_STATE_NR];
+	FtkGc gc[FTK_WIDGET_STATE_NR];
 	
 	/*check button*/
 	int checked;
@@ -416,6 +416,23 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 	return priv->processed_value;
 }
 
+static FtkColor ftk_xul_builder_init_color( const char* value)
+{
+	int a = 0xff;
+	int r = 0;
+	int g = 0;
+	int b = 0;
+	FtkColor color = {0};
+	
+	sscanf(value, "%02x%02x%02x%02x", &a, &r, &g, &b);
+	color.a = a;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+
+	return color;
+}
+
 static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** attrs, FtkWidgetCreateInfo* info)
 {
 	int i = 0;
@@ -498,12 +515,82 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'b':
 			{
-				/*TODO: backgroup*/
+				if(strcmp(name, "bg[normal]") == 0)
+				{
+					info->gc[FTK_WIDGET_NORMAL].mask |= FTK_GC_BG;
+					info->gc[FTK_WIDGET_NORMAL].bg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg[active]") == 0)
+				{
+					info->gc[FTK_WIDGET_ACTIVE].mask |= FTK_GC_BG;
+					info->gc[FTK_WIDGET_ACTIVE].bg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg[focused]") == 0)
+				{
+					info->gc[FTK_WIDGET_FOCUSED].mask |= FTK_GC_BG;
+					info->gc[FTK_WIDGET_FOCUSED].bg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg[disable]") == 0)
+				{
+					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_BG;
+					info->gc[FTK_WIDGET_INSENSITIVE].bg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg_image[normal]") == 0)
+				{
+					info->gc[FTK_WIDGET_NORMAL].mask |= FTK_GC_BITMAP;
+					info->gc[FTK_WIDGET_NORMAL].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
+						info->priv->tr_path(value, info->priv->translated_path));
+				}
+				else if(strcmp(name, "bg_image[disable]") == 0)
+				{
+					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_BITMAP;
+					info->gc[FTK_WIDGET_INSENSITIVE].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
+						info->priv->tr_path(value, info->priv->translated_path));
+				}
+				else if(strcmp(name, "bg_image[active]") == 0)
+				{
+					info->gc[FTK_WIDGET_ACTIVE].mask |= FTK_GC_BITMAP;
+					info->gc[FTK_WIDGET_ACTIVE].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
+						info->priv->tr_path(value, info->priv->translated_path));
+				}
+				else if(strcmp(name, "bg_image[focused]") == 0)
+				{
+					info->gc[FTK_WIDGET_FOCUSED].mask |= FTK_GC_BITMAP;
+					info->gc[FTK_WIDGET_FOCUSED].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
+						info->priv->tr_path(value, info->priv->translated_path));
+				}
+				else
+				{
+					ftk_logd("%s: unknown %s\n", __func__, name);
+				}
 				break;
 			}
 			case 'f':
 			{
-				/*TODO: foreground*/
+				if(strcmp(name, "bg[normal]") == 0)
+				{
+					info->gc[FTK_WIDGET_NORMAL].mask |= FTK_GC_FG;
+					info->gc[FTK_WIDGET_NORMAL].fg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg[active]") == 0)
+				{
+					info->gc[FTK_WIDGET_ACTIVE].mask |= FTK_GC_FG;
+					info->gc[FTK_WIDGET_ACTIVE].fg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg[focused]") == 0)
+				{
+					info->gc[FTK_WIDGET_FOCUSED].mask |= FTK_GC_FG;
+					info->gc[FTK_WIDGET_FOCUSED].fg = ftk_xul_builder_init_color(value);
+				}
+				else if(strcmp(name, "bg[disable]") == 0)
+				{
+					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_FG;
+					info->gc[FTK_WIDGET_INSENSITIVE].fg = ftk_xul_builder_init_color(value);
+				}
+				else
+				{
+					ftk_logd("%s: unknown %s\n", __func__, name);
+				}
 				break;
 			}
 			default:break;/*TODO: handle other attrs*/
@@ -515,7 +602,12 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 
 static void ftk_xul_builder_reset_widget_info(FtkXmlBuilder* thiz, FtkWidgetCreateInfo* info)
 {
-	/*TODO*/
+	int i = 0;
+	for(i = 0; i < FTK_WIDGET_STATE_NR;i++)
+	{
+		ftk_gc_reset(info->gc+i);
+	}
+
 	return;
 }
 
@@ -534,6 +626,15 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 	{
 		ftk_widget_set_id(widget, info.id);
 		ftk_widget_set_attr(widget, info.attr);
+		if(info.gc[FTK_WIDGET_NORMAL].mask & FTK_GC_BG)
+		{
+			ftk_widget_unset_attr(widget, FTK_ATTR_TRANSPARENT);
+		}
+		ftk_widget_set_gc(widget, FTK_WIDGET_NORMAL, info.gc+FTK_WIDGET_NORMAL);
+		ftk_widget_set_gc(widget, FTK_WIDGET_FOCUSED, info.gc+FTK_WIDGET_FOCUSED);
+		ftk_widget_set_gc(widget, FTK_WIDGET_ACTIVE, info.gc+FTK_WIDGET_ACTIVE);
+		ftk_widget_set_gc(widget, FTK_WIDGET_INSENSITIVE, info.gc+FTK_WIDGET_INSENSITIVE);
+
 		if(info.visible)
 		{
 			ftk_widget_show(widget, info.visible);
