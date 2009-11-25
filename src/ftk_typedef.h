@@ -138,6 +138,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 
 #define FTK_STOCK_IMG_SUFFIX ".png"
 
+#define FTK_MAX_PATH 260
 #define FTK_MIN(a, b) (a) < (b) ? (a) : (b)
 #define FTK_MAX(a, b) (a) < (b) ? (b) : (a)
 

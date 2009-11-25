@@ -34,7 +34,11 @@
 
 #include "ftk_widget.h"
 
+typedef const char* (*FtkTranslateText)(const char* text);
+typedef const char* (*FtkTranslatePath)(const char* path, char out_path[FTK_MAX_PATH+1]);
+
 FtkWidget* ftk_xul_load(const char* xml, int length);
+FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkTranslatePath tr_path);
 
 #endif/*FTK_XUL_H*/
 

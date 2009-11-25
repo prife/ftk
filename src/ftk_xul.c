@@ -40,6 +40,9 @@ typedef struct _PrivInfo
 	FtkWidget* current;
 	int  meet_start_tag;
 	char processed_value[128];
+	char translated_path[FTK_MAX_PATH+1];
+	FtkTranslateText tr_text;
+	FtkTranslatePath tr_path;
 }PrivInfo;
 
 typedef struct _FtkWidgetCreateInfo
@@ -60,6 +63,8 @@ typedef struct _FtkWidgetCreateInfo
 	/*scroll bar*/
 	int max_value;
 	int page_delta;
+
+	PrivInfo* priv;
 }FtkWidgetCreateInfo;
 
 typedef FtkWidget* (*FtkXulWidgetCreate)(FtkWidgetCreateInfo* info);
@@ -77,7 +82,7 @@ static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 	widget = ftk_label_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->value);
+		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
 	}
 
 	return widget;
@@ -90,7 +95,7 @@ static FtkWidget* ftk_xul_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->value);
+		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
 	}
 
 	return widget;
@@ -103,7 +108,7 @@ static FtkWidget* ftk_xul_entry_create(FtkWidgetCreateInfo* info)
 	widget = ftk_entry_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_entry_set_text(widget, info->value);
+		ftk_entry_set_text(widget, info->priv->tr_text(info->value));
 	}
 
 	return widget;
@@ -151,7 +156,7 @@ static FtkWidget* ftk_xul_radio_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_radio_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->value);
+		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
 	}
 	
 	if(info->checked)
@@ -169,7 +174,7 @@ static FtkWidget* ftk_xul_check_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_check_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->value);
+		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
 	}
 	
 	if(info->checked)
@@ -187,7 +192,7 @@ static FtkWidget* ftk_xul_image_create(FtkWidgetCreateInfo* info)
 	widget = ftk_image_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_image_set_image_file(widget, info->value);
+		ftk_image_set_image_file(widget, info->priv->tr_path(info->value, info->priv->translated_path));
 	}
 
 	return widget;
@@ -213,7 +218,7 @@ static FtkWidget* ftk_xul_window_create(FtkWidgetCreateInfo* info)
 	widget = ftk_app_window_create();
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->value);
+		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
 	}
 
 	return widget;
@@ -226,7 +231,7 @@ static FtkWidget* ftk_xul_dialog_create(FtkWidgetCreateInfo* info)
 	widget = ftk_dialog_create(info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->value);
+		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
 	}
 
 	return widget;
@@ -419,6 +424,7 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 	DECL_PRIV(thiz, priv);
 	return_if_fail(attrs != NULL && info != NULL);
 
+	info->priv = priv;
 	info->parent = priv->current;
 	for(i = 0; attrs[i] != NULL; i += 2)
 	{
@@ -607,7 +613,19 @@ static FtkXmlBuilder* ftk_xul_builder_create(void)
 	return thiz;
 }
 
-FtkWidget* ftk_xul_load(const char* xml, int length)
+static const char* ftk_text_no_translate(const char* text)
+{
+	return text;
+}
+
+static const char* ftk_path_no_translate(const char* path, char out_path[FTK_MAX_PATH+1])
+{
+	(void)out_path;
+
+	return path;
+}
+
+FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkTranslatePath tr_path)
 {
 	FtkWidget* widget = NULL;
 	FtkXmlParser* parser = NULL;
@@ -622,6 +640,8 @@ FtkWidget* ftk_xul_load(const char* xml, int length)
 	if(builder != NULL)
 	{
 		PrivInfo* priv = (PrivInfo*)builder->priv;
+		priv->tr_text = tr_text != NULL ? tr_text : ftk_text_no_translate;
+		priv->tr_path = tr_path != NULL ? tr_path : ftk_path_no_translate;
 		ftk_xml_parser_set_builder(parser, builder);
 		ftk_xml_parser_parse(parser, xml);
 		widget = priv->root;
@@ -630,6 +650,11 @@ FtkWidget* ftk_xul_load(const char* xml, int length)
 	ftk_xml_parser_destroy(parser);
 
 	return widget;
+}
+
+FtkWidget* ftk_xul_load(const char* xml, int length)
+{
+	return ftk_xul_load_ex(xml, length, ftk_text_no_translate, ftk_path_no_translate);	
 }
 
 

@@ -5,6 +5,14 @@
 const char* t1 = "<window> </window>";
 
 #define IDC_QUIT 100
+
+const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
+{
+	snprintf(out_path, FTK_MAX_PATH, "%s/%s", TESTDATA_DIR, path);
+
+	return out_path;
+}
+
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
 	ftk_quit();
@@ -30,7 +38,7 @@ int main(int argc, char* argv[])
 		ftk_init(argc, argv);
 
 		buffer = read_file(argv[1], &length);
-		win = ftk_xul_load(buffer, length);
+		win = ftk_xul_load_ex(buffer, length, NULL, tr_path);
 		free(buffer);
 		ftk_widget_set_user_data(win, on_window_close, win);
 		
