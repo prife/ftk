@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<window value="ProgressBar">
+<window value="background">
 	<button id="99" x="5" y="30" w="64" h="64" attr="$FTK_ATTR_INSENSITIVE"
 		bg_image[disable]="Flickr.png" bg[disable]="ffff0000"/>
 	
