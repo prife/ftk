@@ -51,11 +51,12 @@ static FtkBitmap* load_png (const char *filename)
 	FtkColor* dst = NULL;
 	unsigned char* src = NULL;
 	FtkBitmap* bitmap = NULL;
-	FtkColor  bg = {.a = 0xff,};
+	FtkColor  bg = {0};
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 	png_bytep * row_pointers = NULL;
 	
+	bg.a = 0xff;
 	if ((fp = fopen (filename, "rb")) == NULL)
 	{
 		printf("%s: open %s failed.\n", __func__, filename);
@@ -102,9 +103,12 @@ static FtkBitmap* load_png (const char *filename)
 			src = row_pointers[y];
 			for(x = 0; x < w; x++)
 			{
-				dst->r = src[0];
-				dst->g = src[1];
-				dst->b = src[2];
+				if(src[3])
+				{
+					dst->r = src[0];
+					dst->g = src[1];
+					dst->b = src[2];
+				}
 				dst->a = src[3];
 				src +=4;
 				dst++;
