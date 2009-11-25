@@ -33,11 +33,11 @@ int main(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	
 	width = width/2 - 10;
-	button = ftk_check_button_create(win,0, 30, width, 50);
+	button = ftk_check_button_create(win,0, 10, width, 50);
 	ftk_widget_set_text(button, "show");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 
-	button = ftk_check_button_create(win, width + 10, 30, width, 50);
+	button = ftk_check_button_create(win, width + 10, 10, width, 50);
 	ftk_widget_set_text(button, "hide");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
