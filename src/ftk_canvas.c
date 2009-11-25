@@ -842,7 +842,7 @@ Ret ftk_canvas_fill_background_normal(FtkCanvas* canvas, int x, int y, int w, in
 	int bh = ftk_bitmap_height(bitmap);
 
 	w = FTK_MIN(bw, w);
-	h = FTK_MAX(bh, h);
+	h = FTK_MIN(bh, h);
 
 	if(set)
 	{
@@ -894,7 +894,7 @@ Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, int w, in
 	int by = bh < h ? 0 : (bh - h)/2;
 	
 	w = FTK_MIN(bw, w);
-	h = FTK_MAX(bh, h);
+	h = FTK_MIN(bh, h);
 
 	if(set)
 	{

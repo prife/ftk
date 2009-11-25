@@ -9,6 +9,6 @@
 	<label  id="5" x="5" y="75" w="$ww/4" h="30" value="Mobile" />
 	<entry  id="6" x="$ww/4+5" y="75" w="3*$ww/4-15" h="30" value="+8613911112222" />
 	
-	<button id="99" x="5" y="3*$wh/4" w="$ww/2-5" h="50" value="Save" />
-	<button id="100" x="$ww/2" y="3*$wh/4" w="$ww/2-5" h="50" value="Quit" />
+	<button id="99" x="5" y="3*$wh/4" w="$ww/2-5" h="50" attr="$FTK_ATTR_INSENSITIVE" value="Save" />
+	<button id="100" x="$ww/2" y="3*$wh/4" w="$ww/2-5" h="50" attr="$FTK_ATTR_FOCUSED" value="Quit" />
 </window>

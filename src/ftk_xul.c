@@ -49,6 +49,7 @@ typedef struct _FtkWidgetCreateInfo
 	int y;
 	int w;
 	int h;
+	int attr;
 	int visible;
 	const char* value;
 	FtkWidget* parent;
@@ -343,6 +344,38 @@ static int ftk_xul_find_getter(const char* name)
 	return -1;
 }
 
+typedef struct _VarConst
+{
+	const char* name;
+	int value;
+}VarConst;
+
+static const VarConst s_var_conts[] =
+{
+	{"FTK_ATTR_TRANSPARENT",    FTK_ATTR_TRANSPARENT},
+	{"FTK_ATTR_BG_CENTER",      FTK_ATTR_BG_CENTER},
+	{"FTK_ATTR_BG_TILE",        FTK_ATTR_BG_TILE},
+	{"FTK_ATTR_BG_FOUR_CORNER", FTK_ATTR_BG_FOUR_CORNER},
+	{"FTK_ATTR_NO_FOCUS",       FTK_ATTR_NO_FOCUS},
+	{"FTK_ATTR_INSENSITIVE",    FTK_ATTR_INSENSITIVE},
+	{"FTK_ATTR_FOCUSED",        FTK_ATTR_FOCUSED},
+	{NULL, 0},
+};
+
+static int ftk_xul_find_const(const char* name)
+{
+	int i = 0;
+	for(i = 0; s_var_conts[i].name != NULL; i++)
+	{
+		if(strcmp(s_var_conts[i].name, name) == 0)
+		{
+			return i;
+		}
+	}
+
+	return -1;
+}
+
 static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const char* value)
 {
 	int i = 0;
@@ -359,6 +392,13 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 			{
 				dst += snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
 					"%d", s_var_getters[i].get(thiz));
+				iter += strlen(s_var_getters[i].name);
+				continue;
+			}
+			else if((i = ftk_xul_find_const(iter+1)) >= 0)
+			{
+				dst += snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
+					"%d", s_var_conts[i].value);
 				iter += strlen(s_var_getters[i].name);
 				continue;
 			}
@@ -414,6 +454,13 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			{
 				value = ftk_xul_builder_preprocess_value(thiz, value);
 				info->h = (int)ftk_expr_eval(value);
+				break;
+			}
+			case 'a':
+			{
+				/*attr*/
+				value = ftk_xul_builder_preprocess_value(thiz, value);
+				info->attr = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'v':
@@ -480,6 +527,7 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 	if((widget = create(&info)) != NULL)
 	{
 		ftk_widget_set_id(widget, info.id);
+		ftk_widget_set_attr(widget, info.attr);
 		if(info.visible)
 		{
 			ftk_widget_show(widget, info.visible);

@@ -34,6 +34,7 @@
 #include "ftk_widget.h"
 #include "ftk_globals.h"
 #include "ftk_canvas.h"
+#include "ftk_window.h"
 
 struct _FtkWidgetInfo
 {
@@ -258,6 +259,15 @@ void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->attr |= attr;
+
+	if(attr & FTK_ATTR_INSENSITIVE)
+	{
+		ftk_widget_set_insensitive(thiz, 1);
+	}
+	else if(attr & FTK_ATTR_FOCUSED)
+	{
+		ftk_window_set_focus(ftk_widget_toplevel(thiz), thiz);
+	}
 
 	return;
 }
