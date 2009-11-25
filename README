@@ -77,3 +77,5 @@ o supported variable, variable preceeded with '$'
   FTK_ATTR_INSENSITIVE
   FTK_ATTR_FOCUSED
 
+There are many examples in src/demos
+

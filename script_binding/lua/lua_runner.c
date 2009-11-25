@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 	L = lua_open();
 	luaL_openlibs(L);
 	ftk_lua_init(L);
-	luaL_dofile(L, argv[1]);
+	(void)luaL_dofile(L, argv[1]);
 	lua_close(L);
 
 	return 0;
