@@ -348,8 +348,24 @@ static Ret ftk_window_realize(FtkWidget* thiz)
 
 	if(priv->canvas == NULL)
 	{
-		FtkColor color = ftk_style_get_color(FTK_COLOR_WINDOW);
-		priv->canvas = ftk_canvas_create(w, h, color);
+		FtkGc* gc = ftk_widget_get_gc(thiz);	
+		priv->canvas = ftk_canvas_create(w, h, gc->bg);
+		if(gc->bitmap != NULL)
+		{
+			FtkBitmap* bitmap = gc->bitmap;
+			if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_CENTER))
+			{
+				ftk_canvas_set_bg_image(priv->canvas, bitmap, FTK_BG_CENTER, 0, 0, w, h);
+			}
+			else if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_TILE))
+			{
+				ftk_canvas_set_bg_image(priv->canvas, bitmap, FTK_BG_TILE, 0, 0, w, h);
+			}
+			else
+			{
+				ftk_canvas_set_bg_image(priv->canvas, bitmap, FTK_BG_NORMAL, 0, 0, w, h);
+			}
+		}
 	}
 	ftk_widget_set_canvas(thiz, priv->canvas);
 
@@ -489,6 +505,30 @@ Ret        ftk_window_enable_update(FtkWidget* thiz)
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	priv->update_disabled = 0;
+
+	return RET_OK;
+}
+
+Ret        ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg)
+{
+	FtkGc gc = {0};
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	gc.mask = FTK_GC_BG;
+	gc.bg = bg;
+	
+	if(gc.mask)
+	{
+		gc.mask |= FTK_GC_BITMAP;
+		gc.bitmap = bitmap;
+	}
+
+	ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL,      &gc);
+	ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE,      &gc);
+	ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED,     &gc);
+	ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+	ftk_gc_reset(&gc);
 
 	return RET_OK;
 }
