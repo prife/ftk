@@ -567,22 +567,22 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'f':
 			{
-				if(strcmp(name, "bg[normal]") == 0)
+				if(strcmp(name, "fg[normal]") == 0)
 				{
 					info->gc[FTK_WIDGET_NORMAL].mask |= FTK_GC_FG;
 					info->gc[FTK_WIDGET_NORMAL].fg = ftk_xul_builder_init_color(value);
 				}
-				else if(strcmp(name, "bg[active]") == 0)
+				else if(strcmp(name, "fg[active]") == 0)
 				{
 					info->gc[FTK_WIDGET_ACTIVE].mask |= FTK_GC_FG;
 					info->gc[FTK_WIDGET_ACTIVE].fg = ftk_xul_builder_init_color(value);
 				}
-				else if(strcmp(name, "bg[focused]") == 0)
+				else if(strcmp(name, "fg[focused]") == 0)
 				{
 					info->gc[FTK_WIDGET_FOCUSED].mask |= FTK_GC_FG;
 					info->gc[FTK_WIDGET_FOCUSED].fg = ftk_xul_builder_init_color(value);
 				}
-				else if(strcmp(name, "bg[disable]") == 0)
+				else if(strcmp(name, "fg[disable]") == 0)
 				{
 					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_FG;
 					info->gc[FTK_WIDGET_INSENSITIVE].fg = ftk_xul_builder_init_color(value);
