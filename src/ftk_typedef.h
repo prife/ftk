@@ -108,39 +108,38 @@ typedef Ret (*FtkIdle)(void* user_data);
 typedef Ret (*FtkTimer)(void* user_data);
 typedef Ret (*FtkListener)(void* user_data, void* obj);
 
+#define FTK_INHERITE_FROM(parent) /*used as comment*/
+
 #define FTK_CALL_LISTENER(listener, u, o) listener != NULL ? listener(u, o) : RET_OK
 #define return_if_fail(p) if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
 #define return_val_if_fail(p, val) if(!(p)) {printf("%s:%d "#p" failed.\n", __func__, __LINE__); return (val);}
-
-#define MIN(x1, x2) ((x1) < (x2) ? (x1) : (x2))
-#define MAX(x1, x2) ((x1) > (x2) ? (x1) : (x2))
-#define FTK_MAX_WINDOWS 32
-#define FTK_P_IN_R(x, y, r) (((x) >= (r)->x && (x)<((r)->x+(r)->width)) && ((y) >= (r)->y && (y) < ((r)->y + (r)->height)))
-
-#define FTK_SPACE_WIDTH         5
-#define FTK_MAX_IMAGE_DECODERS  8
-#define FTK_STATUS_PANEL_HEIGHT 36
-#define FTK_DIALOG_MARGIN       8
-#define FTK_DIALOG_TITLE_HEIGHT 30
-
 #define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
 #define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL
 
-#define FTK_MASK_BITS(val32, index) (((val32) << ((index)%32)) & 0x80000000)
+#define FTK_HALF(a)    ((a)>>1)
+#define FTK_MIN(a, b) (a) < (b) ? (a) : (b)
+#define FTK_MAX(a, b) (a) < (b) ? (b) : (a)
 
-#define FTK_INHERITE_FROM(parent) /*used as comment*/
+#define FTK_MASK_BITS(val32, index) (((val32) << ((index)%32)) & 0x80000000)
 
 #define FTK_ALPHA_1(s, d, a) (d) = ((unsigned int)((d) * (0xff - (a)) + (s) * (a)) + 0xff) >> 8
 #define FTK_ALPHA(sc, dc, a) FTK_ALPHA_1(sc->r, dc->r, a); \
-	FTK_ALPHA_1(sc->g, dc->g, a); \
-	FTK_ALPHA_1(sc->b, dc->b, a);
+	     FTK_ALPHA_1(sc->g, dc->g, a); \
+	     FTK_ALPHA_1(sc->b, dc->b, a);
 
-#define FTK_STOCK_IMG_SUFFIX ".png"
-
-#define FTK_MAX_PATH 260
-#define FTK_MIN(a, b) (a) < (b) ? (a) : (b)
-#define FTK_MAX(a, b) (a) < (b) ? (b) : (a)
+/*for customize*/
+#define FTK_MAX_PATH            260
+#define FTK_MAX_WINDOWS         32
+#define FTK_SPACE_WIDTH         5
+#define FTK_MAX_IMAGE_DECODERS  6
+#define FTK_STATUS_PANEL_HEIGHT 36
+#define FTK_DIALOG_MARGIN       8
+#define FTK_DIALOG_TITLE_HEIGHT 30
+#define FTK_MENU_MAX_ITEM       16
+#define FTK_MENU_ITEM_HEIGHT    48
+#define FTK_MENU_ITEM_WIDTH     100
+#define FTK_STOCK_IMG_SUFFIX    ".png"
 
 #endif/*FTK_TYPEDEF_H*/
 

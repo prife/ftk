@@ -34,10 +34,6 @@
 #include "ftk_globals.h"
 #include "ftk_menu_item.h"
 
-#define FTK_MENU_MAX_ITEM 16
-#define FTK_MENU_ITEM_HEIGHT 48
-#define FTK_MENU_ITEM_WIDTH 100
-
 typedef struct _PrivInfo
 {
 	int changed;

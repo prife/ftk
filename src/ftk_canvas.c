@@ -312,11 +312,11 @@ Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
 
 	if(x1 == x2)
 	{
-		ret = ftk_canvas_draw_vline(thiz, x1, MIN(y1, y2), MAX(y1, y2) - MIN(y1, y2));
+		ret = ftk_canvas_draw_vline(thiz, x1, FTK_MIN(y1, y2), FTK_MAX(y1, y2) - FTK_MIN(y1, y2));
 	}
 	else if(y1 == y2)
 	{
-		ret = ftk_canvas_draw_hline(thiz, MIN(x1, x2), y1, MAX(x1, x2) - MIN(x1, x2));
+		ret = ftk_canvas_draw_hline(thiz, FTK_MIN(x1, x2), y1, FTK_MAX(x1, x2) - FTK_MIN(x1, x2));
 	}
 	else
 	{

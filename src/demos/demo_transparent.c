@@ -77,7 +77,6 @@ void create_dialog(FtkBitmap* bitmap, FtkColor bg)
 
 static void create_app_window(void)
 {
-	char title[32] = {0};
 	int width = 0;
 	int height = 0;
 	FtkWidget* win = ftk_app_window_create();
@@ -94,7 +93,7 @@ static void create_app_window(void)
 	ftk_widget_set_text(button, "半透明效果");
 	ftk_button_set_clicked_listener(button, button_open_transparent_dialog, win);
 
-	ftk_widget_set_text(win, title);
+	ftk_widget_set_text(win, "transparent");
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 

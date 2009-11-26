@@ -95,8 +95,8 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		const char* text = ftk_widget_get_text(thiz);
 		int fh = ftk_canvas_font_height(canvas);
 		int fw = ftk_canvas_get_extent(canvas, text, -1);
-		int dx = (width - fw)>>1;
-		int dy = height/2;
+		int dx = FTK_HALF(width - fw);
+		int dy = FTK_HALF(height);
 	
 		assert(fh < height && fw < width);
 		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);

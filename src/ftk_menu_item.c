@@ -38,7 +38,6 @@
 
 typedef struct _PrivInfo
 {
-	int menu_item_down;
 	FtkListener listener;
 	void* listener_ctx;
 }PrivInfo;
@@ -96,8 +95,8 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 		const char* text = ftk_widget_get_text(thiz);
 		int fh = ftk_canvas_font_height(canvas);
 		int fw = ftk_canvas_get_extent(canvas, text, -1);
-		int dx = (width - fw)>>1;
-		int dy = height>>1;
+		int dx = FTK_HALF(width - fw);
+		int dy = FTK_HALF(height);
 	
 		assert(fh < height && fw < width);
 		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
@@ -132,6 +131,7 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 		thiz->destroy  = ftk_menu_item_destroy;
 
 		ftk_widget_init(thiz, FTK_MENU_ITEM, 0);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
 		gc.mask = FTK_GC_BITMAP;
 		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
@@ -143,7 +143,6 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
 		ftk_gc_reset(&gc);
 
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 		ftk_menu_panel_add(parent, thiz);
 	}
 	else
