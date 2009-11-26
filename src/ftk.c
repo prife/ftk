@@ -32,11 +32,11 @@
 #include "ftk.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
-#include "ftk_wnd_manager_default.h"
-#include "ftk_bitmap_factory.h"
-#include "ftk_status_panel.h"
 #include "ftk_status_item.h"
 #include "ftk_font_default.h"
+#include "ftk_status_panel.h"
+#include "ftk_bitmap_factory.h"
+#include "ftk_wnd_manager_default.h"
 
 #ifdef USE_LINUX_NATIVE
 #include "ftk_display_fb.h"
@@ -285,6 +285,7 @@ static void ftk_init_panel(void)
 	FtkGc gc = {0};
 	FtkWidget* item = NULL;	
 	FtkWidget* panel = ftk_default_status_panel();
+	
 	gc.mask = FTK_GC_BITMAP;
 	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "status-bg"FTK_STOCK_IMG_SUFFIX);
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
@@ -331,3 +332,4 @@ static void ftk_init_panel(void)
 
 	return;
 }
+
