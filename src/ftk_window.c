@@ -489,7 +489,7 @@ Ret        ftk_window_disable_update(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
-	priv->update_disabled = 1;
+	priv->update_disabled++;
 
 	return RET_OK;
 }
@@ -499,7 +499,7 @@ Ret        ftk_window_enable_update(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
-	priv->update_disabled = 0;
+	priv->update_disabled--;
 
 	return RET_OK;
 }
