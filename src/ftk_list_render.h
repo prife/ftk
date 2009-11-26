@@ -32,7 +32,47 @@
 #ifndef FTK_LIST_RENDER_H
 #define FTK_LIST_RENDER_H
 
-FtkWidget* ftk_list_render_create(int id, int x, int y, int width, int height);
+#include "ftk_typedef.h"
+
+struct _FtkListRender;
+typedef struct _FtkListRender FtkListRender;
+
+typedef Ret  (*FtkListRenderInit)(FtkListRender* thiz, FtkListModel* model);
+typedef Ret  (*FtkListRenderPaint)(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h);
+typedef void (*FtkListRenderDestroy)(FtkListRender* thiz);
+
+struct _FtkListRender
+{
+	FtkListRenderInit    init;
+	FtkListRenderPaint   paint;
+	FtkListRenderDestroy destroy;
+
+	char priv[1];
+};
+
+static inline Ret ftk_render_init(FtkListRender* thiz, FtkListModel* model)
+{
+	return_val_if_fail(thiz != NULL && thiz->init != NULL, RET_FAIL);
+
+	return thiz->init(thiz, model);
+}
+
+static inline Ret ftk_render_paint(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h)
+{
+	return_val_if_fail(thiz != NULL && thiz->paint != NULL, RET_FAIL);
+
+	return thiz->paint(thiz, canvas, pos, x, y, w, h);
+}
+
+static inline void ftk_render_destroy(FtkListRender* thiz)
+{
+	if(thiz != NULL && thiz->destroy != NULL)
+	{
+		thiz->destroy(thiz);
+	}
+
+	return;
+}
 
 #endif/*FTK_LIST_RENDER_H*/
 

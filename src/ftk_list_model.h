@@ -32,6 +32,8 @@
 #ifndef FTK_LIST_MODEL_H
 #define FTK_LIST_MODEL_H
 
+#include "ftk_typedef.h"
+
 struct _FtkListModel;
 typedef struct _FtkListModel* FtkListModel;
 
@@ -47,6 +49,30 @@ struct _FtkListModel
 
 	char priv[1];
 };
+
+static inline int ftk_list_model_get_total(FtkListModel* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->get_total != NULL, 0);
+
+	return thiz->get_total(thiz);
+}
+
+static inline Ret ftk_list_model_get_data(FtkListModel* thiz, int index, void** ret)
+{
+	return_val_if_fail(thiz != NULL && thiz->get_data != NULL, RET_FAIL);
+
+	return thiz->get_data(thiz, index, ret);
+}
+
+static inline void ftk_list_model_destroy(FtkListModel* thiz)
+{
+	if(thiz != NULL && thiz->destroy != NULL)
+	{
+		thiz->destroy(thiz);
+	}
+
+	return;
+}
 
 #endif/*FTK_LIST_MODEL_H*/
 
