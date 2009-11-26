@@ -47,6 +47,7 @@ struct _FtkListModel
 	FtkListModelGetData  get_data;
 	FtkListModelDestroy  destroy;
 
+	int ref;
 	char priv[1];
 };
 
@@ -69,6 +70,27 @@ static inline void ftk_list_model_destroy(FtkListModel* thiz)
 	if(thiz != NULL && thiz->destroy != NULL)
 	{
 		thiz->destroy(thiz);
+	}
+
+	return;
+}
+
+static inline void ftk_list_model_ref(FtkListModel* thiz)
+{
+	if(thiz != NULL) thiz->ref++;
+
+	return;
+}
+
+static inline void ftk_list_model_unref(FtkListModel* thiz)
+{
+	if(thiz != NULL)
+	{
+		thiz->ref--;
+		if(thiz->ref == 0)
+		{
+			ftk_list_model_destroy(thiz);
+		}
 	}
 
 	return;
