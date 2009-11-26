@@ -85,26 +85,10 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
-static const char* bg_imgs[FTK_WIDGET_STATE_NR] = 
-{
-	NULL,
-	"menuitem_background_focus"FTK_STOCK_IMG_SUFFIX,
-	"menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX,
-	NULL
-};
-
 static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 {
-	FtkBitmap* bitmap = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(width > 0 && height > 0, RET_FAIL);
-
-	if(bg_imgs[ftk_widget_state(thiz)] != NULL)
-	{
-		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
-		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, y, width, height);
-		ftk_bitmap_unref(bitmap);
-	}
 
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz));
 	if(ftk_widget_get_text(thiz))
@@ -141,12 +125,25 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
+		FtkGc gc ={0};
+
 		thiz->on_event = ftk_menu_item_on_event;
 		thiz->on_paint = ftk_menu_item_on_paint;
 		thiz->destroy  = ftk_menu_item_destroy;
 
 		ftk_widget_init(thiz, FTK_MENU_ITEM, 0);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+
+		gc.mask = FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
+		ftk_gc_reset(&gc);
+
+		gc.mask = FTK_GC_BITMAP;
+		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
+		ftk_gc_reset(&gc);
+
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 		ftk_menu_panel_add(parent, thiz);
 	}
 	else
