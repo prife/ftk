@@ -40,7 +40,7 @@ typedef enum _FtkListItemType
 	FTK_LIST_ITEM_NORMAL = 0,
 	FTK_LIST_ITEM_RADIO,
 	FTK_LIST_ITEM_CHECK,
-	FTK_LIST_ITEM_MORE,
+	FTK_LIST_ITEM_MORE
 }FtkListItemType;
 
 typedef struct _FtkListItemInfo

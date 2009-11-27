@@ -29,7 +29,7 @@
  *
  */
 
-FTK_INHERITE_FROM(Window);
+FTK_INHERITE_FROM(Window)
 
 #ifndef FTK_APP_WINDOW_H
 #define FTK_APP_WINDOW_H

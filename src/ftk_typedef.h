@@ -37,7 +37,7 @@
 typedef enum _FtkBool
 {
 	FTK_TRUE = 1,
-	FTK_FALSE = 0,
+	FTK_FALSE = 0
 }FtkBool;
 
 typedef struct _FtkPoint
@@ -101,7 +101,7 @@ typedef enum _FtkLogLevel
 {
 	FTK_LOG_V = 0,
 	FTK_LOG_D = 1,
-	FTK_LOG_E = 2,
+	FTK_LOG_E = 2
 }FtkLogLevel;
 
 typedef void (*FtkDestroy)(void* user_data);
@@ -109,7 +109,7 @@ typedef Ret (*FtkIdle)(void* user_data);
 typedef Ret (*FtkTimer)(void* user_data);
 typedef Ret (*FtkListener)(void* user_data, void* obj);
 
-#define FTK_INHERITE_FROM(parent) /*used as comment*/
+#define FTK_INHERITE_FROM(parent) extern int a;
 
 #define FTK_CALL_LISTENER(listener, u, o) listener != NULL ? listener(u, o) : RET_OK
 #define return_if_fail(p) if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}

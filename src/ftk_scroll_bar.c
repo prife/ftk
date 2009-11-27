@@ -343,7 +343,7 @@ Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value)
 	{
 		priv->value = value;
 		ftk_widget_paint_self(thiz);	
-		FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+		return FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 	}
 
 	return RET_OK;

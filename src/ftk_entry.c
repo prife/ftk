@@ -129,9 +129,10 @@ static Ret ftk_entry_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_entry_input_char(FtkWidget* thiz, char c)
 {
-	char str[2] = {c, 0};
+	char str[2] = {0};
 	DECL_PRIV0(thiz, priv);
 	
+	str[0] = c;
 	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
 	ftk_entry_move_caret(thiz, 1);	
 

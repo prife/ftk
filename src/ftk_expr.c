@@ -58,7 +58,7 @@ typedef struct tagLex
 
 static double EvalExpr(PLex pLex);
 
-static Token LexGetNumToken(PLex thiz)
+static void LexGetNumToken(PLex thiz)
 {
 	enum
 	{

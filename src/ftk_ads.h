@@ -1,7 +1,8 @@
+
 /*
- * File: ftk_menu_panel.h    
- * Author: Li XianJing <xianjimli@hotmail.com>
- * Brief:  ftk menu panel
+ * File: ftk_linux.h
+ * Author:  Li XianJing <xianjimli@hotmail.com>
+ * Brief:   linux specific functions.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,21 +26,27 @@
 /*
  * History:
  * ================================================================
- * 2009-10-18 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-22 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#ifndef FTK_ARM_ADS_H
+#define FTK_ARM_ADS_H
 
-#ifndef FTK_MENU_PANEL_H
-#define FTK_MENU_PANEL_H
-#include "ftk_window.h"
+#ifdef ARM_ADS
+#define FTK_FONT "./unicode.fnt"
+#define DATA_DIR ""
+#define LOCAL_DATA_DIR ""
+#define usleep 
+#define pipe(fds) _pipe(fds, 2, 0)
 
-FTK_INHERITE_FROM(Window)
+#include "ctype.h"
+#define ftk_strdup(p) (char*)0    
+#define ftk_strncpy   strncpy
+#define ftk_snprintf  snprintf
+#define ftk_vsnprintf vsnprintf 
+#define inline 
+#endif
 
-FtkWidget* ftk_menu_panel_create(void);
-Ret ftk_menu_panel_relayout(FtkWidget* thiz);
-Ret ftk_menu_panel_add(FtkWidget* thiz, FtkWidget* item);
-Ret ftk_menu_panel_remove(FtkWidget* thiz, FtkWidget* item);
-
-#endif/*FTK_MENU_PANEL_H*/
+#endif/*FTK_ARM_ADS_H*/
 

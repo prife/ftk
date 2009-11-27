@@ -37,7 +37,7 @@ struct _FtkBitmap
 	int h;
 	int ref;
 	int length;
-	FtkColor bits[0];
+	FtkColor bits[1];
 };
 
 FtkBitmap* ftk_bitmap_create(int w, int h, FtkColor color)
