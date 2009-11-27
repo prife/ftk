@@ -35,7 +35,7 @@
 #include "ftk_typedef.h"
 
 struct _FtkListModel;
-typedef struct _FtkListModel* FtkListModel;
+typedef struct _FtkListModel FtkListModel;
 
 typedef int  (*FtkListModelGetTotal)(FtkListModel* thiz);
 typedef Ret  (*FtkListModelGetData)(FtkListModel* thiz, int index, void** ret);

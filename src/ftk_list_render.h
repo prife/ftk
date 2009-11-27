@@ -32,7 +32,8 @@
 #ifndef FTK_LIST_RENDER_H
 #define FTK_LIST_RENDER_H
 
-#include "ftk_typedef.h"
+#include "ftk_canvas.h"
+#include "ftk_list_model.h"
 
 struct _FtkListRender;
 typedef struct _FtkListRender FtkListRender;
@@ -50,21 +51,21 @@ struct _FtkListRender
 	char priv[1];
 };
 
-static inline Ret ftk_render_init(FtkListRender* thiz, FtkListModel* model)
+static inline Ret ftk_list_render_init(FtkListRender* thiz, FtkListModel* model)
 {
 	return_val_if_fail(thiz != NULL && thiz->init != NULL, RET_FAIL);
 
 	return thiz->init(thiz, model);
 }
 
-static inline Ret ftk_render_paint(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h)
+static inline Ret ftk_list_render_paint(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h)
 {
 	return_val_if_fail(thiz != NULL && thiz->paint != NULL, RET_FAIL);
 
 	return thiz->paint(thiz, canvas, pos, x, y, w, h);
 }
 
-static inline void ftk_render_destroy(FtkListRender* thiz)
+static inline void ftk_list_render_destroy(FtkListRender* thiz)
 {
 	if(thiz != NULL && thiz->destroy != NULL)
 	{
