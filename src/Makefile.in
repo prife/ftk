@@ -69,8 +69,8 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_mmap_linux.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
-	ftk_display_fb.c ftk_source_input.c ftk_display_x11.c \
-	ftk_source_x11.c
+	ftk_list_render_default.c ftk_display_fb.c ftk_source_input.c \
+	ftk_display_x11.c ftk_source_x11.c
 am__objects_1 = ftk_display_fb.lo ftk_source_input.lo
 @FTK_BACKEND_FB_TRUE@am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo
@@ -90,7 +90,8 @@ am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_linux.lo ftk_gesture.lo ftk_wait_box.lo ftk_mmap_linux.lo \
 	ftk_scroll_bar.lo ftk_sprite.lo ftk_display.lo \
 	ftk_xml_parser.lo ftk_xul.lo ftk_expr.lo ftk_list_view.lo \
-	ftk_list_model_default.lo $(am__objects_2) $(am__objects_4)
+	ftk_list_model_default.lo ftk_list_render_default.lo \
+	$(am__objects_2) $(am__objects_4)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -245,7 +246,7 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_linux.c ftk_gesture.c ftk_wait_box.c ftk_mmap_linux.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
-	$(am__append_1) $(am__append_2)
+	ftk_list_render_default.c $(am__append_1) $(am__append_2)
 INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99
 
@@ -371,6 +372,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_label.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_linux.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_list_model_default.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_list_render_default.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_list_view.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_log.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_main_loop.Plo@am__quote@

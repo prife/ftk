@@ -4,7 +4,10 @@ MYLDFLAGS=$(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
 
 noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
 	demo_menu demo_entry demo_expand demo_progress_bar demo_check_button demo_wait_box \
-	demo_scroll_bar demo_sprite demo_xul demo_transparent
+	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview
+
+demo_listview_SOURCES=demo_listview.c
+demo_listview_LDFLAGS=$(MYLDFLAGS)
 
 demo_transparent_SOURCES=demo_transparent.c
 demo_transparent_LDFLAGS=$(MYLDFLAGS)

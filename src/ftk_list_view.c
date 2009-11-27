@@ -34,7 +34,7 @@
 #include "ftk_globals.h"
 #include "ftk_window.h"
 #include "ftk_list_view.h"
-
+#include "ftk_scroll_bar.h"
 typedef struct _PrivInfo
 {
 	int selected;
@@ -51,11 +51,14 @@ typedef struct _PrivInfo
 	void* listener_ctx;
 }PrivInfo;
 
+#define FTK_LIST_VIEW_H_MARGIN 2
+#define FTK_SCROLL_BAR_WIDTH 10
+
 static Ret ftk_list_view_set_cursor(FtkWidget* thiz, int selected)
 {
 	DECL_PRIV0(thiz, priv);
 	int total = ftk_list_model_get_total(priv->model);
-	if(priv->selected == selected)
+	if(priv->selected == selected && !priv->is_active)
 	{
 		return RET_OK;
 	}
@@ -77,7 +80,7 @@ static Ret ftk_list_view_set_cursor(FtkWidget* thiz, int selected)
 
 	ftk_widget_paint_self(thiz);
 
-	return RET_OK;
+	return RET_REMOVE;
 }
 
 static Ret ftk_list_view_move_cursor(FtkWidget* thiz, int offset)
@@ -119,7 +122,7 @@ static Ret ftk_list_view_on_key_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_KEY_DOWN:
 		{
-			if(event->type == FTK_KEY_DOWN)
+			if(event->type == FTK_EVT_KEY_DOWN)
 			{
 				ret = ftk_list_view_move_cursor(thiz, 1);
 			}
@@ -127,7 +130,7 @@ static Ret ftk_list_view_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_KEY_UP:
 		{
-			if(event->type == FTK_KEY_DOWN)
+			if(event->type == FTK_EVT_KEY_DOWN)
 			{
 				ret = ftk_list_view_move_cursor(thiz, -1);
 			}
@@ -217,13 +220,18 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	FtkBitmap* bitmap = NULL;
 	const char* filename = NULL;
-
+	int total = ftk_list_model_get_total(priv->model);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	(void)height;
 	dy = y + priv->top_margin;
-	for(i = 0; priv->visible_nr; i++)
+	for(i = 0; i < priv->visible_nr; i++)
 	{
+		if((priv->visible_start + i) >= total)
+		{
+			break;
+		}
+
 		if((priv->visible_start + i) == priv->selected)
 		{
 			filename = priv->is_active ? "list_selector_background_focus"FTK_STOCK_IMG_SUFFIX 
@@ -235,9 +243,15 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 		}
 		bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), filename);
 
-		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, dy, width, priv->item_height);
+		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, 
+			x + FTK_LIST_VIEW_H_MARGIN, 
+			dy, width - 2 * FTK_LIST_VIEW_H_MARGIN - FTK_SCROLL_BAR_WIDTH, priv->item_height);
 		ftk_list_render_paint(priv->render, canvas, priv->visible_start + i, x, dy, width, priv->item_height);
+		dy += priv->item_height;
 	}
+
+	ftk_scroll_bar_set_param(priv->vscroll_bar, priv->visible_start, total, priv->visible_nr);
+	ftk_widget_show(priv->vscroll_bar, priv->visible_nr < total);
 
 	FTK_END_PAINT();
 }
@@ -261,6 +275,7 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
+		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_list_view_on_event;
 		thiz->on_paint = ftk_list_view_on_paint;
 		thiz->destroy  = ftk_list_view_destroy;
@@ -268,6 +283,9 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_init(thiz, FTK_LIST_VIEW, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
+		ftk_widget_append_child(parent, thiz);
+
+		priv->vscroll_bar = ftk_scroll_bar_create(thiz, width - FTK_SCROLL_BAR_WIDTH, 0, FTK_SCROLL_BAR_WIDTH, height);
 	}
 	else
 	{

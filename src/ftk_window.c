@@ -212,7 +212,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 
 	ret = ftk_widget_event(priv->focus_widget, event);
 	
-	if(ret == RET_REMOVE || event->type == FTK_EVT_KEY_DOWN)
+	if(ret == RET_REMOVE || event->type == FTK_EVT_KEY_UP)
 	{
 		return ret;
 	}

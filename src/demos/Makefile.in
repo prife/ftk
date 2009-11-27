@@ -39,7 +39,7 @@ noinst_PROGRAMS = demo_label$(EXEEXT) demo_button$(EXEEXT) \
 	demo_progress_bar$(EXEEXT) demo_check_button$(EXEEXT) \
 	demo_wait_box$(EXEEXT) demo_scroll_bar$(EXEEXT) \
 	demo_sprite$(EXEEXT) demo_xul$(EXEEXT) \
-	demo_transparent$(EXEEXT)
+	demo_transparent$(EXEEXT) demo_listview$(EXEEXT)
 subdir = src/demos
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -98,6 +98,12 @@ demo_label_LDADD = $(LDADD)
 demo_label_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_label_LDFLAGS) $(LDFLAGS) -o $@
+am_demo_listview_OBJECTS = demo_listview.$(OBJEXT)
+demo_listview_OBJECTS = $(am_demo_listview_OBJECTS)
+demo_listview_LDADD = $(LDADD)
+demo_listview_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(demo_listview_LDFLAGS) $(LDFLAGS) -o $@
 am_demo_menu_OBJECTS = demo_menu.$(OBJEXT)
 demo_menu_OBJECTS = $(am_demo_menu_OBJECTS)
 demo_menu_LDADD = $(LDADD)
@@ -162,18 +168,20 @@ SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
 	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
-	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
-	$(demo_progress_bar_SOURCES) $(demo_scroll_bar_SOURCES) \
-	$(demo_sprite_SOURCES) $(demo_transparent_SOURCES) \
-	$(demo_wait_box_SOURCES) $(demo_xul_SOURCES)
+	$(demo_listview_SOURCES) $(demo_menu_SOURCES) \
+	$(demo_multi_win_SOURCES) $(demo_progress_bar_SOURCES) \
+	$(demo_scroll_bar_SOURCES) $(demo_sprite_SOURCES) \
+	$(demo_transparent_SOURCES) $(demo_wait_box_SOURCES) \
+	$(demo_xul_SOURCES)
 DIST_SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
 	$(demo_expand_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
-	$(demo_menu_SOURCES) $(demo_multi_win_SOURCES) \
-	$(demo_progress_bar_SOURCES) $(demo_scroll_bar_SOURCES) \
-	$(demo_sprite_SOURCES) $(demo_transparent_SOURCES) \
-	$(demo_wait_box_SOURCES) $(demo_xul_SOURCES)
+	$(demo_listview_SOURCES) $(demo_menu_SOURCES) \
+	$(demo_multi_win_SOURCES) $(demo_progress_bar_SOURCES) \
+	$(demo_scroll_bar_SOURCES) $(demo_sprite_SOURCES) \
+	$(demo_transparent_SOURCES) $(demo_wait_box_SOURCES) \
+	$(demo_xul_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -287,6 +295,8 @@ INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR
 	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\""
 
 MYLDFLAGS = $(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
+demo_listview_SOURCES = demo_listview.c
+demo_listview_LDFLAGS = $(MYLDFLAGS)
 demo_transparent_SOURCES = demo_transparent.c
 demo_transparent_LDFLAGS = $(MYLDFLAGS)
 demo_xul_SOURCES = demo_xul.c
@@ -383,6 +393,9 @@ demo_image_button$(EXEEXT): $(demo_image_button_OBJECTS) $(demo_image_button_DEP
 demo_label$(EXEEXT): $(demo_label_OBJECTS) $(demo_label_DEPENDENCIES) 
 	@rm -f demo_label$(EXEEXT)
 	$(demo_label_LINK) $(demo_label_OBJECTS) $(demo_label_LDADD) $(LIBS)
+demo_listview$(EXEEXT): $(demo_listview_OBJECTS) $(demo_listview_DEPENDENCIES) 
+	@rm -f demo_listview$(EXEEXT)
+	$(demo_listview_LINK) $(demo_listview_OBJECTS) $(demo_listview_LDADD) $(LIBS)
 demo_menu$(EXEEXT): $(demo_menu_OBJECTS) $(demo_menu_DEPENDENCIES) 
 	@rm -f demo_menu$(EXEEXT)
 	$(demo_menu_LINK) $(demo_menu_OBJECTS) $(demo_menu_LDADD) $(LIBS)
@@ -422,6 +435,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_image.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_image_button.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_label.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_listview.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_menu.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_multi_win.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_progress_bar.Po@am__quote@
