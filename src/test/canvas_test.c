@@ -70,22 +70,10 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 		ftk_canvas_set_gc(thiz, &gc);
 		ftk_canvas_draw_string(thiz, 0, 220, "李先静是一个程序员", -1);
 	
-		ftk_canvas_draw_line(thiz, 0, 0, 100, 100);
-		ftk_canvas_draw_line(thiz, 100, 100, 200, 0);
-		ftk_canvas_draw_line(thiz, 100, 100, 0, 200);
-		ftk_canvas_draw_ellipse(thiz, 50, 50, 50, 50, 1);
-		ftk_canvas_draw_ellipse(thiz, 100, 50, 50, 50, 0);
-		ftk_canvas_draw_ellipse(thiz, 150, 50, 50, 50, 0);
-		ftk_canvas_draw_ellipse(thiz, 200, 50, 50, 50, 1);
 		unsigned int line_mask = 0xaaaaaaaa;
 		gc.line_mask = line_mask;
 		gc.mask = FTK_GC_LINE_MASK;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_line(thiz, 100, 200, 200, 200);
-		ftk_canvas_draw_line(thiz, 100, 200, 100, 300);
-		ftk_canvas_draw_line(thiz, 100, 300, 200, 300);
-		ftk_canvas_draw_line(thiz, 200, 200, 200, 300);
-		ftk_canvas_draw_line(thiz, 200, 200, 300, 300);
 		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
 
 		assert(ftk_canvas_font_height(thiz) == 16);
@@ -101,7 +89,7 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 
 	return;
 }
-
+#if 0
 void test_draw_point(FtkDisplay* display)
 {
 	int i = 0;
@@ -155,7 +143,7 @@ void test_draw_point(FtkDisplay* display)
 
 	return;
 }
-
+#endif
 void test_draw_vline(FtkDisplay* display)
 {
 	int i = 0;
@@ -263,6 +251,7 @@ void test_draw_hline(FtkDisplay* display)
 	return;
 }
 
+#if 0
 void test_draw_line(FtkDisplay* display)
 {
 	int i = 0;
@@ -316,7 +305,7 @@ void test_draw_line(FtkDisplay* display)
 
 	return;
 }
-
+#endif
 void test_alpha(FtkDisplay* display)
 {
 	int i = 0;
@@ -541,8 +530,6 @@ int main(int argc, char* argv[])
 	test_fill_bg(display);
 	test_font(display, font);
 	test_put_get_pixel(display);
-	test_draw_point(display);
-	test_draw_line(display);
 	test_draw_hline(display);
 	test_draw_vline(display);
 	ftk_bitmap_unref(bitmap);

@@ -85,28 +85,6 @@ Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc)
 		}\
 	}while(0);
 
-Ret ftk_canvas_draw_point(FtkCanvas* thiz, int x, int y)
-{
-	int width = 0;
-	int height = 0;
-	FtkColor* bits = NULL;
-	unsigned char alpha = 0;
-	FtkColor* pdst = NULL;
-
-	return_val_if_fail(thiz != NULL, RET_FAIL);
-
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
-	return_val_if_fail(bits != NULL && x < width && y < height, RET_FAIL);
-	pdst = bits + y * width + x;
-	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
-
-	PUT_PIXEL(pdst, alpha);
-
-	return RET_OK;
-}
-
 Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val)
 {
 	int width = 0;
@@ -305,28 +283,6 @@ static Ret ftk_canvas_draw_normal_line(FtkCanvas* thiz,
 	return RET_OK;
 }
 
-Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
-{
-	Ret ret = RET_FAIL;
-	return_val_if_fail(thiz != NULL, RET_FAIL);
-
-	if(x1 == x2)
-	{
-		ret = ftk_canvas_draw_vline(thiz, x1, FTK_MIN(y1, y2), FTK_MAX(y1, y2) - FTK_MIN(y1, y2));
-	}
-	else if(y1 == y2)
-	{
-		ret = ftk_canvas_draw_hline(thiz, FTK_MIN(x1, x2), y1, FTK_MAX(x1, x2) - FTK_MIN(x1, x2));
-	}
-	else
-	{
-		/*FIXME: support line style.*/
-		ret = ftk_canvas_draw_normal_line(thiz, x1, y1, x2, y2);
-	}
-
-	return ret;
-}
-
 Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 {
 	int i = 0;
@@ -382,86 +338,6 @@ Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int 
 	{
 		ftk_canvas_draw_rect(thiz, x + 2, y + 2, w - 4, h - 4, fill);
 	}
-
-	return RET_OK;
-}
-
-#define SET_PIXEL(x, y) bits[(y)*(width) + (x)] = thiz->gc.fg
-Ret ftk_canvas_draw_ellipse(FtkCanvas* thiz, int x, int y, int rx, int ry,int fill)
-{
-
-    /* Algorithm from IEEE CG&A Sept 1984 p.24 */
-
-    int t1 = rx * rx, t2 = t1 << 1, t3 = t2 << 1;
-    int t4 = ry * ry, t5 = t4 << 1, t6 = t5 << 1;
-    int t7 = rx * t5, t8 = t7 << 1, t9 = 0;
-    int d1 = t2 - t7 + (t4 >> 1);
-    int d2 = (t1 >> 1) - t8 + t5;
-
-    int ex = rx, ey = 0;
-    int width = ftk_bitmap_width(thiz->bitmap);
-	FtkColor* bits = ftk_bitmap_bits(thiz->bitmap);
-
-    while (d2 < 0)
-    {
-        if (fill)
-        {
-        	ftk_canvas_draw_hline(thiz, x - ex, y + ey, 2 * ex);
-        	ftk_canvas_draw_hline(thiz, x - ex, y - ey, 2 * ex);
-        }
-        else
-        {
-        	SET_PIXEL(x + ex, y + ey);
-        	SET_PIXEL(x + ex, y - ey);
-        	SET_PIXEL(x - ex, y + ey);
-        	SET_PIXEL(x - ex, y - ey);
-        }
-
-        ey++;        
-        t9 += t3;    
-        if (d1 < 0)
-        {
-            d1 += t9 + t2;
-            d2 += t9;
-        }
-        else
-        {
-            ex--;
-            t8 -= t6;
-            d1 += t9 + t2 - t8;
-            d2 += t9 + t5 - t8;
-        }
-    }
-
-    do
-    {
-        if (fill)
-        {
-        	ftk_canvas_draw_hline(thiz, x - ex, y + ey, 2*ex);
-        	ftk_canvas_draw_hline(thiz, x - ex, y - ey, 2*ex);
-        }
-        else
-        {
-        	SET_PIXEL(x + ex, y + ey);
-        	SET_PIXEL(x + ex, y - ey);
-        	SET_PIXEL(x - ex, y + ey);
-        	SET_PIXEL(x - ex, y - ey);
-        }
-
-        ex--;    
-        t8 -= t6;    
-        if (d2 < 0)
-        {
-            ey++;
-            t9 += t3;
-            d2 += t9 + t5 - t8;
-        }
-        else
-        {
-            d2 += t5 - t8;
-        }
-    } 
-    while (ex >= 0);
 
 	return RET_OK;
 }
