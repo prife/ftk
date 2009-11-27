@@ -45,6 +45,11 @@ static Ret ftk_list_render_default_init(FtkListRender* thiz, FtkListModel* model
 
 static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h)
 {
+	char text[32] = {0};
+	return_val_if_fail(thiz != NULL && canvas != NULL && w > 0 && h > 0, RET_FAIL);
+
+	snprintf(text, sizeof(text), "%08d", pos);
+	ftk_canvas_draw_string_ex(canvas, x + 4, y + h/2 +10, text, -1, 0);
 
 	return RET_OK;
 }

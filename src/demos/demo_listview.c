@@ -25,6 +25,17 @@ void item_destroy(FtkListItemInfo* info)
 	return;
 }
 
+Ret on_item_clicked(void* ctx, void* list)
+{
+	FtkListModel* model = ftk_list_view_get_model(list);
+
+	ftk_logd("%s: %d/%d\n", __func__, 
+		ftk_list_view_get_selected(list),
+		ftk_list_model_get_total(model));
+
+	return RET_OK;
+}
+
 int main(int argc, char* argv[])
 {
 	int width = 0;
@@ -42,6 +53,8 @@ int main(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	
 	list = ftk_list_view_create(win, 10, 5, width - 20, 3 * height/4-5);
+	ftk_list_view_set_clicked_listener(list, on_item_clicked, NULL);
+
 	model = ftk_list_model_default_create(10, item_destroy);
 	render = ftk_list_render_default_create();
 	ftk_list_model_default_add(model, &info);
@@ -49,6 +62,7 @@ int main(int argc, char* argv[])
 	ftk_list_model_default_add(model, &info);
 	ftk_list_model_default_add(model, &info);
 	ftk_list_model_default_add(model, &info);
+	
 	ftk_list_model_default_add(model, &info);
 	ftk_list_model_default_add(model, &info);
 	ftk_list_model_default_add(model, &info);

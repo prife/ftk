@@ -51,7 +51,8 @@ Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && thiz != focus_widget, RET_FAIL);
 
-	if(priv->focus_widget == focus_widget || focus_widget->children != NULL)
+	if(priv->focus_widget == focus_widget)
+//	|| focus_widget->children != NULL)
 	{
 		return RET_OK;
 	}

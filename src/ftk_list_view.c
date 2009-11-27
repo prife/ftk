@@ -58,8 +58,11 @@ static Ret ftk_list_view_set_cursor(FtkWidget* thiz, int selected)
 {
 	DECL_PRIV0(thiz, priv);
 	int total = ftk_list_model_get_total(priv->model);
-	if(priv->selected == selected && !priv->is_active)
+
+	if(priv->selected == selected)
 	{
+		ftk_widget_paint_self(thiz);
+
 		return RET_OK;
 	}
 
@@ -225,6 +228,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 
 	(void)height;
 	dy = y + priv->top_margin;
+	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	for(i = 0; i < priv->visible_nr; i++)
 	{
 		if((priv->visible_start + i) >= total)
@@ -275,7 +279,6 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_list_view_on_event;
 		thiz->on_paint = ftk_list_view_on_paint;
 		thiz->destroy  = ftk_list_view_destroy;
@@ -284,8 +287,6 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_append_child(parent, thiz);
-
-		priv->vscroll_bar = ftk_scroll_bar_create(thiz, width - FTK_SCROLL_BAR_WIDTH, 0, FTK_SCROLL_BAR_WIDTH, height);
 	}
 	else
 	{
@@ -297,6 +298,8 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 
 Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* render, int item_height)
 {
+	int width = 0;
+	int height = 0;
 	int margin = 0;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && render != NULL && model != NULL && item_height > 0, RET_FAIL);
@@ -304,6 +307,9 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	priv->model       = model;
 	priv->render      = render;
 	priv->item_height = item_height;
+
+	width = ftk_widget_width(thiz);
+	height = ftk_widget_height(thiz);
 
 	margin = ftk_widget_height(thiz)%item_height;
 	priv->visible_nr = ftk_widget_height(thiz)/item_height;
@@ -314,6 +320,8 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	priv->visible_start = 0;
 	priv->selected      = -1;
 	priv->is_active = 0;
+	priv->vscroll_bar = ftk_scroll_bar_create(thiz, width - FTK_SCROLL_BAR_WIDTH, priv->top_margin, 
+		FTK_SCROLL_BAR_WIDTH, item_height * priv->visible_nr);
 	
 	return RET_OK;
 }
