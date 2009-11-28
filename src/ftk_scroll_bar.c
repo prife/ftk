@@ -360,7 +360,7 @@ Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	value = value < 0 ? 0 : value;
-	value = (value + priv->page_delta) < priv->max_value ? value : priv->max_value - priv->page_delta;
+	value = value < priv->max_value ? value : priv->max_value;
 	
 	if(value != priv->value)
 	{

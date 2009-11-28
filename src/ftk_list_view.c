@@ -230,12 +230,14 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	int i = 0;
 	int dx = 0;
 	int dy = 0;
+	int scroll_bar_width = 0;
 	DECL_PRIV0(thiz, priv);
 	FtkBitmap* bitmap = NULL;
 	int total = ftk_list_model_get_total(priv->model);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	(void)height;
+	scroll_bar_width = priv->visible_nr >= total ? 0 : FTK_SCROLL_BAR_WIDTH;
 	dy = y + priv->top_margin;
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	for(i = 0; i < priv->visible_nr; i++)
@@ -256,21 +258,21 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 		}
 
 		dx = x + FTK_H_MARGIN;
-		w = width - 2 * FTK_H_MARGIN - FTK_SCROLL_BAR_WIDTH;
+		w = width - 2 * FTK_H_MARGIN - scroll_bar_width;
 		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, dx, dy, w, priv->item_height);
 		ftk_list_render_paint(priv->render, canvas, priv->visible_start + i, dx, dy, w, priv->item_height);
 		dy += priv->item_height;
 	}
 
 	priv->scrolled_by_me = 1;
-	if(priv->visible_nr < total)
+	if(priv->visible_nr >= total)
 	{
 		ftk_widget_show(priv->vscroll_bar, 0);
 	}
 	else
 	{
 		ftk_scroll_bar_set_param(priv->vscroll_bar, priv->current, total, priv->visible_nr);
-		ftk_widget_show(priv->vscroll_bar, priv->visible_nr < total);
+		ftk_widget_show(priv->vscroll_bar, 1);
 	}
 	priv->scrolled_by_me = 0;
 
@@ -371,6 +373,7 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	priv->is_active = 0;
 	priv->vscroll_bar = ftk_scroll_bar_create(thiz, width - FTK_SCROLL_BAR_WIDTH, priv->top_margin, 
 		FTK_SCROLL_BAR_WIDTH, item_height * priv->visible_nr);
+	ftk_widget_set_attr(priv->vscroll_bar, FTK_ATTR_NO_FOCUS);
 	ftk_scroll_bar_set_listener(priv->vscroll_bar, (FtkListener)ftk_list_view_on_scroll, thiz);
 
 	return RET_OK;
