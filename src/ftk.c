@@ -30,6 +30,7 @@
  */
 
 #include "ftk.h"
+#include "ftk_backend.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
 #include "ftk_status_item.h"
@@ -38,47 +39,8 @@
 #include "ftk_bitmap_factory.h"
 #include "ftk_wnd_manager_default.h"
 
-#ifdef USE_LINUX_NATIVE
-#include "ftk_display_fb.h"
-#include "ftk_source_input.h"
-#endif
-
-#ifdef USE_LINUX_X11
-#include "ftk_display_x11.h"
-#include "ftk_source_x11.h"
-#endif
-
 static void ftk_deinit(void);
 static void ftk_init_panel(void);
-
-#ifdef USE_LINUX_NATIVE
-static Ret ftk_init_input(void)
-{
-	char filename[260] = {0};
-	struct dirent* iter = NULL;
-	DIR* dir = opendir("/dev/input");
-	
-	return_val_if_fail(dir != NULL, RET_FAIL);
-
-	while((iter = readdir(dir)) != NULL)
-	{
-		FtkSource* source = NULL;
-
-		if(iter->d_name[0] == '.') continue;
-		if(!(iter->d_type & DT_CHR)) continue;
-
-		ftk_snprintf(filename, sizeof(filename), "/dev/input/%s", iter->d_name);
-		source = ftk_source_input_create(filename, (FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
-		if(source != NULL)
-		{
-			ftk_sources_manager_add(ftk_default_sources_manager(), source);
-		}
-	}
-	closedir(dir);
-
-	return RET_OK;
-}
-#endif
 
 static Ret ftk_init_bitmap_factory(void)
 {
@@ -140,8 +102,6 @@ static void ftk_deinit(void)
 Ret ftk_init(int argc, char* argv[])
 {
 	FtkFont* font = NULL;
-	FtkSource* source = NULL;
-	FtkDisplay* display = NULL;
 	char filename[260] = {0};
 
 	ftk_platform_init(argc, argv);
@@ -171,23 +131,7 @@ Ret ftk_init(int argc, char* argv[])
 		exit(0);
 	}
 
-#ifdef USE_LINUX_NATIVE
-	(void)source;
-	(void)display;
-	ftk_init_input();
-	ftk_set_display(ftk_display_fb_create(FTK_FB_NAME));
-	if(ftk_default_display() == NULL)
-	{
-		ftk_loge("open display failed.\n");
-		exit(0);
-	}
-#endif
-
-#ifdef USE_LINUX_X11
-	display = ftk_display_x11_create(&source, (FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
-	ftk_set_display(display);
-	ftk_sources_manager_add(ftk_default_sources_manager(), source);
-#endif
+	ftk_backend_init(argc, argv);
 
 	ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
 	ftk_init_panel();

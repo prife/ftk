@@ -2,8 +2,17 @@ SUBDIRS=. testdata icons data demos test
 
 lib_LTLIBRARIES=libftk.la
 
-LINUX_NATIVE=ftk_display_fb.c ftk_source_input.c
-LINUX_X11=ftk_display_x11.c ftk_source_x11.c
+LINUX_NATIVE=$(srcdir)/backend/fb/ftk_display_fb.c \
+	$(srcdir)/backend/fb/ftk_source_input.c \
+	$(srcdir)/backend/fb/ftk_backend_fb.c
+
+LINUX_X11=$(srcdir)/backend/x11-emu/ftk_display_x11.c \
+	$(srcdir)/backend/x11-emu/ftk_source_x11.c \
+	$(srcdir)/backend/x11-emu/ftk_backend_x11.c
+
+LINUX_DFB=$(srcdir)/backend/directfb/ftk_display_dfb.c \
+	$(srcdir)/backend/directfb/ftk_source_dfb.c \
+	$(srcdir)/backend/directfb/ftk_backend_dfb.c
 
 libftk_la_SOURCES=\
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
@@ -29,7 +38,11 @@ if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11)
 endif
 
-INCLUDES=-Wall -Werror -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
+if FTK_BACKEND_DFB
+libftk_la_SOURCES+=$(LINUX_DFB)
+endif
+
+INCLUDES=-Wall -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99
 
 ftkdir=$(includedir)/ftk

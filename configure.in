@@ -19,7 +19,10 @@ AC_CHECK_LIB([png], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
 
-AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd],
+VERSION=1.2.0
+PKG_CHECK_MODULES(DIRECTFB, [directfb >= $VERSION])
+
+AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb],
                     [use which display/input backend])])
 
 case "$with_backend" in
@@ -30,6 +33,10 @@ case "$with_backend" in
 	linux-vlcd*)
 		backend="fb"
 		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
+	linux-dfb*)
+		backend="dfb"
+		CFLAGS="$CFLAGS -DUSE_LINUX_DFB $DIRECTFB_CFLAGS";
+		LDFLAGS="$LDFLAGS $DIRECTFB_LIBS";;
 	*)
 		backend="fb"
 		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE";;
@@ -39,6 +46,7 @@ echo with_backend=$with_backend
 
 AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
 AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
+AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
