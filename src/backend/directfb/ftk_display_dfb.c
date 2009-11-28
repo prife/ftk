@@ -195,7 +195,7 @@ static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 	priv->width   = screen_width;
 	priv->height  = screen_height;
 
-	primary->Clear( primary, 0, 0, 0, 0 );
+	primary->Clear( primary, 0xff, 0, 0, 0 );
 	primary->Flip( primary, NULL, 0 );
 
 	return RET_OK;
