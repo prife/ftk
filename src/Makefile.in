@@ -287,11 +287,10 @@ ftk_HEADERS = \
 	ftk_button.h              ftk_platform.h\
 	ftk_canvas.h              ftk_source.h\
 	ftk_dialog.h              ftk_source_idle.h\
-	ftk_display_fb.h          ftk_source_input.h\
 	ftk_display.h             ftk_source_primary.h\
-	ftk_display_x11.h         ftk_sources_manager.h\
+	ftk_sources_manager.h\
 	ftk_event.h               ftk_source_timer.h\
-	ftk_font.h                ftk_source_x11.h\
+	ftk_font.h                \
 	ftk_gc.h                  ftk_status_item.h\
 	ftk_globals.h             ftk_status_panel.h\
 	ftk.h                     ftk_style.h\
@@ -302,8 +301,7 @@ ftk_HEADERS = \
 	ftk_key.h                 ftk_wnd_manager_default.h\
 	ftk_label.h               ftk_wnd_manager.h
 
-EXTRA_DIST = ftk_source_x11.h ftk_source_input.h ftk_display_fb.h \
-	ftk_display_x11.h ftk_source_primary.h fontdata.h \
+EXTRA_DIST = ftk_source_primary.h fontdata.h \
 	ftk_image_jpeg_decoder.h ftk_image_png_decoder.h
 
 all: all-recursive
