@@ -29,17 +29,19 @@
  *
  */
 
+#include "ftk_globals.h"
 #include <directfb.h>
 #include "ftk_display_dfb.h"
+#include "ftk_source_dfb.h"
 
 #define DFBCHECK(x) x
 
 typedef struct _PrivInfo
 {
+	int width;
+	int height;
 	IDirectFB* dfb;
-	IDirectFBSurface *surface;
-	IDirectFBWindow* window;
-	IDirectFBDisplayLayer  *layer;
+	IDirectFBSurface     *primary;
 }PrivInfo;
 
 static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
@@ -50,7 +52,7 @@ static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	int pitch = 0;
 	void *data = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->surface != NULL && bitmap != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 	int display_width  = ftk_display_width(thiz);
 	int display_height = ftk_display_height(thiz);
 	int x = rect != NULL ? rect->x : 0;
@@ -61,7 +63,7 @@ static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 	FtkColor* src = ftk_bitmap_bits(bitmap);
 	FtkColor* dst = NULL;
-	IDirectFBSurface* surface = priv->surface;
+	IDirectFBSurface* surface = priv->primary;
 	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
 	dst = data;
 	return_val_if_fail(x < bitmap_width, RET_FAIL);
@@ -103,34 +105,25 @@ static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 		dst += display_width;
 	}
 	surface->Unlock(surface);
-	priv->layer->SetBackgroundImage(priv->layer, surface );
-	priv->layer->SetBackgroundMode(priv->layer, DLBM_IMAGE );
+	surface->Flip(surface, NULL, 0);
 
 	return RET_OK;
 }
 
 static int ftk_display_dfb_width(FtkDisplay* thiz)
 {
-	int w = 0;
-	int h = 0;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(priv != NULL, RET_FAIL);
-	
-	priv->surface->GetSize(priv->surface, &w, &h);
+	return_val_if_fail(priv != NULL, 0);	
 
-	return w;
+	return priv->width;
 }
 
 static int ftk_display_dfb_height(FtkDisplay* thiz)
 {
-	int w = 0;
-	int h = 0;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(priv != NULL, RET_FAIL);
+	return_val_if_fail(priv != NULL, 0);	
 
-	priv->surface->GetSize(priv->surface, &w, &h);
-
-	return h;
+	return priv->height;
 }
 
 static int ftk_display_dfb_bits_per_pixel(FtkDisplay* thiz)
@@ -151,16 +144,17 @@ static void ftk_display_dfb_destroy(FtkDisplay* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		if(priv->window != NULL)
+
+		if(priv->primary != NULL)
 		{
-			priv->window->Release(priv->window);
-			priv->window = NULL;
+			priv->primary->Release(priv->primary);
+			priv->primary = NULL;
 		}
 
 		if(priv->dfb != NULL)
 		{
 			priv->dfb->Release( priv->dfb );
-			priv->dfb->Release( priv->dfb );
+			priv->dfb = NULL;
 		}
 	}
 
@@ -169,44 +163,40 @@ static void ftk_display_dfb_destroy(FtkDisplay* thiz)
 
 static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 {	
+	int fd = 0;
 	DECL_PRIV(thiz, priv);
-	IDirectFBDisplayLayer  *layer;
+	int screen_height = 0;
+	int screen_width = 0;
+	DFBSurfaceDescription  sdsc;
+	IDirectFBSurface* primary = NULL;
+	IDirectFBEventBuffer* events = NULL;
+	IDirectFBDisplayLayer  *layer = NULL;
 	
-	IDirectFBSurface       *surface;
-	IDirectFBWindow        *window;
-	DFBDisplayLayerConfig         layer_config;
-	DFBGraphicsDeviceDescription  gdesc;
+	DFBCHECK(dfb->CreateInputEventBuffer( dfb, DICAPS_ALL, DFB_FALSE, &events ));
+	events->CreateFileDescriptor(events, &fd);
+	if(fd > 0)
+	{
+		FtkSource* source = ftk_source_dfb_create(dfb, fd);
+		ftk_sources_manager_add(ftk_default_sources_manager(), source);
+		ftk_loge("%s: create input source failed.\n", __func__);
+	}
 
-     dfb->GetDeviceDescription( dfb, &gdesc );
+	dfb->SetCooperativeLevel( dfb, DFSCL_FULLSCREEN );
 
-     DFBCHECK(dfb->GetDisplayLayer( dfb, DLID_PRIMARY, &layer ));
+	DFBCHECK(dfb->GetDisplayLayer( dfb, DLID_PRIMARY, &layer ));
+	layer->EnableCursor ( layer, 1 );
 
-     layer->SetCooperativeLevel( layer, DLSCL_ADMINISTRATIVE );
+	sdsc.flags = DSDESC_CAPS;
+	sdsc.caps  = DSCAPS_PRIMARY | DSCAPS_DOUBLE;
+	DFBCHECK(dfb->CreateSurface( dfb, &sdsc, &primary ));
 
-     if (!((gdesc.blitting_flags & DSBLIT_BLEND_ALPHACHANNEL) &&
-           (gdesc.blitting_flags & DSBLIT_BLEND_COLORALPHA  )))
-     {
-          layer_config.flags = DLCONF_BUFFERMODE;
-          layer_config.buffermode = DLBM_BACKSYSTEM;
+	primary->GetSize( primary, &screen_width, &screen_height );
+	priv->primary = primary;
+	priv->width   = screen_width;
+	priv->height  = screen_height;
 
-          layer->SetConfiguration( layer, &layer_config );
-     }
-
-     layer->GetConfiguration( layer, &layer_config );
-     layer->EnableCursor ( layer, 1 );
-     {
-          DFBSurfaceDescription desc;
-          desc.flags  = DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_CAPS;
-          desc.width  = layer_config.width;
-          desc.height = layer_config.height;
-          desc.caps   = DSCAPS_SHARED;
-          DFBCHECK(dfb->CreateSurface( dfb, &desc, &surface ) );
-     }
-
-	priv->dfb = dfb;
-	priv->layer = layer;
-	priv->surface =surface;
-	priv->window = window;
+	primary->Clear( primary, 0, 0, 0, 0 );
+	primary->Flip( primary, NULL, 0 );
 
 	return RET_OK;
 }

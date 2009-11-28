@@ -57,11 +57,18 @@ static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
 	int i = 0;
 	int nr = 0;
 	DFBEvent  *event;
-	DFBEvent   buff[10] = {0};
 	DECL_PRIV(thiz, priv);
+	DFBEvent   buff[10] = {0};
 	int size =  read(priv->fd, buff, sizeof(buff));
-	printf("%s\n", __func__);
-	return_val_if_fail(size <= 0, RET_FAIL);
+	return_val_if_fail(size > 0, RET_FAIL);
+
+	nr = size/sizeof(DFBEvent);
+
+	for(i = 0; i < nr; i++)
+	{
+		event = buff+i;
+		printf("%s clazz=%d\n", __func__, event->clazz);
+	}
 
 	return RET_OK;
 }
@@ -71,50 +78,25 @@ static void ftk_source_dfb_destroy(FtkSource* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		if(priv->event_buffer != NULL)
-		{
-			close(priv->fd);
-			priv->event_buffer->Release(priv->event_buffer);
-			priv->event_buffer = NULL;
-		}
+		close(priv->fd);
 	}
 
 	return;
 }
 
-static Ret ftk_source_dfb_init(FtkSource* thiz, IDirectFB* dfb)
-{
-	IDirectFBEventBuffer   *event_buffer = NULL;
-
-	DECL_PRIV(thiz, priv);
-
-	dfb->CreateEventBuffer(dfb, &event_buffer);
-	return_val_if_fail(event_buffer != NULL, RET_FAIL);
-
-	event_buffer->CreateFileDescriptor(event_buffer, &priv->fd);
-	return_val_if_fail(priv->fd > 0, RET_FAIL);
-
-	priv->dfb = dfb;
-	priv->event_buffer = event_buffer;
-
-	return RET_OK;
-}
-
-FtkSource* ftk_source_dfb_create(IDirectFB* dfb)
+FtkSource* ftk_source_dfb_create(IDirectFB* dfb, int fd)
 {
 	FtkSource* thiz = FTK_ZALLOC(sizeof(FtkSource)+sizeof(PrivInfo));
 
 	if(thiz != NULL)
 	{
-		thiz->get_fd =  ftk_source_dfb_get_fd;
-		thiz->check = ftk_source_dfb_check;
+		DECL_PRIV(thiz, priv);
+		thiz->get_fd   =  ftk_source_dfb_get_fd;
+		thiz->check    = ftk_source_dfb_check;
 		thiz->dispatch = ftk_source_dfb_dispatch;
-		thiz->destroy = ftk_source_dfb_destroy;
+		thiz->destroy  = ftk_source_dfb_destroy;
 
-		if(ftk_source_dfb_init(thiz, dfb) != RET_OK)
-		{
-			FTK_ZFREE(thiz, sizeof(FtkSource)+sizeof(PrivInfo));
-		}
+		priv->fd = fd;
 	}
 
 	return thiz;

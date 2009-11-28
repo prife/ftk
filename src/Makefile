@@ -33,9 +33,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
-am__append_1 = $(LINUX_NATIVE)
+#am__append_1 = $(LINUX_NATIVE)
 #am__append_2 = $(LINUX_X11)
-#am__append_3 = $(LINUX_DFB)
+am__append_3 = $(LINUX_DFB)
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -82,13 +82,13 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
 am__objects_1 = ftk_display_fb.lo ftk_source_input.lo \
 	ftk_backend_fb.lo
-am__objects_2 = $(am__objects_1)
+#am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo \
 	ftk_backend_x11.lo
 #am__objects_4 = $(am__objects_3)
 am__objects_5 = ftk_display_dfb.lo ftk_source_dfb.lo \
 	ftk_backend_dfb.lo
-#am__objects_6 = $(am__objects_5)
+am__objects_6 = $(am__objects_5)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font_default.lo \
@@ -145,13 +145,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -DUSE_LINUX_NATIVE -DPC_EMU
+CFLAGS = -g  -DUSE_LINUX_DFB -D_REENTRANT -I/usr/local/include/directfb  
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -164,19 +164,19 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g -O2
+FFLAGS = -g 
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = 
-LIBOBJS = 
+LDFLAGS =  -L/usr/local/lib -ldirectfb -lfusion -ldirect -lpthread  
+LIBOBJS =  ${LIBOBJDIR}malloc$U.o ${LIBOBJDIR}realloc$U.o
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
-LTLIBOBJS = 
+LTLIBOBJS =  ${LIBOBJDIR}malloc$U.lo ${LIBOBJDIR}realloc$U.lo
 MAKEINFO = ${SHELL} /work/mine/googlecode/ftk/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
