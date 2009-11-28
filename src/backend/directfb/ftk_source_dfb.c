@@ -42,8 +42,7 @@ typedef struct _PrivInfo
 static int  ftk_source_dfb_get_fd(FtkSource* thiz)
 {
 	DECL_PRIV(thiz, priv);
-
-	printf("%s\n", __func__);
+	
 	return priv->fd;
 }
 
@@ -52,6 +51,37 @@ static int  ftk_source_dfb_check(FtkSource* thiz)
 	return -1;
 }
 
+static Ret ftk_source_dfb_dispatch_input_event(FtkSource* thiz, DFBInputEvent* event)
+{
+	switch(event->type)
+	{
+		case DIET_KEYPRESS:
+		{
+			ftk_logd("key_code=%d\n", event->key_code);
+			break;
+		}
+		case DIET_KEYRELEASE:
+		{
+			ftk_logd("key_code=%d\n", event->key_code);
+			break;
+		}
+		case DIET_BUTTONPRESS:
+		{
+			ftk_logd("button=%d axisrel=%d axisabs=%d\n", event->button, event->axisrel, event->axisabs);
+			break;
+		}
+		case DIET_BUTTONRELEASE:
+		{
+			ftk_logd("button=%d axisrel=%d axisabs=%d\n", event->button, event->axisrel, event->axisabs);
+			break;
+		}
+		case DIET_AXISMOTION:
+		{
+			break;
+		}
+	}
+	return RET_OK;
+}
 static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
 {
 	int i = 0;
@@ -67,7 +97,23 @@ static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
 	for(i = 0; i < nr; i++)
 	{
 		event = buff+i;
-		printf("%s clazz=%d\n", __func__, event->clazz);
+		switch(event->clazz)
+		{
+			case DFEC_INPUT:
+			{
+				ftk_source_dfb_dispatch_input_event(thiz, event);
+				break;
+			}
+			case DFEC_USER:
+			{
+				break;
+			}
+			case DFEC_WINDOW:
+			{
+				break;
+			}
+			default:break;
+		}
 	}
 
 	return RET_OK;
