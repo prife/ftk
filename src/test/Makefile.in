@@ -41,7 +41,8 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	icon_cache_test$(EXEEXT) xml_parser_test$(EXEEXT) \
 	xul_test$(EXEEXT) list_model_default_test$(EXEEXT) \
 	$(am__EXEEXT_1)
-@FTK_BACKEND_FB_TRUE@am__append_1 = display_fb_test input_test
+@FTK_BACKEND_FB_TRUE@am__append_1 = -I$(abs_top_srcdir)/src/backend/fb
+@FTK_BACKEND_FB_TRUE@am__append_2 = display_fb_test input_test
 subdir = src/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -324,9 +325,11 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
-	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\""
-
+INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" \
+	-DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX \
+	-I$(abs_top_srcdir)/src \
+	-DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\"" \
+	$(am__append_1)
 MYLDFLAGS = $(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
 @FTK_BACKEND_FB_TRUE@display_fb_test_SOURCES = display_fb_test.c
 @FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)

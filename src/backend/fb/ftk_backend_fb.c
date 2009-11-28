@@ -1,5 +1,7 @@
+#include "ftk_globals.h"
 #include "ftk_display_fb.h"
 #include "ftk_source_input.h"
+#include "ftk_wnd_manager.h"
 
 static Ret ftk_init_input(void)
 {

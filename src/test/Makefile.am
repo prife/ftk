@@ -9,6 +9,7 @@ noinst_PROGRAMS=label_test widget_test \
 	xml_parser_test xul_test list_model_default_test
 
 if FTK_BACKEND_FB
+INCLUDES+=-I$(abs_top_srcdir)/src/backend/fb
 noinst_PROGRAMS +=display_fb_test input_test
 display_fb_test_SOURCES=display_fb_test.c
 display_fb_test_LDFLAGS=$(MYLDFLAGS)
