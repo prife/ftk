@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 		info.state = i;
 		assert(ftk_list_model_get_total(thiz) == i);
 		assert(ftk_list_model_default_add(thiz, &info) == RET_OK);
-		assert(ftk_list_model_get_data(thiz, i, &pinfo) == RET_OK);
+		assert(ftk_list_model_get_data(thiz, i, (void**)&pinfo) == RET_OK);
 		assert(pinfo->state == i);
 	}
 	

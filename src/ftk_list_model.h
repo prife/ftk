@@ -38,7 +38,7 @@ struct _FtkListModel;
 typedef struct _FtkListModel FtkListModel;
 
 typedef int  (*FtkListModelGetTotal)(FtkListModel* thiz);
-typedef Ret  (*FtkListModelGetData)(FtkListModel* thiz, int index, void** ret);
+typedef Ret  (*FtkListModelGetData)(FtkListModel* thiz, size_t index, void** ret);
 typedef void (*FtkListModelDestroy)(FtkListModel* thiz);
 
 struct _FtkListModel
@@ -58,7 +58,7 @@ static inline int ftk_list_model_get_total(FtkListModel* thiz)
 	return thiz->get_total(thiz);
 }
 
-static inline Ret ftk_list_model_get_data(FtkListModel* thiz, int index, void** ret)
+static inline Ret ftk_list_model_get_data(FtkListModel* thiz, size_t index, void** ret)
 {
 	return_val_if_fail(thiz != NULL && thiz->get_data != NULL, RET_FAIL);
 
@@ -77,7 +77,10 @@ static inline void ftk_list_model_destroy(FtkListModel* thiz)
 
 static inline void ftk_list_model_ref(FtkListModel* thiz)
 {
-	if(thiz != NULL) thiz->ref++;
+	if(thiz != NULL)
+	{
+		thiz->ref++;
+	}
 
 	return;
 }

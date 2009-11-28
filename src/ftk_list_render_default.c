@@ -29,27 +29,89 @@
  *
  */
 
+#include "ftk_globals.h"
+#include "ftk_icon_cache.h"
+#include "ftk_list_model_default.h"
 #include "ftk_list_render_default.h"
 
 typedef struct _PrivInfo
 {
+	FtkBitmap* more;
+	FtkBitmap* radio_off;
+	FtkBitmap* radio_on;
+	FtkBitmap* check_off;
+	FtkBitmap* check_on;
 	FtkListModel* model;
 }PrivInfo;
 
 static Ret ftk_list_render_default_init(FtkListRender* thiz, FtkListModel* model)
 {
-	return_val_if_fail(thiz != NULL && model != NULL, RET_FAIL);
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(priv != NULL && model != NULL, RET_FAIL);
+
+	priv->model = model;
 
 	return RET_OK;
 }
 
 static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h)
 {
-	char text[32] = {0};
+	int dx = 0;
+	int dy = 0;
+	DECL_PRIV(thiz, priv);
+	FtkBitmap* right_icon = NULL;
+	FtkListItemInfo* info = NULL;
 	return_val_if_fail(thiz != NULL && canvas != NULL && w > 0 && h > 0, RET_FAIL);
+	ftk_list_model_get_data(priv->model, pos, (void**)&info);
+	return_val_if_fail(info != NULL, RET_FAIL);
 
-	snprintf(text, sizeof(text), "%08d", pos);
-	ftk_canvas_draw_string_ex(canvas, x + 4, y + h/2 +10, text, -1, 0);
+	if(info->left_icon != NULL)
+	{
+		ftk_canvas_draw_bg_image(canvas, info->left_icon, FTK_BG_CENTER, x, y, h, h);
+	}
+	
+	switch(info->type)
+	{
+		case FTK_LIST_ITEM_RADIO:
+		{
+			right_icon = info->state ? priv->radio_on : priv->radio_off;
+			break;
+		}
+		case FTK_LIST_ITEM_CHECK:
+		{
+			right_icon = info->state ? priv->check_on : priv->check_off;
+			break;
+		}
+		case FTK_LIST_ITEM_MORE:
+		{
+			right_icon = priv->more;
+			break;
+		}
+		default:
+		{
+			right_icon = info->right_icon;
+			break;
+		}
+	}
+
+	if(right_icon != NULL)
+	{
+		ftk_canvas_draw_bg_image(canvas, right_icon, FTK_BG_CENTER, x+w-h, y, h, h);
+	}
+
+	if(info->text != NULL)
+	{
+		int text_width = w;
+		const char* end = NULL;
+		text_width = info->left_icon != NULL  ? text_width - h : text_width;
+		text_width = right_icon != NULL ? text_width - h : text_width;
+		
+		dy = y + FTK_HALF(h);
+		dx = info->left_icon != NULL  ? x + h : x;
+
+		end = ftk_canvas_calc_str_visible_range(canvas, info->text, 0, -1, text_width);
+		ftk_canvas_draw_string_ex(canvas, dx, dy, info->text, end - info->text, 1);
+	}
 
 	return RET_OK;
 }
@@ -58,6 +120,13 @@ static void ftk_list_render_default_destroy(FtkListRender* thiz)
 {
 	if(thiz != NULL)
 	{
+		DECL_PRIV(thiz, priv);
+		ftk_bitmap_unref(priv->radio_on);
+		ftk_bitmap_unref(priv->radio_off);
+		ftk_bitmap_unref(priv->check_on);
+		ftk_bitmap_unref(priv->check_off);
+		ftk_bitmap_unref(priv->more);
+
 		FTK_ZFREE(thiz, sizeof(FtkListRender) + sizeof(PrivInfo));
 	}
 
@@ -70,12 +139,18 @@ FtkListRender* ftk_list_render_default_create(void)
 	
 	if(thiz != NULL)
 	{
+		DECL_PRIV(thiz, priv);
 		thiz->init    = ftk_list_render_default_init;
 		thiz->paint   = ftk_list_render_default_paint;
 		thiz->destroy = ftk_list_render_default_destroy;
+
+		priv->radio_off = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_radio_off"FTK_STOCK_IMG_SUFFIX);
+		priv->radio_on = ftk_icon_cache_load(ftk_default_icon_cache(),  "btn_radio_on"FTK_STOCK_IMG_SUFFIX);
+		priv->check_off = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_check_off"FTK_STOCK_IMG_SUFFIX);
+		priv->check_on = ftk_icon_cache_load(ftk_default_icon_cache(),  "btn_check_on"FTK_STOCK_IMG_SUFFIX);
+		priv->more = ftk_icon_cache_load(ftk_default_icon_cache(),      "more"FTK_STOCK_IMG_SUFFIX);
 	}
 
 	return thiz;
 }
-
 

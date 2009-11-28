@@ -33,8 +33,8 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
-am__append_1 = $(LINUX_NATIVE)
-#am__append_2 = $(LINUX_X11)
+#am__append_1 = $(LINUX_NATIVE)
+am__append_2 = $(LINUX_X11)
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -72,9 +72,9 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_list_render_default.c ftk_display_fb.c ftk_source_input.c \
 	ftk_display_x11.c ftk_source_x11.c
 am__objects_1 = ftk_display_fb.lo ftk_source_input.lo
-am__objects_2 = $(am__objects_1)
+#am__objects_2 = $(am__objects_1)
 am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo
-#am__objects_4 = $(am__objects_3)
+am__objects_4 = $(am__objects_3)
 am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
 	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
 	ftk_source_timer.lo ftk_bitmap.lo ftk_font_default.lo \
@@ -131,13 +131,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -DUSE_LINUX_NATIVE -DPC_EMU
+CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g -O2
+CXXFLAGS = -g 
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -148,14 +148,14 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g -O2
+FFLAGS = -g 
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = 
+LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -247,7 +247,7 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
 	ftk_list_render_default.c $(am__append_1) $(am__append_2)
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
+INCLUDES = -Wall -Werror -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99
 
 ftkdir = $(includedir)/ftk

@@ -55,6 +55,7 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	int x = 0;
 	int y = 0;
+	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
 
 	if(priv->page_delta == priv->max_value)
@@ -65,6 +66,28 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 
 	switch(event->type)
 	{
+		case FTK_EVT_KEY_DOWN:
+		{
+			if(event->u.key.code == FTK_KEY_DOWN)
+			{
+				ftk_scroll_bar_inc(thiz);
+				ret = RET_REMOVE;
+			}
+			else if(event->u.key.code == FTK_KEY_UP)
+			{
+				ftk_scroll_bar_dec(thiz);
+				ret = RET_REMOVE;
+			}
+			else if(event->u.key.code == FTK_KEY_PAGEDOWN)
+			{
+				ftk_scroll_bar_pagedown(thiz);
+			}
+			else if(event->u.key.code == FTK_KEY_PAGEUP)
+			{
+				ftk_scroll_bar_pageup(thiz);
+			}
+			break;
+		}
 		case FTK_EVT_MOUSE_DOWN:
 		{
 			int pos = 0;
@@ -129,7 +152,7 @@ static Ret ftk_scroll_bar_on_event(FtkWidget* thiz, FtkEvent* event)
 		default:break;
 	}
 
-	return RET_OK;
+	return ret;
 }
 
 static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
@@ -243,7 +266,7 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 		ftk_widget_init(thiz, FTK_SCROLL_BAR, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_NO_FOCUS);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}
 
@@ -257,7 +280,7 @@ Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int value, int max_value, int page
 	return_val_if_fail(value <= max_value && page_delta <= max_value, RET_FAIL);
 	return_val_if_fail(max_value > 0 && page_delta > 0, RET_FAIL);
 
-	priv->value      = value;
+	priv->value      = value < 0 ? 0 : value;
 	priv->max_value  = max_value;
 	priv->page_delta = page_delta;
 	ftk_widget_paint_self(thiz);	

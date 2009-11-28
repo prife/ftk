@@ -38,15 +38,15 @@
 typedef enum _FtkListItemType
 {
 	FTK_LIST_ITEM_NORMAL = 0,
-	FTK_LIST_ITEM_RADIO,
-	FTK_LIST_ITEM_CHECK,
-	FTK_LIST_ITEM_MORE
+	FTK_LIST_ITEM_RADIO,  /*draw radio button icon at right side.*/
+	FTK_LIST_ITEM_CHECK,  /*draw check button icon at right side.*/
+	FTK_LIST_ITEM_MORE    /*draw MORE icon at right side, which means click this item will lead to more UI. */
 }FtkListItemType;
 
 typedef struct _FtkListItemInfo
 {
 	char* text;
-	int   state;
+	int   state; /*used for FTK_LIST_ITEM_RADIO and FTK_LIST_ITEM_CHECK*/
 	FtkListItemType type;
 	FtkBitmap* left_icon;
 	FtkBitmap* right_icon;
@@ -55,7 +55,7 @@ typedef struct _FtkListItemInfo
 
 typedef void (*FtkListItemDestroy)(FtkListItemInfo* info);
 
-FtkListModel* ftk_list_model_default_create(int init_nr, FtkListItemDestroy destroy);
+FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkListItemDestroy destroy);
 Ret ftk_list_model_default_add(FtkListModel* thiz, FtkListItemInfo* info);
 Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index);
 
