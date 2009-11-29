@@ -43,5 +43,8 @@ FtkColor*  ftk_bitmap_bits(FtkBitmap* thiz);
 void       ftk_bitmap_ref(FtkBitmap* thiz);
 void       ftk_bitmap_unref(FtkBitmap* thiz);
 
+Ret ftk_bitmap_copy_from_data_argb(FtkBitmap* bitmap, void* data, size_t dw, size_t dh, FtkRect* rect);
+Ret ftk_bitmap_copy_to_data_argb(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh);
+
 #endif/*FTK_BITMAP_H*/
 

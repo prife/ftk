@@ -52,75 +52,27 @@ typedef struct _PrivInfo
 
 static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
+	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
 
 	if(bitmap != NULL)
 	{
-		int i = 0;
-		int j = 0;
-		int k = 0;
 		int display_width  = priv->width;
 		int display_height = priv->height;
-		int x = rect != NULL ? rect->x : 0;
-		int y = rect != NULL ? rect->y : 0;
-		int w = rect != NULL ? rect->width : ftk_bitmap_width(bitmap);
-		int h = rect != NULL ? rect->height : ftk_bitmap_height(bitmap);
-		int bitmap_width   = ftk_bitmap_width(bitmap);
-		int bitmap_height  = ftk_bitmap_height(bitmap);
-		FtkColor* src = ftk_bitmap_bits(bitmap);
-		FtkColor* dst = (FtkColor*)priv->bits;
-
-//		ftk_logv("%s: ox=%d oy=%d x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, x, y, w, h);
-		return_val_if_fail(x < bitmap_width, RET_FAIL);
-		return_val_if_fail(y < bitmap_height, RET_FAIL);
-		return_val_if_fail(xoffset < display_width, RET_FAIL);
-		return_val_if_fail(yoffset < display_height, RET_FAIL);
-
-		w = (x + w) < bitmap_width  ? w : bitmap_width - x;
-		w = (xoffset + w) < display_width  ? w : display_width  - xoffset;
-		h = (y + h) < bitmap_height ? h : bitmap_height - y;
-		h = (yoffset + h) < display_height ? h : display_height - yoffset;
-		
-		w += x;
-		h += y;
-
-		src += y * bitmap_width;
-		dst += yoffset * display_width;
-
-		for(i = y; i < h; i++)
-		{
-			for(j = x, k= xoffset; j < w; j++, k++)
-			{
-				FtkColor* pdst = dst+k;
-				FtkColor* psrc = src+j;
-				if(psrc->a == 0xff)
-				{
-					pdst->b = psrc->r;
-					pdst->g = psrc->g;
-					pdst->r = psrc->b;
-				}
-				else
-				{
-					FTK_ALPHA_1(psrc->r, pdst->b, psrc->a);
-					FTK_ALPHA_1(psrc->b, pdst->r, psrc->a);
-					FTK_ALPHA_1(psrc->g, pdst->g, psrc->a);
-				}
-			}
-			src += bitmap_width;
-			dst += display_width;
-		}
+		ret = ftk_bitmap_copy_to_data_argb(bitmap, rect, priv->bits, xoffset, yoffset, display_width, display_height);
 		XPutImage(priv->display, priv->win, priv->gc, priv->ximage,
 			xoffset, yoffset, xoffset, yoffset, rect->width, rect->height);      
 	}
 	else
 	{
 		XPutImage(priv->display, priv->win, priv->gc, priv->ximage, 0, 0, 0, 0, priv->width, priv->height);
+		ret = RET_OK;
 	}
 
 	XFlush(priv->display);
 	XSync(priv->display, 0);
 
-	return RET_OK;
+	return ret;
 }
 
 static int ftk_display_x11_width(FtkDisplay* thiz)
@@ -141,6 +93,21 @@ static int ftk_display_x11_height(FtkDisplay* thiz)
 
 static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
+#if 1
+	FtkRect rect = {0};
+	DECL_PRIV(thiz, priv);
+	int w = ftk_display_width(thiz);
+	int h = ftk_display_height(thiz);
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	
+	rect.x = x;
+	rect.y = y;
+	rect.width = bw;
+	rect.height = bh;
+
+	return ftk_bitmap_copy_from_data_argb(bitmap, priv->bits, w, h, &rect);
+#else
 	int ox = 0;
 	int oy = 0;
 	DECL_PRIV(thiz, priv);
@@ -169,7 +136,7 @@ static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 		src += ftk_display_width(thiz);
 		dst += ftk_bitmap_width(bitmap);
 	}
-
+#endif
 	return RET_OK;
 }
 

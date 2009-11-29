@@ -46,69 +46,20 @@ typedef struct _PrivInfo
 
 static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
 	int pitch = 0;
 	void *data = NULL;
+	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
-	int x = rect != NULL ? rect->x : 0;
-	int y = rect != NULL ? rect->y : 0;
-	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
-	IDirectFBSurface* surface = priv->primary;
 	int display_width  = ftk_display_width(thiz);
 	int display_height = ftk_display_height(thiz);
-	int bitmap_width   = ftk_bitmap_width(bitmap);
-	int bitmap_height  = ftk_bitmap_height(bitmap);
-	int w = rect != NULL ? rect->width : bitmap_width;
-	int h = rect != NULL ? rect->height : bitmap_height;
-
-	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
-	FtkColor* dst = data;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(x < bitmap_width, RET_FAIL);
-	return_val_if_fail(y < bitmap_height, RET_FAIL);
-	return_val_if_fail(xoffset < display_width, RET_FAIL);
-	return_val_if_fail(yoffset < display_height, RET_FAIL);
-
-	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
-	w = (xoffset + w) < display_width  ? w : display_width  - xoffset;
-	h = (y + h) < bitmap_height ? h : bitmap_height - y;
-	h = (yoffset + h) < display_height ? h : display_height - yoffset;
+	IDirectFBSurface* surface = priv->primary;
 	
-	w += x;
-	h += y;
-
-	src += y * bitmap_width;
-	dst += yoffset * display_width;
-
-	for(i = y; i < h; i++)
-	{
-		for(j = x, k= xoffset; j < w; j++, k++)
-		{
-			FtkColor* pdst = dst+k;
-			FtkColor* psrc = src+j;
-			if(psrc->a == 0xff)
-			{
-				pdst->b = psrc->r;
-				pdst->g = psrc->g;
-				pdst->r = psrc->b;
-			}
-			else
-			{
-				FTK_ALPHA_1(psrc->r, pdst->b, psrc->a);
-				FTK_ALPHA_1(psrc->b, pdst->r, psrc->a);
-				FTK_ALPHA_1(psrc->g, pdst->g, psrc->a);
-			}
-		}
-		src += bitmap_width;
-		dst += display_width;
-	}
+	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
+	ret = ftk_bitmap_copy_to_data_argb(bitmap, rect, data, xoffset, yoffset, display_width, display_height);
 	surface->Unlock(surface);
 	surface->Flip(surface, NULL, 0);
 
-	return RET_OK;
+	return ret;
 }
 
 static int ftk_display_dfb_width(FtkDisplay* thiz)
@@ -129,38 +80,23 @@ static int ftk_display_dfb_height(FtkDisplay* thiz)
 
 static Ret ftk_display_dfb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
-	int ox = 0;
-	int oy = 0;
 	int pitch = 0;
 	void *data = NULL;
+	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
 	int w = ftk_display_width(thiz);
 	int h = ftk_display_height(thiz);
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
+
 	IDirectFBSurface* surface = priv->primary;
 	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
-	FtkColor* src = (FtkColor*)data;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(thiz != NULL && NULL != dst, RET_FAIL);
-
-	w = (x + bw) < w ? bw : w - x;
-	h = (y + bh) < h ? bh : h - y;
-
-	src += y * ftk_display_width(thiz) + x;
-	for(oy = 0; oy < h; oy++)
-	{
-		for(ox =0; ox < w; ox++)
-		{
-			dst[ox].a = 0xff;
-			dst[ox].r = src[ox].b;
-			dst[ox].g = src[ox].g;
-			dst[ox].b = src[ox].r;
-		}
-		src += ftk_display_width(thiz);
-		dst += ftk_bitmap_width(bitmap);
-	}
+	
+	rect.x = x;
+	rect.y = y;
+	rect.width = bw;
+	rect.height = bh;
+	ftk_bitmap_copy_from_data_argb(bitmap, data, w, h, &rect);
 
 	surface->Unlock(surface);
 
