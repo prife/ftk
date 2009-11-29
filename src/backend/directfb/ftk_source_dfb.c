@@ -196,6 +196,7 @@ static Ret ftk_source_dfb_dispatch_input_event(FtkSource* thiz, DFBInputEvent* e
 		ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &priv->event);
 		priv->event.type = FTK_EVT_NOP;
 	}
+
 	return RET_OK;
 }
 static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
@@ -204,7 +205,7 @@ static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
 	int nr = 0;
 	DFBEvent   buff[10];
 	DECL_PRIV(thiz, priv);
-	DFBEvent  *event = NULL;
+	DFBEvent* event = NULL;
 	int size =  read(priv->fd, buff, sizeof(buff));
 	return_val_if_fail(size > 0, RET_FAIL);
 
@@ -217,7 +218,7 @@ static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
 		{
 			case DFEC_INPUT:
 			{
-				ftk_source_dfb_dispatch_input_event(thiz, event);
+				ftk_source_dfb_dispatch_input_event(thiz, &(event->input));
 				break;
 			}
 			case DFEC_USER:
@@ -241,6 +242,11 @@ static void ftk_source_dfb_destroy(FtkSource* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 		close(priv->fd);
+		if(priv->event_buffer != NULL)
+		{
+			priv->event_buffer->Release(priv->event_buffer);
+		}
+		FTK_ZFREE(thiz, sizeof(FtkSource) + sizeof(PrivInfo));
 	}
 
 	return;

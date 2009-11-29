@@ -139,11 +139,6 @@ static int ftk_display_x11_height(FtkDisplay* thiz)
 	return priv->height;
 }
 
-static int ftk_display_x11_bits_per_pixel(FtkDisplay* thiz)
-{
-	return 2;
-}
-
 static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
 	int ox = 0;
@@ -226,7 +221,6 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 		thiz->snap     = ftk_display_x11_snap;
 		thiz->width	   = ftk_display_x11_width;
 		thiz->height   = ftk_display_x11_height;
-		thiz->bits_per_pixel = ftk_display_x11_bits_per_pixel;
 		thiz->destroy  = ftk_display_x11_destroy;
 	
 		priv->gc      = gc;

@@ -128,13 +128,6 @@ static int ftk_display_height(Ftkdisplay* thiz)
 	return r->height;
 }
 
-static int ftk_display_bitsPerPixel(Ftkdisplay* thiz)
-{
-	DECL_PRIV(thiz, priv);
-
-	return 16;
-}
-
 static Ret ftk_display_snap(Ftkdisplay* thiz, FtkBitmap** bitmap)
 {
 	DECL_PRIV(thiz, priv);
@@ -161,7 +154,6 @@ FtkDisplay* ftk_display_win32_create(void)
 		thiz->update   = ftk_display_win32_update;
 		thiz->width    = ftk_display_win32_width;
 		thiz->height   = ftk_display_win32_height;
-		thiz->bits_per_pixel = ftk_display_win32_bits_per_pixel;
 		thiz->snap     = ftk_display_win32_snap;
 		thiz->destroy = ftk_display_win32_destroy;
 

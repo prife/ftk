@@ -42,6 +42,7 @@ typedef struct _PrivInfo
 	int top;
 	int caplock;
 	int shift_down;
+	int dieing;
 	FtkMainLoop* main_loop;
 	FtkSource*   primary_source;
 	FtkWidget*   grab_widget;
@@ -177,7 +178,12 @@ static Ret  ftk_wnd_manager_default_remove(FtkWndManager* thiz, FtkWidget* windo
 {
 	int i = 0;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && window != NULL && priv->top > 0, RET_FAIL);
+	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
+	if(priv->dieing && priv->top <= 0)
+	{
+		return RET_OK;
+	}
+	return_val_if_fail(priv->top > 0, RET_FAIL);
 
 	if(priv->grab_widget == window)
 	{
@@ -210,8 +216,11 @@ static Ret  ftk_wnd_manager_default_remove(FtkWndManager* thiz, FtkWidget* windo
 		}
 	}
 
-	ftk_wnd_manager_update(thiz);
-	ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+	if(!priv->dieing)
+	{
+		ftk_wnd_manager_update(thiz);
+		ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+	}
 
 	return RET_OK;
 }
@@ -547,6 +556,7 @@ static void ftk_wnd_manager_default_destroy(FtkWndManager* thiz)
 	if(thiz != NULL)
 	{
 		int nr = priv->top;
+		priv->dieing = 1;
 		for(i = 0; i < nr; i++)
 		{
 			FtkWidget* win = priv->windows[0];

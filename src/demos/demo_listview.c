@@ -56,7 +56,7 @@ Ret on_item_clicked(void* ctx, void* list)
 	FtkListModel* model = ftk_list_view_get_model(list);
 	int i = ftk_list_view_get_selected(list);
 
-	ftk_list_model_get_data(model, i, &info);
+	ftk_list_model_get_data(model, i, (void**)&info);
 	if(info != NULL)
 	{
 		info->state = !info->state;

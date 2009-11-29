@@ -174,13 +174,6 @@ static int ftk_display_fb_height(FtkDisplay* thiz)
 	return priv->fb.vi.yres;
 }
 
-static int ftk_display_fb_bits_per_pixel(FtkDisplay* thiz)
-{
-//	DECL_PRIV(thiz, priv);
-
-	return 2;
-}
-
 static Ret ftk_display_fb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
 	int ox = 0;
@@ -239,7 +232,6 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			thiz->update   = ftk_display_fb_update;
 			thiz->width    = ftk_display_fb_width;
 			thiz->height   = ftk_display_fb_height;
-			thiz->bits_per_pixel = ftk_display_fb_bits_per_pixel;
 			thiz->snap     = ftk_display_fb_snap;
 			thiz->destroy = ftk_display_fb_destroy;
 		}

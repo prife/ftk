@@ -14,22 +14,6 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
-static Ret timer(void* user_data)
-{
-	int x = 0;
-	int y = 0;
-	FtkSprite* sprite = user_data;
-	FtkDisplay* display = ftk_default_display();
-
-	x = ftk_sprite_get_x(sprite);
-	y = ftk_sprite_get_y(sprite);
-
-	y += 5;
-	ftk_sprite_move(sprite, x, y);
-
-	return x < ftk_display_width(display) && y < ftk_display_height(display) ? RET_OK : RET_REMOVE;
-}
-
 Ret on_move(void* ctx, void* obj)
 {
 	ftk_logd("%s: %d %d\n", __func__, ftk_sprite_get_x(obj), ftk_sprite_get_y(obj));

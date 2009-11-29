@@ -42,7 +42,7 @@ if FTK_BACKEND_DFB
 libftk_la_SOURCES+=$(LINUX_DFB)
 endif
 
-INCLUDES=-Wall -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
+INCLUDES=-Wall -Werror -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99
 
 ftkdir=$(includedir)/ftk

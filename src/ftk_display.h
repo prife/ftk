@@ -52,7 +52,6 @@ struct _FtkDisplay
 	FtkDisplayUpdate       update;
 	FtkDisplayWidth        width;
 	FtkDisplayHeight       height;
-	FtkDisplayBitsPerPixel bits_per_pixel;
 	FtkDisplaySnap         snap;
 	FtkDisplayDestroy      destroy;
 
@@ -97,13 +96,6 @@ static inline int ftk_display_height(FtkDisplay* thiz)
 	return_val_if_fail(thiz != NULL && thiz->height != NULL, RET_FAIL);
 
 	return thiz->height(thiz);
-}
-
-static inline int ftk_display_bits_per_pixel(FtkDisplay* thiz)
-{
-	return_val_if_fail(thiz != NULL && thiz->bits_per_pixel != NULL, RET_FAIL);
-
-	return thiz->bits_per_pixel(thiz);
 }
 
 static inline Ret ftk_display_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
