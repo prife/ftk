@@ -95,69 +95,12 @@ typedef struct _PrivInfo
 
 static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int x = rect->x;
-	int y = rect->y;
-	int w = rect->width;
-	int h = rect->height;
 	DECL_PRIV(thiz, priv);
 	int display_width  = fb_width(&priv->fb);
 	int display_height = fb_height(&priv->fb);
-	int bitmap_width   = ftk_bitmap_width(bitmap);
-	int bitmap_height  = ftk_bitmap_height(bitmap);
 
-	ftk_logv("%s: ox=%d oy=%d x=%d y=%d w=%d h=%d\n", __func__, xoffset, yoffset, x, y, w, h);
-	return_val_if_fail(bitmap != NULL, RET_FAIL);
-	return_val_if_fail(x < bitmap_width, RET_FAIL);
-	return_val_if_fail(y < bitmap_height, RET_FAIL);
-	return_val_if_fail(xoffset < display_width, RET_FAIL);
-	return_val_if_fail(yoffset < display_height, RET_FAIL);
-
-	FtkColor dcolor;
-	FtkColor* pdst = NULL;
-	FtkColor* psrc = NULL;
-	unsigned short pixel = 0;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-	unsigned short* dst = priv->fb.bits;
-	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
-	w = (xoffset + w) < display_width  ? w : display_width  - xoffset;
-	h = (y + h) < bitmap_height ? h : bitmap_height - y;
-	h = (yoffset + h) < display_height ? h : display_height - yoffset;
-	
-	w += x;
-	h += y;
-
-	src += y * bitmap_width;
-	dst += yoffset * display_width;
-
-	for(i = y; i < h; i++)
-	{
-		for(j = x, k = xoffset; j < w; j++, k++)
-		{
-			dcolor.r = (dst[k] & 0xf800) >> 8;
-			dcolor.g = (dst[k] & 0x07e0) >> 3;
-			dcolor.b = (dst[k] & 0x1f) << 3;
-			psrc = src + j;
-			pdst = &dcolor;
-
-			if(psrc->a == 0xff)
-			{
-				*pdst = *psrc;
-			}
-			else
-			{
-				FTK_ALPHA(psrc, pdst, psrc->a);
-			}
-			pixel = ((dcolor.r >> 3) << 11) | ((dcolor.g >> 2) << 5) | (dcolor.b >> 3);
-			dst[k] = pixel;
-		}
-		src += bitmap_width;
-		dst += display_width;
-	}
-
-	return RET_OK;
+	return ftk_bitmap_copy_to_data_rgb565(bitmap, rect, 
+		priv->fb.bits, xoffset, yoffset, display_width, display_height); 
 }
 
 static int ftk_display_fb_width(FtkDisplay* thiz)
@@ -176,36 +119,19 @@ static int ftk_display_fb_height(FtkDisplay* thiz)
 
 static Ret ftk_display_fb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
-	int ox = 0;
-	int oy = 0;
+	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
 	int w = ftk_display_width(thiz);
 	int h = ftk_display_height(thiz);
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
-	unsigned short* src = priv->fb.bits;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
+	
+	rect.x = x;
+	rect.y = y;
+	rect.width = bw;
+	rect.height = bh;
 
-	return_val_if_fail(thiz != NULL && NULL != dst, RET_FAIL);
-
-	w = (x + bw) < w ? bw : w - x;
-	h = (y + bh) < h ? bh : h - y;
-
-	src += y * ftk_display_width(thiz) + x;
-	for(oy = 0; oy < h; oy++)
-	{
-		for(ox =0; ox < w; ox++)
-		{
-			dst[ox].a = 0xff;
-			dst[ox].r = (src[ox] >> 8) & 0xf1;
-			dst[ox].g = (src[ox] >> 3) & 0xf6;
-			dst[ox].b = (src[ox] << 3) & 0xff;
-		}
-		src += ftk_display_width(thiz);
-		dst += ftk_bitmap_width(bitmap);
-	}
-
-	return RET_OK;
+	return ftk_bitmap_copy_from_data_rgb565(bitmap, priv->fb.bits, w, h, &rect);
 }
 
 static void ftk_display_fb_destroy(FtkDisplay* thiz)

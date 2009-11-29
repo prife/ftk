@@ -93,7 +93,6 @@ static int ftk_display_x11_height(FtkDisplay* thiz)
 
 static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
-#if 1
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
 	int w = ftk_display_width(thiz);
@@ -107,37 +106,6 @@ static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	rect.height = bh;
 
 	return ftk_bitmap_copy_from_data_argb(bitmap, priv->bits, w, h, &rect);
-#else
-	int ox = 0;
-	int oy = 0;
-	DECL_PRIV(thiz, priv);
-	int w = ftk_display_width(thiz);
-	int h = ftk_display_height(thiz);
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	FtkColor* src = (FtkColor*)priv->bits;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(thiz != NULL && NULL != dst, RET_FAIL);
-
-	w = (x + bw) < w ? bw : w - x;
-	h = (y + bh) < h ? bh : h - y;
-
-	src += y * ftk_display_width(thiz) + x;
-	for(oy = 0; oy < h; oy++)
-	{
-		for(ox =0; ox < w; ox++)
-		{
-			dst[ox].a = 0xff;
-			dst[ox].r = src[ox].b;
-			dst[ox].g = src[ox].g;
-			dst[ox].b = src[ox].r;
-		}
-		src += ftk_display_width(thiz);
-		dst += ftk_bitmap_width(bitmap);
-	}
-#endif
-	return RET_OK;
 }
 
 static void ftk_display_x11_destroy(FtkDisplay* thiz)

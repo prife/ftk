@@ -221,3 +221,119 @@ Ret ftk_bitmap_copy_to_data_argb(FtkBitmap* bitmap, FtkRect* rect, void* data, i
 	return RET_OK;
 }
 
+Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data, 
+	size_t dw, size_t dh, FtkRect* rect)
+{
+	int x  = 0;
+	int y  = 0;
+	int w  = 0;
+	int h  = 0;
+	int ox = 0;
+	int oy = 0;
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	unsigned short* src = data;
+	FtkColor* dst = ftk_bitmap_bits(bitmap);
+
+	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);
+	
+	x = rect != NULL ? rect->x : 0;
+	y = rect != NULL ? rect->y : 0;
+	x = x < 0 ? 0 : x;
+	y = y < 0 ? 0 : y;
+	return_val_if_fail(x < dw && y < dh, RET_FAIL);
+
+	w = rect != NULL ? rect->width  : bw;
+	h = rect != NULL ? rect->height : bh;
+
+	/*width/height must less than bitmap's width/height*/
+	w = w < bw ? w : bw;
+	h = w < bh ? h : bh;
+	
+	/*width/height must less than data's width/height*/
+	w = (x + w) < dw ? w : dw - x;
+	h = (y + h) < dh ? h : dh - y;
+
+	src += y * dw + x;
+	for(oy = 0; oy < h; oy++)
+	{
+		for(ox = 0; ox < w; ox++)
+		{
+			dst[ox].a = 0xff;
+			dst[ox].r = (src[ox] >> 8) & 0xf1;
+			dst[ox].g = (src[ox] >> 3) & 0xf6;
+			dst[ox].b = (src[ox] << 3) & 0xff;
+		}
+		src += dw; 
+		dst += bw;
+	}
+
+	return RET_OK;
+}
+
+Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
+{
+	int i = 0;
+	int j = 0;
+	int k = 0;
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	int x = rect != NULL ? rect->x : 0;
+	int y = rect != NULL ? rect->y : 0;
+	int w = rect != NULL ? rect->width : bw;
+	int h = rect != NULL ? rect->height : bh;
+	unsigned short* dst = data;
+	FtkColor* src = ftk_bitmap_bits(bitmap);
+
+	return_val_if_fail(ox < dw, RET_FAIL);
+	return_val_if_fail(oy < dh, RET_FAIL);
+	return_val_if_fail(x < bw, RET_FAIL);
+	return_val_if_fail(y < bh, RET_FAIL);
+	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
+
+	x = x < 0 ? 0 : x;
+	y = y < 0 ? 0 : y;
+	
+	w = (x + w) < bw ? w : bw - x;
+	h = (y + h) < bh ? h : bh - y;
+	w = (ox + w) < dw ? w : dw - ox;
+	h = (oy + h) < dh ? h : dh - oy;
+	
+	w += x;
+	h += y;
+
+	src += y * bw;
+	dst += oy * dw;
+
+	FtkColor dcolor;
+	FtkColor* pdst = NULL;
+	FtkColor* psrc = NULL;
+	unsigned short pixel = 0;
+	for(i = y; i < h; i++)
+	{
+		for(j = x, k = ox; j < w; j++, k++)
+		{
+			dcolor.r = (dst[k] & 0xf800) >> 8;
+			dcolor.g = (dst[k] & 0x07e0) >> 3;
+			dcolor.b = (dst[k] & 0x1f) << 3;
+			psrc = src + j;
+			pdst = &dcolor;
+
+			if(psrc->a == 0xff)
+			{
+				*pdst = *psrc;
+			}
+			else
+			{
+				FTK_ALPHA(psrc, pdst, psrc->a);
+			}
+			pixel = ((dcolor.r >> 3) << 11) | ((dcolor.g >> 2) << 5) | (dcolor.b >> 3);
+			dst[k] = pixel;
+		}
+		src += bw;
+		dst += dw;
+	}
+
+	return RET_OK;
+}
+
