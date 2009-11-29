@@ -41,3 +41,4 @@ ftkicons_DATA=\
 	$(srcdir)/status-bg.png\
 	$(srcdir)/wait_box.png
 
+EXTRA_DIST=$(ftkicons_DATA)
