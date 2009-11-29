@@ -163,32 +163,20 @@ static void ftk_display_dfb_destroy(FtkDisplay* thiz)
 
 static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 {	
-	int fd = 0;
 	DECL_PRIV(thiz, priv);
 	int screen_height = 0;
 	int screen_width = 0;
 	DFBSurfaceDescription  sdsc;
 	IDirectFBSurface* primary = NULL;
-	IDirectFBEventBuffer* events = NULL;
 	IDirectFBDisplayLayer  *layer = NULL;
 	
-	DFBCHECK(dfb->CreateInputEventBuffer( dfb, DICAPS_ALL, DFB_FALSE, &events ));
-	events->CreateFileDescriptor(events, &fd);
-	if(fd > 0)
-	{
-		FtkSource* source = ftk_source_dfb_create(dfb, fd);
-		ftk_sources_manager_add(ftk_default_sources_manager(), source);
-		ftk_loge("%s: create input source failed.\n", __func__);
-	}
-
 	dfb->SetCooperativeLevel( dfb, DFSCL_FULLSCREEN );
-
 	DFBCHECK(dfb->GetDisplayLayer( dfb, DLID_PRIMARY, &layer ));
 	layer->EnableCursor ( layer, 1 );
 
 	sdsc.flags = DSDESC_CAPS;
-	sdsc.caps  = DSCAPS_PRIMARY | DSCAPS_DOUBLE;
-	DFBCHECK(dfb->CreateSurface( dfb, &sdsc, &primary ));
+	sdsc.caps  = DSCAPS_PRIMARY;// | DSCAPS_DOUBLE;
+	DFBCHECK(dfb->CreateSurface( dfb, &sdsc, &primary));
 
 	primary->GetSize( primary, &screen_width, &screen_height );
 	priv->primary = primary;

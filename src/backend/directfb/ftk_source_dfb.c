@@ -30,6 +30,7 @@
  */
 
 #include "ftk_key.h"
+#include "ftk_log.h"
 #include "ftk_display.h"
 #include "ftk_event.h"
 #include "ftk_globals.h"
@@ -153,13 +154,16 @@ static Ret ftk_source_dfb_dispatch_input_event(FtkSource* thiz, DFBInputEvent* e
 		{
 			priv->event.u.key.code = ftk_source_dfb_keymap(thiz, event->key_code);
 			priv->event.type = event->type == DIET_KEYPRESS ? FTK_EVT_KEY_DOWN : FTK_EVT_KEY_UP;
-		
-			ftk_logd("key_code=%d -> %d\n", event->key_code, priv->event.u.key.code);
-			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &priv->event);
 			break;
 		}
 		case DIET_BUTTONPRESS:
 		case DIET_BUTTONRELEASE:
+		{
+			priv->event.type = event->type == DIET_BUTTONPRESS ? FTK_EVT_MOUSE_DOWN : FTK_EVT_MOUSE_UP;
+			priv->event.u.mouse.x = priv->x;
+			priv->event.u.mouse.y = priv->y;
+			break;
+		}
 		case DIET_AXISMOTION:
 		{
 			switch(event->axis)
@@ -179,8 +183,18 @@ static Ret ftk_source_dfb_dispatch_input_event(FtkSource* thiz, DFBInputEvent* e
 					break;
 				}
 			}
+			priv->event.type = FTK_EVT_MOUSE_MOVE;
+			priv->event.u.mouse.x = priv->x;
+			priv->event.u.mouse.y = priv->y;
 			break;
 		}
+		default:break;
+	}
+
+	if(priv->event.type != FTK_EVT_NOP)
+	{
+		ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &priv->event);
+		priv->event.type = FTK_EVT_NOP;
 	}
 	return RET_OK;
 }
@@ -188,9 +202,9 @@ static Ret  ftk_source_dfb_dispatch(FtkSource* thiz)
 {
 	int i = 0;
 	int nr = 0;
-	DFBEvent  *event;
+	DFBEvent   buff[10];
 	DECL_PRIV(thiz, priv);
-	DFBEvent   buff[10] = {0};
+	DFBEvent  *event = NULL;
 	int size =  read(priv->fd, buff, sizeof(buff));
 	return_val_if_fail(size > 0, RET_FAIL);
 
@@ -232,19 +246,28 @@ static void ftk_source_dfb_destroy(FtkSource* thiz)
 	return;
 }
 
-FtkSource* ftk_source_dfb_create(IDirectFB* dfb, int fd)
+FtkSource* ftk_source_dfb_create(IDirectFB* dfb)
 {
 	FtkSource* thiz = FTK_ZALLOC(sizeof(FtkSource)+sizeof(PrivInfo));
 
 	if(thiz != NULL)
 	{
+		int fd = 0;
 		DECL_PRIV(thiz, priv);
+		IDirectFBEventBuffer* event_buffer = NULL;
+
 		thiz->get_fd   =  ftk_source_dfb_get_fd;
 		thiz->check    = ftk_source_dfb_check;
 		thiz->dispatch = ftk_source_dfb_dispatch;
 		thiz->destroy  = ftk_source_dfb_destroy;
 
+		dfb->CreateInputEventBuffer( dfb, DICAPS_ALL, DFB_FALSE, &event_buffer );
+		if(event_buffer != NULL)
+		{
+			event_buffer->CreateFileDescriptor(event_buffer, &fd);
+		}
 		priv->fd = fd;
+		priv->event_buffer = event_buffer;
 	}
 
 	return thiz;
