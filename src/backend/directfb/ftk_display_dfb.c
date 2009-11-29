@@ -184,6 +184,8 @@ static void ftk_display_dfb_destroy(FtkDisplay* thiz)
 			priv->dfb->Release( priv->dfb );
 			priv->dfb = NULL;
 		}
+
+		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
 	}
 
 	return;
