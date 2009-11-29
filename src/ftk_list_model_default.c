@@ -79,23 +79,6 @@ static void ftk_list_model_default_destroy(FtkListModel* thiz)
 	return;
 }
 
-FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkListItemDestroy destroy)
-{
-	FtkListModel* thiz = FTK_ZALLOC(sizeof(FtkListModel) + sizeof(PrivInfo));
-	if(thiz != NULL)
-	{
-		DECL_PRIV(thiz, priv);
-		thiz->get_total = ftk_list_model_default_get_total;
-		thiz->get_data  = ftk_list_model_default_get_data;
-		thiz->destroy   = ftk_list_model_default_destroy;
-
-		priv->alloc_nr = init_nr;
-		priv->item_destroy = destroy;
-	}
-
-	return thiz;
-}
-
 static Ret ftk_list_model_default_extend(FtkListModel* thiz, size_t delta)
 {
 	int alloc_nr = 0;
@@ -118,9 +101,10 @@ static Ret ftk_list_model_default_extend(FtkListModel* thiz, size_t delta)
 	return RET_OK;
 }
 
-Ret ftk_list_model_default_add(FtkListModel* thiz, FtkListItemInfo* info)
+Ret ftk_list_model_default_add(FtkListModel* thiz, void* item)
 {
 	DECL_PRIV(thiz, priv);
+	FtkListItemInfo* info = item;
 	return_val_if_fail(thiz != NULL && info != NULL, RET_FAIL);
 	return_val_if_fail(ftk_list_model_default_extend(thiz, 1) == RET_OK, RET_FAIL);
 
@@ -147,5 +131,24 @@ Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index)
 	priv->nr--;
 
 	return RET_OK;
+}
+
+FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkListItemDestroy destroy)
+{
+	FtkListModel* thiz = FTK_ZALLOC(sizeof(FtkListModel) + sizeof(PrivInfo));
+	if(thiz != NULL)
+	{
+		DECL_PRIV(thiz, priv);
+		thiz->get_total = ftk_list_model_default_get_total;
+		thiz->get_data  = ftk_list_model_default_get_data;
+		thiz->add       = ftk_list_model_default_add;
+		thiz->remove    = ftk_list_model_default_remove;
+		thiz->destroy   = ftk_list_model_default_destroy;
+
+		priv->alloc_nr = init_nr;
+		priv->item_destroy = destroy;
+	}
+
+	return thiz;
 }
 

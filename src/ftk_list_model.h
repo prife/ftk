@@ -40,16 +40,66 @@ typedef struct _FtkListModel FtkListModel;
 typedef int  (*FtkListModelGetTotal)(FtkListModel* thiz);
 typedef Ret  (*FtkListModelGetData)(FtkListModel* thiz, size_t index, void** ret);
 typedef void (*FtkListModelDestroy)(FtkListModel* thiz);
+typedef Ret  (*FtkListModelAdd)(FtkListModel* thiz, void* item);
+typedef Ret  (*FtkListModelRemove)(FtkListModel* thiz, size_t index);
 
 struct _FtkListModel
 {
 	FtkListModelGetTotal get_total;
 	FtkListModelGetData  get_data;
+	FtkListModelAdd      add;
+	FtkListModelRemove   remove;
 	FtkListModelDestroy  destroy;
 
 	int ref;
+	void* listener_ctx;
+	FtkListener listener;
 	char priv[1];
 };
+
+static inline Ret ftk_list_model_set_changed_listener(FtkListModel* thiz, FtkListener listener, void* ctx)
+{
+	if(thiz != NULL)
+	{
+		thiz->listener = listener;
+		thiz->listener_ctx = ctx;
+	}
+
+	return RET_OK;
+}
+
+static inline Ret ftk_list_model_notify(FtkListModel* thiz)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	return FTK_CALL_LISTENER(thiz->listener, thiz->listener_ctx, thiz);
+}
+
+static inline Ret ftk_list_model_add(FtkListModel* thiz, void* item)
+{
+	Ret ret = RET_FAIL;
+	return_val_if_fail(thiz != NULL && thiz->add != NULL, RET_FAIL);
+
+	if((ret = thiz->add(thiz, item)) == RET_OK)
+	{
+		ftk_list_model_notify(thiz);
+	}
+
+	return ret;
+}
+
+static inline Ret ftk_list_model_remove(FtkListModel* thiz, size_t index)
+{
+	Ret ret = RET_FAIL;
+	return_val_if_fail(thiz != NULL && thiz->remove != NULL, RET_FAIL);
+
+	if((ret = thiz->remove(thiz, index)) == RET_OK)
+	{
+		ftk_list_model_notify(thiz);
+	}
+
+	return ret;
+}
 
 static inline int ftk_list_model_get_total(FtkListModel* thiz)
 {

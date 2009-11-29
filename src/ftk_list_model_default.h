@@ -56,8 +56,6 @@ typedef struct _FtkListItemInfo
 typedef void (*FtkListItemDestroy)(FtkListItemInfo* info);
 
 FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkListItemDestroy destroy);
-Ret ftk_list_model_default_add(FtkListModel* thiz, FtkListItemInfo* info);
-Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index);
 
 #endif/*FTK_LIST_MODEL_DEFAULT_H*/
 

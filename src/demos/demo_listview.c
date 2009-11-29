@@ -31,7 +31,7 @@ static Ret button_more_clicked(void* ctx, void* obj)
 		info.left_icon = left_icon;
 		info.right_icon = right_icon;
 		info.type = g_index%4;
-		ftk_list_model_default_add(model, &info);
+		ftk_list_model_add(model, &info);
 	}
 
 	return RET_OK;
@@ -102,7 +102,7 @@ int main(int argc, char* argv[])
 		info.left_icon = left_icon;
 		info.right_icon = right_icon;
 		info.type = g_index%4;
-		ftk_list_model_default_add(model, &info);
+		ftk_list_model_add(model, &info);
 	}
 
 	ftk_list_view_init(list, model, render, 40);

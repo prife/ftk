@@ -346,6 +346,19 @@ static Ret ftk_list_view_on_scroll(FtkWidget* thiz, void* obj)
 	return RET_OK;
 }
 
+static Ret ftk_list_view_on_model_changed(void* ctx, void* obj)
+{
+	(void)obj;
+	FtkWidget* thiz = ctx;
+	
+	if(ftk_widget_is_visible(thiz))
+	{
+		ftk_widget_paint_self(thiz);
+	}
+
+	return RET_OK;
+}
+
 Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* render, int item_height)
 {
 	int width = 0;
@@ -358,7 +371,7 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	priv->render      = render;
 	priv->item_height = item_height;
 	ftk_list_render_init(render, model);
-
+	ftk_list_model_set_changed_listener(model, ftk_list_view_on_model_changed, thiz); 
 	width  = ftk_widget_width(thiz);
 	height = ftk_widget_height(thiz);
 
