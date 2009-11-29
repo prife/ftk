@@ -74,7 +74,7 @@ ftk_HEADERS=\
 	ftk_icon_cache.h          ftk_util.h\
 	ftk_image_bmp_decoder.h   ftk_wait_box.h\
 	ftk_image_decoder.h       ftk_widget.h\
-	ftk_image.h               ftk_win32.h\
+	ftk_image.h               \
 	ftk_image_jpeg_decoder.h  ftk_window.h\
 	ftk_image_png_decoder.h   ftk_wnd_manager_default.h\
 	ftk_key.h                 ftk_wnd_manager.h\
