@@ -1,2 +1,2 @@
 ftkdatadir=$(datadir)/ftk/data
-ftkdata_DATA=unicode.fnt
+ftkdata_DATA=$(srcdir)/unicode.fnt

@@ -39,10 +39,7 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	png_test$(EXEEXT) log_test$(EXEEXT) util_test$(EXEEXT) \
 	sources_manager_test$(EXEEXT) text_buffer_test$(EXEEXT) \
 	icon_cache_test$(EXEEXT) xml_parser_test$(EXEEXT) \
-	xul_test$(EXEEXT) list_model_default_test$(EXEEXT) \
-	$(am__EXEEXT_1)
-@FTK_BACKEND_FB_TRUE@am__append_1 = -I$(abs_top_srcdir)/src/backend/fb
-@FTK_BACKEND_FB_TRUE@am__append_2 = display_fb_test input_test
+	xul_test$(EXEEXT) list_model_default_test$(EXEEXT)
 subdir = src/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -52,8 +49,6 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-@FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
-@FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -73,14 +68,6 @@ canvas_test_LDADD = $(LDADD)
 canvas_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(canvas_test_LDFLAGS) $(LDFLAGS) -o $@
-am__display_fb_test_SOURCES_DIST = display_fb_test.c
-@FTK_BACKEND_FB_TRUE@am_display_fb_test_OBJECTS =  \
-@FTK_BACKEND_FB_TRUE@	display_fb_test.$(OBJEXT)
-display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
-display_fb_test_LDADD = $(LDADD)
-display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(display_fb_test_LDFLAGS) $(LDFLAGS) -o $@
 am_font_test_OBJECTS = font_test.$(OBJEXT)
 font_test_OBJECTS = $(am_font_test_OBJECTS)
 font_test_LDADD = $(LDADD)
@@ -99,13 +86,6 @@ icon_cache_test_LDADD = $(LDADD)
 icon_cache_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(icon_cache_test_LDFLAGS) $(LDFLAGS) -o $@
-am__input_test_SOURCES_DIST = input_test.c
-@FTK_BACKEND_FB_TRUE@am_input_test_OBJECTS = input_test.$(OBJEXT)
-input_test_OBJECTS = $(am_input_test_OBJECTS)
-input_test_LDADD = $(LDADD)
-input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(input_test_LDFLAGS) $(LDFLAGS) -o $@
 am_label_test_OBJECTS = label_test.$(OBJEXT)
 label_test_OBJECTS = $(am_label_test_OBJECTS)
 label_test_LDADD = $(LDADD)
@@ -194,9 +174,8 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(display_fb_test_SOURCES) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(input_test_SOURCES) \
+	$(canvas_test_SOURCES) $(font_test_SOURCES) \
+	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
 	$(label_test_SOURCES) $(list_model_default_test_SOURCES) \
 	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
 	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
@@ -204,9 +183,8 @@ SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
 	$(xul_test_SOURCES)
 DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(am__input_test_SOURCES_DIST) \
+	$(canvas_test_SOURCES) $(font_test_SOURCES) \
+	$(ftk_test_SOURCES) $(icon_cache_test_SOURCES) \
 	$(label_test_SOURCES) $(list_model_default_test_SOURCES) \
 	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
 	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
@@ -325,16 +303,16 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-INCLUDES = -Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" \
-	-DDATA_DIR="\"$(datadir)/ftk\"" -DLINUX \
-	-I$(abs_top_srcdir)/src \
-	-DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\"" \
-	$(am__append_1)
-MYLDFLAGS = $(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
-@FTK_BACKEND_FB_TRUE@display_fb_test_SOURCES = display_fb_test.c
-@FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)
-@FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
-@FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
+
+#if FTK_BACKEND_FB
+#INCLUDES=$(INCLUDES)
+#INCLUDES+=-I$(abs_top_srcdir)/src/backend/fb
+#noinst_PROGRAMS +=display_fb_test input_test
+#display_fb_test_SOURCES=display_fb_test.c
+#display_fb_test_LDFLAGS=$(MYLDFLAGS)
+#input_test_SOURCES=input_test.c
+#input_test_LDFLAGS=$(MYLDFLAGS)
+#endif
 list_model_default_test_SOURCES = list_model_default_test.c
 list_model_default_test_LDFLAGS = $(MYLDFLAGS)
 xul_test_SOURCES = xul_test.c
@@ -371,6 +349,7 @@ main_loop_test_SOURCES = main_loop_test.c
 main_loop_test_LDFLAGS = $(MYLDFLAGS)
 primary_source_test_SOURCES = primary_source_test.c
 primary_source_test_LDFLAGS = $(MYLDFLAGS)
+EXTRA_DIST = test_util.c xml_builder_dump.h
 all: all-am
 
 .SUFFIXES:
@@ -420,9 +399,6 @@ bitmap_test$(EXEEXT): $(bitmap_test_OBJECTS) $(bitmap_test_DEPENDENCIES)
 canvas_test$(EXEEXT): $(canvas_test_OBJECTS) $(canvas_test_DEPENDENCIES) 
 	@rm -f canvas_test$(EXEEXT)
 	$(canvas_test_LINK) $(canvas_test_OBJECTS) $(canvas_test_LDADD) $(LIBS)
-display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
-	@rm -f display_fb_test$(EXEEXT)
-	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
 font_test$(EXEEXT): $(font_test_OBJECTS) $(font_test_DEPENDENCIES) 
 	@rm -f font_test$(EXEEXT)
 	$(font_test_LINK) $(font_test_OBJECTS) $(font_test_LDADD) $(LIBS)
@@ -432,9 +408,6 @@ ftk_test$(EXEEXT): $(ftk_test_OBJECTS) $(ftk_test_DEPENDENCIES)
 icon_cache_test$(EXEEXT): $(icon_cache_test_OBJECTS) $(icon_cache_test_DEPENDENCIES) 
 	@rm -f icon_cache_test$(EXEEXT)
 	$(icon_cache_test_LINK) $(icon_cache_test_OBJECTS) $(icon_cache_test_LDADD) $(LIBS)
-input_test$(EXEEXT): $(input_test_OBJECTS) $(input_test_DEPENDENCIES) 
-	@rm -f input_test$(EXEEXT)
-	$(input_test_LINK) $(input_test_OBJECTS) $(input_test_LDADD) $(LIBS)
 label_test$(EXEEXT): $(label_test_OBJECTS) $(label_test_DEPENDENCIES) 
 	@rm -f label_test$(EXEEXT)
 	$(label_test_LINK) $(label_test_OBJECTS) $(label_test_LDADD) $(LIBS)
@@ -481,11 +454,9 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitmap_factory_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitmap_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/canvas_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/display_fb_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icon_cache_test.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/input_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/label_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list_model_default_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log_test.Po@am__quote@
@@ -702,6 +673,7 @@ uninstall-am:
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
+include $(abs_top_srcdir)/src/rules.mk
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

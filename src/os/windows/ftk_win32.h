@@ -1,7 +1,7 @@
 /*
- * File: ftk_source_dfb.h    
+ * File: ftk_win32.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   source to handle directfb event.
+ * Brief:   win32 specific functions.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,17 +25,40 @@
 /*
  * History:
  * ================================================================
- * 2009-11-28 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-22 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_SOURCE_DFB_H
-#define FTK_SOURCE_DFB_H
 
-#include "ftk_event.h"
-#include "ftk_source.h"
-#include <directfb.h>
+#ifndef FTK_WIN32_H
+#define FTK_WIN32_H
 
-FtkSource* ftk_source_dfb_create(IDirectFB* dfb);
+#ifdef WIN32
+#include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <io.h>
+#include <windows.h>
+#define inline 
+#define __func__ __FILE__
+#define FTK_FONT "./unicode.fnt"
+#define DATA_DIR ""
+#define LOCAL_DATA_DIR ""
+#define usleep Sleep
+#define pipe(fds) _pipe(fds, 2, 0)
 
-#endif/*FTK_SOURCE_DFB_H*/
+struct timezone {
+	int tz_minuteswest;     /* minutes west of Greenwich */
+	int tz_dsttime;         /* type of DST correction */
+};
+
+char* ftk_strncpy(char *dest, const char *src, size_t n);
+char* ftk_strdup(const char *s);
+int   ftk_snprintf(char *str, size_t size, const char *format, ...);
+int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap);
+int   gettimeofday(struct timeval *tv, struct timezone *tz);
+
+#endif
+
+#endif/*FTK_WIN32_H*/
 

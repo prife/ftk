@@ -1,0 +1,1 @@
+SUBDIRS=ads  vs2005

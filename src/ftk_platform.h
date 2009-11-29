@@ -37,9 +37,17 @@
 #include <stdarg.h>
 #include <string.h>
 
+#ifdef LINUX
 #include "ftk_linux.h"
+#endif
+
+#ifdef WIN32
 #include "ftk_win32.h"
+#endif
+
+#ifdef ARM_ADS
 #include "ftk_ads.h"
+#endif
 
 #define FTK_ALLOC(s)       malloc(s)
 #define FTK_REALLOC(p, s)  realloc(p, s)

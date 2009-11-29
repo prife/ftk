@@ -1,7 +1,7 @@
 /*
- * File: ftk_source_dfb.h    
+ * File: ftk_source_win32.c
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   source to handle directfb event.
+ * Brief:   source to handle win32 event.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,17 +25,15 @@
 /*
  * History:
  * ================================================================
- * 2009-11-28 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-11-29 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_SOURCE_DFB_H
-#define FTK_SOURCE_DFB_H
 
-#include "ftk_event.h"
-#include "ftk_source.h"
-#include <directfb.h>
+#include "ftk_source_win32.h"
 
-FtkSource* ftk_source_dfb_create(IDirectFB* dfb);
+FtkSource* ftk_source_dfb_create(void)
+{
+	return NULL;
+}
 
-#endif/*FTK_SOURCE_DFB_H*/
 

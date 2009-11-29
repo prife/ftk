@@ -7,3 +7,7 @@ liblua_la_SOURCES= lapi.c lcode.c ldebug.c ldo.c ldump.c lfunc.c lgc.c llex.c lm
 
 liblua_la_CFLAGS=-DLUA_USE_LINUX 
 liblua_la_LDFLAGS=-ldl
+
+EXTRA_DIST=lapi.h     ldebug.h  lgc.h      lmem.h      lparser.h  ltable.h   lua.h      lvm.h\
+lauxlib.h  ldo.h     llex.h     lobject.h   lstate.h   ltm.h      lualib.h   lzio.h\
+lcode.h    lfunc.h   llimits.h  lopcodes.h  lstring.h  luaconf.h  lundump.h

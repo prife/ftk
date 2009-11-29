@@ -294,10 +294,6 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-INCLUDES = -Wall -Werror -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
-	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\""
-
-MYLDFLAGS = $(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
 demo_listview_SOURCES = demo_listview.c
 demo_listview_LDFLAGS = $(MYLDFLAGS)
 demo_transparent_SOURCES = demo_transparent.c
@@ -332,6 +328,7 @@ demo_menu_SOURCES = demo_menu.c
 demo_menu_LDFLAGS = $(MYLDFLAGS)
 demo_entry_SOURCES = demo_entry.c
 demo_entry_LDFLAGS = $(MYLDFLAGS)
+EXTRA_DIST = test_util.c
 all: all-am
 
 .SUFFIXES:
@@ -650,6 +647,7 @@ uninstall-am:
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
 	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
+include $(abs_top_srcdir)/src/rules.mk
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

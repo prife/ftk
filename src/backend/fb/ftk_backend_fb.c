@@ -1,3 +1,4 @@
+#include "ftk_log.h"
 #include "ftk_globals.h"
 #include "ftk_display_fb.h"
 #include "ftk_source_input.h"

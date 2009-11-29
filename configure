@@ -19637,7 +19637,24 @@ fi
 done
 
 
-VERSION=1.2.0
+
+# Check whether --with-backend was given.
+if test "${with_backend+set}" = set; then
+  withval=$with_backend;
+fi
+
+
+case "$with_backend" in
+	linux-x11*)
+		backend="x11"
+		CFLAGS="$CFLAGS -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM=\"\\\"$with_backend\\\"\"";
+		LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -lX11 -lXext";;
+	linux-vlcd*)
+		backend="fb"
+		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
+	linux-dfb*)
+		backend="dfb"
+		DFB_VERSION=1.2.0
 
 
 if test "x$ac_cv_env_PKG_CONFIG_set" != "xset"; then
@@ -19767,12 +19784,12 @@ if test -n "$DIRECTFB_CFLAGS"; then
     pkg_cv_DIRECTFB_CFLAGS="$DIRECTFB_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= \$VERSION\"") >&5
-  ($PKG_CONFIG --exists --print-errors "directfb >= $VERSION") 2>&5
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= \$DFB_VERSION\"") >&5
+  ($PKG_CONFIG --exists --print-errors "directfb >= $DFB_VERSION") 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-  pkg_cv_DIRECTFB_CFLAGS=`$PKG_CONFIG --cflags "directfb >= $VERSION" 2>/dev/null`
+  pkg_cv_DIRECTFB_CFLAGS=`$PKG_CONFIG --cflags "directfb >= $DFB_VERSION" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -19783,12 +19800,12 @@ if test -n "$DIRECTFB_LIBS"; then
     pkg_cv_DIRECTFB_LIBS="$DIRECTFB_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= \$VERSION\"") >&5
-  ($PKG_CONFIG --exists --print-errors "directfb >= $VERSION") 2>&5
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= \$DFB_VERSION\"") >&5
+  ($PKG_CONFIG --exists --print-errors "directfb >= $DFB_VERSION") 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-  pkg_cv_DIRECTFB_LIBS=`$PKG_CONFIG --libs "directfb >= $VERSION" 2>/dev/null`
+  pkg_cv_DIRECTFB_LIBS=`$PKG_CONFIG --libs "directfb >= $DFB_VERSION" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -19806,14 +19823,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "directfb >= $VERSION" 2>&1`
+	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors "directfb >= $DFB_VERSION" 2>&1`
         else
-	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --print-errors "directfb >= $VERSION" 2>&1`
+	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --print-errors "directfb >= $DFB_VERSION" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$DIRECTFB_PKG_ERRORS" >&5
 
-	{ { echo "$as_me:$LINENO: error: Package requirements (directfb >= $VERSION) were not met:
+	{ { echo "$as_me:$LINENO: error: Package requirements (directfb >= $DFB_VERSION) were not met:
 
 $DIRECTFB_PKG_ERRORS
 
@@ -19824,7 +19841,7 @@ Alternatively, you may set the environment variables DIRECTFB_CFLAGS
 and DIRECTFB_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.
 " >&5
-echo "$as_me: error: Package requirements (directfb >= $VERSION) were not met:
+echo "$as_me: error: Package requirements (directfb >= $DFB_VERSION) were not met:
 
 $DIRECTFB_PKG_ERRORS
 
@@ -19866,23 +19883,6 @@ echo "${ECHO_T}yes" >&6; }
 	:
 fi
 
-
-# Check whether --with-backend was given.
-if test "${with_backend+set}" = set; then
-  withval=$with_backend;
-fi
-
-
-case "$with_backend" in
-	linux-x11*)
-		backend="x11"
-		CFLAGS="$CFLAGS -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM=\"\\\"$with_backend\\\"\"";
-		LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -lX11 -lXext";;
-	linux-vlcd*)
-		backend="fb"
-		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
-	linux-dfb*)
-		backend="dfb"
 		CFLAGS="$CFLAGS -DUSE_LINUX_DFB $DIRECTFB_CFLAGS";
 		LDFLAGS="$LDFLAGS $DIRECTFB_LIBS";;
 	*)
@@ -21048,7 +21048,7 @@ fi
 done
 
 
-ac_config_files="$ac_config_files ftk.pc Makefile src/Makefile src/testdata/Makefile src/icons/Makefile src/data/Makefile src/demos/Makefile src/test/Makefile script_binding/Makefile script_binding/lua/Makefile script_binding/lua/lua/Makefile"
+ac_config_files="$ac_config_files ftk.pc Makefile src/Makefile src/testdata/Makefile src/icons/Makefile src/data/Makefile src/demos/Makefile src/test/Makefile src/backend/Makefile src/backend/directfb/Makefile src/backend/fb/Makefile src/backend/x11-emu/Makefile src/backend/win32/Makefile src/os/Makefile src/os/linux/Makefile src/os/windows/Makefile src/compiler/Makefile src/compiler/ads/Makefile src/compiler/vs2005/Makefile script_binding/Makefile script_binding/lua/Makefile script_binding/lua/lua/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -21665,6 +21665,17 @@ do
     "src/data/Makefile") CONFIG_FILES="$CONFIG_FILES src/data/Makefile" ;;
     "src/demos/Makefile") CONFIG_FILES="$CONFIG_FILES src/demos/Makefile" ;;
     "src/test/Makefile") CONFIG_FILES="$CONFIG_FILES src/test/Makefile" ;;
+    "src/backend/Makefile") CONFIG_FILES="$CONFIG_FILES src/backend/Makefile" ;;
+    "src/backend/directfb/Makefile") CONFIG_FILES="$CONFIG_FILES src/backend/directfb/Makefile" ;;
+    "src/backend/fb/Makefile") CONFIG_FILES="$CONFIG_FILES src/backend/fb/Makefile" ;;
+    "src/backend/x11-emu/Makefile") CONFIG_FILES="$CONFIG_FILES src/backend/x11-emu/Makefile" ;;
+    "src/backend/win32/Makefile") CONFIG_FILES="$CONFIG_FILES src/backend/win32/Makefile" ;;
+    "src/os/Makefile") CONFIG_FILES="$CONFIG_FILES src/os/Makefile" ;;
+    "src/os/linux/Makefile") CONFIG_FILES="$CONFIG_FILES src/os/linux/Makefile" ;;
+    "src/os/windows/Makefile") CONFIG_FILES="$CONFIG_FILES src/os/windows/Makefile" ;;
+    "src/compiler/Makefile") CONFIG_FILES="$CONFIG_FILES src/compiler/Makefile" ;;
+    "src/compiler/ads/Makefile") CONFIG_FILES="$CONFIG_FILES src/compiler/ads/Makefile" ;;
+    "src/compiler/vs2005/Makefile") CONFIG_FILES="$CONFIG_FILES src/compiler/vs2005/Makefile" ;;
     "script_binding/Makefile") CONFIG_FILES="$CONFIG_FILES script_binding/Makefile" ;;
     "script_binding/lua/Makefile") CONFIG_FILES="$CONFIG_FILES script_binding/lua/Makefile" ;;
     "script_binding/lua/lua/Makefile") CONFIG_FILES="$CONFIG_FILES script_binding/lua/lua/Makefile" ;;

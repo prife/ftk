@@ -19,9 +19,6 @@ AC_CHECK_LIB([png], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
 
-VERSION=1.2.0
-PKG_CHECK_MODULES(DIRECTFB, [directfb >= $VERSION])
-
 AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb],
                     [use which display/input backend])])
 
@@ -35,6 +32,9 @@ case "$with_backend" in
 		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
 	linux-dfb*)
 		backend="dfb"
+		DFB_VERSION=1.2.0
+		PKG_CHECK_MODULES(DIRECTFB, [directfb >= $DFB_VERSION])
+
 		CFLAGS="$CFLAGS -DUSE_LINUX_DFB $DIRECTFB_CFLAGS";
 		LDFLAGS="$LDFLAGS $DIRECTFB_LIBS";;
 	*)
@@ -66,6 +66,17 @@ AC_CONFIG_FILES([ftk.pc
                 src/data/Makefile
                 src/demos/Makefile
                 src/test/Makefile
+                src/backend/Makefile
+                src/backend/directfb/Makefile
+                src/backend/fb/Makefile
+                src/backend/x11-emu/Makefile
+                src/backend/win32/Makefile
+                src/os/Makefile
+                src/os/linux/Makefile
+                src/os/windows/Makefile
+                src/compiler/Makefile
+                src/compiler/ads/Makefile
+                src/compiler/vs2005/Makefile
                 script_binding/Makefile
                 script_binding/lua/Makefile
                 script_binding/lua/lua/Makefile

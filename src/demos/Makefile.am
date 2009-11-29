@@ -1,6 +1,4 @@
-INCLUDES=-Wall -Werror -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
-	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\""
-MYLDFLAGS=$(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
+include $(abs_top_srcdir)/src/rules.mk
 
 noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
 	demo_menu demo_entry demo_expand demo_progress_bar demo_check_button demo_wait_box \
@@ -57,3 +55,4 @@ demo_menu_LDFLAGS=$(MYLDFLAGS)
 demo_entry_SOURCES=demo_entry.c
 demo_entry_LDFLAGS=$(MYLDFLAGS)
 
+EXTRA_DIST=test_util.c

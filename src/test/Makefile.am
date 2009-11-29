@@ -1,6 +1,4 @@
-INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"$(datadir)/ftk\"" \
-	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\""
-MYLDFLAGS=$(abs_top_builddir)/src/.libs/libftk.a -lpng -ljpeg
+include $(abs_top_srcdir)/src/rules.mk
 
 noinst_PROGRAMS=label_test widget_test \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
@@ -8,14 +6,15 @@ noinst_PROGRAMS=label_test widget_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test
 
-if FTK_BACKEND_FB
-INCLUDES+=-I$(abs_top_srcdir)/src/backend/fb
-noinst_PROGRAMS +=display_fb_test input_test
-display_fb_test_SOURCES=display_fb_test.c
-display_fb_test_LDFLAGS=$(MYLDFLAGS)
-input_test_SOURCES=input_test.c
-input_test_LDFLAGS=$(MYLDFLAGS)
-endif
+#if FTK_BACKEND_FB
+#INCLUDES=$(INCLUDES)
+#INCLUDES+=-I$(abs_top_srcdir)/src/backend/fb
+#noinst_PROGRAMS +=display_fb_test input_test
+#display_fb_test_SOURCES=display_fb_test.c
+#display_fb_test_LDFLAGS=$(MYLDFLAGS)
+#input_test_SOURCES=input_test.c
+#input_test_LDFLAGS=$(MYLDFLAGS)
+#endif
 
 list_model_default_test_SOURCES=list_model_default_test.c
 list_model_default_test_LDFLAGS=$(MYLDFLAGS)
@@ -71,3 +70,4 @@ main_loop_test_LDFLAGS=$(MYLDFLAGS)
 primary_source_test_SOURCES=primary_source_test.c
 primary_source_test_LDFLAGS=$(MYLDFLAGS)
 
+EXTRA_DIST=test_util.c xml_builder_dump.h
