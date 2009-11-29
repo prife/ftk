@@ -55,4 +55,4 @@ demo_menu_LDFLAGS=$(MYLDFLAGS)
 demo_entry_SOURCES=demo_entry.c
 demo_entry_LDFLAGS=$(MYLDFLAGS)
 
-EXTRA_DIST=test_util.c
+EXTRA_DIST=test_util.c t1.xul  t2.xul  t3.xul  t4.xul  t5.xul  t6.xul  t7.xul
