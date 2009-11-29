@@ -41,6 +41,7 @@ typedef struct _PrivInfo
 	int width;
 	int height;
 	IDirectFB* dfb;
+	IDirectFBSurface* surface;
 	IDirectFBSurface* primary;
 }PrivInfo;
 
@@ -50,14 +51,20 @@ static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	void *data = NULL;
 	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
+	DFBRectangle r = {0};
 	int display_width  = ftk_display_width(thiz);
 	int display_height = ftk_display_height(thiz);
-	IDirectFBSurface* surface = priv->primary;
+	IDirectFBSurface* surface = priv->surface;
 	
 	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
 	ret = ftk_bitmap_copy_to_data_argb(bitmap, rect, data, xoffset, yoffset, display_width, display_height);
 	surface->Unlock(surface);
 	surface->Flip(surface, NULL, 0);
+
+	r.w = display_width;
+	r.h = display_height;
+	priv->primary->Blit(priv->primary, surface, &r, 0, 0);
+	priv->primary->Flip(priv->primary, NULL, 0);
 
 	return ret;
 }
@@ -89,7 +96,7 @@ static Ret ftk_display_dfb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 
-	IDirectFBSurface* surface = priv->primary;
+	IDirectFBSurface* surface = priv->surface;
 	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
 	
 	rect.x = x;
@@ -108,6 +115,12 @@ static void ftk_display_dfb_destroy(FtkDisplay* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
+		
+		if(priv->surface != NULL)
+		{
+			priv->surface->Release(priv->surface);
+			priv->surface = NULL;
+		}
 
 		if(priv->primary != NULL)
 		{
@@ -132,14 +145,14 @@ static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 	DECL_PRIV(thiz, priv);
 	int screen_height = 0;
 	int screen_width  = 0;
-	DFBSurfaceDescription  sdsc;
+	DFBSurfaceDescription  desc;
 	IDirectFBSurface* primary = NULL;
 	
 	dfb->SetCooperativeLevel( dfb, DFSCL_FULLSCREEN );
 
-	sdsc.flags = DSDESC_CAPS;
-	sdsc.caps  = DSCAPS_PRIMARY;
-	DFBCHECK(dfb->CreateSurface( dfb, &sdsc, &primary));
+	desc.flags = DSDESC_CAPS;
+	desc.caps  = DSCAPS_PRIMARY;
+	DFBCHECK(dfb->CreateSurface( dfb, &desc, &primary));
 
 	primary->GetSize( primary, &screen_width, &screen_height );
 	priv->dfb     = dfb;
@@ -147,8 +160,15 @@ static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 	priv->width   = screen_width;
 	priv->height  = screen_height;
 
-	primary->Clear(primary, 0xff, 0, 0, 0);
-	primary->Flip(primary, NULL, 0);
+
+	desc.flags  = DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_CAPS | DSDESC_PIXELFORMAT;
+	desc.width  = screen_width;
+	desc.height = screen_height;
+	desc.caps   = DSCAPS_SHARED;
+	desc.pixelformat = DSPF_ARGB;
+
+	dfb->CreateSurface(dfb, &desc, &priv->surface);
+	priv->surface->Clear(priv->surface, 0xff, 0, 0, 0);
 
 	return RET_OK;
 }

@@ -58,7 +58,7 @@ static int  ftk_source_dfb_check(FtkSource* thiz)
 {
 	return -1;
 }
-
+#if 0
 static const int s_key_map[] = 
 {
 	[0x0a] = FTK_KEY_1,
@@ -136,7 +136,91 @@ static const int s_key_map[] =
 	[0x6b] = FTK_KEY_DELETE,
 	[0x71] = FTK_KEY_RIGHTALT,
 };
-
+#else
+static const int s_key_map[] = 
+{
+	[DIKI_A-DIKI_UNKNOWN]              =  FTK_KEY_a,
+	[DIKI_B-DIKI_UNKNOWN]              =  FTK_KEY_b,
+	[DIKI_C-DIKI_UNKNOWN]              =  FTK_KEY_c,
+	[DIKI_D-DIKI_UNKNOWN]              =  FTK_KEY_d,
+	[DIKI_E-DIKI_UNKNOWN]              =  FTK_KEY_e,
+	[DIKI_F-DIKI_UNKNOWN]              =  FTK_KEY_f,
+	[DIKI_G-DIKI_UNKNOWN]              =  FTK_KEY_g,
+	[DIKI_H-DIKI_UNKNOWN]              =  FTK_KEY_h,
+	[DIKI_I-DIKI_UNKNOWN]              =  FTK_KEY_i,
+	[DIKI_J-DIKI_UNKNOWN]              =  FTK_KEY_j,
+	[DIKI_K-DIKI_UNKNOWN]              =  FTK_KEY_k,
+	[DIKI_L-DIKI_UNKNOWN]              =  FTK_KEY_l,
+	[DIKI_M-DIKI_UNKNOWN]              =  FTK_KEY_m,
+	[DIKI_N-DIKI_UNKNOWN]              =  FTK_KEY_n,
+	[DIKI_O-DIKI_UNKNOWN]              =  FTK_KEY_o,
+	[DIKI_P-DIKI_UNKNOWN]              =  FTK_KEY_p,
+	[DIKI_Q-DIKI_UNKNOWN]              =  FTK_KEY_q,
+	[DIKI_R-DIKI_UNKNOWN]              =  FTK_KEY_r,
+	[DIKI_S-DIKI_UNKNOWN]              =  FTK_KEY_s,
+	[DIKI_T-DIKI_UNKNOWN]              =  FTK_KEY_t,
+	[DIKI_U-DIKI_UNKNOWN]              =  FTK_KEY_u,
+	[DIKI_V-DIKI_UNKNOWN]              =  FTK_KEY_v,
+	[DIKI_W-DIKI_UNKNOWN]              =  FTK_KEY_w,
+	[DIKI_X-DIKI_UNKNOWN]              =  FTK_KEY_x,
+	[DIKI_Y-DIKI_UNKNOWN]              =  FTK_KEY_y,
+	[DIKI_Z-DIKI_UNKNOWN]              =  FTK_KEY_z,
+	[DIKI_0-DIKI_UNKNOWN]              =  FTK_KEY_o,
+	[DIKI_1-DIKI_UNKNOWN]              =  FTK_KEY_1,
+	[DIKI_2-DIKI_UNKNOWN]              =  FTK_KEY_2,
+	[DIKI_3-DIKI_UNKNOWN]              =  FTK_KEY_3,
+	[DIKI_4-DIKI_UNKNOWN]              =  FTK_KEY_4,
+	[DIKI_5-DIKI_UNKNOWN]              =  FTK_KEY_5,
+	[DIKI_6-DIKI_UNKNOWN]              =  FTK_KEY_6,
+	[DIKI_7-DIKI_UNKNOWN]              =  FTK_KEY_7,
+	[DIKI_8-DIKI_UNKNOWN]              =  FTK_KEY_8,
+	[DIKI_9-DIKI_UNKNOWN]              =  FTK_KEY_9,
+	[DIKI_F1-DIKI_UNKNOWN]             =  FTK_KEY_F1,
+	[DIKI_F2-DIKI_UNKNOWN]             =  FTK_KEY_F2,
+	[DIKI_F3-DIKI_UNKNOWN]             =  FTK_KEY_F3,
+	[DIKI_F4-DIKI_UNKNOWN]             =  FTK_KEY_F4,
+	[DIKI_F5-DIKI_UNKNOWN]             =  FTK_KEY_F5,
+	[DIKI_F6-DIKI_UNKNOWN]             =  FTK_KEY_F6,
+	[DIKI_F7-DIKI_UNKNOWN]             =  FTK_KEY_F7,
+	[DIKI_F8-DIKI_UNKNOWN]             =  FTK_KEY_F8,
+	[DIKI_F9-DIKI_UNKNOWN]             =  FTK_KEY_F9,
+	[DIKI_SHIFT_L-DIKI_UNKNOWN]        =  FTK_KEY_LEFTSHIFT,
+	[DIKI_SHIFT_R-DIKI_UNKNOWN]        =  FTK_KEY_RIGHTSHIFT,
+	[DIKI_CONTROL_L-DIKI_UNKNOWN]      =  FTK_KEY_LEFTCTRL,
+	[DIKI_CONTROL_R-DIKI_UNKNOWN]      =  FTK_KEY_RIGHTCTRL,
+	[DIKI_ALT_L-DIKI_UNKNOWN]          =  FTK_KEY_LEFTALT,
+	[DIKI_ALT_R-DIKI_UNKNOWN]          =  FTK_KEY_RIGHTALT,
+	[DIKI_CAPS_LOCK-DIKI_UNKNOWN]      =  FTK_KEY_CAPSLOCK,
+	[DIKI_NUM_LOCK-DIKI_UNKNOWN]       =  FTK_KEY_NUMBERSIGN,
+	[DIKI_ESCAPE-DIKI_UNKNOWN]         =  FTK_KEY_ESC,
+	[DIKI_LEFT-DIKI_UNKNOWN]           =  FTK_KEY_LEFT,
+	[DIKI_RIGHT-DIKI_UNKNOWN]          =  FTK_KEY_RIGHT,
+	[DIKI_UP-DIKI_UNKNOWN]             =  FTK_KEY_UP,
+	[DIKI_DOWN-DIKI_UNKNOWN]           =  FTK_KEY_DOWN,
+	[DIKI_TAB-DIKI_UNKNOWN]            =  FTK_KEY_TAB,
+	[DIKI_ENTER-DIKI_UNKNOWN]          =  FTK_KEY_ENTER,
+	[DIKI_SPACE-DIKI_UNKNOWN]          =  FTK_KEY_SPACE,
+	[DIKI_BACKSPACE-DIKI_UNKNOWN]      =  FTK_KEY_BACKSPACE,
+	[DIKI_INSERT-DIKI_UNKNOWN]         =  FTK_KEY_INSERT,
+	[DIKI_DELETE-DIKI_UNKNOWN]         =  FTK_KEY_DELETE,
+	[DIKI_HOME-DIKI_UNKNOWN]           =  FTK_KEY_HOME,
+	[DIKI_END-DIKI_UNKNOWN]            =  FTK_KEY_END,
+	[DIKI_PAGE_UP-DIKI_UNKNOWN]        =  FTK_KEY_PAGEUP,
+	[DIKI_PAGE_DOWN-DIKI_UNKNOWN]      =  FTK_KEY_PAGEDOWN,
+	[DIKI_QUOTE_LEFT-DIKI_UNKNOWN]     =  FTK_KEY_QUOTELEFT,
+	[DIKI_MINUS_SIGN-DIKI_UNKNOWN]     =  FTK_KEY_MINUS,
+	[DIKI_EQUALS_SIGN-DIKI_UNKNOWN]    =  FTK_KEY_EQUAL,
+	[DIKI_BRACKET_LEFT-DIKI_UNKNOWN]   =  FTK_KEY_BRACKETLEFT,
+	[DIKI_BRACKET_RIGHT-DIKI_UNKNOWN]  =  FTK_KEY_BRACKETRIGHT,
+	[DIKI_BACKSLASH-DIKI_UNKNOWN]      =  FTK_KEY_BACKSLASH,
+	[DIKI_SEMICOLON-DIKI_UNKNOWN]      =  FTK_KEY_SEMICOLON,
+	[DIKI_QUOTE_RIGHT-DIKI_UNKNOWN]    =  FTK_KEY_QUOTERIGHT,
+	[DIKI_COMMA-DIKI_UNKNOWN]          =  FTK_KEY_COMMA,
+	[DIKI_PERIOD-DIKI_UNKNOWN]         =  FTK_KEY_PERIOD,
+	[DIKI_SLASH-DIKI_UNKNOWN]          =  FTK_KEY_SLASH,
+	[DIKI_LESS_SIGN-DIKI_UNKNOWN]      =  FTK_KEY_LESS
+};
+#endif
 static int ftk_source_dfb_keymap(FtkSource* thiz, int keycode)
 {
 	ftk_logd("0x%03x --> 0x%03x %c\n", keycode, s_key_map[0xff&keycode], (char)s_key_map[0xff&keycode]);
@@ -152,7 +236,8 @@ static Ret ftk_source_dfb_dispatch_input_event(FtkSource* thiz, DFBInputEvent* e
 		case DIET_KEYPRESS:
 		case DIET_KEYRELEASE:
 		{
-			priv->event.u.key.code = ftk_source_dfb_keymap(thiz, event->key_code);
+			//priv->event.u.key.code = ftk_source_dfb_keymap(thiz, event->key_code);
+			priv->event.u.key.code = ftk_source_dfb_keymap(thiz, event->key_id);
 			priv->event.type = event->type == DIET_KEYPRESS ? FTK_EVT_KEY_DOWN : FTK_EVT_KEY_UP;
 			break;
 		}
