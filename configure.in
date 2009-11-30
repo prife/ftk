@@ -80,5 +80,8 @@ AC_CONFIG_FILES([ftk.pc
                 script_binding/Makefile
                 script_binding/lua/Makefile
                 script_binding/lua/lua/Makefile
+                apps/Makefile
+                apps/launcher/Makefile
+                apps/desktop/Makefile
                 ])
 AC_OUTPUT
