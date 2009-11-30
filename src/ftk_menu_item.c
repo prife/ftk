@@ -73,8 +73,8 @@ static Ret ftk_menu_item_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && ftk_widget_is_active(thiz))
 			{
-				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 				ftk_widget_set_active(thiz, 0);
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 			}
 			break;
 		}

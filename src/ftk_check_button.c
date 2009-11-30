@@ -96,9 +96,9 @@ static Ret ftk_check_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
-				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 				ftk_widget_set_active(thiz, 0);
 				ftk_check_button_check(thiz);
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 			}
 			break;
 		}
