@@ -32,7 +32,10 @@
 #include "ftk.h"
 #include "ftk_xul.h"
 #include "ftk_expr.h"
+#include "ftk_mmap.h"
+#include "ftk_animator.h"
 #include "ftk_xml_parser.h"
+#include "ftk_animator_expand.h"
 
 typedef struct _PrivInfo
 {
@@ -43,6 +46,7 @@ typedef struct _PrivInfo
 	char translated_path[FTK_MAX_PATH+1];
 	FtkTranslateText tr_text;
 	FtkTranslatePath tr_path;
+	FtkAnimator* animator;
 }PrivInfo;
 
 typedef struct _FtkWidgetCreateInfo
@@ -54,6 +58,7 @@ typedef struct _FtkWidgetCreateInfo
 	int h;
 	int attr;
 	int visible;
+	int animator;
 	const char* value;
 	FtkWidget* parent;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
@@ -364,6 +369,12 @@ static const VarConst s_var_conts[] =
 	{"FTK_ATTR_NO_FOCUS",       FTK_ATTR_NO_FOCUS},
 	{"FTK_ATTR_INSENSITIVE",    FTK_ATTR_INSENSITIVE},
 	{"FTK_ATTR_FOCUSED",        FTK_ATTR_FOCUSED},
+	{"FTK_ANI_TO_RIGHT",        FTK_ANI_TO_RIGHT},
+	{"FTK_ANI_TO_DOWN",         FTK_ANI_TO_DOWN},
+	{"FTK_ANI_TO_UP",           FTK_ANI_TO_UP},
+	{"FTK_ANI_TO_EAST_SOUTH",   FTK_ANI_TO_EAST_SOUTH},
+	{"FTK_ANI_TO_EAST_NORTH",   FTK_ANI_TO_EAST_NORTH},
+	{"FTK_ANI_ALPHA",           FTK_ANI_ALPHA},
 	{NULL, 0},
 };
 
@@ -482,8 +493,16 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			case 'a':
 			{
 				/*attr*/
-				value = ftk_xul_builder_preprocess_value(thiz, value);
-				info->attr = (int)ftk_expr_eval(value);
+				if(name[1] == 't')
+				{
+					value = ftk_xul_builder_preprocess_value(thiz, value);
+					info->attr = (int)ftk_expr_eval(value);
+				}
+				else if(name[1] == 'n')
+				{
+					value = ftk_xul_builder_preprocess_value(thiz, value);
+					info->animator = (int)ftk_expr_eval(value);
+				}
 				break;
 			}
 			case 'v':
@@ -637,7 +656,44 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 
 		if(info.visible)
 		{
-			ftk_widget_show(widget, info.visible);
+			if(info.animator >= FTK_ANI_TO_RIGHT && info.animator <= FTK_ANI_TO_EAST_NORTH 
+				&& ftk_widget_type(widget) == FTK_WINDOW)
+			{
+				int delta = 0;
+				int type = info.animator;
+				int width = ftk_widget_width(widget);
+				int height = ftk_widget_height(widget);
+				FtkAnimator* ani = ftk_animator_expand_create();
+				switch(info.animator)
+				{
+					case FTK_ANI_TO_RIGHT:
+					case FTK_ANI_TO_EAST_SOUTH:
+					case FTK_ANI_TO_EAST_NORTH:
+					{
+						delta = width/8;
+						ftk_animator_set_param(ani, type, delta, width, delta, 200);
+						break;
+					}
+					case FTK_ANI_TO_DOWN:
+					{
+						delta = height/8;
+						ftk_animator_set_param(ani, type, delta, height, delta, 200);
+						break;
+					}
+					case FTK_ANI_TO_UP:
+					{
+						delta = height/8;
+						ftk_animator_set_param(ani, type, height - delta, ftk_widget_top(widget), delta, 200);
+						break;
+					}
+					default:break;
+				}
+				priv->animator = ani;
+			}
+			else
+			{
+				ftk_widget_show(widget, info.visible);
+			}
 		}
 	}
 	ftk_xul_builder_reset_widget_info(thiz, &info);
@@ -744,8 +800,12 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text
 		priv->tr_text = tr_text != NULL ? tr_text : ftk_text_no_translate;
 		priv->tr_path = tr_path != NULL ? tr_path : ftk_path_no_translate;
 		ftk_xml_parser_set_builder(parser, builder);
-		ftk_xml_parser_parse(parser, xml);
+		ftk_xml_parser_parse(parser, xml, strlen(xml));
 		widget = priv->root;
+		if(priv->animator != NULL)
+		{
+			ftk_animator_start(priv->animator, widget, 0);
+		}
 	}
 	ftk_xml_builder_destroy(builder);
 	ftk_xml_parser_destroy(parser);
@@ -758,4 +818,17 @@ FtkWidget* ftk_xul_load(const char* xml, int length)
 	return ftk_xul_load_ex(xml, length, ftk_text_no_translate, ftk_path_no_translate);	
 }
 
+FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, FtkTranslatePath tr_path)
+{
+	FtkMmap* m = NULL;
+	FtkWidget* widget = NULL;
+	return_val_if_fail(filename != NULL, NULL);
+
+	if((m = ftk_mmap_create(filename, 0, -1)) != NULL)
+	{
+		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), tr_text, tr_path);
+	}
+
+	return widget;
+}
 

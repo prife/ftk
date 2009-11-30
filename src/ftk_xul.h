@@ -39,6 +39,7 @@ typedef const char* (*FtkTranslatePath)(const char* path, char out_path[FTK_MAX_
 
 FtkWidget* ftk_xul_load(const char* xml, int length);
 FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkTranslatePath tr_path);
+FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, FtkTranslatePath tr_path);
 
 #endif/*FTK_XUL_H*/
 

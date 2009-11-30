@@ -188,6 +188,7 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 		ftk_canvas_destroy(priv->canvas);
 		ftk_bitmap_unref(priv->snap);
 		ftk_window_enable_update(priv->win);
+		ftk_widget_show_all(priv->win, 1);
 		ftk_widget_unref(priv->win);
 		priv->canvas = NULL;
 		priv->snap   = NULL;

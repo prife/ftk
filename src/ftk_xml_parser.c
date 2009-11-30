@@ -66,8 +66,9 @@ void ftk_xml_parser_set_builder(FtkXmlParser* thiz, FtkXmlBuilder* builder)
 	return;
 }
 
-void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml)
+void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml, size_t length)
 {
+	int i = 0;
 	enum _State
 	{
 		STAT_NONE,
@@ -83,7 +84,7 @@ void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml)
 
 	thiz->read_ptr = xml;
 
-	for(; *thiz->read_ptr != '\0'; thiz->read_ptr++)
+	for(; *thiz->read_ptr != '\0' && i < length; thiz->read_ptr++, i++)
 	{
 		char c = thiz->read_ptr[0];
 

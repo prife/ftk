@@ -31,15 +31,11 @@ int main(int argc, char* argv[])
 {
 	if(argc > 1)
 	{
-		int length = 0;
-		char* buffer = NULL;
 		FtkWidget* win = NULL;
 		FtkWidget* quit = NULL;
 		ftk_init(argc, argv);
 
-		buffer = read_file(argv[1], &length);
-		win = ftk_xul_load_ex(buffer, length, NULL, tr_path);
-		free(buffer);
+		win = ftk_xul_load_file(argv[1], NULL, tr_path);
 		ftk_widget_set_user_data(win, on_window_close, win);
 		
 		quit = ftk_widget_lookup(win, IDC_QUIT);

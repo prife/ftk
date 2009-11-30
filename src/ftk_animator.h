@@ -44,6 +44,7 @@ typedef void (*FtkAnimatorDestroy)(FtkAnimator* thiz);
 
 typedef enum _FtkExpandType
 {
+	FTK_ANI_NONE = 0,
 	FTK_ANI_TO_RIGHT,
 	FTK_ANI_TO_DOWN,
 	FTK_ANI_TO_UP,

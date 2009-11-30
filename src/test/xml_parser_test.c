@@ -36,12 +36,12 @@ int main(int argc, char* argv[])
 	FtkXmlParser* thiz = ftk_xml_parser_create();
 	FtkXmlBuilder* builder = ftk_xml_builder_dump_create(NULL);
 	ftk_xml_parser_set_builder(thiz, builder);
-	ftk_xml_parser_parse(thiz, XML);
+	ftk_xml_parser_parse(thiz, XML, strlen(XML));
 	
 	if(argc > 1)
 	{
 		char* buffer = read_file(argv[1]);
-		ftk_xml_parser_parse(thiz, buffer);
+		ftk_xml_parser_parse(thiz, buffer, strlen(buffer));
 		free(buffer);
 	}
 
