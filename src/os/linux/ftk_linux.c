@@ -88,6 +88,14 @@ static int ftk_set_tty_mode(int graphics)
     return r;
 }
 
+size_t ftk_get_relative_time(void)
+{
+	struct timeval now = {0};
+	gettimeofday(&now, NULL);
+
+	return now.tv_sec*1000 + now.tv_usec/1000;
+}
+
 int ftk_platform_init(int argc, char** argv)
 {
 	ftk_set_tty_mode(1);

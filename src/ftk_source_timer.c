@@ -33,10 +33,10 @@
 
 typedef struct _PrivInfo
 {
-	int interval;
 	FtkTimer action;
 	void* user_data;
-	struct timeval next_time;
+	size_t interval;
+	size_t next_time;
 }PrivInfo;
 
 static int ftk_source_timer_get_fd(FtkSource* thiz)
@@ -46,35 +46,17 @@ static int ftk_source_timer_get_fd(FtkSource* thiz)
 
 static int ftk_source_timer_check(FtkSource* thiz)
 {
-	int t = 0;
 	DECL_PRIV(thiz, priv);
-	struct timeval now = {0};
-	gettimeofday(&now, NULL);
+	int t = priv->next_time - ftk_get_relative_time();
 	
-	t = (priv->next_time.tv_sec - now.tv_sec)*1000 + (priv->next_time.tv_usec - now.tv_usec)/1000;
-	if(t < 0) t = 0;
+	t = t < 0 ? 0 : t;
 
 	return t;
 }
 
 static void ftk_source_timer_calc_timer(PrivInfo* priv)
 {
-	int sec = 0;
-	int usec = 0;
-	int tv_usec = 0;
-	int interval = priv->interval;
-
-	sec = interval / 1000;
-	usec = (interval % 1000) * 1000;
-	gettimeofday(&priv->next_time, NULL);
-	tv_usec = priv->next_time.tv_usec;
-	priv->next_time.tv_sec += sec;
-	priv->next_time.tv_usec += usec;
-	
-	if(tv_usec > priv->next_time.tv_usec && tv_usec > usec)
-	{
-		priv->next_time.tv_sec++;
-	}
+	priv->next_time = ftk_get_relative_time() + priv->interval;
 
 	return;
 }
@@ -116,43 +98,10 @@ FtkSource* ftk_source_timer_create(int interval, FtkTimer action, void* user_dat
 		thiz->ref = 1;
 		priv->interval  = interval;
 		priv->user_data = user_data;
-		priv->action = action;
+		priv->action    = action;
 		ftk_source_timer_calc_timer(priv);
 	}
 
 	return thiz;
 }
-
-#ifdef FTK_SOURCE_TIMER_TEST
-Ret my_action(void* user_data)
-{	
-	int* p = (int*)user_data;
-
-	(*p)++;
-	printf("%d\n", *p);
-
-	return *p == 10 ? RET_REMOVE:RET_OK;
-}
-
-int main(int argc, char* argv[])
-{
-	int n = 0;
-
-	FtkSource* thiz = ftk_source_timer_create(1500, my_action, &n);
-	while(1)
-	{
-		int t = ftk_source_check(thiz);
-		printf("t=%d\n", t);
-		assert(t > 1000);
-		assert(ftk_source_get_fd(thiz) < 0);
-		usleep(t*1000);
-		if(ftk_source_dispatch(thiz) == RET_REMOVE)
-		{
-			break;
-		}
-	}
-	ftk_source_unref(thiz);
-	return 0;
-}
-#endif/*FTK_SOURCE_TIMER_TEST*/
 

@@ -4,7 +4,7 @@ noinst_PROGRAMS=label_test widget_test \
 	canvas_test ftk_test bitmap_test font_test primary_source_test\
 	bitmap_factory_test main_loop_test png_test log_test util_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
-	xml_parser_test xul_test list_model_default_test
+	xml_parser_test xul_test list_model_default_test timer_test
 
 #if FTK_BACKEND_FB
 #INCLUDES=$(INCLUDES)
@@ -15,6 +15,9 @@ noinst_PROGRAMS=label_test widget_test \
 #input_test_SOURCES=input_test.c
 #input_test_LDFLAGS=$(MYLDFLAGS)
 #endif
+
+timer_test_SOURCES=timer_test.c
+timer_test_LDFLAGS=$(MYLDFLAGS)
 
 list_model_default_test_SOURCES=list_model_default_test.c
 list_model_default_test_LDFLAGS=$(MYLDFLAGS)

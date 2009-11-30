@@ -58,6 +58,7 @@
 
 int  ftk_platform_init(int argc, char** argv);
 void ftk_platform_deinit(void);
+size_t ftk_get_relative_time(void);
 
 #endif/*FTK_PLATFORM_H*/
 
