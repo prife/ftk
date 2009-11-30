@@ -216,8 +216,11 @@ static Ret button_close_top_clicked(void* ctx, void* obj)
 	if(top_window != NULL && ftk_widget_type(top_window) == FTK_WINDOW)
 	{
 		ftk_logd("%s: close window %s\n", __func__, ftk_widget_get_text(top_window));
-		ftk_widget_unref(top_window);
-		ftk_widget_set_user_data(title_widget, NULL, NULL);
+		if(!ftk_widget_has_attr(top_window, FTK_ATTR_IGNORE_CLOSE))
+		{
+			ftk_widget_unref(top_window);
+			ftk_widget_set_user_data(title_widget, NULL, NULL);
+		}
 	}
 	else
 	{

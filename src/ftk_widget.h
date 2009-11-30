@@ -64,7 +64,8 @@ typedef enum _FtkWidgetAttr
 	FTK_ATTR_BG_TILE        = 8,
 	FTK_ATTR_BG_FOUR_CORNER = 16,
 	FTK_ATTR_INSENSITIVE    = 32,
-	FTK_ATTR_FOCUSED        = 64
+	FTK_ATTR_FOCUSED        = 64,
+	FTK_ATTR_IGNORE_CLOSE   = 128 /*for window only*/
 }FtkWidgetAttr;
 
 struct _FtkWdiget
