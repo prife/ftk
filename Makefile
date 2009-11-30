@@ -190,7 +190,7 @@ sysconfdir = ${prefix}/etc
 target_alias = 
 top_builddir = .
 top_srcdir = .
-SUBDIRS = src script_binding
+SUBDIRS = src script_binding apps
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = ftk.pc
 all: config.h

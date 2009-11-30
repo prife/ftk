@@ -190,7 +190,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = src script_binding
+SUBDIRS = src script_binding apps
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = ftk.pc
 all: config.h
