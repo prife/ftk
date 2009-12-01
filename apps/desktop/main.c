@@ -2,7 +2,7 @@
 #include "ftk_xul.h"
 #include "ftk_animator_expand.h"
 
-static int g_desktop_vertical = 0;
+static int g_desktop_vertical = 1;
 
 static Ret button_close_applist_clicked(void* ctx, void* obj)
 {
