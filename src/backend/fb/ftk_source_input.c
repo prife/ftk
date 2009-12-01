@@ -129,8 +129,7 @@ static unsigned short s_key_map[0x100] =
 	[KEY_SEND]        =  FTK_KEY_SEND,
 	[KEY_REPLY]       =  FTK_KEY_REPLY,
 	[KEY_SAVE]        =  FTK_KEY_SAVE,
-	[KEY_BATTERY]     =  FTK_KEY_BATTERY,
-	[KEY_POWER]       =  FTK_KEY_POWER,
+	[KEY_POWER]       =  FTK_KEY_POWER
 };
 
 static int ftk_source_input_get_fd(FtkSource* thiz)
