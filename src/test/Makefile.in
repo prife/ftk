@@ -40,7 +40,8 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	sources_manager_test$(EXEEXT) text_buffer_test$(EXEEXT) \
 	icon_cache_test$(EXEEXT) xml_parser_test$(EXEEXT) \
 	xul_test$(EXEEXT) list_model_default_test$(EXEEXT) \
-	timer_test$(EXEEXT) expr_test$(EXEEXT)
+	timer_test$(EXEEXT) expr_test$(EXEEXT) $(am__EXEEXT_1)
+@FTK_BACKEND_FB_TRUE@am__append_1 = display_fb_test input_test
 subdir = src/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -50,6 +51,8 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
+@FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
+@FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -69,6 +72,13 @@ canvas_test_LDADD = $(LDADD)
 canvas_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(canvas_test_LDFLAGS) $(LDFLAGS) -o $@
+am__display_fb_test_SOURCES_DIST = display_fb_test.c
+@FTK_BACKEND_FB_TRUE@am_display_fb_test_OBJECTS = display_fb_test-display_fb_test.$(OBJEXT)
+display_fb_test_OBJECTS = $(am_display_fb_test_OBJECTS)
+display_fb_test_LDADD = $(LDADD)
+display_fb_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(display_fb_test_CFLAGS) \
+	$(CFLAGS) $(display_fb_test_LDFLAGS) $(LDFLAGS) -o $@
 am_expr_test_OBJECTS = expr_test.$(OBJEXT)
 expr_test_OBJECTS = $(am_expr_test_OBJECTS)
 expr_test_LDADD = $(LDADD)
@@ -93,6 +103,14 @@ icon_cache_test_LDADD = $(LDADD)
 icon_cache_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(icon_cache_test_LDFLAGS) $(LDFLAGS) -o $@
+am__input_test_SOURCES_DIST = input_test.c
+@FTK_BACKEND_FB_TRUE@am_input_test_OBJECTS =  \
+@FTK_BACKEND_FB_TRUE@	input_test-input_test.$(OBJEXT)
+input_test_OBJECTS = $(am_input_test_OBJECTS)
+input_test_LDADD = $(LDADD)
+input_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(input_test_CFLAGS) \
+	$(CFLAGS) $(input_test_LDFLAGS) $(LDFLAGS) -o $@
 am_label_test_OBJECTS = label_test.$(OBJEXT)
 label_test_OBJECTS = $(am_label_test_OBJECTS)
 label_test_LDADD = $(LDADD)
@@ -187,25 +205,25 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(expr_test_SOURCES) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(label_test_SOURCES) \
-	$(list_model_default_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(text_buffer_test_SOURCES) $(timer_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
-	$(xul_test_SOURCES)
+	$(canvas_test_SOURCES) $(display_fb_test_SOURCES) \
+	$(expr_test_SOURCES) $(font_test_SOURCES) $(ftk_test_SOURCES) \
+	$(icon_cache_test_SOURCES) $(input_test_SOURCES) \
+	$(label_test_SOURCES) $(list_model_default_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
+	$(timer_test_SOURCES) $(util_test_SOURCES) widget_test.c \
+	$(xml_parser_test_SOURCES) $(xul_test_SOURCES)
 DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
-	$(canvas_test_SOURCES) $(expr_test_SOURCES) \
-	$(font_test_SOURCES) $(ftk_test_SOURCES) \
-	$(icon_cache_test_SOURCES) $(label_test_SOURCES) \
-	$(list_model_default_test_SOURCES) $(log_test_SOURCES) \
-	$(main_loop_test_SOURCES) $(png_test_SOURCES) \
-	$(primary_source_test_SOURCES) $(sources_manager_test_SOURCES) \
-	$(text_buffer_test_SOURCES) $(timer_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
-	$(xul_test_SOURCES)
+	$(canvas_test_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
+	$(expr_test_SOURCES) $(font_test_SOURCES) $(ftk_test_SOURCES) \
+	$(icon_cache_test_SOURCES) $(am__input_test_SOURCES_DIST) \
+	$(label_test_SOURCES) $(list_model_default_test_SOURCES) \
+	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
+	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
+	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
+	$(timer_test_SOURCES) $(util_test_SOURCES) widget_test.c \
+	$(xml_parser_test_SOURCES) $(xul_test_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -318,16 +336,12 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-
-#if FTK_BACKEND_FB
-#INCLUDES=$(INCLUDES)
-#INCLUDES+=-I$(abs_top_srcdir)/src/backend/fb
-#noinst_PROGRAMS +=display_fb_test input_test
-#display_fb_test_SOURCES=display_fb_test.c
-#display_fb_test_LDFLAGS=$(MYLDFLAGS)
-#input_test_SOURCES=input_test.c
-#input_test_LDFLAGS=$(MYLDFLAGS)
-#endif
+@FTK_BACKEND_FB_TRUE@display_fb_test_SOURCES = display_fb_test.c
+@FTK_BACKEND_FB_TRUE@display_fb_test_LDFLAGS = $(MYLDFLAGS)
+@FTK_BACKEND_FB_TRUE@display_fb_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
+@FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
+@FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
+@FTK_BACKEND_FB_TRUE@input_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
 expr_test_SOURCES = expr_test.c
 expr_test_LDFLAGS = $(MYLDFLAGS)
 timer_test_SOURCES = timer_test.c
@@ -418,6 +432,9 @@ bitmap_test$(EXEEXT): $(bitmap_test_OBJECTS) $(bitmap_test_DEPENDENCIES)
 canvas_test$(EXEEXT): $(canvas_test_OBJECTS) $(canvas_test_DEPENDENCIES) 
 	@rm -f canvas_test$(EXEEXT)
 	$(canvas_test_LINK) $(canvas_test_OBJECTS) $(canvas_test_LDADD) $(LIBS)
+display_fb_test$(EXEEXT): $(display_fb_test_OBJECTS) $(display_fb_test_DEPENDENCIES) 
+	@rm -f display_fb_test$(EXEEXT)
+	$(display_fb_test_LINK) $(display_fb_test_OBJECTS) $(display_fb_test_LDADD) $(LIBS)
 expr_test$(EXEEXT): $(expr_test_OBJECTS) $(expr_test_DEPENDENCIES) 
 	@rm -f expr_test$(EXEEXT)
 	$(expr_test_LINK) $(expr_test_OBJECTS) $(expr_test_LDADD) $(LIBS)
@@ -430,6 +447,9 @@ ftk_test$(EXEEXT): $(ftk_test_OBJECTS) $(ftk_test_DEPENDENCIES)
 icon_cache_test$(EXEEXT): $(icon_cache_test_OBJECTS) $(icon_cache_test_DEPENDENCIES) 
 	@rm -f icon_cache_test$(EXEEXT)
 	$(icon_cache_test_LINK) $(icon_cache_test_OBJECTS) $(icon_cache_test_LDADD) $(LIBS)
+input_test$(EXEEXT): $(input_test_OBJECTS) $(input_test_DEPENDENCIES) 
+	@rm -f input_test$(EXEEXT)
+	$(input_test_LINK) $(input_test_OBJECTS) $(input_test_LDADD) $(LIBS)
 label_test$(EXEEXT): $(label_test_OBJECTS) $(label_test_DEPENDENCIES) 
 	@rm -f label_test$(EXEEXT)
 	$(label_test_LINK) $(label_test_OBJECTS) $(label_test_LDADD) $(LIBS)
@@ -479,10 +499,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitmap_factory_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bitmap_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/canvas_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/display_fb_test-display_fb_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/expr_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/font_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ftk_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/icon_cache_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/input_test-input_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/label_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list_model_default_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/log_test.Po@am__quote@
@@ -518,6 +540,34 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+display_fb_test-display_fb_test.o: display_fb_test.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(display_fb_test_CFLAGS) $(CFLAGS) -MT display_fb_test-display_fb_test.o -MD -MP -MF $(DEPDIR)/display_fb_test-display_fb_test.Tpo -c -o display_fb_test-display_fb_test.o `test -f 'display_fb_test.c' || echo '$(srcdir)/'`display_fb_test.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/display_fb_test-display_fb_test.Tpo $(DEPDIR)/display_fb_test-display_fb_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='display_fb_test.c' object='display_fb_test-display_fb_test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(display_fb_test_CFLAGS) $(CFLAGS) -c -o display_fb_test-display_fb_test.o `test -f 'display_fb_test.c' || echo '$(srcdir)/'`display_fb_test.c
+
+display_fb_test-display_fb_test.obj: display_fb_test.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(display_fb_test_CFLAGS) $(CFLAGS) -MT display_fb_test-display_fb_test.obj -MD -MP -MF $(DEPDIR)/display_fb_test-display_fb_test.Tpo -c -o display_fb_test-display_fb_test.obj `if test -f 'display_fb_test.c'; then $(CYGPATH_W) 'display_fb_test.c'; else $(CYGPATH_W) '$(srcdir)/display_fb_test.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/display_fb_test-display_fb_test.Tpo $(DEPDIR)/display_fb_test-display_fb_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='display_fb_test.c' object='display_fb_test-display_fb_test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(display_fb_test_CFLAGS) $(CFLAGS) -c -o display_fb_test-display_fb_test.obj `if test -f 'display_fb_test.c'; then $(CYGPATH_W) 'display_fb_test.c'; else $(CYGPATH_W) '$(srcdir)/display_fb_test.c'; fi`
+
+input_test-input_test.o: input_test.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(input_test_CFLAGS) $(CFLAGS) -MT input_test-input_test.o -MD -MP -MF $(DEPDIR)/input_test-input_test.Tpo -c -o input_test-input_test.o `test -f 'input_test.c' || echo '$(srcdir)/'`input_test.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/input_test-input_test.Tpo $(DEPDIR)/input_test-input_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='input_test.c' object='input_test-input_test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(input_test_CFLAGS) $(CFLAGS) -c -o input_test-input_test.o `test -f 'input_test.c' || echo '$(srcdir)/'`input_test.c
+
+input_test-input_test.obj: input_test.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(input_test_CFLAGS) $(CFLAGS) -MT input_test-input_test.obj -MD -MP -MF $(DEPDIR)/input_test-input_test.Tpo -c -o input_test-input_test.obj `if test -f 'input_test.c'; then $(CYGPATH_W) 'input_test.c'; else $(CYGPATH_W) '$(srcdir)/input_test.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/input_test-input_test.Tpo $(DEPDIR)/input_test-input_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='input_test.c' object='input_test-input_test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(input_test_CFLAGS) $(CFLAGS) -c -o input_test-input_test.obj `if test -f 'input_test.c'; then $(CYGPATH_W) 'input_test.c'; else $(CYGPATH_W) '$(srcdir)/input_test.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

@@ -9,7 +9,9 @@ Ret on_event(void* user_data, FtkEvent* event)
 int main(int argc, char* argv[])
 {
 	int i = 0;
-	FtkSource* thiz = ftk_source_input_create("/dev/input/event2", on_event, NULL);
+	FtkSource* thiz = NULL;
+	const char* filename = argv[1] != NULL ? argv[1] : "/dev/input/event2";
+	ftk_source_input_create(filename, on_event, NULL);
 	assert(ftk_source_get_fd(thiz) > 0);
 	assert(ftk_source_check(thiz) < 0);
 

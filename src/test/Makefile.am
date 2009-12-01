@@ -7,15 +7,16 @@ noinst_PROGRAMS=label_test widget_test \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test
 
-#if FTK_BACKEND_FB
-#INCLUDES=$(INCLUDES)
-#INCLUDES+=-I$(abs_top_srcdir)/src/backend/fb
-#noinst_PROGRAMS +=display_fb_test input_test
-#display_fb_test_SOURCES=display_fb_test.c
-#display_fb_test_LDFLAGS=$(MYLDFLAGS)
-#input_test_SOURCES=input_test.c
-#input_test_LDFLAGS=$(MYLDFLAGS)
-#endif
+if FTK_BACKEND_FB
+noinst_PROGRAMS +=display_fb_test input_test
+display_fb_test_SOURCES=display_fb_test.c
+display_fb_test_LDFLAGS=$(MYLDFLAGS)
+display_fb_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
+
+input_test_SOURCES=input_test.c
+input_test_LDFLAGS=$(MYLDFLAGS)
+input_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
+endif
 
 expr_test_SOURCES=expr_test.c
 expr_test_LDFLAGS=$(MYLDFLAGS)
