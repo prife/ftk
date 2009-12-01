@@ -77,7 +77,7 @@ static void ftk_install_crash_signal(void)
 static int ftk_set_tty_mode(int graphics)
 {
     int r = 0;
-#ifndef PC_EMU
+#if !defined(PC_EMU) && !defined(USE_LINUX_X11)
 	int fd = 0;
     fd = open("/dev/tty0", O_RDWR | O_SYNC);
     if (fd < 0)
