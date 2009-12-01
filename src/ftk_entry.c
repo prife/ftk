@@ -410,6 +410,21 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	return RET_OK;
 }
 
+Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
+
+	pos = pos < TB_LENGTH ? pos : TB_LENGTH;
+	ftk_text_buffer_insert(priv->text_buffer, pos, text);
+	priv->visible_start = -1;
+	priv->visible_end = TB_LENGTH;
+	priv->caret = priv->visible_end;
+	ftk_widget_paint_self(thiz);
+
+	return RET_OK;
+}
+
 const char* ftk_entry_get_text(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);

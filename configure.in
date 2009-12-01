@@ -85,5 +85,8 @@ AC_CONFIG_FILES([ftk.pc
                 apps/desktop/Makefile
                 apps/desktop/icons/Makefile
                 apps/desktop/xul/Makefile
+                apps/calculator/Makefile
+                apps/calculator/icons/Makefile
+                apps/calculator/xul/Makefile
                 ])
 AC_OUTPUT

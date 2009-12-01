@@ -1,1 +1,1 @@
-SUBDIRS=launcher desktop
+SUBDIRS=launcher desktop calculator

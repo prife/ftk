@@ -13,10 +13,10 @@ static Ret button_close_applist_clicked(void* ctx, void* obj)
 
 const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
-	snprintf(out_path, FTK_MAX_PATH, "%s/%s", DESKTOP_DATA_DIR, path);
+	snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_DATA_DIR, path);
 	if(access(out_path, R_OK) < 0)
 	{
-		snprintf(out_path, FTK_MAX_PATH, "%s/%s", DESKTOP_LOCAL_DATA_DIR, path);
+		snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_LOCAL_DATA_DIR, path);
 	}
 
 	return out_path;
