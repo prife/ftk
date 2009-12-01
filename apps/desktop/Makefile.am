@@ -1,3 +1,4 @@
+SUBDIRS=icons xul
 include $(abs_top_srcdir)/src/rules.mk
 
 bin_PROGRAMS=desktop
