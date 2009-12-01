@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_style.h"
 #include "ftk_radio_group.h"
 #include "ftk_check_button.h"
 
@@ -53,6 +54,7 @@ FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, in
 		
 	if(thiz != NULL)
 	{
+		FtkGc gc = {0};
 		thiz->on_event = ftk_radio_group_on_event;
 		thiz->on_paint = ftk_radio_group_on_paint;
 		thiz->destroy  = ftk_radio_group_destroy;
@@ -61,6 +63,8 @@ FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, in
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_append_child(parent, thiz);
+		gc.bg = ftk_style_get_color(FTK_COLOR_WINDOW);
+		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 	}
 
 	return thiz;

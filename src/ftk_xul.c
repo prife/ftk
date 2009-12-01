@@ -827,6 +827,7 @@ FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, Ftk
 	if((m = ftk_mmap_create(filename, 0, -1)) != NULL)
 	{
 		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), tr_text, tr_path);
+		ftk_mmap_destroy(m);
 	}
 
 	return widget;

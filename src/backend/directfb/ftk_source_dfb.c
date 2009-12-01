@@ -357,6 +357,7 @@ FtkSource* ftk_source_dfb_create(IDirectFB* dfb)
 		{
 			event_buffer->CreateFileDescriptor(event_buffer, &fd);
 		}
+		thiz->ref = 1;
 		priv->fd = fd;
 		priv->event_buffer = event_buffer;
 	}
