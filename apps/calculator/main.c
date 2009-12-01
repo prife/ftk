@@ -68,7 +68,9 @@ Ret ftk_main(int argc, char* argv[])
 	int i = 0;
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
+#ifdef HAS_MAIN
 	ftk_init(argc, argv);
+#endif
 	
 	win = load_xul("xul/calc.xul"); 
 	for(i = 1; i <= 20; i++)
@@ -81,7 +83,9 @@ Ret ftk_main(int argc, char* argv[])
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 
+#ifdef HAS_MAIN
 	ftk_run();
+#endif
 
 	return RET_OK;
 }
