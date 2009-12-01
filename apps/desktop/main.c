@@ -1,21 +1,8 @@
 #include "ftk.h"
+#include "ftk_xul.h"
 #include "ftk_animator_expand.h"
 
-static FtkBitmap* load_bitmap(const char* filename)
-{
-	char path[260] = {0};
-	FtkBitmap* bitmap = NULL;
-
-	snprintf(path, sizeof(path), "%s/icons/%s", DESKTOP_DATA_DIR, filename);
-	bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
-	if(bitmap == NULL)
-	{
-		snprintf(path, sizeof(path), "%s/icons/%s", DESKTOP_LOCAL_DATA_DIR, filename);
-		bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
-	}
-
-	return bitmap;
-}
+static int g_desktop_vertical = 0;
 
 static Ret button_close_applist_clicked(void* ctx, void* obj)
 {
@@ -24,83 +11,55 @@ static Ret button_close_applist_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
+{
+	snprintf(out_path, FTK_MAX_PATH, "%s/%s", DESKTOP_DATA_DIR, path);
+	if(access(out_path, R_OK) < 0)
+	{
+		snprintf(out_path, FTK_MAX_PATH, "%s/%s", DESKTOP_LOCAL_DATA_DIR, path);
+	}
+
+	return out_path;
+}
+
+
+static FtkWidget* desktop_load_xul(const char* filename)
+{
+	char path[FTK_MAX_PATH+1] = {0};
+	
+	tr_path(filename, path);
+	return ftk_xul_load_file(filename, NULL, tr_path);
+}
+
 static Ret button_open_applist_clicked(void* ctx, void* obj)
 {
-	int delta = 0;
-	int width  = 0;
-	int height = 0;
-	int button_height = 0;
-	FtkGc gc = {0};
 	FtkWidget* button = NULL;
-	FtkWidget* win = ftk_app_window_create();
-	FtkAnimator* ani = ftk_animator_expand_create();
+	FtkWidget* win = NULL;
 
-	width = ftk_widget_width(win);
-	height = ftk_widget_height(win);
-
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = load_bitmap("tray_handle_normal.png");
-	button_height = ftk_bitmap_height(gc.bitmap);
-
-	button = ftk_button_create(win, 0, 0, width, button_height);
+	win = desktop_load_xul(g_desktop_vertical ? "xul/appview-v.xul" : "xul/appview-h.xul"); 
+	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, button_close_applist_clicked, win);
-	ftk_widget_set_attr(button, FTK_ATTR_BG_CENTER);
-	ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
-	ftk_gc_reset(&gc);
-
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = load_bitmap("tray_handle_selected.png");
-	ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
-	ftk_gc_reset(&gc);
-	
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = load_bitmap("tray_handle_pressed.png");
-	ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
-	ftk_gc_reset(&gc);
-
-	delta = height/8;
-	ftk_animator_set_param(ani, FTK_ANI_TO_UP, height - 100, ftk_widget_top(win), delta, 200);
-	ftk_animator_start(ani, win, 0);
-
-	ftk_widget_show_all(win, 1);
 
 	return RET_OK;
 }
 
-Ret ftk_main(int argc, char* argv[])
+int main(int argc, char* argv[])
 {
-	int width  = 0;
-	int height = 0;
-	int button_height = 0;
-	FtkGc gc = {0};
+	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
-	FtkWidget* win = ftk_app_window_create();
-
-	ftk_widget_set_attr(win, FTK_ATTR_IGNORE_CLOSE);
-	width = ftk_widget_width(win);
-	height = ftk_widget_height(win);
-
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = load_bitmap("tray_handle_normal.png");
-	button_height = ftk_bitmap_height(gc.bitmap);
-
-	button = ftk_button_create(win, 0, height-button_height, width, button_height);
-	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
-	ftk_widget_set_attr(button, FTK_ATTR_BG_CENTER);
-	ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
-	ftk_gc_reset(&gc);
-
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = load_bitmap("tray_handle_selected.png");
-	ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
-	ftk_gc_reset(&gc);
+	ftk_init(argc, argv);
 	
-	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = load_bitmap("tray_handle_pressed.png");
-	ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
-	ftk_gc_reset(&gc);
+	if(argv[1] != NULL && strcmp(argv[1], "--vertical") == 0)
+	{
+		g_desktop_vertical = 1;
+	}
 
+	win = desktop_load_xul(g_desktop_vertical ? "xul/desktop-v.xul" : "xul/desktop-h.xul"); 
+	button = ftk_widget_lookup(win, 100);
+	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
 	ftk_widget_show_all(win, 1);
 
-	return RET_OK;
+	ftk_run();
+
+	return 0;
 }
