@@ -687,7 +687,7 @@ Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, int w, in
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 	int ox = bw < w ? x + (w - bw)/2 : x;
-	int oy = bh < h ? y + (h - bw)/2 : y;
+	int oy = bh < h ? y + (h - bh)/2 : y;
 	int bx = bw < w ? 0 : (bw - w)/2;
 	int by = bh < h ? 0 : (bh - h)/2;
 	

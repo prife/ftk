@@ -2,7 +2,7 @@
 #include "ftk_xul.h"
 #include "ftk_animator_expand.h"
 
-static int g_desktop_vertical = 1;
+static int g_desktop_horizonal = 0;
 
 static Ret button_close_applist_clicked(void* ctx, void* obj)
 {
@@ -36,7 +36,7 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 	FtkWidget* button = NULL;
 	FtkWidget* win = NULL;
 
-	win = desktop_load_xul(g_desktop_vertical ? "xul/appview-v.xul" : "xul/appview-h.xul"); 
+	win = desktop_load_xul(g_desktop_horizonal ? "xul/appview-h.xul" : "xul/appview-v.xul"); 
 	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, button_close_applist_clicked, win);
 
@@ -49,12 +49,12 @@ int main(int argc, char* argv[])
 	FtkWidget* button = NULL;
 	ftk_init(argc, argv);
 	
-	if(argv[1] != NULL && strcmp(argv[1], "--vertical") == 0)
+	if(argv[1] != NULL && strncmp(argv[1], "--hor", 5) == 0)
 	{
-		g_desktop_vertical = 1;
+		g_desktop_horizonal = 1;
 	}
 
-	win = desktop_load_xul(g_desktop_vertical ? "xul/desktop-v.xul" : "xul/desktop-h.xul"); 
+	win = desktop_load_xul(g_desktop_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
 	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
 	ftk_widget_show_all(win, 1);
