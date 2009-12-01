@@ -3,7 +3,12 @@
 #include "ftk_expr.h"
 #include "ftk_animator_expand.h"
 
-const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
+const char* ftk_translate_text(const char* text)
+{
+	return text;
+}
+
+const char* ftk_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
 	snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_DATA_DIR, path);
 	if(access(out_path, R_OK) < 0)
@@ -18,8 +23,8 @@ static FtkWidget* load_xul(const char* filename)
 {
 	char path[FTK_MAX_PATH+1] = {0};
 	
-	tr_path(filename, path);
-	return ftk_xul_load_file(filename, NULL, tr_path);
+	ftk_translate_path(filename, path);
+	return ftk_xul_load_file(filename, ftk_translate_text, ftk_translate_path);
 }
 
 static Ret button_clicked(void* ctx, void* obj)
@@ -54,7 +59,11 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
+#ifdef HAS_MAIN
 int main(int argc, char* argv[])
+#else
+Ret ftk_main(int argc, char* argv[])
+#endif
 {
 	int i = 0;
 	FtkWidget* win = NULL;
@@ -74,5 +83,5 @@ int main(int argc, char* argv[])
 
 	ftk_run();
 
-	return 0;
+	return RET_OK;
 }

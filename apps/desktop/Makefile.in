@@ -45,7 +45,7 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-am_desktop_OBJECTS = desktop-main.$(OBJEXT)
+am_desktop_OBJECTS = desktop-main.$(OBJEXT) desktop-app_info.$(OBJEXT)
 desktop_OBJECTS = $(am_desktop_OBJECTS)
 desktop_LDADD = $(LDADD)
 desktop_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -177,7 +177,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-desktop_SOURCES = main.c
+desktop_SOURCES = main.c app_info.c
 desktop_LDFLAGS = $(MYLDFLAGS)
 desktop_CFLAGS = -DAPP_DATA_DIR="\"$(datadir)/ftk/desktop\"" \
 	-DAPP_LOCAL_DATA_DIR="\"$(srcdir)\""
@@ -253,6 +253,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/desktop-app_info.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/desktop-main.Po@am__quote@
 
 .c.o:
@@ -289,6 +290,20 @@ desktop-main.obj: main.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='main.c' object='desktop-main.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(desktop_CFLAGS) $(CFLAGS) -c -o desktop-main.obj `if test -f 'main.c'; then $(CYGPATH_W) 'main.c'; else $(CYGPATH_W) '$(srcdir)/main.c'; fi`
+
+desktop-app_info.o: app_info.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(desktop_CFLAGS) $(CFLAGS) -MT desktop-app_info.o -MD -MP -MF $(DEPDIR)/desktop-app_info.Tpo -c -o desktop-app_info.o `test -f 'app_info.c' || echo '$(srcdir)/'`app_info.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/desktop-app_info.Tpo $(DEPDIR)/desktop-app_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='app_info.c' object='desktop-app_info.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(desktop_CFLAGS) $(CFLAGS) -c -o desktop-app_info.o `test -f 'app_info.c' || echo '$(srcdir)/'`app_info.c
+
+desktop-app_info.obj: app_info.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(desktop_CFLAGS) $(CFLAGS) -MT desktop-app_info.obj -MD -MP -MF $(DEPDIR)/desktop-app_info.Tpo -c -o desktop-app_info.obj `if test -f 'app_info.c'; then $(CYGPATH_W) 'app_info.c'; else $(CYGPATH_W) '$(srcdir)/app_info.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/desktop-app_info.Tpo $(DEPDIR)/desktop-app_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='app_info.c' object='desktop-app_info.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(desktop_CFLAGS) $(CFLAGS) -c -o desktop-app_info.obj `if test -f 'app_info.c'; then $(CYGPATH_W) 'app_info.c'; else $(CYGPATH_W) '$(srcdir)/app_info.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo
