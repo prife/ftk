@@ -118,25 +118,27 @@ static int ftk_wnd_manager_get_status_bar_height(FtkWndManager* thiz)
 	}
 }
 
-static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
+static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget* window)
 {
 	int x = 0;
 	int y = 0;
 	int w = 0;
 	int h = 0;
-	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
-	return_val_if_fail((priv->top+1) < FTK_MAX_WINDOWS, RET_FAIL);
 
-	priv->windows[priv->top++] = window;
 	/*XXX: we assume panel is added as first window*/
 	switch(ftk_widget_type(window))
 	{
 		case FTK_WINDOW:
 		{
-			y = ftk_wnd_manager_get_status_bar_height(thiz);
 			w = ftk_display_width(ftk_default_display());
-			h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);
+			h = ftk_display_height(ftk_default_display());
+
+			if(!ftk_window_is_fullscreen(window))
+			{
+				h -= ftk_wnd_manager_get_status_bar_height(thiz);
+				y = ftk_wnd_manager_get_status_bar_height(thiz);
+			}
 
 			break;
 		}
@@ -172,6 +174,33 @@ static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 	ftk_logd("type=%d %d %d %d %d\n", ftk_widget_type(window), x, y, w, h);
 
 	return RET_OK;
+}
+
+static Ret  ftk_wnd_manager_default_relayout(FtkWndManager* thiz)
+{
+	int i = 0;
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	for(i = 0; i < priv->top; i++)
+	{
+		ftk_wnd_manager_default_relayout_one(thiz, priv->windows[i]);
+	}
+
+	ftk_wnd_manager_update(thiz);
+
+	return RET_OK;
+}
+
+static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
+	return_val_if_fail((priv->top+1) < FTK_MAX_WINDOWS, RET_FAIL);
+
+	priv->windows[priv->top++] = window;
+
+	return ftk_wnd_manager_default_relayout_one(thiz, window);
 }
 
 static Ret  ftk_wnd_manager_default_remove(FtkWndManager* thiz, FtkWidget* window)
@@ -419,6 +448,11 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
 			return RET_OK;
 		}
+		case FTK_EVT_RELAYOUT_WND:
+		{
+			ftk_wnd_manager_default_relayout(thiz);
+			break;
+		}
 		default:break;
 	}
 	
@@ -486,6 +520,10 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 		if(ftk_widget_is_visible(win))
 		{
 			ftk_widget_paint(win);
+			if(ftk_window_is_fullscreen(win))
+			{
+				return RET_OK;
+			}
 		}
 	}
 	

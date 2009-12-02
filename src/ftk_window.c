@@ -421,8 +421,11 @@ Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 
 	if(priv->fullscreen != fullscreen)
 	{
+		FtkEvent event = {0};
 		priv->fullscreen = fullscreen;
-		ftk_wnd_manager_update(ftk_default_wnd_manager());
+
+		event.type = FTK_EVT_RELAYOUT_WND;
+		ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 	}
 
 	return RET_OK;
