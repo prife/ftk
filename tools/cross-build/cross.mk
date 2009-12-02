@@ -1,5 +1,8 @@
-all: check zlib png jpeg libftk
-all_clean:  zlib_clean png_clean jpeg_clean  libftk_clean
+all: check zlib png jpeg tslib freetype libftk
+all_clean:  zlib_clean png_clean jpeg_clean  libftk_clean tslib_clean freetype_clean 
+
+all_dfb: check zlib png jpeg tslib freetype directfb libftk
+all_dfb_clean:  zlib_clean png_clean jpeg_clean  libftk_clean tslib_clean freetype_clean directfb_clean
 
 check:
 	if [ ! -e packages ]; then mkdir packages;fi
@@ -38,8 +41,48 @@ jpeg: jpegsrc.v7
 jpeg_clean:
 	rm -rf jpeg-7/$(ARCH)
 
+packages/tslib-1.0.tar.bz2:
+	cd packages && wget http://download.berlios.de/tslib/tslib-1.0.tar.bz2
+tslib-1.0: packages/tslib-1.0.tar.bz2
+	tar xf packages/tslib-1.0.tar.bz2
+tslib: tslib-1.0
+	cd tslib-1.0 && ./autogen.sh; cd -;\
+	mkdir tslib-1.0/$(ARCH); cd tslib-1.0/$(ARCH) && \
+	../configure $(HOST_PARAM) --prefix=$(PREFIX) -sysconfdir=$(PREFIX)/etc  ac_cv_func_malloc_0_nonnull=yes &&\
+	make clean; make && make install
+tslib_clean:
+	rm -rf tslib-1.0/$(ARCH)
+tslib_source_clean:
+	rm -rf tslib-1.0
+
+packages/freetype-2.3.9.tar.gz:
+	cd packages && wget http://ftp.twaren.net/Unix/NonGNU/freetype/freetype-2.3.9.tar.gz
+freetype-2.3.9: packages/freetype-2.3.9.tar.gz
+	tar xf packages/freetype-2.3.9.tar.gz
+freetype: freetype-2.3.9
+	mkdir freetype-2.3.9/$(ARCH); cd freetype-2.3.9/$(ARCH) && \
+	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
+	make clean; make && make install
+freetype_clean:
+	rm -rf freetype-2.3.9/$(ARCH)
+freetype_source_clean:
+	rm -rf freetype-2.3.9
+
+packages/DirectFB-1.4.1.tar.gz:
+	cd packages && wget http://www.directfb.org/downloads/Core/DirectFB-1.4/DirectFB-1.4.1.tar.gz
+DirectFB-1.4.1: packages/DirectFB-1.4.1.tar.gz
+	tar xf packages/DirectFB-1.4.1.tar.gz
+directfb: DirectFB-1.4.1
+	mkdir DirectFB-1.4.1/$(ARCH); cd DirectFB-1.4.1/$(ARCH) && \
+	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique &&\
+	make clean; make && make install
+directfb_clean:
+	rm -rf DirectFB-1.4.1/$(ARCH)
+directfb_source_clean:
+	rm -rf DirectFB-1.4.1
+
 libftk:
-	cd ftk* && . ./autogen.sh;
+	cd ftk && . autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install
