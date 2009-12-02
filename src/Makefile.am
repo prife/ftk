@@ -18,8 +18,8 @@ LINUX_DFB=$(srcdir)/backend/directfb/ftk_display_dfb.c \
 
 libftk_la_SOURCES=\
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
-	fontdata.c            ftk_label.c               ftk_source_timer.c \
-	ftk_bitmap.c          ftk_font_default.c        ftk_main_loop.c     ftk_util.c \
+	ftk_label.c           ftk_source_timer.c \
+	ftk_bitmap.c          ftk_main_loop.c     ftk_util.c \
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
 	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
@@ -34,6 +34,14 @@ libftk_la_SOURCES=\
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c
 
+if FONT_ENGINE_FREETYPE
+libftk_la_SOURCES+=ftk_font_freetype.c
+endif
+
+if FONT_ENGINE_DEFAULT
+libftk_la_SOURCES+=fontdata.c ftk_font_default.c
+endif
+
 if FTK_BACKEND_FB
 libftk_la_SOURCES+=$(LINUX_NATIVE)
 endif
@@ -44,6 +52,14 @@ endif
 
 if FTK_BACKEND_DFB
 libftk_la_SOURCES+=$(LINUX_DFB)
+endif
+
+if FONT_ENGINE_FREETYPE
+libftk_la_CFLAGS=-DFTK_FONT="\"font.ttf\"" 
+endif
+
+if FONT_ENGINE_DEFAULT
+libftk_la_CFLAGS=-DFTK_FONT="\"unicode.fnt\"" 
 endif
 
 ftkdir=$(includedir)/ftk

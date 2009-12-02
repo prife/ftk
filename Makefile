@@ -90,7 +90,7 @@ AUTOMAKE = ${SHELL} /android/lab/gui/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""   -I/usr/include/freetype2   -DUSE_FREETYPE
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -116,7 +116,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
+LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext  -lfreetype  
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -190,7 +190,7 @@ sysconfdir = ${prefix}/etc
 target_alias = 
 top_builddir = .
 top_srcdir = .
-SUBDIRS = src script_binding apps
+SUBDIRS = src script_binding apps tools
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = ftk.pc
 all: config.h

@@ -1,3 +1,4 @@
+#include "ftk_font_freetype.h"
 #include "ftk_font_default.h"
 
 int main(int argc, char* argv[])
@@ -6,7 +7,11 @@ int main(int argc, char* argv[])
 	unsigned short c = 'a';
 	FtkFont* font = NULL;
 	const char* filename = argv[1] != NULL ? argv[1] : "./unicode.fnt";
+#ifdef USE_FREETYPE 
+	font = ftk_font_freetype_create(filename, 0, 0, 16);
+#else
 	font = ftk_font_default_create(filename, 0, 0, 16);
+#endif	
 	for(c = 'a'; c != 'z'; c++)
 	{
 		assert(ftk_font_lookup(font, c, &glyph) == RET_OK);

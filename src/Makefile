@@ -33,9 +33,11 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
-#am__append_1 = $(LINUX_NATIVE)
-am__append_2 = $(LINUX_X11)
-#am__append_3 = $(LINUX_DFB)
+am__append_1 = ftk_font_freetype.c
+#am__append_2 = fontdata.c ftk_font_default.c
+#am__append_3 = $(LINUX_NATIVE)
+am__append_4 = $(LINUX_X11)
+#am__append_5 = $(LINUX_DFB)
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -57,9 +59,8 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libftk_la_LIBADD =
 am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
-	ftk_wnd_manager_default.c fontdata.c ftk_label.c \
-	ftk_source_timer.c ftk_bitmap.c ftk_font_default.c \
-	ftk_main_loop.c ftk_util.c ftk_bitmap_factory.c \
+	ftk_wnd_manager_default.c ftk_label.c ftk_source_timer.c \
+	ftk_bitmap.c ftk_main_loop.c ftk_util.c ftk_bitmap_factory.c \
 	ftk_image_jpeg_decoder.c ftk_source_idle.c ftk_widget.c ftk.c \
 	ftk_image_png_decoder.c ftk_window.c ftk_sources_manager.c \
 	ftk_globals.c ftk_button.c ftk_image.c ftk_log.c ftk_dialog.c \
@@ -71,8 +72,8 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	$(srcdir)/os/linux/ftk_linux.c ftk_gesture.c ftk_wait_box.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
-	ftk_list_render_default.c \
-	$(srcdir)/backend/fb/ftk_display_fb.c \
+	ftk_list_render_default.c ftk_font_freetype.c fontdata.c \
+	ftk_font_default.c $(srcdir)/backend/fb/ftk_display_fb.c \
 	$(srcdir)/backend/fb/ftk_source_input.c \
 	$(srcdir)/backend/fb/ftk_backend_fb.c \
 	$(srcdir)/backend/x11-emu/ftk_display_x11.c \
@@ -81,33 +82,51 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	$(srcdir)/backend/directfb/ftk_display_dfb.c \
 	$(srcdir)/backend/directfb/ftk_source_dfb.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
-am__objects_1 = ftk_display_fb.lo ftk_source_input.lo \
-	ftk_backend_fb.lo
-#am__objects_2 = $(am__objects_1)
-am__objects_3 = ftk_display_x11.lo ftk_source_x11.lo \
-	ftk_backend_x11.lo
-am__objects_4 = $(am__objects_3)
-am__objects_5 = ftk_display_dfb.lo ftk_source_dfb.lo \
-	ftk_backend_dfb.lo
-#am__objects_6 = $(am__objects_5)
-am_libftk_la_OBJECTS = ftk_canvas.lo ftk_source_primary.lo \
-	ftk_wnd_manager_default.lo fontdata.lo ftk_label.lo \
-	ftk_source_timer.lo ftk_bitmap.lo ftk_font_default.lo \
-	ftk_main_loop.lo ftk_util.lo ftk_bitmap_factory.lo \
-	ftk_image_jpeg_decoder.lo ftk_source_idle.lo ftk_widget.lo \
-	ftk.lo ftk_image_png_decoder.lo ftk_window.lo \
-	ftk_sources_manager.lo ftk_globals.lo ftk_button.lo \
-	ftk_image.lo ftk_log.lo ftk_dialog.lo ftk_status_item.lo \
-	ftk_status_panel.lo ftk_style.lo ftk_menu_panel.lo \
-	ftk_menu_item.lo ftk_app_window.lo ftk_entry.lo \
-	ftk_text_buffer.lo ftk_icon_cache.lo ftk_animator_expand.lo \
-	ftk_progress_bar.lo ftk_radio_group.lo ftk_check_button.lo \
-	ftk_mmap_linux.lo ftk_linux.lo ftk_gesture.lo ftk_wait_box.lo \
-	ftk_scroll_bar.lo ftk_sprite.lo ftk_display.lo \
-	ftk_xml_parser.lo ftk_xul.lo ftk_expr.lo ftk_list_view.lo \
-	ftk_list_model_default.lo ftk_list_render_default.lo \
-	$(am__objects_2) $(am__objects_4) $(am__objects_6)
+am__objects_1 =  \
+	libftk_la-ftk_font_freetype.lo
+#am__objects_2 = libftk_la-fontdata.lo \
+#	libftk_la-ftk_font_default.lo
+am__objects_3 = libftk_la-ftk_display_fb.lo \
+	libftk_la-ftk_source_input.lo libftk_la-ftk_backend_fb.lo
+#am__objects_4 = $(am__objects_3)
+am__objects_5 = libftk_la-ftk_display_x11.lo \
+	libftk_la-ftk_source_x11.lo libftk_la-ftk_backend_x11.lo
+am__objects_6 = $(am__objects_5)
+am__objects_7 = libftk_la-ftk_display_dfb.lo \
+	libftk_la-ftk_source_dfb.lo libftk_la-ftk_backend_dfb.lo
+#am__objects_8 = $(am__objects_7)
+am_libftk_la_OBJECTS = libftk_la-ftk_canvas.lo \
+	libftk_la-ftk_source_primary.lo \
+	libftk_la-ftk_wnd_manager_default.lo libftk_la-ftk_label.lo \
+	libftk_la-ftk_source_timer.lo libftk_la-ftk_bitmap.lo \
+	libftk_la-ftk_main_loop.lo libftk_la-ftk_util.lo \
+	libftk_la-ftk_bitmap_factory.lo \
+	libftk_la-ftk_image_jpeg_decoder.lo \
+	libftk_la-ftk_source_idle.lo libftk_la-ftk_widget.lo \
+	libftk_la-ftk.lo libftk_la-ftk_image_png_decoder.lo \
+	libftk_la-ftk_window.lo libftk_la-ftk_sources_manager.lo \
+	libftk_la-ftk_globals.lo libftk_la-ftk_button.lo \
+	libftk_la-ftk_image.lo libftk_la-ftk_log.lo \
+	libftk_la-ftk_dialog.lo libftk_la-ftk_status_item.lo \
+	libftk_la-ftk_status_panel.lo libftk_la-ftk_style.lo \
+	libftk_la-ftk_menu_panel.lo libftk_la-ftk_menu_item.lo \
+	libftk_la-ftk_app_window.lo libftk_la-ftk_entry.lo \
+	libftk_la-ftk_text_buffer.lo libftk_la-ftk_icon_cache.lo \
+	libftk_la-ftk_animator_expand.lo libftk_la-ftk_progress_bar.lo \
+	libftk_la-ftk_radio_group.lo libftk_la-ftk_check_button.lo \
+	libftk_la-ftk_mmap_linux.lo libftk_la-ftk_linux.lo \
+	libftk_la-ftk_gesture.lo libftk_la-ftk_wait_box.lo \
+	libftk_la-ftk_scroll_bar.lo libftk_la-ftk_sprite.lo \
+	libftk_la-ftk_display.lo libftk_la-ftk_xml_parser.lo \
+	libftk_la-ftk_xul.lo libftk_la-ftk_expr.lo \
+	libftk_la-ftk_list_view.lo libftk_la-ftk_list_model_default.lo \
+	libftk_la-ftk_list_render_default.lo $(am__objects_1) \
+	$(am__objects_2) $(am__objects_4) $(am__objects_6) \
+	$(am__objects_8)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
+libftk_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libftk_la_CFLAGS) \
+	$(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -146,7 +165,7 @@ AUTOMAKE = ${SHELL} /android/lab/gui/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
+CFLAGS = -g  -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""   -I/usr/include/freetype2   -DUSE_FREETYPE
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -172,7 +191,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
+LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext  -lfreetype  
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -261,9 +280,8 @@ LINUX_DFB = $(srcdir)/backend/directfb/ftk_display_dfb.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
 
 libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
-	ftk_wnd_manager_default.c fontdata.c ftk_label.c \
-	ftk_source_timer.c ftk_bitmap.c ftk_font_default.c \
-	ftk_main_loop.c ftk_util.c ftk_bitmap_factory.c \
+	ftk_wnd_manager_default.c ftk_label.c ftk_source_timer.c \
+	ftk_bitmap.c ftk_main_loop.c ftk_util.c ftk_bitmap_factory.c \
 	ftk_image_jpeg_decoder.c ftk_source_idle.c ftk_widget.c ftk.c \
 	ftk_image_png_decoder.c ftk_window.c ftk_sources_manager.c \
 	ftk_globals.c ftk_button.c ftk_image.c ftk_log.c ftk_dialog.c \
@@ -276,7 +294,9 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
 	ftk_list_render_default.c $(am__append_1) $(am__append_2) \
-	$(am__append_3)
+	$(am__append_3) $(am__append_4) $(am__append_5)
+#libftk_la_CFLAGS = -DFTK_FONT="\"unicode.fnt\"" 
+libftk_la_CFLAGS = -DFTK_FONT="\"font.ttf\"" 
 ftkdir = $(includedir)/ftk
 ftk_HEADERS = \
 	fontdata.h                ftk_list_render_default.h\
@@ -375,7 +395,7 @@ clean-libLTLIBRARIES:
 	  rm -f "$${dir}/so_locations"; \
 	done
 libftk.la: $(libftk_la_OBJECTS) $(libftk_la_DEPENDENCIES) 
-	$(LINK) -rpath $(libdir) $(libftk_la_OBJECTS) $(libftk_la_LIBADD) $(LIBS)
+	$(libftk_la_LINK) -rpath $(libdir) $(libftk_la_OBJECTS) $(libftk_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -383,64 +403,65 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/fontdata.Plo
-include ./$(DEPDIR)/ftk.Plo
-include ./$(DEPDIR)/ftk_animator_expand.Plo
-include ./$(DEPDIR)/ftk_app_window.Plo
-include ./$(DEPDIR)/ftk_backend_dfb.Plo
-include ./$(DEPDIR)/ftk_backend_fb.Plo
-include ./$(DEPDIR)/ftk_backend_x11.Plo
-include ./$(DEPDIR)/ftk_bitmap.Plo
-include ./$(DEPDIR)/ftk_bitmap_factory.Plo
-include ./$(DEPDIR)/ftk_button.Plo
-include ./$(DEPDIR)/ftk_canvas.Plo
-include ./$(DEPDIR)/ftk_check_button.Plo
-include ./$(DEPDIR)/ftk_dialog.Plo
-include ./$(DEPDIR)/ftk_display.Plo
-include ./$(DEPDIR)/ftk_display_dfb.Plo
-include ./$(DEPDIR)/ftk_display_fb.Plo
-include ./$(DEPDIR)/ftk_display_x11.Plo
-include ./$(DEPDIR)/ftk_entry.Plo
-include ./$(DEPDIR)/ftk_expr.Plo
-include ./$(DEPDIR)/ftk_font_default.Plo
-include ./$(DEPDIR)/ftk_gesture.Plo
-include ./$(DEPDIR)/ftk_globals.Plo
-include ./$(DEPDIR)/ftk_icon_cache.Plo
-include ./$(DEPDIR)/ftk_image.Plo
-include ./$(DEPDIR)/ftk_image_jpeg_decoder.Plo
-include ./$(DEPDIR)/ftk_image_png_decoder.Plo
-include ./$(DEPDIR)/ftk_label.Plo
-include ./$(DEPDIR)/ftk_linux.Plo
-include ./$(DEPDIR)/ftk_list_model_default.Plo
-include ./$(DEPDIR)/ftk_list_render_default.Plo
-include ./$(DEPDIR)/ftk_list_view.Plo
-include ./$(DEPDIR)/ftk_log.Plo
-include ./$(DEPDIR)/ftk_main_loop.Plo
-include ./$(DEPDIR)/ftk_menu_item.Plo
-include ./$(DEPDIR)/ftk_menu_panel.Plo
-include ./$(DEPDIR)/ftk_mmap_linux.Plo
-include ./$(DEPDIR)/ftk_progress_bar.Plo
-include ./$(DEPDIR)/ftk_radio_group.Plo
-include ./$(DEPDIR)/ftk_scroll_bar.Plo
-include ./$(DEPDIR)/ftk_source_dfb.Plo
-include ./$(DEPDIR)/ftk_source_idle.Plo
-include ./$(DEPDIR)/ftk_source_input.Plo
-include ./$(DEPDIR)/ftk_source_primary.Plo
-include ./$(DEPDIR)/ftk_source_timer.Plo
-include ./$(DEPDIR)/ftk_source_x11.Plo
-include ./$(DEPDIR)/ftk_sources_manager.Plo
-include ./$(DEPDIR)/ftk_sprite.Plo
-include ./$(DEPDIR)/ftk_status_item.Plo
-include ./$(DEPDIR)/ftk_status_panel.Plo
-include ./$(DEPDIR)/ftk_style.Plo
-include ./$(DEPDIR)/ftk_text_buffer.Plo
-include ./$(DEPDIR)/ftk_util.Plo
-include ./$(DEPDIR)/ftk_wait_box.Plo
-include ./$(DEPDIR)/ftk_widget.Plo
-include ./$(DEPDIR)/ftk_window.Plo
-include ./$(DEPDIR)/ftk_wnd_manager_default.Plo
-include ./$(DEPDIR)/ftk_xml_parser.Plo
-include ./$(DEPDIR)/ftk_xul.Plo
+include ./$(DEPDIR)/libftk_la-fontdata.Plo
+include ./$(DEPDIR)/libftk_la-ftk.Plo
+include ./$(DEPDIR)/libftk_la-ftk_animator_expand.Plo
+include ./$(DEPDIR)/libftk_la-ftk_app_window.Plo
+include ./$(DEPDIR)/libftk_la-ftk_backend_dfb.Plo
+include ./$(DEPDIR)/libftk_la-ftk_backend_fb.Plo
+include ./$(DEPDIR)/libftk_la-ftk_backend_x11.Plo
+include ./$(DEPDIR)/libftk_la-ftk_bitmap.Plo
+include ./$(DEPDIR)/libftk_la-ftk_bitmap_factory.Plo
+include ./$(DEPDIR)/libftk_la-ftk_button.Plo
+include ./$(DEPDIR)/libftk_la-ftk_canvas.Plo
+include ./$(DEPDIR)/libftk_la-ftk_check_button.Plo
+include ./$(DEPDIR)/libftk_la-ftk_dialog.Plo
+include ./$(DEPDIR)/libftk_la-ftk_display.Plo
+include ./$(DEPDIR)/libftk_la-ftk_display_dfb.Plo
+include ./$(DEPDIR)/libftk_la-ftk_display_fb.Plo
+include ./$(DEPDIR)/libftk_la-ftk_display_x11.Plo
+include ./$(DEPDIR)/libftk_la-ftk_entry.Plo
+include ./$(DEPDIR)/libftk_la-ftk_expr.Plo
+include ./$(DEPDIR)/libftk_la-ftk_font_default.Plo
+include ./$(DEPDIR)/libftk_la-ftk_font_freetype.Plo
+include ./$(DEPDIR)/libftk_la-ftk_gesture.Plo
+include ./$(DEPDIR)/libftk_la-ftk_globals.Plo
+include ./$(DEPDIR)/libftk_la-ftk_icon_cache.Plo
+include ./$(DEPDIR)/libftk_la-ftk_image.Plo
+include ./$(DEPDIR)/libftk_la-ftk_image_jpeg_decoder.Plo
+include ./$(DEPDIR)/libftk_la-ftk_image_png_decoder.Plo
+include ./$(DEPDIR)/libftk_la-ftk_label.Plo
+include ./$(DEPDIR)/libftk_la-ftk_linux.Plo
+include ./$(DEPDIR)/libftk_la-ftk_list_model_default.Plo
+include ./$(DEPDIR)/libftk_la-ftk_list_render_default.Plo
+include ./$(DEPDIR)/libftk_la-ftk_list_view.Plo
+include ./$(DEPDIR)/libftk_la-ftk_log.Plo
+include ./$(DEPDIR)/libftk_la-ftk_main_loop.Plo
+include ./$(DEPDIR)/libftk_la-ftk_menu_item.Plo
+include ./$(DEPDIR)/libftk_la-ftk_menu_panel.Plo
+include ./$(DEPDIR)/libftk_la-ftk_mmap_linux.Plo
+include ./$(DEPDIR)/libftk_la-ftk_progress_bar.Plo
+include ./$(DEPDIR)/libftk_la-ftk_radio_group.Plo
+include ./$(DEPDIR)/libftk_la-ftk_scroll_bar.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_dfb.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_idle.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_input.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_primary.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_timer.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_x11.Plo
+include ./$(DEPDIR)/libftk_la-ftk_sources_manager.Plo
+include ./$(DEPDIR)/libftk_la-ftk_sprite.Plo
+include ./$(DEPDIR)/libftk_la-ftk_status_item.Plo
+include ./$(DEPDIR)/libftk_la-ftk_status_panel.Plo
+include ./$(DEPDIR)/libftk_la-ftk_style.Plo
+include ./$(DEPDIR)/libftk_la-ftk_text_buffer.Plo
+include ./$(DEPDIR)/libftk_la-ftk_util.Plo
+include ./$(DEPDIR)/libftk_la-ftk_wait_box.Plo
+include ./$(DEPDIR)/libftk_la-ftk_widget.Plo
+include ./$(DEPDIR)/libftk_la-ftk_window.Plo
+include ./$(DEPDIR)/libftk_la-ftk_wnd_manager_default.Plo
+include ./$(DEPDIR)/libftk_la-ftk_xml_parser.Plo
+include ./$(DEPDIR)/libftk_la-ftk_xul.Plo
 
 .c.o:
 	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -463,82 +484,418 @@ include ./$(DEPDIR)/ftk_xul.Plo
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(LTCOMPILE) -c -o $@ $<
 
-ftk_mmap_linux.lo: $(srcdir)/os/linux/ftk_mmap_linux.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_mmap_linux.lo -MD -MP -MF $(DEPDIR)/ftk_mmap_linux.Tpo -c -o ftk_mmap_linux.lo `test -f '$(srcdir)/os/linux/ftk_mmap_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_mmap_linux.c
-	mv -f $(DEPDIR)/ftk_mmap_linux.Tpo $(DEPDIR)/ftk_mmap_linux.Plo
-#	source='$(srcdir)/os/linux/ftk_mmap_linux.c' object='ftk_mmap_linux.lo' libtool=yes \
+libftk_la-ftk_canvas.lo: ftk_canvas.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_canvas.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_canvas.Tpo -c -o libftk_la-ftk_canvas.lo `test -f 'ftk_canvas.c' || echo '$(srcdir)/'`ftk_canvas.c
+	mv -f $(DEPDIR)/libftk_la-ftk_canvas.Tpo $(DEPDIR)/libftk_la-ftk_canvas.Plo
+#	source='ftk_canvas.c' object='libftk_la-ftk_canvas.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_mmap_linux.lo `test -f '$(srcdir)/os/linux/ftk_mmap_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_mmap_linux.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_canvas.lo `test -f 'ftk_canvas.c' || echo '$(srcdir)/'`ftk_canvas.c
 
-ftk_linux.lo: $(srcdir)/os/linux/ftk_linux.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_linux.lo -MD -MP -MF $(DEPDIR)/ftk_linux.Tpo -c -o ftk_linux.lo `test -f '$(srcdir)/os/linux/ftk_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_linux.c
-	mv -f $(DEPDIR)/ftk_linux.Tpo $(DEPDIR)/ftk_linux.Plo
-#	source='$(srcdir)/os/linux/ftk_linux.c' object='ftk_linux.lo' libtool=yes \
+libftk_la-ftk_source_primary.lo: ftk_source_primary.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_primary.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_primary.Tpo -c -o libftk_la-ftk_source_primary.lo `test -f 'ftk_source_primary.c' || echo '$(srcdir)/'`ftk_source_primary.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_primary.Tpo $(DEPDIR)/libftk_la-ftk_source_primary.Plo
+#	source='ftk_source_primary.c' object='libftk_la-ftk_source_primary.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_linux.lo `test -f '$(srcdir)/os/linux/ftk_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_linux.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_primary.lo `test -f 'ftk_source_primary.c' || echo '$(srcdir)/'`ftk_source_primary.c
 
-ftk_display_fb.lo: $(srcdir)/backend/fb/ftk_display_fb.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_display_fb.lo -MD -MP -MF $(DEPDIR)/ftk_display_fb.Tpo -c -o ftk_display_fb.lo `test -f '$(srcdir)/backend/fb/ftk_display_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_display_fb.c
-	mv -f $(DEPDIR)/ftk_display_fb.Tpo $(DEPDIR)/ftk_display_fb.Plo
-#	source='$(srcdir)/backend/fb/ftk_display_fb.c' object='ftk_display_fb.lo' libtool=yes \
+libftk_la-ftk_wnd_manager_default.lo: ftk_wnd_manager_default.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_wnd_manager_default.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_wnd_manager_default.Tpo -c -o libftk_la-ftk_wnd_manager_default.lo `test -f 'ftk_wnd_manager_default.c' || echo '$(srcdir)/'`ftk_wnd_manager_default.c
+	mv -f $(DEPDIR)/libftk_la-ftk_wnd_manager_default.Tpo $(DEPDIR)/libftk_la-ftk_wnd_manager_default.Plo
+#	source='ftk_wnd_manager_default.c' object='libftk_la-ftk_wnd_manager_default.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_display_fb.lo `test -f '$(srcdir)/backend/fb/ftk_display_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_display_fb.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_wnd_manager_default.lo `test -f 'ftk_wnd_manager_default.c' || echo '$(srcdir)/'`ftk_wnd_manager_default.c
 
-ftk_source_input.lo: $(srcdir)/backend/fb/ftk_source_input.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_source_input.lo -MD -MP -MF $(DEPDIR)/ftk_source_input.Tpo -c -o ftk_source_input.lo `test -f '$(srcdir)/backend/fb/ftk_source_input.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_source_input.c
-	mv -f $(DEPDIR)/ftk_source_input.Tpo $(DEPDIR)/ftk_source_input.Plo
-#	source='$(srcdir)/backend/fb/ftk_source_input.c' object='ftk_source_input.lo' libtool=yes \
+libftk_la-ftk_label.lo: ftk_label.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_label.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_label.Tpo -c -o libftk_la-ftk_label.lo `test -f 'ftk_label.c' || echo '$(srcdir)/'`ftk_label.c
+	mv -f $(DEPDIR)/libftk_la-ftk_label.Tpo $(DEPDIR)/libftk_la-ftk_label.Plo
+#	source='ftk_label.c' object='libftk_la-ftk_label.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_source_input.lo `test -f '$(srcdir)/backend/fb/ftk_source_input.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_source_input.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_label.lo `test -f 'ftk_label.c' || echo '$(srcdir)/'`ftk_label.c
 
-ftk_backend_fb.lo: $(srcdir)/backend/fb/ftk_backend_fb.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_backend_fb.lo -MD -MP -MF $(DEPDIR)/ftk_backend_fb.Tpo -c -o ftk_backend_fb.lo `test -f '$(srcdir)/backend/fb/ftk_backend_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_backend_fb.c
-	mv -f $(DEPDIR)/ftk_backend_fb.Tpo $(DEPDIR)/ftk_backend_fb.Plo
-#	source='$(srcdir)/backend/fb/ftk_backend_fb.c' object='ftk_backend_fb.lo' libtool=yes \
+libftk_la-ftk_source_timer.lo: ftk_source_timer.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_timer.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_timer.Tpo -c -o libftk_la-ftk_source_timer.lo `test -f 'ftk_source_timer.c' || echo '$(srcdir)/'`ftk_source_timer.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_timer.Tpo $(DEPDIR)/libftk_la-ftk_source_timer.Plo
+#	source='ftk_source_timer.c' object='libftk_la-ftk_source_timer.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_backend_fb.lo `test -f '$(srcdir)/backend/fb/ftk_backend_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_backend_fb.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_timer.lo `test -f 'ftk_source_timer.c' || echo '$(srcdir)/'`ftk_source_timer.c
 
-ftk_display_x11.lo: $(srcdir)/backend/x11-emu/ftk_display_x11.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_display_x11.lo -MD -MP -MF $(DEPDIR)/ftk_display_x11.Tpo -c -o ftk_display_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_display_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_display_x11.c
-	mv -f $(DEPDIR)/ftk_display_x11.Tpo $(DEPDIR)/ftk_display_x11.Plo
-#	source='$(srcdir)/backend/x11-emu/ftk_display_x11.c' object='ftk_display_x11.lo' libtool=yes \
+libftk_la-ftk_bitmap.lo: ftk_bitmap.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_bitmap.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_bitmap.Tpo -c -o libftk_la-ftk_bitmap.lo `test -f 'ftk_bitmap.c' || echo '$(srcdir)/'`ftk_bitmap.c
+	mv -f $(DEPDIR)/libftk_la-ftk_bitmap.Tpo $(DEPDIR)/libftk_la-ftk_bitmap.Plo
+#	source='ftk_bitmap.c' object='libftk_la-ftk_bitmap.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_display_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_display_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_display_x11.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_bitmap.lo `test -f 'ftk_bitmap.c' || echo '$(srcdir)/'`ftk_bitmap.c
 
-ftk_source_x11.lo: $(srcdir)/backend/x11-emu/ftk_source_x11.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_source_x11.lo -MD -MP -MF $(DEPDIR)/ftk_source_x11.Tpo -c -o ftk_source_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_source_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_source_x11.c
-	mv -f $(DEPDIR)/ftk_source_x11.Tpo $(DEPDIR)/ftk_source_x11.Plo
-#	source='$(srcdir)/backend/x11-emu/ftk_source_x11.c' object='ftk_source_x11.lo' libtool=yes \
+libftk_la-ftk_main_loop.lo: ftk_main_loop.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_main_loop.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_main_loop.Tpo -c -o libftk_la-ftk_main_loop.lo `test -f 'ftk_main_loop.c' || echo '$(srcdir)/'`ftk_main_loop.c
+	mv -f $(DEPDIR)/libftk_la-ftk_main_loop.Tpo $(DEPDIR)/libftk_la-ftk_main_loop.Plo
+#	source='ftk_main_loop.c' object='libftk_la-ftk_main_loop.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_source_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_source_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_source_x11.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_main_loop.lo `test -f 'ftk_main_loop.c' || echo '$(srcdir)/'`ftk_main_loop.c
 
-ftk_backend_x11.lo: $(srcdir)/backend/x11-emu/ftk_backend_x11.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_backend_x11.lo -MD -MP -MF $(DEPDIR)/ftk_backend_x11.Tpo -c -o ftk_backend_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_backend_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_backend_x11.c
-	mv -f $(DEPDIR)/ftk_backend_x11.Tpo $(DEPDIR)/ftk_backend_x11.Plo
-#	source='$(srcdir)/backend/x11-emu/ftk_backend_x11.c' object='ftk_backend_x11.lo' libtool=yes \
+libftk_la-ftk_util.lo: ftk_util.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_util.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_util.Tpo -c -o libftk_la-ftk_util.lo `test -f 'ftk_util.c' || echo '$(srcdir)/'`ftk_util.c
+	mv -f $(DEPDIR)/libftk_la-ftk_util.Tpo $(DEPDIR)/libftk_la-ftk_util.Plo
+#	source='ftk_util.c' object='libftk_la-ftk_util.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_backend_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_backend_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_backend_x11.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_util.lo `test -f 'ftk_util.c' || echo '$(srcdir)/'`ftk_util.c
 
-ftk_display_dfb.lo: $(srcdir)/backend/directfb/ftk_display_dfb.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_display_dfb.lo -MD -MP -MF $(DEPDIR)/ftk_display_dfb.Tpo -c -o ftk_display_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_display_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_display_dfb.c
-	mv -f $(DEPDIR)/ftk_display_dfb.Tpo $(DEPDIR)/ftk_display_dfb.Plo
-#	source='$(srcdir)/backend/directfb/ftk_display_dfb.c' object='ftk_display_dfb.lo' libtool=yes \
+libftk_la-ftk_bitmap_factory.lo: ftk_bitmap_factory.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_bitmap_factory.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_bitmap_factory.Tpo -c -o libftk_la-ftk_bitmap_factory.lo `test -f 'ftk_bitmap_factory.c' || echo '$(srcdir)/'`ftk_bitmap_factory.c
+	mv -f $(DEPDIR)/libftk_la-ftk_bitmap_factory.Tpo $(DEPDIR)/libftk_la-ftk_bitmap_factory.Plo
+#	source='ftk_bitmap_factory.c' object='libftk_la-ftk_bitmap_factory.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_display_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_display_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_display_dfb.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_bitmap_factory.lo `test -f 'ftk_bitmap_factory.c' || echo '$(srcdir)/'`ftk_bitmap_factory.c
 
-ftk_source_dfb.lo: $(srcdir)/backend/directfb/ftk_source_dfb.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_source_dfb.lo -MD -MP -MF $(DEPDIR)/ftk_source_dfb.Tpo -c -o ftk_source_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_source_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_source_dfb.c
-	mv -f $(DEPDIR)/ftk_source_dfb.Tpo $(DEPDIR)/ftk_source_dfb.Plo
-#	source='$(srcdir)/backend/directfb/ftk_source_dfb.c' object='ftk_source_dfb.lo' libtool=yes \
+libftk_la-ftk_image_jpeg_decoder.lo: ftk_image_jpeg_decoder.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_image_jpeg_decoder.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_image_jpeg_decoder.Tpo -c -o libftk_la-ftk_image_jpeg_decoder.lo `test -f 'ftk_image_jpeg_decoder.c' || echo '$(srcdir)/'`ftk_image_jpeg_decoder.c
+	mv -f $(DEPDIR)/libftk_la-ftk_image_jpeg_decoder.Tpo $(DEPDIR)/libftk_la-ftk_image_jpeg_decoder.Plo
+#	source='ftk_image_jpeg_decoder.c' object='libftk_la-ftk_image_jpeg_decoder.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_source_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_source_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_source_dfb.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_image_jpeg_decoder.lo `test -f 'ftk_image_jpeg_decoder.c' || echo '$(srcdir)/'`ftk_image_jpeg_decoder.c
 
-ftk_backend_dfb.lo: $(srcdir)/backend/directfb/ftk_backend_dfb.c
-	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT ftk_backend_dfb.lo -MD -MP -MF $(DEPDIR)/ftk_backend_dfb.Tpo -c -o ftk_backend_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_backend_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_backend_dfb.c
-	mv -f $(DEPDIR)/ftk_backend_dfb.Tpo $(DEPDIR)/ftk_backend_dfb.Plo
-#	source='$(srcdir)/backend/directfb/ftk_backend_dfb.c' object='ftk_backend_dfb.lo' libtool=yes \
+libftk_la-ftk_source_idle.lo: ftk_source_idle.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_idle.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_idle.Tpo -c -o libftk_la-ftk_source_idle.lo `test -f 'ftk_source_idle.c' || echo '$(srcdir)/'`ftk_source_idle.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_idle.Tpo $(DEPDIR)/libftk_la-ftk_source_idle.Plo
+#	source='ftk_source_idle.c' object='libftk_la-ftk_source_idle.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o ftk_backend_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_backend_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_backend_dfb.c
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_idle.lo `test -f 'ftk_source_idle.c' || echo '$(srcdir)/'`ftk_source_idle.c
+
+libftk_la-ftk_widget.lo: ftk_widget.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_widget.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_widget.Tpo -c -o libftk_la-ftk_widget.lo `test -f 'ftk_widget.c' || echo '$(srcdir)/'`ftk_widget.c
+	mv -f $(DEPDIR)/libftk_la-ftk_widget.Tpo $(DEPDIR)/libftk_la-ftk_widget.Plo
+#	source='ftk_widget.c' object='libftk_la-ftk_widget.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_widget.lo `test -f 'ftk_widget.c' || echo '$(srcdir)/'`ftk_widget.c
+
+libftk_la-ftk.lo: ftk.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk.Tpo -c -o libftk_la-ftk.lo `test -f 'ftk.c' || echo '$(srcdir)/'`ftk.c
+	mv -f $(DEPDIR)/libftk_la-ftk.Tpo $(DEPDIR)/libftk_la-ftk.Plo
+#	source='ftk.c' object='libftk_la-ftk.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk.lo `test -f 'ftk.c' || echo '$(srcdir)/'`ftk.c
+
+libftk_la-ftk_image_png_decoder.lo: ftk_image_png_decoder.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_image_png_decoder.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_image_png_decoder.Tpo -c -o libftk_la-ftk_image_png_decoder.lo `test -f 'ftk_image_png_decoder.c' || echo '$(srcdir)/'`ftk_image_png_decoder.c
+	mv -f $(DEPDIR)/libftk_la-ftk_image_png_decoder.Tpo $(DEPDIR)/libftk_la-ftk_image_png_decoder.Plo
+#	source='ftk_image_png_decoder.c' object='libftk_la-ftk_image_png_decoder.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_image_png_decoder.lo `test -f 'ftk_image_png_decoder.c' || echo '$(srcdir)/'`ftk_image_png_decoder.c
+
+libftk_la-ftk_window.lo: ftk_window.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_window.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_window.Tpo -c -o libftk_la-ftk_window.lo `test -f 'ftk_window.c' || echo '$(srcdir)/'`ftk_window.c
+	mv -f $(DEPDIR)/libftk_la-ftk_window.Tpo $(DEPDIR)/libftk_la-ftk_window.Plo
+#	source='ftk_window.c' object='libftk_la-ftk_window.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_window.lo `test -f 'ftk_window.c' || echo '$(srcdir)/'`ftk_window.c
+
+libftk_la-ftk_sources_manager.lo: ftk_sources_manager.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_sources_manager.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_sources_manager.Tpo -c -o libftk_la-ftk_sources_manager.lo `test -f 'ftk_sources_manager.c' || echo '$(srcdir)/'`ftk_sources_manager.c
+	mv -f $(DEPDIR)/libftk_la-ftk_sources_manager.Tpo $(DEPDIR)/libftk_la-ftk_sources_manager.Plo
+#	source='ftk_sources_manager.c' object='libftk_la-ftk_sources_manager.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_sources_manager.lo `test -f 'ftk_sources_manager.c' || echo '$(srcdir)/'`ftk_sources_manager.c
+
+libftk_la-ftk_globals.lo: ftk_globals.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_globals.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_globals.Tpo -c -o libftk_la-ftk_globals.lo `test -f 'ftk_globals.c' || echo '$(srcdir)/'`ftk_globals.c
+	mv -f $(DEPDIR)/libftk_la-ftk_globals.Tpo $(DEPDIR)/libftk_la-ftk_globals.Plo
+#	source='ftk_globals.c' object='libftk_la-ftk_globals.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_globals.lo `test -f 'ftk_globals.c' || echo '$(srcdir)/'`ftk_globals.c
+
+libftk_la-ftk_button.lo: ftk_button.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_button.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_button.Tpo -c -o libftk_la-ftk_button.lo `test -f 'ftk_button.c' || echo '$(srcdir)/'`ftk_button.c
+	mv -f $(DEPDIR)/libftk_la-ftk_button.Tpo $(DEPDIR)/libftk_la-ftk_button.Plo
+#	source='ftk_button.c' object='libftk_la-ftk_button.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_button.lo `test -f 'ftk_button.c' || echo '$(srcdir)/'`ftk_button.c
+
+libftk_la-ftk_image.lo: ftk_image.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_image.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_image.Tpo -c -o libftk_la-ftk_image.lo `test -f 'ftk_image.c' || echo '$(srcdir)/'`ftk_image.c
+	mv -f $(DEPDIR)/libftk_la-ftk_image.Tpo $(DEPDIR)/libftk_la-ftk_image.Plo
+#	source='ftk_image.c' object='libftk_la-ftk_image.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_image.lo `test -f 'ftk_image.c' || echo '$(srcdir)/'`ftk_image.c
+
+libftk_la-ftk_log.lo: ftk_log.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_log.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_log.Tpo -c -o libftk_la-ftk_log.lo `test -f 'ftk_log.c' || echo '$(srcdir)/'`ftk_log.c
+	mv -f $(DEPDIR)/libftk_la-ftk_log.Tpo $(DEPDIR)/libftk_la-ftk_log.Plo
+#	source='ftk_log.c' object='libftk_la-ftk_log.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_log.lo `test -f 'ftk_log.c' || echo '$(srcdir)/'`ftk_log.c
+
+libftk_la-ftk_dialog.lo: ftk_dialog.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_dialog.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_dialog.Tpo -c -o libftk_la-ftk_dialog.lo `test -f 'ftk_dialog.c' || echo '$(srcdir)/'`ftk_dialog.c
+	mv -f $(DEPDIR)/libftk_la-ftk_dialog.Tpo $(DEPDIR)/libftk_la-ftk_dialog.Plo
+#	source='ftk_dialog.c' object='libftk_la-ftk_dialog.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_dialog.lo `test -f 'ftk_dialog.c' || echo '$(srcdir)/'`ftk_dialog.c
+
+libftk_la-ftk_status_item.lo: ftk_status_item.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_status_item.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_status_item.Tpo -c -o libftk_la-ftk_status_item.lo `test -f 'ftk_status_item.c' || echo '$(srcdir)/'`ftk_status_item.c
+	mv -f $(DEPDIR)/libftk_la-ftk_status_item.Tpo $(DEPDIR)/libftk_la-ftk_status_item.Plo
+#	source='ftk_status_item.c' object='libftk_la-ftk_status_item.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_status_item.lo `test -f 'ftk_status_item.c' || echo '$(srcdir)/'`ftk_status_item.c
+
+libftk_la-ftk_status_panel.lo: ftk_status_panel.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_status_panel.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_status_panel.Tpo -c -o libftk_la-ftk_status_panel.lo `test -f 'ftk_status_panel.c' || echo '$(srcdir)/'`ftk_status_panel.c
+	mv -f $(DEPDIR)/libftk_la-ftk_status_panel.Tpo $(DEPDIR)/libftk_la-ftk_status_panel.Plo
+#	source='ftk_status_panel.c' object='libftk_la-ftk_status_panel.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_status_panel.lo `test -f 'ftk_status_panel.c' || echo '$(srcdir)/'`ftk_status_panel.c
+
+libftk_la-ftk_style.lo: ftk_style.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_style.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_style.Tpo -c -o libftk_la-ftk_style.lo `test -f 'ftk_style.c' || echo '$(srcdir)/'`ftk_style.c
+	mv -f $(DEPDIR)/libftk_la-ftk_style.Tpo $(DEPDIR)/libftk_la-ftk_style.Plo
+#	source='ftk_style.c' object='libftk_la-ftk_style.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_style.lo `test -f 'ftk_style.c' || echo '$(srcdir)/'`ftk_style.c
+
+libftk_la-ftk_menu_panel.lo: ftk_menu_panel.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_menu_panel.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_menu_panel.Tpo -c -o libftk_la-ftk_menu_panel.lo `test -f 'ftk_menu_panel.c' || echo '$(srcdir)/'`ftk_menu_panel.c
+	mv -f $(DEPDIR)/libftk_la-ftk_menu_panel.Tpo $(DEPDIR)/libftk_la-ftk_menu_panel.Plo
+#	source='ftk_menu_panel.c' object='libftk_la-ftk_menu_panel.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_menu_panel.lo `test -f 'ftk_menu_panel.c' || echo '$(srcdir)/'`ftk_menu_panel.c
+
+libftk_la-ftk_menu_item.lo: ftk_menu_item.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_menu_item.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_menu_item.Tpo -c -o libftk_la-ftk_menu_item.lo `test -f 'ftk_menu_item.c' || echo '$(srcdir)/'`ftk_menu_item.c
+	mv -f $(DEPDIR)/libftk_la-ftk_menu_item.Tpo $(DEPDIR)/libftk_la-ftk_menu_item.Plo
+#	source='ftk_menu_item.c' object='libftk_la-ftk_menu_item.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_menu_item.lo `test -f 'ftk_menu_item.c' || echo '$(srcdir)/'`ftk_menu_item.c
+
+libftk_la-ftk_app_window.lo: ftk_app_window.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_app_window.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_app_window.Tpo -c -o libftk_la-ftk_app_window.lo `test -f 'ftk_app_window.c' || echo '$(srcdir)/'`ftk_app_window.c
+	mv -f $(DEPDIR)/libftk_la-ftk_app_window.Tpo $(DEPDIR)/libftk_la-ftk_app_window.Plo
+#	source='ftk_app_window.c' object='libftk_la-ftk_app_window.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_app_window.lo `test -f 'ftk_app_window.c' || echo '$(srcdir)/'`ftk_app_window.c
+
+libftk_la-ftk_entry.lo: ftk_entry.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_entry.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_entry.Tpo -c -o libftk_la-ftk_entry.lo `test -f 'ftk_entry.c' || echo '$(srcdir)/'`ftk_entry.c
+	mv -f $(DEPDIR)/libftk_la-ftk_entry.Tpo $(DEPDIR)/libftk_la-ftk_entry.Plo
+#	source='ftk_entry.c' object='libftk_la-ftk_entry.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_entry.lo `test -f 'ftk_entry.c' || echo '$(srcdir)/'`ftk_entry.c
+
+libftk_la-ftk_text_buffer.lo: ftk_text_buffer.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_text_buffer.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_text_buffer.Tpo -c -o libftk_la-ftk_text_buffer.lo `test -f 'ftk_text_buffer.c' || echo '$(srcdir)/'`ftk_text_buffer.c
+	mv -f $(DEPDIR)/libftk_la-ftk_text_buffer.Tpo $(DEPDIR)/libftk_la-ftk_text_buffer.Plo
+#	source='ftk_text_buffer.c' object='libftk_la-ftk_text_buffer.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_text_buffer.lo `test -f 'ftk_text_buffer.c' || echo '$(srcdir)/'`ftk_text_buffer.c
+
+libftk_la-ftk_icon_cache.lo: ftk_icon_cache.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_icon_cache.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_icon_cache.Tpo -c -o libftk_la-ftk_icon_cache.lo `test -f 'ftk_icon_cache.c' || echo '$(srcdir)/'`ftk_icon_cache.c
+	mv -f $(DEPDIR)/libftk_la-ftk_icon_cache.Tpo $(DEPDIR)/libftk_la-ftk_icon_cache.Plo
+#	source='ftk_icon_cache.c' object='libftk_la-ftk_icon_cache.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_icon_cache.lo `test -f 'ftk_icon_cache.c' || echo '$(srcdir)/'`ftk_icon_cache.c
+
+libftk_la-ftk_animator_expand.lo: ftk_animator_expand.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_animator_expand.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_animator_expand.Tpo -c -o libftk_la-ftk_animator_expand.lo `test -f 'ftk_animator_expand.c' || echo '$(srcdir)/'`ftk_animator_expand.c
+	mv -f $(DEPDIR)/libftk_la-ftk_animator_expand.Tpo $(DEPDIR)/libftk_la-ftk_animator_expand.Plo
+#	source='ftk_animator_expand.c' object='libftk_la-ftk_animator_expand.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_animator_expand.lo `test -f 'ftk_animator_expand.c' || echo '$(srcdir)/'`ftk_animator_expand.c
+
+libftk_la-ftk_progress_bar.lo: ftk_progress_bar.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_progress_bar.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_progress_bar.Tpo -c -o libftk_la-ftk_progress_bar.lo `test -f 'ftk_progress_bar.c' || echo '$(srcdir)/'`ftk_progress_bar.c
+	mv -f $(DEPDIR)/libftk_la-ftk_progress_bar.Tpo $(DEPDIR)/libftk_la-ftk_progress_bar.Plo
+#	source='ftk_progress_bar.c' object='libftk_la-ftk_progress_bar.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_progress_bar.lo `test -f 'ftk_progress_bar.c' || echo '$(srcdir)/'`ftk_progress_bar.c
+
+libftk_la-ftk_radio_group.lo: ftk_radio_group.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_radio_group.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_radio_group.Tpo -c -o libftk_la-ftk_radio_group.lo `test -f 'ftk_radio_group.c' || echo '$(srcdir)/'`ftk_radio_group.c
+	mv -f $(DEPDIR)/libftk_la-ftk_radio_group.Tpo $(DEPDIR)/libftk_la-ftk_radio_group.Plo
+#	source='ftk_radio_group.c' object='libftk_la-ftk_radio_group.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_radio_group.lo `test -f 'ftk_radio_group.c' || echo '$(srcdir)/'`ftk_radio_group.c
+
+libftk_la-ftk_check_button.lo: ftk_check_button.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_check_button.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_check_button.Tpo -c -o libftk_la-ftk_check_button.lo `test -f 'ftk_check_button.c' || echo '$(srcdir)/'`ftk_check_button.c
+	mv -f $(DEPDIR)/libftk_la-ftk_check_button.Tpo $(DEPDIR)/libftk_la-ftk_check_button.Plo
+#	source='ftk_check_button.c' object='libftk_la-ftk_check_button.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_check_button.lo `test -f 'ftk_check_button.c' || echo '$(srcdir)/'`ftk_check_button.c
+
+libftk_la-ftk_mmap_linux.lo: $(srcdir)/os/linux/ftk_mmap_linux.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_mmap_linux.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_mmap_linux.Tpo -c -o libftk_la-ftk_mmap_linux.lo `test -f '$(srcdir)/os/linux/ftk_mmap_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_mmap_linux.c
+	mv -f $(DEPDIR)/libftk_la-ftk_mmap_linux.Tpo $(DEPDIR)/libftk_la-ftk_mmap_linux.Plo
+#	source='$(srcdir)/os/linux/ftk_mmap_linux.c' object='libftk_la-ftk_mmap_linux.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_mmap_linux.lo `test -f '$(srcdir)/os/linux/ftk_mmap_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_mmap_linux.c
+
+libftk_la-ftk_linux.lo: $(srcdir)/os/linux/ftk_linux.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_linux.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_linux.Tpo -c -o libftk_la-ftk_linux.lo `test -f '$(srcdir)/os/linux/ftk_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_linux.c
+	mv -f $(DEPDIR)/libftk_la-ftk_linux.Tpo $(DEPDIR)/libftk_la-ftk_linux.Plo
+#	source='$(srcdir)/os/linux/ftk_linux.c' object='libftk_la-ftk_linux.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_linux.lo `test -f '$(srcdir)/os/linux/ftk_linux.c' || echo '$(srcdir)/'`$(srcdir)/os/linux/ftk_linux.c
+
+libftk_la-ftk_gesture.lo: ftk_gesture.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_gesture.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_gesture.Tpo -c -o libftk_la-ftk_gesture.lo `test -f 'ftk_gesture.c' || echo '$(srcdir)/'`ftk_gesture.c
+	mv -f $(DEPDIR)/libftk_la-ftk_gesture.Tpo $(DEPDIR)/libftk_la-ftk_gesture.Plo
+#	source='ftk_gesture.c' object='libftk_la-ftk_gesture.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_gesture.lo `test -f 'ftk_gesture.c' || echo '$(srcdir)/'`ftk_gesture.c
+
+libftk_la-ftk_wait_box.lo: ftk_wait_box.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_wait_box.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_wait_box.Tpo -c -o libftk_la-ftk_wait_box.lo `test -f 'ftk_wait_box.c' || echo '$(srcdir)/'`ftk_wait_box.c
+	mv -f $(DEPDIR)/libftk_la-ftk_wait_box.Tpo $(DEPDIR)/libftk_la-ftk_wait_box.Plo
+#	source='ftk_wait_box.c' object='libftk_la-ftk_wait_box.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_wait_box.lo `test -f 'ftk_wait_box.c' || echo '$(srcdir)/'`ftk_wait_box.c
+
+libftk_la-ftk_scroll_bar.lo: ftk_scroll_bar.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_scroll_bar.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_scroll_bar.Tpo -c -o libftk_la-ftk_scroll_bar.lo `test -f 'ftk_scroll_bar.c' || echo '$(srcdir)/'`ftk_scroll_bar.c
+	mv -f $(DEPDIR)/libftk_la-ftk_scroll_bar.Tpo $(DEPDIR)/libftk_la-ftk_scroll_bar.Plo
+#	source='ftk_scroll_bar.c' object='libftk_la-ftk_scroll_bar.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_scroll_bar.lo `test -f 'ftk_scroll_bar.c' || echo '$(srcdir)/'`ftk_scroll_bar.c
+
+libftk_la-ftk_sprite.lo: ftk_sprite.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_sprite.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_sprite.Tpo -c -o libftk_la-ftk_sprite.lo `test -f 'ftk_sprite.c' || echo '$(srcdir)/'`ftk_sprite.c
+	mv -f $(DEPDIR)/libftk_la-ftk_sprite.Tpo $(DEPDIR)/libftk_la-ftk_sprite.Plo
+#	source='ftk_sprite.c' object='libftk_la-ftk_sprite.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_sprite.lo `test -f 'ftk_sprite.c' || echo '$(srcdir)/'`ftk_sprite.c
+
+libftk_la-ftk_display.lo: ftk_display.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_display.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_display.Tpo -c -o libftk_la-ftk_display.lo `test -f 'ftk_display.c' || echo '$(srcdir)/'`ftk_display.c
+	mv -f $(DEPDIR)/libftk_la-ftk_display.Tpo $(DEPDIR)/libftk_la-ftk_display.Plo
+#	source='ftk_display.c' object='libftk_la-ftk_display.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_display.lo `test -f 'ftk_display.c' || echo '$(srcdir)/'`ftk_display.c
+
+libftk_la-ftk_xml_parser.lo: ftk_xml_parser.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_xml_parser.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_xml_parser.Tpo -c -o libftk_la-ftk_xml_parser.lo `test -f 'ftk_xml_parser.c' || echo '$(srcdir)/'`ftk_xml_parser.c
+	mv -f $(DEPDIR)/libftk_la-ftk_xml_parser.Tpo $(DEPDIR)/libftk_la-ftk_xml_parser.Plo
+#	source='ftk_xml_parser.c' object='libftk_la-ftk_xml_parser.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_xml_parser.lo `test -f 'ftk_xml_parser.c' || echo '$(srcdir)/'`ftk_xml_parser.c
+
+libftk_la-ftk_xul.lo: ftk_xul.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_xul.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_xul.Tpo -c -o libftk_la-ftk_xul.lo `test -f 'ftk_xul.c' || echo '$(srcdir)/'`ftk_xul.c
+	mv -f $(DEPDIR)/libftk_la-ftk_xul.Tpo $(DEPDIR)/libftk_la-ftk_xul.Plo
+#	source='ftk_xul.c' object='libftk_la-ftk_xul.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_xul.lo `test -f 'ftk_xul.c' || echo '$(srcdir)/'`ftk_xul.c
+
+libftk_la-ftk_expr.lo: ftk_expr.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_expr.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_expr.Tpo -c -o libftk_la-ftk_expr.lo `test -f 'ftk_expr.c' || echo '$(srcdir)/'`ftk_expr.c
+	mv -f $(DEPDIR)/libftk_la-ftk_expr.Tpo $(DEPDIR)/libftk_la-ftk_expr.Plo
+#	source='ftk_expr.c' object='libftk_la-ftk_expr.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_expr.lo `test -f 'ftk_expr.c' || echo '$(srcdir)/'`ftk_expr.c
+
+libftk_la-ftk_list_view.lo: ftk_list_view.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_list_view.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_list_view.Tpo -c -o libftk_la-ftk_list_view.lo `test -f 'ftk_list_view.c' || echo '$(srcdir)/'`ftk_list_view.c
+	mv -f $(DEPDIR)/libftk_la-ftk_list_view.Tpo $(DEPDIR)/libftk_la-ftk_list_view.Plo
+#	source='ftk_list_view.c' object='libftk_la-ftk_list_view.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_list_view.lo `test -f 'ftk_list_view.c' || echo '$(srcdir)/'`ftk_list_view.c
+
+libftk_la-ftk_list_model_default.lo: ftk_list_model_default.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_list_model_default.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_list_model_default.Tpo -c -o libftk_la-ftk_list_model_default.lo `test -f 'ftk_list_model_default.c' || echo '$(srcdir)/'`ftk_list_model_default.c
+	mv -f $(DEPDIR)/libftk_la-ftk_list_model_default.Tpo $(DEPDIR)/libftk_la-ftk_list_model_default.Plo
+#	source='ftk_list_model_default.c' object='libftk_la-ftk_list_model_default.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_list_model_default.lo `test -f 'ftk_list_model_default.c' || echo '$(srcdir)/'`ftk_list_model_default.c
+
+libftk_la-ftk_list_render_default.lo: ftk_list_render_default.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_list_render_default.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_list_render_default.Tpo -c -o libftk_la-ftk_list_render_default.lo `test -f 'ftk_list_render_default.c' || echo '$(srcdir)/'`ftk_list_render_default.c
+	mv -f $(DEPDIR)/libftk_la-ftk_list_render_default.Tpo $(DEPDIR)/libftk_la-ftk_list_render_default.Plo
+#	source='ftk_list_render_default.c' object='libftk_la-ftk_list_render_default.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_list_render_default.lo `test -f 'ftk_list_render_default.c' || echo '$(srcdir)/'`ftk_list_render_default.c
+
+libftk_la-ftk_font_freetype.lo: ftk_font_freetype.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_font_freetype.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_font_freetype.Tpo -c -o libftk_la-ftk_font_freetype.lo `test -f 'ftk_font_freetype.c' || echo '$(srcdir)/'`ftk_font_freetype.c
+	mv -f $(DEPDIR)/libftk_la-ftk_font_freetype.Tpo $(DEPDIR)/libftk_la-ftk_font_freetype.Plo
+#	source='ftk_font_freetype.c' object='libftk_la-ftk_font_freetype.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_font_freetype.lo `test -f 'ftk_font_freetype.c' || echo '$(srcdir)/'`ftk_font_freetype.c
+
+libftk_la-fontdata.lo: fontdata.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-fontdata.lo -MD -MP -MF $(DEPDIR)/libftk_la-fontdata.Tpo -c -o libftk_la-fontdata.lo `test -f 'fontdata.c' || echo '$(srcdir)/'`fontdata.c
+	mv -f $(DEPDIR)/libftk_la-fontdata.Tpo $(DEPDIR)/libftk_la-fontdata.Plo
+#	source='fontdata.c' object='libftk_la-fontdata.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-fontdata.lo `test -f 'fontdata.c' || echo '$(srcdir)/'`fontdata.c
+
+libftk_la-ftk_font_default.lo: ftk_font_default.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_font_default.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_font_default.Tpo -c -o libftk_la-ftk_font_default.lo `test -f 'ftk_font_default.c' || echo '$(srcdir)/'`ftk_font_default.c
+	mv -f $(DEPDIR)/libftk_la-ftk_font_default.Tpo $(DEPDIR)/libftk_la-ftk_font_default.Plo
+#	source='ftk_font_default.c' object='libftk_la-ftk_font_default.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_font_default.lo `test -f 'ftk_font_default.c' || echo '$(srcdir)/'`ftk_font_default.c
+
+libftk_la-ftk_display_fb.lo: $(srcdir)/backend/fb/ftk_display_fb.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_display_fb.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_display_fb.Tpo -c -o libftk_la-ftk_display_fb.lo `test -f '$(srcdir)/backend/fb/ftk_display_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_display_fb.c
+	mv -f $(DEPDIR)/libftk_la-ftk_display_fb.Tpo $(DEPDIR)/libftk_la-ftk_display_fb.Plo
+#	source='$(srcdir)/backend/fb/ftk_display_fb.c' object='libftk_la-ftk_display_fb.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_display_fb.lo `test -f '$(srcdir)/backend/fb/ftk_display_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_display_fb.c
+
+libftk_la-ftk_source_input.lo: $(srcdir)/backend/fb/ftk_source_input.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_input.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_input.Tpo -c -o libftk_la-ftk_source_input.lo `test -f '$(srcdir)/backend/fb/ftk_source_input.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_source_input.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_input.Tpo $(DEPDIR)/libftk_la-ftk_source_input.Plo
+#	source='$(srcdir)/backend/fb/ftk_source_input.c' object='libftk_la-ftk_source_input.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_input.lo `test -f '$(srcdir)/backend/fb/ftk_source_input.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_source_input.c
+
+libftk_la-ftk_backend_fb.lo: $(srcdir)/backend/fb/ftk_backend_fb.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_backend_fb.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_backend_fb.Tpo -c -o libftk_la-ftk_backend_fb.lo `test -f '$(srcdir)/backend/fb/ftk_backend_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_backend_fb.c
+	mv -f $(DEPDIR)/libftk_la-ftk_backend_fb.Tpo $(DEPDIR)/libftk_la-ftk_backend_fb.Plo
+#	source='$(srcdir)/backend/fb/ftk_backend_fb.c' object='libftk_la-ftk_backend_fb.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_backend_fb.lo `test -f '$(srcdir)/backend/fb/ftk_backend_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_backend_fb.c
+
+libftk_la-ftk_display_x11.lo: $(srcdir)/backend/x11-emu/ftk_display_x11.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_display_x11.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_display_x11.Tpo -c -o libftk_la-ftk_display_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_display_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_display_x11.c
+	mv -f $(DEPDIR)/libftk_la-ftk_display_x11.Tpo $(DEPDIR)/libftk_la-ftk_display_x11.Plo
+#	source='$(srcdir)/backend/x11-emu/ftk_display_x11.c' object='libftk_la-ftk_display_x11.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_display_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_display_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_display_x11.c
+
+libftk_la-ftk_source_x11.lo: $(srcdir)/backend/x11-emu/ftk_source_x11.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_x11.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_x11.Tpo -c -o libftk_la-ftk_source_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_source_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_source_x11.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_x11.Tpo $(DEPDIR)/libftk_la-ftk_source_x11.Plo
+#	source='$(srcdir)/backend/x11-emu/ftk_source_x11.c' object='libftk_la-ftk_source_x11.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_source_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_source_x11.c
+
+libftk_la-ftk_backend_x11.lo: $(srcdir)/backend/x11-emu/ftk_backend_x11.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_backend_x11.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_backend_x11.Tpo -c -o libftk_la-ftk_backend_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_backend_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_backend_x11.c
+	mv -f $(DEPDIR)/libftk_la-ftk_backend_x11.Tpo $(DEPDIR)/libftk_la-ftk_backend_x11.Plo
+#	source='$(srcdir)/backend/x11-emu/ftk_backend_x11.c' object='libftk_la-ftk_backend_x11.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_backend_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_backend_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_backend_x11.c
+
+libftk_la-ftk_display_dfb.lo: $(srcdir)/backend/directfb/ftk_display_dfb.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_display_dfb.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_display_dfb.Tpo -c -o libftk_la-ftk_display_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_display_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_display_dfb.c
+	mv -f $(DEPDIR)/libftk_la-ftk_display_dfb.Tpo $(DEPDIR)/libftk_la-ftk_display_dfb.Plo
+#	source='$(srcdir)/backend/directfb/ftk_display_dfb.c' object='libftk_la-ftk_display_dfb.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_display_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_display_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_display_dfb.c
+
+libftk_la-ftk_source_dfb.lo: $(srcdir)/backend/directfb/ftk_source_dfb.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_dfb.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_dfb.Tpo -c -o libftk_la-ftk_source_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_source_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_source_dfb.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_dfb.Tpo $(DEPDIR)/libftk_la-ftk_source_dfb.Plo
+#	source='$(srcdir)/backend/directfb/ftk_source_dfb.c' object='libftk_la-ftk_source_dfb.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_source_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_source_dfb.c
+
+libftk_la-ftk_backend_dfb.lo: $(srcdir)/backend/directfb/ftk_backend_dfb.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_backend_dfb.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_backend_dfb.Tpo -c -o libftk_la-ftk_backend_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_backend_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_backend_dfb.c
+	mv -f $(DEPDIR)/libftk_la-ftk_backend_dfb.Tpo $(DEPDIR)/libftk_la-ftk_backend_dfb.Plo
+#	source='$(srcdir)/backend/directfb/ftk_backend_dfb.c' object='libftk_la-ftk_backend_dfb.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_backend_dfb.lo `test -f '$(srcdir)/backend/directfb/ftk_backend_dfb.c' || echo '$(srcdir)/'`$(srcdir)/backend/directfb/ftk_backend_dfb.c
 
 mostlyclean-libtool:
 	-rm -f *.lo

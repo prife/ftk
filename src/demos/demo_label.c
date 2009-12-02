@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 	label = ftk_label_create(win, 10, height/2, width - 20, 120);
 	ftk_widget_set_gc(label, FTK_WIDGET_INSENSITIVE, &gc);
 	ftk_widget_unset_attr(label, FTK_ATTR_TRANSPARENT);
-	ftk_widget_set_text(label, "中英文混合多行文本显示:the linux mobile development.带有背景颜色");
+	ftk_widget_set_text(label, "中英文混合多行文本显示:the linux mobile development.带有背景颜色。");
 	
 	label = ftk_label_create(win, 50, height/2-30, width, 20);
 	info.label = label;

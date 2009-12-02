@@ -48,6 +48,25 @@ AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
 AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
 AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
 
+AC_ARG_WITH(fontengine, [AC_HELP_STRING([--with-fontengine=default|freetype],
+                    [use which font engine])])
+case "$with_fontengine" in
+	freetype) 
+	  	export FREETYPE_CONFIG="pkg-config freetype2"
+    	FREETYPE_CFLAGS=`$FREETYPE_CONFIG --cflags`
+	    FREETYPE_LIBS=`$FREETYPE_CONFIG --libs`
+  		FREETYPE_LIBS="$FONTCONFIG_LIBS $FREETYPE_LIBS"
+		FREETYPE_CFLAGS="$FONTCONFIG_CFLAGS $FREETYPE_CFLAGS"
+		CFLAGS="$CFLAGS  $FREETYPE_CFLAGS -DUSE_FREETYPE"
+		LDFLAGS="$LDFLAGS $FREETYPE_LIBS"
+		font_engine="freetype";;
+	*)
+		font_engine="default";;
+esac
+
+AM_CONDITIONAL(FONT_ENGINE_FREETYPE, test "$font_engine" = "freetype")
+AM_CONDITIONAL(FONT_ENGINE_DEFAULT,  test "$font_engine" = "default")
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_SIZE_T

@@ -113,13 +113,21 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_init_bitmap_factory();
 	ftk_set_icon_cache(ftk_icon_cache_create());
 
+#ifdef USE_FREETYPE
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+	if((font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE)) == NULL)
+	{
+		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
+		font = ftk_font_freetype_create(filename, 0, 0, 0);
+	}
+#else
 	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
 	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
 	{
 		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
 		font = ftk_font_default_create(filename, 0, 0, 0);
 	}
-
+#endif
 	if(font != NULL)
 	{
 		ftk_set_font(font);
