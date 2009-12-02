@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	ftk_widget_set_text(button, "Unfullscreen");
 	ftk_button_set_clicked_listener(button, button_unfullscreen_clicked, win);
 	
-	button = ftk_button_create(win, width + 10, height/2, width, 60);
+	button = ftk_button_create(win, width/4 + 10, height/2, width, 60);
 	ftk_widget_set_text(button, "quit");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	ftk_window_set_focus(win, button);

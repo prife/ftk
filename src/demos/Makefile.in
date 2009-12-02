@@ -40,7 +40,7 @@ noinst_PROGRAMS = demo_label$(EXEEXT) demo_button$(EXEEXT) \
 	demo_wait_box$(EXEEXT) demo_scroll_bar$(EXEEXT) \
 	demo_sprite$(EXEEXT) demo_xul$(EXEEXT) \
 	demo_transparent$(EXEEXT) demo_listview$(EXEEXT) \
-	demo_hello$(EXEEXT) demo_fullscrenn$(EXEEXT)
+	demo_hello$(EXEEXT) demo_fullscreen$(EXEEXT)
 subdir = src/demos
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -81,12 +81,12 @@ demo_expand_LDADD = $(LDADD)
 demo_expand_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(demo_expand_LDFLAGS) $(LDFLAGS) -o $@
-am_demo_fullscrenn_OBJECTS = demo_fullscrenn.$(OBJEXT)
-demo_fullscrenn_OBJECTS = $(am_demo_fullscrenn_OBJECTS)
-demo_fullscrenn_LDADD = $(LDADD)
-demo_fullscrenn_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+am_demo_fullscreen_OBJECTS = demo_fullscreen.$(OBJEXT)
+demo_fullscreen_OBJECTS = $(am_demo_fullscreen_OBJECTS)
+demo_fullscreen_LDADD = $(LDADD)
+demo_fullscreen_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(demo_fullscrenn_LDFLAGS) $(LDFLAGS) -o $@
+	$(demo_fullscreen_LDFLAGS) $(LDFLAGS) -o $@
 am_demo_hello_OBJECTS = demo_hello.$(OBJEXT)
 demo_hello_OBJECTS = $(am_demo_hello_OBJECTS)
 demo_hello_LDADD = $(LDADD)
@@ -179,7 +179,7 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
-	$(demo_expand_SOURCES) $(demo_fullscrenn_SOURCES) \
+	$(demo_expand_SOURCES) $(demo_fullscreen_SOURCES) \
 	$(demo_hello_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
 	$(demo_listview_SOURCES) $(demo_menu_SOURCES) \
@@ -189,7 +189,7 @@ SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_xul_SOURCES)
 DIST_SOURCES = $(demo_button_SOURCES) $(demo_check_button_SOURCES) \
 	$(demo_dialog_SOURCES) $(demo_entry_SOURCES) \
-	$(demo_expand_SOURCES) $(demo_fullscrenn_SOURCES) \
+	$(demo_expand_SOURCES) $(demo_fullscreen_SOURCES) \
 	$(demo_hello_SOURCES) $(demo_image_SOURCES) \
 	$(demo_image_button_SOURCES) $(demo_label_SOURCES) \
 	$(demo_listview_SOURCES) $(demo_menu_SOURCES) \
@@ -309,8 +309,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-demo_fullscrenn_SOURCES = demo_fullscrenn.c
-demo_fullscrenn_LDFLAGS = $(MYLDFLAGS)
+demo_fullscreen_SOURCES = demo_fullscreen.c
+demo_fullscreen_LDFLAGS = $(MYLDFLAGS)
 demo_hello_SOURCES = demo_hello.c
 demo_hello_LDFLAGS = $(MYLDFLAGS)
 demo_listview_SOURCES = demo_listview.c
@@ -403,9 +403,9 @@ demo_entry$(EXEEXT): $(demo_entry_OBJECTS) $(demo_entry_DEPENDENCIES)
 demo_expand$(EXEEXT): $(demo_expand_OBJECTS) $(demo_expand_DEPENDENCIES) 
 	@rm -f demo_expand$(EXEEXT)
 	$(demo_expand_LINK) $(demo_expand_OBJECTS) $(demo_expand_LDADD) $(LIBS)
-demo_fullscrenn$(EXEEXT): $(demo_fullscrenn_OBJECTS) $(demo_fullscrenn_DEPENDENCIES) 
-	@rm -f demo_fullscrenn$(EXEEXT)
-	$(demo_fullscrenn_LINK) $(demo_fullscrenn_OBJECTS) $(demo_fullscrenn_LDADD) $(LIBS)
+demo_fullscreen$(EXEEXT): $(demo_fullscreen_OBJECTS) $(demo_fullscreen_DEPENDENCIES) 
+	@rm -f demo_fullscreen$(EXEEXT)
+	$(demo_fullscreen_LINK) $(demo_fullscreen_OBJECTS) $(demo_fullscreen_LDADD) $(LIBS)
 demo_hello$(EXEEXT): $(demo_hello_OBJECTS) $(demo_hello_DEPENDENCIES) 
 	@rm -f demo_hello$(EXEEXT)
 	$(demo_hello_LINK) $(demo_hello_OBJECTS) $(demo_hello_LDADD) $(LIBS)
@@ -457,7 +457,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_dialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_entry.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_expand.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_fullscrenn.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_fullscreen.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_hello.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_image.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/demo_image_button.Po@am__quote@
