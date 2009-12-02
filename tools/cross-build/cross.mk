@@ -39,7 +39,7 @@ jpeg_clean:
 	rm -rf jpeg-7/$(ARCH)
 
 libftk:
-	cd ftk && . autogen.sh;
+	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install
