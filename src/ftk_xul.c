@@ -831,6 +831,7 @@ FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, Ftk
 		ftk_mmap_destroy(m);
 	}
 
+	ftk_logd("%s: %p %s\n", __func__, widget, filename);
 	return widget;
 }
 
