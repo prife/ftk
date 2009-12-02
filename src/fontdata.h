@@ -46,8 +46,8 @@ typedef enum _Encoding
 
 typedef struct _Glyph
 {
-	char x;
-	char y;
+	signed char x;
+	signed char y;
 	unsigned char w;
 	unsigned char h;
 	unsigned short code;

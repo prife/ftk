@@ -36,8 +36,8 @@
 
 typedef struct _FtkGlyph
 {
-	char x;
-	char y;
+	signed char x;
+	signed char y;
 	unsigned char w;
 	unsigned char h;
 	unsigned short code;
