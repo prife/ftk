@@ -272,6 +272,7 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 	int oy = y;
 	int width = 0;
 	int height = 0;
+	int vcenter_offset = 0;
 	FtkGlyph glyph = {0};
 	FtkColor color = {0};
 	FtkColor fg = {0};
@@ -287,10 +288,11 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 	bits   = ftk_bitmap_bits(thiz->bitmap);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	//ftk_logv("%s: x=%d y=%d s=%s\n", __func__, x, y, str);
 	color.a = 0xff;
 	fg = thiz->gc.fg;
 
+	/*FIXME: vcenter_offset maybe not correct.*/
+	vcenter_offset = ftk_font_height(thiz->gc.font)/3;
 	while(*iter && (iter - str) < len)
 	{
 		int offset = 0;
@@ -304,7 +306,7 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 		}
 		if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) continue;
 		
-		glyph.y = vcenter ? glyph.y >> 1 : glyph.y;
+		glyph.y = vcenter ? glyph.y - vcenter_offset : glyph.y;
 		if((x + glyph.x + glyph.w) >= width) break;
 		if((y - glyph.y + glyph.h) >= height) break;
 
