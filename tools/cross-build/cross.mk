@@ -82,7 +82,7 @@ directfb_source_clean:
 	rm -rf DirectFB-1.4.1
 
 libftk:
-	cd ftk && . autogen.sh;
+	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install
