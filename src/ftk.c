@@ -101,8 +101,19 @@ static void ftk_deinit(void)
 
 Ret ftk_init(int argc, char* argv[])
 {
+	int i = 0;
+	int disable_status_panel = 0;
 	FtkFont* font = NULL;
 	char filename[260] = {0};
+
+	for(i = 0; i < argc && argv != NULL && argv[i] != NULL; i++)
+	{
+		if(strcmp(argv[i], "--no-status-panel") == 0)
+		{
+			disable_status_panel = 1;
+			break;
+		}
+	}
 
 	ftk_platform_init(argc, argv);
 
@@ -141,8 +152,11 @@ Ret ftk_init(int argc, char* argv[])
 
 	ftk_backend_init(argc, argv);
 
-	ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
-	ftk_init_panel();
+	if(!disable_status_panel)
+	{
+		ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
+		ftk_init_panel();
+	}
 
 	atexit(ftk_deinit);
 
