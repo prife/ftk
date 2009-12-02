@@ -69,6 +69,14 @@ static int fb_open(struct FB *fb, const char* fbfilename)
 	if (ioctl(fb->fd, FBIOGET_VSCREENINFO, &fb->vi) < 0)
 		goto fail;
 
+	ftk_logd("FB: %s\n", fbfilename);
+	ftk_logd("FB: xres=%d yres=%d bits_per_pixel=%d\n", 
+		fb->vi.xres, fb->vi.yres, fb->vi.bits_per_pixel);
+	ftk_logd("FB: red(%d %d) green(%d %d) blue(%d %d)\n", 
+		fb->vi.red.offset, fb->vi.red.length,
+		fb->vi.green.offset, fb->vi.green.length,
+		fb->vi.blue.offset, fb->vi.blue.length);
+
 	fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, 
 					MAP_SHARED, fb->fd, 0);
 	if (fb->bits == MAP_FAILED)

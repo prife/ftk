@@ -36,27 +36,14 @@ int main(int argc, char* argv[])
 	FtkDisplay* thiz = ftk_display_fb_create(FTK_FB_NAME);
 	if(thiz != NULL)
 	{
+		FtkBitmap* bitmap = NULL;
 		FtkColor color = {0xff, 0x00, 0xff, 0};
 		FtkRect rect = {10, 10};
 		rect.width = ftk_display_width(thiz);
 		rect.height = ftk_display_height(thiz);
 
-		FtkBitmap* bitmap = ftk_bitmap_create(rect.width, rect.height, color);
+		bitmap = ftk_bitmap_create(rect.width, rect.height, color);
 
-		//ftk_display_update(thiz, bitmap, &rect, 0, 0);
-		color.b = 0x80;
-		color.g = 0x80;
-		rect.width = 100;
-		rect.height = 100;
-		
-		ftk_display_update(thiz, bitmap, &rect, 10, 10);
-		//ftk_display_update(thiz, bitmap, &rect, 210, 10);
-		//ftk_display_update(thiz, bitmap, &rect, 110, 110);
-		//ftk_display_update(thiz, bitmap, &rect, 10, 210);
-		rect.width = 400;
-		rect.height = 400;
-		//ftk_display_update(thiz, bitmap, &rect, 210, 210);
-		printf("width=%d height=%d\n", ftk_display_width(thiz), ftk_display_height(thiz));
 		ftk_display_destroy(thiz);
 		ftk_bitmap_unref(bitmap);
 	}
