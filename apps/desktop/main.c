@@ -13,11 +13,13 @@ static Ret button_close_applist_clicked(void* ctx, void* obj)
 
 const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
+	struct stat st = {0};
 	snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_DATA_DIR, path);
-	if(access(out_path, R_OK) < 0)
+	if(stat(out_path, &st) < 0)
 	{
 		snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_LOCAL_DATA_DIR, path);
 	}
+	ftk_logd("%s: %s --> %s\n", __func__, path, out_path);
 
 	return out_path;
 }
@@ -28,7 +30,7 @@ static FtkWidget* desktop_load_xul(const char* filename)
 	char path[FTK_MAX_PATH+1] = {0};
 	
 	tr_path(filename, path);
-	return ftk_xul_load_file(filename, NULL, tr_path);
+	return ftk_xul_load_file(path, NULL, tr_path);
 }
 
 static Ret button_open_applist_clicked(void* ctx, void* obj)

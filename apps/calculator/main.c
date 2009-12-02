@@ -15,7 +15,7 @@ const char* ftk_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 	{
 		snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_LOCAL_DATA_DIR, path);
 	}
-
+	ftk_logd("%s->%s\n", path, out_path);
 	return out_path;
 }
 
@@ -24,7 +24,7 @@ static FtkWidget* load_xul(const char* filename)
 	char path[FTK_MAX_PATH+1] = {0};
 	
 	ftk_translate_path(filename, path);
-	return ftk_xul_load_file(filename, ftk_translate_text, ftk_translate_path);
+	return ftk_xul_load_file(path, ftk_translate_text, ftk_translate_path);
 }
 
 static Ret button_clicked(void* ctx, void* obj)
