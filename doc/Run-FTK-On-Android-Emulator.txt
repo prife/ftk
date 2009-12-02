@@ -1,0 +1,16 @@
+1.down android and make sdk.
+
+2.edit ftk/src/Android-build.sh, set the ANDROID_ROOT to android source dir.
+
+3.run Android-build.sh
+
+4.unpack platforms/android-1.5/images/ramdisk.img in SDK, edit init.rc to forbit system server.
+
+5.create and run android emulator.
+
+6.upload demo* to /data
+
+7.update data/icons/testdata to /data/ftk
+
+8.run the demos.
+

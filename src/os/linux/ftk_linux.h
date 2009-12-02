@@ -33,7 +33,6 @@
 #ifndef FTK_LINUX_H
 #define FTK_LINUX_H
 
-#ifdef LINUX
 #include <fcntl.h>
 #include <dirent.h>
 #include <sys/types.h>
@@ -50,7 +49,6 @@
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
-#endif
 
 #endif/*FTK_LINUX_H*/
 

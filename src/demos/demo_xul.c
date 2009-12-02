@@ -1,6 +1,5 @@
 #include "ftk.h"
 #include "ftk_xul.h"
-#include "test_util.c"
 
 const char* t1 = "<window> </window>";
 

@@ -29,11 +29,13 @@
  *
  */
 #include <signal.h>
-#include <execinfo.h>
 #include "ftk_typedef.h"
-
+#ifndef ANDROID
+#include <execinfo.h>
+#endif
 static void signal_handler(int sig)
 {
+#ifndef ANDROID
 	int i = 0;
 	void* buffer[100] = {0};
 	int n = backtrace(buffer, 100);
@@ -50,7 +52,7 @@ static void signal_handler(int sig)
 	signal(SIGSEGV, NULL);
 	signal(SIGILL,  NULL);
 	signal(SIGKILL, NULL);
-
+#endif
 	_exit(0);
 
 	return;
