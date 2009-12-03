@@ -144,7 +144,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_MENU_ITEM_HEIGHT    48
 #define FTK_MENU_ITEM_WIDTH     100
 #define FTK_STOCK_IMG_SUFFIX    ".png"
-#define FTK_FONT_SIZE 16
+#define FTK_FONT_SIZE 12
 
 #endif/*FTK_TYPEDEF_H*/
 
