@@ -69,7 +69,7 @@ AM_CONDITIONAL(FONT_ENGINE_DEFAULT,  test "$font_engine" = "default")
 
 AC_ARG_ENABLE(tslib,
   [  --enable-tslib            build with tslib support [[default=no]]],,
-  enable_tslib=yes)
+  enable_tslib=no)
 
 if test "$enable_tslib" = "yes"; then
   CFLAGS="$CFLAGS -DUSE_TSLIB `pkg-config --cflags tslib-0.0`"
