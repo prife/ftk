@@ -34,7 +34,11 @@
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
 #include "ftk_status_item.h"
+#ifdef USE_FREETYPE
+#include "ftk_font_freetype.h"
+#else
 #include "ftk_font_default.h"
+#endif
 #include "ftk_status_panel.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_wnd_manager_default.h"
@@ -199,14 +203,15 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 			if(top_window != NULL)
 			{
 				ftk_widget_set_text(title_widget, ftk_widget_get_text(top_window));
+				ftk_logd("top_window changed: %s\n", ftk_widget_get_text(top_window));
 			}
 			else
 			{
 				ftk_widget_set_text(title_widget, NULL);
 			}
 			ftk_widget_set_user_data(title_widget, NULL, top_window);
-			ftk_logd("top_window changed: %s\n", ftk_widget_get_text(top_window));
 			ret = RET_REMOVE;
+
 			break;
 		}
 		case FTK_EVT_WND_CONFIG_CHANGED:
