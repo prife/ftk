@@ -177,7 +177,7 @@ FtkDisplay* ftk_display_dfb_create(IDirectFB* dfb)
 	FtkDisplay* thiz = NULL;
 	return_val_if_fail(dfb != NULL, NULL);
 
-	FTK_ZALLOC(sizeof(FtkDisplay)+sizeof(PrivInfo));
+	thiz = FTK_ZALLOC(sizeof(FtkDisplay)+sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
 		thiz->update  = ftk_display_dfb_update;
