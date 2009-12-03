@@ -33,6 +33,16 @@
 #include "ftk_event.h"
 #include "ftk_source.h"
 
+/*
+ * make sure the following evn variables are set properly.
+ *	TSLIB_CALIBFILE
+ *	TSLIB_PLUGINDIR
+ *	TSLIB_CONFFILE
+ * 
+ * and ts_test works.
+ */
+
+#define FTK_TSLIB_FILE "/dev/input/event0"
 FtkSource* ftk_source_tslib_create(const char* filename, FtkOnEvent on_event, void* ctx);
 
 #endif/*FTK_SOURCE_TSLIB_H*/

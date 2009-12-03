@@ -3,6 +3,7 @@
 #include "ftk_display_fb.h"
 #include "ftk_source_input.h"
 #include "ftk_wnd_manager.h"
+#include "ftk_source_tslib.h"
 
 static Ret ftk_init_input(void)
 {
@@ -20,8 +21,18 @@ static Ret ftk_init_input(void)
 		if(!(iter->d_type & DT_CHR)) continue;
 
 		ftk_snprintf(filename, sizeof(filename), "/dev/input/%s", iter->d_name);
-		source = ftk_source_input_create(filename, 
-			(FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+#ifdef USE_TSLIB
+		if(strcmp(filename, FTK_TSLIB_FILE) == 0)
+		{
+			source = ftk_source_tslib_create(filename, 
+				(FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+		}
+		else
+#endif
+		{
+			source = ftk_source_input_create(filename, 
+				(FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+		}
 		if(source != NULL)
 		{
 			ftk_sources_manager_add(ftk_default_sources_manager(), source);

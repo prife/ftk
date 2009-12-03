@@ -63,7 +63,10 @@ static Ret ftk_source_tslib_dispatch(FtkSource* thiz)
 	struct ts_sample sample = {0};
 	return_val_if_fail(priv->ts != NULL, RET_FAIL);	
 	ret = ts_read(priv->ts, &sample, 1);
-	return_val_if_fail(ret > 0, RET_FAIL);
+	if(ret <= 0)
+	{
+		return RET_OK;
+	}
 
 	priv->event.type = FTK_EVT_NOP;
 	priv->event.u.mouse.x = sample.x;
@@ -92,6 +95,9 @@ static Ret ftk_source_tslib_dispatch(FtkSource* thiz)
 	if(priv->on_event != NULL && priv->event.type != FTK_EVT_NOP)
 	{
 		priv->on_event(priv->user_data, &priv->event);
+		ftk_logd("%s: type=%d x=%d y=%d\n", __func__, 
+			priv->event.type, priv->event.u.mouse.x,
+			priv->event.u.mouse.y);
 		priv->event.type = FTK_EVT_NOP;
 	}
 
@@ -127,10 +133,11 @@ FtkSource* ftk_source_tslib_create(const char* filename, FtkOnEvent on_event, vo
 
 		thiz->ref = 1;
 		priv->ts = ts_open(filename, 1);
+		ts_config(priv->ts);
 
 		priv->on_event  = on_event;
 		priv->user_data = user_data;
-		printf("%s: %d=%s priv->user_data=%p\n", __func__, ts_fd(priv->ts), filename, priv->user_data);
+		ftk_logd("%s: %d=%s priv->user_data=%p\n", __func__, ts_fd(priv->ts), filename, priv->user_data);
 	}
 
 	return thiz;
