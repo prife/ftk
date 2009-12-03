@@ -34,6 +34,10 @@ libftk_la_SOURCES=\
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c
 
+if ENABLE_TSLIB
+libftk_la_SOURCES+=$(srcdir)/backend/fb/ftk_source_tslib.c 
+endif
+
 if FONT_ENGINE_FREETYPE
 libftk_la_SOURCES+=ftk_font_freetype.c
 endif

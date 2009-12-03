@@ -40,8 +40,10 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	sources_manager_test$(EXEEXT) text_buffer_test$(EXEEXT) \
 	icon_cache_test$(EXEEXT) xml_parser_test$(EXEEXT) \
 	xul_test$(EXEEXT) list_model_default_test$(EXEEXT) \
-	timer_test$(EXEEXT) expr_test$(EXEEXT) $(am__EXEEXT_1)
+	timer_test$(EXEEXT) expr_test$(EXEEXT) $(am__EXEEXT_1) \
+	$(am__EXEEXT_2)
 @FTK_BACKEND_FB_TRUE@am__append_1 = display_fb_test input_test
+@ENABLE_TSLIB_TRUE@am__append_2 = tslib_test
 subdir = src/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -53,6 +55,7 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 @FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 @FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
+@ENABLE_TSLIB_TRUE@am__EXEEXT_2 = tslib_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -167,6 +170,14 @@ timer_test_LDADD = $(LDADD)
 timer_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(timer_test_LDFLAGS) $(LDFLAGS) -o $@
+am__tslib_test_SOURCES_DIST = tslib_test.c
+@ENABLE_TSLIB_TRUE@am_tslib_test_OBJECTS =  \
+@ENABLE_TSLIB_TRUE@	tslib_test-tslib_test.$(OBJEXT)
+tslib_test_OBJECTS = $(am_tslib_test_OBJECTS)
+tslib_test_LDADD = $(LDADD)
+tslib_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(tslib_test_CFLAGS) \
+	$(CFLAGS) $(tslib_test_LDFLAGS) $(LDFLAGS) -o $@
 am_util_test_OBJECTS = util_test.$(OBJEXT)
 util_test_OBJECTS = $(am_util_test_OBJECTS)
 util_test_LDADD = $(LDADD)
@@ -212,8 +223,9 @@ SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
 	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
 	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(timer_test_SOURCES) $(util_test_SOURCES) widget_test.c \
-	$(xml_parser_test_SOURCES) $(xul_test_SOURCES)
+	$(timer_test_SOURCES) $(tslib_test_SOURCES) \
+	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
+	$(xul_test_SOURCES)
 DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
 	$(expr_test_SOURCES) $(font_test_SOURCES) $(ftk_test_SOURCES) \
@@ -222,8 +234,9 @@ DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
 	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
 	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(timer_test_SOURCES) $(util_test_SOURCES) widget_test.c \
-	$(xml_parser_test_SOURCES) $(xul_test_SOURCES)
+	$(timer_test_SOURCES) $(am__tslib_test_SOURCES_DIST) \
+	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
+	$(xul_test_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -342,6 +355,9 @@ top_srcdir = @top_srcdir@
 @FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
 @FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
 @FTK_BACKEND_FB_TRUE@input_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
+@ENABLE_TSLIB_TRUE@tslib_test_SOURCES = tslib_test.c
+@ENABLE_TSLIB_TRUE@tslib_test_LDFLAGS = $(MYLDFLAGS)
+@ENABLE_TSLIB_TRUE@tslib_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
 expr_test_SOURCES = expr_test.c
 expr_test_LDFLAGS = $(MYLDFLAGS)
 timer_test_SOURCES = timer_test.c
@@ -477,6 +493,9 @@ text_buffer_test$(EXEEXT): $(text_buffer_test_OBJECTS) $(text_buffer_test_DEPEND
 timer_test$(EXEEXT): $(timer_test_OBJECTS) $(timer_test_DEPENDENCIES) 
 	@rm -f timer_test$(EXEEXT)
 	$(timer_test_LINK) $(timer_test_OBJECTS) $(timer_test_LDADD) $(LIBS)
+tslib_test$(EXEEXT): $(tslib_test_OBJECTS) $(tslib_test_DEPENDENCIES) 
+	@rm -f tslib_test$(EXEEXT)
+	$(tslib_test_LINK) $(tslib_test_OBJECTS) $(tslib_test_LDADD) $(LIBS)
 util_test$(EXEEXT): $(util_test_OBJECTS) $(util_test_DEPENDENCIES) 
 	@rm -f util_test$(EXEEXT)
 	$(util_test_LINK) $(util_test_OBJECTS) $(util_test_LDADD) $(LIBS)
@@ -514,6 +533,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources_manager_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text_buffer_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/timer_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tslib_test-tslib_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/widget_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xml_builder_dump.Po@am__quote@
@@ -568,6 +588,20 @@ input_test-input_test.obj: input_test.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='input_test.c' object='input_test-input_test.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(input_test_CFLAGS) $(CFLAGS) -c -o input_test-input_test.obj `if test -f 'input_test.c'; then $(CYGPATH_W) 'input_test.c'; else $(CYGPATH_W) '$(srcdir)/input_test.c'; fi`
+
+tslib_test-tslib_test.o: tslib_test.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tslib_test_CFLAGS) $(CFLAGS) -MT tslib_test-tslib_test.o -MD -MP -MF $(DEPDIR)/tslib_test-tslib_test.Tpo -c -o tslib_test-tslib_test.o `test -f 'tslib_test.c' || echo '$(srcdir)/'`tslib_test.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/tslib_test-tslib_test.Tpo $(DEPDIR)/tslib_test-tslib_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tslib_test.c' object='tslib_test-tslib_test.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tslib_test_CFLAGS) $(CFLAGS) -c -o tslib_test-tslib_test.o `test -f 'tslib_test.c' || echo '$(srcdir)/'`tslib_test.c
+
+tslib_test-tslib_test.obj: tslib_test.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tslib_test_CFLAGS) $(CFLAGS) -MT tslib_test-tslib_test.obj -MD -MP -MF $(DEPDIR)/tslib_test-tslib_test.Tpo -c -o tslib_test-tslib_test.obj `if test -f 'tslib_test.c'; then $(CYGPATH_W) 'tslib_test.c'; else $(CYGPATH_W) '$(srcdir)/tslib_test.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/tslib_test-tslib_test.Tpo $(DEPDIR)/tslib_test-tslib_test.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='tslib_test.c' object='tslib_test-tslib_test.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(tslib_test_CFLAGS) $(CFLAGS) -c -o tslib_test-tslib_test.obj `if test -f 'tslib_test.c'; then $(CYGPATH_W) 'tslib_test.c'; else $(CYGPATH_W) '$(srcdir)/tslib_test.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

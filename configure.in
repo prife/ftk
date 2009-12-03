@@ -76,6 +76,8 @@ if test "$enable_tslib" = "yes"; then
   LDFLAGS="$LDFLAGS `pkg-config --libs tslib-0.0`"
 fi
 
+AM_CONDITIONAL(ENABLE_TSLIB,  test "$enable_tslib" = "yes")
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_SIZE_T
