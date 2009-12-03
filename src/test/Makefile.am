@@ -16,14 +16,14 @@ display_fb_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
 input_test_SOURCES=input_test.c
 input_test_LDFLAGS=$(MYLDFLAGS)
 input_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
-endif
-
 if ENABLE_TSLIB
 noinst_PROGRAMS +=tslib_test
 tslib_test_SOURCES=tslib_test.c
 tslib_test_LDFLAGS=$(MYLDFLAGS)
 tslib_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
 endif
+endif
+
 
 expr_test_SOURCES=expr_test.c
 expr_test_LDFLAGS=$(MYLDFLAGS)

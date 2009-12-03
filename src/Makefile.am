@@ -35,7 +35,7 @@ libftk_la_SOURCES=\
 	ftk_list_render_default.c
 
 if ENABLE_TSLIB
-libftk_la_SOURCES+=$(srcdir)/backend/fb/ftk_source_tslib.c 
+LINUX_NATIVE+=$(srcdir)/backend/fb/ftk_source_tslib.c 
 endif
 
 if FONT_ENGINE_FREETYPE

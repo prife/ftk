@@ -43,7 +43,7 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	timer_test$(EXEEXT) expr_test$(EXEEXT) $(am__EXEEXT_1) \
 	$(am__EXEEXT_2)
 @FTK_BACKEND_FB_TRUE@am__append_1 = display_fb_test input_test
-@ENABLE_TSLIB_TRUE@am__append_2 = tslib_test
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@am__append_2 = tslib_test
 subdir = src/test
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -55,7 +55,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 @FTK_BACKEND_FB_TRUE@am__EXEEXT_1 = display_fb_test$(EXEEXT) \
 @FTK_BACKEND_FB_TRUE@	input_test$(EXEEXT)
-@ENABLE_TSLIB_TRUE@am__EXEEXT_2 = tslib_test$(EXEEXT)
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@am__EXEEXT_2 =  \
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@	tslib_test$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 am_bitmap_factory_test_OBJECTS = bitmap_factory_test.$(OBJEXT)
 bitmap_factory_test_OBJECTS = $(am_bitmap_factory_test_OBJECTS)
@@ -171,8 +172,7 @@ timer_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(timer_test_LDFLAGS) $(LDFLAGS) -o $@
 am__tslib_test_SOURCES_DIST = tslib_test.c
-@ENABLE_TSLIB_TRUE@am_tslib_test_OBJECTS =  \
-@ENABLE_TSLIB_TRUE@	tslib_test-tslib_test.$(OBJEXT)
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@am_tslib_test_OBJECTS = tslib_test-tslib_test.$(OBJEXT)
 tslib_test_OBJECTS = $(am_tslib_test_OBJECTS)
 tslib_test_LDADD = $(LDADD)
 tslib_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
@@ -355,9 +355,9 @@ top_srcdir = @top_srcdir@
 @FTK_BACKEND_FB_TRUE@input_test_SOURCES = input_test.c
 @FTK_BACKEND_FB_TRUE@input_test_LDFLAGS = $(MYLDFLAGS)
 @FTK_BACKEND_FB_TRUE@input_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
-@ENABLE_TSLIB_TRUE@tslib_test_SOURCES = tslib_test.c
-@ENABLE_TSLIB_TRUE@tslib_test_LDFLAGS = $(MYLDFLAGS)
-@ENABLE_TSLIB_TRUE@tslib_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_SOURCES = tslib_test.c
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_LDFLAGS = $(MYLDFLAGS)
+@ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
 expr_test_SOURCES = expr_test.c
 expr_test_LDFLAGS = $(MYLDFLAGS)
 timer_test_SOURCES = timer_test.c
