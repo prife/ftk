@@ -160,7 +160,6 @@ static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 	priv->width   = screen_width;
 	priv->height  = screen_height;
 
-
 	desc.flags  = DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_CAPS | DSDESC_PIXELFORMAT;
 	desc.width  = screen_width;
 	desc.height = screen_height;
@@ -175,8 +174,10 @@ static Ret ftk_display_dfb_init(FtkDisplay* thiz, IDirectFB* dfb)
 
 FtkDisplay* ftk_display_dfb_create(IDirectFB* dfb)
 {
-	FtkDisplay* thiz = FTK_ZALLOC(sizeof(FtkDisplay)+sizeof(PrivInfo));
+	FtkDisplay* thiz = NULL;
+	return_val_if_fail(dfb != NULL, NULL);
 
+	FTK_ZALLOC(sizeof(FtkDisplay)+sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
 		thiz->update  = ftk_display_dfb_update;
