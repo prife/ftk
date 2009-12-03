@@ -63,15 +63,11 @@ static Ret ftk_source_tslib_dispatch(FtkSource* thiz)
 	struct ts_sample sample = {0};
 	return_val_if_fail(priv->ts != NULL, RET_FAIL);	
 	ret = ts_read(priv->ts, &sample, 1);
-	if(ret <= 0)
-	{
-		return RET_OK;
-	}
+	if(ret <= 0) return RET_OK;
 
 	priv->event.type = FTK_EVT_NOP;
 	priv->event.u.mouse.x = sample.x;
 	priv->event.u.mouse.y = sample.y;
-
 	if(sample.pressure > 0)
 	{
 		if(priv->pressed)
@@ -88,7 +84,7 @@ static Ret ftk_source_tslib_dispatch(FtkSource* thiz)
 	{
 		if(priv->pressed)
 		{
-			priv->event.type =  FTK_EVT_MOUSE_DOWN;
+			priv->event.type =  FTK_EVT_MOUSE_UP;
 		}
 	}
 
@@ -110,7 +106,7 @@ static void ftk_source_tslib_destroy(FtkSource* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 		ts_close(priv->ts);
-		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 	}
 
 	return;
@@ -122,7 +118,6 @@ FtkSource* ftk_source_tslib_create(const char* filename, FtkOnEvent on_event, vo
 	return_val_if_fail(filename != NULL && on_event != NULL, NULL);
 
 	thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource) + sizeof(PrivInfo));
-
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
@@ -133,11 +128,17 @@ FtkSource* ftk_source_tslib_create(const char* filename, FtkOnEvent on_event, vo
 
 		thiz->ref = 1;
 		priv->ts = ts_open(filename, 1);
-		ts_config(priv->ts);
-
-		priv->on_event  = on_event;
-		priv->user_data = user_data;
-		ftk_logd("%s: %d=%s priv->user_data=%p\n", __func__, ts_fd(priv->ts), filename, priv->user_data);
+		if(priv->ts != NULL)
+		{
+			ts_config(priv->ts);
+			priv->on_event  = on_event;
+			priv->user_data = user_data;
+			ftk_logd("%s: %d=%s priv->user_data=%p\n", __func__, ts_fd(priv->ts), filename, priv->user_data);
+		}
+		else
+		{
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
+		}
 	}
 
 	return thiz;
