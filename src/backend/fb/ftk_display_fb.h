@@ -1,7 +1,7 @@
 /*
  * File: ftk_display_fb.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   framebuffer implemented display.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *

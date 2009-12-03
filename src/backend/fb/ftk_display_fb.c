@@ -1,7 +1,7 @@
 /*
  * File: ftk_display_fb.c    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   framebuffer implemented display.
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -33,20 +33,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
-#include <sys/ioctl.h>
+#include "ftk_log.h"
+#include <linux/fb.h>
+#include <linux/kd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <linux/fb.h>
-#include <linux/kd.h>
+#include <sys/ioctl.h>
 #include "ftk_display_fb.h"
-#include "ftk_log.h"
 
 struct FB 
 {
 	int fd;
-	unsigned size;
-	unsigned short *bits;
+	void* bits;
 	struct fb_fix_screeninfo fi;
 	struct fb_var_screeninfo vi;
 };
@@ -77,14 +76,13 @@ static int fb_open(struct FB *fb, const char* fbfilename)
 		fb->vi.green.offset, fb->vi.green.length,
 		fb->vi.blue.offset, fb->vi.blue.length);
 
-	fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, 
-					MAP_SHARED, fb->fd, 0);
+	fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, MAP_SHARED, fb->fd, 0);
 	if (fb->bits == MAP_FAILED)
 		goto fail;
 
 	return 0;
 fail:
-	printf("%s is not a framebuffer.\n", fbfilename);
+	ftk_logd("%s is not a framebuffer.\n", fbfilename);
 	close(fb->fd);
 
 	return -1;
@@ -94,6 +92,8 @@ static void fb_close(struct FB *fb)
 {
 	munmap(fb->bits, fb_size(fb));
 	close(fb->fd);
+
+	return;
 }
 
 typedef struct _PrivInfo
@@ -156,8 +156,10 @@ static void ftk_display_fb_destroy(FtkDisplay* thiz)
 
 FtkDisplay* ftk_display_fb_create(const char* filename)
 {
-	FtkDisplay* thiz = (FtkDisplay*)FTK_ZALLOC(sizeof(FtkDisplay) + sizeof(PrivInfo));
+	FtkDisplay* thiz = NULL;
+	return_val_if_fail(filename != NULL, NULL);
 
+	thiz = (FtkDisplay*)FTK_ZALLOC(sizeof(FtkDisplay) + sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
@@ -167,13 +169,12 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			thiz->width    = ftk_display_fb_width;
 			thiz->height   = ftk_display_fb_height;
 			thiz->snap     = ftk_display_fb_snap;
-			thiz->destroy = ftk_display_fb_destroy;
+			thiz->destroy  = ftk_display_fb_destroy;
 		}
 		else
 		{
 			ftk_logd("%s: open %s failed.\n", __func__, filename);
-			free(thiz);
-			thiz = NULL;
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 		}
 	}
 		
