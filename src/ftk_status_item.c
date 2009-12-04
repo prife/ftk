@@ -95,7 +95,6 @@ static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 		int fh = ftk_canvas_font_height(canvas);
 		int fw = ftk_canvas_get_extent(canvas, ftk_widget_get_text(thiz), -1);
 	
-		assert(fh < height && fw < width);
 		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
 	}
 
