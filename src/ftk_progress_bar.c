@@ -124,7 +124,7 @@ Ret ftk_progress_bar_set_percent(FtkWidget* thiz, int percent)
 	if(percent != priv->percent)
 	{
 		priv->percent = percent;
-		ftk_widget_paint_self(thiz);
+		ftk_widget_invalidate(thiz);
 	}
 
 	return RET_OK;

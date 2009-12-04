@@ -68,7 +68,7 @@ static Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current)
 
 	if(priv->current == current)
 	{
-		ftk_widget_paint_self(thiz);
+		ftk_widget_invalidate(thiz);
 
 		return RET_OK;
 	}
@@ -88,7 +88,7 @@ static Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current)
 		priv->visible_start = priv->current - (priv->visible_nr - 1);
 	}
 
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_REMOVE;
 }
@@ -361,7 +361,7 @@ static Ret ftk_list_view_on_model_changed(void* ctx, void* obj)
 	
 	if(ftk_widget_is_visible(thiz))
 	{
-		ftk_widget_paint_self(thiz);
+		ftk_widget_invalidate(thiz);
 	}
 
 	return RET_OK;

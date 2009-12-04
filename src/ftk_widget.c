@@ -197,6 +197,17 @@ int ftk_widget_id(FtkWidget* thiz)
 	return thiz != NULL && thiz->priv != NULL ? thiz->priv->id : 0;
 }
 
+Ret ftk_widget_invalidate(FtkWidget* thiz)
+{
+	FtkRect rect = {0};
+	rect.y = ftk_widget_top_in_window(thiz);
+	rect.x = ftk_widget_left_in_window(thiz);
+	rect.width = ftk_widget_width(thiz);
+	rect.height = ftk_widget_height(thiz);
+
+	return ftk_window_invalidate(ftk_widget_toplevel(thiz), &rect);
+}
+
 Ret ftk_widget_update(FtkWidget* thiz)
 {
 	FtkEvent event = {0};
@@ -377,15 +388,7 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 		return;
 	}
 
-	if(visible)
-	{
-		ftk_widget_paint(thiz);
-	}
-	else
-	{
-		/*FIXME: now, as ftk not support clip, repaint the whole parent surface.*/
-		ftk_widget_paint(ftk_widget_parent(thiz));
-	}
+	ftk_widget_invalidate(thiz);
 
 	return;
 }
@@ -439,7 +442,7 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 		return;
 	}
 
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return;
 }
@@ -460,7 +463,7 @@ void ftk_widget_set_active(FtkWidget* thiz, int active)
 		return;
 	}
 
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return;
 }
@@ -679,7 +682,7 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 	{
 		thiz->priv->text = FTK_STRDUP(text);
 	}
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return;
 }
@@ -812,26 +815,10 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 		return_val_if_fail(canvas != NULL, RET_FAIL);
 		return_val_if_fail(thiz->priv->width > 0 && thiz->priv->height > 0, RET_FAIL);
 
-		priv->painting = 1;
-		if(ftk_widget_has_attr(thiz, FTK_ATTR_TRANSPARENT))
-		{
-			if(!ftk_widget_paint_called_by_parent(thiz) && parent != NULL)
-			{
-				/*fill backgroup with parent background*/
-				/*FIXME: if parent bg image is not filled in normal mode, it doesn't work.*/
-				gc.mask = FTK_GC_FG;
-				gc.fg = ftk_widget_get_gc(parent)->bg;
-				ftk_canvas_reset_gc(canvas, &gc); 
-				ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+		priv->painting++;
+		assert(parent == NULL || ftk_widget_paint_called_by_parent(thiz));
 
-				bitmap = parent->priv->gc[parent->priv->state].bitmap;
-				if(bitmap != NULL)
-				{
-					ftk_canvas_draw_bitmap(canvas, bitmap, x, y, width, height, x, y);
-				}
-			}
-		}
-		else
+		if(!ftk_widget_has_attr(thiz, FTK_ATTR_TRANSPARENT))
 		{
 			gc.mask = FTK_GC_FG;
 			gc.fg = ftk_widget_get_gc(thiz)->bg;
@@ -870,7 +857,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 			ftk_widget_paint(thiz->children);
 		}
 		
-		priv->painting = 0;
+		priv->painting--;
 	}
 	
 	return RET_OK;

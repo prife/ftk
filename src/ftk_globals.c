@@ -34,6 +34,7 @@
 struct _FtkGlobals
 {
 	FtkFont* font;
+	FtkCanvas* canvas;
 	FtkDisplay* display;
 	FtkIconCache* icon_cache;
 	FtkMainLoop* main_loop;
@@ -57,6 +58,11 @@ FtkDisplay*       ftk_default_display(void)
 FtkIconCache*     ftk_default_icon_cache(void)
 {
 	return g_globals.icon_cache;
+}
+
+FtkCanvas*         ftk_shared_canvas(void)
+{
+	return g_globals.canvas;
 }
 
 FtkMainLoop*      ftk_default_main_loop(void)
@@ -148,6 +154,13 @@ void ftk_set_bitmap_factory(FtkBitmapFactory* bitmap_factory)
 void ftk_set_sources_manager(FtkSourcesManager* sources_manager)
 {
 	g_globals.sources_manager = sources_manager;
+
+	return;
+}
+
+void ftk_set_shared_canvas(FtkCanvas* canvas)
+{
+	g_globals.canvas = canvas;
 
 	return;
 }

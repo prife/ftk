@@ -438,6 +438,23 @@ int        ftk_window_is_fullscreen(FtkWidget* thiz)
 	return priv->fullscreen;
 }
 
+Ret        ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, 0);
+
+	if(!ftk_widget_is_visible(thiz))
+	{
+		return RET_OK;
+	}
+
+	ftk_window_disable_update(thiz);
+	ftk_widget_paint(thiz);
+	ftk_window_enable_update(thiz);
+
+	return ftk_window_update(thiz, rect);
+}
+
 FtkWidget* ftk_window_create(int x, int y, int width, int height)
 {
 	return ftk_window_create_with_type(FTK_WINDOW, x, y, width, height);

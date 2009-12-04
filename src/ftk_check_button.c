@@ -264,7 +264,7 @@ Ret ftk_check_button_set_icon_position(FtkWidget* thiz, int at_right)
 	if(priv->icon_at_right != at_right)
 	{
 		priv->icon_at_right = at_right;
-		ftk_widget_paint_self(thiz);
+		ftk_widget_invalidate(thiz);
 	}
 
 	return RET_OK;
@@ -278,7 +278,7 @@ Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked)
 	if(priv->checked != checked)
 	{
 		priv->checked = checked;
-		ftk_widget_paint_self(thiz);
+		ftk_widget_invalidate(thiz);
 	}
 
 	return RET_OK;

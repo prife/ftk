@@ -81,7 +81,7 @@ Ret ftk_image_set_image_file(FtkWidget* thiz, const char* image_file)
 		ftk_bitmap_unref(bitmap);
 	}
 
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_OK;
 }

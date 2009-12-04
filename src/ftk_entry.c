@@ -89,7 +89,7 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 		priv->visible_start = -1;
 	}
 
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_OK;
 }
@@ -405,7 +405,7 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	priv->visible_start = -1;
 	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_OK;
 }
@@ -420,7 +420,7 @@ Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text)
 	priv->visible_start = -1;
 	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;
-	ftk_widget_paint_self(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_OK;
 }

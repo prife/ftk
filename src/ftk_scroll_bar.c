@@ -283,7 +283,7 @@ Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int value, int max_value, int page
 	priv->value      = value < 0 ? 0 : value;
 	priv->max_value  = max_value;
 	priv->page_delta = page_delta;
-	ftk_widget_paint_self(thiz);	
+	ftk_widget_invalidate(thiz);	
 
 	return RET_OK;
 }
@@ -365,7 +365,7 @@ Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value)
 	if(value != priv->value)
 	{
 		priv->value = value;
-		ftk_widget_paint_self(thiz);	
+		ftk_widget_invalidate(thiz);	
 		return FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 	}
 

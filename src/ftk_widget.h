@@ -106,6 +106,7 @@ int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr);
 FtkWidgetState ftk_widget_state(FtkWidget* thiz);
 void* ftk_widget_user_data(FtkWidget* thiz);
 const char* ftk_widget_get_text(FtkWidget* thiz);
+Ret ftk_widget_invalidate(FtkWidget* thiz);
 
 void ftk_widget_show(FtkWidget* thiz, int visible);
 void ftk_widget_show_all(FtkWidget* thiz, int visible);
