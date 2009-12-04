@@ -47,26 +47,6 @@ typedef Ret  (*FtkWidgetOnEvent)(FtkWidget* thiz, FtkEvent* event);
 typedef Ret  (*FtkWidgetOnPaint)(FtkWidget* thiz);
 typedef void (*FtkWidgetDestroy)(FtkWidget* thiz);
 
-typedef enum _FtkWidgetState
-{
-	FTK_WIDGET_NORMAL      = 0,
-	FTK_WIDGET_FOCUSED     = 1,
-	FTK_WIDGET_ACTIVE      = 2,
-	FTK_WIDGET_INSENSITIVE = 3,
-	FTK_WIDGET_STATE_NR    = 4
-}FtkWidgetState;
-
-typedef enum _FtkWidgetAttr
-{
-	FTK_ATTR_TRANSPARENT    = 1,
-	FTK_ATTR_NO_FOCUS       = 2,
-	FTK_ATTR_BG_CENTER      = 4,
-	FTK_ATTR_BG_TILE        = 8,
-	FTK_ATTR_BG_FOUR_CORNER = 16,
-	FTK_ATTR_INSENSITIVE    = 32,
-	FTK_ATTR_FOCUSED        = 64,
-	FTK_ATTR_IGNORE_CLOSE   = 128 /*for window only*/
-}FtkWidgetAttr;
 
 struct _FtkWdiget
 {

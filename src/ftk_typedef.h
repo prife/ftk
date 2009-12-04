@@ -78,6 +78,7 @@ typedef enum _Ret
 
 typedef enum _FtkWidgetType
 {
+	FTK_NONE   = 0,
 	FTK_WINDOW = 1,
 	FTK_DIALOG,
 	FTK_STATUS_PANEL,
@@ -95,7 +96,8 @@ typedef enum _FtkWidgetType
 	FTK_CHECK_BUTTON,
 	FTK_SCROLL_BAR,
 	FTK_LIST_VIEW,
-	FTK_ICON_VIEW
+	FTK_ICON_VIEW,
+	FTK_WIDGET_TYPE_NR
 }FtkWidgetType;
 
 typedef enum _FtkLogLevel
@@ -104,6 +106,27 @@ typedef enum _FtkLogLevel
 	FTK_LOG_D = 1,
 	FTK_LOG_E = 2
 }FtkLogLevel;
+
+typedef enum _FtkWidgetState
+{
+	FTK_WIDGET_NORMAL      = 0,
+	FTK_WIDGET_FOCUSED     = 1,
+	FTK_WIDGET_ACTIVE      = 2,
+	FTK_WIDGET_INSENSITIVE = 3,
+	FTK_WIDGET_STATE_NR    = 4
+}FtkWidgetState;
+
+typedef enum _FtkWidgetAttr
+{
+	FTK_ATTR_TRANSPARENT    = 1,
+	FTK_ATTR_NO_FOCUS       = 2,
+	FTK_ATTR_BG_CENTER      = 4,
+	FTK_ATTR_BG_TILE        = 8,
+	FTK_ATTR_BG_FOUR_CORNER = 16,
+	FTK_ATTR_INSENSITIVE    = 32,
+	FTK_ATTR_FOCUSED        = 64,
+	FTK_ATTR_IGNORE_CLOSE   = 128 /*for window only*/
+}FtkWidgetAttr;
 
 typedef void (*FtkDestroy)(void* user_data);
 typedef Ret (*FtkIdle)(void* user_data);
