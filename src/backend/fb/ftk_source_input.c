@@ -126,9 +126,9 @@ static unsigned short s_key_map[0x100] =
 	[KEY_BACKSPACE]   =  FTK_KEY_BACKSPACE,
 	[KEY_TAB]         =  FTK_KEY_TAB,
 	[KEY_ESC]         =  FTK_KEY_ESC,
-	[KEY_SEND]        =  FTK_KEY_SEND,
-	[KEY_REPLY]       =  FTK_KEY_REPLY,
-	[KEY_SAVE]        =  FTK_KEY_SAVE,
+//	[KEY_SEND]        =  FTK_KEY_SEND,
+//	[KEY_REPLY]       =  FTK_KEY_REPLY,
+//	[KEY_SAVE]        =  FTK_KEY_SAVE,
 	[KEY_POWER]       =  FTK_KEY_POWER
 };
 
