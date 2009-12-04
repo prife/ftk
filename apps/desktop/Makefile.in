@@ -32,6 +32,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+noinst_PROGRAMS = app_info_test$(EXEEXT)
 bin_PROGRAMS = desktop$(EXEEXT)
 subdir = apps/desktop
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in TODO
@@ -44,7 +45,13 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
+PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
+am_app_info_test_OBJECTS = app_info_test-app_info.$(OBJEXT)
+app_info_test_OBJECTS = $(am_app_info_test_OBJECTS)
+app_info_test_LDADD = $(LDADD)
+app_info_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(app_info_test_CFLAGS) \
+	$(CFLAGS) $(app_info_test_LDFLAGS) $(LDFLAGS) -o $@
 am_desktop_OBJECTS = desktop-main.$(OBJEXT) desktop-app_info.$(OBJEXT)
 desktop_OBJECTS = $(am_desktop_OBJECTS)
 desktop_LDADD = $(LDADD)
@@ -63,8 +70,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(desktop_SOURCES)
-DIST_SOURCES = $(desktop_SOURCES)
+SOURCES = $(app_info_test_SOURCES) $(desktop_SOURCES)
+DIST_SOURCES = $(app_info_test_SOURCES) $(desktop_SOURCES)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -188,6 +195,9 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = icons xul
+app_info_test_SOURCES = app_info.c
+app_info_test_CFLAGS = -DAPP_INFO_TEST
+app_info_test_LDFLAGS = $(MYLDFLAGS)
 desktop_SOURCES = main.c app_info.c
 desktop_LDFLAGS = $(MYLDFLAGS)
 desktop_CFLAGS = -DAPP_DATA_DIR="\"$(datadir)/ftk/desktop\"" \
@@ -254,6 +264,16 @@ clean-binPROGRAMS:
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
 	done
+
+clean-noinstPROGRAMS:
+	@list='$(noinst_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
+	done
+app_info_test$(EXEEXT): $(app_info_test_OBJECTS) $(app_info_test_DEPENDENCIES) 
+	@rm -f app_info_test$(EXEEXT)
+	$(app_info_test_LINK) $(app_info_test_OBJECTS) $(app_info_test_LDADD) $(LIBS)
 desktop$(EXEEXT): $(desktop_OBJECTS) $(desktop_DEPENDENCIES) 
 	@rm -f desktop$(EXEEXT)
 	$(desktop_LINK) $(desktop_OBJECTS) $(desktop_LDADD) $(LIBS)
@@ -264,6 +284,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/app_info_test-app_info.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/desktop-app_info.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/desktop-main.Po@am__quote@
 
@@ -287,6 +308,20 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+
+app_info_test-app_info.o: app_info.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(app_info_test_CFLAGS) $(CFLAGS) -MT app_info_test-app_info.o -MD -MP -MF $(DEPDIR)/app_info_test-app_info.Tpo -c -o app_info_test-app_info.o `test -f 'app_info.c' || echo '$(srcdir)/'`app_info.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/app_info_test-app_info.Tpo $(DEPDIR)/app_info_test-app_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='app_info.c' object='app_info_test-app_info.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(app_info_test_CFLAGS) $(CFLAGS) -c -o app_info_test-app_info.o `test -f 'app_info.c' || echo '$(srcdir)/'`app_info.c
+
+app_info_test-app_info.obj: app_info.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(app_info_test_CFLAGS) $(CFLAGS) -MT app_info_test-app_info.obj -MD -MP -MF $(DEPDIR)/app_info_test-app_info.Tpo -c -o app_info_test-app_info.obj `if test -f 'app_info.c'; then $(CYGPATH_W) 'app_info.c'; else $(CYGPATH_W) '$(srcdir)/app_info.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/app_info_test-app_info.Tpo $(DEPDIR)/app_info_test-app_info.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='app_info.c' object='app_info_test-app_info.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(app_info_test_CFLAGS) $(CFLAGS) -c -o app_info_test-app_info.obj `if test -f 'app_info.c'; then $(CYGPATH_W) 'app_info.c'; else $(CYGPATH_W) '$(srcdir)/app_info.c'; fi`
 
 desktop-main.o: main.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(desktop_CFLAGS) $(CFLAGS) -MT desktop-main.o -MD -MP -MF $(DEPDIR)/desktop-main.Tpo -c -o desktop-main.o `test -f 'main.c' || echo '$(srcdir)/'`main.c
@@ -529,7 +564,8 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
@@ -590,18 +626,18 @@ uninstall-am: uninstall-binPROGRAMS
 
 .PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
 	all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool ctags ctags-recursive distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-data \
-	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am install-info \
-	install-info-am install-man install-pdf install-pdf-am \
-	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs installdirs-am maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-recursive uninstall uninstall-am \
+	clean-generic clean-libtool clean-noinstPROGRAMS ctags \
+	ctags-recursive distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-binPROGRAMS \
+	install-data install-data-am install-dvi install-dvi-am \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	installcheck installcheck-am installdirs installdirs-am \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-binPROGRAMS
 
 include $(abs_top_srcdir)/src/rules.mk

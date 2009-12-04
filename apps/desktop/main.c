@@ -1,5 +1,6 @@
 #include "ftk.h"
 #include "ftk_xul.h"
+#include "app_info.h"
 #include "ftk_animator_expand.h"
 
 static int g_desktop_horizonal = 0;
