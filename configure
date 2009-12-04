@@ -21116,7 +21116,7 @@ fi
 done
 
 
-ac_config_files="$ac_config_files ftk.pc Makefile src/Makefile src/testdata/Makefile src/icons/Makefile src/data/Makefile src/demos/Makefile src/test/Makefile src/backend/Makefile src/backend/directfb/Makefile src/backend/fb/Makefile src/backend/x11-emu/Makefile src/backend/win32/Makefile src/os/Makefile src/os/linux/Makefile src/os/windows/Makefile src/compiler/Makefile src/compiler/ads/Makefile src/compiler/vs2005/Makefile script_binding/Makefile script_binding/lua/Makefile script_binding/lua/lua/Makefile apps/Makefile apps/launcher/Makefile apps/desktop/Makefile apps/desktop/icons/Makefile apps/desktop/xul/Makefile apps/calculator/Makefile apps/calculator/icons/Makefile apps/calculator/xul/Makefile tools/Makefile tools/cross-build/Makefile"
+ac_config_files="$ac_config_files ftk.pc Makefile src/Makefile src/testdata/Makefile src/icons/Makefile src/data/Makefile src/demos/Makefile src/test/Makefile src/backend/Makefile src/backend/directfb/Makefile src/backend/fb/Makefile src/backend/x11-emu/Makefile src/backend/win32/Makefile src/os/Makefile src/os/linux/Makefile src/os/windows/Makefile src/compiler/Makefile src/compiler/ads/Makefile src/compiler/vs2005/Makefile script_binding/Makefile script_binding/lua/Makefile script_binding/lua/lua/Makefile apps/Makefile apps/launcher/Makefile apps/desktop/Makefile apps/desktop/icons/Makefile apps/desktop/xul/Makefile apps/calculator/Makefile apps/calculator/icons/Makefile apps/calculator/xul/Makefile apps/calculator/data/Makefile tools/Makefile tools/cross-build/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -21776,6 +21776,7 @@ do
     "apps/calculator/Makefile") CONFIG_FILES="$CONFIG_FILES apps/calculator/Makefile" ;;
     "apps/calculator/icons/Makefile") CONFIG_FILES="$CONFIG_FILES apps/calculator/icons/Makefile" ;;
     "apps/calculator/xul/Makefile") CONFIG_FILES="$CONFIG_FILES apps/calculator/xul/Makefile" ;;
+    "apps/calculator/data/Makefile") CONFIG_FILES="$CONFIG_FILES apps/calculator/data/Makefile" ;;
     "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
     "tools/cross-build/Makefile") CONFIG_FILES="$CONFIG_FILES tools/cross-build/Makefile" ;;
 

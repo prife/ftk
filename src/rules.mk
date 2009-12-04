@@ -1,5 +1,5 @@
 INCLUDES=-Wall  -g -DHAS_PNG -DHAS_JPEG \
-	-DDATA_DIR="\"$(datadir)/ftk\"" \
+	-DDATA_DIR="\"$(datadir)/ftk/base\"" \
 	-DLINUX -I$(abs_top_srcdir)/src -DTESTDATA_DIR="\"$(abs_top_srcdir)/src/testdata\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)/src\"" -DLINUX -DFTK_SUPPORT_C99 -I$(abs_top_srcdir)/src/os/linux 
 

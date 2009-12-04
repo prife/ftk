@@ -118,6 +118,7 @@ AC_CONFIG_FILES([ftk.pc
                 apps/calculator/Makefile
                 apps/calculator/icons/Makefile
                 apps/calculator/xul/Makefile
+                apps/calculator/data/Makefile
                 tools/Makefile
                 tools/cross-build/Makefile
                 ])

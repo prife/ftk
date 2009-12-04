@@ -1,4 +1,4 @@
-ftkiconsdir=$(datadir)/ftk/icons
+ftkiconsdir=$(datadir)/ftk/base/icons
 ftkicons_DATA=\
 	$(srcdir)/btn_check_off_disable_focused.png\
 	$(srcdir)/btn_check_off_disable.png\

@@ -1,4 +1,4 @@
-ftkdatadir=$(datadir)/ftk/data
+ftkdatadir=$(datadir)/ftk/base/data
 
 if FONT_ENGINE_FREETYPE
 ftkdata_DATA=$(srcdir)/font.ttf

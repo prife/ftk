@@ -33,11 +33,12 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = i686-pc-linux-gnu
 host_triplet = i686-pc-linux-gnu
-am__append_1 = ftk_font_freetype.c
-#am__append_2 = fontdata.c ftk_font_default.c
-am__append_3 = $(LINUX_NATIVE)
-#am__append_4 = $(LINUX_X11)
-#am__append_5 = $(LINUX_DFB)
+#am__append_1 = $(srcdir)/backend/fb/ftk_source_tslib.c 
+#am__append_2 = ftk_font_freetype.c
+am__append_3 = fontdata.c ftk_font_default.c
+#am__append_4 = $(LINUX_NATIVE)
+am__append_5 = $(LINUX_X11)
+#am__append_6 = $(LINUX_DFB)
 subdir = src
 DIST_COMMON = $(ftk_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -76,25 +77,28 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_font_default.c $(srcdir)/backend/fb/ftk_display_fb.c \
 	$(srcdir)/backend/fb/ftk_source_input.c \
 	$(srcdir)/backend/fb/ftk_backend_fb.c \
+	$(srcdir)/backend/fb/ftk_source_tslib.c \
 	$(srcdir)/backend/x11-emu/ftk_display_x11.c \
 	$(srcdir)/backend/x11-emu/ftk_source_x11.c \
 	$(srcdir)/backend/x11-emu/ftk_backend_x11.c \
 	$(srcdir)/backend/directfb/ftk_display_dfb.c \
 	$(srcdir)/backend/directfb/ftk_source_dfb.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
-am__objects_1 =  \
-	libftk_la-ftk_font_freetype.lo
-#am__objects_2 = libftk_la-fontdata.lo \
-#	libftk_la-ftk_font_default.lo
-am__objects_3 = libftk_la-ftk_display_fb.lo \
-	libftk_la-ftk_source_input.lo libftk_la-ftk_backend_fb.lo
-am__objects_4 = $(am__objects_3)
-am__objects_5 = libftk_la-ftk_display_x11.lo \
+#am__objects_1 =  \
+#	libftk_la-ftk_font_freetype.lo
+am__objects_2 = libftk_la-fontdata.lo \
+	libftk_la-ftk_font_default.lo
+#am__objects_3 = libftk_la-ftk_source_tslib.lo
+am__objects_4 = libftk_la-ftk_display_fb.lo \
+	libftk_la-ftk_source_input.lo libftk_la-ftk_backend_fb.lo \
+	$(am__objects_3)
+#am__objects_5 = $(am__objects_4)
+am__objects_6 = libftk_la-ftk_display_x11.lo \
 	libftk_la-ftk_source_x11.lo libftk_la-ftk_backend_x11.lo
-#am__objects_6 = $(am__objects_5)
-am__objects_7 = libftk_la-ftk_display_dfb.lo \
+am__objects_7 = $(am__objects_6)
+am__objects_8 = libftk_la-ftk_display_dfb.lo \
 	libftk_la-ftk_source_dfb.lo libftk_la-ftk_backend_dfb.lo
-#am__objects_8 = $(am__objects_7)
+#am__objects_9 = $(am__objects_8)
 am_libftk_la_OBJECTS = libftk_la-ftk_canvas.lo \
 	libftk_la-ftk_source_primary.lo \
 	libftk_la-ftk_wnd_manager_default.lo libftk_la-ftk_label.lo \
@@ -121,8 +125,8 @@ am_libftk_la_OBJECTS = libftk_la-ftk_canvas.lo \
 	libftk_la-ftk_xul.lo libftk_la-ftk_expr.lo \
 	libftk_la-ftk_list_view.lo libftk_la-ftk_list_model_default.lo \
 	libftk_la-ftk_list_render_default.lo $(am__objects_1) \
-	$(am__objects_2) $(am__objects_4) $(am__objects_6) \
-	$(am__objects_8)
+	$(am__objects_2) $(am__objects_5) $(am__objects_7) \
+	$(am__objects_9)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 libftk_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libftk_la_CFLAGS) \
@@ -165,13 +169,13 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/cross/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g  -DUSE_LINUX_NATIVE -DPC_EMU   -I/usr/include/freetype2   -DUSE_FREETYPE
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
 CXXCPP = g++ -E
 CXXDEPMODE = depmode=gcc3
-CXXFLAGS = -g 
+CXXFLAGS = -g -O2
 CYGPATH_W = echo
 DEFS = -DHAVE_CONFIG_H
 DEPDIR = .deps
@@ -184,14 +188,14 @@ ECHO_T =
 EGREP = /bin/grep -E
 EXEEXT = 
 F77 = gfortran
-FFLAGS = -g 
+FFLAGS = -g -O2
 GREP = /bin/grep
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS =   -lfreetype  
+LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
@@ -269,8 +273,7 @@ SUBDIRS = . os backend compiler testdata icons data demos test
 lib_LTLIBRARIES = libftk.la
 LINUX_NATIVE = $(srcdir)/backend/fb/ftk_display_fb.c \
 	$(srcdir)/backend/fb/ftk_source_input.c \
-	$(srcdir)/backend/fb/ftk_backend_fb.c
-
+	$(srcdir)/backend/fb/ftk_backend_fb.c $(am__append_1)
 LINUX_X11 = $(srcdir)/backend/x11-emu/ftk_display_x11.c \
 	$(srcdir)/backend/x11-emu/ftk_source_x11.c \
 	$(srcdir)/backend/x11-emu/ftk_backend_x11.c
@@ -293,10 +296,10 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	$(srcdir)/os/linux/ftk_linux.c ftk_gesture.c ftk_wait_box.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
-	ftk_list_render_default.c $(am__append_1) $(am__append_2) \
-	$(am__append_3) $(am__append_4) $(am__append_5)
-#libftk_la_CFLAGS = -DFTK_FONT="\"unicode.fnt\"" 
-libftk_la_CFLAGS = -DFTK_FONT="\"font.ttf\"" 
+	ftk_list_render_default.c $(am__append_2) $(am__append_3) \
+	$(am__append_4) $(am__append_5) $(am__append_6)
+libftk_la_CFLAGS = -DFTK_FONT="\"unicode.fnt\"" 
+#libftk_la_CFLAGS = -DFTK_FONT="\"font.ttf\"" 
 ftkdir = $(includedir)/ftk
 ftk_HEADERS = \
 	fontdata.h                ftk_list_render_default.h\
@@ -448,6 +451,7 @@ include ./$(DEPDIR)/libftk_la-ftk_source_idle.Plo
 include ./$(DEPDIR)/libftk_la-ftk_source_input.Plo
 include ./$(DEPDIR)/libftk_la-ftk_source_primary.Plo
 include ./$(DEPDIR)/libftk_la-ftk_source_timer.Plo
+include ./$(DEPDIR)/libftk_la-ftk_source_tslib.Plo
 include ./$(DEPDIR)/libftk_la-ftk_source_x11.Plo
 include ./$(DEPDIR)/libftk_la-ftk_sources_manager.Plo
 include ./$(DEPDIR)/libftk_la-ftk_sprite.Plo
@@ -854,6 +858,13 @@ libftk_la-ftk_backend_fb.lo: $(srcdir)/backend/fb/ftk_backend_fb.c
 #	source='$(srcdir)/backend/fb/ftk_backend_fb.c' object='libftk_la-ftk_backend_fb.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
 #	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_backend_fb.lo `test -f '$(srcdir)/backend/fb/ftk_backend_fb.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_backend_fb.c
+
+libftk_la-ftk_source_tslib.lo: $(srcdir)/backend/fb/ftk_source_tslib.c
+	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_source_tslib.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_source_tslib.Tpo -c -o libftk_la-ftk_source_tslib.lo `test -f '$(srcdir)/backend/fb/ftk_source_tslib.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_source_tslib.c
+	mv -f $(DEPDIR)/libftk_la-ftk_source_tslib.Tpo $(DEPDIR)/libftk_la-ftk_source_tslib.Plo
+#	source='$(srcdir)/backend/fb/ftk_source_tslib.c' object='libftk_la-ftk_source_tslib.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_source_tslib.lo `test -f '$(srcdir)/backend/fb/ftk_source_tslib.c' || echo '$(srcdir)/'`$(srcdir)/backend/fb/ftk_source_tslib.c
 
 libftk_la-ftk_display_x11.lo: $(srcdir)/backend/x11-emu/ftk_display_x11.c
 	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_display_x11.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_display_x11.Tpo -c -o libftk_la-ftk_display_x11.lo `test -f '$(srcdir)/backend/x11-emu/ftk_display_x11.c' || echo '$(srcdir)/'`$(srcdir)/backend/x11-emu/ftk_display_x11.c

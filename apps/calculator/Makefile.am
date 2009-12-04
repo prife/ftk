@@ -1,4 +1,4 @@
-SUBDIRS=icons xul
+SUBDIRS=icons xul data
 include $(abs_top_srcdir)/src/rules.mk
 
 LOCAL_CFLAGS=-DAPP_DATA_DIR="\"$(datadir)/ftk/calc\"" -DAPP_LOCAL_DATA_DIR="\"$(srcdir)\""

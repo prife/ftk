@@ -201,7 +201,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = icons xul
+SUBDIRS = icons xul data
 LOCAL_CFLAGS = -DAPP_DATA_DIR="\"$(datadir)/ftk/calc\"" -DAPP_LOCAL_DATA_DIR="\"$(srcdir)\""
 lib_LTLIBRARIES = libapp-calc.la
 libapp_calc_la_SOURCES = main.c
