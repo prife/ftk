@@ -334,7 +334,8 @@ ftk_HEADERS = \
 	ftk_key.h                 ftk_wnd_manager.h\
 	ftk_label.h               ftk_xml_builder.h\
 	ftk_list_model_default.h  ftk_xml_parser.h\
-	ftk_list_model.h          ftk_xul.h
+	ftk_list_model.h          ftk_xul.h \
+	ftk_font_freetype.h
 
 EXTRA_DIST = rules.mk
 all: all-recursive

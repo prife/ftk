@@ -12,3 +12,4 @@ desktop_LDFLAGS=$(MYLDFLAGS)
 desktop_CFLAGS=-DAPP_DATA_DIR="\"$(datadir)/ftk/desktop\"" \
 	-DAPP_LOCAL_DATA_DIR="\"$(srcdir)\""
 
+EXTRA_DIST=app_info.h

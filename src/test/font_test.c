@@ -1,5 +1,8 @@
+#ifdef USE_FREETYPE 
 #include "ftk_font_freetype.h"
+#else
 #include "ftk_font_default.h"
+#endif
 
 int main(int argc, char* argv[])
 {
