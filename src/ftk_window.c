@@ -49,10 +49,9 @@ static Ret ftk_window_realize(FtkWidget* thiz);
 Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL && thiz != focus_widget, RET_FAIL);
-
-	if(priv->focus_widget == focus_widget)
-//	|| focus_widget->children != NULL)
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+	
+	if(priv->focus_widget == focus_widget || thiz == focus_widget)
 	{
 		return RET_OK;
 	}
@@ -150,7 +149,7 @@ static FtkWidget* ftk_window_find_prev_focus(FtkWidget* focus_widget, int move_p
 		}
 	}
 	
-	return focus_widget;
+	return parent;
 }
 
 static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_next)
