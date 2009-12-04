@@ -271,7 +271,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	}
 	else
 	{
-		ftk_scroll_bar_set_param(priv->vscroll_bar, priv->current, total, priv->visible_nr);
+		ftk_scroll_bar_set_param(priv->vscroll_bar, priv->visible_start, total, priv->visible_nr);
 		ftk_widget_show(priv->vscroll_bar, 1);
 	}
 	priv->scrolled_by_me = 0;
@@ -340,7 +340,15 @@ static Ret ftk_list_view_on_scroll(FtkWidget* thiz, void* obj)
 
 	if(!priv->scrolled_by_me)
 	{
-		ftk_list_view_set_cursor(thiz, ftk_scroll_bar_get_value(priv->vscroll_bar));
+		int value = ftk_scroll_bar_get_value(priv->vscroll_bar);	
+		int total = ftk_list_model_get_total(priv->model);
+		value = (value + priv->visible_nr) < total ? value : total - priv->visible_nr;
+
+		if(value != priv->visible_start)
+		{
+			priv->visible_start = value;
+			ftk_list_view_set_cursor(thiz, value);
+		}
 	}
 
 	return RET_OK;
