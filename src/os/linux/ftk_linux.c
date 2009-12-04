@@ -30,12 +30,13 @@
  */
 #include <signal.h>
 #include "ftk_typedef.h"
-#ifdef HAS_BACKTRACE
+
+#ifdef HAVE_EXECINFO_H
 #include <execinfo.h>
 #endif
 static void signal_handler(int sig)
 {
-#ifdef HAS_BACKTRACE
+#ifdef HAVE_EXECINFO_H
 	int i = 0;
 	void* buffer[100] = {0};
 	int n = backtrace(buffer, 100);

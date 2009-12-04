@@ -17,7 +17,7 @@ AC_CHECK_LIB([jpeg], [main])
 AC_CHECK_LIB([png], [main])
 
 # Checks for header files.
-AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h])
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h execinfo.h])
 
 AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb],
                     [use which display/input backend])])

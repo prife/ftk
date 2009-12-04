@@ -50,5 +50,9 @@
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #endif/*FTK_LINUX_H*/
 
