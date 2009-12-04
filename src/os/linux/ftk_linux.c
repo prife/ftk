@@ -30,12 +30,12 @@
  */
 #include <signal.h>
 #include "ftk_typedef.h"
-#ifndef ANDROID
+#ifdef HAS_BACKTRACE
 #include <execinfo.h>
 #endif
 static void signal_handler(int sig)
 {
-#ifndef ANDROID
+#ifdef HAS_BACKTRACE
 	int i = 0;
 	void* buffer[100] = {0};
 	int n = backtrace(buffer, 100);
