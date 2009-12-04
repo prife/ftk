@@ -34,6 +34,8 @@
 #include "ftk_window.h"
 #include "ftk_globals.h"
 
+#define FTK_MAX_DIRTY_RECT 8
+
 typedef struct _PrivInfo
 {
 	FtkCanvas*  canvas;
@@ -42,6 +44,10 @@ typedef struct _PrivInfo
 	FtkWidget*  grab_widget;
 	int fullscreen;
 	int update_disabled;
+	
+	FtkSource* update_idle;
+	size_t dirty_rect_nr;
+	FtkRect dirty_rect[FTK_MAX_DIRTY_RECT];
 }PrivInfo;
 
 static Ret ftk_window_realize(FtkWidget* thiz);
@@ -79,7 +85,7 @@ FtkWidget* ftk_window_get_focus(FtkWidget* thiz)
 	return priv->focus_widget;
 }
 
-Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget)
+Ret ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
@@ -389,6 +395,7 @@ static void ftk_window_destroy(FtkWidget* thiz)
 
 		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 
+		ftk_source_unref(priv->update_idle);
 		ftk_canvas_destroy(priv->canvas);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
@@ -396,7 +403,7 @@ static void ftk_window_destroy(FtkWidget* thiz)
 	return;
 }
 
-Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
+Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 {
 	int xoffset = 0;
 	int yoffset = 0;
@@ -413,7 +420,7 @@ Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	return ftk_display_update_and_notify(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
 }
 
-Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
+Ret ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_OK);
@@ -430,7 +437,7 @@ Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 	return RET_OK;
 }
 
-int        ftk_window_is_fullscreen(FtkWidget* thiz)
+int ftk_window_is_fullscreen(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
@@ -438,21 +445,63 @@ int        ftk_window_is_fullscreen(FtkWidget* thiz)
 	return priv->fullscreen;
 }
 
-Ret        ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
+static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 {
+	size_t i = 0;
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(priv != NULL, 0);
-
-	if(!ftk_widget_is_visible(thiz))
+	return_val_if_fail(priv != NULL, RET_REMOVE);
+	
+	if(priv->dirty_rect_nr == 0)
 	{
-		return RET_OK;
+		return RET_REMOVE;
 	}
 
 	ftk_window_disable_update(thiz);
 	ftk_widget_paint(thiz);
 	ftk_window_enable_update(thiz);
 
-	return ftk_window_update(thiz, rect);
+	for(i = 0; i < priv->dirty_rect_nr; i++)
+	{
+		ftk_window_update(thiz, priv->dirty_rect+i);
+	}
+	priv->dirty_rect_nr = 0;
+
+	return RET_REMOVE;
+}
+
+Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL && rect != NULL, RET_FAIL);
+	
+	if(!ftk_widget_is_visible(thiz))
+	{
+		return RET_OK;
+	}
+
+	if((priv->dirty_rect_nr + 1) >= FTK_MAX_DIRTY_RECT)
+	{
+		ftk_window_idle_invalidate(thiz);
+	}
+	
+	priv->dirty_rect[priv->dirty_rect_nr] = *rect;
+	priv->dirty_rect_nr++;
+		
+	if(priv->dirty_rect_nr == 1)
+	{
+		if(priv->update_idle == NULL)
+		{
+			priv->update_idle = ftk_source_idle_create(ftk_window_idle_invalidate, thiz);
+			ftk_source_ref(priv->update_idle);
+		}
+		else
+		{
+			ftk_source_ref(priv->update_idle);
+		}
+		ftk_main_loop_add_source(ftk_default_main_loop(), priv->update_idle);
+	}
+
+	return RET_OK;
 }
 
 FtkWidget* ftk_window_create(int x, int y, int width, int height)
@@ -504,7 +553,7 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 	return thiz;
 }
 
-Ret        ftk_window_disable_update(FtkWidget* thiz)
+Ret ftk_window_disable_update(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
@@ -514,7 +563,7 @@ Ret        ftk_window_disable_update(FtkWidget* thiz)
 	return RET_OK;
 }
 
-Ret        ftk_window_enable_update(FtkWidget* thiz)
+Ret ftk_window_enable_update(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
@@ -524,7 +573,7 @@ Ret        ftk_window_enable_update(FtkWidget* thiz)
 	return RET_OK;
 }
 
-Ret        ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg)
+Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg)
 {
 	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
