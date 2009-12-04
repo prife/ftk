@@ -73,8 +73,8 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	$(srcdir)/os/linux/ftk_linux.c ftk_gesture.c ftk_wait_box.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
-	ftk_list_render_default.c ftk_icon_view.c ftk_font_freetype.c \
-	fontdata.c ftk_font_default.c \
+	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c \
+	ftk_font_freetype.c fontdata.c ftk_font_default.c \
 	$(srcdir)/backend/fb/ftk_display_fb.c \
 	$(srcdir)/backend/fb/ftk_source_input.c \
 	$(srcdir)/backend/fb/ftk_backend_fb.c \
@@ -126,8 +126,9 @@ am_libftk_la_OBJECTS = libftk_la-ftk_canvas.lo \
 	libftk_la-ftk_xul.lo libftk_la-ftk_expr.lo \
 	libftk_la-ftk_list_view.lo libftk_la-ftk_list_model_default.lo \
 	libftk_la-ftk_list_render_default.lo \
-	libftk_la-ftk_icon_view.lo $(am__objects_1) $(am__objects_2) \
-	$(am__objects_5) $(am__objects_7) $(am__objects_9)
+	libftk_la-ftk_icon_view.lo libftk_la-ftk_theme.lo \
+	$(am__objects_1) $(am__objects_2) $(am__objects_5) \
+	$(am__objects_7) $(am__objects_9)
 libftk_la_OBJECTS = $(am_libftk_la_OBJECTS)
 libftk_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(libftk_la_CFLAGS) \
@@ -297,9 +298,9 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	$(srcdir)/os/linux/ftk_linux.c ftk_gesture.c ftk_wait_box.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
 	ftk_xul.c ftk_expr.c ftk_list_view.c ftk_list_model_default.c \
-	ftk_list_render_default.c ftk_icon_view.c $(am__append_2) \
-	$(am__append_3) $(am__append_4) $(am__append_5) \
-	$(am__append_6)
+	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c \
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5) $(am__append_6)
 @FONT_ENGINE_DEFAULT_TRUE@libftk_la_CFLAGS = -DFTK_FONT="\"unicode.fnt\"" 
 @FONT_ENGINE_FREETYPE_TRUE@libftk_la_CFLAGS = -DFTK_FONT="\"font.ttf\"" 
 ftkdir = $(includedir)/ftk
@@ -463,6 +464,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_status_panel.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_style.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_text_buffer.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_theme.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_util.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_wait_box.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_widget.Plo@am__quote@
@@ -827,6 +829,13 @@ libftk_la-ftk_icon_view.lo: ftk_icon_view.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ftk_icon_view.c' object='libftk_la-ftk_icon_view.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_icon_view.lo `test -f 'ftk_icon_view.c' || echo '$(srcdir)/'`ftk_icon_view.c
+
+libftk_la-ftk_theme.lo: ftk_theme.c
+@am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_theme.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_theme.Tpo -c -o libftk_la-ftk_theme.lo `test -f 'ftk_theme.c' || echo '$(srcdir)/'`ftk_theme.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libftk_la-ftk_theme.Tpo $(DEPDIR)/libftk_la-ftk_theme.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ftk_theme.c' object='libftk_la-ftk_theme.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_theme.lo `test -f 'ftk_theme.c' || echo '$(srcdir)/'`ftk_theme.c
 
 libftk_la-ftk_font_freetype.lo: ftk_font_freetype.c
 @am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_font_freetype.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_font_freetype.Tpo -c -o libftk_la-ftk_font_freetype.lo `test -f 'ftk_font_freetype.c' || echo '$(srcdir)/'`ftk_font_freetype.c

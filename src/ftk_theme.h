@@ -32,7 +32,7 @@
 #ifndef FTK_THEME_H
 #define FTK_THEME_H
 
-#include "ftk_typedef.h"
+#include "ftk_bitmap.h"
 
 struct _FtkTheme;
 typedef struct _FtkTheme FtkTheme;

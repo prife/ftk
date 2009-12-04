@@ -168,3 +168,20 @@ int utf8_count_char(const char *str, size_t length)
 	return nr;
 }
 
+FtkColor ftk_parse_color( const char* value)
+{
+	int a = 0xff;
+	int r = 0;
+	int g = 0;
+	int b = 0;
+	FtkColor color = {0};
+	
+	sscanf(value, "%02x%02x%02x%02x", &a, &r, &g, &b);
+	color.a = a;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+
+	return color;
+}
+
