@@ -58,10 +58,13 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, &gc);
 	fg_width = width * priv->percent/100;
 
-	ftk_canvas_draw_round_rect(canvas, x+1, y+1, fg_width-2, height-2, 1);
-	if(fg_width < width && fg_width > 2)
+	if(fg_width >= 10)
 	{
-		ftk_canvas_draw_rect(canvas, x + fg_width - 2, y+1, 2, height-2, 1);
+		ftk_canvas_draw_round_rect(canvas, x+1, y+1, fg_width-2, height-2, 1);
+		if(fg_width < width && fg_width > 2)
+		{
+			ftk_canvas_draw_rect(canvas, x + fg_width - 2, y+1, 2, height-2, 1);
+		}
 	}
 
 	FTK_END_PAINT();

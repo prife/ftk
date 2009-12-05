@@ -57,7 +57,7 @@ static Ret ftk_source_idle_dispatch(FtkSource* thiz)
 
 static void ftk_source_idle_destroy(FtkSource* thiz)
 {
-	FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+	FTK_ZFREE(thiz, sizeof(FtkSource) + sizeof(PrivInfo));
 
 	return;
 }

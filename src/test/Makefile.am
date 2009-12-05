@@ -5,7 +5,7 @@ noinst_PROGRAMS=label_test widget_test \
 	bitmap_factory_test main_loop_test png_test log_test util_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test timer_test \
-	expr_test theme_test
+	expr_test theme_test xul_stress_test
 
 if FTK_BACKEND_FB
 noinst_PROGRAMS +=display_fb_test input_test
@@ -23,6 +23,9 @@ tslib_test_LDFLAGS=$(MYLDFLAGS)
 tslib_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
 endif
 endif
+
+xul_stress_test_SOURCES=xul_stress_test.c
+xul_stress_test_LDFLAGS=$(MYLDFLAGS)
 
 theme_test_SOURCES=theme_test.c
 theme_test_LDFLAGS=$(MYLDFLAGS)

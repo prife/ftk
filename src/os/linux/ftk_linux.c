@@ -52,7 +52,6 @@ static void signal_handler(int sig)
 	signal(SIGABRT, NULL);
 	signal(SIGSEGV, NULL);
 	signal(SIGILL,  NULL);
-	signal(SIGKILL, NULL);
 #endif
 	_exit(0);
 
@@ -71,7 +70,6 @@ static void ftk_install_crash_signal(void)
 	signal(SIGABRT, signal_handler);
 	signal(SIGSEGV, signal_handler);
 	signal(SIGILL,  signal_handler);
-	signal(SIGKILL, signal_handler);
 	signal(SIGINT,  signal_int_handler);
 
 	return ;

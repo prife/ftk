@@ -41,7 +41,7 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	icon_cache_test$(EXEEXT) xml_parser_test$(EXEEXT) \
 	xul_test$(EXEEXT) list_model_default_test$(EXEEXT) \
 	timer_test$(EXEEXT) expr_test$(EXEEXT) theme_test$(EXEEXT) \
-	$(am__EXEEXT_1) $(am__EXEEXT_2)
+	xul_stress_test$(EXEEXT) $(am__EXEEXT_1) $(am__EXEEXT_2)
 @FTK_BACKEND_FB_TRUE@am__append_1 = display_fb_test input_test
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@am__append_2 = tslib_test
 subdir = src/test
@@ -203,6 +203,12 @@ xml_parser_test_LDADD = $(LDADD)
 xml_parser_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(xml_parser_test_LDFLAGS) $(LDFLAGS) -o $@
+am_xul_stress_test_OBJECTS = xul_stress_test.$(OBJEXT)
+xul_stress_test_OBJECTS = $(am_xul_stress_test_OBJECTS)
+xul_stress_test_LDADD = $(LDADD)
+xul_stress_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(xul_stress_test_LDFLAGS) $(LDFLAGS) -o $@
 am_xul_test_OBJECTS = xul_test.$(OBJEXT)
 xul_test_OBJECTS = $(am_xul_test_OBJECTS)
 xul_test_LDADD = $(LDADD)
@@ -231,7 +237,8 @@ SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
 	$(theme_test_SOURCES) $(timer_test_SOURCES) \
 	$(tslib_test_SOURCES) $(util_test_SOURCES) widget_test.c \
-	$(xml_parser_test_SOURCES) $(xul_test_SOURCES)
+	$(xml_parser_test_SOURCES) $(xul_stress_test_SOURCES) \
+	$(xul_test_SOURCES)
 DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
 	$(expr_test_SOURCES) $(font_test_SOURCES) $(ftk_test_SOURCES) \
@@ -242,7 +249,8 @@ DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
 	$(theme_test_SOURCES) $(timer_test_SOURCES) \
 	$(am__tslib_test_SOURCES_DIST) $(util_test_SOURCES) \
-	widget_test.c $(xml_parser_test_SOURCES) $(xul_test_SOURCES)
+	widget_test.c $(xml_parser_test_SOURCES) \
+	$(xul_stress_test_SOURCES) $(xul_test_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -364,6 +372,8 @@ top_srcdir = @top_srcdir@
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_SOURCES = tslib_test.c
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_LDFLAGS = $(MYLDFLAGS)
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
+xul_stress_test_SOURCES = xul_stress_test.c
+xul_stress_test_LDFLAGS = $(MYLDFLAGS)
 theme_test_SOURCES = theme_test.c
 theme_test_LDFLAGS = $(MYLDFLAGS)
 expr_test_SOURCES = expr_test.c
@@ -516,6 +526,9 @@ widget_test$(EXEEXT): $(widget_test_OBJECTS) $(widget_test_DEPENDENCIES)
 xml_parser_test$(EXEEXT): $(xml_parser_test_OBJECTS) $(xml_parser_test_DEPENDENCIES) 
 	@rm -f xml_parser_test$(EXEEXT)
 	$(xml_parser_test_LINK) $(xml_parser_test_OBJECTS) $(xml_parser_test_LDADD) $(LIBS)
+xul_stress_test$(EXEEXT): $(xul_stress_test_OBJECTS) $(xul_stress_test_DEPENDENCIES) 
+	@rm -f xul_stress_test$(EXEEXT)
+	$(xul_stress_test_LINK) $(xul_stress_test_OBJECTS) $(xul_stress_test_LDADD) $(LIBS)
 xul_test$(EXEEXT): $(xul_test_OBJECTS) $(xul_test_DEPENDENCIES) 
 	@rm -f xul_test$(EXEEXT)
 	$(xul_test_LINK) $(xul_test_OBJECTS) $(xul_test_LDADD) $(LIBS)
@@ -550,6 +563,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/widget_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xml_builder_dump.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xml_parser_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xul_stress_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xul_test.Po@am__quote@
 
 .c.o:
