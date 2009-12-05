@@ -42,6 +42,13 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_QUIT;
 }
 
+static Ret button_close_clicked(void* ctx, void* obj)
+{
+	ftk_widget_unref(ctx);
+
+	return RET_OK;
+}
+
 void create_dialog(FtkBitmap* bitmap, FtkColor bg)
 {
 	int id = 0;
@@ -98,6 +105,10 @@ static void create_app_window(void)
 	button = ftk_button_create(win, 2*width/3, height/6, width/3, 50);
 	ftk_widget_set_text(button, "半透明效果");
 	ftk_button_set_clicked_listener(button, button_open_transparent_dialog, win);
+
+	button = ftk_button_create(win, width/4, height/2, width/2, 60);
+	ftk_widget_set_text(button, "quit");
+	ftk_button_set_clicked_listener(button, button_close_clicked, win);
 
 	ftk_widget_set_text(win, "transparent");
 	ftk_widget_show_all(win, 1);

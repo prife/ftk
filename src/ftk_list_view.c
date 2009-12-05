@@ -388,6 +388,7 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 		FTK_SCROLL_BAR_WIDTH, item_height * priv->visible_nr);
 	ftk_widget_set_attr(priv->vscroll_bar, FTK_ATTR_NO_FOCUS);
 	ftk_scroll_bar_set_listener(priv->vscroll_bar, (FtkListener)ftk_list_view_on_scroll, thiz);
+	ftk_widget_set_attr(thiz, FTK_BG_TILE);
 
 	return RET_OK;
 }
