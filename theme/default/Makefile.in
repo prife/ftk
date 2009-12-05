@@ -49,9 +49,9 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(ftkiconsdir)"
-ftkiconsDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(ftkicons_DATA)
+am__installdirs = "$(DESTDIR)$(themedir)"
+themeDATA_INSTALL = $(INSTALL_DATA)
+DATA = $(theme_DATA)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -162,8 +162,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-ftkiconsdir = $(datadir)/ftk/base/icons
-ftkicons_DATA = \
+themedir = $(datadir)/ftk/base/theme/default
+theme_DATA = \
 	$(srcdir)/btn_check_off_disable_focused.png\
 	$(srcdir)/btn_check_off_disable.png\
 	$(srcdir)/btn_check_off.png\
@@ -203,9 +203,10 @@ ftkicons_DATA = \
 	$(srcdir)/scrollbar_handle_horizontal.png\
 	$(srcdir)/scrollbar_handle_vertical.png\
 	$(srcdir)/status-bg.png\
-	$(srcdir)/wait_box.png
+	$(srcdir)/wait_box.png \
+	theme.xml
 
-EXTRA_DIST = $(ftkicons_DATA)
+EXTRA_DIST = $(theme_DATA)
 all: all-am
 
 .SUFFIXES:
@@ -244,22 +245,22 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-ftkiconsDATA: $(ftkicons_DATA)
+install-themeDATA: $(theme_DATA)
 	@$(NORMAL_INSTALL)
-	test -z "$(ftkiconsdir)" || $(MKDIR_P) "$(DESTDIR)$(ftkiconsdir)"
-	@list='$(ftkicons_DATA)'; for p in $$list; do \
+	test -z "$(themedir)" || $(MKDIR_P) "$(DESTDIR)$(themedir)"
+	@list='$(theme_DATA)'; for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  f=$(am__strip_dir) \
-	  echo " $(ftkiconsDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(ftkiconsdir)/$$f'"; \
-	  $(ftkiconsDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(ftkiconsdir)/$$f"; \
+	  echo " $(themeDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(themedir)/$$f'"; \
+	  $(themeDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(themedir)/$$f"; \
 	done
 
-uninstall-ftkiconsDATA:
+uninstall-themeDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(ftkicons_DATA)'; for p in $$list; do \
+	@list='$(theme_DATA)'; for p in $$list; do \
 	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(ftkiconsdir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(ftkiconsdir)/$$f"; \
+	  echo " rm -f '$(DESTDIR)$(themedir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(themedir)/$$f"; \
 	done
 tags: TAGS
 TAGS:
@@ -298,7 +299,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(ftkiconsdir)"; do \
+	for dir in "$(DESTDIR)$(themedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -343,7 +344,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-ftkiconsDATA
+install-data-am: install-themeDATA
 
 install-dvi: install-dvi-am
 
@@ -377,7 +378,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-ftkiconsDATA
+uninstall-am: uninstall-themeDATA
 
 .MAKE: install-am install-strip
 
@@ -385,13 +386,13 @@ uninstall-am: uninstall-ftkiconsDATA
 	distclean distclean-generic distclean-libtool distdir dvi \
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-ftkiconsDATA install-html \
-	install-html-am install-info install-info-am install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
+	install-exec install-exec-am install-html install-html-am \
+	install-info install-info-am install-man install-pdf \
+	install-pdf-am install-ps install-ps-am install-strip \
+	install-themeDATA installcheck installcheck-am installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	uninstall uninstall-am uninstall-ftkiconsDATA
+	uninstall uninstall-am uninstall-themeDATA
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

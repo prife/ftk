@@ -52,44 +52,56 @@ struct _FtkTheme
 	FtkWidgetTheme widget_themes[FTK_WIDGET_TYPE_NR];
 };
 
-static const char* s_default_theme = "\
-<theme name=\"default\">\
-<button bg_image[normal]=\"btn_default_normal.png\" \
-bg_image[focused]=\"btn_default_selected.png\" \
-bg_image[active]=\"btn_default_pressed.png\" \
-bg_image[disable]=\"btn_default_normal_disable.png\" \
-/> \
-<label fg[disable]=\"ff000000\"\
-/>\
-<progress_bar \ 
-bg[normal]=\"ff9d9e9d\" fg[normal]=\"ffffd300\"\
-bg[focused]=\"ff9d9e9d\" fg[focused]=\"ffffd300\"\
-bg[active]=\"ff9d9e9d\" fg[active]=\"ffffd300\"\
-bg[disable]=\"ff9d9e9d\" fg[disable]=\"ffffd300\"\
-/>\
-<entry \ 
-bg[normal]=\"ffffffff\" fg[normal]=\"ff000000\" bd[normal]=\"ffe2ceee\"\
-bg[focused]=\"ffffffff\" fg[focused]=\"ff000000\" bd[focused]=\"ffffbb00\"\
-bg[active]=\"ffffffff\" fg[active]=\"ff000000\" bd[active]=\"ffe2ceee\"\
-bg[disable]=\"ffffffff\" fg[disable]=\"ffaca899\" bd[disable]=\"ffe2ceee\"\
-/>\
-<check_button \
-	fg[normal]=\"ff000000\"\
-	fg[focused]=\"ffffbb00\"\
-	fg[active]=\"ffffbb00\"\
-	fg[disable]=\"ffaca899\"\
-/>\
-<radio_button \
-	fg[normal]=\"ff000000\"\
-	fg[focused]=\"ffffbb00\"\
-	fg[active]=\"ffffbb00\"\
-	fg[disable]=\"ffaca899\"\
-/>\
-</theme>";
+static const char* const s_default_theme = "\
+	<theme name=\"default\">\
+	<button bg_image[normal]=\"btn_default_normal"FTK_STOCK_IMG_SUFFIX"\" \
+	bg_image[focused]=\"btn_default_selected"FTK_STOCK_IMG_SUFFIX"\" \
+	bg_image[active]=\"btn_default_pressed"FTK_STOCK_IMG_SUFFIX"\" \
+	bg_image[disable]=\"btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX"\" \
+	/> \
+	<progress_bar \
+	bg[normal]=\"ff9d9e9d\" fg[normal]=\"ffffd300\"\
+	bg[focused]=\"ff9d9e9d\" fg[focused]=\"ffffd300\"\
+	bg[active]=\"ff9d9e9d\" fg[active]=\"ffffd300\"\
+	bg[disable]=\"ff9d9e9d\" fg[disable]=\"ffffd300\"\
+	/>\
+	<entry \
+	bg[normal]=\"ffffffff\" fg[normal]=\"ff000000\" bd[normal]=\"ffe2ceee\"\
+	bg[focused]=\"ffffffff\" fg[focused]=\"ff000000\" bd[focused]=\"ffffbb00\"\
+	bg[active]=\"ffffffff\" fg[active]=\"ff000000\" bd[active]=\"ffe2ceee\"\
+	bg[disable]=\"ffffffff\" fg[disable]=\"ffaca899\" bd[disable]=\"ffe2ceee\"\
+	/>\
+	<check_button \
+		fg[normal]=\"ff000000\"\
+		fg[focused]=\"ffffbb00\"\
+		fg[active]=\"ffffbb00\"\
+		fg[disable]=\"ffaca899\"\
+	/>\
+	<radio_button \
+		fg[normal]=\"ff000000\"\
+		fg[focused]=\"ffffbb00\"\
+		fg[active]=\"ffffbb00\"\
+		fg[disable]=\"ffaca899\"\
+	/>\
+	<menu_panel \
+	bg[normal]=\"ffffffff\" fg[normal]=\"ffccc9b8\" bd[normal]=\"ffb0a080\"\
+	/>\
+	</theme>";
 
 static Ret ftk_theme_init_default(FtkTheme* thiz)
 {
+#ifdef LINUX
+	char filename[FTK_MAX_PATH] = {0};
+	ftk_snprintf(filename, sizeof(filename), DATA_DIR"/theme/default/theme.xml");
+	if(ftk_theme_parse_file(thiz, filename) != RET_OK)
+	{
+		ftk_snprintf(filename, sizeof(filename), LOCAL_DATA_DIR"/theme/default/theme.xml");
+		return ftk_theme_parse_file(thiz, filename);
+	}
+	return RET_OK;
+#else
 	return ftk_theme_parse_data(thiz, s_default_theme, strlen(s_default_theme));
+#endif
 }
 
 FtkTheme*  ftk_theme_create(int init_default)
@@ -106,10 +118,12 @@ FtkTheme*  ftk_theme_create(int init_default)
 		{
 			for(j = 0; j < FTK_WIDGET_STATE_NR; j++)
 			{
+				/*init background color to white*/
 				thiz->widget_themes[i].bg[j].a = 0xff;
 				thiz->widget_themes[i].bg[j].r = 0xff;
 				thiz->widget_themes[i].bg[j].g = 0xff;
 				thiz->widget_themes[i].bg[j].b = 0xff;
+				/*init foreground color to black*/
 				thiz->widget_themes[i].fg[j].a = 0xff;
 				thiz->widget_themes[i].fg[j].r = 0x00;
 				thiz->widget_themes[i].fg[j].g = 0x00;
@@ -121,6 +135,7 @@ FtkTheme*  ftk_theme_create(int init_default)
 		{
 			ftk_theme_init_default(thiz);
 		}
+
 		ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
 		thiz->icon_cache = ftk_icon_cache_create(icon_path);
 	}
@@ -134,7 +149,7 @@ typedef struct _WidgetNameType
 	FtkWidgetType type;
 }WidgetNameType;
 
-static const WidgetNameType s_widget_name_types[] = 
+static const WidgetNameType const s_widget_name_types[] = 
 {
 	{"label",        FTK_LABEL},
 	{"entry",        FTK_ENTRY},
@@ -155,13 +170,13 @@ static const WidgetNameType s_widget_name_types[] =
 	{"menu_panel",   FTK_MENU_PANEL},
 	{"list_view",    FTK_LIST_VIEW},
 	{"icon_view",    FTK_ICON_VIEW},
-	{NULL, FTK_NONE},
+	{NULL, FTK_WIDGET_NONE},
 };
 
 static FtkWidgetType ftk_theme_get_widget_type(FtkTheme* thiz, const char* name)
 {
 	size_t i = 0;
-	return_val_if_fail(thiz != NULL && name != NULL, FTK_NONE);
+	return_val_if_fail(thiz != NULL && name != NULL, FTK_WIDGET_NONE);
 
 	for(i = 0; s_widget_name_types[i].name != NULL; i++)
 	{
@@ -171,7 +186,7 @@ static FtkWidgetType ftk_theme_get_widget_type(FtkTheme* thiz, const char* name)
 		}
 	}
 
-	return FTK_NONE;
+	return FTK_WIDGET_NONE;
 }
 
 typedef struct _PrivInfo
@@ -215,6 +230,7 @@ static Ret  ftk_theme_parse_fg_color(FtkTheme* thiz, FtkWidgetType type, const c
 
 	TO_STATE(name[3]);
 	theme->fg[state] = ftk_parse_color(value);
+
 	ftk_logd("fg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
 		theme->fg[state].a, theme->fg[state].r, theme->fg[state].g, theme->fg[state].b);
 
@@ -257,7 +273,8 @@ static Ret  ftk_theme_parse_bg_image(FtkTheme* thiz, FtkWidgetType type, const c
 	TO_STATE(name[9]);
 	ftk_strncpy(theme->bg_image_name[state], value, sizeof(theme->bg_image_name[state]));
 
-	ftk_logd("type=%d state=%d name=%s \n", type, state, theme->bg_image_name[state]);
+	ftk_logd("bg_image type=%d state=%d name=%s \n", type, state, theme->bg_image_name[state]);
+
 	return RET_OK;
 }
 
@@ -268,7 +285,7 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 	const char* name = NULL;
 	const char* value = NULL;
 	FtkTheme* theme = priv->theme;
-	FtkWidgetType type = FTK_NONE;
+	FtkWidgetType type = FTK_WIDGET_NONE;
 	return_if_fail(tag != NULL && attrs != NULL);
 
 	if(strcmp(tag, "theme") == 0)
@@ -279,7 +296,7 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 			value = attrs[i+1];
 			if(name[0] == 'n')
 			{
-				ftk_strncpy(theme->name, value, sizeof(theme->name));	
+				ftk_strncpy(theme->name, value, sizeof(theme->name));
 				break;
 			}
 		}
@@ -288,12 +305,13 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 	}
 
 	type = ftk_theme_get_widget_type(theme, tag);
-	return_if_fail(type != FTK_NONE);
+	return_if_fail(type != FTK_WIDGET_NONE);
 
 	for(i = 0; attrs[i] != NULL; i += 2)
 	{
 		name = attrs[i];
 		value = attrs[i+1];
+
 		if(strlen(name) < 9)
 		{
 			ftk_logd("%s: unknow %s=%s\n", __func__, name, value);
@@ -304,25 +322,30 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 		{
 			case 'f':
 			{
-				if(name[1] == 'g' && name[2] == '[')
-				{
-					ftk_theme_parse_fg_color(theme, type, name, value);
-				}
+				/*fg:forground color*/
+				ftk_theme_parse_fg_color(theme, type, name, value);
 				break;
 			}
 			case 'b':
 			{
+				/*bd:border color*/
 				if(name[1] == 'd')
 				{
 					ftk_theme_parse_bd_color(theme, type, name, value);
 				}
 				else if(name[1] == 'g' && name[2] == '[')
 				{
+					/*bg:background color*/
 					ftk_theme_parse_bg_color(theme, type, name, value);
 				}
 				else if(name[1] == 'g' && name[2] == '_')
 				{
+					/*bg_image:background image*/
 					ftk_theme_parse_bg_image(theme, type, name, value);
+				}
+				else
+				{
+					ftk_logd("%s: unknow %s=%s\n", __func__, name, value);
 				}
 				break;
 			}
@@ -334,31 +357,6 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 		}
 	}
 
-	return;
-}
-
-static void ftk_theme_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
-{
-	return;
-}
-
-static void ftk_theme_builder_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
-{
-	return;
-}
-
-static void ftk_theme_builder_on_comment(FtkXmlBuilder* thiz, const char* text, size_t length)
-{
-	return;
-}
-
-static void ftk_theme_builder_on_pi(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
-{
-	return;
-}
-
-static void ftk_theme_builder_on_error(FtkXmlBuilder* thiz, int line, int row, const char* message)
-{
 	return;
 }
 
@@ -378,11 +376,6 @@ static FtkXmlBuilder* ftk_theme_builder_create(void)
 	if(thiz != NULL)
 	{
 		thiz->on_start_element = ftk_theme_builder_on_start;
-		thiz->on_end_element   = ftk_theme_builder_on_end;
-		thiz->on_text          = ftk_theme_builder_on_text;
-		thiz->on_comment       = ftk_theme_builder_on_comment;
-		thiz->on_pi_element    = ftk_theme_builder_on_pi;
-		thiz->on_error         = ftk_theme_builder_on_error;
 		thiz->destroy          = ftk_theme_builder_destroy;
 	}
 
@@ -391,7 +384,7 @@ static FtkXmlBuilder* ftk_theme_builder_create(void)
 
 Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 {
-	FtkXmlParser* parser = NULL;
+	FtkXmlParser*  parser = NULL;
 	FtkXmlBuilder* builder = NULL;
 	return_val_if_fail(xml != NULL, RET_FAIL);
 
@@ -399,7 +392,6 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 	return_val_if_fail(parser != NULL, RET_FAIL);
 
 	builder = ftk_theme_builder_create();
-
 	if(builder != NULL)
 	{
 		PrivInfo* priv = (PrivInfo*)builder->priv;
@@ -420,6 +412,10 @@ Ret        ftk_theme_parse_file(FtkTheme* thiz, const char* filename)
 	return_val_if_fail(thiz != NULL && filename != NULL, RET_FAIL);
 	
 	m = ftk_mmap_create(filename, 0, -1);
+	if(m == NULL)
+	{
+		ftk_logd("%s: mmap %s failed.\n", __func__, filename);
+	}
 	return_val_if_fail(m != NULL, RET_FAIL);
 	ret = ftk_theme_parse_data(thiz, ftk_mmap_data(m), ftk_mmap_length(m));
 	ftk_mmap_destroy(m);
@@ -429,6 +425,7 @@ Ret        ftk_theme_parse_file(FtkTheme* thiz, const char* filename)
 
 FtkBitmap* ftk_theme_get_bg(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
 {
+	assert(type < FTK_WIDGET_TYPE_NR && state < FTK_WIDGET_STATE_NR);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	if(thiz->widget_themes[type].bg_image[state] == NULL)
@@ -458,6 +455,7 @@ FtkBitmap* ftk_theme_load_image(FtkTheme* thiz, const char* filename)
 FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
 {
 	FtkColor c = {0};
+	assert(type < FTK_WIDGET_TYPE_NR && state < FTK_WIDGET_STATE_NR);
 	return_val_if_fail(thiz != NULL, c);
 
 	return thiz->widget_themes[type].bg[state];
@@ -466,6 +464,7 @@ FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetS
 FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
 {
 	FtkColor c = {0};
+	assert(type < FTK_WIDGET_TYPE_NR && state < FTK_WIDGET_STATE_NR);
 	return_val_if_fail(thiz != NULL, c);
 
 	return thiz->widget_themes[type].border[state];
@@ -474,6 +473,7 @@ FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWid
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
 {
 	FtkColor c = {0};
+	assert(type < FTK_WIDGET_TYPE_NR && state < FTK_WIDGET_STATE_NR);
 	return_val_if_fail(thiz != NULL, c);
 
 	return thiz->widget_themes[type].fg[state];
@@ -497,6 +497,7 @@ void       ftk_theme_destroy(FtkTheme* thiz)
 				}
 			}
 		}
+		ftk_icon_cache_destroy(thiz->icon_cache);
 	}
 
 	return;

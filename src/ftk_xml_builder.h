@@ -69,18 +69,22 @@ static inline void ftk_xml_builder_on_start_element(FtkXmlBuilder* thiz, const c
 
 static inline void ftk_xml_builder_on_end_element(FtkXmlBuilder* thiz, const char* tag)
 {
-	return_if_fail(thiz != NULL && thiz->on_end_element != NULL);
-
-	thiz->on_end_element(thiz, tag);
+	return_if_fail(thiz != NULL);
+	if(thiz->on_end_element != NULL)
+	{
+		thiz->on_end_element(thiz, tag);
+	}
 
 	return;
 }
 
 static inline void ftk_xml_builder_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
 {
-	return_if_fail(thiz != NULL && thiz->on_text != NULL);
-
-	thiz->on_text(thiz, text, length);
+	return_if_fail(thiz != NULL);
+	if(thiz->on_text != NULL)
+	{
+		thiz->on_text(thiz, text, length);
+	}
 
 	return;
 }
@@ -88,7 +92,6 @@ static inline void ftk_xml_builder_on_text(FtkXmlBuilder* thiz, const char* text
 static inline void ftk_xml_builder_on_comment(FtkXmlBuilder* thiz, const char* text, size_t length)
 {
 	return_if_fail(thiz != NULL);
-
 	if(thiz->on_comment != NULL)
 	{
 		thiz->on_comment(thiz, text, length);
@@ -100,7 +103,6 @@ static inline void ftk_xml_builder_on_comment(FtkXmlBuilder* thiz, const char* t
 static inline void ftk_xml_builder_on_pi_element(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	return_if_fail(thiz != NULL);
-	
 	if(thiz->on_pi_element != NULL)
 	{
 		thiz->on_pi_element(thiz, tag, attrs);
@@ -112,7 +114,6 @@ static inline void ftk_xml_builder_on_pi_element(FtkXmlBuilder* thiz, const char
 static inline void ftk_xml_builder_on_error(FtkXmlBuilder* thiz, int line, int row, const char* message)
 {
 	return_if_fail(thiz != NULL);
-
 	if(thiz->on_error != NULL)
 	{
 		thiz->on_error(thiz, line, row, message);

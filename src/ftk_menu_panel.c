@@ -200,11 +200,9 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_is_visible(thiz), RET_FAIL);
 
+	/*draw border*/
 	gc.mask = FTK_GC_FG;
-	gc.fg = ftk_widget_get_gc(thiz)->fg;
-	gc.fg.r -=0x1f;
-	gc.fg.g -=0x1f;
-	gc.fg.b -=0x1f;
+	gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_MENU_PANEL, ftk_widget_state(thiz));
 	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_rect(canvas, x, y, width, height+1, 0);
 	ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height, 0);
@@ -267,7 +265,6 @@ FtkWidget* ftk_menu_panel_create(void)
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[1] != NULL)
 	{
-		FtkGc gc = {0};
 		DECL_PRIV1(thiz, priv);
 		priv->parent_on_event = thiz->on_event;
 		priv->parent_on_paint = thiz->on_paint;

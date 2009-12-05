@@ -64,6 +64,7 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	{
 		close(thiz->fd);
 		FTK_ZFREE(thiz, sizeof(*thiz));
+		ftk_logd("%s mmap %s failed.\n", __func__, filename);
 	}
 
 	return thiz;

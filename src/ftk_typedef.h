@@ -78,7 +78,7 @@ typedef enum _Ret
 
 typedef enum _FtkWidgetType
 {
-	FTK_NONE   = 0,
+	FTK_WIDGET_NONE   = 0,
 	FTK_WINDOW = 1,
 	FTK_DIALOG,
 	FTK_STATUS_PANEL,

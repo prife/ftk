@@ -1,5 +1,5 @@
-ftkiconsdir=$(datadir)/ftk/base/icons
-ftkicons_DATA=\
+themedir=$(datadir)/ftk/base/theme/default
+theme_DATA=\
 	$(srcdir)/btn_check_off_disable_focused.png\
 	$(srcdir)/btn_check_off_disable.png\
 	$(srcdir)/btn_check_off.png\
@@ -39,6 +39,7 @@ ftkicons_DATA=\
 	$(srcdir)/scrollbar_handle_horizontal.png\
 	$(srcdir)/scrollbar_handle_vertical.png\
 	$(srcdir)/status-bg.png\
-	$(srcdir)/wait_box.png
+	$(srcdir)/wait_box.png \
+	theme.xml
 
-EXTRA_DIST=$(ftkicons_DATA)
+EXTRA_DIST=$(theme_DATA)
