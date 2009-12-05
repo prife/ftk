@@ -301,7 +301,6 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_list_view_on_event;
 		thiz->on_paint = ftk_list_view_on_paint;

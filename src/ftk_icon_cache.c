@@ -43,7 +43,7 @@ typedef struct _FtkBitmapNamePair
 struct _FtkIconCache
 {
 	int nr;
-	const char path[FTK_MAX_PATH];
+	char path[FTK_MAX_PATH];
 	FtkBitmapNamePair pairs[FTK_ICON_CACHE_MAX];
 };
 

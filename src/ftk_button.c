@@ -124,8 +124,6 @@ FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int hei
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc ={0};
-
 		thiz->on_event = ftk_button_on_event;
 		thiz->on_paint = ftk_button_on_paint;
 		thiz->destroy  = ftk_button_destroy;

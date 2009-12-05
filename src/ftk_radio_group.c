@@ -53,7 +53,6 @@ FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, in
 		
 	if(thiz != NULL)
 	{
-		FtkGc gc = {0};
 		thiz->on_event = ftk_radio_group_on_event;
 		thiz->on_paint = ftk_radio_group_on_paint;
 		thiz->destroy  = ftk_radio_group_destroy;

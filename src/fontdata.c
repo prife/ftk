@@ -30,7 +30,7 @@
  */
 #include "fontdata.h"
 #define FD_ASSERT(p) assert(p)
-#define VERSION 0x00000100 /*1.0*/
+#define FONT_VERSION 0x00000100 /*1.0*/
 
 typedef struct _FontDataHeader
 {
@@ -64,7 +64,7 @@ FontData* font_data_create(int char_nr, Encoding encoding)
 
 	if(thiz != NULL)
 	{
-		thiz->header.version  = VERSION;
+		thiz->header.version  = FONT_VERSION;
 		thiz->header.char_nr  = char_nr;
 		thiz->header.encoding = encoding;
 		
@@ -383,7 +383,7 @@ int main(int argc, char* argv[])
 		assert(memcmp(glyph, &ret_glyph, sizeof(ret_glyph)-sizeof(void*)) == 0);
 		assert(memcmp(glyph->data, ret_glyph.data, ret_glyph.w * ret_glyph.h) == 0);
 	}
-	assert(font_data_get_version(data) == VERSION);
+	assert(font_data_get_version(data) == FONT_VERSION);
 	assert(strcmp(font_data_get_author(data), "Li XianJing <xianjimli@hotmail.com>") == 0);
 	font_data_destroy(data);
 	free(glyph->data);

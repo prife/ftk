@@ -86,15 +86,12 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 {
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-
+	(void)width;
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		int dx = 2;
+		int dx = FTK_H_MARGIN;
 		int dy = height/2;
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, ftk_widget_get_text(thiz), -1);
-	
 		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
 	}
 

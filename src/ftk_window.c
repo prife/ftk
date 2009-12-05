@@ -32,6 +32,7 @@
 #include "ftk_log.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
+#include "ftk_source_idle.h"
 
 #define FTK_MAX_DIRTY_RECT 8
 
@@ -490,7 +491,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 	{
 		if(priv->update_idle == NULL)
 		{
-			priv->update_idle = ftk_source_idle_create(ftk_window_idle_invalidate, thiz);
+			priv->update_idle = ftk_source_idle_create((FtkIdle)ftk_window_idle_invalidate, thiz);
 			ftk_source_ref(priv->update_idle);
 		}
 		else
