@@ -12,7 +12,7 @@
 	bg[disable]="ff9d9e9d" fg[disable]="ffffd300"/>
 
 <entry  
-	bg[normal]="ffffffff" fg[normal]="ff000000" bd[normal]="ffe2ceee"
+	bg[normal]="ffffffff" fg[normal]="ff000000" bd[normal]="ffd0d0d0"
 	bg[focused]="ffffffff" fg[focused]="ff000000" bd[focused]="ffffbb00"
 	bg[active]="ffffffff" fg[active]="ff000000" bd[active]="ffe2ceee"
 	bg[disable]="ffffffff" fg[disable]="ffaca899" bd[disable]="ffe2ceee"/>

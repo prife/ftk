@@ -100,7 +100,7 @@ static void create_ani_window(int type, int sync)
 		}
 		default:break;
 	}
-	ftk_animator_start(ani, win, sync);
+	ftk_animator_start(ani, win, 0);
 
 	return;
 }
