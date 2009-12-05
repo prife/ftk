@@ -33,6 +33,7 @@
 #define FTK_GLOBALS_H
 
 #include "ftk_font.h"
+#include "ftk_theme.h"
 #include "ftk_display.h"
 #include "ftk_icon_cache.h"
 #include "ftk_wnd_manager.h"
@@ -49,6 +50,7 @@ FtkWidget*        ftk_default_status_panel(void);
 FtkBitmapFactory* ftk_default_bitmap_factory(void);
 FtkSourcesManager* ftk_default_sources_manager(void);
 FtkCanvas*         ftk_shared_canvas(void);
+FtkTheme*          ftk_default_theme(void);
 
 void ftk_set_font(FtkFont* font);
 void ftk_set_display(FtkDisplay* display);
@@ -60,6 +62,7 @@ void ftk_set_wnd_manager(FtkWndManager* wnd_manager);
 void ftk_set_bitmap_factory(FtkBitmapFactory* bitmap_factory);
 void ftk_set_sources_manager(FtkSourcesManager* sources_manager);
 void ftk_set_shared_canvas(FtkCanvas* canvas);
+void ftk_set_theme(FtkTheme* theme);
 
 #endif/*FTK_GLOBALS_H*/
 

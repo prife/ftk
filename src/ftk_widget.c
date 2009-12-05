@@ -29,7 +29,7 @@
  *
  */
 
-#include "ftk_style.h"
+#include "ftk_theme.h"
 #include "ftk_bitmap.h"
 #include "ftk_widget.h"
 #include "ftk_globals.h"
@@ -67,29 +67,21 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id)
 
 	if(thiz->priv != NULL)
 	{
+		FtkWidgetState state = FTK_WIDGET_NORMAL;
 		FtkWidgetInfo* priv =  thiz->priv;
 
 		priv->id     = id;
 		priv->type   = type;
-		priv->gc[FTK_WIDGET_NORMAL].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_NORMAL].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-		priv->gc[FTK_WIDGET_NORMAL].bg = ftk_style_get_color(FTK_COLOR_WINDOW);
-		priv->gc[FTK_WIDGET_NORMAL].font = ftk_default_font();
-		
-		priv->gc[FTK_WIDGET_FOCUSED].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_FOCUSED].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-		priv->gc[FTK_WIDGET_FOCUSED].bg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
-		priv->gc[FTK_WIDGET_FOCUSED].font = ftk_default_font();
-		
-		priv->gc[FTK_WIDGET_ACTIVE].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_ACTIVE].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-		priv->gc[FTK_WIDGET_ACTIVE].bg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
-		priv->gc[FTK_WIDGET_ACTIVE].font = ftk_default_font();
-		
-		priv->gc[FTK_WIDGET_INSENSITIVE].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-		priv->gc[FTK_WIDGET_INSENSITIVE].fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-		priv->gc[FTK_WIDGET_INSENSITIVE].bg = ftk_style_get_color(FTK_COLOR_WINDOW);
-		priv->gc[FTK_WIDGET_INSENSITIVE].font = ftk_default_font();
+
+		for(; state < FTK_WIDGET_STATE_NR; state++)
+		{
+			priv->gc[state].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
+			priv->gc[state].font = ftk_default_font();
+			priv->gc[state].fg = ftk_theme_get_fg_color(ftk_default_theme(), type, state);
+			priv->gc[state].bg = ftk_theme_get_bg_color(ftk_default_theme(), type, state);
+			priv->gc[state].bitmap = ftk_theme_get_bg(ftk_default_theme(), type, state);
+			if(priv->gc[state].bitmap != NULL) priv->gc[state].mask |= FTK_GC_BITMAP;
+		}
 	}
 
 	return;

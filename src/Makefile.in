@@ -65,10 +65,10 @@ am__libftk_la_SOURCES_DIST = ftk_canvas.c ftk_source_primary.c \
 	ftk_image_jpeg_decoder.c ftk_source_idle.c ftk_widget.c ftk.c \
 	ftk_image_png_decoder.c ftk_window.c ftk_sources_manager.c \
 	ftk_globals.c ftk_button.c ftk_image.c ftk_log.c ftk_dialog.c \
-	ftk_status_item.c ftk_status_panel.c ftk_style.c \
-	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
-	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
-	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
+	ftk_status_item.c ftk_status_panel.c ftk_menu_panel.c \
+	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
+	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
+	ftk_radio_group.c ftk_check_button.c \
 	$(srcdir)/os/linux/ftk_mmap_linux.c \
 	$(srcdir)/os/linux/ftk_linux.c ftk_gesture.c ftk_wait_box.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
@@ -113,18 +113,18 @@ am_libftk_la_OBJECTS = libftk_la-ftk_canvas.lo \
 	libftk_la-ftk_globals.lo libftk_la-ftk_button.lo \
 	libftk_la-ftk_image.lo libftk_la-ftk_log.lo \
 	libftk_la-ftk_dialog.lo libftk_la-ftk_status_item.lo \
-	libftk_la-ftk_status_panel.lo libftk_la-ftk_style.lo \
-	libftk_la-ftk_menu_panel.lo libftk_la-ftk_menu_item.lo \
-	libftk_la-ftk_app_window.lo libftk_la-ftk_entry.lo \
-	libftk_la-ftk_text_buffer.lo libftk_la-ftk_icon_cache.lo \
-	libftk_la-ftk_animator_expand.lo libftk_la-ftk_progress_bar.lo \
-	libftk_la-ftk_radio_group.lo libftk_la-ftk_check_button.lo \
-	libftk_la-ftk_mmap_linux.lo libftk_la-ftk_linux.lo \
-	libftk_la-ftk_gesture.lo libftk_la-ftk_wait_box.lo \
-	libftk_la-ftk_scroll_bar.lo libftk_la-ftk_sprite.lo \
-	libftk_la-ftk_display.lo libftk_la-ftk_xml_parser.lo \
-	libftk_la-ftk_xul.lo libftk_la-ftk_expr.lo \
-	libftk_la-ftk_list_view.lo libftk_la-ftk_list_model_default.lo \
+	libftk_la-ftk_status_panel.lo libftk_la-ftk_menu_panel.lo \
+	libftk_la-ftk_menu_item.lo libftk_la-ftk_app_window.lo \
+	libftk_la-ftk_entry.lo libftk_la-ftk_text_buffer.lo \
+	libftk_la-ftk_icon_cache.lo libftk_la-ftk_animator_expand.lo \
+	libftk_la-ftk_progress_bar.lo libftk_la-ftk_radio_group.lo \
+	libftk_la-ftk_check_button.lo libftk_la-ftk_mmap_linux.lo \
+	libftk_la-ftk_linux.lo libftk_la-ftk_gesture.lo \
+	libftk_la-ftk_wait_box.lo libftk_la-ftk_scroll_bar.lo \
+	libftk_la-ftk_sprite.lo libftk_la-ftk_display.lo \
+	libftk_la-ftk_xml_parser.lo libftk_la-ftk_xul.lo \
+	libftk_la-ftk_expr.lo libftk_la-ftk_list_view.lo \
+	libftk_la-ftk_list_model_default.lo \
 	libftk_la-ftk_list_render_default.lo \
 	libftk_la-ftk_icon_view.lo libftk_la-ftk_theme.lo \
 	$(am__objects_1) $(am__objects_2) $(am__objects_5) \
@@ -271,7 +271,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = . os backend compiler testdata icons data demos test
+SUBDIRS = . os backend compiler demos test
 lib_LTLIBRARIES = libftk.la
 LINUX_NATIVE = $(srcdir)/backend/fb/ftk_display_fb.c \
 	$(srcdir)/backend/fb/ftk_source_input.c \
@@ -290,10 +290,10 @@ libftk_la_SOURCES = ftk_canvas.c ftk_source_primary.c \
 	ftk_image_jpeg_decoder.c ftk_source_idle.c ftk_widget.c ftk.c \
 	ftk_image_png_decoder.c ftk_window.c ftk_sources_manager.c \
 	ftk_globals.c ftk_button.c ftk_image.c ftk_log.c ftk_dialog.c \
-	ftk_status_item.c ftk_status_panel.c ftk_style.c \
-	ftk_menu_panel.c ftk_menu_item.c ftk_app_window.c ftk_entry.c \
-	ftk_text_buffer.c ftk_icon_cache.c ftk_animator_expand.c \
-	ftk_progress_bar.c ftk_radio_group.c ftk_check_button.c \
+	ftk_status_item.c ftk_status_panel.c ftk_menu_panel.c \
+	ftk_menu_item.c ftk_app_window.c ftk_entry.c ftk_text_buffer.c \
+	ftk_icon_cache.c ftk_animator_expand.c ftk_progress_bar.c \
+	ftk_radio_group.c ftk_check_button.c \
 	$(srcdir)/os/linux/ftk_mmap_linux.c \
 	$(srcdir)/os/linux/ftk_linux.c ftk_gesture.c ftk_wait_box.c \
 	ftk_scroll_bar.c ftk_sprite.c ftk_display.c ftk_xml_parser.c \
@@ -325,7 +325,7 @@ ftk_HEADERS = \
 	ftk_font.h                ftk_sprite.h\
 	ftk_gc.h                  ftk_status_item.h\
 	ftk_gesture.h             ftk_status_panel.h\
-	ftk_gesture_listener.h    ftk_style.h\
+	ftk_gesture_listener.h    \
 	ftk_globals.h             ftk_text_buffer.h\
 	ftk.h                     ftk_typedef.h\
 	ftk_icon_cache.h          ftk_util.h\
@@ -338,7 +338,8 @@ ftk_HEADERS = \
 	ftk_label.h               ftk_xml_builder.h\
 	ftk_list_model_default.h  ftk_xml_parser.h\
 	ftk_list_model.h          ftk_xul.h \
-	ftk_font_freetype.h       ftk_icon_view.h
+	ftk_font_freetype.h       ftk_icon_view.h\
+	ftk_theme.h
 
 EXTRA_DIST = rules.mk
 all: all-recursive
@@ -462,7 +463,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_sprite.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_status_item.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_status_panel.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_style.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_text_buffer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_theme.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libftk_la-ftk_util.Plo@am__quote@
@@ -654,13 +654,6 @@ libftk_la-ftk_status_panel.lo: ftk_status_panel.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ftk_status_panel.c' object='libftk_la-ftk_status_panel.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_status_panel.lo `test -f 'ftk_status_panel.c' || echo '$(srcdir)/'`ftk_status_panel.c
-
-libftk_la-ftk_style.lo: ftk_style.c
-@am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_style.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_style.Tpo -c -o libftk_la-ftk_style.lo `test -f 'ftk_style.c' || echo '$(srcdir)/'`ftk_style.c
-@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/libftk_la-ftk_style.Tpo $(DEPDIR)/libftk_la-ftk_style.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='ftk_style.c' object='libftk_la-ftk_style.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -c -o libftk_la-ftk_style.lo `test -f 'ftk_style.c' || echo '$(srcdir)/'`ftk_style.c
 
 libftk_la-ftk_menu_panel.lo: ftk_menu_panel.c
 @am__fastdepCC_TRUE@	$(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libftk_la_CFLAGS) $(CFLAGS) -MT libftk_la-ftk_menu_panel.lo -MD -MP -MF $(DEPDIR)/libftk_la-ftk_menu_panel.Tpo -c -o libftk_la-ftk_menu_panel.lo `test -f 'ftk_menu_panel.c' || echo '$(srcdir)/'`ftk_menu_panel.c

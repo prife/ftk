@@ -33,33 +33,96 @@
 #include "ftk_util.h"
 #include "ftk_mmap.h"
 #include "ftk_theme.h"
+#include "ftk_icon_cache.h"
 #include "ftk_xml_parser.h"
 
 typedef struct _FtkWidgetTheme
 {
 	FtkColor   bg[FTK_WIDGET_STATE_NR];
 	FtkColor   fg[FTK_WIDGET_STATE_NR];
+	FtkColor   border[FTK_WIDGET_STATE_NR];
 	FtkBitmap* bg_image[FTK_WIDGET_STATE_NR];
 	char bg_image_name[FTK_WIDGET_STATE_NR][32];
 }FtkWidgetTheme;
 
 struct _FtkTheme
 {
+	char name[32];
+	FtkIconCache* icon_cache;
 	FtkWidgetTheme widget_themes[FTK_WIDGET_TYPE_NR];
 };
 
+static const char* s_default_theme = "\
+<theme name=\"default\">\
+<button bg_image[normal]=\"btn_default_normal.png\" \
+bg_image[focused]=\"btn_default_selected.png\" \
+bg_image[active]=\"btn_default_pressed.png\" \
+bg_image[disable]=\"btn_default_normal_disable.png\" \
+/> \
+<label fg[disable]=\"ff000000\"\
+/>\
+<progress_bar \ 
+bg[normal]=\"ff9d9e9d\" fg[normal]=\"ffffd300\"\
+bg[focused]=\"ff9d9e9d\" fg[focused]=\"ffffd300\"\
+bg[active]=\"ff9d9e9d\" fg[active]=\"ffffd300\"\
+bg[disable]=\"ff9d9e9d\" fg[disable]=\"ffffd300\"\
+/>\
+<entry \ 
+bg[normal]=\"ffffffff\" fg[normal]=\"ff000000\" bd[normal]=\"ffe2ceee\"\
+bg[focused]=\"ffffffff\" fg[focused]=\"ff000000\" bd[focused]=\"ffffbb00\"\
+bg[active]=\"ffffffff\" fg[active]=\"ff000000\" bd[active]=\"ffe2ceee\"\
+bg[disable]=\"ffffffff\" fg[disable]=\"ffaca899\" bd[disable]=\"ffe2ceee\"\
+/>\
+<check_button \
+	fg[normal]=\"ff000000\"\
+	fg[focused]=\"ffffbb00\"\
+	fg[active]=\"ffffbb00\"\
+	fg[disable]=\"ffaca899\"\
+/>\
+<radio_button \
+	fg[normal]=\"ff000000\"\
+	fg[focused]=\"ffffbb00\"\
+	fg[active]=\"ffffbb00\"\
+	fg[disable]=\"ffaca899\"\
+/>\
+</theme>";
+
 static Ret ftk_theme_init_default(FtkTheme* thiz)
 {
-	return RET_OK;
+	return ftk_theme_parse_data(thiz, s_default_theme, strlen(s_default_theme));
 }
 
-FtkTheme*  ftk_theme_create(void)
+FtkTheme*  ftk_theme_create(int init_default)
 {
 	FtkTheme* thiz = FTK_ZALLOC(sizeof(FtkTheme));
 
 	if(thiz != NULL)
 	{
-		ftk_theme_init_default(thiz);
+		size_t i = 0;
+		size_t j = 0;
+		char icon_path[FTK_MAX_PATH] = {0};
+
+		for(i = 0; i < FTK_WIDGET_TYPE_NR; i++)
+		{
+			for(j = 0; j < FTK_WIDGET_STATE_NR; j++)
+			{
+				thiz->widget_themes[i].bg[j].a = 0xff;
+				thiz->widget_themes[i].bg[j].r = 0xff;
+				thiz->widget_themes[i].bg[j].g = 0xff;
+				thiz->widget_themes[i].bg[j].b = 0xff;
+				thiz->widget_themes[i].fg[j].a = 0xff;
+				thiz->widget_themes[i].fg[j].r = 0x00;
+				thiz->widget_themes[i].fg[j].g = 0x00;
+				thiz->widget_themes[i].fg[j].b = 0x00;
+			}
+		}
+
+		if(init_default)
+		{
+			ftk_theme_init_default(thiz);
+		}
+		ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
+		thiz->icon_cache = ftk_icon_cache_create(icon_path);
 	}
 
 	return thiz;
@@ -82,7 +145,8 @@ static const WidgetNameType s_widget_name_types[] =
 	{"radio_button", FTK_RADIO_BUTTON},
 	{"check_button", FTK_CHECK_BUTTON},
 	{"image",        FTK_IMAGE},
-	{"scroll_bar",   FTK_SCROLL_BAR},
+	{"scroll_vbar",   FTK_SCROLL_VBAR},
+	{"scroll_hbar",   FTK_SCROLL_HBAR},
 	{"window",       FTK_WINDOW},
 	{"dialog",       FTK_DIALOG},
 	{"menu_item",    FTK_MENU_ITEM},
@@ -144,24 +208,43 @@ typedef struct _PrivInfo
 		}\
 	}
 	
-static Ret  ftk_theme_parse_fg(FtkTheme* thiz, FtkWidgetType type, const char* name, const char* value)
+static Ret  ftk_theme_parse_fg_color(FtkTheme* thiz, FtkWidgetType type, const char* name, const char* value)
 {
 	FtkWidgetState state = FTK_WIDGET_NORMAL;
 	FtkWidgetTheme* theme = thiz->widget_themes+type;
 
 	TO_STATE(name[3]);
 	theme->fg[state] = ftk_parse_color(value);
+	ftk_logd("fg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
+		theme->fg[state].a, theme->fg[state].r, theme->fg[state].g, theme->fg[state].b);
 
 	return RET_OK;
 }
 
-static Ret  ftk_theme_parse_bg(FtkTheme* thiz, FtkWidgetType type, const char* name, const char* value)
+static Ret  ftk_theme_parse_bg_color(FtkTheme* thiz, FtkWidgetType type, const char* name, const char* value)
 {
 	FtkWidgetState state = FTK_WIDGET_NORMAL;
 	FtkWidgetTheme* theme = thiz->widget_themes+type;
 
 	TO_STATE(name[3]);
 	theme->bg[state] = ftk_parse_color(value);
+	
+	ftk_logd("bg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
+		theme->bg[state].a, theme->bg[state].r, theme->bg[state].g, theme->bg[state].b);
+
+	return RET_OK;
+}
+
+static Ret  ftk_theme_parse_bd_color(FtkTheme* thiz, FtkWidgetType type, const char* name, const char* value)
+{
+	FtkWidgetState state = FTK_WIDGET_NORMAL;
+	FtkWidgetTheme* theme = thiz->widget_themes+type;
+
+	TO_STATE(name[3]);
+	theme->border[state] = ftk_parse_color(value);
+	
+	ftk_logd("bd type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
+		theme->border[state].a, theme->border[state].r, theme->border[state].g, theme->border[state].b);
 
 	return RET_OK;
 }
@@ -171,11 +254,13 @@ static Ret  ftk_theme_parse_bg_image(FtkTheme* thiz, FtkWidgetType type, const c
 	FtkWidgetState state = FTK_WIDGET_NORMAL;
 	FtkWidgetTheme* theme = thiz->widget_themes+type;
 
-	TO_STATE(name[3]);
+	TO_STATE(name[9]);
 	ftk_strncpy(theme->bg_image_name[state], value, sizeof(theme->bg_image_name[state]));
 
+	ftk_logd("type=%d state=%d name=%s \n", type, state, theme->bg_image_name[state]);
 	return RET_OK;
 }
+
 static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	size_t i = 0;
@@ -183,7 +268,26 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 	const char* name = NULL;
 	const char* value = NULL;
 	FtkTheme* theme = priv->theme;
-	FtkWidgetType type = ftk_theme_get_widget_type(theme, tag);
+	FtkWidgetType type = FTK_NONE;
+	return_if_fail(tag != NULL && attrs != NULL);
+
+	if(strcmp(tag, "theme") == 0)
+	{
+		for(i = 0; attrs[i] != NULL; i += 2)
+		{
+			name = attrs[i];
+			value = attrs[i+1];
+			if(name[0] == 'n')
+			{
+				ftk_strncpy(theme->name, value, sizeof(theme->name));	
+				break;
+			}
+		}
+		
+		return;
+	}
+
+	type = ftk_theme_get_widget_type(theme, tag);
 	return_if_fail(type != FTK_NONE);
 
 	for(i = 0; attrs[i] != NULL; i += 2)
@@ -200,16 +304,23 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 		{
 			case 'f':
 			{
-				ftk_theme_parse_fg(theme, type, name, value);
+				if(name[1] == 'g' && name[2] == '[')
+				{
+					ftk_theme_parse_fg_color(theme, type, name, value);
+				}
 				break;
 			}
 			case 'b':
 			{
-				if(name[2] == '[')
+				if(name[1] == 'd')
 				{
-					ftk_theme_parse_bg(theme, type, name, value);
+					ftk_theme_parse_bd_color(theme, type, name, value);
 				}
-				else
+				else if(name[1] == 'g' && name[2] == '[')
+				{
+					ftk_theme_parse_bg_color(theme, type, name, value);
+				}
+				else if(name[1] == 'g' && name[2] == '_')
 				{
 					ftk_theme_parse_bg_image(theme, type, name, value);
 				}
@@ -320,7 +431,28 @@ FtkBitmap* ftk_theme_get_bg(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState s
 {
 	return_val_if_fail(thiz != NULL, NULL);
 
+	if(thiz->widget_themes[type].bg_image[state] == NULL)
+	{
+		if(thiz->widget_themes[type].bg_image_name[state][0])
+		{
+			thiz->widget_themes[type].bg_image[state] = ftk_icon_cache_load(thiz->icon_cache, 
+				thiz->widget_themes[type].bg_image_name[state]);
+		}
+	}
+	
+	if(thiz->widget_themes[type].bg_image[state] != NULL)
+	{
+		ftk_bitmap_ref(thiz->widget_themes[type].bg_image[state]);
+	}
+	
 	return thiz->widget_themes[type].bg_image[state];
+}
+
+FtkBitmap* ftk_theme_load_image(FtkTheme* thiz, const char* filename)
+{
+	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
+
+	return ftk_icon_cache_load(thiz->icon_cache, filename);
 }
 
 FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
@@ -329,6 +461,14 @@ FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetS
 	return_val_if_fail(thiz != NULL, c);
 
 	return thiz->widget_themes[type].bg[state];
+}
+
+FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
+{
+	FtkColor c = {0};
+	return_val_if_fail(thiz != NULL, c);
+
+	return thiz->widget_themes[type].border[state];
 }
 
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)

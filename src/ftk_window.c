@@ -30,7 +30,6 @@
  */
 
 #include "ftk_log.h"
-#include "ftk_style.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
 
@@ -536,12 +535,6 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 			thiz->on_paint = ftk_window_on_paint;
 			thiz->destroy  = ftk_window_destroy;
 
-			gc.bg = ftk_style_get_color(FTK_COLOR_WINDOW);
-			gc.fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-
-			ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-			ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-			ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 			ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 		}while(0);
 	}

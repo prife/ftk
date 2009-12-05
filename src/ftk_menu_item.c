@@ -134,12 +134,12 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
 		gc.mask = FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
+		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_gc_reset(&gc);
 
 		gc.mask = FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX);
+		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
 		ftk_gc_reset(&gc);
 

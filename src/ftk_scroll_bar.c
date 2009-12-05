@@ -249,7 +249,7 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 		{
 			/*vertical*/
 			priv->vertical = 1;
-			priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), 
+			priv->bitmap = ftk_theme_load_image(ftk_default_theme(), 
 				"scrollbar_handle_vertical"FTK_STOCK_IMG_SUFFIX);
 			width = ftk_bitmap_width(priv->bitmap);
 			assert(width < height);
@@ -257,13 +257,13 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 		else
 		{
 			priv->vertical = 0;
-			priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), 
+			priv->bitmap = ftk_theme_load_image(ftk_default_theme(), 
 				"scrollbar_handle_horizontal"FTK_STOCK_IMG_SUFFIX);
 			height = ftk_bitmap_height(priv->bitmap);	
 			assert(width > height);
 		}
 
-		ftk_widget_init(thiz, FTK_SCROLL_BAR, 0);
+		ftk_widget_init(thiz, width < height ? FTK_SCROLL_VBAR : FTK_SCROLL_HBAR, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);

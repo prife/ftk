@@ -30,8 +30,8 @@
  */
 
 #include "ftk_key.h"
-#include "ftk_style.h"
 #include "ftk_event.h"
+#include "ftk_theme.h"
 #include "ftk_globals.h"
 #include "ftk_window.h"
 #include "ftk_list_view.h"
@@ -312,18 +312,11 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_append_child(parent, thiz);
 
-		gc.mask = FTK_GC_BG;
-		gc.bg = ftk_style_get_color(FTK_COLOR_LIST_BG);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
-
-		priv->bg_normal = ftk_icon_cache_load(ftk_default_icon_cache(), 
+		priv->bg_normal = ftk_theme_load_image(ftk_default_theme(),
 			"list_selector_background_disabled"FTK_STOCK_IMG_SUFFIX);
-		priv->bg_focus = ftk_icon_cache_load(ftk_default_icon_cache(), 
+		priv->bg_focus = ftk_theme_load_image(ftk_default_theme(),
 			"list_selector_background_focus"FTK_STOCK_IMG_SUFFIX);
-		priv->bg_active = ftk_icon_cache_load(ftk_default_icon_cache(), 
+		priv->bg_active = ftk_theme_load_image(ftk_default_theme(),
 			"list_selector_background_pressed"FTK_STOCK_IMG_SUFFIX);
 	}
 	else

@@ -20121,7 +20121,7 @@ fi
 
 
 # Checks for library functions.
-ac_config_files="$ac_config_files ftk.pc Makefile src/Makefile src/testdata/Makefile src/icons/Makefile src/data/Makefile src/demos/Makefile src/test/Makefile src/backend/Makefile src/backend/directfb/Makefile src/backend/fb/Makefile src/backend/x11-emu/Makefile src/backend/win32/Makefile src/os/Makefile src/os/linux/Makefile src/os/windows/Makefile src/compiler/Makefile src/compiler/ads/Makefile src/compiler/vs2005/Makefile script_binding/Makefile script_binding/lua/Makefile script_binding/lua/lua/Makefile apps/Makefile apps/launcher/Makefile apps/desktop/Makefile apps/desktop/icons/Makefile apps/desktop/xul/Makefile apps/calculator/Makefile apps/calculator/icons/Makefile apps/calculator/xul/Makefile apps/calculator/data/Makefile tools/Makefile tools/cross-build/Makefile"
+ac_config_files="$ac_config_files ftk.pc Makefile theme/Makefile theme/default/Makefile data/Makefile testdata/Makefile src/Makefile src/demos/Makefile src/test/Makefile src/backend/Makefile src/backend/directfb/Makefile src/backend/fb/Makefile src/backend/x11-emu/Makefile src/backend/win32/Makefile src/os/Makefile src/os/linux/Makefile src/os/windows/Makefile src/compiler/Makefile src/compiler/ads/Makefile src/compiler/vs2005/Makefile script_binding/Makefile script_binding/lua/Makefile script_binding/lua/lua/Makefile apps/Makefile apps/launcher/Makefile apps/desktop/Makefile apps/desktop/icons/Makefile apps/desktop/xul/Makefile apps/calculator/Makefile apps/calculator/icons/Makefile apps/calculator/xul/Makefile apps/calculator/data/Makefile tools/Makefile tools/cross-build/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -20753,10 +20753,11 @@ do
     "depfiles") CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
     "ftk.pc") CONFIG_FILES="$CONFIG_FILES ftk.pc" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
+    "theme/Makefile") CONFIG_FILES="$CONFIG_FILES theme/Makefile" ;;
+    "theme/default/Makefile") CONFIG_FILES="$CONFIG_FILES theme/default/Makefile" ;;
+    "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
+    "testdata/Makefile") CONFIG_FILES="$CONFIG_FILES testdata/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
-    "src/testdata/Makefile") CONFIG_FILES="$CONFIG_FILES src/testdata/Makefile" ;;
-    "src/icons/Makefile") CONFIG_FILES="$CONFIG_FILES src/icons/Makefile" ;;
-    "src/data/Makefile") CONFIG_FILES="$CONFIG_FILES src/data/Makefile" ;;
     "src/demos/Makefile") CONFIG_FILES="$CONFIG_FILES src/demos/Makefile" ;;
     "src/test/Makefile") CONFIG_FILES="$CONFIG_FILES src/test/Makefile" ;;
     "src/backend/Makefile") CONFIG_FILES="$CONFIG_FILES src/backend/Makefile" ;;

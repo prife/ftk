@@ -33,7 +33,6 @@
 #include "ftk_canvas.h"
 #include "ftk_globals.h"
 #include "ftk_window.h"
-#include "ftk_style.h"
 #include "ftk_icon_cache.h"
 #include "ftk_check_button.h"
 #include "ftk_radio_group.h"
@@ -161,7 +160,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 		bg_imgs = priv->checked ? check_bg_on_imgs : check_bg_off_imgs;
 	}
 
-	bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), bg_imgs[ftk_widget_state(thiz)]);
+	bitmap = ftk_theme_load_image(ftk_default_theme(), bg_imgs[ftk_widget_state(thiz)]);
 	return_val_if_fail(bitmap != NULL, RET_FAIL);
 
 	icon_w = ftk_bitmap_width(bitmap);
@@ -213,20 +212,10 @@ FtkWidget* ftk_check_button_create_ex(FtkWidget* parent, int x, int y, int width
 		thiz->on_paint = ftk_check_button_on_paint;
 		thiz->destroy  = ftk_check_button_destroy;
 
-		ftk_widget_init(thiz, FTK_BUTTON, 0);
+		ftk_widget_init(thiz, radio ? FTK_RADIO_BUTTON : FTK_CHECK_BUTTON, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
-		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_BTNFACE);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		
-		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
-		
-		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}

@@ -29,7 +29,6 @@
  *
  */
 
-#include "ftk_style.h"
 #include "ftk_progress_bar.h"
 
 typedef struct _PrivInfo
@@ -98,11 +97,6 @@ FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, i
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
-		gc.fg = ftk_style_get_color(FTK_COLOR_PROGRESS_BAR_FG);
-		gc.bg = ftk_style_get_color(FTK_COLOR_PROGRESS_BAR_BG);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}

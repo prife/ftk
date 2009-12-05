@@ -85,10 +85,11 @@ AC_TYPE_SIZE_T
 # Checks for library functions.
 AC_CONFIG_FILES([ftk.pc
 				Makefile
+                theme/Makefile
+                theme/default/Makefile
+                data/Makefile
+                testdata/Makefile
                 src/Makefile
-                src/testdata/Makefile
-                src/icons/Makefile
-                src/data/Makefile
                 src/demos/Makefile
                 src/test/Makefile
                 src/backend/Makefile

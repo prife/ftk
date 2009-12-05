@@ -35,7 +35,7 @@
 struct _FtkIconCache;
 typedef struct _FtkIconCache FtkIconCache;
 
-FtkIconCache* ftk_icon_cache_create(void);
+FtkIconCache* ftk_icon_cache_create(const char* path);
 FtkBitmap* ftk_icon_cache_load(FtkIconCache* thiz, const char* filename);
 void ftk_icon_cache_destroy(FtkIconCache* thiz);
 

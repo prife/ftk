@@ -33,7 +33,9 @@
 
 int main(int argc, char* argv[])
 {
-	FtkDisplay* thiz = ftk_display_fb_create(FTK_FB_NAME);
+	const char* filename = argv[1] != NULL ? argv[1] : FTK_FB_NAME;
+	FtkDisplay* thiz = ftk_display_fb_create(filename);
+
 	if(thiz != NULL)
 	{
 		FtkBitmap* bitmap = NULL;

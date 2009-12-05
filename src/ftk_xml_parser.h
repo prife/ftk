@@ -3,7 +3,7 @@
 
 #include "ftk_xml_builder.h"
 
-#define MAX_ATTR_NR 32
+#define MAX_ATTR_NR 48
 struct _FtkXmlParser;
 typedef struct _FtkXmlParser FtkXmlParser;
 

@@ -37,11 +37,13 @@
 struct _FtkTheme;
 typedef struct _FtkTheme FtkTheme;
 
-FtkTheme*  ftk_theme_create(void);
+FtkTheme*  ftk_theme_create(int init_default);
 Ret        ftk_theme_parse_file(FtkTheme* thiz, const char* filename);
 Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* data, size_t length);
 FtkBitmap* ftk_theme_get_bg(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
+FtkBitmap* ftk_theme_load_image(FtkTheme* thiz, const char* filename);
 FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
+FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 void       ftk_theme_destroy(FtkTheme* thiz);
 

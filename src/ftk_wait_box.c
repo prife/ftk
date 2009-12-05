@@ -93,7 +93,7 @@ FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
 		thiz->on_paint = ftk_wait_box_on_paint;
 		thiz->destroy  = ftk_wait_box_destroy;
 
-		priv->bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "wait_box"FTK_STOCK_IMG_SUFFIX);
+		priv->bitmap = ftk_theme_load_image(ftk_default_theme(), "wait_box"FTK_STOCK_IMG_SUFFIX);
 		assert(priv->bitmap != NULL);
 		
 		w = ftk_bitmap_width(priv->bitmap);

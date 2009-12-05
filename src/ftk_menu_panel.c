@@ -29,7 +29,6 @@
  *
  */
 
-#include "ftk_style.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
 #include "ftk_menu_item.h"
@@ -276,13 +275,6 @@ FtkWidget* ftk_menu_panel_create(void)
 		thiz->on_event = ftk_menu_panel_on_event;
 		thiz->on_paint = ftk_menu_panel_on_paint;
 		thiz->destroy  = ftk_menu_panel_destroy;
-
-		gc.mask = FTK_GC_BG | FTK_GC_FG;
-		gc.fg = ftk_style_get_color(FTK_COLOR_MENU_FG);
-		gc.bg = ftk_style_get_color(FTK_COLOR_MENU_BG);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 	}
 	else
 	{

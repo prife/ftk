@@ -46,7 +46,6 @@ extern "C" {
 #include "ftk_source_timer.h"
 #include "ftk_menu_item.h"
 #include "ftk_window.h"
-#include "ftk_style.h"
 #include "ftk_label.h"
 #include "ftk_image.h"
 #include "ftk_entry.h"

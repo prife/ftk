@@ -30,7 +30,6 @@
  */
 
 #include "ftk_util.h"
-#include "ftk_style.h"
 #include "ftk_entry.h"
 #include "ftk_globals.h"
 #include "ftk_text_buffer.h"
@@ -280,11 +279,11 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	gc.mask = FTK_GC_FG;
 	if(ftk_widget_is_focused(thiz))
 	{
-		gc.fg = ftk_style_get_color(FTK_COLOR_HIGHLIGHT);
+		gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_ENTRY, FTK_WIDGET_FOCUSED);
 	}
 	else
 	{
-		gc.fg = ftk_style_get_color(FTK_COLOR_BORDER);
+		gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_ENTRY, FTK_WIDGET_NORMAL);
 	}
 
 	ftk_canvas_set_gc(canvas, &gc);
@@ -350,13 +349,6 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 
-		gc.fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_WINDOW);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		
-		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
 		ftk_widget_append_child(parent, thiz);

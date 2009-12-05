@@ -30,7 +30,6 @@
  */
 
 #include "ftk_log.h"
-#include "ftk_style.h"
 #include "ftk_window.h"
 #include "ftk_canvas.h"
 #include "ftk_globals.h"

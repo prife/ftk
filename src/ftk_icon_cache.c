@@ -43,6 +43,7 @@ typedef struct _FtkBitmapNamePair
 struct _FtkIconCache
 {
 	int nr;
+	const char path[FTK_MAX_PATH];
 	FtkBitmapNamePair pairs[FTK_ICON_CACHE_MAX];
 };
 
@@ -69,19 +70,24 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 	FtkBitmap* bitmap = NULL;
 	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
 
-	ftk_snprintf(path, sizeof(path), "%s/icons/%s", LOCAL_DATA_DIR, filename);
+	ftk_snprintf(path, sizeof(path), "%s/%s/%s", LOCAL_DATA_DIR, thiz->path, filename);
 	if((bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path)) == NULL)
 	{
-		ftk_snprintf(path, sizeof(path), "%s/icons/%s", DATA_DIR, filename);
+		ftk_snprintf(path, sizeof(path), "%s/%s/%s", DATA_DIR, thiz->path, filename);
 		bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
 	}
 	
 	return bitmap;
 }
 
-FtkIconCache* ftk_icon_cache_create(void)
+FtkIconCache* ftk_icon_cache_create(const char* path)
 {
 	FtkIconCache* thiz = FTK_ZALLOC(sizeof(FtkIconCache));
+	if(thiz != NULL)
+	{
+		path = path == NULL ? "icons" : path;
+		ftk_strncpy(thiz->path, path, sizeof(thiz->path));
+	}
 
 	return thiz;
 }

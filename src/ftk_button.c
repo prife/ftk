@@ -30,7 +30,7 @@
  */
 
 #include "ftk_log.h"
-#include "ftk_style.h"
+#include "ftk_theme.h"
 #include "ftk_window.h"
 #include "ftk_canvas.h"
 #include "ftk_button.h"
@@ -133,35 +133,7 @@ FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int hei
 		ftk_widget_init(thiz, FTK_BUTTON, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
-
-		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_normal"FTK_STOCK_IMG_SUFFIX);
-		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_BTNFACE);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		ftk_gc_reset(&gc);
 		
-		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_normal_disable"FTK_STOCK_IMG_SUFFIX);
-		gc.fg = ftk_style_get_color(FTK_COLOR_GRAYTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_BTNFACE);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
-		ftk_gc_reset(&gc);
-		
-		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_selected"FTK_STOCK_IMG_SUFFIX);
-		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		ftk_gc_reset(&gc);
-
-		gc.mask = FTK_GC_FG | FTK_GC_BG | FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_pressed"FTK_STOCK_IMG_SUFFIX);
-		gc.fg = ftk_style_get_color(FTK_COLOR_BTNTEXT);
-		gc.bg = ftk_style_get_color(FTK_COLOR_BTNHIGHLIGHT);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
-		ftk_gc_reset(&gc);
-
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 		ftk_widget_append_child(parent, thiz);
 	}

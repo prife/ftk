@@ -29,7 +29,6 @@
  *
  */
 
-#include "ftk_style.h"
 #include "ftk_radio_group.h"
 #include "ftk_check_button.h"
 
@@ -63,13 +62,7 @@ FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, in
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_append_child(parent, thiz);
-		gc.mask = FTK_GC_BG | FTK_GC_FG;
-		gc.bg = ftk_style_get_color(FTK_COLOR_WINDOW);
-		gc.fg = ftk_style_get_color(FTK_COLOR_WINDOWTEXT);
-
-		ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 	}
 
 	return thiz;

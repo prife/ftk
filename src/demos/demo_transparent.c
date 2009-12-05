@@ -5,7 +5,10 @@ static void create_app_window(void);
 
 static Ret button_open_image_dialog(void* ctx, void* obj)
 {
-	FtkColor   bg = ftk_style_get_color(FTK_COLOR_WINDOW);
+	FtkColor   bg = {0};
+	bg.r = 0xff;
+	bg.g = 0xff;
+	bg.b = 0xff;
 	FtkBitmap* bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/earth.png");
 	bg.a = 0x0;
 	create_dialog(bitmap, bg);
@@ -15,8 +18,11 @@ static Ret button_open_image_dialog(void* ctx, void* obj)
 
 static Ret button_open_transparent_dialog(void* ctx, void* obj)
 {
-	FtkColor   bg = ftk_style_get_color(FTK_COLOR_WINDOW);
+	FtkColor   bg = {0};
 	bg.a = 0x80;
+	bg.r = 0xff;
+	bg.g = 0xff;
+	bg.b = 0xff;
 	create_dialog(NULL, bg);
 
 	return RET_OK;

@@ -1,6 +1,6 @@
 include $(abs_top_srcdir)/src/rules.mk
 
-SUBDIRS=. os backend compiler testdata icons data demos test
+SUBDIRS=. os backend compiler demos test
 
 lib_LTLIBRARIES=libftk.la
 
@@ -23,7 +23,7 @@ libftk_la_SOURCES=\
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
 	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
-	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  ftk_style.c \
+	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c \
 	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c  \
@@ -88,7 +88,7 @@ ftk_HEADERS=\
 	ftk_font.h                ftk_sprite.h\
 	ftk_gc.h                  ftk_status_item.h\
 	ftk_gesture.h             ftk_status_panel.h\
-	ftk_gesture_listener.h    ftk_style.h\
+	ftk_gesture_listener.h    \
 	ftk_globals.h             ftk_text_buffer.h\
 	ftk.h                     ftk_typedef.h\
 	ftk_icon_cache.h          ftk_util.h\
@@ -101,6 +101,7 @@ ftk_HEADERS=\
 	ftk_label.h               ftk_xml_builder.h\
 	ftk_list_model_default.h  ftk_xml_parser.h\
 	ftk_list_model.h          ftk_xul.h \
-	ftk_font_freetype.h       ftk_icon_view.h
+	ftk_font_freetype.h       ftk_icon_view.h\
+	ftk_theme.h
 
 EXTRA_DIST=	rules.mk

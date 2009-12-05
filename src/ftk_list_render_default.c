@@ -144,11 +144,11 @@ FtkListRender* ftk_list_render_default_create(void)
 		thiz->paint   = ftk_list_render_default_paint;
 		thiz->destroy = ftk_list_render_default_destroy;
 
-		priv->radio_off = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_radio_off"FTK_STOCK_IMG_SUFFIX);
-		priv->radio_on = ftk_icon_cache_load(ftk_default_icon_cache(),  "btn_radio_on"FTK_STOCK_IMG_SUFFIX);
-		priv->check_off = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_check_off"FTK_STOCK_IMG_SUFFIX);
-		priv->check_on = ftk_icon_cache_load(ftk_default_icon_cache(),  "btn_check_on"FTK_STOCK_IMG_SUFFIX);
-		priv->more = ftk_icon_cache_load(ftk_default_icon_cache(),      "more"FTK_STOCK_IMG_SUFFIX);
+		priv->radio_off = ftk_theme_load_image(ftk_default_theme(), "btn_radio_off"FTK_STOCK_IMG_SUFFIX);
+		priv->radio_on = ftk_theme_load_image(ftk_default_theme(),  "btn_radio_on"FTK_STOCK_IMG_SUFFIX);
+		priv->check_off = ftk_theme_load_image(ftk_default_theme(), "btn_check_off"FTK_STOCK_IMG_SUFFIX);
+		priv->check_on = ftk_theme_load_image(ftk_default_theme(),  "btn_check_on"FTK_STOCK_IMG_SUFFIX);
+		priv->more = ftk_theme_load_image(ftk_default_theme(),      "more"FTK_STOCK_IMG_SUFFIX);
 	}
 
 	return thiz;

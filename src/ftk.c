@@ -97,6 +97,12 @@ static void ftk_deinit(void)
 		ftk_set_display(NULL);
 	}
 
+	if(ftk_default_theme() != NULL)
+	{
+		ftk_theme_destroy(ftk_default_theme());
+		ftk_set_theme(NULL);
+	}
+
 	ftk_platform_deinit();
 
 	ftk_logd("%s: ftk exit.\n", __func__);
@@ -126,7 +132,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
 
 	ftk_init_bitmap_factory();
-	ftk_set_icon_cache(ftk_icon_cache_create());
+	ftk_set_icon_cache(ftk_icon_cache_create(NULL));
 
 #ifdef USE_FREETYPE
 	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
@@ -155,6 +161,8 @@ Ret ftk_init(int argc, char* argv[])
 	}
 
 	ftk_backend_init(argc, argv);
+
+	ftk_set_theme(ftk_theme_create(1));
 
 	if(!disable_status_panel)
 	{
@@ -268,7 +276,7 @@ static void ftk_init_panel(void)
 	FtkWidget* panel = ftk_default_status_panel();
 	
 	gc.mask = FTK_GC_BITMAP;
-	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "status-bg"FTK_STOCK_IMG_SUFFIX);
+	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "status-bg"FTK_STOCK_IMG_SUFFIX);
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_ACTIVE, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
@@ -276,7 +284,7 @@ static void ftk_init_panel(void)
 	
 	item = ftk_status_item_create(panel, -1, 32);
 	ftk_widget_set_id(item, IDC_CLOSE_ITEM);
-	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "close-32"FTK_STOCK_IMG_SUFFIX);
+	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "close-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)
 	{
 		gc.mask = FTK_GC_BITMAP;
@@ -284,7 +292,7 @@ static void ftk_init_panel(void)
 		ftk_widget_set_gc(item, FTK_WIDGET_FOCUSED, &gc);
 		ftk_gc_reset(&gc);
 		gc.mask = FTK_GC_BITMAP;
-		gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "close-pressed-32"FTK_STOCK_IMG_SUFFIX);
+		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "close-pressed-32"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(item, FTK_WIDGET_ACTIVE, &gc);
 		ftk_gc_reset(&gc);
 	}
@@ -293,7 +301,7 @@ static void ftk_init_panel(void)
 
 	item = ftk_status_item_create(panel, 1, 32);
 	ftk_widget_set_id(item, IDC_ICON_ITEM);
-	gc.bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
+	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)
 	{
 		gc.mask = FTK_GC_BITMAP;

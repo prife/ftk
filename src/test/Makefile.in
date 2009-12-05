@@ -40,8 +40,8 @@ noinst_PROGRAMS = label_test$(EXEEXT) widget_test$(EXEEXT) \
 	sources_manager_test$(EXEEXT) text_buffer_test$(EXEEXT) \
 	icon_cache_test$(EXEEXT) xml_parser_test$(EXEEXT) \
 	xul_test$(EXEEXT) list_model_default_test$(EXEEXT) \
-	timer_test$(EXEEXT) expr_test$(EXEEXT) $(am__EXEEXT_1) \
-	$(am__EXEEXT_2)
+	timer_test$(EXEEXT) expr_test$(EXEEXT) theme_test$(EXEEXT) \
+	$(am__EXEEXT_1) $(am__EXEEXT_2)
 @FTK_BACKEND_FB_TRUE@am__append_1 = display_fb_test input_test
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@am__append_2 = tslib_test
 subdir = src/test
@@ -165,6 +165,12 @@ text_buffer_test_LDADD = $(LDADD)
 text_buffer_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(text_buffer_test_LDFLAGS) $(LDFLAGS) -o $@
+am_theme_test_OBJECTS = theme_test.$(OBJEXT)
+theme_test_OBJECTS = $(am_theme_test_OBJECTS)
+theme_test_LDADD = $(LDADD)
+theme_test_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(theme_test_LDFLAGS) $(LDFLAGS) -o $@
 am_timer_test_OBJECTS = timer_test.$(OBJEXT)
 timer_test_OBJECTS = $(am_timer_test_OBJECTS)
 timer_test_LDADD = $(LDADD)
@@ -223,9 +229,9 @@ SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
 	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
 	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(timer_test_SOURCES) $(tslib_test_SOURCES) \
-	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
-	$(xul_test_SOURCES)
+	$(theme_test_SOURCES) $(timer_test_SOURCES) \
+	$(tslib_test_SOURCES) $(util_test_SOURCES) widget_test.c \
+	$(xml_parser_test_SOURCES) $(xul_test_SOURCES)
 DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(canvas_test_SOURCES) $(am__display_fb_test_SOURCES_DIST) \
 	$(expr_test_SOURCES) $(font_test_SOURCES) $(ftk_test_SOURCES) \
@@ -234,9 +240,9 @@ DIST_SOURCES = $(bitmap_factory_test_SOURCES) $(bitmap_test_SOURCES) \
 	$(log_test_SOURCES) $(main_loop_test_SOURCES) \
 	$(png_test_SOURCES) $(primary_source_test_SOURCES) \
 	$(sources_manager_test_SOURCES) $(text_buffer_test_SOURCES) \
-	$(timer_test_SOURCES) $(am__tslib_test_SOURCES_DIST) \
-	$(util_test_SOURCES) widget_test.c $(xml_parser_test_SOURCES) \
-	$(xul_test_SOURCES)
+	$(theme_test_SOURCES) $(timer_test_SOURCES) \
+	$(am__tslib_test_SOURCES_DIST) $(util_test_SOURCES) \
+	widget_test.c $(xml_parser_test_SOURCES) $(xul_test_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -358,6 +364,8 @@ top_srcdir = @top_srcdir@
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_SOURCES = tslib_test.c
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_LDFLAGS = $(MYLDFLAGS)
 @ENABLE_TSLIB_TRUE@@FTK_BACKEND_FB_TRUE@tslib_test_CFLAGS = -I$(abs_top_srcdir)/src/backend/fb
+theme_test_SOURCES = theme_test.c
+theme_test_LDFLAGS = $(MYLDFLAGS)
 expr_test_SOURCES = expr_test.c
 expr_test_LDFLAGS = $(MYLDFLAGS)
 timer_test_SOURCES = timer_test.c
@@ -490,6 +498,9 @@ sources_manager_test$(EXEEXT): $(sources_manager_test_OBJECTS) $(sources_manager
 text_buffer_test$(EXEEXT): $(text_buffer_test_OBJECTS) $(text_buffer_test_DEPENDENCIES) 
 	@rm -f text_buffer_test$(EXEEXT)
 	$(text_buffer_test_LINK) $(text_buffer_test_OBJECTS) $(text_buffer_test_LDADD) $(LIBS)
+theme_test$(EXEEXT): $(theme_test_OBJECTS) $(theme_test_DEPENDENCIES) 
+	@rm -f theme_test$(EXEEXT)
+	$(theme_test_LINK) $(theme_test_OBJECTS) $(theme_test_LDADD) $(LIBS)
 timer_test$(EXEEXT): $(timer_test_OBJECTS) $(timer_test_DEPENDENCIES) 
 	@rm -f timer_test$(EXEEXT)
 	$(timer_test_LINK) $(timer_test_OBJECTS) $(timer_test_LDADD) $(LIBS)
@@ -532,6 +543,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/primary_source_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sources_manager_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/text_buffer_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/theme_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/timer_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tslib_test-tslib_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/util_test.Po@am__quote@
