@@ -395,6 +395,7 @@ static void ftk_window_destroy(FtkWidget* thiz)
 
 		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 
+		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->update_idle);
 		ftk_source_unref(priv->update_idle);
 		ftk_canvas_destroy(priv->canvas);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
