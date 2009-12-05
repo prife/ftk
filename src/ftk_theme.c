@@ -498,6 +498,8 @@ void       ftk_theme_destroy(FtkTheme* thiz)
 			}
 		}
 		ftk_icon_cache_destroy(thiz->icon_cache);
+
+		FTK_ZFREE(thiz, sizeof(FtkTheme));
 	}
 
 	return;
