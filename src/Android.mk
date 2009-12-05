@@ -17,7 +17,7 @@ LOCAL_SRC_FILES := \
 	ftk_expr.c                 ftk_sprite.c\
 	ftk_font_default.c         ftk_status_item.c\
 	ftk_status_panel.c\
-	ftk_gesture.c              ftk_style.c\
+	ftk_gesture.c              \
 	ftk_globals.c              ftk_text_buffer.c\
 	ftk_icon_cache.c           ftk_util.c\
 	ftk_image_bmp_decoder.c    ftk_wait_box.c\
@@ -26,6 +26,7 @@ LOCAL_SRC_FILES := \
 	ftk_image_png_decoder.c    ftk_wnd_manager_default.c\
 	ftk_label.c                ftk_xml_parser.c\
 	ftk_list_model_default.c   ftk_xul.c\
+	ftk_theme.c \
 	ftk_list_render_default.c\
 	backend/fb/ftk_source_input.c \
 	backend/fb/ftk_display_fb.c \
@@ -33,8 +34,8 @@ LOCAL_SRC_FILES := \
 	os/linux/ftk_mmap_linux.c \
 	os/linux/ftk_linux.c
 
-LOCAL_CFLAGS += -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"/usr/share/ftk\"" \
-	-DFTK_FB_NAME="\"/dev/graphics/fb0\"" -DUSE_LINUX_NATIVE -DLOCAL_DATA_DIR="\"./ftk\""\
+LOCAL_CFLAGS += -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"/data/ftk/base\"" \
+	-DFTK_FB_NAME="\"/dev/graphics/fb0\"" -DUSE_LINUX_NATIVE -DLOCAL_DATA_DIR="\"./ftk/base\""\
 	-I$(LOCAL_PATH)/os/linux -I$(LOCAL_PATH)/backend/fb -DLINUX -DFTK_SUPPORT_C99
 
 LOCAL_C_INCLUDES := external/jpeg external/libpng external/zlib 
