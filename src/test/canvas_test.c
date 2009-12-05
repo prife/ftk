@@ -435,7 +435,7 @@ static void test_fill_bg(FtkDisplay* display)
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
 	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
-	FtkBitmap* bitmap = ftk_icon_cache_load(ftk_default_icon_cache(), "btn_default_pressed.9.png");
+	FtkBitmap* bitmap = ftk_theme_load_image(ftk_default_theme(), "btn_default_pressed.9.png");
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 10, 10, 100, 60);
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 120, 10, 40, 60);
 	

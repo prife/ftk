@@ -85,12 +85,6 @@ static void ftk_deinit(void)
 		ftk_set_font(NULL);
 	}
 
-	if(ftk_default_icon_cache() != NULL)
-	{
-		ftk_icon_cache_destroy(ftk_default_icon_cache());
-		ftk_set_icon_cache(NULL);
-	}
-
 	if(ftk_default_display() != NULL)
 	{
 		ftk_display_destroy(ftk_default_display());
@@ -132,7 +126,6 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
 
 	ftk_init_bitmap_factory();
-	ftk_set_icon_cache(ftk_icon_cache_create(NULL));
 
 #ifdef USE_FREETYPE
 	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);

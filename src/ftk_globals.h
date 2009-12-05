@@ -35,14 +35,12 @@
 #include "ftk_font.h"
 #include "ftk_theme.h"
 #include "ftk_display.h"
-#include "ftk_icon_cache.h"
 #include "ftk_wnd_manager.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_sources_manager.h"
 
 FtkFont*          ftk_default_font(void);
 FtkDisplay*       ftk_default_display(void);
-FtkIconCache*     ftk_default_icon_cache(void);
 FtkMainLoop*      ftk_default_main_loop(void);
 FtkLogLevel       ftk_default_log_level(void);
 FtkWndManager*    ftk_default_wnd_manager(void);
@@ -54,7 +52,6 @@ FtkTheme*          ftk_default_theme(void);
 
 void ftk_set_font(FtkFont* font);
 void ftk_set_display(FtkDisplay* display);
-void ftk_set_icon_cache(FtkIconCache* icon_cache);
 void ftk_set_main_loop(FtkMainLoop* main_loop);
 void ftk_set_log_level(FtkLogLevel level);
 void ftk_set_status_panel(FtkWidget* status_panel);

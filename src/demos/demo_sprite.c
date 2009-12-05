@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 #if 0
 	/*multi sprite still has some problems.*/
 	sprite = ftk_sprite_create();
-	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "flag-32"FTK_STOCK_IMG_SUFFIX);
+	icon=ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 	ftk_sprite_set_icon(sprite, icon);
 	ftk_sprite_move(sprite, width/2, 0);
 	ftk_sprite_set_move_listener(sprite, on_move, NULL);
@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 #endif
 
 	sprite = ftk_sprite_create();
-	icon=ftk_icon_cache_load(ftk_default_icon_cache(), "cursor"FTK_STOCK_IMG_SUFFIX);
+	icon=ftk_theme_load_image(ftk_default_theme(), "cursor"FTK_STOCK_IMG_SUFFIX);
 	ftk_sprite_set_icon(sprite, icon);
 	ftk_sprite_show(sprite, 1);
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), move_cursor, sprite);

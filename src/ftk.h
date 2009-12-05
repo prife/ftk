@@ -41,6 +41,7 @@ extern "C" {
 #include "ftk_bitmap.h"
 #include "ftk_dialog.h"
 #include "ftk_app_window.h"
+#include  "ftk_icon_cache.h"
 #include "ftk_status_item.h"
 #include "ftk_progress_bar.h"
 #include "ftk_source_timer.h"
