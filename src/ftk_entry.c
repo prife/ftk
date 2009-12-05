@@ -50,13 +50,11 @@ typedef struct _PrivInfo
 }PrivInfo;
 
 #define FTK_ENTRY_LEFT_MARGIN 4
-#define FTK_ENTRY_TOP_MARGIN  4
-#define HAS_TEXT(priv) (priv != NULL \
-	&& priv->text_buffer != NULL \
-	&& priv->text_buffer->length > 0) 
+#define FTK_ENTRY_TOP_MARGIN  5
 
 #define TB_TEXT priv->text_buffer->buffer
 #define TB_LENGTH (int)(priv->text_buffer->length)
+#define HAS_TEXT(priv) (priv != NULL && priv->text_buffer != NULL && TB_LENGTH > 0) 
 
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
@@ -277,15 +275,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	gc.mask = FTK_GC_FG;
-	if(ftk_widget_is_focused(thiz))
-	{
-		gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_ENTRY, FTK_WIDGET_FOCUSED);
-	}
-	else
-	{
-		gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_ENTRY, FTK_WIDGET_NORMAL);
-	}
-
+	gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_ENTRY, ftk_widget_state(thiz));
 	ftk_canvas_set_gc(canvas, &gc);
 	ftk_canvas_draw_hline(canvas, x + 2, y, width-4);
 	ftk_canvas_draw_hline(canvas, x + 1, y + 1, width-2);
@@ -303,7 +293,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 		ftk_entry_compute_visible_range(thiz);
 		font_height = ftk_canvas_font_height(canvas);
 		x += FTK_ENTRY_LEFT_MARGIN;
-		y += font_height ;
+		y += font_height + FTK_ENTRY_TOP_MARGIN;
 
 		ftk_canvas_draw_string(canvas, x, y, TB_TEXT + priv->visible_start,
 			priv->visible_end - priv->visible_start);
@@ -335,10 +325,8 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
 
-		gc.mask = FTK_GC_FG | FTK_GC_BG;
 		thiz->on_event = ftk_entry_on_event;
 		thiz->on_paint = ftk_entry_on_paint;
 		thiz->destroy  = ftk_entry_destroy;
@@ -347,7 +335,7 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		ftk_widget_init(thiz, FTK_ENTRY, 0);
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
