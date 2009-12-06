@@ -16,6 +16,7 @@ typedef struct _AppInfo
 	char tr_path[64];
 	char tr_text[64];
 	void* handle;
+	FtkBitmap* icon_bitmap;
 }AppInfo;
 
 struct _AppInfoManager;
