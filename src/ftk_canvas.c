@@ -670,13 +670,16 @@ Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int 
 	{
 		for(dx = 0; dx < w; dx += bw)
 		{
+			int draw_w = (dx + bw) < w ? bw : w - dx;
+			int draw_h = (dy + bh) < h ? bh : h - dy;
+
 			if(set)
 			{
-				ftk_canvas_set_bitmap(canvas, bitmap, 0, 0, bw, bh, x + dx, y + dy);
+				ftk_canvas_set_bitmap(canvas, bitmap, 0, 0, draw_w, draw_h, x + dx, y + dy);
 			}
 			else
 			{
-				ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, bw, bh, x + dx, y + dy);
+				ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, draw_w, draw_h, x + dx, y + dy);
 			}
 		}
 	}

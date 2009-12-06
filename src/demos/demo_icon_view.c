@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	ftk_window_set_focus(win, button);
 
 	item.icon = ftk_theme_load_image(ftk_default_theme(), "flag-32.png");
-	icon_view = ftk_icon_view_create(win, 0, 70, width, height-70);
+	icon_view = ftk_icon_view_create(win, 5, 70, width-10, height-80);
 	ftk_widget_set_id(icon_view, 100);
 	ftk_icon_view_set_clicked_listener(icon_view, item_clicked, win);
 	for(; i < 4; i++)

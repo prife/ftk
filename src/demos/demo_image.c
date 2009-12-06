@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 	ftk_image_set_image_file(image, TESTDATA_DIR"/earth.png");
 	
 	image = ftk_image_create(win, ftk_widget_width(win)/2, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
-	ftk_image_set_image_file(image, TESTDATA_DIR"/Calculator.png");
+	ftk_image_set_image_file(image, LOCAL_DATA_DIR"/theme/default/icon_view_bg.png");
 	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
 	
 	image = ftk_image_create(win, 0, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);

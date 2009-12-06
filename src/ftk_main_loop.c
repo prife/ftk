@@ -168,7 +168,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 				{
 					/*as current is removed, the next will be move to current, so dont call i++*/
 					ftk_sources_manager_remove(thiz->sources_manager, source);
-					ftk_logd("%s:%d remove %p\n", __func__, __LINE__, source);
+					//ftk_logd("%s:%d remove %p\n", __func__, __LINE__, source);
 				}
 				else
 				{
