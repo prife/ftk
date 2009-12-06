@@ -77,21 +77,22 @@ static Ret app_item_clicked(void* ctx, void* obj)
 	if(info->handle == NULL)
 	{
 		info->handle = dlopen(info->exec, RTLD_NOW);
-		if(info->handle != NULL)
+	}
+	else
+	{
+		ftk_loge("%s: dlopen %s failed. %s\n", __func__, info->exec, dlerror());
+	}
+	
+	if(info->handle != NULL)
+	{
+		entry = dlsym(info->handle, info->main);
+		if(entry != NULL)
 		{
-			entry = dlsym(info->handle, info->main);
-			if(entry != NULL)
-			{
-				entry(0, NULL);
-			}
-			else
-			{
-				ftk_loge("%s: dlsync %s failed. %s\n", __func__, info->main, dlerror());
-			}
+			entry(0, NULL);
 		}
 		else
 		{
-			ftk_loge("%s: dlopen %s failed. %s\n", __func__, info->exec, dlerror());
+			ftk_loge("%s: dlsync %s failed. %s\n", __func__, info->main, dlerror());
 		}
 	}
 
