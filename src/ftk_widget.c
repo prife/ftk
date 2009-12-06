@@ -192,6 +192,11 @@ int ftk_widget_id(FtkWidget* thiz)
 Ret ftk_widget_invalidate(FtkWidget* thiz)
 {
 	FtkRect rect = {0};
+	if(!ftk_widget_is_visible(thiz) || !ftk_widget_is_visible(ftk_widget_toplevel(thiz)))
+	{
+		return RET_FAIL;
+	}
+
 	rect.y = ftk_widget_top_in_window(thiz);
 	rect.x = ftk_widget_left_in_window(thiz);
 	rect.width = ftk_widget_width(thiz);

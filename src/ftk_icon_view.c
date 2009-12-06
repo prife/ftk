@@ -44,39 +44,171 @@ typedef struct _PrivInfo
 	
 	int    current;
 	size_t visible_nr;
-	size_t visible_start;
+	int    visible_start;
+	
+	size_t cols;
+	size_t rows;
+	size_t left_margin;
+	size_t top_margin;
 
 	size_t item_width;
 	size_t item_height;
 	FtkListener listener;
+	void* listener_ctx;
+
+	int active;
+	FtkBitmap* item_focus;
+	FtkBitmap* item_active;
 }PrivInfo;
+
+static Ret ftk_icon_view_set_cursor(FtkWidget* thiz, int current)
+{
+	DECL_PRIV0(thiz, priv);
+	priv->current = current;
+
+	if(priv->current < 0)
+	{
+		priv->current = 0;
+	}
+
+	if(priv->current >= priv->nr)
+	{
+		priv->current = priv->nr - 1;
+	}
+
+	while(priv->visible_start > priv->current)
+	{
+		priv->visible_start -= priv->cols;
+	}
+
+	while((priv->visible_start + priv->visible_nr) < priv->current)
+	{
+		priv->visible_start += priv->cols;
+	}
+
+	if(priv->visible_start >= priv->nr)
+	{
+		priv->visible_start -= priv->cols * priv->rows;	
+	}
+
+	if(priv->visible_start < 0)
+	{
+		priv->visible_start = 0;
+	}
+
+	ftk_widget_invalidate(thiz);
+
+	return RET_REMOVE;
+}
+
+static Ret ftk_icon_view_move_cursor(FtkWidget* thiz, int offset)
+{
+	DECL_PRIV0(thiz, priv);
+	return ftk_icon_view_set_cursor(thiz, priv->current + offset);
+}
 
 static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 {
+	int x = 0;
+	int y = 0;
+	int current = 0;
 	Ret ret = RET_OK;
+	DECL_PRIV0(thiz, priv);
+
+	if(priv->nr < 1)
+	{
+		return RET_OK;
+	}
 
 	switch(event->type)
 	{
 		case FTK_EVT_MOUSE_DOWN:
 		{
+			x = event->u.mouse.x - ftk_widget_left_abs(thiz) - priv->left_margin;
+			y = event->u.mouse.y - ftk_widget_top_abs(thiz) - priv->top_margin;
+
+			current = (y / priv->item_height) * priv->cols + x / priv->item_width;
+			ftk_icon_view_set_cursor(thiz, priv->visible_start + current);
+			priv->active = 1;
+			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
+
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
+			priv->active = 0;
+			ftk_widget_invalidate(thiz);
+			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+			if(priv->current < priv->nr)
+			{
+				FtkIconViewItem* item = priv->items + priv->current;
+				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, item);
+			}
+
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
 			{
+				priv->active = 1;
+			}
+
+			switch(event->u.key.code)
+			{
+				case FTK_KEY_UP:
+				{
+					if(priv->current > 0)
+					{
+						ftk_icon_view_move_cursor(thiz, -priv->cols);
+						ret = RET_REMOVE;
+					}
+					break;
+				}
+				case FTK_KEY_DOWN:
+				{
+					if((priv->current + 1) < priv->nr)
+					{
+						ftk_icon_view_move_cursor(thiz, priv->cols);
+						ret = RET_REMOVE;
+					}
+					break;
+				}
+				case FTK_KEY_LEFT:
+				{
+					if(priv->current > 0)
+					{
+						ftk_icon_view_move_cursor(thiz, -1);
+						ret = RET_REMOVE;
+					}
+					break;
+				}
+				case FTK_KEY_RIGHT:
+				{
+					if((priv->current + 1) < priv->nr)
+					{
+						ftk_icon_view_move_cursor(thiz, 1);
+						ret = RET_REMOVE;
+					}
+					break;
+				}
+				default:break;
 			}
 			break;
 		}
 		case FTK_EVT_KEY_UP:
 		{
-			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && ftk_widget_is_active(thiz))
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && priv->active) 
 			{
+				priv->active = 0;
+				ftk_widget_invalidate(thiz);
+				if(priv->current < priv->nr)
+				{
+					FtkIconViewItem* item = priv->items + priv->current;
+					ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, item);
+				}
 			}
+			ret = RET_REMOVE;
 			break;
 		}
 		default:break;
@@ -85,21 +217,94 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
+static Ret ftk_icon_view_calc(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	size_t visible_nr = 0;
+	int width = ftk_widget_width(thiz);
+	int height = ftk_widget_height(thiz);
+
+	priv->cols = width/priv->item_width;
+	priv->left_margin = FTK_HALF(width%priv->item_width);
+	priv->rows = height/priv->item_height;
+	priv->top_margin = FTK_HALF(height%priv->item_height);
+
+	visible_nr = priv->cols * priv->rows;
+	priv->visible_nr = priv->nr - priv->visible_start;
+	priv->visible_nr = FTK_MIN(visible_nr, priv->visible_nr);
+
+	return RET_OK;
+}
+
 static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 {
+	int dx = 0;
+	int dy = 0;
+	int fw = 0;
+	size_t i = 0;
+	size_t j = 0;
+	size_t item = 0;
+	int icon_height = 0;
+	const char* text = NULL;
+	DECL_PRIV0(thiz, priv);
+	FtkIconViewItem* item_info = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
-	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(ftk_widget_get_text(thiz) != NULL)
+	(void)width;
+	(void)height;
+	if(priv->cols < 1 || priv->rows < 1 || priv->nr < 1)
 	{
-		const char* text = ftk_widget_get_text(thiz);
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, text, -1);
-		int dx = FTK_HALF(width - fw);
-		int dy = FTK_HALF(height);
+		FTK_END_PAINT();
+	}
+
+	dy = y + priv->top_margin;
+	item = priv->visible_start;
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	
-		assert(fh < height && fw < width);
-		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
+	for(i = 0; i < priv->rows; i++)
+	{
+		dx = x + priv->left_margin;
+		for(j = 0; j < priv->cols; j++, item++)
+		{
+			if(item >= priv->nr || item >= (priv->visible_start + priv->visible_nr))
+			{
+				break;
+			}
+			item_info = priv->items + item;
+			text = item_info->text;
+			if(item == priv->current)
+			{
+				FtkBitmap* bg = priv->active ? priv->item_active : priv->item_focus;
+				ftk_canvas_draw_bg_image(canvas, bg, FTK_BG_FOUR_CORNER, dx, dy, priv->item_width, priv->item_height);
+			}
+			
+			if(text[0] == '\0')
+			{
+				if(item_info->icon != NULL)
+				{
+					ftk_canvas_draw_bg_image(canvas, item_info->icon, 
+						FTK_BG_CENTER, dx, dy, priv->item_width, priv->item_height);
+				}
+			}
+			else
+			{
+				icon_height = 0;
+				fw = ftk_canvas_get_extent(canvas, text, -1);
+
+				if(item_info->icon != NULL)
+				{
+					icon_height = priv->item_height - ftk_canvas_font_height(canvas) - 2*FTK_V_MARGIN;
+					ftk_canvas_draw_bg_image(canvas, item_info->icon, 
+						FTK_BG_CENTER, dx, dy, priv->item_width, icon_height);
+				}
+
+				ftk_canvas_draw_string_ex(canvas, dx + FTK_HALF(priv->item_width - fw), 
+					dy + icon_height + FTK_HALF(priv->item_height - icon_height), text, -1, 1);	
+			}
+
+			dx += priv->item_width;
+		}
+		dy += priv->item_height;
 	}
 
 	FTK_END_PAINT();
@@ -111,6 +316,7 @@ static void ftk_icon_view_destroy(FtkWidget* thiz)
 	{
 		size_t i = 0;
 		DECL_PRIV0(thiz, priv);
+
 		for(i = 0; i < priv->nr; i++)
 		{
 			FtkBitmap* icon = priv->items[i].icon;
@@ -119,6 +325,8 @@ static void ftk_icon_view_destroy(FtkWidget* thiz)
 				ftk_bitmap_unref(icon);
 			}
 		}
+		ftk_bitmap_unref(priv->item_focus);
+		ftk_bitmap_unref(priv->item_active);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
@@ -133,6 +341,7 @@ FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int 
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
+		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_icon_view_on_event;
 		thiz->on_paint = ftk_icon_view_on_paint;
 		thiz->destroy  = ftk_icon_view_destroy;
@@ -141,7 +350,11 @@ FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
+		priv->item_focus  = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
+		priv->item_active = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_append_child(parent, thiz);
+
+		ftk_icon_view_set_item_size(thiz, FTK_ICON_VIEW_ITEM_SIZE);
 	}
 	else
 	{
@@ -151,12 +364,13 @@ FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int 
 	return thiz;
 }
 
-Ret ftk_icon_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener)
+Ret ftk_icon_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	priv->listener = listener;
+	priv->listener_ctx = ctx;
 
 	return RET_OK;
 }
@@ -169,7 +383,7 @@ Ret ftk_icon_view_set_item_size(FtkWidget* thiz, size_t size)
 	size = size < FTK_ICON_VIEW_ITEM_MIN ? FTK_ICON_VIEW_ITEM_MIN : size;
 	size = size > FTK_ICON_VIEW_ITEM_MAX ? FTK_ICON_VIEW_ITEM_MAX : size;
 
-	priv->item_width = size;
+	priv->item_width  = size;
 	priv->item_height = size;
 
 	return RET_FAIL;
@@ -197,6 +411,8 @@ Ret ftk_icon_view_remove(FtkWidget* thiz, size_t index)
 	}
 
 	priv->nr--;
+	ftk_icon_view_calc(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_OK;
 }
@@ -213,7 +429,7 @@ static Ret ftk_icon_view_extend(FtkWidget* thiz, size_t delta)
 	}
 
 	alloc_nr = priv->nr + delta + FTK_HALF(priv->nr + delta) + 5;
-	items = FTK_REALLOC(priv->items, sizeof(FtkIconViewItem) + alloc_nr);
+	items = FTK_REALLOC(priv->items, sizeof(FtkIconViewItem) * alloc_nr);
 	if(items != NULL)
 	{
 		priv->items    = items;
@@ -230,6 +446,10 @@ Ret ftk_icon_view_add(FtkWidget* thiz, const FtkIconViewItem* item)
 	return_val_if_fail(ftk_icon_view_extend(thiz, 1) == RET_OK, RET_FAIL);
 
 	priv->items[priv->nr] = *item;
+	priv->nr++;
+
+	ftk_icon_view_calc(thiz);
+	ftk_widget_invalidate(thiz);
 
 	return RET_OK;
 }

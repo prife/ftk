@@ -59,6 +59,7 @@ extern "C" {
 #include "ftk_status_panel.h"
 #include "ftk_radio_group.h"
 #include "ftk_scroll_bar.h"
+#include "ftk_icon_view.h"
 #include "ftk_sprite.h"
 
 Ret  ftk_init(int argc, char* argv[]);

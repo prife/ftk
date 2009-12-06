@@ -43,12 +43,14 @@ typedef struct _FtkIconViewItem
 	void* user_data;
 }FtkIconViewItem;
 
-#define FTK_ICON_VIEW_ITEM_MIN 32
-#define FTK_ICON_VIEW_ITEM_MAX 128
+#define FTK_ICON_VIEW_ITEM_SIZE 64
+#define FTK_ICON_VIEW_ITEM_MIN  32
+#define FTK_ICON_VIEW_ITEM_MAX  128
 
 FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int height);
-Ret ftk_icon_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener);
+
 Ret ftk_icon_view_set_item_size(FtkWidget* thiz, size_t size);
+Ret ftk_icon_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
 size_t ftk_icon_view_get_count(FtkWidget* thiz);
 Ret ftk_icon_view_remove(FtkWidget* thiz, size_t index);
