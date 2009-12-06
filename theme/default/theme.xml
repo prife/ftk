@@ -29,5 +29,10 @@
 	fg[active]="ffffbb00"
 	fg[disable]="ffaca899"/>
 
+<icon_view bg_image[normal]="icon_view_bg.png" 
+	bg_image[focused]="icon_view_bg.png" 
+	bg_image[active]="icon_view_bg.png" 
+	bg_image[disable]="icon_view_bg.png"/> 
+
 <menu_panel bg[normal]="ffffffff" fg[normal]="ffccc9b8" bd[normal]="ffb0a080"/>
 </theme>

@@ -217,6 +217,24 @@ static FtkWidget* ftk_xul_scroll_bar_create(FtkWidgetCreateInfo* info)
 	return widget;
 }
 
+static FtkWidget* ftk_xul_list_view_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_list_view_create(info->parent, info->x, info->y, info->w, info->h);
+	
+	return widget;
+}
+
+static FtkWidget* ftk_xul_icon_view_create(FtkWidgetCreateInfo* info)
+{
+	FtkWidget* widget = NULL;
+
+	widget = ftk_icon_view_create(info->parent, info->x, info->y, info->w, info->h);
+	
+	return widget;
+}
+
 static FtkWidget* ftk_xul_window_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
@@ -255,6 +273,8 @@ static const WidgetCreator s_widget_creaters[] =
 	{"check_button", ftk_xul_check_button_create},
 	{"image",        ftk_xul_image_create},
 	{"scroll_bar",   ftk_xul_scroll_bar_create},
+	{"list_view",    ftk_xul_list_view_create},
+	{"icon_view",    ftk_xul_icon_view_create},
 	{"window",       ftk_xul_window_create},
 	{"dialog",       ftk_xul_dialog_create},
 	{NULL, NULL},
