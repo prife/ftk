@@ -1,4 +1,5 @@
 #include "ftk.h"
+#include <dlfcn.h>
 #include "ftk_xul.h"
 #include "app_info.h"
 #include "ftk_animator_expand.h"
@@ -68,6 +69,37 @@ static Ret applist_window_show(FtkWidget* widget)
 	return RET_OK;
 }
 
+static Ret app_item_clicked(void* ctx, void* obj)
+{
+	FtkMain entry = NULL;
+	FtkIconViewItem* item = obj;
+	AppInfo* info = item->user_data;
+	if(info->handle == NULL)
+	{
+		info->handle = dlopen(info->exec, RTLD_NOW);
+		if(info->handle != NULL)
+		{
+			entry = dlsym(info->handle, info->main);
+			if(entry != NULL)
+			{
+				entry(0, NULL);
+			}
+			else
+			{
+				ftk_loge("%s: dlsync %s failed. %s\n", __func__, info->main, dlerror());
+			}
+		}
+		else
+		{
+			ftk_loge("%s: dlopen %s failed. %s\n", __func__, info->exec, dlerror());
+		}
+	}
+
+	ftk_logd("%s: %s: user_data=%d\n", __func__, item->text, item->user_data);
+
+	return RET_OK;
+}
+
 static Ret button_open_applist_clicked(void* ctx, void* obj)
 {
 	size_t i = 0;
@@ -91,6 +123,7 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 	ftk_button_set_clicked_listener(button, button_close_applist_clicked, win);
 
 	icon_view = ftk_widget_lookup(win, 99);
+	ftk_icon_view_set_clicked_listener(icon_view, app_item_clicked, win);
 	n = app_info_manager_get_count(g_app_manager);
 	
 	for(i = 0; i < n; i++)
@@ -99,8 +132,7 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 		
 		item.icon = app_info->icon_bitmap;
 		item.user_data = app_info;
-		strncpy(item.text, app_info->name, sizeof(item.text));
-		ftk_logd("%s: %s\n", __func__, item.text);
+		strncpy(item.text, app_info->name, sizeof(item.text)-1);
 		ftk_icon_view_add(icon_view, &item);
 	}
 

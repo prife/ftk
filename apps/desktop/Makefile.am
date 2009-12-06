@@ -8,7 +8,7 @@ app_info_test_LDFLAGS=$(MYLDFLAGS)
 
 bin_PROGRAMS=desktop
 desktop_SOURCES=main.c app_info.c
-desktop_LDFLAGS=$(MYLDFLAGS)
+desktop_LDFLAGS=$(MYLDFLAGS) -ldl
 desktop_CFLAGS=-DAPP_DATA_DIR="\"$(datadir)/ftk/desktop\"" \
 	-DAPP_LOCAL_DATA_DIR="\"$(srcdir)\""
 

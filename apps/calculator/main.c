@@ -81,9 +81,9 @@ Ret ftk_main(int argc, char* argv[])
 		}
 	}
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_user_data(win, on_window_close, win);
 
 #ifdef HAS_MAIN
+	ftk_widget_set_user_data(win, on_window_close, win);
 	ftk_run();
 #endif
 
