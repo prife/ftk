@@ -148,6 +148,8 @@ FtkWidget* ftk_status_panel_create(int size)
 		thiz->on_event = ftk_status_panel_on_event;
 		thiz->on_paint = ftk_status_panel_on_paint;
 		thiz->destroy  = ftk_status_panel_destroy;
+
+		ftk_widget_set_attr(thiz, FTK_ATTR_BG_TILE);
 	}
 	else
 	{
