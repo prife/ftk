@@ -422,6 +422,7 @@ void ftk_widget_set_visible(FtkWidget* thiz, int visible)
 void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 {	
 	FtkEvent event = {0};
+	FtkWidgetState state = FTK_WIDGET_ACTIVE;
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
@@ -429,7 +430,14 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 		return;
 	}
 
-	thiz->priv->state = focused ? FTK_WIDGET_FOCUSED : FTK_WIDGET_NORMAL;
+	state = focused ? FTK_WIDGET_FOCUSED : FTK_WIDGET_NORMAL;
+	
+	if(thiz->priv->state == state)
+	{
+		return;
+	}
+
+	thiz->priv->state = state;
 	event.type = focused ? FTK_EVT_FOCUS_IN : FTK_EVT_FOCUS_OUT;
 	event.widget = thiz;
 	ftk_widget_event(thiz, &event);
@@ -446,6 +454,7 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 
 void ftk_widget_set_active(FtkWidget* thiz, int active)
 {	
+	FtkWidgetState state = FTK_WIDGET_ACTIVE;
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
@@ -453,8 +462,13 @@ void ftk_widget_set_active(FtkWidget* thiz, int active)
 		return;
 	}
 
-	thiz->priv->state = active ? FTK_WIDGET_ACTIVE : FTK_WIDGET_FOCUSED;
+	state = active ? FTK_WIDGET_ACTIVE : FTK_WIDGET_FOCUSED;
+	if(thiz->priv->state == state)
+	{
+		return;
+	}
 	
+	thiz->priv->state = state;
 	if(!ftk_widget_is_parent_visible(thiz))
 	{
 		return;

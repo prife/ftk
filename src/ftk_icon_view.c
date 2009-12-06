@@ -149,9 +149,10 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
-			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && !priv->active)
 			{
 				priv->active = 1;
+				ftk_widget_invalidate(thiz);
 			}
 
 			switch(event->u.key.code)
