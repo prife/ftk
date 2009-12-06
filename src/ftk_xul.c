@@ -668,7 +668,7 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 				int type = info.animator;
 				int width = ftk_widget_width(widget);
 				int height = ftk_widget_height(widget);
-				FtkAnimator* ani = ftk_animator_expand_create();
+				FtkAnimator* ani = ftk_animator_expand_create(1);
 				switch(info.animator)
 				{
 					case FTK_ANI_TO_RIGHT:

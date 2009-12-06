@@ -49,6 +49,8 @@ typedef struct _PrivInfo
 	FtkWidget* win;
 	FtkCanvas* canvas;
 	FtkBitmap* snap;
+
+	int destroy_when_stop;
 }PrivInfo;
 
 static Ret  ftk_animator_expand_stop(FtkAnimator* thiz)
@@ -193,7 +195,11 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 		priv->canvas = NULL;
 		priv->snap   = NULL;
 		priv->win    = NULL;
-
+		
+		if(priv->destroy_when_stop)
+		{
+			ftk_animator_destroy(thiz);
+		}
 		return RET_REMOVE;
 	}
 
@@ -280,16 +286,19 @@ static void ftk_animator_expand_destroy(FtkAnimator* thiz)
 	return;
 }
 
-FtkAnimator* ftk_animator_expand_create(void)
+FtkAnimator* ftk_animator_expand_create(int destroy_when_stop)
 {
 	FtkAnimator* thiz = (FtkAnimator*)FTK_ZALLOC(sizeof(FtkAnimator) + sizeof(PrivInfo));
 
 	if(thiz != NULL)
 	{
+		DECL_PRIV(thiz, priv);
 		thiz->stop      = ftk_animator_expand_stop;
 		thiz->start     = ftk_animator_expand_start;
 		thiz->set_param = ftk_animator_expand_set_param;
 		thiz->destroy   = ftk_animator_expand_destroy;
+
+		priv->destroy_when_stop = destroy_when_stop;
 	}
 
 	return thiz;

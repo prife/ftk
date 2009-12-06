@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
 	}
 
 	g_app_manager = app_info_manager_create();
-	g_animator = ftk_animator_expand_create();
+	g_animator = ftk_animator_expand_create(0);
 
 	snprintf(path, sizeof(path), DATA_DIR"/apps");
 	if(app_info_manager_load_dir(g_app_manager, path) != RET_OK)
