@@ -231,7 +231,11 @@ static FtkWidget* ftk_xul_icon_view_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_icon_view_create(info->parent, info->x, info->y, info->w, info->h);
-	
+	if(info->value != NULL)
+	{
+		ftk_icon_view_set_item_size(widget, atoi(info->value));
+	}
+
 	return widget;
 }
 

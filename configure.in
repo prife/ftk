@@ -115,6 +115,12 @@ AC_CONFIG_FILES([ftk.pc
                 apps/calculator/icons/Makefile
                 apps/calculator/xul/Makefile
                 apps/calculator/data/Makefile
+                apps/filemanager/Makefile
+                apps/filemanager/icons/Makefile
+                apps/filemanager/data/Makefile
+                apps/shell/Makefile
+                apps/shell/icons/Makefile
+                apps/shell/data/Makefile
                 tools/Makefile
                 tools/cross-build/Makefile
                 ])
