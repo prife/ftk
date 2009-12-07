@@ -46,7 +46,7 @@ typedef struct _PrivInfo
 	char processed_value[128];
 	char translated_path[FTK_MAX_PATH+1];
 	FtkTranslateText tr_text;
-	FtkTranslatePath tr_path;
+	FtkLoadImage load_image;
 	FtkAnimator* animator;
 }PrivInfo;
 
@@ -198,7 +198,7 @@ static FtkWidget* ftk_xul_image_create(FtkWidgetCreateInfo* info)
 	widget = ftk_image_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_image_set_image_file(widget, info->priv->tr_path(info->value, info->priv->translated_path));
+		ftk_image_set_image(widget, info->priv->load_image(info->value));
 	}
 
 	return widget;
@@ -562,26 +562,22 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 				else if(strcmp(name, "bg_image[normal]") == 0)
 				{
 					info->gc[FTK_WIDGET_NORMAL].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_NORMAL].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
-						info->priv->tr_path(value, info->priv->translated_path));
+					info->gc[FTK_WIDGET_NORMAL].bitmap = priv->load_image(value);
 				}
 				else if(strcmp(name, "bg_image[disable]") == 0)
 				{
 					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_INSENSITIVE].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
-						info->priv->tr_path(value, info->priv->translated_path));
+					info->gc[FTK_WIDGET_INSENSITIVE].bitmap = priv->load_image(value);
 				}
 				else if(strcmp(name, "bg_image[active]") == 0)
 				{
 					info->gc[FTK_WIDGET_ACTIVE].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_ACTIVE].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
-						info->priv->tr_path(value, info->priv->translated_path));
+					info->gc[FTK_WIDGET_ACTIVE].bitmap = priv->load_image(value);
 				}
 				else if(strcmp(name, "bg_image[focused]") == 0)
 				{
 					info->gc[FTK_WIDGET_FOCUSED].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_FOCUSED].bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), 
-						info->priv->tr_path(value, info->priv->translated_path));
+					info->gc[FTK_WIDGET_FOCUSED].bitmap = priv->load_image(value);
 				}
 				else
 				{
@@ -780,14 +776,12 @@ static const char* ftk_text_no_translate(const char* text)
 	return text;
 }
 
-static const char* ftk_path_no_translate(const char* path, char out_path[FTK_MAX_PATH+1])
+static FtkBitmap* ftk_default_load_image(const char* filename)
 {
-	(void)out_path;
-
-	return path;
+	return ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 }
 
-FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkTranslatePath tr_path)
+FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkLoadImage load_image)
 {
 	FtkWidget* widget = NULL;
 	FtkXmlParser* parser = NULL;
@@ -803,7 +797,7 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text
 	{
 		PrivInfo* priv = (PrivInfo*)builder->priv;
 		priv->tr_text = tr_text != NULL ? tr_text : ftk_text_no_translate;
-		priv->tr_path = tr_path != NULL ? tr_path : ftk_path_no_translate;
+		priv->load_image = load_image != NULL ? load_image : ftk_default_load_image;
 		ftk_xml_parser_set_builder(parser, builder);
 		ftk_xml_parser_parse(parser, xml, strlen(xml));
 		widget = priv->root;
@@ -820,10 +814,10 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text
 
 FtkWidget* ftk_xul_load(const char* xml, int length)
 {
-	return ftk_xul_load_ex(xml, length, ftk_text_no_translate, ftk_path_no_translate);	
+	return ftk_xul_load_ex(xml, length, ftk_text_no_translate, ftk_default_load_image);	
 }
 
-FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, FtkTranslatePath tr_path)
+FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, FtkLoadImage load_image)
 {
 	FtkMmap* m = NULL;
 	FtkWidget* widget = NULL;
@@ -831,7 +825,7 @@ FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, Ftk
 
 	if((m = ftk_mmap_create(filename, 0, -1)) != NULL)
 	{
-		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), tr_text, tr_path);
+		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), tr_text, load_image);
 		ftk_mmap_destroy(m);
 	}
 

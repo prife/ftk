@@ -37,7 +37,7 @@ FTK_INHERITE_FROM(Widget)
 
 FtkWidget* ftk_image_create(FtkWidget* parent, int x, int y, int width, int height);
 
-Ret ftk_image_set_image_file(FtkWidget* thiz, const char* image_file);
+Ret ftk_image_set_image(FtkWidget* thiz, FtkBitmap* image);
 
 #endif/*FTK_IMAGE_H*/
 

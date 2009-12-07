@@ -5,13 +5,6 @@ const char* t1 = "<window> </window>";
 
 #define IDC_QUIT 100
 
-const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
-{
-	snprintf(out_path, FTK_MAX_PATH, "%s/%s", TESTDATA_DIR, path);
-
-	return out_path;
-}
-
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
 	ftk_quit();
@@ -26,6 +19,12 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
+static FtkIconCache* g_icon_cache = NULL;
+static FtkBitmap* my_load_image(const char* filename)
+{
+	return ftk_icon_cache_load(g_icon_cache, filename);
+}
+
 int main(int argc, char* argv[])
 {
 	if(argc > 1)
@@ -33,8 +32,9 @@ int main(int argc, char* argv[])
 		FtkWidget* win = NULL;
 		FtkWidget* quit = NULL;
 		ftk_init(argc, argv);
-
-		win = ftk_xul_load_file(argv[1], NULL, tr_path);
+		
+		g_icon_cache = ftk_icon_cache_create(NULL, "testdata");
+		win = ftk_xul_load_file(argv[1], NULL, my_load_image);
 		ftk_widget_set_user_data(win, on_window_close, win);
 		
 		quit = ftk_widget_lookup(win, IDC_QUIT);
@@ -42,6 +42,7 @@ int main(int argc, char* argv[])
 		ftk_widget_show_all(win, 1);
 
 		ftk_run();
+		ftk_icon_cache_destroy(g_icon_cache);
 	}
 	else
 	{

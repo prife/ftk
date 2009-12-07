@@ -43,7 +43,8 @@ typedef struct _FtkBitmapNamePair
 struct _FtkIconCache
 {
 	int nr;
-	char path[FTK_MAX_PATH];
+	char path[FTK_ICON_PATH_NR][FTK_MAX_PATH];
+	char rel_path[FTK_MAX_PATH];
 	FtkBitmapNamePair pairs[FTK_ICON_CACHE_MAX];
 };
 
@@ -66,27 +67,62 @@ static FtkBitmap* ftk_icon_cache_find(FtkIconCache* thiz, const char* filename)
 
 static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filename)
 {
-	char path[260] = {0};
+	size_t i = 0;
+	char path[FTK_MAX_PATH] = {0};
 	FtkBitmap* bitmap = NULL;
 	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
 
-	ftk_snprintf(path, sizeof(path), "%s/%s/%s", LOCAL_DATA_DIR, thiz->path, filename);
-	if((bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path)) == NULL)
+	for(i = 0; i < FTK_ICON_PATH_NR; i++)
 	{
-		ftk_snprintf(path, sizeof(path), "%s/%s/%s", DATA_DIR, thiz->path, filename);
-		bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
+		ftk_snprintf(path, sizeof(path), "%s/%s/%s", thiz->path[i], thiz->rel_path, filename);
+		if((bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path)) != NULL)
+		{
+			return bitmap;
+		}
 	}
-	
+
 	return bitmap;
 }
 
-FtkIconCache* ftk_icon_cache_create(const char* path)
+static const char* s_default_path[FTK_ICON_PATH_NR]=
 {
+	FTK_DATA_ROOT,
+	DATA_DIR,
+	LOCAL_DATA_DIR,
+	TESTDATA_DIR
+};
+
+FtkIconCache* ftk_icon_cache_create(const char* root_path[FTK_ICON_PATH_NR], const char* rel_path)
+{
+	size_t i = 0;
 	FtkIconCache* thiz = FTK_ZALLOC(sizeof(FtkIconCache));
 	if(thiz != NULL)
 	{
-		path = path == NULL ? "icons" : path;
-		ftk_strncpy(thiz->path, path, sizeof(thiz->path));
+		if(root_path == NULL)
+		{
+			root_path = s_default_path;
+		}
+
+		if(rel_path != NULL)
+		{
+			ftk_strncpy(thiz->rel_path, rel_path, FTK_MAX_PATH);
+		}
+		else
+		{
+			thiz->rel_path[0] = '\0';
+		}
+
+		for(i = 0; i < FTK_ICON_PATH_NR; i++)
+		{
+			if(root_path[i] != NULL)
+			{
+				ftk_strncpy(thiz->path[i], root_path[i], FTK_MAX_PATH);
+			}
+			else
+			{
+				thiz->path[i][0] = '\0';
+			}
+		}
 	}
 
 	return thiz;

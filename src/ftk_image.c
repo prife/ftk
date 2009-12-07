@@ -66,20 +66,15 @@ FtkWidget* ftk_image_create(FtkWidget* parent, int x, int y, int width, int heig
 	return thiz;
 }
 
-Ret ftk_image_set_image_file(FtkWidget* thiz, const char* image_file)
+Ret ftk_image_set_image(FtkWidget* thiz, FtkBitmap* image)
 {
 	FtkGc gc = {0};
-	FtkBitmap* bitmap = NULL;
-	return_val_if_fail(thiz != NULL && image_file != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && image != NULL, RET_FAIL);
 
-	bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), image_file);
-	if(bitmap != NULL)
-	{
-		gc.mask = FTK_GC_BITMAP;
-		gc.bitmap = bitmap;
-		ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
-		ftk_bitmap_unref(bitmap);
-	}
+	gc.mask = FTK_GC_BITMAP;
+	gc.bitmap = image;
+	ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
+	ftk_bitmap_unref(image);
 
 	ftk_widget_invalidate(thiz);
 

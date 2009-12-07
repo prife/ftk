@@ -30,6 +30,11 @@ const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
 	return out_path;
 }
 
+FtkIconCache* g_icon_cache = NULL;
+static FtkBitmap* my_load_image(const char* filename)
+{
+	return ftk_icon_cache_load(g_icon_cache, filename);
+}
 
 static FtkWidget* desktop_load_xul(const char* filename)
 {
@@ -37,7 +42,7 @@ static FtkWidget* desktop_load_xul(const char* filename)
 	
 	tr_path(filename, path);
 
-	return ftk_xul_load_file(path, NULL, tr_path);
+	return ftk_xul_load_file(path, NULL, my_load_image);
 }
 
 static Ret applist_window_show(FtkWidget* widget)
@@ -142,6 +147,14 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static const char* s_default_path[FTK_ICON_PATH_NR]=
+{
+	FTK_DATA_ROOT"/desktop",
+	".",
+	NULL,
+	NULL
+};
+
 int main(int argc, char* argv[])
 {
 	FtkWidget* win = NULL;
@@ -165,6 +178,7 @@ int main(int argc, char* argv[])
 		app_info_manager_load_dir(g_app_manager, path);
 	}
 
+	g_icon_cache = ftk_icon_cache_create(s_default_path, NULL);
 	win = desktop_load_xul(g_desktop_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
 	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
@@ -172,6 +186,7 @@ int main(int argc, char* argv[])
 
 	ftk_run();
 
+	ftk_icon_cache_destroy(g_icon_cache);
 	app_info_manager_destroy(g_app_manager);
 	ftk_animator_destroy(g_animator);
 

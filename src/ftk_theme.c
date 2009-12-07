@@ -137,7 +137,7 @@ FtkTheme*  ftk_theme_create(int init_default)
 		}
 
 		ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
-		thiz->icon_cache = ftk_icon_cache_create(icon_path);
+		thiz->icon_cache = ftk_icon_cache_create(NULL, icon_path);
 	}
 
 	return thiz;
