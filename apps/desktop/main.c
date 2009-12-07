@@ -60,13 +60,13 @@ static Ret applist_window_show(FtkWidget* widget)
 			ftk_animator_set_param(g_animator, type, delta, width, delta, 200);
 			break;
 		}
+		default:
 		case FTK_ANI_TO_UP:
 		{
 			delta = height/8;
 			ftk_animator_set_param(g_animator, type, height - delta, ftk_widget_top(widget), delta, 200);
 			break;
 		}
-		default:break;
 	}
 
 	ftk_animator_start(g_animator, widget, 0);
