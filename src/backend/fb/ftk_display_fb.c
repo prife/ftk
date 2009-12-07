@@ -99,6 +99,8 @@ static void fb_close(struct FB *fb)
 typedef struct _PrivInfo
 {
 	struct FB fb;
+	FtkBitmapCopyFromData copy_from_data;
+	FtkBitmapCopyToData   copy_to_data;
 }PrivInfo;
 
 static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
@@ -107,7 +109,7 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	int display_width  = fb_width(&priv->fb);
 	int display_height = fb_height(&priv->fb);
 
-	return ftk_bitmap_copy_to_data_rgb565(bitmap, rect, 
+	return priv->copy_to_data(bitmap, rect, 
 		priv->fb.bits, xoffset, yoffset, display_width, display_height); 
 }
 
@@ -139,7 +141,7 @@ static Ret ftk_display_fb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* 
 	rect.width = bw;
 	rect.height = bh;
 
-	return ftk_bitmap_copy_from_data_rgb565(bitmap, priv->fb.bits, w, h, &rect);
+	return priv->copy_from_data(bitmap, priv->fb.bits, w, h, &rect);
 }
 
 static void ftk_display_fb_destroy(FtkDisplay* thiz)
@@ -170,6 +172,21 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			thiz->height   = ftk_display_fb_height;
 			thiz->snap     = ftk_display_fb_snap;
 			thiz->destroy  = ftk_display_fb_destroy;
+	
+			if(priv->fb.vi.bits_per_pixel == 16)
+			{
+				priv->copy_to_data   = ftk_bitmap_copy_to_data_rgb565;
+				priv->copy_from_data = ftk_bitmap_copy_from_data_rgb565;
+			}
+			else if(priv->fb.vi.bits_per_pixel == 32)
+			{
+				priv->copy_to_data   = ftk_bitmap_copy_to_data_argb;
+				priv->copy_from_data = ftk_bitmap_copy_from_data_argb;
+			}
+			else
+			{
+				assert(!"not supported framebuffer format.");
+			}
 		}
 		else
 		{

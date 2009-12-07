@@ -53,5 +53,10 @@ Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap,
 Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
 
+typedef Ret (*FtkBitmapCopyFromData)(FtkBitmap* bitmap, 
+	void* data, size_t dw, size_t dh, FtkRect* rect);
+typedef Ret (*FtkBitmapCopyToData)(FtkBitmap* bitmap, FtkRect* rect, 
+	void* data, int ox, int oy, size_t dw, size_t dh);
+
 #endif/*FTK_BITMAP_H*/
 
