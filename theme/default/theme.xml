@@ -35,4 +35,5 @@
 	bg_image[disable]="icon_view_bg.png"/> 
 
 <menu_panel bg[normal]="ffffffff" fg[normal]="ffccc9b8" bd[normal]="ffb0a080"/>
+<menu_item bg_image[focused]="menuitem_background_focus.png" bg_image[active]="menuitem_background_pressed.png" />
 </theme>

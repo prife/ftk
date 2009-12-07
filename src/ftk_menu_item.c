@@ -124,24 +124,12 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
-		FtkGc gc ={0};
-
 		thiz->on_event = ftk_menu_item_on_event;
 		thiz->on_paint = ftk_menu_item_on_paint;
 		thiz->destroy  = ftk_menu_item_destroy;
 
 		ftk_widget_init(thiz, FTK_MENU_ITEM, 0);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
-
-		gc.mask = FTK_GC_BITMAP;
-		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED, &gc);
-		ftk_gc_reset(&gc);
-
-		gc.mask = FTK_GC_BITMAP;
-		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX);
-		ftk_widget_set_gc(thiz, FTK_WIDGET_ACTIVE, &gc);
-		ftk_gc_reset(&gc);
 
 		ftk_menu_panel_add(parent, thiz);
 	}
