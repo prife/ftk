@@ -472,6 +472,7 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 		{
 			case 'i':
 			{
+				/*id*/
 				info->id = atoi(value);
 				break;
 			}
@@ -489,26 +490,29 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'w':
 			{
+				/*width*/
 				value = ftk_xul_builder_preprocess_value(thiz, value);
 				info->w = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'h':
 			{
+				/*height*/
 				value = ftk_xul_builder_preprocess_value(thiz, value);
 				info->h = (int)ftk_expr_eval(value);
 				break;
 			}
 			case 'a':
 			{
-				/*attr*/
 				if(name[1] == 't')
 				{
+					/*attr*/
 					value = ftk_xul_builder_preprocess_value(thiz, value);
 					info->attr = (int)ftk_expr_eval(value);
 				}
 				else if(name[1] == 'n')
 				{
+					/*animator*/
 					value = ftk_xul_builder_preprocess_value(thiz, value);
 					info->animator = (int)ftk_expr_eval(value);
 				}
@@ -518,26 +522,31 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			{
 				if(name[1] == 'a')
 				{
+					/*value*/
 					info->value = value;
 				}
 				else if(name[1] == 'i')
 				{
+					/*visiable*/
 					info->visible = atoi(value);
 				}
 				break;
 			}
 			case 'm':
 			{
+				/*max*/
 				info->max_value = atoi(value);
 				break;
 			}
 			case 'p':
 			{
+				/*page_delta*/
 				info->page_delta = atoi(value);
 				break;
 			}
 			case 'c':
 			{
+				/*checked*/
 				info->checked = atoi(value);
 				break;
 			}
@@ -727,26 +736,6 @@ static void ftk_xul_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
 	return;
 }
 
-static void ftk_xul_builder_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
-{
-	return;
-}
-
-static void ftk_xul_builder_on_comment(FtkXmlBuilder* thiz, const char* text, size_t length)
-{
-	return;
-}
-
-static void ftk_xul_builder_on_pi(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
-{
-	return;
-}
-
-static void ftk_xul_builder_on_error(FtkXmlBuilder* thiz, int line, int row, const char* message)
-{
-	return;
-}
-
 static void ftk_xul_builder_destroy(FtkXmlBuilder* thiz)
 {
 	if(thiz != NULL)
@@ -765,10 +754,6 @@ static FtkXmlBuilder* ftk_xul_builder_create(void)
 	{
 		thiz->on_start_element = ftk_xul_builder_on_start;
 		thiz->on_end_element   = ftk_xul_builder_on_end;
-		thiz->on_text          = ftk_xul_builder_on_text;
-		thiz->on_comment       = ftk_xul_builder_on_comment;
-		thiz->on_pi_element    = ftk_xul_builder_on_pi;
-		thiz->on_error         = ftk_xul_builder_on_error;
 		thiz->destroy          = ftk_xul_builder_destroy;
 	}
 
@@ -796,7 +781,6 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text
 	return_val_if_fail(parser != NULL, NULL);
 
 	builder = ftk_xul_builder_create();
-
 	if(builder != NULL)
 	{
 		PrivInfo* priv = (PrivInfo*)builder->priv;
