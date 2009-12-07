@@ -164,7 +164,7 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = launcher desktop calculator
+SUBDIRS = launcher desktop calculator shell filemanager
 all: all-recursive
 
 .SUFFIXES:
