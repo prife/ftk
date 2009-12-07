@@ -128,22 +128,25 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 			y = event->u.mouse.y - ftk_widget_top_abs(thiz) - priv->top_margin;
 
 			current = (y / priv->item_height) * priv->cols + x / priv->item_width;
-			ftk_icon_view_set_cursor(thiz, priv->visible_start + current);
-			priv->active = 1;
-			ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
+			if((priv->visible_start + current) < priv->nr)
+			{
+				priv->active = 1;
+				ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
+				ftk_icon_view_set_cursor(thiz, priv->visible_start + current);
+			}
 
 			break;
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
-			priv->active = 0;
 			ftk_widget_invalidate(thiz);
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
-			if(priv->current < priv->nr)
+			if(priv->current < priv->nr && priv->active)
 			{
 				FtkIconViewItem* item = priv->items + priv->current;
 				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, item);
 			}
+			priv->active = 0;
 
 			break;
 		}

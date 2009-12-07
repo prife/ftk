@@ -38,13 +38,11 @@ typedef struct _FtkBitmapNamePair
 	FtkBitmap* bitmap;
 }FtkBitmapNamePair;
 
-#define FTK_ICON_CACHE_MAX 32
-
 struct _FtkIconCache
 {
 	int nr;
-	char path[FTK_ICON_PATH_NR][FTK_MAX_PATH];
 	char rel_path[FTK_MAX_PATH];
+	char path[FTK_ICON_PATH_NR][FTK_MAX_PATH];
 	FtkBitmapNamePair pairs[FTK_ICON_CACHE_MAX];
 };
 
@@ -68,8 +66,8 @@ static FtkBitmap* ftk_icon_cache_find(FtkIconCache* thiz, const char* filename)
 static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filename)
 {
 	size_t i = 0;
-	char path[FTK_MAX_PATH] = {0};
 	FtkBitmap* bitmap = NULL;
+	char path[FTK_MAX_PATH] = {0};
 	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
 
 	for(i = 0; i < FTK_ICON_PATH_NR; i++)
@@ -94,10 +92,10 @@ static const char* s_default_path[FTK_ICON_PATH_NR]=
 
 FtkIconCache* ftk_icon_cache_create(const char* root_path[FTK_ICON_PATH_NR], const char* rel_path)
 {
-	size_t i = 0;
 	FtkIconCache* thiz = FTK_ZALLOC(sizeof(FtkIconCache));
 	if(thiz != NULL)
 	{
+		size_t i = 0;
 		if(root_path == NULL)
 		{
 			root_path = s_default_path;
