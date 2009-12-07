@@ -110,6 +110,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 	while(thiz->running)
 	{
 		n = 0;
+		wait_time = 3000;
 		FD_ZERO(&thiz->fdset);
 		FD_SET(thiz->read_fd, &thiz->fdset);
 		FD_SET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset);
