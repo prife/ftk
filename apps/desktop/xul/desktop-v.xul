@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window value="Desktop" attr="$FTK_ATTR_IGNORE_CLOSE" bg_image[normal]="icons/paper.jpg">
+	<image x="10" y="$wh/6" w="70" h="112" value="icons/1.png" attr="$FTK_ATTR_TRANSPARENT" />
+	<image x="80" y="$wh/6" w="70" h="112" value="icons/2.png" attr="$FTK_ATTR_TRANSPARENT" />
+	<image x="100" y="$wh/6" w="20" h="112" value="icons/colon.png" attr="$FTK_ATTR_TRANSPARENT" />
+	<image x="170" y="$wh/6" w="70" h="112" value="icons/0.png" attr="$FTK_ATTR_TRANSPARENT" />
+	<image x="240" y="$wh/6" w="70" h="112" value="icons/0.png" attr="$FTK_ATTR_TRANSPARENT" />
 	<button id="100" x="0" y="$wh-56" w="$ww" h="56" attr="$FTK_ATTR_BG_CENTER"
 		bg_image[normal]="icons/tray_handle_normal.png"
 		bg_image[focused]="icons/tray_handle_selected.png"
