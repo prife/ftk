@@ -38,12 +38,12 @@ struct _FtkSprite;
 typedef struct _FtkSprite FtkSprite;
 
 FtkSprite* ftk_sprite_create(void);
-Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon);
+int  ftk_sprite_get_x(FtkSprite* thiz);
+int  ftk_sprite_get_y(FtkSprite* thiz);
 int  ftk_sprite_is_visible(FtkSprite* thiz);
 Ret  ftk_sprite_show(FtkSprite* thiz, int show);
 Ret  ftk_sprite_move(FtkSprite* thiz, int x, int y);
-int  ftk_sprite_get_x(FtkSprite* thiz);
-int  ftk_sprite_get_y(FtkSprite* thiz);
+Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon);
 Ret  ftk_sprite_set_move_listener(FtkSprite* thiz, FtkListener listener, void* ctx);
 void ftk_sprite_destroy(FtkSprite* thiz);
 
