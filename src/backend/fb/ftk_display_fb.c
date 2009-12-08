@@ -189,8 +189,8 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			}
 			else if(priv->fb.vi.bits_per_pixel == 32)
 			{
-				priv->copy_to_data   = ftk_bitmap_copy_to_data_argb;
-				priv->copy_from_data = ftk_bitmap_copy_from_data_argb;
+				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgra32;
+				priv->copy_from_data = ftk_bitmap_copy_from_data_bgra32;
 			}
 			else
 			{

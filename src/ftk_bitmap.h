@@ -48,9 +48,9 @@ Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap,
 Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
 
-Ret ftk_bitmap_copy_from_data_argb(FtkBitmap* bitmap, 
+Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, 
 	void* data, size_t dw, size_t dh, FtkRect* rect);
-Ret ftk_bitmap_copy_to_data_argb(FtkBitmap* bitmap, FtkRect* rect, 
+Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
 
 Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, 
