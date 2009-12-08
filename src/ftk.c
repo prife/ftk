@@ -106,15 +106,22 @@ static void ftk_deinit(void)
 Ret ftk_init(int argc, char* argv[])
 {
 	int i = 0;
-	int disable_status_panel = 0;
 	FtkFont* font = NULL;
-	char filename[260] = {0};
+	const char* theme = NULL;
+	char filename[FTK_MAX_PATH] = {0};
+	int disable_status_panel = 0;
 
 	for(i = 0; i < argc && argv != NULL && argv[i] != NULL; i++)
 	{
 		if(strcmp(argv[i], "--no-status-panel") == 0)
 		{
 			disable_status_panel = 1;
+			break;
+		}
+		else if(strncmp(argv[i], "--theme=", 8) == 0)
+		{
+			theme = argv[i]+8;
+			ftk_logd("theme=%s\n", theme);
 			break;
 		}
 	}
@@ -155,7 +162,16 @@ Ret ftk_init(int argc, char* argv[])
 
 	ftk_backend_init(argc, argv);
 
-	ftk_set_theme(ftk_theme_create(1));
+	ftk_set_theme(ftk_theme_create(theme == NULL));
+	if(theme != NULL)
+	{
+		ftk_snprintf(filename, sizeof(filename)-1, DATA_DIR"/theme/%s/theme.xml", theme);
+		if(ftk_theme_parse_file(ftk_default_theme(), filename) != RET_OK)
+		{
+			ftk_snprintf(filename, sizeof(filename)-1, LOCAL_DATA_DIR"/theme/%s/theme.xml", theme);
+			ftk_theme_parse_file(ftk_default_theme(), filename);
+		}
+	}
 
 	if(!disable_status_panel)
 	{

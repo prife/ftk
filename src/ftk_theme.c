@@ -112,7 +112,6 @@ FtkTheme*  ftk_theme_create(int init_default)
 	{
 		size_t i = 0;
 		size_t j = 0;
-		char icon_path[FTK_MAX_PATH] = {0};
 
 		for(i = 0; i < FTK_WIDGET_TYPE_NR; i++)
 		{
@@ -135,9 +134,6 @@ FtkTheme*  ftk_theme_create(int init_default)
 		{
 			ftk_theme_init_default(thiz);
 		}
-
-		ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
-		thiz->icon_cache = ftk_icon_cache_create(NULL, icon_path);
 	}
 
 	return thiz;
@@ -231,8 +227,8 @@ static Ret  ftk_theme_parse_fg_color(FtkTheme* thiz, FtkWidgetType type, const c
 	TO_STATE(name[3]);
 	theme->fg[state] = ftk_parse_color(value);
 
-	ftk_logd("fg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
-		theme->fg[state].a, theme->fg[state].r, theme->fg[state].g, theme->fg[state].b);
+//	ftk_logd("fg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
+//		theme->fg[state].a, theme->fg[state].r, theme->fg[state].g, theme->fg[state].b);
 
 	return RET_OK;
 }
@@ -245,8 +241,8 @@ static Ret  ftk_theme_parse_bg_color(FtkTheme* thiz, FtkWidgetType type, const c
 	TO_STATE(name[3]);
 	theme->bg[state] = ftk_parse_color(value);
 	
-	ftk_logd("bg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
-		theme->bg[state].a, theme->bg[state].r, theme->bg[state].g, theme->bg[state].b);
+//	ftk_logd("bg type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
+//		theme->bg[state].a, theme->bg[state].r, theme->bg[state].g, theme->bg[state].b);
 
 	return RET_OK;
 }
@@ -259,8 +255,8 @@ static Ret  ftk_theme_parse_bd_color(FtkTheme* thiz, FtkWidgetType type, const c
 	TO_STATE(name[3]);
 	theme->border[state] = ftk_parse_color(value);
 	
-	ftk_logd("bd type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
-		theme->border[state].a, theme->border[state].r, theme->border[state].g, theme->border[state].b);
+//	ftk_logd("bd type=%d state=%d (%02x %02x %2x %02x) \n", type, state, 
+//		theme->border[state].a, theme->border[state].r, theme->border[state].g, theme->border[state].b);
 
 	return RET_OK;
 }
@@ -273,7 +269,7 @@ static Ret  ftk_theme_parse_bg_image(FtkTheme* thiz, FtkWidgetType type, const c
 	TO_STATE(name[9]);
 	ftk_strncpy(theme->bg_image_name[state], value, sizeof(theme->bg_image_name[state]));
 
-	ftk_logd("bg_image type=%d state=%d name=%s \n", type, state, theme->bg_image_name[state]);
+//	ftk_logd("bg_image type=%d state=%d name=%s \n", type, state, theme->bg_image_name[state]);
 
 	return RET_OK;
 }
@@ -386,6 +382,7 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 {
 	FtkXmlParser*  parser = NULL;
 	FtkXmlBuilder* builder = NULL;
+	char icon_path[FTK_MAX_PATH] = {0};
 	return_val_if_fail(xml != NULL, RET_FAIL);
 
 	parser  = ftk_xml_parser_create();
@@ -401,6 +398,15 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 	}
 	ftk_xml_builder_destroy(builder);
 	ftk_xml_parser_destroy(parser);
+
+	if(thiz->icon_cache != NULL)
+	{
+		ftk_icon_cache_destroy(thiz->icon_cache);
+		thiz->icon_cache = NULL;
+	}
+
+	ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
+	thiz->icon_cache = ftk_icon_cache_create(NULL, icon_path);
 
 	return RET_OK;
 }
