@@ -111,6 +111,120 @@ void       ftk_bitmap_unref(FtkBitmap* thiz)
 	return;
 }
 
+/*=====================================================================*/
+Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, void* data, 
+	size_t dw, size_t dh, FtkRect* rect)
+{
+	int x  = 0;
+	int y  = 0;
+	int w  = 0;
+	int h  = 0;
+	int ox = 0;
+	int oy = 0;
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	unsigned char* src = data;
+	unsigned char* psrc = NULL;
+	FtkColor* dst = ftk_bitmap_bits(bitmap);
+
+	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);
+	
+	x = rect != NULL ? rect->x : 0;
+	y = rect != NULL ? rect->y : 0;
+	x = x < 0 ? 0 : x;
+	y = y < 0 ? 0 : y;
+	return_val_if_fail(x < dw && y < dh, RET_FAIL);
+
+	w = rect != NULL ? rect->width  : bw;
+	h = rect != NULL ? rect->height : bh;
+
+	/*width/height must less than bitmap's width/height*/
+	w = w < bw ? w : bw;
+	h = w < bh ? h : bh;
+	
+	/*width/height must less than data's width/height*/
+	w = (x + w) < dw ? w : dw - x;
+	h = (y + h) < dh ? h : dh - y;
+
+	src += 3*(y * dw + x);
+	for(oy = 0; oy < h; oy++)
+	{
+		psrc = src;
+		for(ox = 0; ox < w; ox++, psrc+=3)
+		{
+			dst[ox].a = 0xff;
+			dst[ox].b = psrc[0];
+			dst[ox].g = psrc[1];
+			dst[ox].r = psrc[2];
+		}
+		src += 3*dw; 
+		dst += bw;
+	}
+
+	return RET_OK;
+}
+
+Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
+{
+	int i = 0;
+	int j = 0;
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	int x = rect != NULL ? rect->x : 0;
+	int y = rect != NULL ? rect->y : 0;
+	int w = rect != NULL ? rect->width : bw;
+	int h = rect != NULL ? rect->height : bh;
+	unsigned char* dst = data;
+	unsigned char* pdst = NULL;
+	FtkColor* src = ftk_bitmap_bits(bitmap);
+
+	return_val_if_fail(ox < dw, RET_FAIL);
+	return_val_if_fail(oy < dh, RET_FAIL);
+	return_val_if_fail(x < bw, RET_FAIL);
+	return_val_if_fail(y < bh, RET_FAIL);
+	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
+
+	x = x < 0 ? 0 : x;
+	y = y < 0 ? 0 : y;
+	
+	w = (x + w) < bw ? w : bw - x;
+	h = (y + h) < bh ? h : bh - y;
+	w = (ox + w) < dw ? w : dw - ox;
+	h = (oy + h) < dh ? h : dh - oy;
+	
+	w += x;
+	h += y;
+
+	src += y * bw;
+	dst += 3*(oy * dw);
+
+	for(i = y; i < h; i++)
+	{
+		pdst = dst + 3*ox;
+		for(j = x; j < w; j++, pdst+=3)
+		{
+			FtkColor* psrc = src+j;
+			if(psrc->a == 0xff)
+			{
+				pdst[0] = psrc->b;
+				pdst[1] = psrc->g;
+				pdst[2] = psrc->r;
+			}
+			else
+			{
+				FTK_ALPHA_1(psrc->b, pdst[0], psrc->a);
+				FTK_ALPHA_1(psrc->g, pdst[1], psrc->a);
+				FTK_ALPHA_1(psrc->r, pdst[2], psrc->a);
+			}
+		}
+		src += bw;
+		dst += 3*dw;
+	}
+
+	return RET_OK;
+}
+
+/*=====================================================================*/
 Ret ftk_bitmap_copy_from_data_argb(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {

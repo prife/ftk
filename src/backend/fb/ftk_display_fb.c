@@ -52,7 +52,7 @@ struct FB
 
 #define fb_width(fb) ((fb)->vi.xres)
 #define fb_height(fb) ((fb)->vi.yres)
-#define fb_size(fb) ((fb)->vi.xres * (fb)->vi.yres * 2)
+#define fb_size(fb) ((fb)->vi.xres * (fb)->vi.yres * fb->vi.bits_per_pixel/8)
 
 static int fb_open(struct FB *fb, const char* fbfilename)
 {
@@ -77,6 +77,8 @@ static int fb_open(struct FB *fb, const char* fbfilename)
 		fb->vi.blue.offset, fb->vi.blue.length);
 
 	fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, MAP_SHARED, fb->fd, 0);
+	memset(fb->bits, 0xff, fb_size(fb));
+
 	if (fb->bits == MAP_FAILED)
 		goto fail;
 
@@ -109,6 +111,8 @@ static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	int display_width  = fb_width(&priv->fb);
 	int display_height = fb_height(&priv->fb);
 
+	ftk_logd("%s: ox=%d oy=%d (%d %d %d %d)\n", __func__, xoffset, yoffset, 
+		rect->x, rect->y, rect->width, rect->height);
 	return priv->copy_to_data(bitmap, rect, 
 		priv->fb.bits, xoffset, yoffset, display_width, display_height); 
 }
@@ -177,6 +181,11 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			{
 				priv->copy_to_data   = ftk_bitmap_copy_to_data_rgb565;
 				priv->copy_from_data = ftk_bitmap_copy_from_data_rgb565;
+			}
+			else if(priv->fb.vi.bits_per_pixel == 24)
+			{
+				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgr24;
+				priv->copy_from_data = ftk_bitmap_copy_from_data_bgr24;
 			}
 			else if(priv->fb.vi.bits_per_pixel == 32)
 			{
