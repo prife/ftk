@@ -126,8 +126,8 @@ static void ftk_status_panel_destroy(FtkWidget* thiz)
 	if(priv != NULL)
 	{
 		FtkWidgetDestroy parent_destroy = priv->parent_destroy;
-		FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
 		parent_destroy(thiz);
+		FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
 	}
 
 	return;

@@ -49,6 +49,7 @@ typedef struct _PrivInfo
 	FtkWidget*   focus_widget;
 	FtkWidget*   windows[FTK_MAX_WINDOWS];
 
+	FtkWidget* top_window;
 	void* global_listeners_ctx[FTK_MAX_GLOBAL_LISTENER];
 	FtkListener global_listeners[FTK_MAX_GLOBAL_LISTENER];
 }PrivInfo;
@@ -101,6 +102,20 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 
 	event.widget = win;
 	ftk_wnd_manager_queue_event(thiz, &event);
+	
+	if(priv->top_window != NULL)
+	{
+		event.type = FTK_EVT_UNMAP;
+		event.widget = priv->top_window;
+		ftk_wnd_manager_dispatch_event(thiz, &event);
+	}
+	priv->top_window = win;
+	if(priv->top_window != NULL)
+	{
+		event.type = FTK_EVT_MAP;
+		event.widget = priv->top_window;
+		ftk_wnd_manager_dispatch_event(thiz, &event);
+	}
 
 	return RET_OK;
 }
@@ -124,6 +139,8 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 	int y = 0;
 	int w = 0;
 	int h = 0;
+	FtkEvent event = {0};
+	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 
 	/*XXX: we assume panel is added as first window*/
@@ -153,6 +170,9 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		}
 		case FTK_STATUS_PANEL:
 		{
+			event.type = FTK_EVT_MAP;
+			event.widget = window;
+			ftk_wnd_manager_dispatch_event(thiz, &event);
 			w = ftk_display_width(ftk_default_display());
 			h = FTK_STATUS_PANEL_HEIGHT;
 
@@ -160,6 +180,9 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		}
 		case FTK_MENU_PANEL:
 		{
+			event.type = FTK_EVT_MAP;
+			event.widget = window;
+			ftk_wnd_manager_dispatch_event(thiz, &event);
 			w = ftk_display_width(ftk_default_display());
 			h = ftk_widget_height(window);
 			x = 0;
@@ -247,8 +270,8 @@ static Ret  ftk_wnd_manager_default_remove(FtkWndManager* thiz, FtkWidget* windo
 
 	if(!priv->dieing)
 	{
-		ftk_wnd_manager_update(thiz);
 		ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+		ftk_wnd_manager_update(thiz);
 	}
 
 	return RET_OK;
@@ -434,13 +457,17 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	{
 		case FTK_EVT_WND_DESTROY:
 		{
+			if(priv->top_window == event->widget)
+			{
+				priv->top_window = NULL;
+			}
 			ftk_wnd_manager_default_remove(thiz, event->widget);	
 			return RET_OK;
 		}
 		case FTK_EVT_HIDE:
 		{
-			ftk_wnd_manager_update(thiz);
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+			ftk_wnd_manager_update(thiz);
 			return RET_OK;
 		}
 		case FTK_EVT_SHOW:

@@ -83,8 +83,8 @@ static void ftk_app_window_destroy(FtkWidget* thiz)
 {
 	DECL_PRIV1(thiz, priv);
 	FtkWidgetDestroy parent_destroy = priv->parent_destroy;
-	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
 	parent_destroy(thiz);
+	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
 
 	return;
 }

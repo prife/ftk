@@ -42,6 +42,8 @@ typedef struct _PrivInfo
 	FtkDisplay* display;
 	FtkWidget*  focus_widget;
 	FtkWidget*  grab_widget;
+
+	int mapped;
 	int fullscreen;
 	int update_disabled;
 	
@@ -284,6 +286,7 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
+	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
@@ -308,6 +311,18 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			event.type = FTK_EVT_HIDE;
 			event.widget = thiz;
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
+			break;
+		}
+		case FTK_EVT_MAP:
+		{
+			priv->mapped = 1;
+			ftk_logd("%s: MAP %s\n", __func__, ftk_widget_get_text(thiz));
+			break;
+		}
+		case FTK_EVT_UNMAP:
+		{
+			ftk_logd("%s: UNMAP %s\n", __func__, ftk_widget_get_text(thiz));
+			priv->mapped = 0;
 			break;
 		}
 		case FTK_EVT_MOUSE_DOWN:
@@ -411,7 +426,11 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
-	if(priv->update_disabled || !ftk_widget_is_visible(thiz))
+	if(!priv->mapped)
+	{
+		ftk_logd("%s: %s is not mapped\n", __func__, ftk_widget_get_text(thiz));
+	}
+	if(priv->update_disabled || !ftk_widget_is_visible(thiz) || !priv->mapped)
 	{
 		return RET_FAIL;
 	}
