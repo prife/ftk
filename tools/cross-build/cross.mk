@@ -68,18 +68,18 @@ freetype_clean:
 freetype_source_clean:
 	rm -rf freetype-2.3.9
 
-packages/DirectFB-1.4.1.tar.gz:
-	cd packages && wget http://www.directfb.org/downloads/Core/DirectFB-1.4/DirectFB-1.4.1.tar.gz
-DirectFB-1.4.1: packages/DirectFB-1.4.1.tar.gz
-	tar xf packages/DirectFB-1.4.1.tar.gz
-directfb: DirectFB-1.4.1
-	mkdir DirectFB-1.4.1/$(ARCH); cd DirectFB-1.4.1/$(ARCH) && \
+packages/DirectFB-1.2.9.tar.gz:
+	cd packages && wget http://www.directfb.org/downloads/Core/DirectFB-1.2/DirectFB-1.2.9.tar.gz
+DirectFB-1.2.9: packages/DirectFB-1.2.9.tar.gz
+	tar xf packages/DirectFB-1.2.9.tar.gz
+directfb: DirectFB-1.2.9
+	mkdir DirectFB-1.2.9/$(ARCH); cd DirectFB-1.2.9/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique &&\
 	make clean; make && make install
 directfb_clean:
-	rm -rf DirectFB-1.4.1/$(ARCH)
+	rm -rf DirectFB-1.2.9/$(ARCH)
 directfb_source_clean:
-	rm -rf DirectFB-1.4.1
+	rm -rf DirectFB-1.2.9
 
 libftk:
 	cd ftk* && . ./autogen.sh;
