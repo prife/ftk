@@ -1,4 +1,4 @@
-1.down android and make sdk.
+1.download android source and make sdk.
 
 2.edit ftk/src/Android-build.sh, set the ANDROID_ROOT to android source dir.
 
