@@ -59,21 +59,7 @@ static int fb_open(struct FB *fb, const char* fbfilename)
 	fb->fd = open(fbfilename, O_RDWR);
 	if (fb->fd < 0)
 	{
-		ftk_logd("open framebuffer %s failed.\n", fbfilename);
-		if((fbfilename = getenv("FTK_FB_NAME")) != NULL)
-		{
-			fb->fd = open(fbfilename, O_RDWR);
-		}
-		
-		if (fb->fd < 0)
-		{
-			if(fbfilename != NULL)
-			{
-				ftk_logd("open framebuffer %s failed.\n", fbfilename);
-			}
-
-			return -1;
-		}
+		return -1;
 	}
 	
 	if (ioctl(fb->fd, FBIOGET_FSCREENINFO, &fb->fi) < 0)

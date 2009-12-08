@@ -46,7 +46,7 @@ static Ret ftk_init_input(void)
 Ret ftk_backend_init(int argc, char* argv[])
 {
 	ftk_init_input();
-	ftk_set_display(ftk_display_fb_create(FTK_FB_NAME));
+	ftk_set_display(ftk_display_fb_create(getenv("FTK_FB_NAME") ? getenv("FTK_FB_NAME") : FTK_FB_NAME));
 	if(ftk_default_display() == NULL)
 	{
 		ftk_loge("open display failed.\n");
