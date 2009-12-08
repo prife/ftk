@@ -1,4 +1,5 @@
 #include "ftk.h"
+#include <time.h>
 #include <dlfcn.h>
 #include "ftk_xul.h"
 #include "app_info.h"
@@ -155,12 +156,44 @@ static const char* s_default_path[FTK_ICON_PATH_NR]=
 	NULL
 };
 
+static Ret update_time(void* ctx)
+{
+	time_t now = time(0);
+	FtkWidget* win = ctx;
+	FtkWidget* image = NULL;
+	FtkBitmap* bitmap = NULL;
+	char filename[FTK_MAX_PATH] = {0};
+	struct tm* t = localtime(&now);
+
+	image = ftk_widget_lookup(win, 1);
+	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour/10);
+	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	ftk_image_set_image(image, bitmap);
+	
+	image = ftk_widget_lookup(win, 2);
+	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour%10);
+	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	ftk_image_set_image(image, bitmap);
+
+	image = ftk_widget_lookup(win, 4);
+	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min/10);
+	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	ftk_image_set_image(image, bitmap);
+	
+	image = ftk_widget_lookup(win, 5);
+	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min%10);
+	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	ftk_image_set_image(image, bitmap);
+
+	return RET_OK;
+}
+
 int main(int argc, char* argv[])
 {
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 	char path[FTK_MAX_PATH] = {0};
-	
+	FtkSource* timer = NULL;
 	ftk_init(argc, argv);
 	
 	if(argv[1] != NULL && strncmp(argv[1], "--hor", 5) == 0)
@@ -184,6 +217,9 @@ int main(int argc, char* argv[])
 	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
 	ftk_widget_show_all(win, 1);
 
+	update_time(win);
+	timer = ftk_source_timer_create(60000, update_time, win);
+	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	ftk_run();
 
 	ftk_icon_cache_destroy(g_icon_cache);
