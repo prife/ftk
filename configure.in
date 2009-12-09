@@ -124,5 +124,6 @@ AC_CONFIG_FILES([ftk.pc
                 apps/shell/data/Makefile
                 tools/Makefile
                 tools/cross-build/Makefile
+                tools/fontextract/Makefile
                 ])
 AC_OUTPUT

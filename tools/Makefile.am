@@ -1,1 +1,1 @@
-SUBDIRS=cross-build
+SUBDIRS=cross-build fontextract
