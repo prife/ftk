@@ -57,7 +57,7 @@ static Ret ftk_display_dfb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	IDirectFBSurface* surface = priv->surface;
 	
 	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
-	ret = ftk_bitmap_copy_to_data_argb(bitmap, rect, data, xoffset, yoffset, display_width, display_height);
+	ret = ftk_bitmap_copy_to_data_bgra32(bitmap, rect, data, xoffset, yoffset, display_width, display_height);
 	surface->Unlock(surface);
 	surface->Flip(surface, NULL, 0);
 
@@ -103,7 +103,7 @@ static Ret ftk_display_dfb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	rect.y = y;
 	rect.width = bw;
 	rect.height = bh;
-	ftk_bitmap_copy_from_data_argb(bitmap, data, w, h, &rect);
+	ftk_bitmap_copy_from_data_bgra32(bitmap, data, w, h, &rect);
 
 	surface->Unlock(surface);
 

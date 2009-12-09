@@ -1,45 +1,46 @@
 themedir=$(datadir)/ftk/base/theme/default
 theme_DATA=\
-	$(srcdir)/btn_check_off_disable_focused.png\
-	$(srcdir)/btn_check_off_disable.png\
-	$(srcdir)/btn_check_off.png\
-	$(srcdir)/btn_check_off_pressed.png\
-	$(srcdir)/btn_check_off_selected.png\
-	$(srcdir)/btn_check_on_disable_focused.png\
-	$(srcdir)/btn_check_on_disable.png\
-	$(srcdir)/btn_check_on.png\
-	$(srcdir)/btn_check_on_pressed.png\
-	$(srcdir)/btn_check_on_selected.png\
-	$(srcdir)/btn_default_normal_disable_focused.png\
-	$(srcdir)/btn_default_normal_disable.png\
-	$(srcdir)/btn_default_normal.png\
-	$(srcdir)/btn_default_pressed.png\
-	$(srcdir)/btn_default_selected.png\
-	$(srcdir)/btn_radio_label_background.png\
-	$(srcdir)/btn_radio_off.png\
-	$(srcdir)/btn_radio_off_pressed.png\
-	$(srcdir)/btn_radio_off_selected.png\
-	$(srcdir)/btn_radio_on.png\
-	$(srcdir)/btn_radio_on_pressed.png\
-	$(srcdir)/btn_radio_on_selected.png\
-	$(srcdir)/close-32.png\
-	$(srcdir)/close-pressed-32.png\
-	$(srcdir)/cursor.png\
-	$(srcdir)/flag-32.png\
-	$(srcdir)/highlight_disabled.png\
-	$(srcdir)/highlight_pressed.png\
-	$(srcdir)/highlight_selected.png\
-	$(srcdir)/list_selector_background_disabled.png\
-	$(srcdir)/list_selector_background_focus.png\
-	$(srcdir)/list_selector_background_longpress.png\
-	$(srcdir)/list_selector_background_pressed.png\
-	$(srcdir)/menuitem_background_focus.png\
-	$(srcdir)/menuitem_background_pressed.png\
-	$(srcdir)/scrollbar_handle_accelerated_anim.png\
-	$(srcdir)/scrollbar_handle_horizontal.png\
-	$(srcdir)/scrollbar_handle_vertical.png\
-	$(srcdir)/status-bg.png\
-	$(srcdir)/wait_box.png \
+	btn_check_off_disable_focused.png\
+	btn_check_off_disable.png\
+	btn_check_off.png\
+	btn_check_off_pressed.png\
+	btn_check_off_selected.png\
+	btn_check_on_disable_focused.png\
+	btn_check_on_disable.png\
+	btn_check_on.png\
+	btn_check_on_pressed.png\
+	btn_check_on_selected.png\
+	btn_default_normal_disable_focused.png\
+	btn_default_normal_disable.png\
+	btn_default_normal.png\
+	btn_default_pressed.png\
+	btn_default_selected.png\
+	btn_radio_label_background.png\
+	btn_radio_off.png\
+	btn_radio_off_pressed.png\
+	btn_radio_off_selected.png\
+	btn_radio_on.png\
+	btn_radio_on_pressed.png\
+	btn_radio_on_selected.png\
+	close-32.png\
+	close-pressed-32.png\
+	cursor.png\
+	flag-32.png\
+	highlight_disabled.png\
+	highlight_pressed.png\
+	highlight_selected.png\
+	list_selector_background_disabled.png\
+	list_selector_background_focus.png\
+	list_selector_background_longpress.png\
+	list_selector_background_pressed.png\
+	menuitem_background_focus.png\
+	menuitem_background_pressed.png\
+	scrollbar_handle_accelerated_anim.png\
+	scrollbar_handle_horizontal.png\
+	scrollbar_handle_vertical.png\
+	status-bg.png\
+	wait_box.png \
+	icon_view_bg.png\
 	theme.xml
 
 EXTRA_DIST=$(theme_DATA)

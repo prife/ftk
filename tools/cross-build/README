@@ -1,4 +1,4 @@
-1. copy cross.mk and env.sh into the parent directory of ftk.
+1. copy cross.mk and env.sh into the PARENT directory of ftk.
 2. edit env.sh to set some variables.
 3. source env.sh
 4. make -f cross.mk
