@@ -1,4 +1,9 @@
 1.download android source and make sdk.
+  mkdir android-eclair
+  cd android-eclair/
+  repo init -u git://android.git.kernel.org/platform/manifest.git -b eclair
+  repo sync
+  make sdk
 
 2.edit ftk/src/Android-build.sh, set the ANDROID_ROOT to android source dir.
 
