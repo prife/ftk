@@ -32,10 +32,12 @@ LOCAL_SRC_FILES := \
 	backend/fb/ftk_display_fb.c \
 	backend/fb/ftk_backend_fb.c \
 	os/linux/ftk_mmap_linux.c \
-	os/linux/ftk_linux.c
+	os/linux/ftk_linux.c \
+	ftk_icon_view.c
 
 LOCAL_CFLAGS += -DHAS_PNG -DHAS_JPEG -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"/data/ftk/base\"" \
 	-DFTK_FB_NAME="\"/dev/graphics/fb0\"" -DUSE_LINUX_NATIVE -DLOCAL_DATA_DIR="\"./ftk/base\""\
+	-DFTK_DATA_ROOT="\"/data/ftk\"" -DTESTDATA_DIR="\"/data/ftk/testdata\"" \
 	-I$(LOCAL_PATH)/os/linux -I$(LOCAL_PATH)/backend/fb -DLINUX -DFTK_SUPPORT_C99
 
 LOCAL_C_INCLUDES := external/jpeg external/libpng external/zlib 
