@@ -4,12 +4,46 @@
   repo init -u git://android.git.kernel.org/platform/manifest.git -b eclair
   repo sync
   make sdk
+  cd ..
+  unzip android-eclair/out/host/linux-x86/sdk/android-sdk_eng.lixianjing_linux-x86.zip
+  mv android-sdk_eng.lixianjing_linux-x86 ftk_emu
+
+recompile it again:
+  cd -;make
+
+2.unpack platforms/android-1.5/images/ramdisk.img in SDK, edit init.rc to forbit system server.
+  cd ftk_emu/platforms/android-Eclair/images/
+
+unpack ramdisk:
+  mv ramdisk.img ramdisk.img.gz;
+  gunzip ramdisk.img.gz;
+  mkdir initrd;
+  cd initrd;
+  cpio -i <../ramdisk.img
+
+edit init.rc, comment this following lines:
+#service zygote /system/bin/app_process -Xzygote /system/bin --zygote
+--start-system-server
+#    socket zygote stream 666
+#    onrestart write /sys/android_power/request_state wake
+#    onrestart write /sys/power/state on
+#    onrestart restart media
+
+repack ramdisk.img
+  find . | cpio -c -o > ../ramdisk
+  cd ..
+  gzip ramdisk
+  mv ramdisk.gz ramdisk.img
 
 2.edit ftk/src/Android-build.sh, set the ANDROID_ROOT to android source dir.
+the run Android-build.sh
 
-3.run Android-build.sh
+  ./Android-build.sh
 
-4.unpack platforms/android-1.5/images/ramdisk.img in SDK, edit init.rc to forbit system server.
+2.create a virtual machine
+  ./ftk_emu/tools/android create avd -t 1 -n ftk
+  ./ftk_emu/tools/emulator -avd ftk
+
 
 5.create and run android emulator.
 
