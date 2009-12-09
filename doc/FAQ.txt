@@ -1,0 +1,7 @@
+Q: If my framebuffer device is not /dev/fb0, how can I choose another one?
+
+A: You set the evn variable FTK_FB_NAME to the device name. eg:
+   export FTK_FB_NAME=/dev/graphic/fb0
+
+
+

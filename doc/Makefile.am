@@ -1,1 +1,1 @@
-EXTRA_DIST=build.txt  Run-FTK-On-Android-Emulator.txt  xul.txt
+EXTRA_DIST=build.txt  Run-FTK-On-Android-Emulator.txt  xul.txt FAQ.txt theme.txt 
