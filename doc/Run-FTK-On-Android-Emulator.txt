@@ -8,10 +8,11 @@
   unzip android-eclair/out/host/linux-x86/sdk/android-sdk_eng.lixianjing_linux-x86.zip
   mv android-sdk_eng.lixianjing_linux-x86 ftk_emu
 
-recompile it again:
+recompile it:
   cd -;make
 
 2.unpack platforms/android-1.5/images/ramdisk.img in SDK, edit init.rc to forbit system server.
+  
   cd ftk_emu/platforms/android-Eclair/images/
 
 unpack ramdisk:
@@ -35,21 +36,18 @@ repack ramdisk.img
   gzip ramdisk
   mv ramdisk.gz ramdisk.img
 
-2.edit ftk/src/Android-build.sh, set the ANDROID_ROOT to android source dir.
+3.edit ftk/src/Android-build.sh, set the ANDROID_ROOT to android source dir.
 the run Android-build.sh
 
   ./Android-build.sh
 
-2.create a virtual machine
+4.create a virtual machine
   ./ftk_emu/tools/android create avd -t 1 -n ftk
   ./ftk_emu/tools/emulator -avd ftk
 
+5.upload demo* to /data
 
-5.create and run android emulator.
+6.update data/icons/testdata to /data/ftk
 
-6.upload demo* to /data
-
-7.update data/icons/testdata to /data/ftk
-
-8.run the demos.
+7.run the demos.
 
