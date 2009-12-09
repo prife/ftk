@@ -75,11 +75,20 @@ static int fb_open(struct FB *fb, const char* fbfilename)
 		fb->vi.green.offset, fb->vi.green.length,
 		fb->vi.blue.offset, fb->vi.blue.length);
 
+#ifdef FTK_FB_NOMMAP
+	//uclinux doesn't support MAP_SHARED or MAP_PRIVATE with PROT_WRITE, so no mmap at all is simpler
+	fb->bits = fb->fi.smem_start;
+#else
 	fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, MAP_SHARED, fb->fd, 0);
-	memset(fb->bits, 0xff, fb_size(fb));
+#endif
 
 	if (fb->bits == MAP_FAILED)
+	{
+		ftk_logd("map framebuffer failed.\n");
 		goto fail;
+	}
+
+	memset(fb->bits, 0xff, fb_size(fb));
 
 	return 0;
 fail:
