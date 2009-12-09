@@ -62,7 +62,7 @@ AUTOMAKE = ${SHELL} /android/lab/gui/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x240\""
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++

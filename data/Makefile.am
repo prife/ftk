@@ -8,4 +8,4 @@ if FONT_ENGINE_DEFAULT
 ftkdata_DATA=$(srcdir)/unicode.fnt
 endif
 
-EXTRA_DIST=$(ftkdata_DATA)
+EXTRA_DIST=font.ttf unicode.fnt
