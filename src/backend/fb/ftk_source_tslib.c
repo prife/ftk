@@ -68,6 +68,8 @@ static Ret ftk_source_tslib_dispatch(FtkSource* thiz)
 	priv->event.type = FTK_EVT_NOP;
 	priv->event.u.mouse.x = sample.x;
 	priv->event.u.mouse.y = sample.y;
+	ftk_logd("%s: sample.pressure=%d x=%d y=%d\n", 
+		__func__, sample.pressure, sample.x, sample.y);
 	if(sample.pressure > 0)
 	{
 		if(priv->pressed)
