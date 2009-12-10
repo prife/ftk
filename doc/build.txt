@@ -23,7 +23,8 @@ it will create a emulation window with 320 pixels width and 480 pixels height.
 
 --with-backend=linux-x11:320x480
 
-linux-native With this option, FTK will run on linux framebuffer.
+linux-native With this option, FTK will run on linux framebuffer, this is
+default value.
 
 linux-vlcd   With this option, FTK will run on virtual framebuffer. I wrote a
 emulator for FTK base on memfb and uinput, with a vnc server and vncviever,

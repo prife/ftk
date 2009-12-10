@@ -46,8 +46,25 @@ the run Android-build.sh
   ./ftk_emu/tools/emulator -avd ftk
 
 5.upload demo* to /data
+  enter android-eclair directory, then:
+  for f in out/target/product/generic/system/bin/demo_*;do adb push $f
+/data;done
 
-6.update data/icons/testdata to /data/ftk
+6.update data/theme/testdata to /data/ftk
+  entry ftk directory, then
+  adb shell mkdir /data/ftk 
+  adb shell mkdir /data/ftk/base
+  adb shell mkdir /data/ftk/base/data
+  adb shell mkdir /data/ftk/base/theme
+  adb shell mkdir /data/ftk/base/theme/default
+  for f in theme/default/*;do adb push $f /data/ftk/base/theme/default;done
+  for f in data/*;do adb push $f /data/ftk/base/data;done
+  for f in src/demos/*.xul;do adb push $f /data/ftk/;done
+  ...
 
 7.run the demos.
+  adb shell
+  cd /data
+  chmod 775 demo*
+  ./demo_button
 
