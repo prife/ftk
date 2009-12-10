@@ -50,7 +50,7 @@ the run Android-build.sh
   for f in out/target/product/generic/system/bin/demo_*;do adb push $f
 /data;done
 
-6.update data/theme/testdata to /data/ftk
+6.upload data/theme/testdata to /data/ftk
   entry ftk directory, then
   adb shell mkdir /data/ftk 
   adb shell mkdir /data/ftk/base
