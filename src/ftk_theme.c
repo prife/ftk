@@ -378,6 +378,14 @@ static FtkXmlBuilder* ftk_theme_builder_create(void)
 	return thiz;
 }
 
+static const char* s_default_path[FTK_ICON_PATH_NR]=
+{
+	DATA_DIR,
+	FTK_DATA_ROOT,
+	LOCAL_DATA_DIR,
+	TESTDATA_DIR
+};
+
 Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 {
 	FtkXmlParser*  parser = NULL;
@@ -406,7 +414,7 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 	}
 
 	ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
-	thiz->icon_cache = ftk_icon_cache_create(NULL, icon_path);
+	thiz->icon_cache = ftk_icon_cache_create(s_default_path, icon_path);
 
 	return RET_OK;
 }
