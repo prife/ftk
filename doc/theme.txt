@@ -21,7 +21,7 @@ bg_image: means background images.
 normal:  when the widget is under normal state.
 focused: when the widget is focused.
 active:  when the widget is active, generally the mouse/pen is pressed on the widget(not all widget has active state).
-disable: when the widget is insentive.
+disable: when the widget is insensitive.
 
 the color format is: AARRGGBB, for example: ff9d9e9a means a=0xff r=0x9d g=0x9e b=0x9a
 
