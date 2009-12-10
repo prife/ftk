@@ -1,7 +1,10 @@
-Q: If my framebuffer device is not /dev/fb0, how can I choose another one?
+Q: If my framebuffer device is not /dev/fb0, how can I choose different one?
 
-A: You set the evn variable FTK_FB_NAME to the device name. eg:
+A: You should set the env variable FTK_FB_NAME to the device name. eg:
    export FTK_FB_NAME=/dev/graphic/fb0
 
+Q: If my touchscreen device file is not /dev/input/event0, how can I choose
+different one?
 
-
+A: You should set the env variable FTK_TSLIB_FILE to the device name. eg:
+   export FTK_TSLIB_FILE=/dev/jz-ts
