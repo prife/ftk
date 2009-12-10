@@ -8,3 +8,11 @@ different one?
 
 A: You should set the env variable FTK_TSLIB_FILE to the device name. eg:
    export FTK_TSLIB_FILE=/dev/jz-ts
+
+Q: I use uclinux, mmap doesn't work well, what can I do?
+
+A: Add the following line to env.sh, and rebuild it.
+   export CFLAGS=-DFTK_FB_NOMMAP
+ 
+   uclinux doesn't support MAP_SHARED or MAP_PRIVATE with PROT_WRITE, we use
+   smem_start instead.
