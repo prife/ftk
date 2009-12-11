@@ -2,7 +2,23 @@
 
 Ret on_event(void* user_data, FtkEvent* event)
 {
-	printf("%s: %d %d\n", __func__, event->type, event->u.key.code);
+	switch(event->type)
+	{
+		case FTK_EVT_MOUSE_DOWN:
+		case FTK_EVT_MOUSE_UP:
+		case FTK_EVT_MOUSE_MOVE:
+		{
+			printf("%s: %d (%d %d)\n", __func__, event->type, 
+				event->u.mouse.x, event->u.mouse.y);
+			break;
+		}
+		case FTK_EVT_KEY_DOWN:
+		case FTK_EVT_KEY_UP:
+		{
+			printf("%s: %d %d\n", __func__, event->type, event->u.key.code);
+		}
+		default:break;
+	}
 	return RET_OK;
 }
 
@@ -15,7 +31,7 @@ int main(int argc, char* argv[])
 	assert(ftk_source_get_fd(thiz) > 0);
 	assert(ftk_source_check(thiz) < 0);
 
-	for(i = 0; i < 100; i++)
+	for(i = 0; i < 1000; i++)
 	{
 		ftk_source_dispatch(thiz);
 	}

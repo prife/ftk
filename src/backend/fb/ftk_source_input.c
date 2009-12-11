@@ -31,6 +31,7 @@
 
 #include "ftk_log.h"
 #include "ftk_key.h"
+#include "ftk_display.h"
 #include <linux/input.h>
 #include "ftk_source_input.h"
 
@@ -171,7 +172,6 @@ static Ret ftk_source_input_dispatch(FtkSource* thiz)
 			{
 				priv->event.type = ievent.value ? FTK_EVT_KEY_DOWN : FTK_EVT_KEY_UP;
 				priv->event.u.key.code = ftk_key_map(thiz, ievent.code);
-				ftk_logd("key.code=%d %c\n", priv->event.u.key.code, (char)priv->event.u.key.code);
 				if(priv->on_event != NULL && priv->event.type != FTK_EVT_NOP)
 				{
 					priv->on_event(priv->user_data, &priv->event);
@@ -201,6 +201,7 @@ static Ret ftk_source_input_dispatch(FtkSource* thiz)
 			{
 				priv->event.type = FTK_EVT_MOUSE_MOVE;
 			}
+
 			break;
 		}
 		case EV_REL:
@@ -235,9 +236,16 @@ static Ret ftk_source_input_dispatch(FtkSource* thiz)
 				case FTK_EVT_MOUSE_UP:
 				case FTK_EVT_MOUSE_MOVE:
 				{
+					int max_x = ftk_display_width(ftk_default_display());
+					int max_y = ftk_display_height(ftk_default_display());
+
+					priv->x = priv->x > 0 ? priv->x : 0;
+					priv->y = priv->y > 0 ? priv->y : 0;
+					priv->x = priv->x < max_x ? priv->x : max_x;
+					priv->y = priv->y < max_y ? priv->y : max_y;
+
 					priv->event.u.mouse.x = priv->x;
 					priv->event.u.mouse.y = priv->y;
-
 					break;
 				}
 				default:break;
