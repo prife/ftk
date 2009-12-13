@@ -97,6 +97,12 @@ static void ftk_deinit(void)
 		ftk_set_theme(NULL);
 	}
 
+	if(ftk_shared_canvas() != NULL)
+	{
+		ftk_canvas_destroy(ftk_shared_canvas());
+		ftk_set_shared_canvas(NULL);
+	}
+
 	ftk_platform_deinit();
 
 	ftk_logd("%s: ftk exit.\n", __func__);
@@ -172,7 +178,15 @@ Ret ftk_init(int argc, char* argv[])
 			ftk_theme_parse_file(ftk_default_theme(), filename);
 		}
 	}
+#ifdef FTK_SHARED_CANVAS
+{
+	FtkColor bg = {0};
+	FtkDisplay* display = ftk_default_display();
 
+	bg.a = 0xff;
+	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), bg));
+}
+#endif
 	if(!disable_status_panel)
 	{
 		ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
