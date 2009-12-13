@@ -217,7 +217,7 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	{
 		first_row_nr = nr/2;
 		second_row_nr = (nr+1)/2;
-		ftk_canvas_draw_hline(canvas, 0, FTK_MENU_ITEM_HEIGHT, screen_width);
+		ftk_canvas_draw_hline(canvas, x, y+FTK_MENU_ITEM_HEIGHT, screen_width);
 	}
 	else
 	{
@@ -229,7 +229,7 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 		w = screen_width/first_row_nr;
 		for(i = 1; i < first_row_nr; i++)
 		{
-			ftk_canvas_draw_vline(canvas, i*w, 0, FTK_MENU_ITEM_HEIGHT);
+			ftk_canvas_draw_vline(canvas, x+i*w, y, FTK_MENU_ITEM_HEIGHT);
 		}
 	}
 
@@ -238,7 +238,7 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 		w = screen_width/second_row_nr;
 		for(i = 1; i < second_row_nr; i++)
 		{
-			ftk_canvas_draw_vline(canvas, i*w, FTK_MENU_ITEM_HEIGHT, FTK_MENU_ITEM_HEIGHT);
+			ftk_canvas_draw_vline(canvas, x+i*w, y+FTK_MENU_ITEM_HEIGHT, FTK_MENU_ITEM_HEIGHT);
 		}
 	}
 
