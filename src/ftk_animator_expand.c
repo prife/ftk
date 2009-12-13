@@ -184,6 +184,8 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
 	FtkBitmap* bitmap = NULL;
+	int x = ftk_widget_left(priv->win);
+	int y = ftk_widget_top(priv->win);
 
 	if(ftk_animator_expand_calc_step(thiz) != RET_OK)
 	{
@@ -204,8 +206,10 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 	}
 
 	bitmap = ftk_canvas_bitmap(ftk_widget_canvas(priv->win));
-	ftk_canvas_draw_bitmap(priv->canvas, bitmap, 0, 0, priv->w, priv->h, priv->x, priv->y);
-
+#ifndef FTK_SHARED_CANVAS	
+	x = y = 0;
+#endif
+	ftk_canvas_draw_bitmap(priv->canvas, bitmap, x, y, priv->w, priv->h, priv->x, priv->y);
 	rect.x = priv->x;
 	rect.y = priv->y;
 	rect.width  = priv->w;
