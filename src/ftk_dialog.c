@@ -74,35 +74,35 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, &gc);
 	for(i = 0; i < FTK_DIALOG_TITLE_HEIGHT; i++)
 	{
-		ftk_canvas_draw_hline(canvas, 0, i, width);
+		ftk_canvas_draw_hline(canvas, x, y+i, width);
 	}
 	
 	for(i = 0; i < FTK_DIALOG_MARGIN; i++)
 	{
-		ftk_canvas_draw_hline(canvas, 0, height-i, width);
+		ftk_canvas_draw_hline(canvas, x, y+height-i, width);
 	}
 
 	h = height - FTK_DIALOG_TITLE_HEIGHT - FTK_DIALOG_MARGIN;
-	ftk_canvas_draw_vline(canvas, 0, FTK_DIALOG_TITLE_HEIGHT, h+1);
-	ftk_canvas_draw_vline(canvas, 1, FTK_DIALOG_TITLE_HEIGHT, h+1);
-	ftk_canvas_draw_vline(canvas, width-1, FTK_DIALOG_TITLE_HEIGHT, h+1);
-	ftk_canvas_draw_vline(canvas, width-2, FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, x, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, x+1, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, x+width-1, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
+	ftk_canvas_draw_vline(canvas, x+width-2, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
 	
-	ftk_canvas_get_pixel(canvas, 0, 0)->a = 0;
-	ftk_canvas_get_pixel(canvas, 1, 0)->a = 0;
-	ftk_canvas_get_pixel(canvas, 0, 1)->a = 0;
+	ftk_canvas_get_pixel(canvas, x, y)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+1, y)->a = 0;
+	ftk_canvas_get_pixel(canvas, x, y+1)->a = 0;
 	
-	ftk_canvas_get_pixel(canvas, width-1, 0)->a = 0;
-	ftk_canvas_get_pixel(canvas, width-2, 0)->a = 0;
-	ftk_canvas_get_pixel(canvas, width-1, 1)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+width-1, y)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+width-2, y)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+width-1, y+1)->a = 0;
 	
-	ftk_canvas_get_pixel(canvas, 0, height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, 1, height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, 0, height-2)->a = 0;
+	ftk_canvas_get_pixel(canvas, x, y+height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+1, y+height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, x, y+height-2)->a = 0;
 	
-	ftk_canvas_get_pixel(canvas, width-1, height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, width-2, height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, width-1, height-2)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+width-1, y+height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+width-2, y+height-1)->a = 0;
+	ftk_canvas_get_pixel(canvas, x+width-1, y+height-2)->a = 0;
 	
 	priv->parent_on_paint(thiz);
 
