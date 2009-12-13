@@ -196,9 +196,13 @@ Ret ftk_widget_invalidate(FtkWidget* thiz)
 	{
 		return RET_FAIL;
 	}
-
+#ifdef FTK_SHARED_CANVAS
+	rect.y = ftk_widget_top_abs(thiz);
+	rect.x = ftk_widget_left_abs(thiz);
+#else
 	rect.y = ftk_widget_top_in_window(thiz);
 	rect.x = ftk_widget_left_in_window(thiz);
+#endif
 	rect.width = ftk_widget_width(thiz);
 	rect.height = ftk_widget_height(thiz);
 
