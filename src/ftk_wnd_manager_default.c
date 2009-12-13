@@ -546,7 +546,7 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 
 		if(ftk_widget_is_visible(win))
 		{
-			ftk_widget_paint(win);
+			ftk_widget_invalidate(win);
 			if(ftk_window_is_fullscreen(win))
 			{
 				return RET_OK;
@@ -560,7 +560,7 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 		if((ftk_widget_type(win) == FTK_STATUS_PANEL || ftk_widget_type(win) == FTK_MENU_PANEL)
 			&& ftk_widget_is_visible(win))
 		{
-			ftk_widget_paint(win);
+			ftk_widget_invalidate(win);
 		}
 	}
 
