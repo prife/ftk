@@ -42,7 +42,7 @@
  * and ts_test works.
  */
 
-#define FTK_TSLIB_FILE "/dev/input/event0"
+#define FTK_TSLIB_FILE "/dev/ts"
 FtkSource* ftk_source_tslib_create(const char* filename, FtkOnEvent on_event, void* ctx);
 
 #endif/*FTK_SOURCE_TSLIB_H*/
