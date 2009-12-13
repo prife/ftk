@@ -130,21 +130,12 @@ void ftk_widget_ref_self(FtkWidget* thiz);
 void ftk_widget_unref_self(FtkWidget* thiz);
 Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);
 
-#ifdef FTK_SHARED_CANVAS
 #define FTK_BEGIN_PAINT(x, y, width, height, canvas) \
 	int x = ftk_widget_left_abs(thiz);\
 	int y = ftk_widget_top_abs(thiz);\
 	int width  = ftk_widget_width(thiz);\
 	int height = ftk_widget_height(thiz);\
 	FtkCanvas* canvas = ftk_widget_canvas(thiz);
-#else
-#define FTK_BEGIN_PAINT(x, y, width, height, canvas) \
-	int x = ftk_widget_left_abs(thiz);\
-	int y = ftk_widget_top_abs(thiz);\
-	int width  = ftk_widget_width(thiz);\
-	int height = ftk_widget_height(thiz);\
-	FtkCanvas* canvas = ftk_widget_canvas(thiz);
-#endif
 
 #define FTK_END_PAINT() \
 	return ftk_widget_update(thiz);

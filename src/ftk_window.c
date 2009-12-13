@@ -355,27 +355,7 @@ static Ret ftk_window_realize(FtkWidget* thiz)
 	int h = ftk_widget_height(thiz);
 	FtkGc* gc = ftk_widget_get_gc(thiz);	
 
-#ifndef FTK_SHARED_CANVAS
-	if(priv->canvas != NULL)
-	{
-		FtkBitmap* bitmap = ftk_canvas_bitmap(priv->canvas);
-		int canvas_w = ftk_bitmap_width(bitmap);
-		int canvas_h = ftk_bitmap_height(bitmap);
-
-		if(canvas_w != w || canvas_h != h)
-		{
-			ftk_canvas_destroy(priv->canvas);
-			priv->canvas = NULL;
-		}
-	}
-
-	if(priv->canvas == NULL)
-	{
-		priv->canvas = ftk_canvas_create(w, h, gc->bg);
-	}
-#else
 	priv->canvas = ftk_shared_canvas();
-#endif	
 	if(priv->canvas != NULL)
 	{
 		if(gc->bitmap != NULL)
@@ -420,9 +400,6 @@ static void ftk_window_destroy(FtkWidget* thiz)
 
 		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->update_idle);
 		ftk_source_unref(priv->update_idle);
-#ifndef FTK_SHARED_CANVAS
-		ftk_canvas_destroy(priv->canvas);
-#endif		
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
@@ -445,13 +422,8 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 		return RET_FAIL;
 	}
 
-#ifdef FTK_SHARED_CANVAS
 	xoffset = rect->x;
 	yoffset = rect->y;
-#else
-	xoffset = ftk_widget_left(thiz) + rect->x;
-	yoffset = ftk_widget_top(thiz) + rect->y;
-#endif
 
 	return ftk_display_update_and_notify(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
 }

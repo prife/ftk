@@ -310,6 +310,7 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_append_child(parent, thiz);
+		ftk_widget_set_attr(thiz, FTK_ATTR_BG_TILE);
 
 		priv->bg_normal = ftk_theme_load_image(ftk_default_theme(),
 			"list_selector_background_disabled"FTK_STOCK_IMG_SUFFIX);
@@ -388,7 +389,6 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 		FTK_SCROLL_BAR_WIDTH, item_height * priv->visible_nr);
 	ftk_widget_set_attr(priv->vscroll_bar, FTK_ATTR_NO_FOCUS);
 	ftk_scroll_bar_set_listener(priv->vscroll_bar, (FtkListener)ftk_list_view_on_scroll, thiz);
-	ftk_widget_set_attr(thiz, FTK_BG_TILE);
 
 	return RET_OK;
 }

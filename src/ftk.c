@@ -112,8 +112,10 @@ static void ftk_deinit(void)
 Ret ftk_init(int argc, char* argv[])
 {
 	int i = 0;
+	FtkColor bg = {0};
 	FtkFont* font = NULL;
 	const char* theme = NULL;
+	FtkDisplay* display = NULL;
 	char filename[FTK_MAX_PATH] = {0};
 	int disable_status_panel = 0;
 
@@ -178,15 +180,11 @@ Ret ftk_init(int argc, char* argv[])
 			ftk_theme_parse_file(ftk_default_theme(), filename);
 		}
 	}
-#ifdef FTK_SHARED_CANVAS
-{
-	FtkColor bg = {0};
-	FtkDisplay* display = ftk_default_display();
 
 	bg.a = 0xff;
+	display = ftk_default_display();
 	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), bg));
-}
-#endif
+
 	if(!disable_status_panel)
 	{
 		ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
