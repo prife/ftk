@@ -32,7 +32,7 @@ FTK can run on VNC.
 
 linux-dfb With this option, FTK will run on DirectFB, FTK does not use
 DirectFB Windows system, just use it to abstract display and input device, so
-you utilize DirectFB hardware acceleration.
+you can utilize DirectFB hardware acceleration.
 
 See tools/cross-build/README for cross building.
 
