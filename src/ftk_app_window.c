@@ -45,7 +45,6 @@ typedef struct _PrivInfo
 	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
 
-
 static Ret  ftk_app_window_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	DECL_PRIV1(thiz, priv);

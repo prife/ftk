@@ -62,7 +62,6 @@ FontData* font_data_load(char* data, size_t length);
 Ret font_data_add_glyph(FontData* thiz, Glyph* glyph);
 Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph);
 
-
 int  font_data_get_version(FontData* thiz);
 int  font_data_get_width(FontData* thiz);
 int  font_data_get_height(FontData* thiz);
