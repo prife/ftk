@@ -75,11 +75,12 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id)
 
 		for(; state < FTK_WIDGET_STATE_NR; state++)
 		{
-			priv->gc[state].mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-			priv->gc[state].font = ftk_default_font();
-			priv->gc[state].fg = ftk_theme_get_fg_color(ftk_default_theme(), type, state);
-			priv->gc[state].bg = ftk_theme_get_bg_color(ftk_default_theme(), type, state);
+			priv->gc[state].mask   = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
+			priv->gc[state].font   = ftk_default_font();
+			priv->gc[state].fg     = ftk_theme_get_fg_color(ftk_default_theme(), type, state);
+			priv->gc[state].bg     = ftk_theme_get_bg_color(ftk_default_theme(), type, state);
 			priv->gc[state].bitmap = ftk_theme_get_bg(ftk_default_theme(), type, state);
+
 			if(priv->gc[state].bitmap != NULL) priv->gc[state].mask |= FTK_GC_BITMAP;
 		}
 	}
@@ -648,7 +649,8 @@ void ftk_widget_paint(FtkWidget* thiz)
 	{
 		return;
 	}
-
+	
+	/*If thiz is a window, we disable update first, until all sub-widgets are painted.*/
 	if(ftk_widget_parent(thiz) == NULL)
 	{
 		ftk_window_disable_update(thiz);
@@ -661,6 +663,7 @@ void ftk_widget_paint(FtkWidget* thiz)
 		ftk_widget_paint(ftk_widget_next(thiz));
 	}
 
+	/*If thiz is a window, now, do real updating.*/
 	if(ftk_widget_parent(thiz) == NULL)
 	{
 		FtkRect rect = {0};

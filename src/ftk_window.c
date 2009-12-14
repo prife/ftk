@@ -572,6 +572,8 @@ Ret ftk_window_enable_update(FtkWidget* thiz)
 
 	priv->update_disabled--;
 
+	assert(priv->update_disabled >= 0);
+
 	return RET_OK;
 }
 
@@ -599,29 +601,4 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 	return RET_OK;
 }
 
-#ifdef FTK_WINDOW_TEST
-#include "ftk_display_fb.h"
-
-int main(int argc, char* argv[])
-{
-	FtkGc gc = {0};
-	gc.mask = FTK_GC_FONT;
-	gc.font = ftk_font_default_create("./unicode.fnt", 0, 0, 16);
-	FtkDisplay* display = ftk_display_fb_create(FTK_FB_NAME);
-	FtkWidget* thiz = ftk_window_create(display, 100, 0, 0, 320, 480);
-	ftk_window_set_focus(thiz, NULL);
-	assert(ftk_window_get_focus(thiz) == NULL);
-
-	ftk_widget_set_text(thiz, "HelloWorld.");
-	assert(strcmp(ftk_widget_get_text(thiz), "HelloWorld.") == 0);
-	ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL, &gc);
-	ftk_widget_show(thiz, 1);
-	ftk_widget_paint(thiz);
-	ftk_widget_unref(thiz);
-	ftk_font_destroy(gc.font);
-	ftk_display_destroy(display);
-
-	return 0;
-}
-#endif/*FTK_WINDOW_TEST*/
 
