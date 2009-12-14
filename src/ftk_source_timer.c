@@ -85,8 +85,10 @@ static void ftk_source_timer_destroy(FtkSource* thiz)
 
 FtkSource* ftk_source_timer_create(int interval, FtkTimer action, void* user_data)
 {
-	FtkSource* thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource) + sizeof(PrivInfo));
+	FtkSource* thiz = NULL;
+	return_val_if_fail(interval > 0 && action != NULL, NULL);
 
+	thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource) + sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);

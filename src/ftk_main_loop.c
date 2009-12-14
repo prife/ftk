@@ -32,8 +32,6 @@
 #include "ftk_log.h"
 #include "ftk_main_loop.h"
 
-#define MAX_SOURCES 32
-
 struct _FtkMainLoop
 {
 	int read_fd;

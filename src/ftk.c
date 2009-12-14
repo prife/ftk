@@ -84,7 +84,6 @@ static Ret ftk_init_font(void)
 		exit(0);
 	}
 
-
 	return RET_OK;
 }
 

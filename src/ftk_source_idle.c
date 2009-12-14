@@ -64,8 +64,10 @@ static void ftk_source_idle_destroy(FtkSource* thiz)
 
 FtkSource* ftk_source_idle_create(FtkIdle action, void* user_data)
 {
-	FtkSource* thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource) + sizeof(PrivInfo));
+	FtkSource* thiz = NULL;
+	return_val_if_fail(action != NULL, NULL);
 
+	thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource) + sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
