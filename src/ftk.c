@@ -53,6 +53,59 @@ static Ret ftk_init_bitmap_factory(void)
 	return RET_OK;
 }
 
+static Ret ftk_init_font(void)
+{
+	FtkFont* font = NULL;
+	char filename[FTK_MAX_PATH] = {0};
+#ifdef USE_FREETYPE
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+	if((font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE)) == NULL)
+	{
+		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
+		font = ftk_font_freetype_create(filename, 0, 0, 0);
+	}
+#else
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
+	{
+		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
+		font = ftk_font_default_create(filename, 0, 0, 0);
+	}
+#endif
+	
+	if(font != NULL)
+	{
+		ftk_set_font(font);
+	}
+	else
+	{
+		ftk_deinit();
+		ftk_loge("load font failed.\n");
+		exit(0);
+	}
+
+
+	return RET_OK;
+}
+
+static Ret ftk_init_theme(const char* theme)
+{
+	char filename[FTK_MAX_PATH] = {0};
+
+	ftk_set_theme(ftk_theme_create(theme == NULL));
+	if(theme != NULL)
+	{
+		ftk_snprintf(filename, sizeof(filename)-1, DATA_DIR"/theme/%s/theme.xml", theme);
+		if(ftk_theme_parse_file(ftk_default_theme(), filename) != RET_OK)
+		{
+			ftk_snprintf(filename, sizeof(filename)-1, LOCAL_DATA_DIR"/theme/%s/theme.xml", theme);
+			ftk_theme_parse_file(ftk_default_theme(), filename);
+		}
+	}
+
+	return RET_OK;
+}
+
 static void ftk_deinit(void)
 {
 	if(ftk_default_sources_manager() != NULL)
@@ -113,10 +166,8 @@ Ret ftk_init(int argc, char* argv[])
 {
 	int i = 0;
 	FtkColor bg = {0};
-	FtkFont* font = NULL;
 	const char* theme = NULL;
 	FtkDisplay* display = NULL;
-	char filename[FTK_MAX_PATH] = {0};
 	int disable_status_panel = 0;
 
 	for(i = 0; i < argc && argv != NULL && argv[i] != NULL; i++)
@@ -140,46 +191,11 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
 
+	ftk_init_font();
 	ftk_init_bitmap_factory();
-
-#ifdef USE_FREETYPE
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
-	if((font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE)) == NULL)
-	{
-		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
-		font = ftk_font_freetype_create(filename, 0, 0, 0);
-	}
-#else
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
-	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
-	{
-		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
-		font = ftk_font_default_create(filename, 0, 0, 0);
-	}
-#endif
-	if(font != NULL)
-	{
-		ftk_set_font(font);
-	}
-	else
-	{
-		ftk_deinit();
-		ftk_loge("load font failed.\n");
-		exit(0);
-	}
-
+	
+	ftk_init_theme(theme);
 	ftk_backend_init(argc, argv);
-
-	ftk_set_theme(ftk_theme_create(theme == NULL));
-	if(theme != NULL)
-	{
-		ftk_snprintf(filename, sizeof(filename)-1, DATA_DIR"/theme/%s/theme.xml", theme);
-		if(ftk_theme_parse_file(ftk_default_theme(), filename) != RET_OK)
-		{
-			ftk_snprintf(filename, sizeof(filename)-1, LOCAL_DATA_DIR"/theme/%s/theme.xml", theme);
-			ftk_theme_parse_file(ftk_default_theme(), filename);
-		}
-	}
 
 	bg.a = 0xff;
 	display = ftk_default_display();
@@ -187,7 +203,6 @@ Ret ftk_init(int argc, char* argv[])
 
 	if(!disable_status_panel)
 	{
-		ftk_set_status_panel(ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT));
 		ftk_init_panel();
 	}
 
@@ -294,9 +309,10 @@ static void ftk_init_panel(void)
 {
 	FtkGc gc = {0};
 	FtkWidget* item = NULL;	
-	FtkWidget* panel = ftk_default_status_panel();
+	FtkWidget* panel = ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT);
 	
 	gc.mask = FTK_GC_BITMAP;
+	ftk_set_status_panel(panel);
 	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "status-bg"FTK_STOCK_IMG_SUFFIX);
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_ACTIVE, &gc);
