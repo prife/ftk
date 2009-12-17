@@ -32,7 +32,7 @@ libftk_la_SOURCES=\
 	ftk_gesture.c         ftk_wait_box.c  ftk_scroll_bar.c \
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
-	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c 
+	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c
 
 if ENABLE_TSLIB
 LINUX_NATIVE+=$(srcdir)/backend/fb/ftk_source_tslib.c 
@@ -102,6 +102,6 @@ ftk_HEADERS=\
 	ftk_list_model_default.h  ftk_xml_parser.h\
 	ftk_list_model.h          ftk_xul.h \
 	ftk_font_freetype.h       ftk_icon_view.h\
-	ftk_theme.h
+	ftk_theme.h               ftk_painter.h
 
 EXTRA_DIST=	rules.mk
