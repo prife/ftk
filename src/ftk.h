@@ -51,6 +51,7 @@ extern "C" {
 #include "ftk_image.h"
 #include "ftk_entry.h"
 #include "ftk_button.h"
+#include "ftk_painter.h"
 #include "ftk_globals.h"
 #include "ftk_wait_box.h"
 #include "ftk_menu_panel.h"
