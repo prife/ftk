@@ -78,6 +78,18 @@ fi
 
 AM_CONDITIONAL(ENABLE_TSLIB,  test "$enable_tslib" = "yes")
 
+AC_ARG_ENABLE(cairo,
+  [  --enable-cairo            build with cairo support [[default=no]]],,
+  enable_cairo=no)
+
+if test "$enable_cairo" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_CAIRO `pkg-config --cflags cairo`"
+  LDFLAGS="$LDFLAGS `pkg-config --libs cairo`"
+fi
+
+AM_CONDITIONAL(ENABLE_CAIRO,  test "$enable_cairo" = "yes")
+
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_SIZE_T

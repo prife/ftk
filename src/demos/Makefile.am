@@ -5,6 +5,12 @@ noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog 
 	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview demo_hello \
 	demo_fullscreen demo_icon_view
 
+if ENABLE_CAIRO
+noinst_PROGRAMS+=demo_cairo
+demo_cairo_SOURCES=demo_cairo.c
+demo_cairo_LDFLAGS=$(MYLDFLAGS)
+endif
+
 demo_icon_view_SOURCES=demo_icon_view.c
 demo_icon_view_LDFLAGS=$(MYLDFLAGS)
 

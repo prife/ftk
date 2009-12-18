@@ -34,6 +34,10 @@ libftk_la_SOURCES=\
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c
 
+if ENABLE_CAIRO
+libftk_la_SOURCES+=ftk_cairo.c
+endif
+
 if ENABLE_TSLIB
 LINUX_NATIVE+=$(srcdir)/backend/fb/ftk_source_tslib.c 
 endif
