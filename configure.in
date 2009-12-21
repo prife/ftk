@@ -19,7 +19,7 @@ AC_CHECK_LIB([png], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h execinfo.h])
 
-AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb],
+AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb|linux-sigma],
                     [use which display/input backend])])
 
 case "$with_backend" in
@@ -37,6 +37,10 @@ case "$with_backend" in
 
 		CFLAGS="$CFLAGS -DUSE_LINUX_DFB $DIRECTFB_CFLAGS";
 		LDFLAGS="$LDFLAGS $DIRECTFB_LIBS";;
+	linux-sigma*)
+		backend="sigma"
+		CFLAGS="$CFLAGS $SIGMA_CFLAGS";
+		LDFLAGS="$LDFLAGS $SIGMA_OBJS $SIGMA_LIBS";;
 	*)
 		backend="fb"
 		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE";;
@@ -47,6 +51,7 @@ echo with_backend=$with_backend
 AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
 AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
 AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
+AM_CONDITIONAL(FTK_BACKEND_SIGMA, test "$backend" = "sigma")
 
 AC_ARG_WITH(fontengine, [AC_HELP_STRING([--with-fontengine=default|freetype],
                     [use which font engine])])
