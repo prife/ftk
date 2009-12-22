@@ -16,6 +16,9 @@ LINUX_DFB=$(srcdir)/backend/directfb/ftk_display_dfb.c \
 	$(srcdir)/backend/directfb/ftk_source_dfb.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
 
+LINUX_SIGMA=$(srcdir)/backend/sigma/ftk_backend_sigma.c \
+	$(srcdir)/backend/sigma/ftk_display_sigma.c
+
 libftk_la_SOURCES=\
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	ftk_label.c           ftk_source_timer.c \
@@ -60,6 +63,10 @@ endif
 
 if FTK_BACKEND_DFB
 libftk_la_SOURCES+=$(LINUX_DFB)
+endif
+
+if FTK_BACKEND_SIGMA
+libftk_la_SOURCES+=$(LINUX_SIGMA)
 endif
 
 if FONT_ENGINE_FREETYPE

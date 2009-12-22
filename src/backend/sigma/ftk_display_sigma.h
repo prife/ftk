@@ -32,7 +32,7 @@
 #define FTK_DISPLAY_SIGMA_H
 #include "ftk_display.h"
 
-FtkDisplay* ftk_display_sigma_create(void);
+FtkDisplay* ftk_display_sigma_create(void* osd_addr, int width, int height, int bits_per_pixel, void* osd);
 
 #endif/*FTK_DISPLAY_SIGMA_H*/
 

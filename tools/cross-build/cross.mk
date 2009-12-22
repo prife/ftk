@@ -84,7 +84,7 @@ directfb_source_clean:
 libftk:
 	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
-	../configure ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes $(HOST_PARAM) --prefix=$(PREFIX)  &&\
+	../configure --with-backend=linux-sigma ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install
 libftk_clean:
 	rm -rf ftk/$(ARCH)

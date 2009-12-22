@@ -30,6 +30,7 @@
  */
 #include "ftk_log.h"
 #include "ftk_util.h"
+#include "ftk_bitmap.h"
 #include "ftk_canvas.h"
 
 struct _FtkCanvas
@@ -561,7 +562,7 @@ void ftk_canvas_destroy(FtkCanvas* thiz)
 	return;
 }
 
-Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
+static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
 {
 	int i = 0;
 	int ox = 0;
@@ -636,7 +637,7 @@ Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int y, int 
 	return RET_OK;
 }
 
-Ret ftk_canvas_fill_background_normal(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap, int set)
+static Ret ftk_canvas_fill_background_normal(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap, int set)
 {
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
@@ -654,7 +655,7 @@ Ret ftk_canvas_fill_background_normal(FtkCanvas* canvas, int x, int y, int w, in
 	}
 }
 
-Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap, int set)
+static Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap, int set)
 {
 	int dx = 0;
 	int dy = 0;
@@ -687,7 +688,7 @@ Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int 
 	return RET_OK;
 }
 
-Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap, int set)
+static Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap, int set)
 {
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
