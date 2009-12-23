@@ -183,8 +183,11 @@ static Ret sigma_init(int argc, char* argv[])
 		init_tc(&p_osd, osd_base_addr);
 	}
 
+	DEB(fprintf(stderr, "osd_base_addr=%p width=%d height=%d bpp=%d\n", 
+		osd_base_addr,
+		(int)p_osd.profile.Width, (int)p_osd.profile.Height, (int)p_osd.bpp));
 	ftk_set_display(ftk_display_sigma_create(osd_base_addr, 
-		p_osd.profile.Width, p_osd.profile.Height, 32, &p_osd));
+		p_osd.profile.Width, p_osd.profile.Height, p_osd.bpp, &p_osd));
 	
 	DEB(fprintf(stderr,"ftk_set_display %p\n", ftk_default_display()));
 	return RET_OK;

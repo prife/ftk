@@ -17,6 +17,7 @@ LINUX_DFB=$(srcdir)/backend/directfb/ftk_display_dfb.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
 
 LINUX_SIGMA=$(srcdir)/backend/sigma/ftk_backend_sigma.c \
+	$(srcdir)/backend/fb/ftk_source_input.c \
 	$(srcdir)/backend/sigma/ftk_display_sigma.c
 
 libftk_la_SOURCES=\
@@ -36,6 +37,7 @@ libftk_la_SOURCES=\
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c
+libftk_la_CFLAGS:=
 
 if ENABLE_CAIRO
 libftk_la_SOURCES+=ftk_cairo.c
@@ -67,14 +69,16 @@ endif
 
 if FTK_BACKEND_SIGMA
 libftk_la_SOURCES+=$(LINUX_SIGMA)
+libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/sigma
+libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/fb
 endif
 
 if FONT_ENGINE_FREETYPE
-libftk_la_CFLAGS=-DFTK_FONT="\"font.ttf\"" 
+libftk_la_CFLAGS+=-DFTK_FONT="\"font.ttf\"" 
 endif
 
 if FONT_ENGINE_DEFAULT
-libftk_la_CFLAGS=-DFTK_FONT="\"unicode.fnt\"" 
+libftk_la_CFLAGS+=-DFTK_FONT="\"unicode.fnt\"" 
 endif
 
 ftkdir=$(includedir)/ftk
