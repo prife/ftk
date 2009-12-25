@@ -37,7 +37,7 @@ libftk_la_SOURCES=\
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c
-libftk_la_CFLAGS:=
+libftk_la_CFLAGS=
 
 if ENABLE_CAIRO
 libftk_la_SOURCES+=ftk_cairo.c
