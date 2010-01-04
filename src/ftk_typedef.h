@@ -99,6 +99,7 @@ typedef enum _FtkWidgetType
 	FTK_SCROLL_HBAR,
 	FTK_LIST_VIEW,
 	FTK_ICON_VIEW,
+	FTK_TEXT_VIEW,
 	FTK_WIDGET_TYPE_NR
 }FtkWidgetType;
 

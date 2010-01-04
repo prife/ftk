@@ -3,13 +3,16 @@ include $(abs_top_srcdir)/src/rules.mk
 noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog demo_multi_win \
 	demo_menu demo_entry demo_expand demo_progress_bar demo_check_button demo_wait_box \
 	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview demo_hello \
-	demo_fullscreen demo_icon_view
+	demo_fullscreen demo_icon_view demo_text_view
 
 if ENABLE_CAIRO
 noinst_PROGRAMS+=demo_cairo
 demo_cairo_SOURCES=demo_cairo.c
 demo_cairo_LDFLAGS=$(MYLDFLAGS)
 endif
+
+demo_text_view_SOURCES=demo_text_view.c
+demo_text_view_LDFLAGS=$(MYLDFLAGS)
 
 demo_icon_view_SOURCES=demo_icon_view.c
 demo_icon_view_LDFLAGS=$(MYLDFLAGS)

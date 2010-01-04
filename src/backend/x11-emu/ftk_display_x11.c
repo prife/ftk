@@ -62,7 +62,7 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 		ret = ftk_bitmap_copy_to_data_bgra32(bitmap, rect, priv->bits, xoffset, yoffset, display_width, display_height);
 		XPutImage(priv->display, priv->win, priv->gc, priv->ximage,
 			xoffset, yoffset, xoffset, yoffset, rect->width, rect->height); 
-		ftk_logd("%s: %d %d %d %d\n", __func__, rect->x, rect->y, rect->width, rect->height);
+	//	ftk_logd("%s: %d %d %d %d\n", __func__, rect->x, rect->y, rect->width, rect->height);
 	}
 	else
 	{

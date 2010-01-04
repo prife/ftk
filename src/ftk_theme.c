@@ -71,6 +71,12 @@ static const char* const s_default_theme = "\
 	bg[active]=\"ffffffff\" fg[active]=\"ff000000\" bd[active]=\"ffe2ceee\"\
 	bg[disable]=\"ffffffff\" fg[disable]=\"ffaca899\" bd[disable]=\"ffe2ceee\"\
 	/>\
+	<text_view \
+	bg[normal]=\"ffffffff\" fg[normal]=\"ff000000\" bd[normal]=\"ffe2ceee\"\
+	bg[focused]=\"ffffffff\" fg[focused]=\"ff000000\" bd[focused]=\"ffffbb00\"\
+	bg[active]=\"ffffffff\" fg[active]=\"ff000000\" bd[active]=\"ffe2ceee\"\
+	bg[disable]=\"ffffffff\" fg[disable]=\"ffaca899\" bd[disable]=\"ffe2ceee\"\
+	/>\
 	<check_button \
 		fg[normal]=\"ff000000\"\
 		fg[focused]=\"ffffbb00\"\
@@ -149,6 +155,7 @@ static const WidgetNameType const s_widget_name_types[] =
 {
 	{"label",        FTK_LABEL},
 	{"entry",        FTK_ENTRY},
+	{"text_view",    FTK_TEXT_VIEW},
 	{"image",        FTK_IMAGE},
 	{"button",       FTK_BUTTON},
 	{"wait_box",     FTK_WAIT_BOX},

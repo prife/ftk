@@ -305,8 +305,11 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 			ox = x;
 			continue;
 		}
-		if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) continue;
-		
+
+		if(code == 0xffff || code == 0) break;
+		if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
+			continue;
+
 		glyph.y = vcenter ? glyph.y - vcenter_offset : glyph.y;
 		if((x + glyph.x + glyph.w) >= width) break;
 		if((y - glyph.y + glyph.h) >= height) break;
@@ -473,12 +476,12 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 			glyph.x = 0;
 			glyph.w = FTK_SPACE_WIDTH - 1;
 		}
-		else if(ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
+		else if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
 		{
 			continue;
 		}
 
-		fprintf(stderr, "%s: %d %d\n", __func__, glyph.x, glyph.w);
+	//	fprintf(stderr, "%s: %d %d\n", __func__, glyph.x, glyph.w);
 		extent += glyph.x + glyph.w + 1;
 	}
 	fprintf(stderr, "%s: %s %d\n", __func__, str, extent);
@@ -496,7 +499,7 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
 		return FTK_SPACE_WIDTH;
 	}
 
-	if(ftk_font_lookup(thiz->gc.font, unicode, &glyph) != RET_OK)
+	if(unicode == '\r' || unicode == '\n' || ftk_font_lookup(thiz->gc.font, unicode, &glyph) != RET_OK)
 	{
 
 		return 0;
@@ -517,6 +520,7 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 	if(vstart >= 0)
 	{
 		iter = start + vstart;
+		prev_iter = iter;
 		while(width > 0)
 		{
 			prev_iter = iter;
@@ -526,6 +530,7 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 			extent = ftk_canvas_get_char_extent(thiz, unicode);
 			if(extent > width) break;
 			width -= extent;
+			prev_iter = iter;
 		}
 	
 		return prev_iter;
@@ -533,6 +538,7 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 	else if(vend > 0)
 	{
 		iter = start + vend;
+		prev_iter = iter;
 		while(width > 0 && iter >= start)
 		{
 			prev_iter = iter;

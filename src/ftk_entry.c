@@ -175,9 +175,10 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_KEY_BACKSPACE:
 		{
-			if(ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, -1) == RET_OK)
+			int caret = priv->caret;
+			ftk_entry_move_caret(thiz, -1);
+			if(ftk_text_buffer_delete_chars(priv->text_buffer, caret, -1) == RET_OK)
 			{
-				ftk_entry_move_caret(thiz, -1);
 			}
 			break;
 		}

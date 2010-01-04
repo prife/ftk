@@ -36,7 +36,9 @@ libftk_la_SOURCES=\
 	ftk_gesture.c         ftk_wait_box.c  ftk_scroll_bar.c \
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
-	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c
+	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c \
+	ftk_text_view.c
+
 libftk_la_CFLAGS=
 
 if ENABLE_CAIRO

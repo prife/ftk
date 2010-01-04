@@ -137,6 +137,9 @@ Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);
 	int height = ftk_widget_height(thiz);\
 	FtkCanvas* canvas = ftk_widget_canvas(thiz);
 
+#define FTK_PAINT_X(thiz) ftk_widget_left_abs(thiz)
+#define FTK_PAINT_Y(thiz) ftk_widget_top_abs(thiz)
+
 #define FTK_END_PAINT() \
 	return ftk_widget_update(thiz);
 
