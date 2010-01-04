@@ -119,6 +119,7 @@ ftk_HEADERS=\
 	ftk_list_model_default.h  ftk_xml_parser.h\
 	ftk_list_model.h          ftk_xul.h \
 	ftk_font_freetype.h       ftk_icon_view.h\
-	ftk_theme.h               ftk_painter.h
+	ftk_theme.h               ftk_painter.h \
+	ftk_text_view.h           ftk_cairo.h
 
 EXTRA_DIST=	rules.mk
