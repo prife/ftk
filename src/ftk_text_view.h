@@ -41,6 +41,7 @@ FtkWidget* ftk_text_view_create(FtkWidget* parent, int x, int y, int width, int 
 const char* ftk_text_view_get_text(FtkWidget* thiz);
 Ret ftk_text_view_set_text(FtkWidget* thiz, const char* text);
 Ret ftk_text_view_insert_text(FtkWidget* thiz, size_t pos, const char* text);
+Ret ftk_text_view_set_readonly(FtkWidget* thiz, int readonly);
 
 #endif/*FTK_TEXT_VIEW_H*/
 

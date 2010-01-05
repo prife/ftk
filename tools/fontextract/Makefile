@@ -52,7 +52,7 @@ AUTOMAKE = ${SHELL} /work/mine/googlecode/cross/ftk/missing --run automake-1.10
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -g -O2 -DUSE_LINUX_NATIVE -DPC_EMU
+CFLAGS = -g -O2 -I/usr/X11R6/include -DUSE_LINUX_X11 -DDISPLAY_PARAM="\"linux-x11:320x480\""   -I/usr/include/freetype2   -DUSE_FREETYPE -DUSE_CAIRO -I/usr/include/cairo  
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -78,7 +78,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = 
+LDFLAGS =  -L/usr/X11R6/lib -lX11 -lXext  -lfreetype   -lcairo  
 LIBOBJS = 
 LIBS = -lpng -ljpeg 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool

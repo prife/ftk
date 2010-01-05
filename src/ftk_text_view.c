@@ -47,7 +47,8 @@ typedef struct _PrivInfo
 	
 	int   visible_start_line;
 	int   visible_end_line;
-	
+
+	int   readonly;
 	int   selected_start;
 	int   selected_end;
 	int   preedit_start;
@@ -275,11 +276,14 @@ static Ret ftk_text_view_input_char(FtkWidget* thiz, char c)
 {
 	char str[2] = {0};
 	DECL_PRIV0(thiz, priv);
-	
-	str[0] = c;
-	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
-	ftk_text_view_move_caret(thiz, 1);	
-	
+
+	if(!priv->readonly)
+	{
+		str[0] = c;
+		ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+		ftk_text_view_move_caret(thiz, 1);	
+	}
+
 	return RET_OK;
 }
 
@@ -381,6 +385,7 @@ static Ret ftk_text_view_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_KEY_DELETE:
 		{
+			if(priv->readonly) break;
 			ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, 1);
 			ftk_text_view_relayout(thiz, priv->caret_at_line);
 			ftk_text_view_move_caret(thiz, 0);
@@ -389,6 +394,7 @@ static Ret ftk_text_view_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_BACKSPACE:
 		{
 			int caret = priv->caret;
+			if(priv->readonly) break;
 			ftk_text_view_move_caret(thiz, -1);
 			if(ftk_text_buffer_delete_chars(priv->text_buffer, caret, -1) == RET_OK)
 			{
@@ -398,6 +404,7 @@ static Ret ftk_text_view_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		default:
 		{
+			if(priv->readonly) break;
 			if((event->u.key.code < 0xff && isprint(event->u.key.code)) 
 				|| event->u.key.code == FTK_KEY_ENTER)
 			{
@@ -654,3 +661,12 @@ const char* ftk_text_view_get_text(FtkWidget* thiz)
 	return TB_TEXT;
 }
 
+Ret ftk_text_view_set_readonly(FtkWidget* thiz, int readonly)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->readonly = readonly;
+
+	return RET_OK;
+}

@@ -34,7 +34,8 @@ int main(int argc, char* argv[])
 	
 	text_view = ftk_text_view_create(win, 10, 15 + height/3, ftk_widget_width(win) - 20, height/3);
 	ftk_text_view_set_text(text_view, TEXT);
-	
+	ftk_text_view_set_readonly(text_view, 1);
+
 	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);
 	ftk_widget_set_text(button, "quit");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);

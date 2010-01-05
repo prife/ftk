@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
 		ftk_icon_view_add(icon_view, &item);
 	}
 
-	ftk_widget_set_text(win, "icon demo");
+	ftk_widget_set_text(win, "icon view demo");
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
 
