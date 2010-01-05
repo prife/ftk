@@ -42,8 +42,10 @@
 #define inline 
 #define __func__ __FILE__
 #define FTK_FONT "./unicode.fnt"
-#define DATA_DIR ""
-#define LOCAL_DATA_DIR ""
+#define DATA_DIR "./"
+#define LOCAL_DATA_DIR "./"
+#define FTK_DATA_ROOT "./"
+#define TESTDATA_DIR "./"
 #define usleep Sleep
 #define pipe(fds) _pipe(fds, 2, 0)
 

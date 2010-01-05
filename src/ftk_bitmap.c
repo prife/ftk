@@ -387,6 +387,10 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	int i = 0;
 	int j = 0;
 	int k = 0;
+	FtkColor dcolor;
+	FtkColor* pdst = NULL;
+	FtkColor* psrc = NULL;
+	unsigned short pixel = 0;
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 	int x = rect != NULL ? rect->x : 0;
@@ -416,10 +420,6 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	src += y * bw;
 	dst += oy * dw;
 
-	FtkColor dcolor;
-	FtkColor* pdst = NULL;
-	FtkColor* psrc = NULL;
-	unsigned short pixel = 0;
 	for(i = y; i < h; i++)
 	{
 		for(j = x, k = ox; j < w; j++, k++)

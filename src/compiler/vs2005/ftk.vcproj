@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\lab\ftk\src"
+				AdditionalIncludeDirectories="D:\lab\ftk\src;D:\lab\ftk\src\compiler\vs2005;D:\lab\ftk\src\os\windows"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -148,7 +148,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\fontdata.c"
+				RelativePath="..\..\fontdata.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -160,7 +160,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk.c"
+				RelativePath="..\..\ftk.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -172,7 +172,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_animator_expand.c"
+				RelativePath="..\..\ftk_animator_expand.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -184,7 +184,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_app_window.c"
+				RelativePath="..\..\ftk_app_window.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -196,7 +196,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_bitmap.c"
+				RelativePath="..\..\backend\win32\ftk_backend_win32.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -208,7 +208,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_bitmap_factory.c"
+				RelativePath="..\..\ftk_bitmap.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -220,7 +220,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_button.c"
+				RelativePath="..\..\ftk_bitmap_factory.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -232,7 +232,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_canvas.c"
+				RelativePath="..\..\ftk_button.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -244,7 +244,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_check_button.c"
+				RelativePath="..\..\ftk_canvas.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -256,7 +256,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_dialog.c"
+				RelativePath="..\..\ftk_check_button.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -268,7 +268,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_display.c"
+				RelativePath="..\..\ftk_dialog.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -280,20 +280,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_entry.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-						CompileAs="2"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\ftk_font_default.c"
+				RelativePath="..\..\ftk_display.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -305,7 +292,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_gesture.c"
+				RelativePath="..\..\backend\win32\ftk_display_win32.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -317,7 +304,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_globals.c"
+				RelativePath="..\..\ftk_entry.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -329,7 +316,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_icon_cache.c"
+				RelativePath="..\..\ftk_expr.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -341,7 +328,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_image.c"
+				RelativePath="..\..\ftk_font_default.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -353,7 +340,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_label.c"
+				RelativePath="..\..\ftk_gesture.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -365,7 +352,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_log.c"
+				RelativePath="..\..\ftk_globals.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -377,7 +364,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_main_loop.c"
+				RelativePath="..\..\ftk_icon_cache.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -389,7 +376,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_menu_item.c"
+				RelativePath="..\..\ftk_icon_view.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -401,7 +388,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_menu_panel.c"
+				RelativePath="..\..\ftk_image.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -413,7 +400,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_progress_bar.c"
+				RelativePath="..\..\ftk_image_bmp_decoder.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -425,7 +412,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_radio_group.c"
+				RelativePath="..\..\ftk_label.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -437,7 +424,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_scroll_bar.c"
+				RelativePath="..\..\ftk_list_model_default.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -449,7 +436,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_source_idle.c"
+				RelativePath="..\..\ftk_list_render_default.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -461,7 +448,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_source_primary.c"
+				RelativePath="..\..\ftk_list_view.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -473,7 +460,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_source_timer.c"
+				RelativePath="..\..\ftk_log.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -485,7 +472,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_sources_manager.c"
+				RelativePath="..\..\ftk_main_loop.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -497,7 +484,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_sprite.c"
+				RelativePath="..\..\ftk_menu_item.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -509,7 +496,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_status_item.c"
+				RelativePath="..\..\ftk_menu_panel.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -521,7 +508,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_status_panel.c"
+				RelativePath="..\..\ftk_painter.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -533,7 +520,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_style.c"
+				RelativePath="..\..\ftk_progress_bar.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -545,7 +532,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_text_buffer.c"
+				RelativePath="..\..\ftk_radio_group.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -557,7 +544,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_util.c"
+				RelativePath="..\..\ftk_scroll_bar.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -569,7 +556,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_wait_box.c"
+				RelativePath="..\..\ftk_source_idle.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -581,7 +568,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_widget.c"
+				RelativePath="..\..\ftk_source_primary.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -593,7 +580,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_win32.c"
+				RelativePath="..\..\ftk_source_timer.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -605,7 +592,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_window.c"
+				RelativePath="..\..\backend\win32\ftk_source_win32.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -617,7 +604,175 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\ftk_wnd_manager_default.c"
+				RelativePath="..\..\ftk_sources_manager.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_sprite.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_status_item.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_status_panel.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_text_buffer.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_text_view.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_theme.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_util.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_wait_box.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_widget.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\os\windows\ftk_win32.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_window.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_wnd_manager_default.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_xml_parser.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_xul.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -655,251 +810,295 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\fontdata.h"
+				RelativePath="..\..\fontdata.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk.h"
+				RelativePath="..\..\ftk.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_animator.h"
+				RelativePath="..\..\ftk_animator.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_animator_expand.h"
+				RelativePath="..\..\ftk_animator_expand.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_app_window.h"
+				RelativePath="..\..\ftk_app_window.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_bitmap.h"
+				RelativePath="..\..\ftk_backend.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_bitmap_factory.h"
+				RelativePath="..\..\ftk_bitmap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_button.h"
+				RelativePath="..\..\ftk_bitmap_factory.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_canvas.h"
+				RelativePath="..\..\ftk_button.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_check_button.h"
+				RelativePath="..\..\ftk_cairo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_clipboard.h"
+				RelativePath="..\..\ftk_canvas.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_dialog.h"
+				RelativePath="..\..\ftk_check_button.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_display.h"
+				RelativePath="..\..\ftk_clipboard.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_display_fb.h"
+				RelativePath="..\..\ftk_dialog.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_display_win32.h"
+				RelativePath="..\..\ftk_display.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_display_x11.h"
+				RelativePath="..\..\backend\win32\ftk_display_win32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_entry.h"
+				RelativePath="..\..\ftk_entry.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_event.h"
+				RelativePath="..\..\ftk_event.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_font.h"
+				RelativePath="..\..\ftk_expr.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_font_default.h"
+				RelativePath="..\..\ftk_font.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_gc.h"
+				RelativePath="..\..\ftk_font_default.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_gesture.h"
+				RelativePath="..\..\ftk_font_freetype.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_gesture_listener.h"
+				RelativePath="..\..\ftk_gc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_globals.h"
+				RelativePath="..\..\ftk_gesture.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_icon_cache.h"
+				RelativePath="..\..\ftk_gesture_listener.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_image.h"
+				RelativePath="..\..\ftk_globals.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_image_decoder.h"
+				RelativePath="..\..\ftk_icon_cache.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_image_jpeg_decoder.h"
+				RelativePath="..\..\ftk_icon_view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_image_png_decoder.h"
+				RelativePath="..\..\ftk_image.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_key.h"
+				RelativePath="..\..\ftk_image_bmp_decoder.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_label.h"
+				RelativePath="..\..\ftk_image_decoder.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_list_model.h"
+				RelativePath="..\..\ftk_image_jpeg_decoder.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_list_render.h"
+				RelativePath="..\..\ftk_image_png_decoder.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_list_view.h"
+				RelativePath="..\..\ftk_key.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_log.h"
+				RelativePath="..\..\ftk_label.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_main_loop.h"
+				RelativePath="..\..\ftk_list_model.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_menu_item.h"
+				RelativePath="..\..\ftk_list_model_default.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_menu_panel.h"
+				RelativePath="..\..\ftk_list_render.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_mmap.h"
+				RelativePath="..\..\ftk_list_render_default.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_platform.h"
+				RelativePath="..\..\ftk_list_view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_progress_bar.h"
+				RelativePath="..\..\ftk_log.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_radio_group.h"
+				RelativePath="..\..\ftk_main_loop.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_scroll_bar.h"
+				RelativePath="..\..\ftk_menu_item.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_source.h"
+				RelativePath="..\..\ftk_menu_panel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_source_idle.h"
+				RelativePath="..\..\ftk_mmap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_source_input.h"
+				RelativePath="..\..\ftk_painter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_source_primary.h"
+				RelativePath="..\..\ftk_platform.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_source_timer.h"
+				RelativePath="..\..\ftk_progress_bar.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_source_x11.h"
+				RelativePath="..\..\ftk_radio_group.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_sources_manager.h"
+				RelativePath="..\..\ftk_scroll_bar.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_sprite.h"
+				RelativePath="..\..\ftk_source.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_status_item.h"
+				RelativePath="..\..\ftk_source_idle.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_status_panel.h"
+				RelativePath="..\..\ftk_source_primary.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_style.h"
+				RelativePath="..\..\ftk_source_timer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_text_buffer.h"
+				RelativePath="..\..\backend\win32\ftk_source_win32.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_typedef.h"
+				RelativePath="..\..\ftk_sources_manager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_util.h"
+				RelativePath="..\..\ftk_sprite.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_wait_box.h"
+				RelativePath="..\..\ftk_status_item.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_widget.h"
+				RelativePath="..\..\ftk_status_panel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_window.h"
+				RelativePath="..\..\ftk_text_buffer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_wnd_manager.h"
+				RelativePath="..\..\ftk_text_view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\ftk_wnd_manager_default.h"
+				RelativePath="..\..\ftk_theme.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_typedef.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_util.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_wait_box.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_widget.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\os\windows\ftk_win32.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_window.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_wnd_manager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_wnd_manager_default.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_xml_builder.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_xml_parser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_xul.h"
 				>
 			</File>
 			<File

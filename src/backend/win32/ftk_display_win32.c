@@ -1,5 +1,5 @@
 /*
- * File: ftk_display_win32.c
+ * File: ftk_display_win32_win32.c
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   win32 display
  *
@@ -30,9 +30,14 @@
  */
 
 #include <windows.h>
+#include "ftk_bitmap.h"
+#include "ftk_display.h"
 
-char szClassName[ ] = "FtkEmulator";
-LRESULT CALLBACK WinProc (HWND, UINT, WPARAM, LPARAM);
+#define DISPLAY_WIDTH  320
+#define DISPLAY_HEIGHT 480
+
+static char szClassName[ ] = "FtkEmulator";
+static LRESULT CALLBACK WinProc (HWND, UINT, WPARAM, LPARAM);
 
 static HWND ftk_create_display(void)
 {
@@ -87,6 +92,8 @@ static HWND ftk_create_display(void)
 typedef struct _PrivInfo
 {
 	HWND wnd;
+	void* bits;
+	PBITMAP hBitmap;
 }PrivInfo;
 
 static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -96,6 +103,24 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
         case WM_DESTROY:
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
+		case WM_PAINT:
+			{
+				HBITMAP hBitmap;
+				HDC dc = NULL;
+				PrivInfo* priv = NULL;
+				PAINTSTRUCT ps;
+				BeginPaint(hwnd, &ps);
+				priv = (PrivInfo*)GetWindowLong(priv->wnd, GWL_USERDATA);
+				dc = CreateCompatibleDC(ps.hdc);
+				hBitmap = SelectObject(dc, priv->hBitmap);
+				BitBlt(ps.hdc, 0, 0, priv->hBitmap->bmWidth,
+					priv->hBitmap->bmHeight, dc, 0, 0, SRCCOPY);
+				SelectObject(dc, hBitmap);
+				DeleteObject(dc);
+
+				EndPaint(hwnd, &ps);
+				break;
+			}
         default:                      /* for messages that we don't deal with */
             return DefWindowProc (hwnd, message, wParam, lParam);
     }
@@ -103,42 +128,49 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     return 0;
 }
 
-static Ret ftk_display_update(Ftkdisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
+static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
+{
+	DECL_PRIV(thiz, priv);
+
+	InvalidateRect(priv->wnd, NULL, FALSE);
+
+	return RET_OK;
+}
+
+static int ftk_display_win32_width(FtkDisplay* thiz)
+{
+	RECT r = {0};
+	DECL_PRIV(thiz, priv);
+	GetWindowRect(priv->wnd, &r);
+
+	return r.right - r.left;
+}
+
+static int ftk_display_win32_height(FtkDisplay* thiz)
+{
+	RECT r = {0};
+	DECL_PRIV(thiz, priv);
+	GetWindowRect(priv->wnd, &r);
+
+	return r.bottom - r.top;
+}
+
+static Ret ftk_display_win32_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
 {
 	DECL_PRIV(thiz, priv);
 
 	return RET_OK;
 }
 
-static int ftk_display_width(Ftkdisplay* thiz)
-{
-	RECT r = {0};
-	DECL_PRIV(thiz, priv);
-	GetWindowRect(priv->wnd, &r);
-
-	return r->width;
-}
-
-static int ftk_display_height(Ftkdisplay* thiz)
-{
-	RECT r = {0};
-	DECL_PRIV(thiz, priv);
-	GetWindowRect(priv->wnd, &r);
-
-	return r->height;
-}
-
-static Ret ftk_display_snap(Ftkdisplay* thiz, FtkBitmap** bitmap)
+static void ftk_display_win32_destroy(FtkDisplay* thiz)
 {
 	DECL_PRIV(thiz, priv);
-
-	return RET_OK;
-}
-
-static void ftk_display_destroy(Ftkdisplay* thiz)
-{
-	DECL_PRIV(thiz, priv);
-	CloseWindow(priv->wnd);
+	if(priv != NULL)
+	{
+		CloseWindow(priv->wnd);
+		FTK_FREE(priv->bits);
+		DeleteObject(priv->hBitmap);
+	}
 
 	return;
 }
@@ -155,9 +187,12 @@ FtkDisplay* ftk_display_win32_create(void)
 		thiz->width    = ftk_display_win32_width;
 		thiz->height   = ftk_display_win32_height;
 		thiz->snap     = ftk_display_win32_snap;
-		thiz->destroy = ftk_display_win32_destroy;
+		thiz->destroy  = ftk_display_win32_destroy;
 
 		priv->wnd = ftk_create_window();
+		priv->bits = FTK_ZALLOC(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
+		priv->hBitmap = CreateBitmap(DISPLAY_WIDTH, DISPLAY_HEIGHT, 1, 32, priv->bits);
+		SetWindowLong(priv->wnd, GWL_USERDATA, priv);
 	}
 
 	return thiz;
