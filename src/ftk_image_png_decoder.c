@@ -46,6 +46,7 @@ static FtkBitmap* load_png (const char *filename)
 	int y = 0;
 	int w = 0;
 	int h = 0;
+	int n = 0;
 	int passes_nr = 0;
 	FILE *fp = NULL;	
 	FtkColor* dst = NULL;
@@ -55,7 +56,8 @@ static FtkBitmap* load_png (const char *filename)
 	png_structp png_ptr = NULL;
 	png_infop info_ptr = NULL;
 	png_bytep * row_pointers = NULL;
-	
+	char buffer[1024] = {0};
+
 	bg.a = 0xff;
 	if ((fp = fopen (filename, "rb")) == NULL)
 	{
@@ -63,6 +65,8 @@ static FtkBitmap* load_png (const char *filename)
 		return NULL;
 	}
 
+	n = fread(buffer, sizeof(buffer), 1, fp);
+	fseek(fp, 0, SEEK_SET);
 	if((png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)) == NULL)
 	{
 		fclose(fp);
@@ -77,6 +81,7 @@ static FtkBitmap* load_png (const char *filename)
 
 	setjmp(png_jmpbuf(png_ptr));
 	png_init_io(png_ptr, fp);
+	memset(info_ptr, 0x00, sizeof(*info_ptr));
 	png_read_info(png_ptr, info_ptr);
 
 	w = info_ptr->width;

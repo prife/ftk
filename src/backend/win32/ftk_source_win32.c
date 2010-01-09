@@ -1,7 +1,7 @@
 /*
- * File: ftk_source_win32.c
+ * File: ftk_source_win32.c    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   source to handle win32 event.
+ * Brief:   win32 source 
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,15 +25,62 @@
 /*
  * History:
  * ================================================================
- * 2009-11-29 Li XianJing <xianjimli@hotmail.com> created
+ * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-
 #include "ftk_source_win32.h"
 
-FtkSource* ftk_source_dfb_create(void)
+typedef struct _PrivInfo
 {
-	return NULL;
+	void* user_data;
+}PrivInfo;
+
+static int ftk_source_win32_get_fd(FtkSource* thiz)
+{
+	return -1;
 }
 
+static int ftk_source_win32_check(FtkSource* thiz)
+{
+	return 100;
+}
 
+static Ret ftk_source_win32_dispatch(FtkSource* thiz)
+{
+	MSG msg;
+	DECL_PRIV(thiz, priv);
+
+	if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	return RET_OK;
+}
+
+static void ftk_source_win32_destroy(FtkSource* thiz)
+{
+	FTK_ZFREE(thiz, sizeof(FtkSource) + sizeof(PrivInfo));
+
+	return;
+}
+
+FtkSource* ftk_source_win32_create(void)
+{
+	FtkSource* thiz = NULL;
+
+	thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource) + sizeof(PrivInfo));
+	if(thiz != NULL)
+	{
+		DECL_PRIV(thiz, priv);
+		thiz->get_fd   = ftk_source_win32_get_fd;
+		thiz->check    = ftk_source_win32_check;
+		thiz->dispatch = ftk_source_win32_dispatch;
+		thiz->destroy  = ftk_source_win32_destroy;
+
+		thiz->ref = 1;
+	}
+
+	return thiz;
+}

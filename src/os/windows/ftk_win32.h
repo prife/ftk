@@ -40,12 +40,15 @@
 #include <io.h>
 #include <windows.h>
 #define inline 
+#define HAS_PNG 1
+#define HAS_JPEG 1
 #define __func__ __FILE__
-#define FTK_FONT "./unicode.fnt"
-#define DATA_DIR "./"
-#define LOCAL_DATA_DIR "./"
-#define FTK_DATA_ROOT "./"
-#define TESTDATA_DIR "./"
+#define FTK_ROOT_DIR "D:\\lab\\ftk"
+#define FTK_FONT     "\\unicode.fnt"
+#define DATA_DIR       FTK_ROOT_DIR
+#define LOCAL_DATA_DIR FTK_ROOT_DIR
+#define FTK_DATA_ROOT  FTK_ROOT_DIR"\\data"
+#define TESTDATA_DIR   FTK_ROOT_DIR"\\testdata"
 #define usleep Sleep
 #define pipe(fds) _pipe(fds, 2, 0)
 

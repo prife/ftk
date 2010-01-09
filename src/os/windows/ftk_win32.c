@@ -31,6 +31,7 @@
 #include <string.h>
 #include "ftk_win32.h"
 
+
 int ftk_platform_init(int argc, char** argv)
 {
 
@@ -55,12 +56,18 @@ char* ftk_strdup(const char *s)
 
 int   ftk_snprintf(char *str, size_t size, const char *format, ...)
 {
+	int ret = 0;
+	va_list args;
+	va_start(args, format);
+	ret = _vsnprintf(str, size-1, format, args);
+	str[size-1] = '\0';
+
 	return 0;
 }
 
 int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 {
-	return 0;
+	return _vsnprintf(str, size-1, format, ap);
 }
 
 #define EPOCHFILETIME 0

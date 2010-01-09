@@ -39,7 +39,7 @@
 static char szClassName[ ] = "FtkEmulator";
 static LRESULT CALLBACK WinProc (HWND, UINT, WPARAM, LPARAM);
 
-static HWND ftk_create_display(void)
+static HWND ftk_create_display_window(void)
 {
     HWND hwnd;               /* This is the handle for our window */
     MSG messages;            /* Here messages to the application are saved */
@@ -58,7 +58,7 @@ static HWND ftk_create_display(void)
     wincl.hCursor = NULL;
     wincl.lpszMenuName = NULL;                 /* No menu */
     wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
-    wincl.cbWndExtra = 0;                      /* structure or the window instance */
+    wincl.cbWndExtra = 64;                      /* structure or the window instance */
     /* Use Windows's default color as the background of the window */
     wincl.hbrBackground = (HBRUSH) COLOR_BACKGROUND;
 
@@ -82,8 +82,6 @@ static HWND ftk_create_display(void)
            NULL                 /* No Window Creation data */
            );
 
-    /* Make the window visible on the screen */
-    ShowWindow (hwnd, SW_SHOW);
 
 	return hwnd;
 }
@@ -93,7 +91,7 @@ typedef struct _PrivInfo
 {
 	HWND wnd;
 	void* bits;
-	PBITMAP hBitmap;
+	HBITMAP hBitmap;
 }PrivInfo;
 
 static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -109,16 +107,26 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				HDC dc = NULL;
 				PrivInfo* priv = NULL;
 				PAINTSTRUCT ps;
+				HBITMAP hDisplay = NULL;
 				BeginPaint(hwnd, &ps);
-				priv = (PrivInfo*)GetWindowLong(priv->wnd, GWL_USERDATA);
+				priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
+				hDisplay = priv->hBitmap;
+
 				dc = CreateCompatibleDC(ps.hdc);
-				hBitmap = SelectObject(dc, priv->hBitmap);
-				BitBlt(ps.hdc, 0, 0, priv->hBitmap->bmWidth,
-					priv->hBitmap->bmHeight, dc, 0, 0, SRCCOPY);
+				hBitmap = SelectObject(dc, hDisplay);
+				BitBlt(ps.hdc, 0, 0, DISPLAY_WIDTH,
+					DISPLAY_HEIGHT, dc, 0, 0, SRCCOPY);
 				SelectObject(dc, hBitmap);
 				DeleteObject(dc);
-
 				EndPaint(hwnd, &ps);
+				break;
+			}
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+		case WM_LBUTTONUP:
+		case WM_LBUTTONDOWN:
+		case WM_MOUSEMOVE:
+			{
 				break;
 			}
         default:                      /* for messages that we don't deal with */
@@ -181,6 +189,8 @@ FtkDisplay* ftk_display_win32_create(void)
 
 	if(thiz != NULL)
 	{
+		PrivInfo* p = NULL;
+		HBITMAP hBitmap = NULL;
 		DECL_PRIV(thiz, priv);
 
 		thiz->update   = ftk_display_win32_update;
@@ -189,10 +199,16 @@ FtkDisplay* ftk_display_win32_create(void)
 		thiz->snap     = ftk_display_win32_snap;
 		thiz->destroy  = ftk_display_win32_destroy;
 
-		priv->wnd = ftk_create_window();
+		priv->wnd = ftk_create_display_window();
 		priv->bits = FTK_ZALLOC(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
-		priv->hBitmap = CreateBitmap(DISPLAY_WIDTH, DISPLAY_HEIGHT, 1, 32, priv->bits);
+		hBitmap = CreateBitmap(DISPLAY_WIDTH, DISPLAY_HEIGHT, 1, 32, priv->bits);
+		priv->hBitmap = hBitmap;
 		SetWindowLong(priv->wnd, GWL_USERDATA, priv);
+
+		p = GetWindowLong(priv->wnd, GWL_USERDATA);
+		    /* Make the window visible on the screen */
+    ShowWindow (priv->wnd, SW_SHOW);
+	UpdateWindow(priv->wnd);
 	}
 
 	return thiz;

@@ -82,11 +82,12 @@ static FtkBitmap* load_jpeg (const char *filename)
 	FILE *infile;	
 	JSAMPARRAY buffer;	
 	int row_stride;	
-	FtkColor bg = {.a = 0xff,};
+	FtkColor bg = {0};
 	FtkBitmap* bitmap = NULL;
 	struct my_error_mgr jerr;
 	struct jpeg_decompress_struct cinfo;
 	
+	bg.a = 0xff;
 	if ((infile = fopen (filename, "rb")) == NULL)
 	{
 		fprintf (stderr, "can't open %s\n", filename);
