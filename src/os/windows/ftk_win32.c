@@ -29,8 +29,8 @@
  *
  */
 #include <string.h>
-#include "ftk_win32.h"
 #include <assert.h>
+#include "ftk_win32.h"
 
 int ftk_platform_init(int argc, char** argv)
 {
@@ -50,7 +50,7 @@ void ftk_platform_deinit(void)
 {
 	if (WSACleanup() == SOCKET_ERROR)
 	{
-		printf("WSACleanup failed with error %d\n", WSAGetLastError());
+		ftk_logd("WSACleanup failed with error %d\n", WSAGetLastError());
 	}
 
 	return;
@@ -124,13 +124,13 @@ size_t ftk_get_relative_time(void)
 	return now.tv_sec*1000 + now.tv_usec/1000;
 }
 
-int win32_socketpair(SOCKET socks[2], int make_overlapped)
+int win32_socketpair(SOCKET socks[2])
 {
-    struct sockaddr_in addr;
-    SOCKET listener;
     int e;
+    DWORD flags = 0;
+    SOCKET listener;
+    struct sockaddr_in addr;
     int addrlen = sizeof(addr);
-    DWORD flags = 0;//(make_overlapped ? WSA_FLAG_OVERLAPPED : 0);
 
     if (socks == 0) {
       WSASetLastError(WSAEINVAL);
@@ -153,6 +153,7 @@ int win32_socketpair(SOCKET socks[2], int make_overlapped)
         WSASetLastError(e);
         return SOCKET_ERROR;
     }
+
     e = getsockname(listener, (struct sockaddr*) &addr, &addrlen);
     if (e == SOCKET_ERROR) {
         e = WSAGetLastError();
@@ -177,5 +178,7 @@ int win32_socketpair(SOCKET socks[2], int make_overlapped)
     closesocket(socks[0]);
     closesocket(socks[1]);
     WSASetLastError(e);
+
     return SOCKET_ERROR;
 }
+

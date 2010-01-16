@@ -61,7 +61,7 @@ FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager)
 	thiz = (FtkMainLoop*)FTK_ZALLOC(sizeof(FtkMainLoop));
 	if(thiz != NULL)
 	{
-		pipe(pipes);
+		pipe_open(pipes);
 		thiz->read_fd  = pipes[0];
 		thiz->write_fd = pipes[1];
 		thiz->sources_manager = sources_manager;
@@ -136,11 +136,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		tv.tv_sec = wait_time/1000;
 		tv.tv_usec = (wait_time%1000) * 1000;
 		ret = select(mfd + 1, &thiz->fdset, NULL, NULL, &tv);
-		if(ret < 0)
-		{
-			ret = WSAGetLastError();
-			printf("WSACleanup failed with error %d\n", ret);
-		}
+		
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
 		{
 			if(ftk_sources_manager_need_refresh(thiz->sources_manager))
@@ -227,8 +223,8 @@ void ftk_main_loop_destroy(FtkMainLoop* thiz)
 {
 	if(thiz != NULL)
 	{
-		close(thiz->read_fd);
-		close(thiz->write_fd);
+		pipe_close(thiz->read_fd);
+		pipe_close(thiz->write_fd);
 		FTK_ZFREE(thiz, sizeof(FtkMainLoop));
 	}
 

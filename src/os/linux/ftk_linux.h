@@ -45,10 +45,18 @@
 #include <linux/input.h>
 #include <sys/select.h>
 #include <sys/time.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+
 #define ftk_strdup    strdup
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
+
+#define pipe_open(fds)          socketpair(AF_UNIX, SOCK_STREAM, 0, fds)
+#define pipe_write(s, buf, len) send(s, buf, len, 0)
+#define pipe_read(s, buf, len)  recv(s, buf, len, 0)
+#define pipe_close(fd)          close(fd)
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

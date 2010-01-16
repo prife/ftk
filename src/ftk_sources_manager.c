@@ -64,7 +64,7 @@ FtkSourcesManager* ftk_sources_manager_create(int max_source_nr)
 	if(thiz != NULL)
 	{
 		int pipes[2] = {0};
-		pipe(pipes);
+		pipe_open(pipes);
 		thiz->read_fd  = pipes[0];
 		thiz->write_fd = pipes[1];
 		thiz->max_source_nr = max_source_nr;

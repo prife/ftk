@@ -73,8 +73,8 @@ static void ftk_source_primary_destroy(FtkSource* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		close(priv->read_fd);
-		close(priv->write_fd);
+		pipe_close(priv->read_fd);
+		pipe_close(priv->write_fd);
 		FTK_ZFREE(thiz, sizeof(FtkSource) + sizeof(PrivInfo));
 	}
 
@@ -95,7 +95,7 @@ FtkSource* ftk_source_primary_create(FtkOnEvent on_event, void* user_data)
 		thiz->dispatch = ftk_source_primary_dispatch;
 		thiz->destroy  = ftk_source_primary_destroy;
 
-		pipe(pipes);
+		pipe_open(pipes);
 		thiz->ref = 1;
 		priv->read_fd   = pipes[0];
 		priv->write_fd  = pipes[1];
