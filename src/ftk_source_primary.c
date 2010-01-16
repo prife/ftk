@@ -57,7 +57,7 @@ static Ret ftk_source_primary_dispatch(FtkSource* thiz)
 {
 	FtkEvent event = {0};
 	DECL_PRIV(thiz, priv);
-	int ret = read(priv->read_fd, &event, sizeof(FtkEvent));
+	int ret = pipe_read(priv->read_fd, &event, sizeof(FtkEvent));
 	return_val_if_fail(ret == sizeof(FtkEvent), RET_REMOVE);
 
 	if(priv->on_event != NULL)
@@ -112,7 +112,7 @@ Ret ftk_source_queue_event(FtkSource* thiz, FtkEvent* event)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
-	ret = write(priv->write_fd, event, sizeof(FtkEvent));
+	ret = pipe_write(priv->write_fd, event, sizeof(FtkEvent));
 
 	return ret == sizeof(FtkEvent) ? RET_OK : RET_FAIL;
 }

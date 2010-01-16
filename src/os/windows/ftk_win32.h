@@ -39,9 +39,11 @@
 #include <stdio.h>
 #include <io.h>
 #include <windows.h>
+#define HAVE_BOOLEAN
+int win32_socketpair(SOCKET socks[2], int make_overlapped);
 #define inline 
-#define HAS_PNG 1
-#define HAS_JPEG 1
+//#define HAS_PNG 1
+//#define HAS_JPEG 1
 #define __func__ __FILE__
 #define FTK_ROOT_DIR "D:\\lab\\ftk"
 #define FTK_FONT     "\\unicode.fnt"
@@ -50,7 +52,11 @@
 #define FTK_DATA_ROOT  FTK_ROOT_DIR"\\data"
 #define TESTDATA_DIR   FTK_ROOT_DIR"\\testdata"
 #define usleep Sleep
-#define pipe(fds) _pipe(fds, 2, 0)
+#define pipe(fds) win32_socketpair(fds, 0)
+#define pipe_write(s, buf, len) send(s, buf, len, 0)
+#define pipe_read(s, buf, len) recv(s, buf, len, 0)
+
+//_pipe(fds, 8092, 0)
 
 struct timezone {
 	int tz_minuteswest;     /* minutes west of Greenwich */

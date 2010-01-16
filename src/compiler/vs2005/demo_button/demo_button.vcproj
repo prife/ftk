@@ -183,7 +183,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\demos\demo_button.c"
+				RelativePath=".\demo_button.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\demos\demo_progress_bar.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -191,23 +195,8 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="0"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						ObjectFile="$(IntDir)\$(InputName)1.obj"
-						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\demo_button.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"

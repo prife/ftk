@@ -76,7 +76,7 @@ static Ret ftk_main_loop_handle_request(FtkMainLoop* thiz)
 	int ret = 0;
 	FtkRequest request = {0};
 
-	ret = read(thiz->read_fd, &request, sizeof(FtkRequest));
+	ret = pipe_read(thiz->read_fd, &request, sizeof(FtkRequest));
 	return_val_if_fail(ret == sizeof(FtkRequest), RET_FAIL);
 
 	switch(request.type)
@@ -136,7 +136,11 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		tv.tv_sec = wait_time/1000;
 		tv.tv_usec = (wait_time%1000) * 1000;
 		ret = select(mfd + 1, &thiz->fdset, NULL, NULL, &tv);
-		
+		if(ret < 0)
+		{
+			ret = WSAGetLastError();
+			printf("WSACleanup failed with error %d\n", ret);
+		}
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
 		{
 			if(ftk_sources_manager_need_refresh(thiz->sources_manager))
@@ -200,7 +204,7 @@ Ret ftk_main_loop_quit(FtkMainLoop* thiz)
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	request.type = FTK_REQUEST_QUIT;
-	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
+	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
 
 	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }

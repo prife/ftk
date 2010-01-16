@@ -42,7 +42,7 @@ static int ftk_source_win32_get_fd(FtkSource* thiz)
 
 static int ftk_source_win32_check(FtkSource* thiz)
 {
-	return 100;
+	return 0;
 }
 
 static Ret ftk_source_win32_dispatch(FtkSource* thiz)

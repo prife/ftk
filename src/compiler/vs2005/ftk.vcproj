@@ -39,10 +39,11 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				UseUnicodeResponseFiles="false"
 				AdditionalOptions="/D ROOT_DIR=&quot;$(SolutionDir)&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\lab\ftk\src;D:\lab\ftk\src\compiler\vs2005;D:\lab\ftk\src\os\windows;&quot;C:\Program Files\GnuWin32\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				AdditionalIncludeDirectories="D:\lab\ftk\src;D:\lab\ftk\src\compiler\vs2005;D:\lab\ftk\src\os\windows;D:\lab\gtk\include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;$(NOINHERIT)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -403,30 +404,6 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_image_bmp_decoder.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\ftk_image_jpeg_decoder.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\ftk_image_png_decoder.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

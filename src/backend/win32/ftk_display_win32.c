@@ -138,7 +138,24 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
 static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
+	int i = 0;
+	int j = 0;
 	DECL_PRIV(thiz, priv);
+	int display_width  = DISPLAY_WIDTH;
+	int display_height = DISPLAY_HEIGHT;
+
+	FtkColor* bits = priv->bits;
+	for(j = 0; j < DISPLAY_HEIGHT; j++)
+	{
+		for(i = 0; i < DISPLAY_WIDTH; i++)
+		{
+			bits->a = 0xff;
+			bits->b = 0xff;
+			bits++;
+		}
+	}
+//	ftk_bitmap_copy_to_data_bgra32(bitmap, rect, 
+//		priv->bits, xoffset, yoffset, display_width, display_height); 
 
 	InvalidateRect(priv->wnd, NULL, FALSE);
 
@@ -192,6 +209,7 @@ FtkDisplay* ftk_display_win32_create(void)
 		PrivInfo* p = NULL;
 		HBITMAP hBitmap = NULL;
 		DECL_PRIV(thiz, priv);
+		BITMAPINFO bmi = {0};
 
 		thiz->update   = ftk_display_win32_update;
 		thiz->width    = ftk_display_win32_width;
@@ -200,15 +218,23 @@ FtkDisplay* ftk_display_win32_create(void)
 		thiz->destroy  = ftk_display_win32_destroy;
 
 		priv->wnd = ftk_create_display_window();
-		priv->bits = FTK_ZALLOC(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
-		hBitmap = CreateBitmap(DISPLAY_WIDTH, DISPLAY_HEIGHT, 1, 32, priv->bits);
-		priv->hBitmap = hBitmap;
-		SetWindowLong(priv->wnd, GWL_USERDATA, priv);
 
-		p = GetWindowLong(priv->wnd, GWL_USERDATA);
-		    /* Make the window visible on the screen */
-    ShowWindow (priv->wnd, SW_SHOW);
-	UpdateWindow(priv->wnd);
+		memset(&bmi, 0x00, sizeof(bmi));
+
+		bmi.bmiHeader.biBitCount = 32;
+		bmi.bmiHeader.biHeight = DISPLAY_HEIGHT;
+		bmi.bmiHeader.biWidth = DISPLAY_HEIGHT;
+		bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+		bmi.bmiHeader.biPlanes = 1;
+		bmi.bmiHeader.biCompression = BI_RGB;
+		bmi.bmiHeader.biSizeImage = 0;
+
+		hBitmap = CreateDIBSection(GetDC(priv->wnd), &bmi, DIB_RGB_COLORS, &priv->bits, NULL, 0); 
+		priv->hBitmap = hBitmap;
+
+		SetWindowLong(priv->wnd, GWL_USERDATA, priv);
+		ShowWindow (priv->wnd, SW_SHOW);
+		UpdateWindow(priv->wnd);
 	}
 
 	return thiz;

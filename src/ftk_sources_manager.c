@@ -132,7 +132,7 @@ Ret  ftk_sources_manager_add_async(FtkSourcesManager* thiz, FtkSource* source)
 
 	request.data = source;
 	request.type = FTK_REQUEST_ADD_SOURCE;
-	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
+	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
 
 	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
@@ -145,7 +145,7 @@ Ret  ftk_sources_manager_remove_async(FtkSourcesManager* thiz, FtkSource* source
 
 	request.data = source;
 	request.type = FTK_REQUEST_REMOVE_SOURCE;
-	ret = write(thiz->write_fd, &request, sizeof(FtkRequest));
+	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
 
 	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
@@ -155,7 +155,7 @@ Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz)
 	int ret = 0;
 	FtkRequest request = {0};
 
-	ret = read(thiz->read_fd, &request, sizeof(FtkRequest));
+	ret = pipe_read(thiz->read_fd, &request, sizeof(FtkRequest));
 	return_val_if_fail(ret == sizeof(FtkRequest), RET_FAIL);
 
 	switch(request.type)
