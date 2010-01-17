@@ -74,14 +74,13 @@ static HWND ftk_create_display_window(void)
            WS_OVERLAPPEDWINDOW, /* default window */
            CW_USEDEFAULT,       /* Windows decides the position */
            CW_USEDEFAULT,       /* where the window ends up on the screen */
-           320,                 /* The programs width */
-           480,                 /* and height in pixels */
+           DISPLAY_WIDTH,       /* The programs width */
+           DISPLAY_HEIGHT,      /* and height in pixels */
            HWND_DESKTOP,        /* The window is a child-window to desktop */
            NULL,                /* No menu */
-           NULL,       /* Program Instance handler */
+           NULL,                /* Program Instance handler */
            NULL                 /* No Window Creation data */
            );
-
 
 	return hwnd;
 }
@@ -94,6 +93,29 @@ typedef struct _PrivInfo
 	HBITMAP hBitmap;
 }PrivInfo;
 
+static LRESULT WinOnPaint(HWND hwnd)
+{
+	HDC dc = NULL;
+	PAINTSTRUCT ps;
+	HBITMAP hBitmap;
+	PrivInfo* priv = NULL;
+	HBITMAP hDisplay = NULL;
+	
+	BeginPaint(hwnd, &ps);
+	priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
+	hDisplay = priv->hBitmap;
+
+	dc = CreateCompatibleDC(ps.hdc);
+	hBitmap = SelectObject(dc, hDisplay);
+	BitBlt(ps.hdc, 0, 0, DISPLAY_WIDTH,	DISPLAY_HEIGHT, dc, 0, 0, SRCCOPY);
+	SelectObject(dc, hBitmap);
+	DeleteObject(dc);
+
+	EndPaint(hwnd, &ps);
+
+	return 0;
+}
+
 static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)                  /* handle the messages */
@@ -103,22 +125,7 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
             break;
 		case WM_PAINT:
 			{
-				HBITMAP hBitmap;
-				HDC dc = NULL;
-				PrivInfo* priv = NULL;
-				PAINTSTRUCT ps;
-				HBITMAP hDisplay = NULL;
-				BeginPaint(hwnd, &ps);
-				priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
-				hDisplay = priv->hBitmap;
-
-				dc = CreateCompatibleDC(ps.hdc);
-				hBitmap = SelectObject(dc, hDisplay);
-				BitBlt(ps.hdc, 0, 0, DISPLAY_WIDTH,
-					DISPLAY_HEIGHT, dc, 0, 0, SRCCOPY);
-				SelectObject(dc, hBitmap);
-				DeleteObject(dc);
-				EndPaint(hwnd, &ps);
+				WinOnPaint(hwnd);
 				break;
 			}
 		case WM_KEYDOWN:
@@ -164,20 +171,12 @@ static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect
 
 static int ftk_display_win32_width(FtkDisplay* thiz)
 {
-	RECT r = {0};
-	DECL_PRIV(thiz, priv);
-	GetWindowRect(priv->wnd, &r);
-
-	return r.right - r.left;
+	return DISPLAY_WIDTH;
 }
 
 static int ftk_display_win32_height(FtkDisplay* thiz)
 {
-	RECT r = {0};
-	DECL_PRIV(thiz, priv);
-	GetWindowRect(priv->wnd, &r);
-
-	return r.bottom - r.top;
+	return DISPLAY_HEIGHT;
 }
 
 static Ret ftk_display_win32_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
@@ -195,6 +194,7 @@ static void ftk_display_win32_destroy(FtkDisplay* thiz)
 		CloseWindow(priv->wnd);
 		FTK_FREE(priv->bits);
 		DeleteObject(priv->hBitmap);
+		FTK_DREE(thiz);
 	}
 
 	return;
@@ -207,9 +207,9 @@ FtkDisplay* ftk_display_win32_create(void)
 	if(thiz != NULL)
 	{
 		PrivInfo* p = NULL;
+		BITMAPINFO bmi = {0};
 		HBITMAP hBitmap = NULL;
 		DECL_PRIV(thiz, priv);
-		BITMAPINFO bmi = {0};
 
 		thiz->update   = ftk_display_win32_update;
 		thiz->width    = ftk_display_win32_width;
@@ -222,10 +222,10 @@ FtkDisplay* ftk_display_win32_create(void)
 		memset(&bmi, 0x00, sizeof(bmi));
 
 		bmi.bmiHeader.biBitCount = 32;
-		bmi.bmiHeader.biHeight = DISPLAY_HEIGHT;
-		bmi.bmiHeader.biWidth = DISPLAY_HEIGHT;
-		bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
-		bmi.bmiHeader.biPlanes = 1;
+		bmi.bmiHeader.biHeight   = DISPLAY_HEIGHT;
+		bmi.bmiHeader.biWidth    = DISPLAY_HEIGHT;
+		bmi.bmiHeader.biSize     = sizeof(bmi.bmiHeader);
+		bmi.bmiHeader.biPlanes   = 1;
 		bmi.bmiHeader.biCompression = BI_RGB;
 		bmi.bmiHeader.biSizeImage = 0;
 
@@ -239,3 +239,4 @@ FtkDisplay* ftk_display_win32_create(void)
 
 	return thiz;
 }
+
