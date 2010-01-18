@@ -31,7 +31,10 @@
 
 #include <windows.h>
 #include "ftk_bitmap.h"
-#include "ftk_display.h"
+#include "ftk_event.h"
+#include "ftk_globals.h"
+#include "ftk_wnd_manager.h"
+#include "ftk_display_win32.h"
 
 #define DISPLAY_WIDTH  320
 #define DISPLAY_HEIGHT 480
@@ -42,7 +45,6 @@ static LRESULT CALLBACK WinProc (HWND, UINT, WPARAM, LPARAM);
 static HWND ftk_create_display_window(void)
 {
     HWND hwnd;               /* This is the handle for our window */
-    MSG messages;            /* Here messages to the application are saved */
     WNDCLASSEX wincl;        /* Data structure for the windowclass */
 
     /* The Window structure */
@@ -55,7 +57,7 @@ static HWND ftk_create_display_window(void)
     /* Use default icon and mouse-pointer */
     wincl.hIcon = NULL;
     wincl.hIconSm = NULL;
-    wincl.hCursor = NULL;
+	wincl.hCursor = LoadCursor(NULL, IDC_ARROW);
     wincl.lpszMenuName = NULL;                 /* No menu */
     wincl.cbClsExtra = 0;                      /* No extra bytes after the window class */
     wincl.cbWndExtra = 64;                      /* structure or the window instance */
@@ -90,7 +92,9 @@ typedef struct _PrivInfo
 {
 	HWND wnd;
 	void* bits;
+	void* revert_bits;
 	HBITMAP hBitmap;
+	FtkEvent event;
 }PrivInfo;
 
 static LRESULT WinOnPaint(HWND hwnd)
@@ -104,9 +108,14 @@ static LRESULT WinOnPaint(HWND hwnd)
 	BeginPaint(hwnd, &ps);
 	priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
 	hDisplay = priv->hBitmap;
-
+	SetMapMode(ps.hdc, MM_TEXT);
+	SetWindowOrgEx(ps.hdc, 0, -DISPLAY_HEIGHT, NULL);
+	SetViewportOrgEx(ps.hdc, 0, -DISPLAY_HEIGHT, NULL);
+	
+	MoveToEx(ps.hdc, 0, 0, NULL);
+	LineTo(ps.hdc, 100, 100);
 	dc = CreateCompatibleDC(ps.hdc);
-	hBitmap = SelectObject(dc, hDisplay);
+	hBitmap = (HBITMAP)SelectObject(dc, hDisplay);
 	BitBlt(ps.hdc, 0, 0, DISPLAY_WIDTH,	DISPLAY_HEIGHT, dc, 0, 0, SRCCOPY);
 	SelectObject(dc, hBitmap);
 	DeleteObject(dc);
@@ -118,6 +127,7 @@ static LRESULT WinOnPaint(HWND hwnd)
 
 static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	PrivInfo* priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
@@ -130,16 +140,30 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			}
 		case WM_KEYDOWN:
 		case WM_KEYUP:
+			{
+				break;
+			}
 		case WM_LBUTTONUP:
 		case WM_LBUTTONDOWN:
-		case WM_MOUSEMOVE:
+		//case WM_MOUSEMOVE:
 			{
+				int xPos = LOWORD(lParam); 
+				int yPos = HIWORD(lParam); 
+				priv->event.u.mouse.x = xPos;
+				priv->event.u.mouse.y = yPos;
+				priv->event.type = message == WM_LBUTTONUP? FTK_EVT_MOUSE_UP : FTK_EVT_MOUSE_DOWN;
+
 				break;
 			}
         default:                      /* for messages that we don't deal with */
             return DefWindowProc (hwnd, message, wParam, lParam);
     }
 
+	if(priv->event.type != FTK_EVT_NOP)
+	{
+		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &priv->event);
+		priv->event.type = FTK_EVT_NOP;
+	}
     return 0;
 }
 
@@ -148,21 +172,35 @@ static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect
 	int i = 0;
 	int j = 0;
 	DECL_PRIV(thiz, priv);
+	BITMAPINFO bmi;
 	int display_width  = DISPLAY_WIDTH;
 	int display_height = DISPLAY_HEIGHT;
+	FtkColor* bits = (FtkColor*)priv->bits;
 
-	FtkColor* bits = priv->bits;
+	memset(&bmi, 0x00, sizeof(bmi));
+	bmi.bmiHeader.biBitCount = 32;
+	bmi.bmiHeader.biCompression = BI_RGB;
+	bmi.bmiHeader.biSize = sizeof(bmi.bmiHeader);
+	bmi.bmiHeader.biWidth = DISPLAY_WIDTH;
+	bmi.bmiHeader.biHeight = DISPLAY_HEIGHT;
+	bmi.bmiHeader.biPlanes = 1;
+
+	ftk_bitmap_copy_to_data_bgra32(bitmap, rect, 
+		priv->bits, xoffset, yoffset, display_width, display_height); 
+
+	FtkColor* src = (FtkColor*)priv->bits;
+	FtkColor* dst = (FtkColor*)priv->revert_bits + ((DISPLAY_HEIGHT - 1) * DISPLAY_WIDTH);
 	for(j = 0; j < DISPLAY_HEIGHT; j++)
 	{
 		for(i = 0; i < DISPLAY_WIDTH; i++)
 		{
-			bits->a = 0xff;
-			bits->b = 0xff;
-			bits++;
+			dst[i] = src[i];
 		}
+		src += DISPLAY_WIDTH;
+		dst -= DISPLAY_WIDTH;
 	}
-//	ftk_bitmap_copy_to_data_bgra32(bitmap, rect, 
-//		priv->bits, xoffset, yoffset, display_width, display_height); 
+
+	::SetDIBits(GetDC(priv->wnd), priv->hBitmap, 0, DISPLAY_HEIGHT, priv->revert_bits, &bmi, DIB_RGB_COLORS);
 
 	InvalidateRect(priv->wnd, NULL, FALSE);
 
@@ -179,7 +217,7 @@ static int ftk_display_win32_height(FtkDisplay* thiz)
 	return DISPLAY_HEIGHT;
 }
 
-static Ret ftk_display_win32_snap(FtkDisplay* thiz, FtkBitmap** bitmap)
+static Ret ftk_display_win32_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
 	DECL_PRIV(thiz, priv);
 
@@ -193,8 +231,9 @@ static void ftk_display_win32_destroy(FtkDisplay* thiz)
 	{
 		CloseWindow(priv->wnd);
 		FTK_FREE(priv->bits);
+		FTK_FREE(priv->revert_bits);
 		DeleteObject(priv->hBitmap);
-		FTK_DREE(thiz);
+		FTK_FREE(thiz);
 	}
 
 	return;
@@ -202,7 +241,7 @@ static void ftk_display_win32_destroy(FtkDisplay* thiz)
 
 FtkDisplay* ftk_display_win32_create(void)
 {
-	FtkDisplay* thiz = FTK_ZALLOC(sizeof(FtkDisplay));
+	FtkDisplay* thiz = (FtkDisplay*)FTK_ZALLOC(sizeof(FtkDisplay) + sizeof(PrivInfo));
 
 	if(thiz != NULL)
 	{
@@ -229,10 +268,12 @@ FtkDisplay* ftk_display_win32_create(void)
 		bmi.bmiHeader.biCompression = BI_RGB;
 		bmi.bmiHeader.biSizeImage = 0;
 
-		hBitmap = CreateDIBSection(GetDC(priv->wnd), &bmi, DIB_RGB_COLORS, &priv->bits, NULL, 0); 
+		hBitmap = CreateBitmap(DISPLAY_WIDTH, DISPLAY_HEIGHT, 1, 32, NULL);
 		priv->hBitmap = hBitmap;
+		priv->bits = FTK_ZALLOC(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
+		priv->revert_bits = FTK_ZALLOC(DISPLAY_WIDTH * DISPLAY_HEIGHT * 4);
 
-		SetWindowLong(priv->wnd, GWL_USERDATA, priv);
+		SetWindowLong(priv->wnd, GWL_USERDATA, (LONG)priv);
 		ShowWindow (priv->wnd, SW_SHOW);
 		UpdateWindow(priv->wnd);
 	}
