@@ -52,6 +52,7 @@
 #define LOCAL_DATA_DIR FTK_ROOT_DIR
 #define FTK_DATA_ROOT  FTK_ROOT_DIR"\\data"
 #define TESTDATA_DIR   FTK_ROOT_DIR"\\testdata"
+#define _CRT_SECURE_NO_WARNINGS 1
 
 #define usleep                  Sleep
 #define pipe_open(fds)          win32_socketpair(fds)

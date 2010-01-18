@@ -34,6 +34,8 @@
 
 #include "ftk_gc.h"
 
+FTK_BEGIN_DECLS
+
 typedef enum _FtkBgStyle
 {
 	FTK_BG_NORMAL = 0,
@@ -74,6 +76,8 @@ Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
 
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
 void ftk_canvas_destroy(FtkCanvas* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_CANVAS_H*/
 

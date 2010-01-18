@@ -432,14 +432,14 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 		{
 			if((i = ftk_xul_find_getter(iter+1)) >= 0)
 			{
-				dst += snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
+				dst += ftk_snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
 					"%d", s_var_getters[i].get(thiz));
 				iter += strlen(s_var_getters[i].name);
 				continue;
 			}
 			else if((i = ftk_xul_find_const(iter+1)) >= 0)
 			{
-				dst += snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
+				dst += ftk_snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
 					"%d", s_var_conts[i].value);
 				iter += strlen(s_var_getters[i].name);
 				continue;

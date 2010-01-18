@@ -37,6 +37,8 @@
 #include "ftk_canvas.h"
 #include "ftk_display.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkWdiget;
 typedef struct _FtkWdiget FtkWidget;
 
@@ -142,6 +144,8 @@ Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);
 
 #define FTK_END_PAINT() \
 	return ftk_widget_update(thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_WIDGET_H*/
 

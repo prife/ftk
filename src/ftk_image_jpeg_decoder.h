@@ -33,7 +33,11 @@
 
 #include "ftk_image_decoder.h"
 
+FTK_BEGIN_DECLS
+
 FtkImageDecoder* ftk_image_jpeg_decoder_create(void);
+
+FTK_END_DECLS
 
 #endif/*FTK_IMAGE_JPEG_DECODER_H*/
 

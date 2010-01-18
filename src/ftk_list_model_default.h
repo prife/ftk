@@ -35,6 +35,8 @@
 #include "ftk_bitmap.h"
 #include "ftk_list_model.h"
 
+FTK_BEGIN_DECLS
+
 typedef enum _FtkListItemType
 {
 	FTK_LIST_ITEM_NORMAL = 0,
@@ -56,6 +58,8 @@ typedef struct _FtkListItemInfo
 typedef void (*FtkListItemDestroy)(FtkListItemInfo* info);
 
 FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkListItemDestroy destroy);
+
+FTK_END_DECLS
 
 #endif/*FTK_LIST_MODEL_DEFAULT_H*/
 

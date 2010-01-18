@@ -35,6 +35,8 @@
 #include "ftk_widget.h"
 #include "ftk_main_loop.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkWndManager;
 typedef struct _FtkWndManager FtkWndManager;
 
@@ -136,6 +138,8 @@ static inline void ftk_wnd_manager_destroy(FtkWndManager* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_WND_MANAGER_H*/
 

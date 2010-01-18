@@ -36,11 +36,15 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int height);
 
 const char* ftk_entry_get_text(FtkWidget* thiz);
 Ret ftk_entry_set_text(FtkWidget* thiz, const char* text);
 Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text);
+
+FTK_END_DECLS
 
 #endif/*FTK_ENTRY_H*/
 

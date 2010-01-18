@@ -35,12 +35,16 @@ FTK_INHERITE_FROM(Window)
 #define FTK_APP_WINDOW_H
 #include "ftk_window.h"
 
+FTK_BEGIN_DECLS
+
 typedef Ret (*FtkPrepareOptionsMenu)(void* ctx, FtkWidget* menu_panel);
 
 FtkWidget* ftk_app_window_create(void);
 
 Ret ftk_app_window_set_on_prepare_options_menu(FtkWidget* thiz, 
 	FtkPrepareOptionsMenu on_prepare_options_menu, void* ctx);
+
+FTK_END_DECLS
 
 #endif/*FTK_APP_WINDOWL*/
 

@@ -33,9 +33,13 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 Ret ftk_logv(const char* format, ...);
 Ret ftk_logd(const char* format, ...);
 Ret ftk_loge(const char* format, ...);
+
+FTK_END_DECLS
 
 #endif/*FTK_LOG_H*/
 

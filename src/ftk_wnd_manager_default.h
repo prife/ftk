@@ -34,7 +34,11 @@
 
 #include "ftk_wnd_manager.h"
 
+FTK_BEGIN_DECLS
+
 FtkWndManager* ftk_wnd_manager_default_create(FtkMainLoop* main_loop);
+
+FTK_END_DECLS
 
 #endif/*FTK_WND_MANAGER_DEFAULT_H*/
 

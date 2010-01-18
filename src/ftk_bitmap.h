@@ -33,6 +33,8 @@
 
 #include "ftk_font.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkBitmap;
 typedef struct _FtkBitmap FtkBitmap;
 
@@ -62,6 +64,8 @@ typedef Ret (*FtkBitmapCopyFromData)(FtkBitmap* bitmap,
 	void* data, size_t dw, size_t dh, FtkRect* rect);
 typedef Ret (*FtkBitmapCopyToData)(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
+
+FTK_END_DECLS
 
 #endif/*FTK_BITMAP_H*/
 

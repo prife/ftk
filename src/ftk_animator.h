@@ -34,6 +34,8 @@
 
 #include "ftk_window.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkAnimator;
 typedef struct _FtkAnimator FtkAnimator;
 
@@ -92,6 +94,8 @@ static inline void ftk_animator_destroy(FtkAnimator* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_ANIMATOR_H*/
 

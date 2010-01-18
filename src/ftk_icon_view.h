@@ -36,6 +36,8 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 typedef struct _FtkIconViewItem
 {
 	char text[10];
@@ -56,6 +58,8 @@ size_t ftk_icon_view_get_count(FtkWidget* thiz);
 Ret ftk_icon_view_remove(FtkWidget* thiz, size_t index);
 Ret ftk_icon_view_add(FtkWidget* thiz, const FtkIconViewItem* item);
 Ret ftk_icon_view_get(FtkWidget* thiz, size_t index, const FtkIconViewItem** item);
+
+FTK_END_DECLS
 
 #endif/*FTK_ICON_VIEW_H*/
 

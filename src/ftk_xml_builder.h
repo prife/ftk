@@ -34,6 +34,8 @@
 #ifndef XML_BUILDER_H
 #define XML_BUILDER_H
 
+FTK_BEGIN_DECLS
+
 struct _FtkXmlBuilder;
 typedef struct _FtkXmlBuilder FtkXmlBuilder;
 
@@ -131,6 +133,8 @@ static inline void ftk_xml_builder_destroy(FtkXmlBuilder* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*XML_BUILDER_H*/
 

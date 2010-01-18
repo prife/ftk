@@ -34,6 +34,8 @@
 
 #include "ftk_widget.h"
 
+FTK_BEGIN_DECLS
+
 typedef const char* (*FtkTranslateText)(const char* text);
 typedef const char* (*FtkTranslatePath)(const char* path, char out_path[FTK_MAX_PATH+1]);
 typedef FtkBitmap*  (*FtkLoadImage)(const char* filename);
@@ -41,6 +43,8 @@ typedef FtkBitmap*  (*FtkLoadImage)(const char* filename);
 FtkWidget* ftk_xul_load(const char* xml, int length);
 FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkLoadImage load_image);
 FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, FtkLoadImage load_image);
+
+FTK_END_DECLS
 
 #endif/*FTK_XUL_H*/
 

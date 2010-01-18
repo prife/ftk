@@ -33,10 +33,14 @@
 #include "ftk_event.h"
 #include "ftk_source.h"
 
+FTK_BEGIN_DECLS
+
 FtkSource* ftk_source_primary_create(FtkOnEvent on_event, void* user_data);
 
 /*commit a event via the primary source.*/
 Ret ftk_source_queue_event(FtkSource* thiz, FtkEvent* event);
+
+FTK_END_DECLS
 
 #endif/*FTK_SOURCE_PRIMARY_H*/
 

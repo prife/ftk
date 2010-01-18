@@ -31,7 +31,11 @@
 #ifndef FTK_EXPR_H
 #define FTK_EXPR_H
 
+FTK_BEGIN_DECLS
+
 double ftk_expr_eval(const char* expr);
+
+FTK_END_DECLS
 
 #endif/*FTK_EXPR_H*/
 

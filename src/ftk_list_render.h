@@ -35,6 +35,8 @@
 #include "ftk_canvas.h"
 #include "ftk_list_model.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkListRender;
 typedef struct _FtkListRender FtkListRender;
 
@@ -74,6 +76,8 @@ static inline void ftk_list_render_destroy(FtkListRender* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_LIST_RENDER_H*/
 

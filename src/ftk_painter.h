@@ -36,8 +36,12 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_painter_create(FtkWidget* parent, int x, int y, int width, int height);
 Ret ftk_painter_set_paint_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+
+FTK_END_DECLS
 
 #endif/*FTK_PAINTER_H*/
 

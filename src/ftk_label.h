@@ -37,7 +37,11 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
+
+FTK_END_DECLS
 
 #endif/*FTK_LABEL_H*/
 

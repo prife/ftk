@@ -39,6 +39,8 @@
 #include "ftk_bitmap_factory.h"
 #include "ftk_sources_manager.h"
 
+FTK_BEGIN_DECLS
+
 FtkFont*          ftk_default_font(void);
 FtkDisplay*       ftk_default_display(void);
 FtkMainLoop*      ftk_default_main_loop(void);
@@ -60,6 +62,8 @@ void ftk_set_bitmap_factory(FtkBitmapFactory* bitmap_factory);
 void ftk_set_sources_manager(FtkSourcesManager* sources_manager);
 void ftk_set_shared_canvas(FtkCanvas* canvas);
 void ftk_set_theme(FtkTheme* theme);
+
+FTK_END_DECLS
 
 #endif/*FTK_GLOBALS_H*/
 

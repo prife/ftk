@@ -34,6 +34,8 @@
 
 #include "ftk_image_decoder.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkBitmapFactory;
 typedef struct _FtkBitmapFactory FtkBitmapFactory;
 
@@ -41,6 +43,8 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void);
 FtkBitmap* ftk_bitmap_factory_load(FtkBitmapFactory* thiz, const char* filename);
 Ret        ftk_bitmap_factory_add_decoder(FtkBitmapFactory* thiz, FtkImageDecoder* decoder);
 void       ftk_bitmap_factory_destroy(FtkBitmapFactory* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_BITMAP_FACTORY_H*/
 

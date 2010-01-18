@@ -33,6 +33,8 @@
 
 #include "ftk_sources_manager.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkMainLoop;
 typedef struct _FtkMainLoop FtkMainLoop;
 
@@ -42,6 +44,8 @@ Ret  ftk_main_loop_quit(FtkMainLoop* thiz);
 Ret  ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source);
 Ret  ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source);
 void ftk_main_loop_destroy(FtkMainLoop* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_MAIN_LOOP_H*/
 

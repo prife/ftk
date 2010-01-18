@@ -32,6 +32,8 @@
 #define FTK_EVENT_H
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 typedef enum _FtkEventType
 {
 	FTK_EVT_NOP = 0,
@@ -93,5 +95,7 @@ typedef struct _FtkEvent
 }FtkEvent;
 
 typedef Ret (*FtkOnEvent)(void* user_data, FtkEvent* event);
+
+FTK_END_DECLS
 
 #endif/*FTK_EVENT_H*/

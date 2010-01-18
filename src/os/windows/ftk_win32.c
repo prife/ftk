@@ -31,6 +31,7 @@
 #include <string.h>
 #include <assert.h>
 #include "ftk_win32.h"
+#include "ftk_log.h"
 
 int ftk_platform_init(int argc, char** argv)
 {

@@ -33,6 +33,8 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 typedef enum _FtkKey
 {
 	FTK_KEY_SPACE         =  0x020,
@@ -178,4 +180,7 @@ typedef enum _FtkKey
 }FtkKey;
 
 #define FTK_IS_ACTIVE_KEY(key) ((key) == FTK_KEY_ENTER || (key) == FTK_KEY_SPACE)
+
+FTK_END_DECLS
+
 #endif/*_FTK_KEY_H*/

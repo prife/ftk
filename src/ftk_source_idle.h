@@ -33,7 +33,11 @@
 #define FTK_SOURCE_IDLE_H
 #include "ftk_source.h"
 
+FTK_BEGIN_DECLS
+
 FtkSource* ftk_source_idle_create(FtkIdle action, void* user_data);
+
+FTK_END_DECLS
 
 #endif/*FTK_SOURCE_IDLE_H*/
 

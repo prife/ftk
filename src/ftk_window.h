@@ -35,6 +35,8 @@
 #include "ftk_widget.h"
 #include "ftk_wnd_manager.h"
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_window_create(int x, int y, int width, int height);
 FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height);
 Ret        ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget);
@@ -48,6 +50,8 @@ Ret        ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect);
 Ret        ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg);
 Ret        ftk_window_disable_update(FtkWidget* thiz);
 Ret        ftk_window_enable_update(FtkWidget* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_WINDOW_H*/
 

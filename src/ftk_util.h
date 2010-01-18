@@ -34,10 +34,14 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 unsigned short utf8_get_char (const char *p, const char** next);
 unsigned short utf8_get_prev_char (const char *p, const char** prev);
 int utf8_count_char(const char *begin, size_t length);
 FtkColor ftk_parse_color( const char* value);
+
+FTK_END_DECLS
 
 #endif/*FTK_UTIL_H*/
 

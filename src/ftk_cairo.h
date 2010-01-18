@@ -35,7 +35,11 @@
 #include <ftk.h>
 #include <cairo.h>
 
+FTK_BEGIN_DECLS
+
 cairo_surface_t* ftk_cairo_surface_create(FtkWidget* widget);
+
+FTK_END_DECLS
 
 #endif/*FTK_CAIRO_H*/
 

@@ -30,9 +30,14 @@
  */
 #ifndef FTK_DISPLAY_WIN32_H
 #define FTK_DISPLAY_WIN32_H
+
 #include "ftk_display.h"
 
+FTK_BEGIN_DECLS
+
 FtkDisplay* ftk_display_win32_create(void);
+
+FTK_END_DECLS
 
 #endif/*FTK_DISPLAY_WIN32_H*/
 

@@ -32,6 +32,10 @@
 #ifndef FTK_BACKEND_H
 #define FTK_BACKEND_H
 
+FTK_BEGIN_DECLS
+
 Ret ftk_backend_init(int argc, char* argv[]);
+
+FTK_END_DECLS
 
 #endif/*FTK_BACKEND_H*/

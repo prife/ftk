@@ -34,6 +34,8 @@
 
 #include "ftk_bitmap.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkTheme;
 typedef struct _FtkTheme FtkTheme;
 
@@ -46,6 +48,8 @@ FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetS
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 void       ftk_theme_destroy(FtkTheme* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_THEME_H*/
 

@@ -34,6 +34,8 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 typedef struct _FtkTextBuffer
 {
 	char* buffer;
@@ -49,6 +51,8 @@ Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count);
 int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count);
 
 void ftk_text_buffer_destroy(FtkTextBuffer* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_TEXT_BUFFER_H*/
 

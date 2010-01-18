@@ -35,8 +35,12 @@
 
 FTK_INHERITE_FROM(Window)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_dialog_create(int x, int y, int width, int height);
 int ftk_dialog_run(FtkWidget* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_DIALOG_H*/
 

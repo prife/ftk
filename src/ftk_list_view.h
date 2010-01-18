@@ -38,12 +38,16 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int height);
 Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* render, int item_height);
 
 int ftk_list_view_get_selected(FtkWidget* thiz);
 FtkListModel* ftk_list_view_get_model(FtkWidget* thiz);
 Ret ftk_list_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+
+FTK_END_DECLS
 
 #endif/*FTK_LIST_VIEW_H*/
 

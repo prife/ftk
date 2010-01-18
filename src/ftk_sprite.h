@@ -34,6 +34,8 @@
 
 #include "ftk_bitmap.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkSprite;
 typedef struct _FtkSprite FtkSprite;
 
@@ -46,6 +48,8 @@ Ret  ftk_sprite_move(FtkSprite* thiz, int x, int y);
 Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon);
 Ret  ftk_sprite_set_move_listener(FtkSprite* thiz, FtkListener listener, void* ctx);
 void ftk_sprite_destroy(FtkSprite* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_SPRITE_H*/
 

@@ -31,8 +31,11 @@
 
 #include "ftk_image_win32_decoder.h"
 #define PNG_SKIP_SETJMP_CHECK
-#include <win32.h>
+#include "ftk_win32.h"
+//#include <gdiplus.h>
 
+//using namespace Gdiplus;
+//static ULONG_PTR gdiplusToken;
 static Ret ftk_image_win32_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {
 	return_val_if_fail(filename != NULL, RET_FAIL);
@@ -44,25 +47,48 @@ static Ret ftk_image_win32_decoder_match(FtkImageDecoder* thiz, const char* file
 
 static FtkBitmap* load_win32 (const char *filename)
 {
+#if 0
 	int x = 0;
 	int y = 0;
 	int w = 0;
 	int h = 0;
 	int n = 0;
 	FILE *fp = NULL;	
-	FtkColor* dst = NULL;
-	unsigned char* src = NULL;
+	FtkColor bg = {0};
 	FtkBitmap* bitmap = NULL;
-	FtkColor  bg = {0};
-	bg.a = 0xff;
-	if ((fp = fopen (filename, "rb")) == NULL)
+	WCHAR wfilename[MAX_PATH] = {0};
+	mbstowcs(wfilename, filename, MAX_PATH);
+	Bitmap* img = Bitmap::FromFile(wfilename);
+
+	return_val_if_fail(img != NULL, NULL);
+
+	w = img->GetWidth();
+	h = img->GetHeight();
+
+	bitmap = ftk_bitmap_create(w, h, bg);
+	Rect r(0, 0, w, h);
+	BitmapData bitmapData;
+	img->LockBits(&r, ImageLockModeRead, PixelFormat32bppARGB, &bitmapData);
+
+	FtkColor* src = (FtkColor*)bitmapData.Scan0;
+	FtkColor* dst = ftk_bitmap_bits(bitmap);
+
+	for(y = 0; y < h; y++)
 	{
-		printf("%s: open %s failed.\n", __func__, filename);
-		return NULL;
+		for(x = 0; x < w; x++)
+		{
+			*dst = *src;
+		}
 	}
 
+	img->UnlockBits(&bitmapData);
+	
+	delete img;
 
 	return bitmap;
+#else
+	return NULL;
+#endif
 }
 
 static FtkBitmap* ftk_image_win32_decoder_decode(FtkImageDecoder* thiz, const char* filename)
@@ -79,6 +105,8 @@ static void ftk_image_win32_decoder_destroy(FtkImageDecoder* thiz)
 		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 
+	 //GdiplusShutdown(gdiplusToken);
+
 	return;
 }
 
@@ -88,6 +116,9 @@ FtkImageDecoder* ftk_image_win32_decoder_create(void)
 
 	if(thiz != NULL)
 	{
+		//GdiplusStartupInput gdiplusStartupInput;
+
+		//GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 		thiz->match   = ftk_image_win32_decoder_match;
 		thiz->decode  = ftk_image_win32_decoder_decode;
 		thiz->destroy = ftk_image_win32_decoder_destroy;

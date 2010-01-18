@@ -34,6 +34,8 @@
 #include "ftk_font.h"
 #include "ftk_bitmap.h"
 
+FTK_BEGIN_DECLS
+
 enum _FtkGcMask
 {
 	FTK_GC_BG        = 1,
@@ -115,6 +117,8 @@ static inline Ret ftk_gc_reset(FtkGc* gc)
 
 	return RET_OK;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_GC_H*/
 

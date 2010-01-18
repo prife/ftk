@@ -96,7 +96,7 @@ static const char* const s_default_theme = "\
 
 static Ret ftk_theme_init_default(FtkTheme* thiz)
 {
-#ifdef LINUX
+#if defined(LINUX) || defined(WIN32)
 	char filename[FTK_MAX_PATH] = {0};
 	ftk_snprintf(filename, sizeof(filename), DATA_DIR"/theme/default/theme.xml");
 	if(ftk_theme_parse_file(thiz, filename) != RET_OK)

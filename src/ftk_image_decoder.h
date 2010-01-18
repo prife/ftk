@@ -34,6 +34,8 @@
 
 #include "ftk_bitmap.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkImageDecoder;
 typedef struct _FtkImageDecoder FtkImageDecoder;
 
@@ -73,6 +75,8 @@ static inline void ftk_image_decoder_destroy(FtkImageDecoder* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_IMAGE_DECODER_H*/
 

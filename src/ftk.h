@@ -64,9 +64,13 @@ extern "C" {
 #include "ftk_icon_view.h"
 #include "ftk_sprite.h"
 
+FTK_BEGIN_DECLS
+
 Ret  ftk_init(int argc, char* argv[]);
 Ret  ftk_run(void);
 void ftk_quit(void);
+
+FTK_END_DECLS
 
 #ifdef __cplusplus
 }

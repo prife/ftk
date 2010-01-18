@@ -36,8 +36,12 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int height);
 Ret ftk_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+
+FTK_END_DECLS
 
 #endif/*FTK_BUTTON_H*/
 

@@ -173,5 +173,13 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_STOCK_IMG_SUFFIX    ".png"
 #define FTK_FONT_SIZE 16
 
+#ifdef __cplusplus
+#define FTK_BEGIN_DECLS extern "C" {
+#define FTK_END_DECLS }
+#else
+#define FTK_BEGIN_DECLS
+#define FTK_END_DECLS
+#endif
+
 #endif/*FTK_TYPEDEF_H*/
 

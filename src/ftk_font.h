@@ -34,6 +34,8 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 typedef struct _FtkGlyph
 {
 	signed char x;
@@ -82,6 +84,8 @@ static inline void     ftk_font_destroy(FtkFont* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_FONT_H*/
 

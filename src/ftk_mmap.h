@@ -34,6 +34,8 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkMmap;
 typedef struct _FtkMmap FtkMmap;
 
@@ -41,6 +43,8 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size);
 void*    ftk_mmap_data(FtkMmap* thiz);
 size_t   ftk_mmap_length(FtkMmap* thiz);
 void     ftk_mmap_destroy(FtkMmap* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_MMAP_H*/
 

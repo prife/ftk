@@ -34,7 +34,11 @@
 
 #include "ftk_list_render.h"
 
+FTK_BEGIN_DECLS
+
 FtkListRender* ftk_list_render_default_create(void);
+
+FTK_END_DECLS
 
 #endif/*FTK_LIST_RENDER_DEFAULT_H*/
 

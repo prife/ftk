@@ -38,6 +38,8 @@
 #ifndef FONT_DATA_H
 #define FONT_DATA_H
 
+FTK_BEGIN_DECLS
+
 typedef enum _Encoding
 {
 	ENC_UTF16 = 0,
@@ -78,6 +80,8 @@ void font_data_set_style(FontData* thiz, const char* style);
 Ret font_data_save(FontData* thiz, const char* filename);
 #endif
 void font_data_destroy(FontData* thiz);
+
+FTK_END_DECLS
 
 #endif/*FONT_DATA_H*/
 

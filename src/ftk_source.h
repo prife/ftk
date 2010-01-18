@@ -32,6 +32,9 @@
 #define FTK_SOURCE_H
 
 #include "ftk_typedef.h"
+
+FTK_BEGIN_DECLS
+
 struct _FtkSource;
 typedef struct _FtkSource FtkSource;
 
@@ -102,5 +105,8 @@ static inline void ftk_source_unref(FtkSource* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
+
 #endif/*FTK_SOURCE_H*/
 

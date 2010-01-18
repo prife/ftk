@@ -34,7 +34,11 @@
 #include "ftk_event.h"
 #include "ftk_source.h"
 
-FtkSource* ftk_source_dfb_create(void);
+FTK_BEGIN_DECLS
+
+FtkSource* ftk_source_win32_create(void);
+
+FTK_END_DECLS
 
 #endif/*FTK_SOURCE_WIN32_H*/
 

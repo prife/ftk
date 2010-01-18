@@ -36,10 +36,14 @@
 
 FTK_INHERITE_FROM(Window)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_menu_panel_create(void);
 Ret ftk_menu_panel_relayout(FtkWidget* thiz);
 Ret ftk_menu_panel_add(FtkWidget* thiz, FtkWidget* item);
 Ret ftk_menu_panel_remove(FtkWidget* thiz, FtkWidget* item);
+
+FTK_END_DECLS
 
 #endif/*FTK_MENU_PANEL_H*/
 

@@ -34,6 +34,8 @@
 
 #include "ftk_source.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkSourcesManager;
 typedef struct _FtkSourcesManager FtkSourcesManager;
 
@@ -54,6 +56,8 @@ int ftk_sources_manager_need_refresh(FtkSourcesManager* thiz);
 Ret  ftk_sources_manager_set_need_refresh(FtkSourcesManager* thiz);
 
 void ftk_sources_manager_destroy(FtkSourcesManager* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_SOURCE_MANAGER_H*/
 

@@ -34,6 +34,8 @@
 
 #include "ftk_typedef.h"
 
+FTK_BEGIN_DECLS
+
 struct _FtkListModel;
 typedef struct _FtkListModel FtkListModel;
 
@@ -148,6 +150,8 @@ static inline void ftk_list_model_unref(FtkListModel* thiz)
 
 	return;
 }
+
+FTK_END_DECLS
 
 #endif/*FTK_LIST_MODEL_H*/
 

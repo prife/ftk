@@ -36,9 +36,13 @@
 
 FTK_INHERITE_FROM(Widget)
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_menu_item_create(FtkWidget* parent);
 
 Ret ftk_menu_item_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+
+FTK_END_DECLS
 
 #endif/*FTK_MENU_ITEM_H*/
 

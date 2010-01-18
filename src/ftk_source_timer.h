@@ -32,7 +32,11 @@
 #define FTK_SOURCE_TIMER_H
 #include "ftk_source.h"
 
+FTK_BEGIN_DECLS
+
 FtkSource* ftk_source_timer_create(int interval, FtkTimer action, void* user_data);
+
+FTK_END_DECLS
 
 #endif/*FTK_SOURCE_TIMER_H*/
 

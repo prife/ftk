@@ -35,6 +35,8 @@
 #define FTK_ICON_PATH_NR   4
 #define FTK_ICON_CACHE_MAX 64
 
+FTK_BEGIN_DECLS
+
 struct _FtkIconCache;
 typedef struct _FtkIconCache FtkIconCache;
 
@@ -42,6 +44,8 @@ typedef struct _FtkIconCache FtkIconCache;
 FtkIconCache* ftk_icon_cache_create(const char* root_path[FTK_ICON_PATH_NR], const char* rel_path);
 FtkBitmap* ftk_icon_cache_load(FtkIconCache* thiz, const char* filename);
 void ftk_icon_cache_destroy(FtkIconCache* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_ICON_CACHE_H*/
 

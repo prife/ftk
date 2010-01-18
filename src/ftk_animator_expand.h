@@ -33,7 +33,11 @@
 #define FTK_ANIMATOR_EXPAND_H
 #include "ftk_animator.h"
 
+FTK_BEGIN_DECLS
+
 FtkAnimator* ftk_animator_expand_create(int destroy_when_stop);
+
+FTK_END_DECLS
 
 #endif/*FTK_ANIMATOR_EXPAND_H*/
 

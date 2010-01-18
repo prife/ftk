@@ -65,7 +65,7 @@
 				Name="VCLinkerTool"
 				UseLibraryDependencyInputs="true"
 				UseUnicodeResponseFiles="false"
-				AdditionalDependencies="ftk.lib Ws2_32.lib libpng.lib"
+				AdditionalDependencies="ftk.lib Ws2_32.lib gdiplus.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="D:\lab\ftk\src\compiler\vs2005\Debug;D:\lab\gtk\lib"
 				IgnoreAllDefaultLibraries="false"
@@ -183,11 +183,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\demo_button.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\demos\demo_progress_bar.c"
+				RelativePath="..\..\..\demos\demo_button.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -195,8 +191,23 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="0"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						ObjectFile="$(IntDir)\$(InputName)1.obj"
+						XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\demo_button.cpp"
+				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
