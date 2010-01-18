@@ -108,12 +108,6 @@ static LRESULT WinOnPaint(HWND hwnd)
 	BeginPaint(hwnd, &ps);
 	priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
 	hDisplay = priv->hBitmap;
-	SetMapMode(ps.hdc, MM_TEXT);
-	SetWindowOrgEx(ps.hdc, 0, -DISPLAY_HEIGHT, NULL);
-	SetViewportOrgEx(ps.hdc, 0, -DISPLAY_HEIGHT, NULL);
-	
-	MoveToEx(ps.hdc, 0, 0, NULL);
-	LineTo(ps.hdc, 100, 100);
 	dc = CreateCompatibleDC(ps.hdc);
 	hBitmap = (HBITMAP)SelectObject(dc, hDisplay);
 	BitBlt(ps.hdc, 0, 0, DISPLAY_WIDTH,	DISPLAY_HEIGHT, dc, 0, 0, SRCCOPY);
