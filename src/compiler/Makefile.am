@@ -1,1 +1,1 @@
-SUBDIRS=ads  vs2005
+SUBDIRS=ads  vs2008 vs2010

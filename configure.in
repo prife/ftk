@@ -121,7 +121,8 @@ AC_CONFIG_FILES([ftk.pc
                 src/os/windows/Makefile
                 src/compiler/Makefile
                 src/compiler/ads/Makefile
-                src/compiler/vs2005/Makefile
+                src/compiler/vs2010/Makefile
+                src/compiler/vs2008/Makefile
                 script_binding/Makefile
                 script_binding/lua/Makefile
                 script_binding/lua/lua/Makefile
