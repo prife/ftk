@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="ftk">
+</Property><Property Name="Solution File" Value="D:\lab\ftk\src\compiler\vs2010\ftk.sln">
+</Property><Property Name="User Options File" Value="D:\lab\ftk\src\compiler\vs2010\ftk.suo">
+</Property><Property Name="Date" Value="2010年1月18日">
+</Property><Property Name="Time" Value="7:11">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="ftk.sln" Description="File successfully backed up as D:\lab\ftk\src\compiler\vs2010\ftk.sln.old">
+</Event><Event ErrorLevel="0" Project="" Source="ftk.suo" Description="File successfully backed up as D:\lab\ftk\src\compiler\vs2010\ftk.suo.old">
+</Event><Event ErrorLevel="0" Project="ftk" Source="ftk.vcproj" Description="Converting project file 'D:\lab\ftk\src\compiler\vs2010\ftk.vcproj'.">
+</Event><Event ErrorLevel="1" Project="ftk" Source="ftk.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="1" Project="ftk" Source="ftk.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="ftk" Source="ftk.vcproj" Description="VCConvertEngine could not convert attribute UseUnicodeResponseFiles = false under Tool VCCLCompilerTool.">
+</Event><Event ErrorLevel="1" Project="ftk" Source="ftk.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="1" Project="ftk" Source="ftk.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="0" Project="ftk" Source="ftk.vcproj" Description="Done converting to new project file 'D:\lab\ftk\src\compiler\vs2010\ftk.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="ftk" Source="ftk.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="Converting project file 'D:\lab\ftk\src\compiler\vs2010\demo_button\demo_button.vcproj'.">
+</Event><Event ErrorLevel="1" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="This application has been updated to include settings related to the User Account Control (UAC) feature of Windows Vista. By default, when run on Windows Vista with UAC enabled, this application is marked to run with the same privileges as the process that launched it. This marking also disables the application from running with virtualization. You can change UAC related settings from the Property Pages of the project.">
+</Event><Event ErrorLevel="1" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="VCWebServiceProxyGeneratorTool is no longer supported. The tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="VCConvertEngine could not convert attribute UseUnicodeResponseFiles = false under Tool VCCLCompilerTool.">
+</Event><Event ErrorLevel="1" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="1" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="VCConvertEngine could not convert attribute UseUnicodeResponseFiles = false under Tool VCLinkerTool.">
+</Event><Event ErrorLevel="0" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="Web deployment to the local IIS server is no longer supported. The Web Deployment build tool has been removed from your project settings.">
+</Event><Event ErrorLevel="1" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="Attribute 'Detect64BitPortabilityProblems' of 'VCCLCompilerTool' is not supported in this version and has been removed during conversion.">
+</Event><Event ErrorLevel="0" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="Done converting to new project file 'D:\lab\ftk\src\compiler\vs2010\demo_button\demo_button.vcxproj'.">
+</Event><Event ErrorLevel="3" Project="demo_button" Source="demo_button\demo_button.vcproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="ftk.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="ftk.sln" Description="Converted">
+</Event></UpgradeLog>
