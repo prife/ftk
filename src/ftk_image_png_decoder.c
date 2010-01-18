@@ -59,14 +59,14 @@ static FtkBitmap* load_png (const char *filename)
 	char buffer[1024] = {0};
 
 	bg.a = 0xff;
-	if ((fp = fopen (filename, "rb")) == NULL)
+	if ((fp = fopen (filename, "r")) == NULL)
 	{
 		printf("%s: open %s failed.\n", __func__, filename);
 		return NULL;
 	}
 
-	n = fread(buffer, sizeof(buffer), 1, fp);
-	fseek(fp, 0, SEEK_SET);
+	//n = fread(buffer, sizeof(buffer), 1, fp);
+	//fseek(fp, 0, SEEK_SET);
 	if((png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)) == NULL)
 	{
 		fclose(fp);

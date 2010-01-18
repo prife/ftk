@@ -40,7 +40,7 @@ int ftk_platform_init(int argc, char** argv)
     
 	if ((Ret = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0)
 	{
-		assert(!"WSAStartup failed with error %d\n", Ret);
+		assert(!"WSAStartup failed with error %d\n");
 		return 0;
 	}
 	

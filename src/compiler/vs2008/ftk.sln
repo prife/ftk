@@ -1,9 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftk", "ftk.vcproj", "{12A0FDDD-7138-4320-A9D6-B5742065053E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_button", "demo_button\demo_button.vcproj", "{AA152BDA-BF18-4E1A-A49D-F18A5A67FD93}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_images", "demo_images\demo_images.vcproj", "{710DD135-8D90-4879-A7BC-E20E293A8727}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_button", "demo_button\demo_button.vcproj", "{7A75556C-4A42-4BA5-93AA-725CB8A468CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,14 @@ Global
 		{12A0FDDD-7138-4320-A9D6-B5742065053E}.Debug|Win32.Build.0 = Debug|Win32
 		{12A0FDDD-7138-4320-A9D6-B5742065053E}.Release|Win32.ActiveCfg = Release|Win32
 		{12A0FDDD-7138-4320-A9D6-B5742065053E}.Release|Win32.Build.0 = Release|Win32
-		{AA152BDA-BF18-4E1A-A49D-F18A5A67FD93}.Debug|Win32.ActiveCfg = Debug|Win32
-		{AA152BDA-BF18-4E1A-A49D-F18A5A67FD93}.Debug|Win32.Build.0 = Debug|Win32
-		{AA152BDA-BF18-4E1A-A49D-F18A5A67FD93}.Release|Win32.ActiveCfg = Release|Win32
-		{AA152BDA-BF18-4E1A-A49D-F18A5A67FD93}.Release|Win32.Build.0 = Release|Win32
+		{710DD135-8D90-4879-A7BC-E20E293A8727}.Debug|Win32.ActiveCfg = Debug|Win32
+		{710DD135-8D90-4879-A7BC-E20E293A8727}.Debug|Win32.Build.0 = Debug|Win32
+		{710DD135-8D90-4879-A7BC-E20E293A8727}.Release|Win32.ActiveCfg = Release|Win32
+		{710DD135-8D90-4879-A7BC-E20E293A8727}.Release|Win32.Build.0 = Release|Win32
+		{7A75556C-4A42-4BA5-93AA-725CB8A468CF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7A75556C-4A42-4BA5-93AA-725CB8A468CF}.Debug|Win32.Build.0 = Debug|Win32
+		{7A75556C-4A42-4BA5-93AA-725CB8A468CF}.Release|Win32.ActiveCfg = Release|Win32
+		{7A75556C-4A42-4BA5-93AA-725CB8A468CF}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

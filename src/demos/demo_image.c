@@ -16,14 +16,22 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
+#ifdef WIN32
+int ftk_main(int argc, char* argv[])
+#else
 int main(int argc, char* argv[])
+#endif
 {
+	FtkSource* timer = NULL;
+	FtkWidget* image = NULL;
+	FtkWidget* win = NULL;
+
 	ftk_init(argc, argv);
 	
-	FtkSource* timer = ftk_source_timer_create(5000, timeout, NULL);
-	FtkWidget* win = ftk_window_create(0, 0, 320, 480);
+	timer = ftk_source_timer_create(5000, timeout, NULL);
+	win = ftk_window_create(0, 0, 320, 480);
 
-	FtkWidget* image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
+	image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
 		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/earth.png"));
 	

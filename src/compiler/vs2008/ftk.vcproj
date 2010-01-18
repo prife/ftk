@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="gb2312"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="9.00"
 	Name="ftk"
 	ProjectGUID="{12A0FDDD-7138-4320-A9D6-B5742065053E}"
 	RootNamespace="ftk"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -42,8 +43,8 @@
 				UseUnicodeResponseFiles="false"
 				AdditionalOptions="/D ROOT_DIR=&quot;$(SolutionDir)&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="D:\lab\ftk\src;D:\lab\ftk\src\compiler\vs2005;D:\lab\ftk\src\os\windows;D:\lab\gtk\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;$(NOINHERIT)"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;$(NOINHERIT)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -404,6 +405,18 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_image_bmp_decoder.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_image_png_decoder.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"

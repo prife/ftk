@@ -28,14 +28,14 @@
  * 2010-01-17 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include <windows.h>
+#include <gdiplus.h>
+#include "ftk_win32.h"
+
+using namespace Gdiplus;
+static ULONG_PTR gdiplusToken;
 
 #include "ftk_image_win32_decoder.h"
-#define PNG_SKIP_SETJMP_CHECK
-#include "ftk_win32.h"
-//#include <gdiplus.h>
-
-//using namespace Gdiplus;
-//static ULONG_PTR gdiplusToken;
 static Ret ftk_image_win32_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {
 	return_val_if_fail(filename != NULL, RET_FAIL);
@@ -47,13 +47,11 @@ static Ret ftk_image_win32_decoder_match(FtkImageDecoder* thiz, const char* file
 
 static FtkBitmap* load_win32 (const char *filename)
 {
-#if 0
+#if 1
 	int x = 0;
 	int y = 0;
 	int w = 0;
 	int h = 0;
-	int n = 0;
-	FILE *fp = NULL;	
 	FtkColor bg = {0};
 	FtkBitmap* bitmap = NULL;
 	WCHAR wfilename[MAX_PATH] = {0};
@@ -65,6 +63,8 @@ static FtkBitmap* load_win32 (const char *filename)
 	w = img->GetWidth();
 	h = img->GetHeight();
 
+	bg.a = 0xff;
+//	bg.b = 0xff;
 	bitmap = ftk_bitmap_create(w, h, bg);
 	Rect r(0, 0, w, h);
 	BitmapData bitmapData;
@@ -78,6 +78,8 @@ static FtkBitmap* load_win32 (const char *filename)
 		for(x = 0; x < w; x++)
 		{
 			*dst = *src;
+			dst++;
+			src++;
 		}
 	}
 
@@ -105,7 +107,7 @@ static void ftk_image_win32_decoder_destroy(FtkImageDecoder* thiz)
 		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 
-	 //GdiplusShutdown(gdiplusToken);
+	 GdiplusShutdown(gdiplusToken);
 
 	return;
 }
@@ -116,9 +118,9 @@ FtkImageDecoder* ftk_image_win32_decoder_create(void)
 
 	if(thiz != NULL)
 	{
-		//GdiplusStartupInput gdiplusStartupInput;
+		GdiplusStartupInput gdiplusStartupInput;
 
-		//GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+		GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
 		thiz->match   = ftk_image_win32_decoder_match;
 		thiz->decode  = ftk_image_win32_decoder_decode;
 		thiz->destroy = ftk_image_win32_decoder_destroy;
