@@ -416,18 +416,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image_png_decoder.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\os\windows\ftk_image_win32_decoder.cpp"
 				>
 				<FileConfiguration
