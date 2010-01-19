@@ -1,9 +1,8 @@
-// demo_images.cpp : 定义应用程序的入口点。
+// demo_progress.cpp : 定义应用程序的入口点。
 //
 
 #include "stdafx.h"
-#include "demo_images.h"
-
+#include "demo_progress.h"
 static int argc = 1;
 static char* argv[] = {"ftk", NULL};
 extern "C" int ftk_main(int argc, char* argv[]);

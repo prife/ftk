@@ -1,8 +1,8 @@
-// demo_images.cpp : 定义应用程序的入口点。
+// demo_textview.cpp : 定义应用程序的入口点。
 //
 
 #include "stdafx.h"
-#include "demo_images.h"
+#include "demo_textview.h"
 
 static int argc = 1;
 static char* argv[] = {"ftk", NULL};

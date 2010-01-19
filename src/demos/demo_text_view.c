@@ -14,8 +14,14 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-#define TEXT "Multi line editor（多行编辑器）:\nfirst\nsecond\nthird\nforth\n012345667890qwertyuiopasdfghjklkzxcbnmcutukakdfasiwerksjdfaksdjfaksdjifiwjkaldfkjkalsdfjieirnlkkafjiierklaaa多行编辑器\n1\n2\n3\n\n4\n5\n6\n7\n8\nlast line最后一行"
+#define TEXT_STR "Multi line editor:\nfirst\nsecond\nthird\nforth\n012345667890qwertyuiopasdfghjklkzxcbnmcutukakdfasiwerksjdfaksdjfaksdjifiwjkaldfkjkalsdfjieirnlkkafjiierklaaa\n1\n2\n3\n\n4\n5\n6\n7\n8\nlast line"
+
+
+#ifdef WIN32
+int ftk_main(int argc, char* argv[])
+#else
 int main(int argc, char* argv[])
+#endif
 {
 	int width = 0;
 	int height = 0;
@@ -30,10 +36,10 @@ int main(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	
 	text_view = ftk_text_view_create(win, 10, 10, ftk_widget_width(win) - 20, height/3);
-	ftk_text_view_set_text(text_view, TEXT);
+	ftk_text_view_set_text(text_view, TEXT_STR);
 	
 	text_view = ftk_text_view_create(win, 10, 15 + height/3, ftk_widget_width(win) - 20, height/3);
-	ftk_text_view_set_text(text_view, TEXT);
+	ftk_text_view_set_text(text_view, TEXT_STR);
 	ftk_text_view_set_readonly(text_view, 1);
 
 	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);

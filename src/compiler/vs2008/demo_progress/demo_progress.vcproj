@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="demo_images"
-	ProjectGUID="{710DD135-8D90-4879-A7BC-E20E293A8727}"
-	RootNamespace="demo_images"
+	Name="demo_progress"
+	ProjectGUID="{42FF8875-9BA3-49BA-B3D0-569F9CA0F262}"
+	RootNamespace="demo_progress"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -177,7 +177,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\demos\demo_image.c"
+				RelativePath=".\demo_main.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\demos\demo_progress_bar.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -195,10 +199,6 @@
 						UsePrecompiledHeader="0"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\demo_main.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
@@ -227,7 +227,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\demo_images.h"
+				RelativePath=".\demo_progress.h"
 				>
 			</File>
 			<File
@@ -249,11 +249,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\demo_images.ico"
+				RelativePath=".\demo_progress.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\demo_images.rc"
+				RelativePath=".\demo_progress.rc"
 				>
 			</File>
 			<File
