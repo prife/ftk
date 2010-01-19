@@ -29,11 +29,7 @@ static Ret update_progress(void* ctx)
 	return RET_OK;
 }
 
-#ifdef WIN32
-int ftk_main(int argc, char* argv[])
-#else
-int main(int argc, char* argv[])
-#endif
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

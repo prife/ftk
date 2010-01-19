@@ -119,6 +119,16 @@ static LRESULT WinOnPaint(HWND hwnd)
 	return 0;
 }
 
+static int s_key_map[0xff] = {0};
+
+static Ret ftk_on_key_event(PrivInfo* priv, int down, unsigned char vkey)
+{
+	priv->event.type = down ? FTK_EVT_KEY_DOWN : FTK_EVT_KEY_UP;
+	priv->event.u.key.code = s_key_map[vkey];
+
+	return RET_OK;
+}
+
 static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PrivInfo* priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
@@ -135,6 +145,7 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 		case WM_KEYDOWN:
 		case WM_KEYUP:
 			{
+				ftk_on_key_event(priv, message==WM_KEYDOWN, 0xFF & wParam);
 				break;
 			}
 		case WM_LBUTTONUP:
@@ -214,7 +225,7 @@ static int ftk_display_win32_height(FtkDisplay* thiz)
 static Ret ftk_display_win32_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
 	DECL_PRIV(thiz, priv);
-
+ 
 	return RET_OK;
 }
 
@@ -229,6 +240,85 @@ static void ftk_display_win32_destroy(FtkDisplay* thiz)
 		DeleteObject(priv->hBitmap);
 		FTK_FREE(thiz);
 	}
+
+	return;
+}
+
+static void ftk_keymap_init(void)
+{
+	s_key_map[0xBD] = FTK_KEY_MINUS;
+	s_key_map[0x20] = FTK_KEY_SPACE;
+	s_key_map[0xBB] = FTK_KEY_EQUAL;
+	s_key_map[0xDC] = FTK_KEY_BACKSPACE;
+	s_key_map[0x09] = FTK_KEY_TAB;
+	s_key_map[0xC0] = FTK_KEY_QUOTELEFT;
+	s_key_map[0xDE] = FTK_KEY_QUOTERIGHT;
+	s_key_map[0xDB] = FTK_KEY_BRACKETLEFT;
+	s_key_map[0xDD] = FTK_KEY_BRACKETRIGHT;
+	s_key_map[0x0d] = FTK_KEY_ENTER;
+	s_key_map[0xBA] = FTK_KEY_SEMICOLON;
+	s_key_map[0x30] = FTK_KEY_0;
+	s_key_map[0x31] = FTK_KEY_1; 
+	s_key_map[0x32] = FTK_KEY_2;
+	s_key_map[0x33] = FTK_KEY_3;
+	s_key_map[0x34] = FTK_KEY_4;
+	s_key_map[0x35] = FTK_KEY_5;
+	s_key_map[0x36] = FTK_KEY_6;
+	s_key_map[0x37] = FTK_KEY_7;
+	s_key_map[0x38] = FTK_KEY_8;
+	s_key_map[0x39] = FTK_KEY_9;
+	s_key_map[0x70] = FTK_KEY_F1; 
+	s_key_map[0x71] = FTK_KEY_F2;
+	s_key_map[0x72] = FTK_KEY_F3;
+	s_key_map[0x73] = FTK_KEY_F4;
+	s_key_map[0x74] = FTK_KEY_F5;
+	s_key_map[0x75] = FTK_KEY_F6;
+	s_key_map[0x76] = FTK_KEY_F7;
+	s_key_map[0x77] = FTK_KEY_F8;
+	s_key_map[0x78] = FTK_KEY_F9;
+	s_key_map[0xBC] = FTK_KEY_COMMA;
+	s_key_map[0xBE] = FTK_KEY_DOT;
+	s_key_map[0xBF] = FTK_KEY_SLASH;
+	s_key_map[0x10] = FTK_KEY_RIGHTSHIFT;
+	s_key_map[0x11] = FTK_KEY_LEFTCTRL;
+	s_key_map[0x14] = FTK_KEY_CAPSLOCK;
+	s_key_map[0x40] = FTK_KEY_LEFTALT;
+	s_key_map[0x41] = FTK_KEY_a;
+	s_key_map[0x42] = FTK_KEY_b;
+	s_key_map[0x43] = FTK_KEY_c;
+	s_key_map[0x44] = FTK_KEY_d;
+	s_key_map[0x45] = FTK_KEY_e;
+	s_key_map[0x46] = FTK_KEY_f;
+	s_key_map[0x47] = FTK_KEY_g;
+	s_key_map[0x48] = FTK_KEY_h;
+	s_key_map[0x49] = FTK_KEY_i;
+	s_key_map[0x4a] = FTK_KEY_j;
+	s_key_map[0x4b] = FTK_KEY_k;
+	s_key_map[0x4c] = FTK_KEY_l;
+	s_key_map[0x4d] = FTK_KEY_m;
+	s_key_map[0x4e] = FTK_KEY_n;
+	s_key_map[0x4f] = FTK_KEY_o;
+	s_key_map[0x50] = FTK_KEY_p;
+	s_key_map[0x51] = FTK_KEY_q;
+	s_key_map[0x52] = FTK_KEY_r;
+	s_key_map[0x53] = FTK_KEY_s;
+	s_key_map[0x54] = FTK_KEY_t;
+	s_key_map[0x55] = FTK_KEY_u;
+	s_key_map[0x56] = FTK_KEY_v;
+	s_key_map[0x57] = FTK_KEY_w;
+	s_key_map[0x58] = FTK_KEY_x;
+	s_key_map[0x59] = FTK_KEY_y;
+	s_key_map[0x5a] = FTK_KEY_z;
+	s_key_map[0x21] = FTK_KEY_PAGEUP;
+	s_key_map[0x25] = FTK_KEY_LEFT;
+	s_key_map[0x27] = FTK_KEY_RIGHT;
+	s_key_map[0x24] = FTK_KEY_HOME;
+	s_key_map[0x23] = FTK_KEY_END;
+	s_key_map[0x28] = FTK_KEY_DOWN;
+	s_key_map[0x22] = FTK_KEY_PAGEDOWN;
+	s_key_map[0x2d] = FTK_KEY_INSERT;
+	s_key_map[0x2e] = FTK_KEY_DELETE;
+	s_key_map[0x26] = FTK_KEY_UP;
 
 	return;
 }
@@ -270,6 +360,8 @@ FtkDisplay* ftk_display_win32_create(void)
 		SetWindowLong(priv->wnd, GWL_USERDATA, (LONG)priv);
 		ShowWindow (priv->wnd, SW_SHOW);
 		UpdateWindow(priv->wnd);
+
+		ftk_keymap_init();
 	}
 
 	return thiz;

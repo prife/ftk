@@ -181,5 +181,11 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_END_DECLS
 #endif
 
+#ifdef FTK_HAS_MAIN
+#define FTK_MAIN main
+#else
+#define FTK_MAIN ftk_main
+#endif
+
 #endif/*FTK_TYPEDEF_H*/
 

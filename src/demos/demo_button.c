@@ -36,11 +36,7 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
-#ifdef WIN32
-int ftk_main(int argc, char* argv[])
-#else
-int main(int argc, char* argv[])
-#endif
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

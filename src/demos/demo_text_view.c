@@ -17,11 +17,7 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 #define TEXT_STR "Multi line editor:\nfirst\nsecond\nthird\nforth\n012345667890qwertyuiopasdfghjklkzxcbnmcutukakdfasiwerksjdfaksdjfaksdjifiwjkaldfkjkalsdfjieirnlkkafjiierklaaa\n1\n2\n3\n\n4\n5\n6\n7\n8\nlast line"
 
 
-#ifdef WIN32
-int ftk_main(int argc, char* argv[])
-#else
-int main(int argc, char* argv[])
-#endif
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
