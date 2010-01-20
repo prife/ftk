@@ -34,23 +34,10 @@
 
 struct _FtkMainLoop
 {
-	int read_fd;
-	int write_fd;
 	fd_set fdset;
 	int running;
 	FtkSourcesManager* sources_manager;
 };
-
-typedef enum _FtkRequestType
-{
-	FTK_REQUEST_QUIT = 1,
-}FtkRequestType;
-
-typedef struct _FtkRequest
-{
-	int   type;
-	void* data;
-}FtkRequest;
 
 FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager)
 {
@@ -61,35 +48,11 @@ FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager)
 	thiz = (FtkMainLoop*)FTK_ZALLOC(sizeof(FtkMainLoop));
 	if(thiz != NULL)
 	{
-		pipe_open(pipes);
-		thiz->read_fd  = pipes[0];
-		thiz->write_fd = pipes[1];
 		thiz->sources_manager = sources_manager;
 		FD_ZERO(&thiz->fdset);
 	}
 
 	return thiz;
-}
-
-static Ret ftk_main_loop_handle_request(FtkMainLoop* thiz)
-{
-	int ret = 0;
-	FtkRequest request = {0};
-
-	ret = pipe_read(thiz->read_fd, &request, sizeof(FtkRequest));
-	return_val_if_fail(ret == sizeof(FtkRequest), RET_FAIL);
-
-	switch(request.type)
-	{
-		case FTK_REQUEST_QUIT:
-		{
-			thiz->running = 0;
-			break;
-		}
-		default:break;
-	}
-
-	return RET_OK;
 }
 
 Ret ftk_main_loop_run(FtkMainLoop* thiz)
@@ -110,11 +73,9 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		n = 0;
 		wait_time = 3000;
 		FD_ZERO(&thiz->fdset);
-		FD_SET(thiz->read_fd, &thiz->fdset);
 		FD_SET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset);
 	
-		mfd = thiz->read_fd > ftk_sources_manager_get_async_pipe(thiz->sources_manager) ?
-			thiz->read_fd : ftk_sources_manager_get_async_pipe(thiz->sources_manager);
+		mfd = ftk_sources_manager_get_async_pipe(thiz->sources_manager);
 
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager); i++)
 		{
@@ -179,11 +140,6 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 			i++;
 		}
 
-		if(FD_ISSET(thiz->read_fd, &thiz->fdset))
-		{
-			ftk_main_loop_handle_request(thiz);
-		}
-
 		if(FD_ISSET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset))
 		{
 			ftk_sources_manager_handle_async(thiz->sources_manager);
@@ -195,14 +151,11 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 Ret ftk_main_loop_quit(FtkMainLoop* thiz)
 {
-	int ret = 0;
-	FtkRequest request = {0};
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	request.type = FTK_REQUEST_QUIT;
-	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
+	thiz->running = 0;
 
-	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
+	return ftk_sources_manager_wakeup(thiz->sources_manager);
 }
 
 Ret ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source)
@@ -223,8 +176,6 @@ void ftk_main_loop_destroy(FtkMainLoop* thiz)
 {
 	if(thiz != NULL)
 	{
-		pipe_close(thiz->read_fd);
-		pipe_close(thiz->write_fd);
 		FTK_ZFREE(thiz, sizeof(FtkMainLoop));
 	}
 

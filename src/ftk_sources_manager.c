@@ -161,6 +161,11 @@ Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz)
 
 	switch(request.type)
 	{
+		case FTK_REQUEST_WAKEUP:
+		{
+			ftk_logd("%s: FTK_REQUEST_WAKEUP\n", __func__);
+			break;
+		}
 		case FTK_REQUEST_ADD_SOURCE:
 		{
 			ftk_sources_manager_add(thiz, request.data);
@@ -182,6 +187,19 @@ int  ftk_sources_manager_get_async_pipe(FtkSourcesManager* thiz)
 	return_val_if_fail(thiz != NULL, -1);
 
 	return thiz->read_fd;
+}
+
+Ret  ftk_sources_manager_wakeup(FtkSourcesManager* thiz)
+{
+	int ret = 0;
+	FtkRequest request = {0};
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	request.data = NULL;
+	request.type = FTK_REQUEST_WAKEUP;
+	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
+
+	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
 
 int ftk_sources_manager_need_refresh(FtkSourcesManager* thiz)
