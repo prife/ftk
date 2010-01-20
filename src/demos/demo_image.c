@@ -21,29 +21,33 @@ int FTK_MAIN(int argc, char* argv[])
 	FtkSource* timer = NULL;
 	FtkWidget* image = NULL;
 	FtkWidget* win = NULL;
-
+	char filename[MAX_PATH+1] = {0};
 	ftk_init(argc, argv);
 	
 	timer = ftk_source_timer_create(5000, timeout, NULL);
 	win = ftk_window_create(0, 0, 320, 480);
 
+	ftk_snprintf(filename, MAX_PATH, "%s/earth.png", TESTDATA_DIR);
 	image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
-		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/earth.png"));
+		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	
+	ftk_snprintf(filename, MAX_PATH, "%s/theme/default/icon_view_bg.png", LOCAL_DATA_DIR);
 	image = ftk_image_create(win, ftk_widget_width(win)/2, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
-		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), LOCAL_DATA_DIR"/theme/default/icon_view_bg.png"));
+		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
 	
+	ftk_snprintf(filename, MAX_PATH, "%s/Calculator.png", TESTDATA_DIR);
 	image = ftk_image_create(win, 0, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
-		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/Calculator.png"));
+		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	ftk_widget_set_attr(image, FTK_ATTR_BG_CENTER);
 	
+	ftk_snprintf(filename, MAX_PATH,  "%s/jpeg1.jpg", TESTDATA_DIR);
 	image = ftk_image_create(win, ftk_widget_width(win)/2, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
-		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/jpeg1.jpg"));
+		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
 
 	ftk_widget_set_text(win, "image demo");

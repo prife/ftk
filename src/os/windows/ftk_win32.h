@@ -43,15 +43,20 @@
 #define HAVE_BOOLEAN
 #define inline 
 
+char* ftk_get_root_dir(void);
+char* ftk_get_data_dir(void);
+char* ftk_get_testdata_dir(void);
+
 //#define HAS_PNG 1
 //#define HAS_JPEG 1
 #define __func__       __FILE__
-#define FTK_ROOT_DIR   "D:\\lab\\ftk"
+#define FTK_ROOT_DIR   ftk_get_root_dir()
 #define FTK_FONT       "\\unicode.fnt"
-#define DATA_DIR       FTK_ROOT_DIR
-#define LOCAL_DATA_DIR FTK_ROOT_DIR
-#define FTK_DATA_ROOT  FTK_ROOT_DIR"\\data"
-#define TESTDATA_DIR   FTK_ROOT_DIR"\\testdata"
+#define DATA_DIR       ftk_get_root_dir()
+#define LOCAL_DATA_DIR ftk_get_root_dir()
+#define FTK_DATA_ROOT  ftk_get_data_dir()
+#define TESTDATA_DIR   ftk_get_testdata_dir()
+
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #define usleep                  Sleep
@@ -59,11 +64,6 @@
 #define pipe_write(s, buf, len) send(s, buf, len, 0)
 #define pipe_read(s, buf, len)  recv(s, buf, len, 0)
 #define pipe_close(fd)          closesocket(fd)
-
-struct timezone {
-	int tz_minuteswest;     /* minutes west of Greenwich */
-	int tz_dsttime;         /* type of DST correction */
-};
 
 char* ftk_strdup(const char *s);
 char* ftk_strncpy(char *dest, const char *src, size_t n);

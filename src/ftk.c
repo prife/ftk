@@ -94,10 +94,10 @@ static Ret ftk_init_theme(const char* theme)
 	ftk_set_theme(ftk_theme_create(theme == NULL));
 	if(theme != NULL)
 	{
-		ftk_snprintf(filename, sizeof(filename)-1, DATA_DIR"/theme/%s/theme.xml", theme);
+		ftk_snprintf(filename, sizeof(filename)-1, "%s/theme/%s/theme.xml", DATA_DIR, theme);
 		if(ftk_theme_parse_file(ftk_default_theme(), filename) != RET_OK)
 		{
-			ftk_snprintf(filename, sizeof(filename)-1, LOCAL_DATA_DIR"/theme/%s/theme.xml", theme);
+			ftk_snprintf(filename, sizeof(filename)-1, "%s/theme/%s/theme.xml", LOCAL_DATA_DIR, theme);
 			ftk_theme_parse_file(ftk_default_theme(), filename);
 		}
 	}

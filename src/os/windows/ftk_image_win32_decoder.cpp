@@ -47,7 +47,6 @@ static Ret ftk_image_win32_decoder_match(FtkImageDecoder* thiz, const char* file
 
 static FtkBitmap* load_win32 (const char *filename)
 {
-#if 1
 	int x = 0;
 	int y = 0;
 	int w = 0;
@@ -59,12 +58,17 @@ static FtkBitmap* load_win32 (const char *filename)
 	Bitmap* img = Bitmap::FromFile(wfilename);
 
 	return_val_if_fail(img != NULL, NULL);
+	if(img->GetWidth() == 0 || img->GetHeight() == 0)
+	{
+		delete img;
+
+		return NULL;
+	}
 
 	w = img->GetWidth();
 	h = img->GetHeight();
 
 	bg.a = 0xff;
-//	bg.b = 0xff;
 	bitmap = ftk_bitmap_create(w, h, bg);
 	Rect r(0, 0, w, h);
 	BitmapData bitmapData;
@@ -88,9 +92,6 @@ static FtkBitmap* load_win32 (const char *filename)
 	delete img;
 
 	return bitmap;
-#else
-	return NULL;
-#endif
 }
 
 static FtkBitmap* ftk_image_win32_decoder_decode(FtkImageDecoder* thiz, const char* filename)

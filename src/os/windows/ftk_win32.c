@@ -33,9 +33,29 @@
 #include "ftk_win32.h"
 #include "ftk_log.h"
 
+static char g_work_dir[MAX_PATH+1] = {0};
+static char g_data_dir[MAX_PATH+1] = {0};
+static char g_testdata_dir[MAX_PATH+1] = {0};
+
+char* ftk_get_root_dir(void)
+{
+	return g_work_dir;
+}
+
+char* ftk_get_data_dir(void)
+{
+	return g_data_dir;
+}
+
+char* ftk_get_testdata_dir(void)
+{
+	return g_testdata_dir;
+}
+
 int ftk_platform_init(int argc, char** argv)
 {
 	int Ret = 0;
+	char* p = NULL;
 	WSADATA wsaData = {0};
     
 	if ((Ret = WSAStartup(MAKEWORD(2,2), &wsaData)) != 0)
@@ -44,6 +64,17 @@ int ftk_platform_init(int argc, char** argv)
 		return 0;
 	}
 	
+	if(_getcwd(g_work_dir, MAX_PATH) != NULL)
+	{
+		p = strstr(g_work_dir, "\\src");
+		if(p != NULL)
+		{
+			*p = '\0';
+			ftk_snprintf(g_data_dir, MAX_PATH, "%s\\data", g_work_dir);
+			ftk_snprintf(g_testdata_dir, MAX_PATH, "%s\\testdata", g_work_dir);
+		}
+	}
+
 	return 0;
 }
 
@@ -83,48 +114,31 @@ int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap)
 	return _vsnprintf(str, size-1, format, ap);
 }
 
-#define EPOCHFILETIME 0
-int gettimeofday(struct timeval *tv, struct timezone *tz)
-{
-    FILETIME        ft;
-    LARGE_INTEGER   li;
-    __int64         t;
-    static int      tzflag;
-
-    if (tv)
-    {
-        GetSystemTimeAsFileTime(&ft);
-        li.LowPart  = ft.dwLowDateTime;
-        li.HighPart = ft.dwHighDateTime;
-        t  = li.QuadPart;       /* In 100-nanosecond intervals */
-        t -= EPOCHFILETIME;     /* Offset to the Epoch time */
-        t /= 10;                /* In microseconds */
-        tv->tv_sec  = (long)(t / 1000000);
-        tv->tv_usec = (long)(t % 1000000);
-    }
-
-    if (tz)
-    {
-        if (!tzflag)
-        {
-            _tzset();
-            tzflag++;
-        }
-        tz->tz_minuteswest = _timezone / 60;
-        tz->tz_dsttime = _daylight;
-    }
-
-    return 0;
-}
-
 size_t ftk_get_relative_time(void)
 {
-	struct timeval now = {0};
-	gettimeofday(&now, NULL);
+	FILETIME        ft;
+	LARGE_INTEGER   li;
+	__int64         t;
 
-	return now.tv_sec*1000 + now.tv_usec/1000;
+	GetSystemTimeAsFileTime(&ft);
+	li.LowPart  = ft.dwLowDateTime;
+	li.HighPart = ft.dwHighDateTime;
+	t  = li.QuadPart;       /* In 100-nanosecond intervals */
+	t /= 10;                /* In microseconds */
+
+	return t/1000;
 }
 
+/*http://cantrip.org/socketpair.c*/
+/* socketpair.c
+ * Copyright 2007 by Nathan C. Myers <ncm@cantrip.org>; all rights reserved.
+ * This code is Free Software.  It may be copied freely, in original or 
+ * modified form, subject only to the restrictions that (1) the author is
+ * relieved from all responsibilities for any use for any purpose, and (2)
+ * this copyright notice must be retained, unchanged, in its entirety.  If
+ * for any reason the author might be held responsible for any consequences
+ * of copying or use, license is withheld.  
+ */
 int win32_socketpair(SOCKET socks[2])
 {
     int e;

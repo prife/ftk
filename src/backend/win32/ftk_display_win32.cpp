@@ -224,9 +224,19 @@ static int ftk_display_win32_height(FtkDisplay* thiz)
 
 static Ret ftk_display_win32_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
 {
+	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
- 
-	return RET_OK;
+	int w = ftk_display_width(thiz);
+	int h = ftk_display_height(thiz);
+	int bw = ftk_bitmap_width(bitmap);
+	int bh = ftk_bitmap_height(bitmap);
+	
+	rect.x = x;
+	rect.y = y;
+	rect.width = bw;
+	rect.height = bh;
+
+	return ftk_bitmap_copy_from_data_bgra32(bitmap, priv->bits, w, h, &rect);
 }
 
 static void ftk_display_win32_destroy(FtkDisplay* thiz)
@@ -249,7 +259,7 @@ static void ftk_keymap_init(void)
 	s_key_map[0xBD] = FTK_KEY_MINUS;
 	s_key_map[0x20] = FTK_KEY_SPACE;
 	s_key_map[0xBB] = FTK_KEY_EQUAL;
-	s_key_map[0xDC] = FTK_KEY_BACKSPACE;
+	s_key_map[0x08] = FTK_KEY_BACKSPACE;
 	s_key_map[0x09] = FTK_KEY_TAB;
 	s_key_map[0xC0] = FTK_KEY_QUOTELEFT;
 	s_key_map[0xDE] = FTK_KEY_QUOTERIGHT;

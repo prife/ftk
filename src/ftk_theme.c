@@ -36,6 +36,8 @@
 #include "ftk_icon_cache.h"
 #include "ftk_xml_parser.h"
 
+static void ftk_init_default_path();
+
 typedef struct _FtkWidgetTheme
 {
 	FtkColor   bg[FTK_WIDGET_STATE_NR];
@@ -98,10 +100,10 @@ static Ret ftk_theme_init_default(FtkTheme* thiz)
 {
 #if defined(LINUX) || defined(WIN32)
 	char filename[FTK_MAX_PATH] = {0};
-	ftk_snprintf(filename, sizeof(filename), DATA_DIR"/theme/default/theme.xml");
+	ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", DATA_DIR);
 	if(ftk_theme_parse_file(thiz, filename) != RET_OK)
 	{
-		ftk_snprintf(filename, sizeof(filename), LOCAL_DATA_DIR"/theme/default/theme.xml");
+		ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", LOCAL_DATA_DIR);
 		return ftk_theme_parse_file(thiz, filename);
 	}
 	return RET_OK;
@@ -114,6 +116,7 @@ FtkTheme*  ftk_theme_create(int init_default)
 {
 	FtkTheme* thiz = FTK_ZALLOC(sizeof(FtkTheme));
 
+	ftk_init_default_path();
 	if(thiz != NULL)
 	{
 		size_t i = 0;
@@ -151,7 +154,7 @@ typedef struct _WidgetNameType
 	FtkWidgetType type;
 }WidgetNameType;
 
-static const WidgetNameType const s_widget_name_types[] = 
+static const WidgetNameType s_widget_name_types[] = 
 {
 	{"label",        FTK_LABEL},
 	{"entry",        FTK_ENTRY},
@@ -385,6 +388,20 @@ static FtkXmlBuilder* ftk_theme_builder_create(void)
 	return thiz;
 }
 
+#ifdef WIN32
+static const char* s_default_path[FTK_ICON_PATH_NR];
+
+static void ftk_init_default_path()
+{
+	s_default_path[0] = DATA_DIR;
+	s_default_path[1] = FTK_DATA_ROOT;
+	s_default_path[2] = LOCAL_DATA_DIR;
+	s_default_path[3] = TESTDATA_DIR;
+
+	return;
+}
+
+#else
 static const char* s_default_path[FTK_ICON_PATH_NR]=
 {
 	DATA_DIR,
@@ -392,6 +409,8 @@ static const char* s_default_path[FTK_ICON_PATH_NR]=
 	LOCAL_DATA_DIR,
 	TESTDATA_DIR
 };
+static void ftk_init_default_path() {}
+#endif
 
 Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 {
