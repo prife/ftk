@@ -43,6 +43,7 @@ struct _FtkSourcesManager
 
 typedef enum _FtkRequestType
 {
+	FTK_REQUEST_WAKEUP = 0,
 	FTK_REQUEST_ADD_SOURCE,
 	FTK_REQUEST_REMOVE_SOURCE,
 }FtkRequestType;
