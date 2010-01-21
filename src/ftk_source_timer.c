@@ -67,6 +67,12 @@ static Ret ftk_source_timer_dispatch(FtkSource* thiz)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv->action != NULL, RET_REMOVE);
 
+	if(thiz->disable > 0)
+	{
+		ftk_source_timer_calc_timer(priv);
+		return RET_OK;
+	}
+
 	ret = priv->action(priv->user_data);
 	if(ret == RET_OK)
 	{

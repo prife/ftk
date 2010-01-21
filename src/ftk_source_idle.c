@@ -32,7 +32,6 @@
 
 typedef struct _PrivInfo
 {
-	int disable;
 	FtkIdle action;
 	void* user_data;
 }PrivInfo;
@@ -53,22 +52,12 @@ static Ret ftk_source_idle_dispatch(FtkSource* thiz)
 
 	return_val_if_fail(priv->action != NULL, RET_REMOVE);
 
-	if(priv->disable)
+	if(thiz->disable > 0)
 	{
 		return RET_OK;
 	}
 
 	return priv->action(priv->user_data);
-}
-
-Ret ftk_source_idle_disable(FtkSource* thiz)
-{
-	DECL_PRIV(thiz, priv);
-	return_val_if_fail(priv != NULL, RET_FAIL);
-
-	priv->disable = 1;
-
-	return RET_OK;
 }
 
 static void ftk_source_idle_destroy(FtkSource* thiz)

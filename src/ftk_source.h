@@ -50,9 +50,35 @@ struct _FtkSource
 	FtkSourceDispatch dispatch;
 	FtkSourceDestroy  destroy;
 	
-	int ref;
+	int  ref;
+	int  disable;
 	char priv[1];
 };
+
+static inline Ret ftk_source_disable(FtkSource* thiz)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	thiz->disable++;
+
+	return RET_OK;
+}
+
+static inline Ret ftk_source_enable(FtkSource* thiz)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(thiz->disable > 0)
+	{
+		thiz->disable--;
+	}
+	else
+	{
+		thiz->disable = 0;
+	}
+
+	return RET_OK;
+}
 
 static inline int ftk_source_get_fd(FtkSource* thiz)
 {

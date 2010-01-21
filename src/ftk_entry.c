@@ -309,7 +309,8 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
-		
+	
+		ftk_source_disable(priv->caret_timer);
 		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 		ftk_source_unref(priv->caret_timer);
 		ftk_text_buffer_destroy(priv->text_buffer);
