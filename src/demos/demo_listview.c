@@ -26,8 +26,8 @@ static Ret button_more_clicked(void* ctx, void* obj)
 	for(i = 0; i < 4; i++)
 	{
 		g_index++;
-		snprintf(text, sizeof(text), "item%04d", g_index);
-		info.text = strdup(text);
+		ftk_snprintf(text, sizeof(text), "item%04d", g_index);
+		info.text = ftk_strdup(text);
 		info.left_icon = left_icon;
 		info.right_icon = right_icon;
 		info.type = g_index%4;
@@ -68,7 +68,7 @@ Ret on_item_clicked(void* ctx, void* list)
 	return RET_OK;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 	FtkListModel* model = NULL;
 	FtkListRender* render = NULL;
 	FtkListItemInfo info = {0};
-
+	char filename[FTK_MAX_PATH+1] = {0};
 	ftk_init(argc, argv);
 	
 	win = ftk_app_window_create();
@@ -91,14 +91,16 @@ int main(int argc, char* argv[])
 
 	model = ftk_list_model_default_create(10, item_destroy);
 	render = ftk_list_render_default_create();
-	left_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/alarm"FTK_STOCK_IMG_SUFFIX);
-	right_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/search"FTK_STOCK_IMG_SUFFIX);
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/alarm/%s",TESTDATA_DIR, FTK_STOCK_IMG_SUFFIX);
+	left_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/search/%s",  TESTDATA_DIR, FTK_STOCK_IMG_SUFFIX);
+	right_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 
 	g_index = 0;
 	for(g_index = 0; g_index < 4; g_index++)
 	{
-		snprintf(text, sizeof(text), "item%04d", g_index);
-		info.text = strdup(text);
+		ftk_snprintf(text, sizeof(text), "item%04d", g_index);
+		info.text = ftk_strdup(text);
 		info.left_icon = left_icon;
 		info.right_icon = right_icon;
 		info.type = g_index%4;

@@ -39,7 +39,7 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 	{
 		char text[32] = {0};
 		FtkWidget* item = ftk_menu_item_create(menu_panel);
-		snprintf(text, sizeof(text), "Menu%02d", i);
+		ftk_snprintf(text, sizeof(text), "Menu%02d", i);
 		ftk_widget_set_text(item, text);
 		ftk_widget_show(item, 1);
 	}
@@ -70,7 +70,7 @@ static void create_app_window(void)
 	label = ftk_label_create(win, 10, ftk_widget_height(win)/2, ftk_widget_width(win)-20, 30);
 	ftk_widget_set_text(label, "press F2 to open menu");
 	
-	snprintf(title, sizeof(title), "window%02d", g_index++);
+	ftk_snprintf(title, sizeof(title), "window%02d", g_index++);
 	ftk_widget_set_text(win, title);
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_user_data(win, on_window_close, win);
@@ -80,7 +80,7 @@ static void create_app_window(void)
 	return;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
 	

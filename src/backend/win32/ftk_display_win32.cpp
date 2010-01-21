@@ -46,6 +46,8 @@ static HWND ftk_create_display_window(void)
 {
     HWND hwnd;               /* This is the handle for our window */
     WNDCLASSEX wincl;        /* Data structure for the windowclass */
+	int width = DISPLAY_WIDTH + GetSystemMetrics(SM_CXFRAME) * 2;
+	int height = DISPLAY_HEIGHT + GetSystemMetrics(SM_CYFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION);
 
     /* The Window structure */
     wincl.hInstance = NULL;
@@ -76,8 +78,8 @@ static HWND ftk_create_display_window(void)
            WS_OVERLAPPEDWINDOW, /* default window */
            CW_USEDEFAULT,       /* Windows decides the position */
            CW_USEDEFAULT,       /* where the window ends up on the screen */
-           DISPLAY_WIDTH,       /* The programs width */
-           DISPLAY_HEIGHT,      /* and height in pixels */
+           width,       /* The programs width */
+           height,      /* and height in pixels */
            HWND_DESKTOP,        /* The window is a child-window to desktop */
            NULL,                /* No menu */
            NULL,                /* Program Instance handler */

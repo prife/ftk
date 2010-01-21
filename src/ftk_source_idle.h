@@ -36,6 +36,7 @@
 FTK_BEGIN_DECLS
 
 FtkSource* ftk_source_idle_create(FtkIdle action, void* user_data);
+Ret ftk_source_idle_disable(FtkSource* thiz);
 
 FTK_END_DECLS
 

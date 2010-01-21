@@ -813,6 +813,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_pipe_socket.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_progress_bar.c"
 				>
 				<FileConfiguration
