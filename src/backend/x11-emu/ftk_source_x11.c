@@ -187,7 +187,7 @@ static Ret ftk_source_x11_dispatch(FtkSource* thiz)
 			}
 			case ButtonPress:
 			{
-				ftk_logd("%s: ButtonPress: %d %d\n", __func__, event.xbutton.x, event.xbutton.y);
+				//ftk_logd("%s: ButtonPress: %d %d\n", __func__, event.xbutton.x, event.xbutton.y);
 				priv->event.type = FTK_EVT_MOUSE_DOWN;
 				priv->event.u.mouse.x = event.xbutton.x;
 				priv->event.u.mouse.y = event.xbutton.y;
@@ -195,7 +195,7 @@ static Ret ftk_source_x11_dispatch(FtkSource* thiz)
 			}
 			case ButtonRelease:
 			{
-				ftk_logd("%s: ButtonRelease: %d %d\n", __func__, event.xbutton.x, event.xbutton.y);
+				//ftk_logd("%s: ButtonRelease: %d %d\n", __func__, event.xbutton.x, event.xbutton.y);
 				priv->event.type = FTK_EVT_MOUSE_UP;
 				priv->event.u.mouse.x = event.xbutton.x;
 				priv->event.u.mouse.y = event.xbutton.y;
@@ -215,12 +215,12 @@ static Ret ftk_source_x11_dispatch(FtkSource* thiz)
 			}
 			default:break;
 		}
-	}
 
-	if(priv->on_event != NULL && priv->event.type != FTK_EVT_NOP)
-	{
-		priv->on_event(priv->ctx, &priv->event);
-		priv->event.type = FTK_EVT_NOP;
+		if(priv->on_event != NULL && priv->event.type != FTK_EVT_NOP)
+		{
+			priv->on_event(priv->ctx, &priv->event);
+			priv->event.type = FTK_EVT_NOP;
+		}
 	}
 
 	return RET_OK;
