@@ -60,10 +60,6 @@ char* ftk_get_testdata_dir(void);
 #define _CRT_SECURE_NO_WARNINGS 1
 
 #define usleep                  Sleep
-#define pipe_open(fds)          win32_socketpair(fds)
-#define pipe_write(s, buf, len) send(s, buf, len, 0)
-#define pipe_read(s, buf, len)  recv(s, buf, len, 0)
-#define pipe_close(fd)          closesocket(fd)
 
 char* ftk_strdup(const char *s);
 char* ftk_strncpy(char *dest, const char *src, size_t n);

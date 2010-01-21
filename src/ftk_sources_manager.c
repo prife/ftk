@@ -29,12 +29,12 @@
  *
  */
 
+#include "ftk_pipe.h"
 #include "ftk_sources_manager.h"
 
 struct _FtkSourcesManager
 {
-	int read_fd;
-	int write_fd;
+	FtkPipe* pipe;
 	int source_nr;
 	int max_source_nr;
 	int need_refresh;
@@ -64,10 +64,7 @@ FtkSourcesManager* ftk_sources_manager_create(int max_source_nr)
 
 	if(thiz != NULL)
 	{
-		int pipes[2] = {0};
-		pipe_open(pipes);
-		thiz->read_fd  = pipes[0];
-		thiz->write_fd = pipes[1];
+		thiz->pipe = ftk_pipe_create();
 		thiz->max_source_nr = max_source_nr;
 	}
 
@@ -133,7 +130,7 @@ Ret  ftk_sources_manager_add_async(FtkSourcesManager* thiz, FtkSource* source)
 
 	request.data = source;
 	request.type = FTK_REQUEST_ADD_SOURCE;
-	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
+	ret = ftk_pipe_write(thiz->pipe, &request, sizeof(FtkRequest));
 
 	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
@@ -146,7 +143,7 @@ Ret  ftk_sources_manager_remove_async(FtkSourcesManager* thiz, FtkSource* source
 
 	request.data = source;
 	request.type = FTK_REQUEST_REMOVE_SOURCE;
-	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
+	ret = ftk_pipe_write(thiz->pipe, &request, sizeof(FtkRequest));
 
 	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
@@ -156,7 +153,7 @@ Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz)
 	int ret = 0;
 	FtkRequest request = {0};
 
-	ret = pipe_read(thiz->read_fd, &request, sizeof(FtkRequest));
+	ret = ftk_pipe_read(thiz->pipe, &request, sizeof(FtkRequest));
 	return_val_if_fail(ret == sizeof(FtkRequest), RET_FAIL);
 
 	switch(request.type)
@@ -186,7 +183,7 @@ int  ftk_sources_manager_get_async_pipe(FtkSourcesManager* thiz)
 {
 	return_val_if_fail(thiz != NULL, -1);
 
-	return thiz->read_fd;
+	return ftk_pipe_get_read_handle(thiz->pipe);
 }
 
 Ret  ftk_sources_manager_wakeup(FtkSourcesManager* thiz)
@@ -197,7 +194,7 @@ Ret  ftk_sources_manager_wakeup(FtkSourcesManager* thiz)
 
 	request.data = NULL;
 	request.type = FTK_REQUEST_WAKEUP;
-	ret = pipe_write(thiz->write_fd, &request, sizeof(FtkRequest));
+	ret = ftk_pipe_write(thiz->pipe, &request, sizeof(FtkRequest));
 
 	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
@@ -237,6 +234,7 @@ void ftk_sources_manager_destroy(FtkSourcesManager* thiz)
 			thiz->sources[i] = NULL;
 		}
 
+		ftk_pipe_destroy(thiz->pipe);
 		FTK_ZFREE(thiz, sizeof(FtkSourcesManager) + sizeof(FtkSource*)*(thiz->max_source_nr + 1));
 	}
 

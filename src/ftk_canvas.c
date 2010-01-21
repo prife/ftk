@@ -484,7 +484,7 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 	//	fprintf(stderr, "%s: %d %d\n", __func__, glyph.x, glyph.w);
 		extent += glyph.x + glyph.w + 1;
 	}
-	fprintf(stderr, "%s: %s %d\n", __func__, str, extent);
+	//fprintf(stderr, "%s: %s %d\n", __func__, str, extent);
 	return extent;
 }
 

@@ -28,14 +28,15 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+#include "ftk_pipe.h"
 #include "ftk_source_primary.h"
 
 #define MAX_EVENTS 128
 
 typedef struct _PrivInfo
 {
-	int read_fd;
-	int write_fd;
+	FtkPipe* pipe;
 	FtkOnEvent on_event;
 	void* user_data;
 }PrivInfo;
@@ -45,7 +46,7 @@ static int ftk_source_primary_get_fd(FtkSource* thiz)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, -1);
 
-	return priv->read_fd;
+	return ftk_pipe_get_read_handle(priv->pipe);
 }
 
 static int ftk_source_primary_check(FtkSource* thiz)
@@ -57,7 +58,7 @@ static Ret ftk_source_primary_dispatch(FtkSource* thiz)
 {
 	FtkEvent event = {0};
 	DECL_PRIV(thiz, priv);
-	int ret = pipe_read(priv->read_fd, &event, sizeof(FtkEvent));
+	int ret = ftk_pipe_read(priv->pipe, &event, sizeof(FtkEvent));
 	return_val_if_fail(ret == sizeof(FtkEvent), RET_REMOVE);
 
 	if(priv->on_event != NULL)
@@ -73,8 +74,7 @@ static void ftk_source_primary_destroy(FtkSource* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		pipe_close(priv->read_fd);
-		pipe_close(priv->write_fd);
+		ftk_pipe_destroy(priv->pipe);
 		FTK_ZFREE(thiz, sizeof(FtkSource) + sizeof(PrivInfo));
 	}
 
@@ -87,7 +87,6 @@ FtkSource* ftk_source_primary_create(FtkOnEvent on_event, void* user_data)
 
 	if(thiz != NULL)
 	{
-		int pipes[2] = {0};
 		DECL_PRIV(thiz, priv);
 		
 		thiz->get_fd   = ftk_source_primary_get_fd;
@@ -95,10 +94,8 @@ FtkSource* ftk_source_primary_create(FtkOnEvent on_event, void* user_data)
 		thiz->dispatch = ftk_source_primary_dispatch;
 		thiz->destroy  = ftk_source_primary_destroy;
 
-		pipe_open(pipes);
 		thiz->ref = 1;
-		priv->read_fd   = pipes[0];
-		priv->write_fd  = pipes[1];
+		priv->pipe = ftk_pipe_create();
 		priv->on_event  = on_event;
 		priv->user_data = user_data;
 	}
@@ -112,7 +109,7 @@ Ret ftk_source_queue_event(FtkSource* thiz, FtkEvent* event)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
-	ret = pipe_write(priv->write_fd, event, sizeof(FtkEvent));
+	ret = ftk_pipe_write(priv->pipe, event, sizeof(FtkEvent));
 
 	return ret == sizeof(FtkEvent) ? RET_OK : RET_FAIL;
 }
