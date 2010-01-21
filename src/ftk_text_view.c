@@ -281,6 +281,7 @@ static Ret ftk_text_view_input_char(FtkWidget* thiz, char c)
 	{
 		str[0] = c;
 		ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+		ftk_text_view_relayout(thiz, priv->caret_at_line);
 		ftk_text_view_move_caret(thiz, 1);	
 	}
 

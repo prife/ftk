@@ -16,6 +16,7 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 
 #define TEXT_STR "Multi line editor:\nfirst\nsecond\nthird\nforth\n012345667890qwertyuiopasdfghjklkzxcbnmcutukakdfasiwerksjdfaksdjfaksdjifiwjkaldfkjkalsdfjieirnlkkafjiierklaaa\n1\n2\n3\n\n4\n5\n6\n7\n8\nlast line"
 
+#define TEXT1_STR "a\n\n4\n5\n6\n7\n8\nlast line"
 
 int FTK_MAIN(int argc, char* argv[])
 {
@@ -32,7 +33,7 @@ int FTK_MAIN(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	
 	text_view = ftk_text_view_create(win, 10, 10, ftk_widget_width(win) - 20, height/3);
-	ftk_text_view_set_text(text_view, TEXT_STR);
+	ftk_text_view_set_text(text_view, TEXT1_STR);
 	
 	text_view = ftk_text_view_create(win, 10, 15 + height/3, ftk_widget_width(win) - 20, height/3);
 	ftk_text_view_set_text(text_view, TEXT_STR);
