@@ -126,7 +126,7 @@ static void create_app_window(void)
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-	button = ftk_button_create(win, 5, height/6, width/2, 50);
+	button = ftk_button_create(win, 5, height/6, width/2-5, 50);
 	ftk_widget_set_text(button, "向右伸展");
 	ftk_button_set_clicked_listener(button, button_to_right_clicked, win);
 
