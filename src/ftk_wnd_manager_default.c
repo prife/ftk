@@ -133,6 +133,18 @@ static int ftk_wnd_manager_get_status_bar_height(FtkWndManager* thiz)
 	}
 }
 
+static inline Ret  ftk_wnd_manager_default_get_work_area(FtkWndManager* thiz, FtkRect* rect)
+{
+	return_val_if_fail(thiz != NULL && rect != NULL, RET_FAIL);
+
+	rect->x = 0;
+	rect->y = ftk_wnd_manager_get_status_bar_height(thiz);
+	rect->width = ftk_display_width(ftk_default_display());
+	rect->height = ftk_display_height(ftk_default_display()) - rect->y;
+
+	return RET_OK;
+}
+
 static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget* window)
 {
 	int x = 0;
@@ -144,7 +156,7 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 
-	work_area_h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);;
+	work_area_h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);
 	/*XXX: we assume panel is added as first window*/
 	switch(ftk_widget_type(window))
 	{
@@ -656,6 +668,7 @@ FtkWndManager* ftk_wnd_manager_default_create(FtkMainLoop* main_loop)
 		thiz->add    = ftk_wnd_manager_default_add;
 		thiz->remove = ftk_wnd_manager_default_remove;
 		thiz->update         = ftk_wnd_manager_default_update;
+		thiz->get_work_area  = ftk_wnd_manager_default_get_work_area;
 		thiz->queue_event    = ftk_wnd_manager_default_queue_event;
 		thiz->dispatch_event         = ftk_wnd_manager_default_dispatch_event;
 		thiz->add_global_listener    = ftk_wnd_manager_default_add_global_listener;

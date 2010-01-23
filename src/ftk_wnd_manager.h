@@ -45,6 +45,7 @@ typedef Ret  (*FtkWndManagerUngrab)(FtkWndManager* thiz, FtkWidget* window);
 typedef Ret  (*FtkWndManagerAdd)(FtkWndManager* thiz, FtkWidget* window);
 typedef Ret  (*FtkWndManagerRemove)(FtkWndManager* thiz, FtkWidget* window);
 typedef Ret  (*FtkWndManagerUpdate)(FtkWndManager* thiz);
+typedef Ret  (*FtkWndManagerGetWorkArea)(FtkWndManager* thiz, FtkRect* rect);
 typedef Ret  (*FtkWndManagerQueueEvent)(FtkWndManager* thiz, FtkEvent* event);
 typedef Ret  (*FtkWndManagerDispatchEvent)(FtkWndManager* thiz, FtkEvent* event);
 typedef Ret  (*FtkWndManagerAddGlobalListener)(FtkWndManager* thiz, FtkListener listener, void* ctx);
@@ -58,6 +59,7 @@ struct _FtkWndManager
 	FtkWndManagerAdd                  add;
 	FtkWndManagerRemove               remove;
 	FtkWndManagerUpdate               update;
+	FtkWndManagerGetWorkArea          get_work_area;
 	FtkWndManagerQueueEvent           queue_event;
 	FtkWndManagerDispatchEvent        dispatch_event;
 	FtkWndManagerAddGlobalListener    add_global_listener;
@@ -100,6 +102,13 @@ static inline Ret  ftk_wnd_manager_update(FtkWndManager* thiz)
 	return_val_if_fail(thiz != NULL && thiz->update != NULL, RET_FAIL);
 
 	return thiz->update(thiz);
+}
+
+static inline Ret  ftk_wnd_manager_get_work_area(FtkWndManager* thiz, FtkRect* rect)
+{
+	return_val_if_fail(thiz != NULL && thiz->get_work_area != NULL && rect != NULL, RET_FAIL);
+
+	return thiz->get_work_area(thiz, rect);
 }
 
 static inline Ret  ftk_wnd_manager_queue_event(FtkWndManager* thiz, FtkEvent* event)
