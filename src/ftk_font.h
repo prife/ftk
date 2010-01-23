@@ -3,7 +3,7 @@
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   font interface.
  *
- * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
+ * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
  * Licensed under the Academic Free License version 2.1
  *
