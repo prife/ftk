@@ -59,6 +59,7 @@ extern "C" {
 #include "ftk_source_idle.h"
 #include "ftk_check_button.h"
 #include "ftk_status_panel.h"
+#include "ftk_message_box.h"
 #include "ftk_radio_group.h"
 #include "ftk_scroll_bar.h"
 #include "ftk_icon_view.h"

@@ -500,11 +500,24 @@ void ftk_widget_set_canvas(FtkWidget* thiz, FtkCanvas* canvas)
 
 void ftk_widget_set_parent(FtkWidget* thiz, FtkWidget* parent)
 {
+	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
+	event.u.extra = thiz;
+	if(thiz->parent != NULL && parent == NULL)
+	{
+		event.type = FTK_EVT_REMOVE_CHILD;
+		ftk_widget_event(thiz->parent, &event);
+	}
 	thiz->parent = parent;
-	ftk_widget_set_canvas(thiz, ftk_widget_canvas(ftk_widget_toplevel(parent)));
+	if(parent != NULL)
+	{
+		event.type = FTK_EVT_ADD_CHILD;
+		ftk_widget_event(parent, &event);
+	}
 
+	ftk_widget_set_canvas(thiz, ftk_widget_canvas(ftk_widget_toplevel(parent)));
+	
 	return;
 }
 
@@ -515,13 +528,12 @@ void ftk_widget_append_child(FtkWidget* thiz, FtkWidget* child)
 	if(thiz->children == NULL)
 	{
 		thiz->children = child;
+		ftk_widget_set_parent(child, thiz);
 	}
 	else
 	{
 		ftk_widget_append_sibling(thiz->children, child);
 	}
-
-	ftk_widget_set_parent(child, thiz);
 
 	return;
 }

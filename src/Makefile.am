@@ -37,7 +37,7 @@ libftk_la_SOURCES=\
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c \
-	ftk_text_view.c       ftk_pipe_socket.c
+	ftk_text_view.c       ftk_pipe_socket.c        ftk_message_box.c
 
 libftk_la_CFLAGS=
 
@@ -121,6 +121,6 @@ ftk_HEADERS=\
 	ftk_font_freetype.h       ftk_icon_view.h\
 	ftk_theme.h               ftk_painter.h \
 	ftk_text_view.h           ftk_cairo.h \
-	ftk_pipe.h
+	ftk_pipe.h                ftk_message_box.h
 
 EXTRA_DIST=	rules.mk

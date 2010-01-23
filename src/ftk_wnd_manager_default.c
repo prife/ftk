@@ -139,10 +139,12 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 	int y = 0;
 	int w = 0;
 	int h = 0;
+	int work_area_h = 0;
 	FtkEvent event = {0};
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 
+	work_area_h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);;
 	/*XXX: we assume panel is added as first window*/
 	switch(ftk_widget_type(window))
 	{
@@ -162,9 +164,9 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		case FTK_DIALOG:
 		{
 			x = FTK_DIALOG_MARGIN;
-			y = ftk_widget_top(window) + ftk_wnd_manager_get_status_bar_height(thiz);
 			w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
-			h = ftk_widget_height(window);
+			h = work_area_h < ftk_widget_height(window) ? work_area_h : ftk_widget_height(window);
+			y = (work_area_h - h) / 2 + ftk_wnd_manager_get_status_bar_height(thiz);
 
 			break;
 		}

@@ -77,6 +77,9 @@ Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
 void ftk_canvas_destroy(FtkCanvas* thiz);
 
+int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode);
+const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width);
+
 FTK_END_DECLS
 
 #endif/*FTK_CANVAS_H*/

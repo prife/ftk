@@ -1,7 +1,7 @@
 /*
- * File: ftk_dialog.h    
+ * File: ftk_messagebox.h    
  * Author: Li XianJing <xianjimli@hotmail.com>
- * Brief:  dialog
+ * Brief:  messagebox
  *
  * Copyright (c) 2009  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,24 +25,24 @@
 /*
  * History:
  * ================================================================
- * 2009-10-15 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-01-23 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_DIALOG_H
-#define FTK_DIALOG_H
-#include "ftk_window.h"
+#ifndef FTK_MESSAGEBOX_H
+#define FTK_MESSAGEBOX_H
 
-FTK_INHERITE_FROM(Window)
+#include "ftk_dialog.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_dialog_create(int x, int y, int width, int height);
-Ret ftk_dialog_set_icon(FtkWidget* thiz, FtkBitmap* icon);
-int ftk_dialog_run(FtkWidget* thiz);
+#define FTK_MSGBOX_MAX_BUTTONS 3
+
+int ftk_warning(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS]);
+int ftk_question(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS]);
+int ftk_infomation(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS]);
 
 FTK_END_DECLS
 
-#endif/*FTK_DIALOG_H*/
-
+#endif/*FTK_MESSAGEBOX_H*/
 

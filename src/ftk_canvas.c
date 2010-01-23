@@ -488,18 +488,18 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 	return extent;
 }
 
-int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
+int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode)
 {
 	int extent = 0;
 	FtkGlyph glyph = {0};
-	return_val_if_fail(thiz != NULL && thiz->gc.font != NULL, 0);
+	return_val_if_fail(thiz != NULL, 0);
 
 	if(unicode == ' ')
 	{
 		return FTK_SPACE_WIDTH;
 	}
 
-	if(unicode == '\r' || unicode == '\n' || ftk_font_lookup(thiz->gc.font, unicode, &glyph) != RET_OK)
+	if(unicode == '\r' || unicode == '\n' || ftk_font_lookup(thiz, unicode, &glyph) != RET_OK)
 	{
 
 		return 0;
@@ -510,7 +510,12 @@ int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
 	return extent;
 }
 
-const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width)
+int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)
+{
+	return ftk_font_get_char_extent(thiz->gc.font, unicode);
+}
+
+const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width)
 {
 	int extent = 0;
 	unsigned short unicode = 0;
@@ -527,7 +532,7 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 			unicode = utf8_get_char(iter, &iter);
 			if(unicode == 0 || unicode == 0xffff) break;
 
-			extent = ftk_canvas_get_char_extent(thiz, unicode);
+			extent = ftk_font_get_char_extent(thiz, unicode);
 			if(extent > width) break;
 			width -= extent;
 			prev_iter = iter;
@@ -546,7 +551,7 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 			unicode = utf8_get_prev_char(iter, &iter);
 			if(unicode == 0 || iter < start) break;
 
-			extent = ftk_canvas_get_char_extent(thiz, unicode);
+			extent = ftk_font_get_char_extent(thiz, unicode);
 			if(extent > width) break;
 			width -= extent;
 		}
@@ -555,6 +560,11 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 	}
 		
 	return start;
+}
+
+const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width)
+{
+	return ftk_font_calc_str_visible_range(thiz->gc.font, start, vstart, vend, width);
 }
 
 void ftk_canvas_destroy(FtkCanvas* thiz)

@@ -35,11 +35,30 @@
 
 typedef struct _PrivInfo
 {
+	FtkBitmap* icon;
 	FtkMainLoop* main_loop;
 	FtkWidgetOnEvent parent_on_event;
 	FtkWidgetOnPaint parent_on_paint;
 	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
+
+Ret ftk_dialog_set_icon(FtkWidget* thiz, FtkBitmap* icon)
+{
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(priv->icon != NULL)
+	{
+		ftk_bitmap_unref(priv->icon);
+	}
+	priv->icon = icon;
+	if(priv->icon != NULL)
+	{
+		ftk_bitmap_ref(priv->icon);
+	}
+
+	return RET_OK;	
+}
 
 static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 {
@@ -49,6 +68,23 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 	if(ret == RET_QUIT)
 	{
 		ftk_main_loop_quit(priv->main_loop);
+	}
+
+	switch(event->type)
+	{
+		case FTK_EVT_ADD_CHILD:
+		{
+			int x = 0;
+			int y = 0;
+			FtkWidget* child = event->u.extra;
+			x = ftk_widget_left(child) + FTK_DIALOG_MARGIN;
+			y = ftk_widget_top(child) + FTK_DIALOG_TITLE_HEIGHT;
+
+			ftk_widget_move(child, x, y);
+
+			break;
+		}
+		default:break;
 	}
 
 	return RET_OK;
@@ -68,26 +104,42 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	(void)y;
 	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
-	gc.fg.r -= 0x2f;
-	gc.fg.g -= 0x2f;
-	gc.fg.b -= 0x2f;
+	gc.fg.r -= 0x5f;
+	gc.fg.g -= 0x5f;
+	gc.fg.b -= 0x5f;
+
 	ftk_canvas_set_gc(canvas, &gc);
 	for(i = 0; i < FTK_DIALOG_TITLE_HEIGHT; i++)
 	{
 		ftk_canvas_draw_hline(canvas, x, y+i, width);
 	}
-	
-	for(i = 0; i < FTK_DIALOG_MARGIN; i++)
-	{
-		ftk_canvas_draw_hline(canvas, x, y+height-i, width);
-	}
 
 	h = height - FTK_DIALOG_TITLE_HEIGHT - FTK_DIALOG_MARGIN;
-	ftk_canvas_draw_vline(canvas, x, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
-	ftk_canvas_draw_vline(canvas, x+1, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
-	ftk_canvas_draw_vline(canvas, x+width-1, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
-	ftk_canvas_draw_vline(canvas, x+width-2, y+FTK_DIALOG_TITLE_HEIGHT, h+1);
+	for(i = 0; i < FTK_DIALOG_MARGIN; i++)
+	{
+		ftk_canvas_draw_hline(canvas, x, y+height-i-1, width);
+		ftk_canvas_draw_vline(canvas, x+i, y+FTK_DIALOG_TITLE_HEIGHT, h);
+		ftk_canvas_draw_vline(canvas, x+width-i-1, y+FTK_DIALOG_TITLE_HEIGHT, h);
+	}
 	
+	if(priv->icon != NULL)
+	{
+		ftk_canvas_draw_bg_image(canvas, priv->icon, FTK_BG_CENTER, x + FTK_DIALOG_MARGIN, y, 
+			FTK_DIALOG_TITLE_HEIGHT, FTK_DIALOG_TITLE_HEIGHT);
+	}
+
+	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
+	if(ftk_widget_get_text(thiz) != NULL)
+	{
+		int xoffset = FTK_DIALOG_MARGIN + (priv->icon != NULL ? FTK_DIALOG_TITLE_HEIGHT : FTK_DIALOG_MARGIN);
+		int yoffset = FTK_DIALOG_TITLE_HEIGHT >> 1;
+		const char* text = ftk_widget_get_text(thiz);
+		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, width - xoffset - FTK_DIALOG_MARGIN);
+		
+		ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, end - text, 1);
+	}
+
+
 	ftk_canvas_get_pixel(canvas, x, y)->a = 0;
 	ftk_canvas_get_pixel(canvas, x+1, y)->a = 0;
 	ftk_canvas_get_pixel(canvas, x, y+1)->a = 0;
@@ -103,6 +155,7 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	ftk_canvas_get_pixel(canvas, x+width-1, y+height-1)->a = 0;
 	ftk_canvas_get_pixel(canvas, x+width-2, y+height-1)->a = 0;
 	ftk_canvas_get_pixel(canvas, x+width-1, y+height-2)->a = 0;
+
 	
 	priv->parent_on_paint(thiz);
 

@@ -41,6 +41,6 @@ theme_DATA=\
 	status-bg.png\
 	wait_box.png \
 	icon_view_bg.png\
-	theme.xml
+	theme.xml question.png info.png warning.png
 
 EXTRA_DIST=$(theme_DATA)

@@ -52,6 +52,8 @@ typedef enum _FtkEventType
 	FTK_EVT_UPDATE,
 	FTK_EVT_FOCUS_IN,
 	FTK_EVT_FOCUS_OUT,
+	FTK_EVT_ADD_CHILD,
+	FTK_EVT_REMOVE_CHILD,
 	FTK_EVT_WND_DESTROY,
 	FTK_EVT_RELAYOUT_WND,
 	FTK_EVT_THEME_CHANGED,
@@ -91,6 +93,7 @@ typedef struct _FtkEvent
 			unsigned short y;
 		}mouse;
 		FtkRect rect;
+		void* extra;
 	}u;
 }FtkEvent;
 

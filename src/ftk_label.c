@@ -31,9 +31,6 @@
 
 #include "ftk_label.h"
 
-#define FTK_LABEL_LEFT_MARGIN 3
-#define FTK_LABEL_TOP_MARGIN  1
-
 static Ret ftk_label_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	return RET_OK;
