@@ -38,6 +38,13 @@ static Ret button_to_up_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret button_to_brink_clicked(void* ctx, void* obj)
+{
+	create_ani_window(FTK_ANI_TO_BRINK, 0);
+
+	return RET_OK;
+}
+
 static Ret button_close_clicked(void* ctx, void* obj)
 {
 	FtkWidget* win = ctx;
@@ -91,6 +98,7 @@ static void create_ani_window(int type, int sync)
 			ftk_animator_set_param(ani, type, 100, width, delta, 200);
 			break;
 		}
+		case FTK_ANI_TO_BRINK:
 		case FTK_ANI_TO_DOWN:
 		{
 			ftk_animator_set_param(ani, type, 100, height, delta, 200);
@@ -147,7 +155,11 @@ static void create_app_window(void)
 	ftk_button_set_clicked_listener(button, button_to_up_clicked, win);
 	
 	button = ftk_button_create(win, width/2, height/6 + 120, width/2-5, 50);
-	ftk_widget_set_text(button, "Quit");
+	ftk_widget_set_text(button, "Brink");
+	ftk_button_set_clicked_listener(button, button_to_brink_clicked, win);
+
+	button = ftk_button_create(win, width/4-2, height/6 + 180, width/2-5, 50);
+	ftk_widget_set_text(button, "退出");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 
 	ftk_snprintf(title, sizeof(title), "Expand Demo");
