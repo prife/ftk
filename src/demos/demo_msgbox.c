@@ -1,9 +1,11 @@
 #include "ftk.h"
 
-static const char* buttons[] = {"Yes", "No"};
+static const char* buttons1[] = {"Yes", NULL};
+static const char* buttons2[] = {"Yes", "No", NULL};
+static const char* buttons3[] = {"Yes", "No", "Cancel", NULL};
 static Ret button_warning(void* ctx, void* obj)
 {
-	int ret = ftk_warning("Warning", "It is danger!", buttons);
+	int ret = ftk_warning("Warning", "December 31, 2008: patchwork.kernel.org is now available for general use. It is currently only monitoring the Linux Kernel mailing-list, but should be useful to kernel developers in dealing with patches flying across the wire.", buttons1);
 
 	ftk_logd("%s: ret = %d\n", __func__, ret);
 
@@ -12,13 +14,24 @@ static Ret button_warning(void* ctx, void* obj)
 
 static Ret button_info(void* ctx, void* obj)
 {
-	int ret = ftk_infomation("Infomation", "Network is connected!", buttons);
+	int ret = ftk_infomation("Infomation", "September 19, 2008: mirrors.kernel.org has been flipped over to using our new GeoDNS based bind server (named-geodns). This means that, at the dns query level, our servers will attempt to direct you to the nearest / fastest kernel.org mirror for your request. This means that you no longer have to use mirrors.us.kernel.org or mirrors.eu.kernel.org to generally route you to the right place. This does mean a change to mirrors.kernel.org no longer explicitly pointing at mirrors.us.kernel.org. Additional information on named-geodns will be forth coming, check back here for an addendum soon.", buttons2);
+
+	ftk_logd("%s: ret = %d\n", __func__, ret);
 	return RET_OK;
 }
 
 static Ret button_question(void* ctx, void* obj)
 {
-	int ret = ftk_question("Question", "Are you sure to quit?", buttons);
+	int ret = ftk_question("Question", "Are you sure to quit?", buttons3);
+	ftk_logd("%s: ret = %d\n", __func__, ret);
+
+	return RET_OK;
+}
+
+static Ret button_tips(void* ctx, void* obj)
+{
+	int ret = ftk_question("Tips", "The dialog will quit in 3 seconds.", NULL);
+	ftk_logd("%s: ret = %d\n", __func__, ret);
 
 	return RET_OK;
 }
@@ -39,6 +52,7 @@ static void on_window_close(void* user_data)
 
 int main(int argc, char* argv[])
 {
+	int y = 0;
 	int width = 0;
 	int height = 0;
 	FtkWidget* win = NULL;
@@ -50,19 +64,26 @@ int main(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-	button = ftk_button_create(win, width/4, 0, width/2, 50);
-	ftk_widget_set_text(button, "warning");
-	ftk_button_set_clicked_listener(button, button_warning, win);
-	
-	button = ftk_button_create(win, width/4, 60, width/2, 50);
+	y = (height - 240)/2;
+	y = y > 0 ? y : 0;
+
+	button = ftk_button_create(win, 0, y, width/2, 50);
 	ftk_widget_set_text(button, "question");
 	ftk_button_set_clicked_listener(button, button_question, win);
 	
-	button = ftk_button_create(win, width/4, 120, width/2, 50);
+	button = ftk_button_create(win, width/2, y, width/2, 50);
+	ftk_widget_set_text(button, "warning");
+	ftk_button_set_clicked_listener(button, button_warning, win);
+	
+	button = ftk_button_create(win, 0, y+60, width/2, 50);
 	ftk_widget_set_text(button, "info");
 	ftk_button_set_clicked_listener(button, button_info, win);
+
+	button = ftk_button_create(win, width/2, y+60, width/2, 50);
+	ftk_widget_set_text(button, "tips");
+	ftk_button_set_clicked_listener(button, button_tips, win);
 	
-	button = ftk_button_create(win, width/4, 180, width/2, 50);
+	button = ftk_button_create(win, width/4, y+120, width/2, 50);
 	ftk_widget_set_text(button, "quit");
 	ftk_button_set_clicked_listener(button, button_quit, win);
 

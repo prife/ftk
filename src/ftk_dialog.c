@@ -77,7 +77,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 			int x = 0;
 			int y = 0;
 			FtkWidget* child = event->u.extra;
-			x = ftk_widget_left(child) + FTK_DIALOG_MARGIN;
+			x = ftk_widget_left(child) + FTK_DIALOG_BORDER;
 			y = ftk_widget_top(child) + FTK_DIALOG_TITLE_HEIGHT;
 
 			ftk_widget_move(child, x, y);
@@ -114,8 +114,8 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 		ftk_canvas_draw_hline(canvas, x, y+i, width);
 	}
 
-	h = height - FTK_DIALOG_TITLE_HEIGHT - FTK_DIALOG_MARGIN;
-	for(i = 0; i < FTK_DIALOG_MARGIN; i++)
+	h = height - FTK_DIALOG_TITLE_HEIGHT - FTK_DIALOG_BORDER;
+	for(i = 0; i < FTK_DIALOG_BORDER; i++)
 	{
 		ftk_canvas_draw_hline(canvas, x, y+height-i-1, width);
 		ftk_canvas_draw_vline(canvas, x+i, y+FTK_DIALOG_TITLE_HEIGHT, h);
@@ -124,17 +124,17 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 	
 	if(priv->icon != NULL)
 	{
-		ftk_canvas_draw_bg_image(canvas, priv->icon, FTK_BG_CENTER, x + FTK_DIALOG_MARGIN, y, 
+		ftk_canvas_draw_bg_image(canvas, priv->icon, FTK_BG_CENTER, x + FTK_DIALOG_BORDER, y, 
 			FTK_DIALOG_TITLE_HEIGHT, FTK_DIALOG_TITLE_HEIGHT);
 	}
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		int xoffset = FTK_DIALOG_MARGIN + (priv->icon != NULL ? FTK_DIALOG_TITLE_HEIGHT : FTK_DIALOG_MARGIN);
+		int xoffset = FTK_DIALOG_BORDER + (priv->icon != NULL ? FTK_DIALOG_TITLE_HEIGHT : FTK_DIALOG_BORDER);
 		int yoffset = FTK_DIALOG_TITLE_HEIGHT >> 1;
 		const char* text = ftk_widget_get_text(thiz);
-		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, width - xoffset - FTK_DIALOG_MARGIN);
+		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, width - xoffset - FTK_DIALOG_BORDER);
 		
 		ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, end - text, 1);
 	}
@@ -197,6 +197,16 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 	}
 
 	return thiz;
+}
+
+Ret ftk_dialog_quit(FtkWidget* thiz)
+{
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	ftk_main_loop_quit(priv->main_loop);
+
+	return RET_OK;
 }
 
 int ftk_dialog_run(FtkWidget* thiz)

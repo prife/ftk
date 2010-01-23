@@ -38,9 +38,15 @@ FTK_BEGIN_DECLS
 
 #define FTK_MSGBOX_MAX_BUTTONS 3
 
-int ftk_warning(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS]);
-int ftk_question(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS]);
-int ftk_infomation(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS]);
+/*
+ * if buttons is not NULL, it must end with NULL.
+ *
+ * all the functions return the index(begin 1) of the clicked button.
+ */
+
+int ftk_warning(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1]);
+int ftk_question(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1]);
+int ftk_infomation(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1]);
 
 FTK_END_DECLS
 
