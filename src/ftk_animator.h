@@ -52,6 +52,7 @@ typedef enum _FtkExpandType
 	FTK_ANI_TO_UP,
 	FTK_ANI_TO_EAST_SOUTH,
 	FTK_ANI_TO_EAST_NORTH,
+	FTK_ANI_TO_BRINK,
 	FTK_ANI_ALPHA
 }FtkExpandType;
 

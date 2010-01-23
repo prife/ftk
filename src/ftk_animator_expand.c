@@ -81,6 +81,15 @@ static Ret  ftk_animator_expand_init(FtkAnimator* thiz)
 	priv->y = y;
 	switch(priv->type)
 	{
+		case FTK_ANI_TO_BRINK:
+		{
+			priv->h = 0;
+			priv->w = 0;
+			priv->x = w/2;
+			priv->y = y/2;
+ 			break;
+		}
+
 		case FTK_ANI_TO_RIGHT:
 		{
 			priv->h = h;
@@ -134,6 +143,16 @@ static Ret  ftk_animator_expand_calc_step(FtkAnimator* thiz)
 
 	switch(priv->type)
 	{
+		case FTK_ANI_TO_BRINK:
+		{
+			ret = priv->h < priv->end ? RET_OK : RET_FAIL;
+			priv->h += priv->step;
+			priv->w += priv->h*w/h;
+			priv->x = (w-priv->w)/2; //w/2+priv->w/2
+			priv->y = (h-priv->h)/2; 
+
+			break;		
+		}
 		case FTK_ANI_TO_DOWN:
 		{
 			ret = priv->h < priv->end ? RET_OK : RET_FAIL;
@@ -206,6 +225,12 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 	}
 
 	bitmap = ftk_canvas_bitmap(ftk_widget_canvas(priv->win));
+	if(priv->type==FTK_ANI_TO_BRINK)
+	{	
+		x=priv->x;
+		y=priv->y;
+	}
+
 	ftk_canvas_draw_bitmap(priv->canvas, bitmap, x, y, priv->w, priv->h, priv->x, priv->y);
 	rect.x = priv->x;
 	rect.y = priv->y;
