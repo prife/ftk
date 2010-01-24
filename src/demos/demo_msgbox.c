@@ -50,7 +50,7 @@ static void on_window_close(void* user_data)
 	return ;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int y = 0;
 	int width = 0;

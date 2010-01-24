@@ -5,11 +5,14 @@ static void create_app_window(void);
 
 static Ret button_open_image_dialog(void* ctx, void* obj)
 {
+	char filename[FTK_MAX_PATH+1] = {0};
+	FtkBitmap* bitmap = NULL;
 	FtkColor   bg = {0};
 	bg.r = 0xff;
 	bg.g = 0xff;
 	bg.b = 0xff;
-	FtkBitmap* bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), TESTDATA_DIR"/earth.png");
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/earth.png", TESTDATA_DIR);
+	bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 	bg.a = 0x0;
 	create_dialog(bitmap, bg);
 
@@ -117,7 +120,7 @@ static void create_app_window(void)
 	return;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	ftk_init(argc, argv);
 	

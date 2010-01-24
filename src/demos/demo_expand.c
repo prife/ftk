@@ -159,7 +159,7 @@ static void create_app_window(void)
 	ftk_button_set_clicked_listener(button, button_to_brink_clicked, win);
 
 	button = ftk_button_create(win, width/4-2, height/6 + 180, width/2-5, 50);
-	ftk_widget_set_text(button, "退出");
+	ftk_widget_set_text(button, "Quit");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 
 	ftk_snprintf(title, sizeof(title), "Expand Demo");

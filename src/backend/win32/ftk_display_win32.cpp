@@ -152,13 +152,22 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 			}
 		case WM_LBUTTONUP:
 		case WM_LBUTTONDOWN:
-		//case WM_MOUSEMOVE:
 			{
 				int xPos = LOWORD(lParam); 
 				int yPos = HIWORD(lParam); 
 				priv->event.u.mouse.x = xPos;
 				priv->event.u.mouse.y = yPos;
 				priv->event.type = message == WM_LBUTTONUP? FTK_EVT_MOUSE_UP : FTK_EVT_MOUSE_DOWN;
+
+				break;
+			}
+		case WM_MOUSEMOVE:
+			{
+				int xPos = LOWORD(lParam); 
+				int yPos = HIWORD(lParam); 
+				priv->event.u.mouse.x = xPos;
+				priv->event.u.mouse.y = yPos;
+				priv->event.type = FTK_EVT_MOUSE_MOVE;
 
 				break;
 			}

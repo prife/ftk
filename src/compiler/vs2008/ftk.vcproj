@@ -773,6 +773,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_message_box.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\os\windows\ftk_mmap_win32.c"
 				>
 				<FileConfiguration
@@ -1468,6 +1488,10 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_menu_panel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_message_box.h"
 				>
 			</File>
 			<File
