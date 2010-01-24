@@ -30,7 +30,7 @@ static Ret button_question(void* ctx, void* obj)
 
 static Ret button_tips(void* ctx, void* obj)
 {
-	int ret = ftk_question("Tips", "The dialog will quit in 3 seconds.", NULL);
+	int ret = ftk_tips("The dialog will quit in 3 seconds.");
 	ftk_logd("%s: ret = %d\n", __func__, ret);
 
 	return RET_OK;

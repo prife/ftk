@@ -44,6 +44,7 @@ FTK_BEGIN_DECLS
  * all the functions return the index(begin 1) of the clicked button.
  */
 
+int ftk_tips(const char* text);
 int ftk_warning(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1]);
 int ftk_question(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1]);
 int ftk_infomation(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1]);

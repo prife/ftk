@@ -55,9 +55,9 @@ static Ret message_box_on_button_clicked(void* ctx, void* obj)
 
 #define FTK_BUTTON_DEFAULT_WIDTH   80
 #define FTK_BUTTON_DEFAULT_HEIGHT  48
-#define FTK_MESSAGE_BOX_MIN_HEIGHT 120
+#define FTK_MESSAGE_BOX_MIN_HEIGHT 30
 
-static Ret ftk_message_box_size(const char* text, int* w, int* h)
+static Ret ftk_message_box_size(int has_title, int has_button, const char* text, int* w, int* h)
 {
 	int start  = 0;
 	int width  = 0;
@@ -69,7 +69,10 @@ static Ret ftk_message_box_size(const char* text, int* w, int* h)
 	ftk_wnd_manager_get_work_area(ftk_default_wnd_manager(), &rect);
 
 	width  = rect.width - 2 * (FTK_DIALOG_MARGIN + FTK_LABEL_LEFT_MARGIN + FTK_DIALOG_BORDER);
-	height = 4 * FTK_V_MARGIN + FTK_DIALOG_BORDER + FTK_DIALOG_TITLE_HEIGHT + FTK_BUTTON_DEFAULT_HEIGHT;
+
+	height = 4 * FTK_V_MARGIN + FTK_DIALOG_BORDER;
+	height += has_title ? FTK_DIALOG_TITLE_HEIGHT : 0;
+	height += has_button ? FTK_BUTTON_DEFAULT_HEIGHT : 0;
 
 	while(*end != '\0')
 	{
@@ -87,6 +90,22 @@ static Ret ftk_message_box_size(const char* text, int* w, int* h)
 	return RET_OK;
 }
 
+static int ftk_count_strings(const char* buttons[FTK_MSGBOX_MAX_BUTTONS])
+{
+	int i = 0;
+	int buttons_nr = 0;
+
+	if(buttons != NULL)
+	{
+		for(i = 0; buttons[i] != NULL && i < FTK_MSGBOX_MAX_BUTTONS; i++)
+		{
+			buttons_nr++;
+		}
+	}
+
+	return buttons_nr;
+}
+
 int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS])
 {
 	int i = 0;
@@ -99,49 +118,53 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	int xoffset = 0;
 	int yoffset = 0;
 	int h_margin = 0;
-	int buttons_nr = 0;
+	int has_title = icon != NULL || title != NULL;
+	int buttons_nr = ftk_count_strings(buttons);
+
 	FtkSource* timer = NULL;
 	FtkWidget* label = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* dialog = NULL;
-
-	if(buttons != NULL)
-	{
-		for(i = 0; buttons[i] != NULL && i < FTK_MSGBOX_MAX_BUTTONS; i++)
-		{
-			buttons_nr++;
-		}
-	}
-
+	
 	return_val_if_fail(text != NULL, -1);
 
-	ftk_message_box_size(text, &width, &height);
+	ftk_message_box_size(has_title, buttons_nr, text, &width, &height);
 	dialog = ftk_dialog_create(0, 0, width, height);
-	ftk_dialog_set_icon(dialog, icon);
-	ftk_widget_set_text(dialog, title);
-	
-	width = ftk_widget_width(dialog);
+	if(has_title) 
+	{
+		ftk_dialog_set_icon(dialog, icon);
+		ftk_widget_set_text(dialog, title);
+	}
+	else
+	{
+		ftk_dialog_hide_title(dialog);
+	}
+
+	width  = ftk_widget_width(dialog);
 	height = ftk_widget_height(dialog);
 
 	/*create label.*/
-	xoffset = 0;
-	yoffset = buttons_nr > 0 ? FTK_V_MARGIN : (FTK_V_MARGIN + FTK_BUTTON_DEFAULT_HEIGHT/2);
-	w = width - 2 * FTK_DIALOG_BORDER;
-	h = height - FTK_DIALOG_TITLE_HEIGHT - FTK_DIALOG_BORDER - FTK_BUTTON_DEFAULT_HEIGHT - 4 * FTK_V_MARGIN;
+	xoffset = FTK_H_MARGIN;
+	yoffset = FTK_V_MARGIN;
+	w = width - 2 * (FTK_DIALOG_BORDER + FTK_H_MARGIN);
+	h = height - FTK_DIALOG_BORDER - 4 * FTK_V_MARGIN;
+	h -= has_title ? FTK_DIALOG_TITLE_HEIGHT : 0;
+	h -= buttons_nr > 0 ? FTK_BUTTON_DEFAULT_HEIGHT : 0;
 
 	label = ftk_label_create(dialog, xoffset, yoffset, w, h);
 	ftk_widget_set_text(label, text);
 
 	/*create buttons*/
-	xoffset = 0;
-	h = FTK_BUTTON_DEFAULT_HEIGHT;
-	w = FTK_BUTTON_DEFAULT_WIDTH;
-	yoffset = height - FTK_DIALOG_TITLE_HEIGHT - h - FTK_V_MARGIN;
 
 	if(buttons_nr > 0)
 	{
+		xoffset = 0;
+		w = FTK_BUTTON_DEFAULT_WIDTH;
+		h = FTK_BUTTON_DEFAULT_HEIGHT;
 		w = ((buttons_nr + 1) * w) < width ? w : (width / (buttons_nr + 1));
+		yoffset = height - h - FTK_V_MARGIN - (has_title ? FTK_DIALOG_TITLE_HEIGHT : 0);
 		h_margin = (width - buttons_nr * w) / (buttons_nr + 1);
+
 		for(i = 0; i < buttons_nr; i++)
 		{
 			xoffset += h_margin;
@@ -165,6 +188,11 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	ftk_widget_unref(dialog);
 
 	return ret;
+}
+
+int ftk_tips(const char* text)
+{
+	return ftk_message_box(NULL, NULL, text, NULL);
 }
 
 int ftk_warning(const char* title, const char* text, const char* buttons[FTK_MSGBOX_MAX_BUTTONS + 1])
