@@ -161,6 +161,29 @@ static void ftk_deinit(void)
 	return;
 }
 
+static Ret ftk_move_cursor(void* ctx, void* obj)
+{
+	FtkEvent* event = obj;
+
+	if(event->type == FTK_EVT_MOUSE_MOVE)
+	{
+		ftk_sprite_move(ctx, event->u.mouse.x, event->u.mouse.y);
+	}
+
+	return RET_OK;
+}
+
+static Ret ftk_enable_curosr(void)
+{
+	FtkSprite* sprite = ftk_sprite_create();
+	FtkBitmap* icon = ftk_theme_load_image(ftk_default_theme(), "cursor"FTK_STOCK_IMG_SUFFIX);
+	ftk_sprite_set_icon(sprite, icon);
+	ftk_sprite_show(sprite, 1);
+	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), ftk_move_cursor, sprite);
+
+	return RET_OK;
+}
+
 Ret ftk_init(int argc, char* argv[])
 {
 	int i = 0;
@@ -168,12 +191,18 @@ Ret ftk_init(int argc, char* argv[])
 	const char* theme = NULL;
 	FtkDisplay* display = NULL;
 	int disable_status_panel = 0;
+	int enable_cursor = 0;
 
 	for(i = 0; i < argc && argv != NULL && argv[i] != NULL; i++)
 	{
 		if(strcmp(argv[i], "--no-status-panel") == 0)
 		{
 			disable_status_panel = 1;
+			break;
+		}
+		else if(strcmp(argv[i], "--enable-cursor") == 0)
+		{
+			enable_cursor = 1;
 			break;
 		}
 		else if(strncmp(argv[i], "--theme=", 8) == 0)
@@ -203,6 +232,11 @@ Ret ftk_init(int argc, char* argv[])
 	if(!disable_status_panel)
 	{
 		ftk_init_panel();
+	}
+
+	if(enable_cursor)
+	{
+		ftk_enable_curosr();
 	}
 
 	atexit(ftk_deinit);
