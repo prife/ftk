@@ -188,6 +188,23 @@ static Ret update_time(void* ctx)
 	return RET_OK;
 }
 
+static Ret on_shutdown(void* ctx, void* obj)
+{
+	ftk_quit();
+
+	return RET_OK;
+}
+
+static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
+{
+	FtkWidget* item = ftk_menu_item_create(menu_panel);
+	ftk_widget_set_text(item, "Shutdown");
+	ftk_menu_item_set_clicked_listener(item, on_shutdown, ctx);
+	ftk_widget_show(item, 1);
+
+	return  RET_OK;
+}
+
 int main(int argc, char* argv[])
 {
 	FtkWidget* win = NULL;
@@ -213,6 +230,7 @@ int main(int argc, char* argv[])
 
 	g_icon_cache = ftk_icon_cache_create(s_default_path, NULL);
 	win = desktop_load_xul(g_desktop_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
+	ftk_app_window_set_on_prepare_options_menu(win, on_prepare_options_menu, win);
 	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
 	ftk_widget_show_all(win, 1);
