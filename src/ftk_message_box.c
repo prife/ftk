@@ -183,7 +183,6 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	}
 
 	ftk_widget_show_all(dialog, 1);
-	ftk_wnd_manager_grab(ftk_default_wnd_manager(), dialog);
 	ret = ftk_dialog_run(dialog);
 	ftk_widget_unref(dialog);
 

@@ -2,30 +2,42 @@
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	*(int*)ctx = ftk_widget_id(obj);
+	if(ctx != NULL)
+	{
+		*(int*)ctx = ftk_widget_id(obj);
+	}
+	else
+	{
+		ftk_widget_unref(ftk_widget_toplevel(obj));
+	}
 
 	return RET_QUIT;
 }
 
 static void on_window_close(void* user_data)
 {
-	FtkEvent event = {0};
-	ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
+	ftk_quit();
 
 	return ;
 }
 
-int main(int argc, char* argv[])
+static Ret button_close_clicked(void* ctx, void* obj)
 {
-	int id = 0;
+	ftk_widget_unref(ctx);
+
+	return RET_OK;
+}
+
+static Ret button_dialog_clicked(void* ctx, void* obj)
+{
+	static int id = 0;
 	int width = 0;
 	int height = 0;
 	FtkWidget* label = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* dialog = NULL;
 	FtkBitmap* icon = NULL;
-
-	ftk_init(argc, argv);
+	int modal = (int)ctx;
 	
 	dialog = ftk_dialog_create(0, 40, 320, 240);
 	
@@ -39,18 +51,60 @@ int main(int argc, char* argv[])
 
 	button = ftk_button_create(dialog, width/6, height/2, width/3, 50);
 	ftk_widget_set_text(button, "yes");
-	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
+	ftk_button_set_clicked_listener(button, button_quit_clicked, modal ? &id : NULL);
 	
 	button = ftk_button_create(dialog, width/2, height/2, width/3, 50);
 	ftk_widget_set_text(button, "no");
-	ftk_button_set_clicked_listener(button, button_quit_clicked, &id);
+	ftk_button_set_clicked_listener(button, button_quit_clicked, modal ? &id : NULL);
 	ftk_window_set_focus(dialog, button);
 
 	ftk_widget_set_text(dialog, "dialog demo");
 	ftk_widget_show_all(dialog, 1);
-	ftk_widget_set_user_data(dialog, on_window_close, dialog);
 
-	assert(ftk_dialog_run(dialog) == id);
+	if(modal)
+	{
+		ftk_logd("is modal\n");
+		assert(ftk_dialog_run(dialog) == id);
+	}
+	else
+	{
+		ftk_logd("is not modal\n");
+		ftk_widget_show_all(dialog, 1);
+	}
+
+	return RET_OK;
+}
+
+int main(int argc, char* argv[])
+{
+	int width = 0;
+	int height = 0;
+	FtkWidget* win = NULL;
+	FtkWidget* button = NULL;
+	
+	ftk_init(argc, argv);
+
+	win = ftk_app_window_create();
+	width = ftk_widget_width(win);
+	height = ftk_widget_height(win);
+
+	button = ftk_button_create(win, 0, height/6, width/3, 50);
+	ftk_widget_set_text(button, "Normal");
+	ftk_button_set_clicked_listener(button, button_dialog_clicked, NULL);
+
+	button = ftk_button_create(win, 2*width/3, height/6, width/3, 50);
+	ftk_widget_set_text(button, "Modal");
+	ftk_button_set_clicked_listener(button, button_dialog_clicked, (void*)1);
+
+	button = ftk_button_create(win, width/4, height/2, width/2, 60);
+	ftk_widget_set_text(button, "quit");
+	ftk_button_set_clicked_listener(button, button_close_clicked, win);
+
+	ftk_widget_set_text(win, "demo dialog");
+	ftk_widget_show_all(win, 1);
+	ftk_widget_set_user_data(win, on_window_close, win);
+
+	ftk_run();
 
 	return 0;
 }

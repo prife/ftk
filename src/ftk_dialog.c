@@ -43,6 +43,13 @@ typedef struct _PrivInfo
 	FtkWidgetDestroy parent_destroy;
 }PrivInfo;
 
+static int ftk_dialog_is_modal(FtkWidget* thiz)
+{
+	DECL_PRIV1(thiz, priv);
+
+	return priv != NULL && priv->main_loop != NULL;
+}
+
 Ret ftk_dialog_set_icon(FtkWidget* thiz, FtkBitmap* icon)
 {
 	DECL_PRIV1(thiz, priv);
@@ -76,7 +83,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 	DECL_PRIV1(thiz, priv);
 	Ret ret = priv->parent_on_event(thiz, event);
 
-	if(ret == RET_QUIT)
+	if(ret == RET_QUIT && ftk_dialog_is_modal(thiz))
 	{
 		ftk_main_loop_quit(priv->main_loop);
 	}
@@ -166,7 +173,6 @@ static Ret  ftk_dialog_paint_border(FtkWidget* thiz, FtkCanvas* canvas, int x, i
 
 static Ret  ftk_dialog_paint_title(FtkWidget* thiz, FtkCanvas* canvas, int x, int y, int width, int height)
 {
-	FtkGc gc = {0};
 	DECL_PRIV1(thiz, priv);
 
 	if(priv->no_title) return RET_OK;
@@ -239,7 +245,7 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 		thiz->on_paint = ftk_dialog_on_paint;
 		thiz->destroy  = ftk_dialog_destroy;
 
-		priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
+		ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
 	}
 	else
 	{
@@ -253,7 +259,7 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 Ret ftk_dialog_quit(FtkWidget* thiz)
 {
 	DECL_PRIV1(thiz, priv);
-	return_val_if_fail(priv != NULL, RET_FAIL);
+	return_val_if_fail(ftk_dialog_is_modal(thiz), RET_FAIL);
 
 	ftk_main_loop_quit(priv->main_loop);
 
@@ -266,6 +272,7 @@ int ftk_dialog_run(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_type(thiz) == FTK_DIALOG, RET_FAIL);
 
+	priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
 	ftk_main_loop_run(priv->main_loop);
 	ftk_main_loop_destroy(priv->main_loop);
 	priv->main_loop = NULL;
