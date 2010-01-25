@@ -4,10 +4,12 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 {
 	if(ctx != NULL)
 	{
+		/*modal*/
 		*(int*)ctx = ftk_widget_id(obj);
 	}
 	else
 	{
+		/*modal-less*/
 		ftk_widget_unref(ftk_widget_toplevel(obj));
 	}
 
@@ -30,7 +32,7 @@ static Ret button_close_clicked(void* ctx, void* obj)
 
 static Ret button_dialog_clicked(void* ctx, void* obj)
 {
-	static int id = 0;
+	int id = 0;
 	int width = 0;
 	int height = 0;
 	FtkWidget* label = NULL;
@@ -39,6 +41,7 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	FtkBitmap* icon = NULL;
 	int modal = (int)ctx;
 	
+	ftk_logd("%s:%d begin\n", __func__, __LINE__);
 	dialog = ftk_dialog_create(0, 40, 320, 240);
 	
 	icon = ftk_theme_load_image(ftk_default_theme(), "info-icon"FTK_STOCK_IMG_SUFFIX); 
@@ -58,19 +61,19 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	ftk_button_set_clicked_listener(button, button_quit_clicked, modal ? &id : NULL);
 	ftk_window_set_focus(dialog, button);
 
-	ftk_widget_set_text(dialog, "dialog demo");
+	ftk_widget_set_text(dialog, modal ? "model dialog" : "normal dialog");
 	ftk_widget_show_all(dialog, 1);
 
 	if(modal)
 	{
-		ftk_logd("is modal\n");
 		assert(ftk_dialog_run(dialog) == id);
+		ftk_widget_unref(dialog);
 	}
 	else
 	{
-		ftk_logd("is not modal\n");
 		ftk_widget_show_all(dialog, 1);
 	}
+	ftk_logd("%s:%d end\n", __func__, __LINE__);
 
 	return RET_OK;
 }
