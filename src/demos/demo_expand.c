@@ -116,13 +116,6 @@ static void create_ani_window(int type, int sync)
 	return;
 }
 
-static void on_window_close(void* user_data)
-{
-	ftk_quit();
-
-	return ;
-}
-
 static void create_app_window(void)
 {
 	char title[32] = {0};
@@ -164,8 +157,8 @@ static void create_app_window(void)
 
 	ftk_snprintf(title, sizeof(title), "Expand Demo");
 	ftk_widget_set_text(win, title);
-	ftk_widget_set_user_data(win, on_window_close, win);
-		
+	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+
 	ftk_widget_show_all(win, 1);
 
 	return;

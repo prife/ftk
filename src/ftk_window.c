@@ -402,6 +402,12 @@ static void ftk_window_destroy(FtkWidget* thiz)
 		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->update_idle);
 		ftk_source_unref(priv->update_idle);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
+
+		if(ftk_widget_has_attr(thiz, FTK_ATTR_QUIT_WHEN_CLOSE))
+		{
+			ftk_logd("%s: quit because window has FTK_ATTR_QUIT_WHEN_CLOSE attr\n", __func__);
+			ftk_quit();
+		}
 	}
 
 	return;

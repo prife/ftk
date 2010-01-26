@@ -12,13 +12,6 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static void on_window_close(void* user_data)
-{
-	ftk_quit();
-
-	return ;
-}
-
 static FtkIconCache* g_icon_cache = NULL;
 static FtkBitmap* my_load_image(const char* filename)
 {
@@ -35,8 +28,8 @@ int main(int argc, char* argv[])
 		
 		g_icon_cache = ftk_icon_cache_create(NULL, "testdata");
 		win = ftk_xul_load_file(argv[1], NULL, my_load_image);
-		ftk_widget_set_user_data(win, on_window_close, win);
-		
+		ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+
 		quit = ftk_widget_lookup(win, IDC_QUIT);
 		ftk_button_set_clicked_listener(quit, button_quit_clicked, win);
 		ftk_widget_show_all(win, 1);

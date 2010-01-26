@@ -29,13 +29,6 @@ static Ret button_more_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static void on_window_close(void* user_data)
-{
-	ftk_quit();
-
-	return ;
-}
-
 static Ret item_clicked(void* ctx, void* obj)
 {
 	FtkIconViewItem* item = obj;
@@ -83,7 +76,7 @@ int FTK_MAIN(int argc, char* argv[])
 
 	ftk_widget_set_text(win, "icon view demo");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_user_data(win, on_window_close, win);
+	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
 
 	ftk_run();
 

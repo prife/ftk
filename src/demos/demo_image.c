@@ -9,13 +9,6 @@ static Ret timeout(void* ctx)
 	return RET_REMOVE;
 }
 
-static void on_window_close(void* user_data)
-{
-	ftk_quit();
-
-	return ;
-}
-
 int FTK_MAIN(int argc, char* argv[])
 {
 	FtkSource* timer = NULL;
@@ -53,7 +46,7 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(win, "image demo");
 	ftk_widget_show_all(win, 1);
 	
-	ftk_widget_set_user_data(win, on_window_close, win);
+	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
 	ftk_run();

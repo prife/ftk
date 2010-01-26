@@ -1,12 +1,5 @@
 #include "ftk.h"
 
-static void on_window_close(void* user_data)
-{
-	ftk_quit();
-
-	return ;
-}
-
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
 	ftk_quit();
@@ -59,7 +52,7 @@ int main(int argc, char* argv[])
 
 	ftk_widget_set_text(win, "wait_box demo");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_user_data(win, on_window_close, win);
+	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
 
 	ftk_run();
 
