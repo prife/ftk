@@ -106,7 +106,7 @@ int   ftk_snprintf(char *str, size_t size, const char *format, ...)
 	ret = _vsnprintf(str, size-1, format, args);
 	str[size-1] = '\0';
 
-	return 0;
+	return ret;
 }
 
 int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap)
