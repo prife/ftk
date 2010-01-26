@@ -51,7 +51,7 @@ struct _FtkBitmapFactory
 
 FtkBitmapFactory* ftk_bitmap_factory_create(void)
 {
-	FtkBitmapFactory* thiz = (FtkBitmapFactory*)calloc(1, sizeof(FtkBitmapFactory));
+	FtkBitmapFactory* thiz = (FtkBitmapFactory*)FTK_ZALLOC(sizeof(FtkBitmapFactory));
 
 	if(thiz != NULL)
 	{

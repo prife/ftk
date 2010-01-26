@@ -47,8 +47,6 @@ char* ftk_get_root_dir(void);
 char* ftk_get_data_dir(void);
 char* ftk_get_testdata_dir(void);
 
-//#define HAS_PNG 1
-//#define HAS_JPEG 1
 #define __func__       __FILE__
 #define FTK_ROOT_DIR   ftk_get_root_dir()
 #define FTK_FONT       "\\unicode.fnt"
@@ -65,7 +63,8 @@ char* ftk_strdup(const char *s);
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);
 int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap);
-int   gettimeofday(struct timeval *tv, struct timezone *tz);
+
+size_t ftk_get_relative_time(void);
 int   win32_socketpair(SOCKET socks[2]);
 
 #endif

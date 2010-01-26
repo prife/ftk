@@ -56,7 +56,7 @@ static void ftk_xml_parser_reset_buffer(FtkXmlParser* thiz);
 
 FtkXmlParser* ftk_xml_parser_create(void)
 {
-	return (FtkXmlParser*)calloc(1, sizeof(FtkXmlParser));
+	return (FtkXmlParser*)FTK_ZALLOC(sizeof(FtkXmlParser));
 }
 
 void ftk_xml_parser_set_builder(FtkXmlParser* thiz, FtkXmlBuilder* builder)
@@ -209,7 +209,7 @@ static int ftk_xml_parser_strdup(FtkXmlParser* thiz, const char* start, size_t l
 	if((thiz->buffer_used + length) >= thiz->buffer_total)
 	{
 		size_t length = thiz->buffer_total+(thiz->buffer_total>>1) + 128;
-		char* buffer = realloc(thiz->buffer, length);
+		char* buffer = FTK_REALLOC(thiz->buffer, length);
 		if(buffer != NULL)
 		{
 			thiz->buffer = buffer;
@@ -523,8 +523,8 @@ void ftk_xml_parser_destroy(FtkXmlParser* thiz)
 {
 	if(thiz != NULL)
 	{
-		free(thiz->buffer);
-		free(thiz);
+		FTK_FREE(thiz->buffer);
+		FTK_FREE(thiz);
 	}
 
 	return;

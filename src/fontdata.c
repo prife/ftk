@@ -60,7 +60,7 @@ struct _FontData
 
 FontData* font_data_create(int char_nr, Encoding encoding)
 {
-	FontData* thiz = (FontData*)calloc(1, sizeof(FontData));
+	FontData* thiz = (FontData*)FTK_ZALLOC(sizeof(FontData));
 
 	if(thiz != NULL)
 	{
@@ -71,7 +71,7 @@ FontData* font_data_create(int char_nr, Encoding encoding)
 		if(char_nr > 0)
 		{
 			thiz->new_created = 1;
-			thiz->glyphs = calloc(char_nr, sizeof(Glyph));
+			thiz->glyphs = FTK_ZALLOC(char_nr * sizeof(Glyph));
 		}
 	}
 
@@ -128,7 +128,7 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 			if((thiz->data_size + size) >= thiz->data_buffer_size)
 			{
 				size_t data_buffer_size = thiz->data_buffer_size + (thiz->data_buffer_size >> 1) + (size << 4);
-				unsigned char* data = (unsigned char*)realloc(thiz->data, data_buffer_size);
+				unsigned char* data = (unsigned char*)FTK_REALLOC(thiz->data, data_buffer_size);
 				if(data != NULL)
 				{
 					thiz->data = data;
@@ -273,10 +273,10 @@ void font_data_destroy(FontData* thiz)
 	{
 		if(thiz->new_created)
 		{
-			free(thiz->glyphs);
-			free(thiz->data);
+			FTK_FREE(thiz->glyphs);
+			FTK_FREE(thiz->data);
 		}
-		free(thiz);
+		FTK_FREE(thiz);
 	}
 
 	return;
@@ -312,7 +312,7 @@ char* read_file(const char* file_name, int* length)
 	}
 	else
 	{
-		char* buffer = malloc(st.st_size + 1);
+		char* buffer = FTK_ALLOC(st.st_size + 1);
 		FILE* fp = fopen(file_name, "rb");
 		fread(buffer, 1, st.st_size, fp);
 		fclose(fp);
@@ -330,13 +330,13 @@ int main(int argc, char* argv[])
 	char* buffer = NULL;
 	Glyph ret_glyph = {0};
 	FontData* data = font_data_create(36, 0);
-	Glyph* glyph = (Glyph*)calloc(1, sizeof(Glyph));
+	Glyph* glyph = (Glyph*)FTK_ZALLOC(sizeof(Glyph));
 
 	glyph->w = 7;
 	glyph->h = 9;
 	glyph->x = 5;
 	glyph->y = 5;
-	glyph->data = calloc(1, glyph->w * glyph->h);
+	glyph->data = FTK_ZALLOC(glyph->w * glyph->h);
 
 	for(; ch <= 'z'; ch++)
 	{
@@ -386,8 +386,8 @@ int main(int argc, char* argv[])
 	assert(font_data_get_version(data) == FONT_VERSION);
 	assert(strcmp(font_data_get_author(data), "Li XianJing <xianjimli@hotmail.com>") == 0);
 	font_data_destroy(data);
-	free(glyph->data);
-	free(glyph);
+	FTK_FREE(glyph->data);
+	FTK_FREE(glyph);
 
 	return 0;
 }
