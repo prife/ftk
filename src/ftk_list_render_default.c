@@ -107,7 +107,7 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 		text_width = right_icon != NULL ? text_width - h : text_width;
 		
 		dy = y + FTK_HALF(h);
-		dx = info->left_icon != NULL  ? x + h : x;
+		dx = FTK_H_MARGIN + (info->left_icon != NULL  ? x + h : x);
 
 		end = ftk_canvas_calc_str_visible_range(canvas, info->text, 0, -1, text_width);
 		ftk_canvas_draw_string_ex(canvas, dx, dy, info->text, end - info->text, 1);

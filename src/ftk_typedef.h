@@ -156,6 +156,8 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 	     FTK_ALPHA_1(sc->g, dc->g, a); \
 	     FTK_ALPHA_1(sc->b, dc->b, a);
 
+#define FTK_ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+
 /*for customize*/
 #define FTK_H_MARGIN            2
 #define FTK_V_MARGIN            2

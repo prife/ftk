@@ -1,7 +1,7 @@
 /*
- * File: ftk_list_model_default.h    
+ * File: ftk_popup_menu.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   default list model
+ * Brief:   popup menu
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,40 +25,19 @@
 /*
  * History:
  * ================================================================
- * 2009-11-28 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-01-26 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_LIST_MODEL_DEFAULT_H
-#define FTK_LIST_MODEL_DEFAULT_H
+#ifndef FTK_POPUP_MENU_H
+#define FTK_POPUP_MENU_H
 
-#include "ftk_bitmap.h"
-#include "ftk_list_model.h"
+#include "ftk_list_model_default.h"
 
-FTK_BEGIN_DECLS
+#define FTK_POPUP_MENU_ITEM_HEIGHT 40
 
-typedef enum _FtkListItemType
-{
-	FTK_LIST_ITEM_NORMAL = 0,
-	FTK_LIST_ITEM_RADIO,  /*draw radio button icon at right side.*/
-	FTK_LIST_ITEM_CHECK,  /*draw check button icon at right side.*/
-	FTK_LIST_ITEM_MORE    /*draw MORE icon at right side, which means click this item will lead to more UI. */
-}FtkListItemType;
+FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, const char* title);
+Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDestroy on_item_destroy);
 
-typedef struct _FtkListItemInfo
-{
-	char* text;
-	int   state; /*used for FTK_LIST_ITEM_RADIO and FTK_LIST_ITEM_CHECK*/
-	FtkListItemType type;
-	FtkBitmap* left_icon;
-	FtkBitmap* right_icon;
-	void*      user_data;
-	void*      extra_user_data;
-}FtkListItemInfo;
-
-FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkDestroy destroy);
-
-FTK_END_DECLS
-
-#endif/*FTK_LIST_MODEL_DEFAULT_H*/
+#endif/*FTK_POPUP_MENU_H*/
 

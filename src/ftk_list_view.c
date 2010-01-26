@@ -259,7 +259,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 
 		dx = x + FTK_H_MARGIN;
 		w = width - 2 * FTK_H_MARGIN - scroll_bar_width;
-		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, dx, dy, w, priv->item_height);
+		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, x, dy, w, priv->item_height);
 		ftk_list_render_paint(priv->render, canvas, priv->visible_start + i, dx, dy, w, priv->item_height);
 		dy += priv->item_height;
 	}
@@ -313,7 +313,7 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_set_attr(thiz, FTK_ATTR_BG_TILE);
 
 		priv->bg_normal = ftk_theme_load_image(ftk_default_theme(),
-			"list_selector_background_disabled"FTK_STOCK_IMG_SUFFIX);
+			"list_selector_background_normal"FTK_STOCK_IMG_SUFFIX);
 		priv->bg_focus = ftk_theme_load_image(ftk_default_theme(),
 			"list_selector_background_focus"FTK_STOCK_IMG_SUFFIX);
 		priv->bg_active = ftk_theme_load_image(ftk_default_theme(),
@@ -379,8 +379,8 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	priv->visible_nr = ftk_widget_height(thiz)/item_height;
 	return_val_if_fail(priv->visible_nr > 0, RET_FAIL);
 
-	priv->top_margin = FTK_HALF(margin);
-	priv->botton_margin = FTK_HALF(margin);
+	priv->top_margin = 0;//FTK_HALF(margin);
+	priv->botton_margin = margin;//FTK_HALF(margin);
 	priv->visible_start = 0;
 	priv->current      = -1;
 	priv->is_active = 0;

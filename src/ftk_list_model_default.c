@@ -36,7 +36,7 @@ typedef struct _PrivInfo
 	size_t nr;
 	size_t alloc_nr;
 	FtkListItemInfo* items;
-	FtkListItemDestroy item_destroy;
+	FtkDestroy item_destroy;
 }PrivInfo;
 
 static int  ftk_list_model_default_get_total(FtkListModel* thiz)
@@ -133,7 +133,7 @@ Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index)
 	return RET_OK;
 }
 
-FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkListItemDestroy destroy)
+FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkDestroy destroy)
 {
 	FtkListModel* thiz = FTK_ZALLOC(sizeof(FtkListModel) + sizeof(PrivInfo));
 	if(thiz != NULL)
