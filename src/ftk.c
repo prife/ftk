@@ -268,14 +268,25 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 {
 	Ret ret = RET_OK;
 	FtkEvent* event = obj;
+	FtkWidget* panel = NULL;
+	FtkWidget* top_window = NULL;
+	FtkWidget* close_widget = NULL;
+	FtkWidget* title_widget = NULL;
 
+	if(event->type != FTK_EVT_TOP_WND_CHANGED
+		&& event->type != FTK_EVT_WND_CONFIG_CHANGED)
+	{
+		return RET_OK;
+	}
+
+	panel = ftk_default_status_panel();
+	close_widget = ftk_widget_lookup(panel, IDC_CLOSE_ITEM);
+	title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
 	switch(event->type)
 	{
 		case FTK_EVT_TOP_WND_CHANGED:
 		{
-			FtkWidget* panel = ftk_default_status_panel();
-			FtkWidget* top_window = event->widget;
-			FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
+			top_window = event->widget;
 
 			if(top_window != NULL)
 			{
@@ -293,9 +304,7 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 		}
 		case FTK_EVT_WND_CONFIG_CHANGED:
 		{
-			FtkWidget* panel = ftk_default_status_panel();
-			FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
-			FtkWidget* top_window = ftk_widget_user_data(title_widget);
+			top_window = ftk_widget_user_data(title_widget);
 			if(top_window == event->widget)
 			{
 				ftk_widget_set_text(title_widget, ftk_widget_get_text(top_window));
@@ -306,6 +315,11 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 			break;
 		}
 		default:break;
+	}
+
+	if(top_window != NULL && close_widget != NULL)
+	{
+		ftk_widget_show(close_widget, !ftk_widget_has_attr(top_window, FTK_ATTR_IGNORE_CLOSE));
 	}
 
 	return ret;

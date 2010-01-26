@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	ftk_widget_set_text(win, "label demo");
 	ftk_widget_show_all(win, 1);
 
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	ftk_widget_set_attr(win, FTK_ATTR_IGNORE_CLOSE);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
 	ftk_run();
