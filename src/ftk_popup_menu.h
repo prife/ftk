@@ -36,8 +36,12 @@
 
 #define FTK_POPUP_MENU_ITEM_HEIGHT 40
 
+FTK_BEGIN_DECLS
+
 FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, const char* title);
 Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDestroy on_item_destroy);
+
+FTK_END_DECLS
 
 #endif/*FTK_POPUP_MENU_H*/
 
