@@ -36,6 +36,7 @@
 
 typedef struct _PrivInfo
 {
+	int  sync;
 	int  start;
 	int  end;
 	char step;
@@ -64,7 +65,12 @@ static Ret  ftk_animator_alpha_init(FtkAnimator* thiz)
 	return_val_if_fail(priv->stop == 0, RET_FAIL);
 
 	ftk_widget_ref(priv->win);
-	ftk_widget_show(priv->win, 1);
+	ftk_widget_show_all(priv->win, 1);
+
+	if(priv->sync)
+	{
+		ftk_widget_paint(priv->win);
+	}
 
 	return RET_OK;
 }
@@ -112,7 +118,7 @@ static Ret  ftk_animator_alpha_step(FtkAnimator* thiz)
 	gc.alpha = priv->start & 0xFF;
 
 	ftk_canvas_set_gc(priv->canvas, &gc);
-	ftk_canvas_draw_bitmap(priv->canvas, bitmap, 0, 0, w, h, x,y);
+	ftk_canvas_draw_bitmap(priv->canvas, bitmap, x, y, w, h, x,y);
 	bitmap = ftk_canvas_bitmap(priv->canvas);
 
 	rect.x = x;
@@ -159,6 +165,7 @@ static Ret  ftk_animator_alpha_start(FtkAnimator* thiz, FtkWidget* win, int sync
 	return_val_if_fail(priv->start != priv->end, RET_FAIL);
 
 	bg.a = 0xff;
+	priv->sync = sync;
 	priv->snap = ftk_bitmap_create(ftk_display_width(display), ftk_display_height(display), bg);
 	ftk_display_snap(ftk_default_display(), 0, 0, priv->snap);
 	return_val_if_fail(priv->snap != NULL, RET_FAIL);

@@ -47,7 +47,7 @@ static void create_ani_window(int type, int sync)
 	ftk_gc_reset(&gc);
 
 	ftk_animator_set_param(ani, 0, 0, 0xff, type ? 0x60 : 0x20, type ? 200 : 1000);
-	ftk_animator_start(ani, win, 1);
+	ftk_animator_start(ani, win, type);
 
 	return;
 }
