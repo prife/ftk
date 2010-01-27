@@ -35,6 +35,11 @@
 	fg[active]="ffffbb00"
 	fg[disable]="ffaca899"/>
 
+<list_view bg_image[normal]="list_view_bg.png" 
+	bg_image[focused]="list_view_bg.png" 
+	bg_image[active]="list_view_bg.png" 
+	bg_image[disable]="list_view_bg.png"/> 
+
 <icon_view bg_image[normal]="icon_view_bg.png" 
 	bg_image[focused]="icon_view_bg.png" 
 	bg_image[active]="icon_view_bg.png" 
