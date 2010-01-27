@@ -301,6 +301,10 @@ static Ret  ftk_animator_expand_set_param(FtkAnimator* thiz, int type, int start
 	{
 		priv->step = step < 0 ? step : -step;
 	}
+	else
+	{
+		priv->step = step > 0 ? step : -step;
+	}
 
 	return RET_OK;
 }
