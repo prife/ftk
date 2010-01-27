@@ -136,6 +136,7 @@ static const int s_key_map[] =
 	[0x71] = FTK_KEY_LEFT,
 	[0x72] = FTK_KEY_RIGHT,
 	[0x74] = FTK_KEY_DOWN,
+	[0x77] = FTK_KEY_DELETE,
 //	[0x71] = FTK_KEY_RIGHTALT,
 };
 

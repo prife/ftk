@@ -380,7 +380,6 @@ static void ftk_init_panel(void)
 		ftk_widget_set_gc(item, FTK_WIDGET_ACTIVE, &gc);
 		ftk_gc_reset(&gc);
 	}
-	ftk_widget_show(item, 1);
 	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
 
 	item = ftk_status_item_create(panel, 1, 32);

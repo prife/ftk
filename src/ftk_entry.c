@@ -68,6 +68,7 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 	if(!HAS_TEXT(priv))
 	{
 		priv->caret = 0;
+		ftk_widget_invalidate(thiz);
 		return RET_OK;
 	}
 
