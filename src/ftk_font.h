@@ -43,6 +43,7 @@ typedef struct _FtkGlyph
 	unsigned char w;
 	unsigned char h;
 	unsigned short code;
+	unsigned short unused;
 	unsigned char* data;
 }FtkGlyph;
 
