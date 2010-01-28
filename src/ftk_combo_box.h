@@ -1,7 +1,7 @@
 /*
- * File: ftk_popup_menu.h
+ * File: ftk_combo_box.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   popup menu
+ * Brief:   combo_box
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,21 +25,23 @@
 /*
  * History:
  * ================================================================
- * 2010-01-26 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-01-28 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_POPUP_MENU_H
-#define FTK_POPUP_MENU_H
+#ifndef FTK_COMBO_BOX_H
+#define FTK_COMBO_BOX_H
 
-#include "ftk_list_model_default.h"
+#include "ftk_widget.h"
+
+FTK_INHERITE_FROM(Widget)
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, const char* title);
-Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDestroy on_item_destroy);
+FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int height);
+Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text);
 
 FTK_END_DECLS
 
-#endif/*FTK_POPUP_MENU_H*/
+#endif/*FTK_COMBO_BOX_H*/
 

@@ -524,7 +524,7 @@ FtkWidget* ftk_window_create(int x, int y, int width, int height)
 	return ftk_window_create_with_type(FTK_WINDOW, x, y, width, height);
 }
 
-FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height)
+FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	return_val_if_fail(thiz != NULL, NULL);
@@ -550,6 +550,7 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 			thiz->on_event = ftk_window_on_event;
 			thiz->on_paint = ftk_window_on_paint;
 			thiz->destroy  = ftk_window_destroy;
+			ftk_widget_set_attr(thiz, attr);
 
 			ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 		}while(0);
@@ -560,6 +561,11 @@ FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int he
 	}
 
 	return thiz;
+}
+
+FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height)
+{
+	return ftk_window_create_ex(type, 0, x, y, width, height);
 }
 
 Ret ftk_window_disable_update(FtkWidget* thiz)

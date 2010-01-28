@@ -153,7 +153,6 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 	int h = 0;
 	int work_area_h = 0;
 	FtkEvent event = {0};
-	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 
 	work_area_h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);
@@ -175,11 +174,20 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		}
 		case FTK_DIALOG:
 		{
-			x = FTK_DIALOG_MARGIN;
-			w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
-			h = work_area_h < ftk_widget_height(window) ? work_area_h : ftk_widget_height(window);
-			y = (work_area_h - h) / 2 + ftk_wnd_manager_get_status_bar_height(thiz);
-
+			if(ftk_widget_has_attr(window, FTK_ATTR_AUTO_LAYOUT))
+			{
+				x = FTK_DIALOG_MARGIN;
+				w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
+				h = work_area_h < ftk_widget_height(window) ? work_area_h : ftk_widget_height(window);
+				y = (work_area_h - h) / 2 + ftk_wnd_manager_get_status_bar_height(thiz);
+			}
+			else
+			{
+				x = ftk_widget_left_abs(window);
+				y = ftk_widget_top_abs(window);
+				w = ftk_widget_width(window);
+				h = ftk_widget_height(window);
+			}
 			break;
 		}
 		case FTK_STATUS_PANEL:

@@ -100,6 +100,7 @@ typedef enum _FtkWidgetType
 	FTK_LIST_VIEW,
 	FTK_ICON_VIEW,
 	FTK_TEXT_VIEW,
+	FTK_COMBO_BOX,
 	FTK_WIDGET_TYPE_NR
 }FtkWidgetType;
 
@@ -129,7 +130,8 @@ typedef enum _FtkWidgetAttr
 	FTK_ATTR_INSENSITIVE     = 32,
 	FTK_ATTR_FOCUSED         = 64,
 	FTK_ATTR_IGNORE_CLOSE    = 128, /*for window only*/
-	FTK_ATTR_QUIT_WHEN_CLOSE = 256 /*for window only*/
+	FTK_ATTR_QUIT_WHEN_CLOSE = 256, /*for window only*/
+	FTK_ATTR_AUTO_LAYOUT     = 512  /*for dialog only*/
 }FtkWidgetAttr;
 
 typedef void (*FtkDestroy)(void* user_data);
@@ -167,13 +169,14 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_SPACE_WIDTH         5
 #define FTK_MAX_IMAGE_DECODERS  6
 #define FTK_STATUS_PANEL_HEIGHT 36
-#define FTK_DIALOG_MARGIN       6
+#define FTK_DIALOG_MARGIN       (ftk_display_width(ftk_default_display()) >> 5)
 #define FTK_DIALOG_BORDER       3
 #define FTK_DIALOG_TITLE_HEIGHT 32
 #define FTK_SCROLL_BAR_WIDTH    10
 #define FTK_MENU_MAX_ITEM       16
 #define FTK_MENU_ITEM_HEIGHT    48
 #define FTK_MENU_ITEM_WIDTH     100
+#define FTK_POPUP_MENU_ITEM_HEIGHT 40
 #define FTK_STOCK_IMG_SUFFIX    ".png"
 #define FTK_FONT_SIZE 16
 #define FTK_LABEL_LEFT_MARGIN 3

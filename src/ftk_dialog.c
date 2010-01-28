@@ -229,9 +229,9 @@ static void ftk_dialog_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
+FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height)
 {
-	FtkWidget* thiz = ftk_window_create_with_type(FTK_DIALOG, x, y, width, height);
+	FtkWidget* thiz = ftk_window_create_ex(FTK_DIALOG, attr, x, y, width, height);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
@@ -254,6 +254,11 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 	}
 
 	return thiz;
+}
+
+FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
+{
+	return ftk_dialog_create_ex(FTK_ATTR_AUTO_LAYOUT, x, y, width, height);
 }
 
 Ret ftk_dialog_quit(FtkWidget* thiz)
