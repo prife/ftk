@@ -170,7 +170,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_MAX_IMAGE_DECODERS  6
 #define FTK_STATUS_PANEL_HEIGHT 36
 #define FTK_DIALOG_MARGIN       (ftk_display_width(ftk_default_display()) >> 5)
-#define FTK_DIALOG_BORDER       3
+#define FTK_DIALOG_BORDER       2
 #define FTK_DIALOG_TITLE_HEIGHT 32
 #define FTK_SCROLL_BAR_WIDTH    10
 #define FTK_MENU_MAX_ITEM       16

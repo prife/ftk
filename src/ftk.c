@@ -279,6 +279,11 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 		return RET_OK;
 	}
 
+	if(ftk_widget_type(event->widget) != FTK_WINDOW)
+	{
+		return RET_OK;
+	}
+
 	panel = ftk_default_status_panel();
 	close_widget = ftk_widget_lookup(panel, IDC_CLOSE_ITEM);
 	title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
