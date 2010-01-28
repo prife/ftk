@@ -24,13 +24,42 @@ int main(int argc, char* argv[])
 	
 	width = width/2 - 10;
 	combo_box = ftk_combo_box_create(win, 0, height/4, width, 50);
+	ftk_combo_box_set_text(combo_box, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "2 seconds");
 	ftk_combo_box_append(combo_box, NULL, "3 seconds");
 	combo_box = ftk_combo_box_create(win, width + 10, height/4, width, 50);
+	ftk_combo_box_set_text(combo_box, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "2 seconds");
 	ftk_combo_box_append(combo_box, NULL, "3 seconds");
+	ftk_combo_box_append(combo_box, NULL, "4 seconds");
+	ftk_combo_box_append(combo_box, NULL, "5 seconds");
+	ftk_combo_box_append(combo_box, NULL, "6 seconds");
+	ftk_combo_box_append(combo_box, NULL, "7 seconds");
+	ftk_combo_box_append(combo_box, NULL, "8 seconds");
+	ftk_combo_box_append(combo_box, NULL, "9 seconds");
+	ftk_combo_box_append(combo_box, NULL, "0 seconds");
+	ftk_combo_box_append(combo_box, NULL, "0 seconds");
+
+	combo_box = ftk_combo_box_create(win, 0, 3*height/4+5, width, 50);
+	ftk_combo_box_set_text(combo_box, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "2 seconds");
+	ftk_combo_box_append(combo_box, NULL, "3 seconds");
+	combo_box = ftk_combo_box_create(win, width + 10, 3*height/4+5, width, 50);
+	ftk_combo_box_set_text(combo_box, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "2 seconds");
+	ftk_combo_box_append(combo_box, NULL, "3 seconds");
+	ftk_combo_box_append(combo_box, NULL, "4 seconds");
+	ftk_combo_box_append(combo_box, NULL, "5 seconds");
+	ftk_combo_box_append(combo_box, NULL, "6 seconds");
+	ftk_combo_box_append(combo_box, NULL, "7 seconds");
+	ftk_combo_box_append(combo_box, NULL, "8 seconds");
+	ftk_combo_box_append(combo_box, NULL, "9 seconds");
+	ftk_combo_box_append(combo_box, NULL, "0 seconds");
+	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 	
 	button = ftk_button_create(win, width/2, height/2, width, 60);
 	ftk_widget_set_text(button, "quit");

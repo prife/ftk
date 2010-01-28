@@ -39,6 +39,9 @@ FTK_INHERITE_FROM(Widget)
 FTK_BEGIN_DECLS
 
 FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int height);
+
+const char* ftk_combo_box_get_text(FtkWidget* thiz);
+Ret ftk_combo_box_set_text(FtkWidget* thiz, const char* text);
 Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text);
 
 FTK_END_DECLS
