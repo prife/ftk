@@ -181,6 +181,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_FONT_SIZE 16
 #define FTK_LABEL_LEFT_MARGIN 3
 #define FTK_LABEL_TOP_MARGIN  1
+#define FTK_CLIPBOARD_SIZE    1024
 
 #ifdef __cplusplus
 #define FTK_BEGIN_DECLS extern "C" {

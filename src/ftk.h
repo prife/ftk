@@ -55,6 +55,7 @@ extern "C" {
 #include "ftk_globals.h"
 #include "ftk_wait_box.h"
 #include "ftk_combo_box.h"
+#include "ftk_clipboard.h"
 #include "ftk_text_view.h"
 #include "ftk_menu_panel.h"
 #include "ftk_source_idle.h"

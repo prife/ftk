@@ -1,5 +1,5 @@
 /*
- * File: ftk_clipboard.h    
+ * File: ftk_clipboard.c
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   clip board
  *
@@ -29,18 +29,32 @@
  *
  */
 
-#ifndef FTK_CLIP_BOARD_H
-#define FTK_CLIP_BOARD_H
+#include "ftk_clipboard.h"
 
-#include "ftk_typedef.h"
+static char g_clipboard[FTK_CLIPBOARD_SIZE+1];
 
-FTK_BEGIN_DECLS
+int ftk_clipboard_has_data(void)
+{
+	return g_clipboard[0] != '\0';
+}
 
-int ftk_clipboard_has_data(void);
-Ret ftk_clipboard_set_text(const char* text);
-Ret ftk_clipboard_get_text(const char** text);
+Ret ftk_clipboard_set_text(const char* text)
+{
+	return_val_if_fail(text != NULL, RET_FAIL);
 
-FTK_END_DECLS
+	ftk_strncpy(g_clipboard, text, FTK_CLIPBOARD_SIZE);
 
-#endif/*FTK_CLIP_BOARD_H*/
+	return RET_OK;
+}
+
+Ret ftk_clipboard_get_text(const char** text)
+{
+	return_val_if_fail(text != NULL, RET_FAIL);
+
+	*text = g_clipboard;
+
+	return RET_OK;
+}
+
+
 
