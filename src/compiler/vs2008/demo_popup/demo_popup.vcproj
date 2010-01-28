@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="demo_button"
-	ProjectGUID="{7A75556C-4A42-4BA5-93AA-725CB8A468CF}"
-	RootNamespace="demo_button"
+	Name="demo_popup"
+	ProjectGUID="{40FEE4A3-9981-4F41-9603-D97ACD2E117A}"
+	RootNamespace="demo_popup"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -177,11 +177,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\demos\demo_alpha.c"
+				RelativePath=".\demo_main.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\demos\demo_button.c"
+				RelativePath="..\..\..\demos\demo_popup.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -199,10 +199,6 @@
 						UsePrecompiledHeader="0"
 					/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\demo_main.cpp"
-				>
 			</File>
 			<File
 				RelativePath=".\stdafx.cpp"
@@ -231,7 +227,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\demo_button.h"
+				RelativePath=".\demo_popup.h"
 				>
 			</File>
 			<File
@@ -253,11 +249,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\demo_button.ico"
+				RelativePath=".\demo_popup.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\demo_button.rc"
+				RelativePath=".\demo_popup.rc"
 				>
 			</File>
 			<File

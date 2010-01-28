@@ -193,6 +193,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_animator_alpha.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_animator_expand.c"
 				>
 				<FileConfiguration
@@ -845,6 +865,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_popup_menu.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_progress_bar.c"
 				>
 				<FileConfiguration
@@ -1323,6 +1363,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\ftk_animator_alpha.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\ftk_animator_expand.h"
 				>
 			</File>
@@ -1504,6 +1548,10 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_platform.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_popup_menu.h"
 				>
 			</File>
 			<File
