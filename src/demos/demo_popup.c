@@ -70,7 +70,7 @@ static Ret button_check_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
