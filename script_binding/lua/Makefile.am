@@ -8,4 +8,4 @@ ftk_run_LDFLAGS=$(MYLDFLAGS) $(abs_top_builddir)/script_binding/lua/lua/.libs/li
 	-lpng -ljpeg  -ldl
 ftk_run_CFLAGS=-DLUA_USE_LINUX -I$(srcdir)/lua
 
-EXTRA_DIST=ftk_lua.h
+EXTRA_DIST=ftk_lua.h t1.lua
