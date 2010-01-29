@@ -503,14 +503,21 @@ static Ret ftk_text_view_paint_border(FtkWidget* thiz, FtkCanvas* canvas, int x,
 	gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_TEXT_VIEW, ftk_widget_state(thiz));
 	ftk_canvas_set_gc(canvas, &gc);
 	
-	ftk_canvas_draw_hline(canvas, x + 2, y, width-4);
-	ftk_canvas_draw_hline(canvas, x + 1, y + 1, width-2);
 	ftk_canvas_draw_vline(canvas, x, y + 2, height - 4);
-	ftk_canvas_draw_vline(canvas, x + 1, y + 1, height - 2);
-	
 	ftk_canvas_draw_vline(canvas, x+width-1, y + 2, height - 4);
-	ftk_canvas_draw_vline(canvas, x + width -2, y + 1, height - 2);
+	ftk_canvas_draw_hline(canvas, x + 2, y, width-4);
 	ftk_canvas_draw_hline(canvas, x + 1, y + height - 1, width-2);
+
+	if(ftk_widget_state(thiz) == FTK_WIDGET_NORMAL)
+	{
+		gc.fg.r += 0x60;
+		gc.fg.g += 0x60;
+		gc.fg.b += 0x60;
+		ftk_canvas_set_gc(canvas, &gc);
+	}
+	ftk_canvas_draw_hline(canvas, x + 1, y + 1, width-2);
+	ftk_canvas_draw_vline(canvas, x + 1, y + 1, height - 2);
+	ftk_canvas_draw_vline(canvas, x + width -2, y + 1, height - 2);
 	ftk_canvas_draw_hline(canvas, x + 2, y + height - 2, width-4);
 
 	return RET_OK;
