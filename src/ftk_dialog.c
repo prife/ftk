@@ -37,6 +37,7 @@ typedef struct _PrivInfo
 {
 	int no_title;
 	FtkBitmap* icon;
+	FtkSource* timer;
 	FtkMainLoop* main_loop;
 	FtkWidgetOnEvent parent_on_event;
 	FtkWidgetOnPaint parent_on_paint;
@@ -100,6 +101,32 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 			ftk_widget_move(child, x, y);
 
+			break;
+		}
+		case FTK_EVT_MOUSE_UP:
+		{
+			int p_x = event->u.mouse.x;
+			int p_y = event->u.mouse.y;
+
+			int x = ftk_widget_left_abs(thiz);
+			int y = ftk_widget_top_abs(thiz);
+			int w = ftk_widget_width(thiz);
+			int h = ftk_widget_height(thiz);
+
+			if(p_x < x || p_y < y || (p_x > (x + w)) || (p_y > (y + h)))
+			{
+				if(ftk_widget_has_attr(thiz, FTK_ATTR_POPUP))
+				{
+					if(ftk_dialog_is_modal(thiz))
+					{
+						ftk_dialog_quit(thiz);
+					}
+					else
+					{
+						ftk_widget_unref(thiz);
+					}
+				}
+			}
 			break;
 		}
 		default:break;
@@ -218,12 +245,22 @@ static Ret  ftk_dialog_on_paint(FtkWidget* thiz)
 static void ftk_dialog_destroy(FtkWidget* thiz)
 {
 	DECL_PRIV1(thiz, priv);
-	FtkWidgetDestroy parent_destroy = priv->parent_destroy;
-	parent_destroy(thiz);
+
+	if(priv->parent_destroy != NULL)
+	{
+		priv->parent_destroy(thiz);
+	}
+
 	if(priv->icon != NULL)
 	{
 		ftk_bitmap_unref(priv->icon);
 	}
+
+	if(priv->timer != NULL)
+	{
+		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->timer);
+	}
+
 	FTK_ZFREE(thiz->priv_subclass[1], sizeof(PrivInfo));
 
 	return;
@@ -267,6 +304,36 @@ Ret ftk_dialog_quit(FtkWidget* thiz)
 	return_val_if_fail(ftk_dialog_is_modal(thiz), RET_FAIL);
 
 	ftk_main_loop_quit(priv->main_loop);
+
+	return RET_OK;
+}
+
+static Ret ftk_dialog_timeout_quit(void* ctx)
+{
+	FtkWidget* thiz = ctx;
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(priv != NULL && priv->timer != NULL, RET_REMOVE);
+
+	priv->timer = NULL;
+	if(ftk_dialog_is_modal(thiz))
+	{
+		ftk_dialog_quit(thiz);
+	}
+	else
+	{
+		ftk_widget_unref(thiz);
+	}
+
+	return RET_REMOVE;
+}
+
+Ret ftk_dialog_quit_after(FtkWidget* thiz, int ms)
+{
+	DECL_PRIV1(thiz, priv);
+	return_val_if_fail(priv != NULL && priv->timer == NULL, RET_FAIL);
+	
+	priv->timer = ftk_source_timer_create(ms, ftk_dialog_timeout_quit, thiz);
+	ftk_main_loop_add_source(ftk_default_main_loop(), priv->timer);
 
 	return RET_OK;
 }

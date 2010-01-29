@@ -34,15 +34,6 @@
 #include "ftk_button.h"
 #include "ftk_globals.h"
 #include "ftk_message_box.h"
-#include "ftk_source_timer.h"
-
-static Ret message_box_timeout(void* ctx)
-{
-	ftk_logd("%s\n", __func__);
-	ftk_dialog_quit(ctx);
-
-	return RET_REMOVE;
-}
 
 static Ret message_box_on_button_clicked(void* ctx, void* obj)
 {
@@ -121,7 +112,6 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	int has_title = icon != NULL || title != NULL;
 	int buttons_nr = ftk_count_strings(buttons);
 
-	FtkSource* timer = NULL;
 	FtkWidget* label = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* dialog = NULL;
@@ -138,6 +128,7 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	else
 	{
 		ftk_dialog_hide_title(dialog);
+		ftk_widget_set_attr(dialog, FTK_ATTR_POPUP);
 	}
 
 	width  = ftk_widget_width(dialog);
@@ -178,8 +169,7 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	else
 	{
 		/*if no buttons, quit when timeout.*/
-		timer = ftk_source_timer_create(3000, message_box_timeout, dialog);
-		ftk_main_loop_add_source(ftk_default_main_loop(), timer);
+		ftk_dialog_quit_after(dialog, 3000);
 	}
 
 	ftk_widget_show_all(dialog, 1);

@@ -158,7 +158,7 @@ static Ret button_drop_down_clicked(void* ctx, void* obj)
 
 	ftk_combo_box_popup_rect(thiz, &x, &y, &w, &h);
 
-	popup = ftk_dialog_create_ex(0, x, y, w, h);
+	popup = ftk_dialog_create_ex(FTK_ATTR_POPUP, x, y, w, h);
 	ftk_dialog_hide_title(popup);
 	w = ftk_widget_width(popup) - FTK_DIALOG_BORDER * 2;
 	h = ftk_widget_height(popup) - FTK_DIALOG_BORDER * 2;

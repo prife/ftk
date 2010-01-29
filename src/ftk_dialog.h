@@ -43,6 +43,7 @@ Ret ftk_dialog_set_icon(FtkWidget* thiz, FtkBitmap* icon);
 Ret ftk_dialog_hide_title(FtkWidget* thiz);
 int ftk_dialog_run(FtkWidget* thiz);
 Ret ftk_dialog_quit(FtkWidget* thiz);
+Ret ftk_dialog_quit_after(FtkWidget* thiz, int ms);
 
 FTK_END_DECLS
 

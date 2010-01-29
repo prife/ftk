@@ -123,15 +123,16 @@ typedef enum _FtkWidgetState
 typedef enum _FtkWidgetAttr
 {
 	FTK_ATTR_TRANSPARENT     = 1,
-	FTK_ATTR_NO_FOCUS        = 2,
-	FTK_ATTR_BG_CENTER       = 4,
-	FTK_ATTR_BG_TILE         = 8,
-	FTK_ATTR_BG_FOUR_CORNER  = 16,
-	FTK_ATTR_INSENSITIVE     = 32,
-	FTK_ATTR_FOCUSED         = 64,
-	FTK_ATTR_IGNORE_CLOSE    = 128, /*for window only*/
-	FTK_ATTR_QUIT_WHEN_CLOSE = 256, /*for window only*/
-	FTK_ATTR_AUTO_LAYOUT     = 512  /*for dialog only*/
+	FTK_ATTR_NO_FOCUS        = 1<<1,
+	FTK_ATTR_BG_CENTER       = 1<<2,
+	FTK_ATTR_BG_TILE         = 1<<3,
+	FTK_ATTR_BG_FOUR_CORNER  = 1<<4,
+	FTK_ATTR_INSENSITIVE     = 1<<5,
+	FTK_ATTR_FOCUSED         = 1<<6,
+	FTK_ATTR_IGNORE_CLOSE    = 1<<7, /*for window only*/
+	FTK_ATTR_QUIT_WHEN_CLOSE = 1<<8, /*for window only*/
+	FTK_ATTR_AUTO_LAYOUT     = 1<<9,  /*for dialog only*/
+	FTK_ATTR_POPUP           = 1<<10  /*for dialog only*/
 }FtkWidgetAttr;
 
 typedef void (*FtkDestroy)(void* user_data);
