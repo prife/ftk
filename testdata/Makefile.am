@@ -8,4 +8,5 @@ EXTRA_DIST=\
 	Camera.png      Install.png    Memory.png     Skype.png     zone.png\
 	Chat.png        iPod.png       Notes.png      Sms.png\
 	Clock.png       IP.png         Photos.png     Stock.png\
-	Customize.png   iradio.png     png1.png       Twitter.png
+	Customize.png   iradio.png     png1.png       Twitter.png\
+	jpeg1.jpg
