@@ -137,6 +137,8 @@ AC_CONFIG_FILES([ftk.pc
 				src/compiler/vs2008/demo_progress/Makefile
 				src/compiler/vs2008/demo_msgbox/Makefile
 				src/compiler/vs2008/demo_entry/Makefile
+				src/compiler/vs2008/demo_combobox/Makefile
+				src/compiler/vs2008/demo_xul/Makefile
                 script_binding/Makefile
                 script_binding/lua/Makefile
                 script_binding/lua/lua/Makefile
