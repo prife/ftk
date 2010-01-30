@@ -48,6 +48,6 @@ theme_DATA=\
 	scrollbar_handle_vertical.png \
 	status-bg.png \
 	wait_box.png \
-	warning.png 
+	warning.png theme.xml
 
 EXTRA_DIST=$(theme_DATA)
