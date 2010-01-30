@@ -30,18 +30,18 @@
  */
 
 #include "ftk_log.h"
+#include "ftk_event.h"
 #include "ftk_main_loop.h"
 
 struct _FtkMainLoop
 {
-	fd_set fdset;
 	int running;
+	fd_set fdset;
 	FtkSourcesManager* sources_manager;
 };
 
 FtkMainLoop* ftk_main_loop_create(FtkSourcesManager* sources_manager)
 {
-	int pipes[2] = {0};
 	FtkMainLoop* thiz = NULL;
 	return_val_if_fail(sources_manager != NULL, NULL);
 
@@ -71,11 +71,9 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 	while(thiz->running)
 	{
 		n = 0;
+		mfd = 0;
 		wait_time = 3000;
 		FD_ZERO(&thiz->fdset);
-		FD_SET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset);
-	
-		mfd = ftk_sources_manager_get_async_pipe(thiz->sources_manager);
 
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager); i++)
 		{
@@ -139,11 +137,6 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 			i++;
 		}
-
-		if(FD_ISSET(ftk_sources_manager_get_async_pipe(thiz->sources_manager), &thiz->fdset))
-		{
-			ftk_sources_manager_handle_async(thiz->sources_manager);
-		}
 	}
 
 	return RET_OK;
@@ -151,25 +144,35 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 Ret ftk_main_loop_quit(FtkMainLoop* thiz)
 {
+	FtkEvent event = {0};
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
+	event.type = FTK_EVT_NOP;
 	thiz->running = 0;
 
-	return ftk_sources_manager_wakeup(thiz->sources_manager);
+	return ftk_source_queue_event(ftk_primary_source(), &event);
 }
 
 Ret ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source)
 {
+	FtkEvent event = {0};
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 
-	return ftk_sources_manager_add_async(thiz->sources_manager, source);
+	event.type = FTK_EVT_ADD_SOURCE;
+	event.u.extra = source;
+
+	return ftk_source_queue_event(ftk_primary_source(), &event);
 }
 
 Ret ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source)
 {
+	FtkEvent event = {0};
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 
-	return ftk_sources_manager_remove_async(thiz->sources_manager, source);
+	event.type = FTK_EVT_REMOVE_SOURCE;
+	event.u.extra = source;
+
+	return ftk_source_queue_event(ftk_primary_source(), &event);
 }
 
 void ftk_main_loop_destroy(FtkMainLoop* thiz)

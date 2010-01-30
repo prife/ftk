@@ -30,7 +30,9 @@
  */
 
 #include "ftk_pipe.h"
+#include "ftk_globals.h"
 #include "ftk_source_primary.h"
+#include "ftk_sources_manager.h"
 
 #define MAX_EVENTS 128
 
@@ -61,9 +63,29 @@ static Ret ftk_source_primary_dispatch(FtkSource* thiz)
 	int ret = ftk_pipe_read(priv->pipe, &event, sizeof(FtkEvent));
 	return_val_if_fail(ret == sizeof(FtkEvent), RET_REMOVE);
 
-	if(priv->on_event != NULL)
+	switch(event.type)
 	{
-		priv->on_event(priv->user_data, &event);
+		case FTK_EVT_NOP:
+		{
+			break;
+		}
+		case FTK_EVT_ADD_SOURCE:
+		{
+			ftk_sources_manager_add(ftk_default_sources_manager(), event.u.extra);
+			break;
+		}
+		case FTK_EVT_REMOVE_SOURCE:
+		{
+			ftk_sources_manager_remove(ftk_default_sources_manager(), event.u.extra);
+			break;
+		}
+		default:
+		{
+			if(priv->on_event != NULL)
+			{
+				priv->on_event(priv->user_data, &event);
+			}
+		}
 	}
 
 	return RET_OK;

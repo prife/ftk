@@ -44,7 +44,6 @@ typedef struct _PrivInfo
 	int shift_down;
 	int dieing;
 	FtkMainLoop* main_loop;
-	FtkSource*   primary_source;
 	FtkWidget*   grab_widget;
 	FtkWidget*   focus_widget;
 	FtkWidget*   windows[FTK_MAX_WINDOWS];
@@ -595,7 +594,7 @@ static Ret  ftk_wnd_manager_default_queue_event(FtkWndManager* thiz, FtkEvent* e
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 	return_val_if_fail(ftk_default_main_loop() != NULL, RET_FAIL);
 
-	return ftk_source_queue_event(priv->primary_source, event);
+	return ftk_source_queue_event(ftk_primary_source(), event);
 }
 
 static Ret  ftk_wnd_manager_default_add_global_listener(FtkWndManager* thiz, FtkListener listener, void* ctx)
@@ -667,9 +666,9 @@ FtkWndManager* ftk_wnd_manager_default_create(FtkMainLoop* main_loop)
 		DECL_PRIV(thiz, priv);
 
 		priv->main_loop = main_loop;
-		priv->primary_source = ftk_source_primary_create(
-			(FtkOnEvent)ftk_wnd_manager_default_dispatch_event, thiz);
-		ftk_sources_manager_add(ftk_default_sources_manager(), priv->primary_source);
+		ftk_set_primary_source(ftk_source_primary_create((FtkOnEvent)ftk_wnd_manager_default_dispatch_event, thiz));
+
+		ftk_sources_manager_add(ftk_default_sources_manager(), ftk_primary_source());
 
 		thiz->grab   = ftk_wnd_manager_default_grab;
 		thiz->ungrab = ftk_wnd_manager_default_ungrab;

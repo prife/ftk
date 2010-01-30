@@ -43,16 +43,10 @@ FtkSourcesManager* ftk_sources_manager_create(int max_source_nr);
 Ret  ftk_sources_manager_add(FtkSourcesManager* thiz, FtkSource* source);
 Ret  ftk_sources_manager_remove(FtkSourcesManager* thiz, FtkSource* source);
 
-Ret  ftk_sources_manager_add_async(FtkSourcesManager* thiz, FtkSource* source);
-Ret  ftk_sources_manager_remove_async(FtkSourcesManager* thiz, FtkSource* source);
-Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz);
-int  ftk_sources_manager_get_async_pipe(FtkSourcesManager* thiz);
-Ret  ftk_sources_manager_wakeup(FtkSourcesManager* thiz);
-
 int  ftk_sources_manager_get_count(FtkSourcesManager* thiz);
 FtkSource* ftk_sources_manager_get(FtkSourcesManager* thiz, int i);
 
-/*used for modal dialog, tell the default-main-loop break current loop and reselect.*/
+/*Tell the main-loop break current loop and reselect.*/
 int ftk_sources_manager_need_refresh(FtkSourcesManager* thiz);
 Ret  ftk_sources_manager_set_need_refresh(FtkSourcesManager* thiz);
 

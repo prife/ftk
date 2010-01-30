@@ -29,42 +29,26 @@
  *
  */
 
-#include "ftk_pipe.h"
 #include "ftk_sources_manager.h"
 
 struct _FtkSourcesManager
 {
-	FtkPipe* pipe;
 	int source_nr;
-	int max_source_nr;
 	int need_refresh;
+	int max_source_nr;
 	FtkSource* sources[1];
 };
 
-typedef enum _FtkRequestType
-{
-	FTK_REQUEST_WAKEUP = 0,
-	FTK_REQUEST_ADD_SOURCE,
-	FTK_REQUEST_REMOVE_SOURCE,
-}FtkRequestType;
-
-typedef struct _FtkRequest
-{
-	int   type;
-	void* data;
-}FtkRequest;
-
-#define MAX_SOURCES 32
+#define FTK_DEFAULT_SOURCE_NR 32
 FtkSourcesManager* ftk_sources_manager_create(int max_source_nr)
 {
 	FtkSourcesManager* thiz = NULL;
-	max_source_nr = max_source_nr < MAX_SOURCES ? MAX_SOURCES : max_source_nr;
+	max_source_nr = max_source_nr < FTK_DEFAULT_SOURCE_NR ? FTK_DEFAULT_SOURCE_NR : max_source_nr;
 
 	thiz = (FtkSourcesManager*)FTK_ZALLOC(sizeof(FtkSourcesManager) + sizeof(FtkSource*)*(max_source_nr + 1));
 
 	if(thiz != NULL)
 	{
-		thiz->pipe = ftk_pipe_create();
 		thiz->max_source_nr = max_source_nr;
 	}
 
@@ -77,6 +61,8 @@ Ret  ftk_sources_manager_add(FtkSourcesManager* thiz, FtkSource* source)
 	return_val_if_fail(thiz->source_nr < thiz->max_source_nr, RET_FAIL);
 
 	thiz->sources[thiz->source_nr++] = source;
+
+	ftk_sources_manager_set_need_refresh(thiz);
 
 	return RET_OK;
 }
@@ -104,6 +90,7 @@ Ret  ftk_sources_manager_remove(FtkSourcesManager* thiz, FtkSource* source)
 		thiz->sources[thiz->source_nr] = NULL;
 		ftk_source_unref(source);
 	}
+	ftk_sources_manager_set_need_refresh(thiz);
 
 	return RET_OK;
 }
@@ -120,83 +107,6 @@ FtkSource* ftk_sources_manager_get(FtkSourcesManager* thiz, int i)
 	return_val_if_fail(thiz != NULL && i < thiz->source_nr, NULL);
 
 	return thiz->sources[i];
-}
-
-Ret  ftk_sources_manager_add_async(FtkSourcesManager* thiz, FtkSource* source)
-{
-	int ret = 0;
-	FtkRequest request = {0};
-	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
-
-	request.data = source;
-	request.type = FTK_REQUEST_ADD_SOURCE;
-	ret = ftk_pipe_write(thiz->pipe, &request, sizeof(FtkRequest));
-
-	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
-}
-
-Ret  ftk_sources_manager_remove_async(FtkSourcesManager* thiz, FtkSource* source)
-{
-	int ret = 0;
-	FtkRequest request = {0};
-	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
-
-	request.data = source;
-	request.type = FTK_REQUEST_REMOVE_SOURCE;
-	ret = ftk_pipe_write(thiz->pipe, &request, sizeof(FtkRequest));
-
-	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
-}
-
-Ret  ftk_sources_manager_handle_async(FtkSourcesManager* thiz)
-{
-	int ret = 0;
-	FtkRequest request = {0};
-
-	ret = ftk_pipe_read(thiz->pipe, &request, sizeof(FtkRequest));
-	return_val_if_fail(ret == sizeof(FtkRequest), RET_FAIL);
-
-	switch(request.type)
-	{
-		case FTK_REQUEST_WAKEUP:
-		{
-			ftk_logd("%s: FTK_REQUEST_WAKEUP\n", __func__);
-			break;
-		}
-		case FTK_REQUEST_ADD_SOURCE:
-		{
-			ftk_sources_manager_add(thiz, request.data);
-			break;
-		}
-		case FTK_REQUEST_REMOVE_SOURCE:
-		{
-			ftk_sources_manager_remove(thiz, request.data);
-			break;
-		}
-		default:break;
-	}
-
-	return RET_OK;
-}
-
-int  ftk_sources_manager_get_async_pipe(FtkSourcesManager* thiz)
-{
-	return_val_if_fail(thiz != NULL, -1);
-
-	return ftk_pipe_get_read_handle(thiz->pipe);
-}
-
-Ret  ftk_sources_manager_wakeup(FtkSourcesManager* thiz)
-{
-	int ret = 0;
-	FtkRequest request = {0};
-	return_val_if_fail(thiz != NULL, RET_FAIL);
-
-	request.data = NULL;
-	request.type = FTK_REQUEST_WAKEUP;
-	ret = ftk_pipe_write(thiz->pipe, &request, sizeof(FtkRequest));
-
-	return ret == sizeof(FtkRequest) ? RET_OK : RET_FAIL;
 }
 
 int ftk_sources_manager_need_refresh(FtkSourcesManager* thiz)
@@ -234,7 +144,6 @@ void ftk_sources_manager_destroy(FtkSourcesManager* thiz)
 			thiz->sources[i] = NULL;
 		}
 
-		ftk_pipe_destroy(thiz->pipe);
 		FTK_ZFREE(thiz, sizeof(FtkSourcesManager) + sizeof(FtkSource*)*(thiz->max_source_nr + 1));
 	}
 

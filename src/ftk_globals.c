@@ -40,6 +40,7 @@ struct _FtkGlobals
 	FtkMainLoop* main_loop;
 	FtkLogLevel  log_level;
 	FtkWidget*   status_panel;
+	FtkSource*   primary_source;
 	FtkWndManager* wnd_manager;
 	FtkBitmapFactory* bitmap_factory;
 	FtkSourcesManager* sources_manager;
@@ -63,6 +64,11 @@ FtkCanvas*         ftk_shared_canvas(void)
 FtkTheme*          ftk_default_theme(void)
 {
 	return g_globals.theme;
+}
+
+FtkSource*         ftk_primary_source(void)
+{
+	return g_globals.primary_source;
 }
 
 FtkMainLoop*      ftk_default_main_loop(void)
@@ -161,6 +167,13 @@ void ftk_set_shared_canvas(FtkCanvas* canvas)
 void ftk_set_theme(FtkTheme* theme)
 {
 	g_globals.theme = theme;
+
+	return;
+}
+
+void ftk_set_primary_source(FtkSource* source)
+{
+	g_globals.primary_source = source;
 
 	return;
 }
