@@ -42,6 +42,11 @@ int main(int argc, char* argv[])
 	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 
+	button = ftk_button_create(win, width/2, height/2, width, 60);
+	ftk_widget_set_text(button, "quit");
+	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
+	ftk_window_set_focus(win, button);
+
 	combo_box = ftk_combo_box_create(win, 0, 3*height/4+5, width, 50);
 	ftk_combo_box_set_text(combo_box, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "1 second");
@@ -61,11 +66,6 @@ int main(int argc, char* argv[])
 	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 	
-	button = ftk_button_create(win, width/2, height/2, width, 60);
-	ftk_widget_set_text(button, "quit");
-	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
-	ftk_window_set_focus(win, button);
-
 	ftk_widget_set_text(win, "ComboBox Demo");
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);

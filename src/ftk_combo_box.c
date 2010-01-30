@@ -195,9 +195,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 
 		ftk_widget_init(thiz, FTK_COMBO_BOX, 0);
 		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_insensitive(thiz, 1);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_NO_FOCUS);
+		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 
 		priv->entry = ftk_entry_create(thiz, 0, 0, width-height, height);
@@ -217,8 +215,9 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_set_gc(priv->button, FTK_WIDGET_FOCUSED, &gc);
 		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "drop_down_pressed"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(priv->button, FTK_WIDGET_ACTIVE, &gc);
-
 		ftk_widget_show(priv->button, 1);
+
+		ftk_widget_resize(thiz, width, h + (FTK_V_MARGIN << 1));
 
 		priv->model = ftk_list_model_default_create(10, list_item_info_destroy);
 	}
