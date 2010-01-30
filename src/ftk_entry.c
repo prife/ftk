@@ -50,7 +50,7 @@ typedef struct _PrivInfo
 }PrivInfo;
 
 #define FTK_ENTRY_LEFT_MARGIN 4
-#define FTK_ENTRY_TOP_MARGIN  5
+#define FTK_ENTRY_TOP_MARGIN  4
 
 #define TB_TEXT priv->text_buffer->buffer
 #define TB_LENGTH (int)(priv->text_buffer->length)
