@@ -165,7 +165,6 @@ static Ret button_drop_down_clicked(void* ctx, void* obj)
 	list = ftk_list_view_create(popup, 0, 0, w, h);
 	ftk_widget_show(list, 1);
 
-	ftk_list_model_ref(priv->model);
 	render = ftk_list_render_default_create();
 	ftk_list_view_init(list, priv->model, render, FTK_POPUP_MENU_ITEM_HEIGHT);
 	ftk_list_view_set_clicked_listener(list, ftk_popup_on_item_clicked, popup);
@@ -211,10 +210,18 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 		gc.mask = FTK_GC_BITMAP;
 		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "drop_down_normal"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(priv->button, FTK_WIDGET_NORMAL, &gc);
+		ftk_gc_reset(&gc);
+		
+		gc.mask = FTK_GC_BITMAP;
 		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "drop_down_selected"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(priv->button, FTK_WIDGET_FOCUSED, &gc);
+		ftk_gc_reset(&gc);
+		
+		gc.mask = FTK_GC_BITMAP;
 		gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "drop_down_pressed"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_set_gc(priv->button, FTK_WIDGET_ACTIVE, &gc);
+		ftk_gc_reset(&gc);
+
 		ftk_widget_show(priv->button, 1);
 
 		ftk_widget_resize(thiz, width, h + (FTK_V_MARGIN << 1));

@@ -175,6 +175,11 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 	ftk_widget_show_all(dialog, 1);
 	ret = ftk_dialog_run(dialog);
 	ftk_widget_unref(dialog);
+	
+	if(icon != NULL)
+	{
+		ftk_bitmap_unref(icon);
+	}
 
 	return ret;
 }

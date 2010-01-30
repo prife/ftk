@@ -69,6 +69,8 @@ int FTK_MAIN(int argc, char* argv[])
 
 	ftk_run();
 
+	ftk_sprite_destroy(sprite);
+
 	return 0;
 }
 

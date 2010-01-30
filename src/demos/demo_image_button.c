@@ -78,8 +78,12 @@ int main(int argc, char* argv[])
 				ftk_widget_unset_attr(button, FTK_ATTR_TRANSPARENT);
 			}
 			ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
+			ftk_bitmap_unref(gc.bitmap);
+
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[1]);
 			ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
+			ftk_bitmap_unref(gc.bitmap);
+
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[0]);
 			ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
 			ftk_bitmap_unref(gc.bitmap);

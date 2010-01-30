@@ -69,7 +69,7 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_KEY_DOWN:
 		{
-			if(FTK_IS_ACTIVE_KEY(event->u.key.code))
+			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && !ftk_widget_is_active(thiz))
 			{
 				ftk_widget_set_active(thiz, 1);
 			}

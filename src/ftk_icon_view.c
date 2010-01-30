@@ -329,6 +329,7 @@ static void ftk_icon_view_destroy(FtkWidget* thiz)
 				ftk_bitmap_unref(icon);
 			}
 		}
+		FTK_FREE(priv->items);
 		ftk_bitmap_unref(priv->item_focus);
 		ftk_bitmap_unref(priv->item_active);
 		FTK_ZFREE(priv, sizeof(PrivInfo));

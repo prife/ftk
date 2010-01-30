@@ -107,22 +107,23 @@ static Ret ftk_init_theme(const char* theme)
 
 static void ftk_deinit(void)
 {
-	if(ftk_default_sources_manager() != NULL)
-	{
-		ftk_sources_manager_destroy(ftk_default_sources_manager());
-		ftk_set_sources_manager(NULL);
-	}
 
+	if(ftk_default_wnd_manager() != NULL)
+	{
+		ftk_wnd_manager_destroy(ftk_default_wnd_manager());
+		ftk_set_wnd_manager(NULL);
+	}
+	
 	if(ftk_default_main_loop() != NULL)
 	{
 		ftk_main_loop_destroy(ftk_default_main_loop());
 		ftk_set_main_loop(NULL);
 	}
 
-	if(ftk_default_wnd_manager() != NULL)
+	if(ftk_default_sources_manager() != NULL)
 	{
-		ftk_wnd_manager_destroy(ftk_default_wnd_manager());
-		ftk_set_wnd_manager(NULL);
+		ftk_sources_manager_destroy(ftk_default_sources_manager());
+		ftk_set_sources_manager(NULL);
 	}
 
 	if(ftk_default_bitmap_factory() != NULL)

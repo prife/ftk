@@ -104,6 +104,7 @@ Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDe
 	}
 
 	ftk_list_view_init(list, model, render, FTK_POPUP_MENU_ITEM_HEIGHT);
+	ftk_list_model_unref(model);
 
 	return RET_OK;
 }

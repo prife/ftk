@@ -145,6 +145,7 @@ FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkDestroy destroy)
 		thiz->remove    = ftk_list_model_default_remove;
 		thiz->destroy   = ftk_list_model_default_destroy;
 
+		thiz->ref = 1;
 		priv->alloc_nr = init_nr;
 		priv->item_destroy = destroy;
 	}

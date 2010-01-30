@@ -285,6 +285,9 @@ static void ftk_list_view_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
+
+		ftk_list_render_destroy(priv->render);
+		ftk_list_model_unref(priv->model);
 		ftk_bitmap_unref(priv->bg_normal);
 		ftk_bitmap_unref(priv->bg_focus);
 		ftk_bitmap_unref(priv->bg_active);
@@ -376,6 +379,7 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	width  = ftk_widget_width(thiz);
 	height = ftk_widget_height(thiz);
 
+	ftk_list_model_ref(priv->model);
 	margin = ftk_widget_height(thiz)%item_height;
 	priv->visible_nr = ftk_widget_height(thiz)/item_height;
 	return_val_if_fail(priv->visible_nr > 0, RET_FAIL);
