@@ -127,4 +127,4 @@ ftk_HEADERS=\
 	ftk_popup_menu.h          ftk_animator_alpha.h \
 	ftk_combo_box.h           ftk_clipboard.h
 
-EXTRA_DIST=	rules.mk
+EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  ftk_image_bmp_decoder.h
