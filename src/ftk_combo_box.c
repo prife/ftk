@@ -239,7 +239,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 const char* ftk_combo_box_get_text(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(thiz != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL, NULL);
 
 	return ftk_entry_get_text(priv->entry);
 }

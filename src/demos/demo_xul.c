@@ -18,7 +18,7 @@ static FtkBitmap* my_load_image(const char* filename)
 	return ftk_icon_cache_load(g_icon_cache, filename);
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	if(argc > 1)
 	{

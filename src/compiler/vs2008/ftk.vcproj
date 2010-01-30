@@ -373,6 +373,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_combo_box.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_dialog.c"
 				>
 				<FileConfiguration
@@ -1404,6 +1424,10 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_clipboard.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_combo_box.h"
 				>
 			</File>
 			<File
