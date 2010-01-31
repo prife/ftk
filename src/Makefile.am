@@ -39,7 +39,7 @@ libftk_la_SOURCES=\
 	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c \
 	ftk_text_view.c       ftk_pipe_socket.c        ftk_message_box.c \
 	ftk_popup_menu.c      ftk_animator_alpha.c     ftk_combo_box.c \
-	ftk_clipboard.c
+	ftk_clipboard.c       ftk_input_method_manager.c
 
 libftk_la_CFLAGS=
 
@@ -125,6 +125,7 @@ ftk_HEADERS=\
 	ftk_text_view.h           ftk_cairo.h \
 	ftk_pipe.h                ftk_message_box.h \
 	ftk_popup_menu.h          ftk_animator_alpha.h \
-	ftk_combo_box.h           ftk_clipboard.h
+	ftk_combo_box.h           ftk_clipboard.h \
+	ftk_input_method_manager.h ftk_input_method.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  ftk_image_bmp_decoder.h
