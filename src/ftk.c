@@ -41,7 +41,15 @@
 #endif
 #include "ftk_status_panel.h"
 #include "ftk_bitmap_factory.h"
+#include "ftk_allocator_default.h"
 #include "ftk_wnd_manager_default.h"
+
+#ifdef FTK_MEMORY_PROFILE
+#include "ftk_allocator_profile.h"
+#define FTK_PROFILE(a) ftk_allocator_profile_create(a)
+#else
+#define FTK_PROFILE(a) a
+#endif
 
 static void ftk_deinit(void);
 static void ftk_init_panel(void);
@@ -156,6 +164,12 @@ static void ftk_deinit(void)
 		ftk_set_shared_canvas(NULL);
 	}
 
+	if(ftk_default_allocator() != NULL)
+	{
+		ftk_allocator_destroy(ftk_default_allocator());
+		ftk_set_allocator(NULL);
+	}
+
 	ftk_platform_deinit();
 
 	ftk_logd("%s: ftk exit.\n", __func__);
@@ -215,6 +229,7 @@ Ret ftk_init(int argc, char* argv[])
 	}
 
 	ftk_platform_init(argc, argv);
+	ftk_set_allocator(FTK_PROFILE(ftk_allocator_default_create()));
 
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));

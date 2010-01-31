@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_allocator.h"
 #include "ftk_input_method_manager.h"
 
 #define FTK_INPUT_METHOD_MAX_NR 6
@@ -55,7 +56,7 @@ Ret  ftk_input_method_manager_get(FtkInputMethodManager* thiz, size_t index, Ftk
 {
 	return_val_if_fail(thiz != NULL && index < thiz->nr && im != NULL, RET_FAIL);
 
-	*im = thiz->methods+index;
+	*im = thiz->methods[index];
 
 	return RET_OK;
 }

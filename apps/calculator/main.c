@@ -58,13 +58,6 @@ static Ret button_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static void on_window_close(void* user_data)
-{
-	ftk_quit();
-
-	return ;
-}
-
 static const char* s_default_path[FTK_ICON_PATH_NR]=
 {
 	FTK_DATA_ROOT"/calc",
@@ -99,7 +92,6 @@ Ret ftk_main(int argc, char* argv[])
 	ftk_widget_show_all(win, 1);
 	
 #ifdef HAS_MAIN
-	ftk_widget_set_user_data(win, on_window_close, win);
 	ftk_run();
 #endif
 

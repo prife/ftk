@@ -82,7 +82,7 @@ int FTK_MAIN(int argc, char* argv[])
 	list = ftk_list_view_create(win, 10, 5, width - 20, 3 * height/4-5);
 	ftk_list_view_set_clicked_listener(list, on_item_clicked, NULL);
 
-	model = ftk_list_model_default_create(10, item_destroy);
+	model = ftk_list_model_default_create(10, (FtkDestroy)item_destroy);
 	render = ftk_list_render_default_create();
 	ftk_snprintf(filename, FTK_MAX_PATH, "%s/alarm/%s",TESTDATA_DIR, FTK_STOCK_IMG_SUFFIX);
 	left_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);

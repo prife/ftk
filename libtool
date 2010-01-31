@@ -85,7 +85,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-g -O2"
+LTCFLAGS="-DFTK_MEMORY_PROFILE -Werror"
 
 # A language-specific compiler.
 CC="gcc"
@@ -7323,7 +7323,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-g -O2"
+LTCFLAGS="-DFTK_MEMORY_PROFILE -Werror"
 
 # A language-specific compiler.
 CC="g++"
@@ -7628,7 +7628,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-g -O2"
+LTCFLAGS="-DFTK_MEMORY_PROFILE -Werror"
 
 # A language-specific compiler.
 CC="gfortran"

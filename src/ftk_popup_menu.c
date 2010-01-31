@@ -33,6 +33,7 @@
 #include "ftk_dialog.h"
 #include "ftk_list_view.h"
 #include "ftk_popup_menu.h"
+#include "ftk_list_render_default.h"
 
 #define FTK_POPUP_MENU_LIST_ID 1000
 

@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_allocator.h"
 #include "ftk_xml_parser.h"
 
 struct _FtkXmlParser

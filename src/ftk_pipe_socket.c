@@ -30,6 +30,7 @@
  */
 
 #include "ftk_pipe.h"
+#include "ftk_allocator.h"
 
 struct _FtkPipe
 {

@@ -41,6 +41,7 @@ struct _FtkGlobals
 	FtkLogLevel  log_level;
 	FtkWidget*   status_panel;
 	FtkSource*   primary_source;
+	FtkAllocator* allocator;
 	FtkWndManager* wnd_manager;
 	FtkBitmapFactory* bitmap_factory;
 	FtkSourcesManager* sources_manager;
@@ -69,6 +70,11 @@ FtkTheme*          ftk_default_theme(void)
 FtkSource*         ftk_primary_source(void)
 {
 	return g_globals.primary_source;
+}
+
+FtkAllocator*      ftk_default_allocator(void)
+{
+	return g_globals.allocator;
 }
 
 FtkMainLoop*      ftk_default_main_loop(void)
@@ -174,6 +180,13 @@ void ftk_set_theme(FtkTheme* theme)
 void ftk_set_primary_source(FtkSource* source)
 {
 	g_globals.primary_source = source;
+
+	return;
+}
+
+void ftk_set_allocator(FtkAllocator* allocator)
+{
+	g_globals.allocator = allocator;
 
 	return;
 }

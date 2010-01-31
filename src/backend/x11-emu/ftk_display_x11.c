@@ -172,8 +172,7 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 		else priv->pixelsize = 4;
 
 		assert(priv->pixelsize == 4);
-		priv->bits = calloc(1, width * height * priv->pixelsize);
-		memset(priv->bits, 0xff, width * height * priv->pixelsize);
+		priv->bits = FTK_ZALLOC(width * height * priv->pixelsize);
 		/*FIXME: force to 32bit*/
 		priv->ximage = XCreateImage(display, priv->visual, priv->depth, ZPixmap,
 			0, (char*)priv->bits, width, height,

@@ -93,11 +93,6 @@ char* ftk_strncpy(char *dest, const char *src, size_t n)
 	return strncpy(dest, src, n);
 }
 
-char* ftk_strdup(const char *s)
-{
-	return strdup(s);
-}
-
 int   ftk_snprintf(char *str, size_t size, const char *format, ...)
 {
 	int ret = 0;

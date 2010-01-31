@@ -36,6 +36,7 @@
 #include "ftk_event.h"
 #include "ftk_canvas.h"
 #include "ftk_display.h"
+#include "ftk_allocator.h"
 
 FTK_BEGIN_DECLS
 

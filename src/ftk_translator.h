@@ -1,7 +1,7 @@
 /*
- * File: ftk_gesture.c
+ * File: ftk_translator.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   gesture recognizer 
+ * Brief:   translate English to local text.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,47 +25,21 @@
 /*
  * History:
  * ================================================================
- * 2009-11-19 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-01-31 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#include "ftk_gesture.h"
-#include "ftk_allocator.h"
+#ifndef FTK_TRANSLATOR_H
+#define FTK_TRANSLATOR_H
 
-struct _FtkGesture
-{
-	FtkGestureListener* listener;
-};
+#include "ftk_typedef.h"
 
-FtkGesture* ftk_gesture_create(FtkGestureListener* listener)
-{
-	FtkGesture* thiz = FTK_ZALLOC(sizeof(FtkGesture));
+struct _FtkTranslator;
+typedef struct _FtkTranslator FtkTranslator;
 
-	if(thiz != NULL)
-	{
-		thiz->listener = listener;
-	}
+FtkTranslator* ftk_translator_create(const char* package, const char* locale);
+const char* ftk_translator_get_text(FtkTranslator* thiz, const char* text);
+void ftk_translator_destroy(FtkTranslator* thiz);
 
-	return thiz;
-}
-
-Ret  ftk_gesture_dispatch(FtkGesture* thiz, FtkEvent* event)
-{
-	/*TODO*/
-
-	return RET_OK;
-}
-
-void ftk_gesture_destroy(FtkGesture* thiz)
-{
-	if(thiz != NULL)
-	{
-		ftk_gesture_listener_destroy(thiz->listener);
-		FTK_ZFREE(thiz, sizeof(FtkGesture));
-	}
-
-	return;
-}
-
-
+#endif/*FTK_TRANSLATOR_H*/
 

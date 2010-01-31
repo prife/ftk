@@ -33,6 +33,7 @@
 #define FTK_UTIL_H
 
 #include "ftk_typedef.h"
+#include "ftk_allocator.h"
 
 FTK_BEGIN_DECLS
 

@@ -590,7 +590,6 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 
 static Ret  ftk_wnd_manager_default_queue_event(FtkWndManager* thiz, FtkEvent* event)
 {
-	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 	return_val_if_fail(ftk_default_main_loop() != NULL, RET_FAIL);
 

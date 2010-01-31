@@ -48,7 +48,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
-#define ftk_strdup    strdup
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 

@@ -32,6 +32,7 @@
 #include "ftk_dialog.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
+#include "ftk_source_timer.h"
 
 typedef struct _PrivInfo
 {

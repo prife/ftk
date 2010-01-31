@@ -243,6 +243,8 @@ static Ret ftk_text_view_get_offset_by_pointer(FtkWidget* thiz, int px, int py)
 	const char* other_side = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
+	(void)width;
+	(void)height;
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	font_height = ftk_canvas_font_height(canvas);
 	

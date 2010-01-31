@@ -49,11 +49,6 @@
 #include "ftk_ads.h"
 #endif
 
-#define FTK_ALLOC(s)       malloc(s)
-#define FTK_REALLOC(p, s)  realloc(p, s)
-#define FTK_ZALLOC(s)      calloc(1, s)
-#define FTK_FREE(p)        if(p) {free(p); p = NULL;}
-#define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
 #define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
 
 int  ftk_platform_init(int argc, char** argv);

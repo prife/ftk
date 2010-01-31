@@ -29,6 +29,8 @@
  *
  */
 #include "fontdata.h"
+#include "ftk_allocator.h"
+
 #define FD_ASSERT(p) assert(p)
 #define FONT_VERSION 0x00000100 /*1.0*/
 

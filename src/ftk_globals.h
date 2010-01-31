@@ -36,6 +36,7 @@
 #include "ftk_theme.h"
 #include "ftk_source.h"
 #include "ftk_display.h"
+#include "ftk_allocator.h"
 #include "ftk_wnd_manager.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_sources_manager.h"
@@ -53,6 +54,7 @@ FtkSourcesManager* ftk_default_sources_manager(void);
 FtkCanvas*         ftk_shared_canvas(void);
 FtkTheme*          ftk_default_theme(void);
 FtkSource*         ftk_primary_source(void);
+FtkAllocator*      ftk_default_allocator(void);
 
 void ftk_set_font(FtkFont* font);
 void ftk_set_display(FtkDisplay* display);
@@ -65,6 +67,7 @@ void ftk_set_sources_manager(FtkSourcesManager* sources_manager);
 void ftk_set_shared_canvas(FtkCanvas* canvas);
 void ftk_set_theme(FtkTheme* theme);
 void ftk_set_primary_source(FtkSource* source);
+void ftk_set_allocator(FtkAllocator* allocator);
 
 FTK_END_DECLS
 

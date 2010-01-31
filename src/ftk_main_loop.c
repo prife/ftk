@@ -31,7 +31,9 @@
 
 #include "ftk_log.h"
 #include "ftk_event.h"
+#include "ftk_globals.h"
 #include "ftk_main_loop.h"
+#include "ftk_source_primary.h"
 
 struct _FtkMainLoop
 {

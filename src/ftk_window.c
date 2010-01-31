@@ -29,10 +29,11 @@
  *
  */
 
+#include "ftk.h"
 #include "ftk_log.h"
 #include "ftk_window.h"
 #include "ftk_globals.h"
-#include "ftk_source_idle.h"
+#include "ftk_main_loop.h"
 
 #define FTK_MAX_DIRTY_RECT 8
 

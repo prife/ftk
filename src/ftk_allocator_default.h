@@ -1,7 +1,7 @@
 /*
- * File: ftk_gesture.c
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   gesture recognizer 
+ * File:   ftk_allocator_default.h 
+ * Author: Li XianJing <xianjimli@hotmail.com>
+ * Brief:  memory allocator interface.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,47 +25,20 @@
 /*
  * History:
  * ================================================================
- * 2009-11-19 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-01-31 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#include "ftk_gesture.h"
+#ifndef FTK_ALLOCATOR_DEFAULT_H
+#define FTK_ALLOCATOR_DEFAULT_H
+
 #include "ftk_allocator.h"
 
-struct _FtkGesture
-{
-	FtkGestureListener* listener;
-};
+FTK_BEGIN_DECLS
 
-FtkGesture* ftk_gesture_create(FtkGestureListener* listener)
-{
-	FtkGesture* thiz = FTK_ZALLOC(sizeof(FtkGesture));
+FtkAllocator* ftk_allocator_default_create(void);
 
-	if(thiz != NULL)
-	{
-		thiz->listener = listener;
-	}
+FTK_END_DECLS
 
-	return thiz;
-}
-
-Ret  ftk_gesture_dispatch(FtkGesture* thiz, FtkEvent* event)
-{
-	/*TODO*/
-
-	return RET_OK;
-}
-
-void ftk_gesture_destroy(FtkGesture* thiz)
-{
-	if(thiz != NULL)
-	{
-		ftk_gesture_listener_destroy(thiz->listener);
-		FTK_ZFREE(thiz, sizeof(FtkGesture));
-	}
-
-	return;
-}
-
-
+#endif/*FTK_ALLOCATOR_DEFAULT_H*/
 
