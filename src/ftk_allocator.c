@@ -80,6 +80,8 @@ void  ftk_allocator_zfree(FtkAllocator* thiz, void* ptr, size_t size)
 
 	memset(ptr, 0x00, size);
 
+	ftk_allocator_free(thiz, ptr);
+
 	return;
 }
 

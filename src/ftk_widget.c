@@ -52,7 +52,7 @@ struct _FtkWidgetInfo
 	FtkWidgetState state;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
 	void* user_data;
-	char* text;
+	char text[FTK_TITLE_LENGTH + 1];
 	FtkDestroy user_data_destroy;
 };
 
@@ -702,11 +702,9 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	
-	FTK_FREE(thiz->priv->text);
-
 	if(text != NULL)
 	{
-		thiz->priv->text = FTK_STRDUP(text);
+		ftk_strncpy(thiz->priv->text, text, FTK_TITLE_LENGTH);
 	}
 	ftk_widget_invalidate(thiz);
 
@@ -770,7 +768,6 @@ void ftk_widget_destroy(FtkWidget* thiz)
 			thiz->priv->user_data_destroy(thiz->priv->user_data);
 		}
 
-		FTK_FREE(thiz->priv->text);
 		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
 	}

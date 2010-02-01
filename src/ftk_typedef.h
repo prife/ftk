@@ -183,7 +183,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_LABEL_LEFT_MARGIN 3
 #define FTK_LABEL_TOP_MARGIN  1
 #define FTK_CLIPBOARD_SIZE    1024
-
+#define FTK_TITLE_LENGTH      15
 #ifdef __cplusplus
 #define FTK_BEGIN_DECLS extern "C" {
 #define FTK_END_DECLS }
@@ -210,6 +210,8 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_ZALLOC(s)      ftk_allocator_zalloc(ftk_default_allocator(), s)
 #define FTK_FREE(p)        ftk_allocator_free(ftk_default_allocator(), p)
 #define FTK_ZFREE(p, size) ftk_allocator_zfree(ftk_default_allocator(), p, size)
+#define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
+
 #endif
 
 #endif/*FTK_TYPEDEF_H*/

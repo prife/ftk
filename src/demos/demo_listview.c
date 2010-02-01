@@ -39,6 +39,7 @@ static Ret button_more_clicked(void* ctx, void* obj)
 
 void item_destroy(FtkListItemInfo* info)
 {
+	FTK_FREE(info->text);
 
 	return;
 }
@@ -101,6 +102,7 @@ int FTK_MAIN(int argc, char* argv[])
 	}
 
 	ftk_list_view_init(list, model, render, 40);
+	ftk_list_model_unref(model);
 
 	button = ftk_button_create(win, width/4, 3 * height/4 + 5, width/4, 60);
 	ftk_widget_set_text(button, "more");
