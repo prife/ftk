@@ -47,7 +47,8 @@ void* ftk_allocator_realloc(FtkAllocator* thiz, void* ptr, size_t new_size)
 
 void  ftk_allocator_free(FtkAllocator* thiz, void* ptr)
 {
-	return_if_fail(thiz != NULL && ptr != NULL);
+	return_if_fail(thiz != NULL);
+	if(ptr == NULL) return;
 
 	thiz->free(thiz, ptr);
 
