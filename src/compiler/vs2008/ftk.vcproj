@@ -193,6 +193,66 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_allocator.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_allocator_default.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_allocator_profile.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_animator_alpha.c"
 				>
 				<FileConfiguration
@@ -1376,6 +1436,18 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_allocator.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_allocator_default.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_allocator_profile.h"
 				>
 			</File>
 			<File

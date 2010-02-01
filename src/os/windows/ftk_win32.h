@@ -59,7 +59,6 @@ char* ftk_get_testdata_dir(void);
 
 #define usleep                  Sleep
 
-char* ftk_strdup(const char *s);
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);
 int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap);
