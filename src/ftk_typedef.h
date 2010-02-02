@@ -208,8 +208,8 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_ALLOC(s)       ftk_allocator_alloc(ftk_default_allocator(), s)
 #define FTK_REALLOC(p, s)  ftk_allocator_realloc(ftk_default_allocator(), p, s)
 #define FTK_ZALLOC(s)      ftk_allocator_zalloc(ftk_default_allocator(), s)
-#define FTK_FREE(p)        ftk_allocator_free(ftk_default_allocator(), p)
-#define FTK_ZFREE(p, size) ftk_allocator_zfree(ftk_default_allocator(), p, size)
+#define FTK_FREE(p)        ftk_allocator_free(ftk_default_allocator(), p); p = NULL
+#define FTK_ZFREE(p, size) ftk_allocator_zfree(ftk_default_allocator(), p, size); p = NULL
 #define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
 
 #endif
