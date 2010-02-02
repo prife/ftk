@@ -41,7 +41,7 @@ libftk_la_SOURCES=\
 	ftk_popup_menu.c      ftk_animator_alpha.c     ftk_combo_box.c \
 	ftk_clipboard.c       ftk_input_method_manager.c \
 	ftk_allocator.c            ftk_allocator_default.c \
-	ftk_allocator_profile.c
+	ftk_allocator_profile.c  ftk_image_bmp_decoder.c
 
 libftk_la_CFLAGS=
 
