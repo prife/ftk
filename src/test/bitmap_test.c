@@ -1,4 +1,6 @@
+#include "ftk_globals.h"
 #include "ftk_bitmap.h"
+#include "ftk_allocator_default.h"
 
 int main(int argc, char* argv[])
 {
@@ -6,6 +8,7 @@ int main(int argc, char* argv[])
 	int w = 100;
 	int h = 100;
 	FtkColor bg = {0xff,0xff,0xff,0xff};
+	ftk_set_allocator(ftk_allocator_default_create());
 	FtkBitmap* thiz = ftk_bitmap_create(w, h, bg);
 
 	assert(ftk_bitmap_width(thiz) == w);

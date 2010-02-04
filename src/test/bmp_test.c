@@ -13,6 +13,8 @@ int main(int argc, char* argv[])
 	
 	if(bitmap != NULL)
 	{
+		printf("%s: width=%d height=%d\n", argv[1], 
+			ftk_bitmap_width(bitmap), ftk_bitmap_height(bitmap));
 		ftk_bitmap_unref(bitmap);
 	}
 	ftk_image_decoder_destroy(decoder);

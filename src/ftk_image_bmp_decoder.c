@@ -31,6 +31,7 @@
 
 #include "ftk_mmap.h"
 #include "ftk_image_bmp_decoder.h"
+
 /**
  * http://atlc.sourceforge.net/bmp.html
  */
@@ -41,41 +42,210 @@ static Ret ftk_image_bmp_decoder_match(FtkImageDecoder* thiz, const char* filena
 	return (strstr(filename, ".bmp") != NULL) ? RET_OK : RET_FAIL;
 }
 
-static Ret ftk_image_bmp_copy24(FtkBitmap* bitmap, int compress, char* data)
+static Ret ftk_image_bmp_copy32(FtkBitmap* bitmap, int compress, const unsigned char* data)
 {
+	int x = 0;
+	int y = 0;
+	const unsigned char* src = data;
+	int width = ftk_bitmap_width(bitmap);
+	int height = ftk_bitmap_height(bitmap);
+	FtkColor* bits = ftk_bitmap_bits(bitmap);
+
+	for(y = 0; y < height; y++)
+	{
+		for(x = 0; x < width; x++, bits++)
+		{
+			bits->r = src[0];
+			bits->g = src[1];	
+			bits->b = src[2];	
+			bits->a = 0xff;//src[3];	
+			src += 4;
+		}
+	}
+
 	return RET_OK;
 }
 
-static Ret ftk_image_bmp_copy8(FtkBitmap* bitmap, int compress, FtkColor* palette, char* data)
+static Ret ftk_image_bmp_copy24(FtkBitmap* bitmap, int compress, const unsigned char* data)
 {
+	int x = 0;
+	int y = 0;
+	const unsigned char* src = data;
+	const unsigned char* lsrc = data;
+	int width = ftk_bitmap_width(bitmap);
+	int height = ftk_bitmap_height(bitmap);
+	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	int line_delta = (width * 3 + 3) & 0xfffffffc;
+
+	for(y = 0; y < height; y++)
+	{
+		src = lsrc;
+		for(x = 0; x < width; x++, bits++)
+		{
+			bits->r = src[0];
+			bits->g = src[1];	
+			bits->b = src[2];	
+			bits->a = 0xff;
+			src += 3;
+		}
+		lsrc += line_delta;
+	}
+
 	return RET_OK;
 }
 
-static Ret ftk_image_bmp_copy4(FtkBitmap* bitmap, int compress, FtkColor* palette, char* data)
+static Ret ftk_image_bmp_copy8(FtkBitmap* bitmap, int compress, FtkColor* palette, unsigned char* data)
 {
+	int x = 0;
+	int y = 0;
+	unsigned char index = 0;
+	const unsigned char* src = data;
+	const unsigned char* lsrc = data;
+	int width = ftk_bitmap_width(bitmap);
+	int height = ftk_bitmap_height(bitmap);
+	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	int line_delta = (width + 3) & 0xfffffffc;
+
+	for(y = 0; y < height; y++)
+	{
+		src = lsrc;
+		for(x = 0; x < width; x++, bits++)
+		{
+			index = src[x];
+			bits->b = palette[index].r;
+			bits->g = palette[index].g;
+			bits->r = palette[index].b;
+			bits->a = 0xff;
+		}
+		lsrc += line_delta;
+	}
+
 	return RET_OK;
 }
 
-static Ret ftk_image_bmp_copy1(FtkBitmap* bitmap, int compress, FtkColor* palette, char* data)
+static Ret ftk_image_bmp_copy4(FtkBitmap* bitmap, int compress, FtkColor* palette, unsigned char* data)
 {
+	int x = 0;
+	int y = 0;
+	int r = 0;
+	int w = 0;
+	unsigned char index = 0;
+	const unsigned char* src = data;
+	const unsigned char* lsrc = data;
+	int width = ftk_bitmap_width(bitmap);
+	int height = ftk_bitmap_height(bitmap);
+	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	int line_delta = (((width & 0x01) ? (width + 1) : width )/2 + 3) & 0xfffffffc;
+
+	w = width>>1;
+	r = width & 0x01;
+
+	for(y = 0; y < height; y++)
+	{
+		src = lsrc;
+		for(x = 0; x < w; x++)
+		{
+			index = (src[x] >> 4) & 0x0f;
+			bits->b = palette[index].r;
+			bits->g = palette[index].g;
+			bits->r = palette[index].b;
+			bits->a = 0xff;
+			bits++;
+
+			index = src[x] & 0x0f;
+			bits->b = palette[index].r;
+			bits->g = palette[index].g;
+			bits->r = palette[index].b;
+			bits->a = 0xff;
+			bits++;
+		}
+
+		if(r)
+		{
+			index = (src[x] >> 4) & 0x0f;
+			bits->b = palette[index].r;
+			bits->g = palette[index].g;
+			bits->r = palette[index].b;
+			bits->a = 0xff;
+			bits++;
+		}
+		lsrc += line_delta;
+	}
+
+	return RET_OK;
+}
+
+#define SET_COLOR_1BIT(bit, color) if(bit) {color->r=color->g=color->b=0xff;color->a=0xff;}\
+	else{color->r=color->g=color->b=0x00;color->a=0xff;}
+
+static Ret ftk_image_bmp_copy1(FtkBitmap* bitmap, int compress, FtkColor* palette, unsigned char* data)
+{
+	int x = 0;
+	int y = 0;
+	int r = 0;
+	int w = 0;
+	unsigned char c = 0;
+	const unsigned char* src = data;
+	const unsigned char* lsrc = data;
+	int width = ftk_bitmap_width(bitmap);
+	int height = ftk_bitmap_height(bitmap);
+	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	int line_delta = (width/8 + 3) & 0xfffffffc;
+
+	w = (width+7)>>3;
+	r = width % 8;
+
+	for(y = 0; y < height; y++)
+	{
+		src = lsrc;
+		for(x = 0; x < w; x++)
+		{
+			c = src[x];
+			if(x == (w - 1))
+			{
+				SET_COLOR_1BIT(c & 0x80,  bits);bits++; if(r == 1) break;
+				SET_COLOR_1BIT(c & 0x40,  bits);bits++; if(r == 2) break;
+				SET_COLOR_1BIT(c & 0x20,  bits);bits++; if(r == 3) break;
+				SET_COLOR_1BIT(c & 0x10,  bits);bits++; if(r == 4) break;
+				SET_COLOR_1BIT(c & 0x08 , bits);bits++; if(r == 5) break;
+				SET_COLOR_1BIT(c & 0x04,  bits);bits++; if(r == 6) break;
+				SET_COLOR_1BIT(c & 0x02,  bits);bits++; if(r == 7) break;
+				SET_COLOR_1BIT(c & 0x01,  bits);bits++; 
+			}
+			else
+			{
+				SET_COLOR_1BIT(c & 0x80,  bits);bits++; 
+				SET_COLOR_1BIT(c & 0x40,  bits);bits++;
+				SET_COLOR_1BIT(c & 0x20,  bits);bits++;
+				SET_COLOR_1BIT(c & 0x10,  bits);bits++;
+				SET_COLOR_1BIT(c & 0x08 , bits);bits++;
+				SET_COLOR_1BIT(c & 0x04,  bits);bits++;
+				SET_COLOR_1BIT(c & 0x02,  bits);bits++;
+				SET_COLOR_1BIT(c & 0x01,  bits);bits++; 
+			}
+		}
+		lsrc += line_delta;
+	}
+
 	return RET_OK;
 }
 
 static FtkBitmap* load_bmp (const char *filename)
 {
-	char* data = NULL;
-	char* src = NULL;
-	size_t length = 0;
-	int compress=0;
 	size_t bpp = 0;
 	size_t width = 0;
 	size_t height = 0;
+	size_t length = 0;
 	size_t colors = 0;
 	size_t doffset = 0;
+	int compress = 0;
 	FtkColor bg = {0};
 	FtkBitmap* bitmap = NULL;
 	FtkColor* palette = NULL;
+	unsigned char* src = NULL;
+	unsigned char* data = NULL;
 	FtkMmap* m = ftk_mmap_create(filename, 0, -1);
+
 	return_val_if_fail(m != NULL, NULL);
 
 	data = ftk_mmap_data(m);
@@ -97,10 +267,16 @@ static FtkBitmap* load_bmp (const char *filename)
 	colors   = *(unsigned int*)(data + 0x002e);
 	palette  = (FtkColor*)(data + 0x0036);
 	src      = data + doffset;
+
 	bitmap = ftk_bitmap_create(width, height, bg);
 
 	switch(bpp)
 	{
+		case 32:
+		{
+			ftk_image_bmp_copy32(bitmap, compress, src);
+			break;
+		}
 		case 24:
 		{
 			ftk_image_bmp_copy24(bitmap, compress, src);

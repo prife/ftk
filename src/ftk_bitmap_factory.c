@@ -31,6 +31,11 @@
 
 #include "ftk_log.h"
 #include "ftk_bitmap_factory.h"
+
+#ifdef HAS_BMP
+#include "ftk_image_bmp_decoder.h"
+#endif
+
 #ifdef HAS_JPEG
 #include "ftk_image_jpeg_decoder.h"
 #endif
@@ -55,6 +60,10 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void)
 
 	if(thiz != NULL)
 	{
+#ifdef HAS_BMP
+		ftk_bitmap_factory_add_decoder(thiz, ftk_image_bmp_decoder_create());	
+#endif
+
 #ifdef HAS_JPEG
 		ftk_bitmap_factory_add_decoder(thiz, ftk_image_jpeg_decoder_create());	
 #endif

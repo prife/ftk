@@ -9,4 +9,4 @@ EXTRA_DIST=\
 	Chat.png        iPod.png       Notes.png      Sms.png\
 	Clock.png       IP.png         Photos.png     Stock.png\
 	Customize.png   iradio.png     png1.png       Twitter.png\
-	jpeg1.jpg
+	jpeg1.jpg       t1.bmp  t24.bmp  t4.bmp  t8.bmp
