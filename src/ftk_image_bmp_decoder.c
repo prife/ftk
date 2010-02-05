@@ -107,18 +107,19 @@ static Ret ftk_image_bmp_copy8(FtkBitmap* bitmap, int compress, FtkColor* palett
 	FtkColor* bits = ftk_bitmap_bits(bitmap);
 	int line_delta = (width + 3) & 0xfffffffc;
 
+	lsrc +=line_delta * (height - 1);
 	for(y = 0; y < height; y++)
 	{
 		src = lsrc;
 		for(x = 0; x < width; x++, bits++)
 		{
 			index = src[x];
-			bits->b = palette[index].r;
+			bits->r = palette[index].r;
 			bits->g = palette[index].g;
-			bits->r = palette[index].b;
+			bits->b = palette[index].b;
 			bits->a = 0xff;
 		}
-		lsrc += line_delta;
+		lsrc -= line_delta;
 	}
 
 	return RET_OK;
@@ -141,22 +142,23 @@ static Ret ftk_image_bmp_copy4(FtkBitmap* bitmap, int compress, FtkColor* palett
 	w = width>>1;
 	r = width & 0x01;
 
+	lsrc += line_delta * (height - 1);
 	for(y = 0; y < height; y++)
 	{
 		src = lsrc;
 		for(x = 0; x < w; x++)
 		{
 			index = (src[x] >> 4) & 0x0f;
-			bits->b = palette[index].r;
+			bits->r = palette[index].r;
 			bits->g = palette[index].g;
-			bits->r = palette[index].b;
+			bits->b = palette[index].b;
 			bits->a = 0xff;
 			bits++;
 
 			index = src[x] & 0x0f;
-			bits->b = palette[index].r;
+			bits->r = palette[index].r;
 			bits->g = palette[index].g;
-			bits->r = palette[index].b;
+			bits->b = palette[index].b;
 			bits->a = 0xff;
 			bits++;
 		}
@@ -164,13 +166,13 @@ static Ret ftk_image_bmp_copy4(FtkBitmap* bitmap, int compress, FtkColor* palett
 		if(r)
 		{
 			index = (src[x] >> 4) & 0x0f;
-			bits->b = palette[index].r;
+			bits->r = palette[index].r;
 			bits->g = palette[index].g;
-			bits->r = palette[index].b;
+			bits->b = palette[index].b;
 			bits->a = 0xff;
 			bits++;
 		}
-		lsrc += line_delta;
+		lsrc -= line_delta;
 	}
 
 	return RET_OK;
@@ -196,6 +198,7 @@ static Ret ftk_image_bmp_copy1(FtkBitmap* bitmap, int compress, FtkColor* palett
 	w = (width+7)>>3;
 	r = width % 8;
 
+	lsrc += line_delta * (height - 1);
 	for(y = 0; y < height; y++)
 	{
 		src = lsrc;
@@ -225,7 +228,7 @@ static Ret ftk_image_bmp_copy1(FtkBitmap* bitmap, int compress, FtkColor* palett
 				SET_COLOR_1BIT(c & 0x01,  bits);bits++; 
 			}
 		}
-		lsrc += line_delta;
+		lsrc -= line_delta;
 	}
 
 	return RET_OK;
