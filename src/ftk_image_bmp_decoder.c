@@ -77,18 +77,19 @@ static Ret ftk_image_bmp_copy24(FtkBitmap* bitmap, int compress, const unsigned 
 	FtkColor* bits = ftk_bitmap_bits(bitmap);
 	int line_delta = (width * 3 + 3) & 0xfffffffc;
 
+	lsrc += line_delta * (height - 1);
 	for(y = 0; y < height; y++)
 	{
 		src = lsrc;
 		for(x = 0; x < width; x++, bits++)
 		{
-			bits->r = src[0];
+			bits->b = src[0];
 			bits->g = src[1];	
-			bits->b = src[2];	
+			bits->r = src[2];	
 			bits->a = 0xff;
 			src += 3;
 		}
-		lsrc += line_delta;
+		lsrc -= line_delta;
 	}
 
 	return RET_OK;
