@@ -92,6 +92,16 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 	switch(event->type)
 	{
+		case FTK_EVT_SHOW:
+		{
+			ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
+			break;
+		}
+		case FTK_EVT_HIDE:
+		{
+			ftk_wnd_manager_ungrab(ftk_default_wnd_manager(), thiz);
+			break;
+		}
 		case FTK_EVT_ADD_CHILD:
 		{
 			int x = 0;
@@ -282,8 +292,6 @@ FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height)
 		thiz->on_event = ftk_dialog_on_event;
 		thiz->on_paint = ftk_dialog_on_paint;
 		thiz->destroy  = ftk_dialog_destroy;
-
-		ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
 	}
 	else
 	{
@@ -345,6 +353,7 @@ int ftk_dialog_run(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_type(thiz) == FTK_DIALOG, RET_FAIL);
 
+	ftk_widget_show_all(thiz, 1);
 	priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
 	ftk_main_loop_run(priv->main_loop);
 	ftk_main_loop_destroy(priv->main_loop);

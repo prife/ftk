@@ -95,6 +95,7 @@ Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDe
 	list = ftk_list_view_create(thiz, 0, 0, w, h);
 	ftk_widget_set_id(list, FTK_POPUP_MENU_LIST_ID);
 	ftk_list_view_set_clicked_listener(list, ftk_popup_menu_on_item_clicked, thiz);
+	ftk_window_set_focus(thiz, list);
 
 	model = ftk_list_model_default_create(nr, on_item_destroy);
 	render = ftk_list_render_default_create();
@@ -110,4 +111,22 @@ Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDe
 	return RET_OK;
 }
 
+int ftk_popup_menu_get_selected(FtkWidget* thiz)
+{
+	FtkWidget* list = NULL;
+	return_val_if_fail(thiz != NULL, -1);
+
+	list = ftk_widget_lookup(thiz, FTK_POPUP_MENU_LIST_ID);
+	return_val_if_fail(list != NULL, -1);
+
+	return ftk_list_view_get_selected(list);
+
+}
+
+int ftk_popup_menu_calc_height(int visible_items)
+{
+	return FTK_DIALOG_TITLE_HEIGHT 
+		+ 2 * FTK_DIALOG_BORDER + 
+		visible_items * FTK_POPUP_MENU_ITEM_HEIGHT;
+}
 

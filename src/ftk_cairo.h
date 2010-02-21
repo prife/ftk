@@ -38,6 +38,7 @@
 FTK_BEGIN_DECLS
 
 cairo_surface_t* ftk_cairo_surface_create(FtkWidget* widget);
+cairo_surface_t* ftk_cairo_surface_create_with_bitmap(FtkBitmap* bitmap);
 
 FTK_END_DECLS
 

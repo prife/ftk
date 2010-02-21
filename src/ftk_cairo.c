@@ -32,15 +32,22 @@
 
 cairo_surface_t* ftk_cairo_surface_create(FtkWidget* window)
 {
-	int width = 0;
-	int height = 0;
 	FtkBitmap* bitmap = NULL;
 	FtkCanvas* canvas = NULL;
-	FtkColor*  data   = NULL;
-	cairo_surface_t*  surface = NULL;
 	return_val_if_fail(window != NULL, NULL);
 	canvas = ftk_widget_canvas(window);
 	bitmap = ftk_canvas_bitmap(canvas);
+	return_val_if_fail(bitmap != NULL, NULL);
+
+	return ftk_cairo_surface_create_with_bitmap(bitmap);
+}
+
+cairo_surface_t* ftk_cairo_surface_create_with_bitmap(FtkBitmap* bitmap)
+{
+	int width = 0;
+	int height = 0;
+	FtkColor*  data   = NULL;
+	cairo_surface_t*  surface = NULL;
 	return_val_if_fail(bitmap != NULL, NULL);
 
 	data = ftk_bitmap_bits(bitmap);
@@ -51,4 +58,3 @@ cairo_surface_t* ftk_cairo_surface_create(FtkWidget* window)
 
 	return surface;
 }
-

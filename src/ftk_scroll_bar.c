@@ -280,6 +280,13 @@ Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int value, int max_value, int page
 	return_val_if_fail(value <= max_value && page_delta <= max_value, RET_FAIL);
 	return_val_if_fail(max_value > 0 && page_delta > 0, RET_FAIL);
 
+	if(priv->value == value 
+		&& priv->max_value == max_value 
+		&& priv->page_delta == page_delta)
+	{
+		return RET_OK;
+	}
+
 	priv->value      = value < 0 ? 0 : value;
 	priv->max_value  = max_value;
 	priv->page_delta = page_delta;

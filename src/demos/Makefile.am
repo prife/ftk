@@ -4,13 +4,16 @@ noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog 
 	demo_menu demo_entry demo_expand demo_progress_bar demo_check_button demo_wait_box \
 	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview demo_hello \
 	demo_fullscreen demo_icon_view demo_text_view demo_msgbox demo_popup demo_alpha \
-	demo_combo_box
+	demo_combo_box demo_ime
 
 if ENABLE_CAIRO
 noinst_PROGRAMS+=demo_cairo
 demo_cairo_SOURCES=demo_cairo.c
 demo_cairo_LDFLAGS=$(MYLDFLAGS)
 endif
+
+demo_ime_SOURCES=demo_ime.c
+demo_ime_LDFLAGS=$(MYLDFLAGS)
 
 demo_combo_box_SOURCES=demo_combo_box.c
 demo_combo_box_LDFLAGS=$(MYLDFLAGS)

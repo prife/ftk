@@ -113,13 +113,13 @@ Ret  ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length)
 	char* src = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL && offset < thiz->length, RET_FAIL);
 
-	length = offset + length < thiz->length ? length : thiz->length - offset;
+	length = (offset + length) < thiz->length ? length : (thiz->length - offset);
 	
 	dst = thiz->buffer + offset;
 	src = thiz->buffer + offset + length;
 
-	i = thiz->length - length;
-	for(; i !=0; i--, dst++, src++)
+	i = thiz->length - length - offset;
+	for(; i != 0; i--, dst++, src++)
 	{
 		*dst = *src;
 	}
@@ -188,6 +188,31 @@ int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count)
 	}
 	
 	return iter - offset_p;
+}
+
+Ret   ftk_text_buffer_reset(FtkTextBuffer* thiz)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	thiz->length = 0;
+
+	return RET_OK;
+}
+
+char* ftk_text_buffer_append_string(FtkTextBuffer* thiz, const char* str)
+{
+	size_t str_len = 0;
+	char*  start = NULL;
+	return_val_if_fail(thiz != NULL && str != NULL, NULL);
+	
+	str_len = strlen(str) + 1;
+	return_val_if_fail(ftk_text_buffer_extend(thiz, str_len) == RET_OK, NULL);
+
+	start = thiz->buffer + thiz->length;
+	memcpy(start, str, str_len);
+	thiz->length += str_len;
+
+	return start;
 }
 
 void ftk_text_buffer_destroy(FtkTextBuffer* thiz)

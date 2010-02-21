@@ -32,6 +32,7 @@
 #include "ftk_log.h"
 #include "ftk_globals.h"
 #include "ftk_status_panel.h"
+#include "ftk_source_timer.h"
 #include "ftk_source_primary.h"
 #include "ftk_wnd_manager_default.h"
 
@@ -40,18 +41,73 @@
 typedef struct _PrivInfo
 {
 	int top;
+	int pressed;
 	int caplock;
 	int shift_down;
 	int dieing;
+	FtkEvent pressed_event;
 	FtkMainLoop* main_loop;
 	FtkWidget*   grab_widget;
 	FtkWidget*   focus_widget;
 	FtkWidget*   windows[FTK_MAX_WINDOWS];
 
 	FtkWidget* top_window;
+	FtkSource* long_press_timer;
 	void* global_listeners_ctx[FTK_MAX_GLOBAL_LISTENER];
 	FtkListener global_listeners[FTK_MAX_GLOBAL_LISTENER];
 }PrivInfo;
+
+static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz);
+
+static Ret  ftk_wnd_manager_default_restack(FtkWndManager* thiz, FtkWidget* window, int offset)
+{
+	int index = 0;
+	int new_index = 0;
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(window != NULL && offset != 0, RET_FAIL);
+
+	for(index = 0; index < priv->top; index++)
+	{
+		if(priv->windows[index] == window)
+		{
+			break;
+		}
+	}
+	return_val_if_fail(index < priv->top, RET_FAIL);
+
+	new_index = index + offset;
+	new_index = new_index < 0 ? 0 : new_index;
+	new_index = new_index >= priv->top ? (priv->top - 1) : new_index;
+
+	if(index == new_index)
+	{
+		return RET_OK;
+	}
+
+	if(index < new_index)
+	{
+		for(;index < new_index; index++)
+		{
+			priv->windows[index] = priv->windows[index+1];
+		}
+	}
+	else
+	{
+		for(; index > new_index; index--)
+		{
+			priv->windows[index] = priv->windows[index-1];
+		}
+	}
+	priv->windows[new_index] = window;
+	
+	if(!priv->dieing)
+	{
+		ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+		ftk_wnd_manager_update(thiz);
+	}
+
+	return RET_OK;
+}
 
 static Ret  ftk_wnd_manager_default_grab(FtkWndManager* thiz, FtkWidget* window)
 {
@@ -87,7 +143,9 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 	for(i = priv->top - 1; i >=0; i--)
 	{
 		win = priv->windows[i];
-		if((ftk_widget_type(win) == FTK_WINDOW || ftk_widget_type(win) == FTK_DIALOG)
+		if((ftk_widget_type(win) == FTK_WINDOW 
+			|| ftk_widget_type(win) == FTK_DIALOG
+			|| ftk_widget_type(win) == FTK_WINDOW_ANY)
 			&& ftk_widget_is_visible(win))
 		{
 			priv->focus_widget = win;
@@ -211,7 +269,15 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 
 			break;
 		}
-		default:break;
+		default:
+		{
+			x = ftk_widget_left_abs(window);
+			y = ftk_widget_top_abs(window);
+			w = ftk_widget_width(window);
+			h = ftk_widget_height(window);
+
+			break;
+		}
 	}
 	
 	ftk_widget_move_resize(window, x, y, w, h);
@@ -311,7 +377,7 @@ static Ret  ftk_wnd_manager_dispatch_globals(FtkWndManager* thiz, FtkEvent* even
 			ret = priv->global_listeners[i](priv->global_listeners_ctx[i], event);
 			if(ret == RET_REMOVE)
 			{
-				printf("%s: event is filtered by global listeners\n", __func__);
+				//printf("%s: event is filtered by global listeners\n", __func__);
 				return ret;
 			}
 		}
@@ -464,6 +530,11 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	FtkWidget* target = NULL;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
+	if(event->type == FTK_EVT_KEY_UP)
+	{
+		ftk_logd("%s: FTK_EVT_KEY_UP\n", __func__);
+	}
+
 	if(event->type == FTK_EVT_KEY_DOWN || event->type == FTK_EVT_KEY_UP)
 	{
 		ftk_wnd_manager_default_key_translate(thiz, event);
@@ -473,7 +544,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	{
 		return RET_REMOVE;
 	}
-	
+
 	switch(event->type)
 	{
 		case FTK_EVT_WND_DESTROY:
@@ -503,7 +574,20 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 		}
 		default:break;
 	}
+
+	if(event->type == FTK_EVT_MOUSE_DOWN || event->type == FTK_EVT_KEY_DOWN)
+	{
+		priv->pressed_event = *event;
+		ftk_source_ref(priv->long_press_timer);
+		ftk_source_timer_reset(priv->long_press_timer);
+		ftk_main_loop_add_source(ftk_default_main_loop(), priv->long_press_timer);
+	}
 	
+	if(event->type == FTK_EVT_MOUSE_UP|| event->type == FTK_EVT_KEY_UP)
+	{
+		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->long_press_timer);
+	}
+
 	if((event->type == FTK_EVT_MOUSE_DOWN 
 		|| event->type == FTK_EVT_MOUSE_UP
 		|| event->type == FTK_EVT_MOUSE_MOVE) && priv->grab_widget == NULL)
@@ -567,7 +651,7 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 
 		if(ftk_widget_is_visible(win))
 		{
-			ftk_widget_invalidate(win);
+			ftk_window_paint_forcely(win);
 			if(ftk_window_is_fullscreen(win))
 			{
 				return RET_OK;
@@ -581,7 +665,7 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 		if((ftk_widget_type(win) == FTK_STATUS_PANEL || ftk_widget_type(win) == FTK_MENU_PANEL)
 			&& ftk_widget_is_visible(win))
 		{
-			ftk_widget_invalidate(win);
+			ftk_window_paint_forcely(win);
 		}
 	}
 
@@ -592,6 +676,11 @@ static Ret  ftk_wnd_manager_default_queue_event(FtkWndManager* thiz, FtkEvent* e
 {
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 	return_val_if_fail(ftk_default_main_loop() != NULL, RET_FAIL);
+
+	if(event->time == 0)
+	{
+		event->time = ftk_get_relative_time();
+	}
 
 	return ftk_source_queue_event(ftk_primary_source(), event);
 }
@@ -655,6 +744,22 @@ static void ftk_wnd_manager_default_destroy(FtkWndManager* thiz)
 	return;
 }
 
+static Ret ftk_wnd_manager_default_long_press(FtkWndManager* thiz)
+{
+	FtkEvent event = {0};
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_REMOVE);
+
+	event = priv->pressed_event;
+	event.type = event.type == FTK_EVT_MOUSE_DOWN ? FTK_EVT_MOUSE_LONG_PRESS : FTK_EVT_KEY_LONG_PRESS;
+
+	ftk_wnd_manager_default_dispatch_event(thiz, &event);
+
+	ftk_logd("%s: %d\n", __func__, event.type);
+
+	return RET_REMOVE;
+}
+
 FtkWndManager* ftk_wnd_manager_default_create(FtkMainLoop* main_loop)
 {
 	FtkWndManager* thiz = NULL;
@@ -665,14 +770,15 @@ FtkWndManager* ftk_wnd_manager_default_create(FtkMainLoop* main_loop)
 		DECL_PRIV(thiz, priv);
 
 		priv->main_loop = main_loop;
+		priv->long_press_timer = ftk_source_timer_create(1500, (FtkTimer)ftk_wnd_manager_default_long_press, thiz);
 		ftk_set_primary_source(ftk_source_primary_create((FtkOnEvent)ftk_wnd_manager_default_dispatch_event, thiz));
-
 		ftk_sources_manager_add(ftk_default_sources_manager(), ftk_primary_source());
 
 		thiz->grab   = ftk_wnd_manager_default_grab;
 		thiz->ungrab = ftk_wnd_manager_default_ungrab;
 		thiz->add    = ftk_wnd_manager_default_add;
 		thiz->remove = ftk_wnd_manager_default_remove;
+		thiz->restack= ftk_wnd_manager_default_restack;
 		thiz->update         = ftk_wnd_manager_default_update;
 		thiz->get_work_area  = ftk_wnd_manager_default_get_work_area;
 		thiz->queue_event    = ftk_wnd_manager_default_queue_event;

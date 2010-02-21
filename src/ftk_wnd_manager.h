@@ -40,6 +40,7 @@ FTK_BEGIN_DECLS
 struct _FtkWndManager;
 typedef struct _FtkWndManager FtkWndManager;
 
+typedef Ret  (*FtkWndManagerRestack)(FtkWndManager* thiz, FtkWidget* window, int offset);
 typedef Ret  (*FtkWndManagerGrab)(FtkWndManager* thiz, FtkWidget* window);
 typedef Ret  (*FtkWndManagerUngrab)(FtkWndManager* thiz, FtkWidget* window);
 typedef Ret  (*FtkWndManagerAdd)(FtkWndManager* thiz, FtkWidget* window);
@@ -59,6 +60,7 @@ struct _FtkWndManager
 	FtkWndManagerAdd                  add;
 	FtkWndManagerRemove               remove;
 	FtkWndManagerUpdate               update;
+	FtkWndManagerRestack              restack;
 	FtkWndManagerGetWorkArea          get_work_area;
 	FtkWndManagerQueueEvent           queue_event;
 	FtkWndManagerDispatchEvent        dispatch_event;
@@ -68,6 +70,13 @@ struct _FtkWndManager
 
 	char priv[1];
 };
+
+static inline Ret  ftk_wnd_manager_restack(FtkWndManager* thiz, FtkWidget* window, int offset)
+{
+	return_val_if_fail(thiz != NULL && thiz->restack != NULL, RET_FAIL);
+
+	return thiz->restack(thiz, window, offset);
+}
 
 static inline Ret  ftk_wnd_manager_grab(FtkWndManager* thiz, FtkWidget* window)
 {

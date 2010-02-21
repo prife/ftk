@@ -38,19 +38,19 @@
 FTK_BEGIN_DECLS
 
 FtkWidget* ftk_window_create(int x, int y, int width, int height);
-FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height);
 FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int width, int height);
 Ret        ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget);
 FtkWidget* ftk_window_get_focus(FtkWidget* thiz);
 Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget);
 Ret        ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget);
+Ret        ftk_window_paint_forcely(FtkWidget* thiz);
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);
-Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
 int        ftk_window_is_fullscreen(FtkWidget* thiz);
+Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
 Ret        ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect);
 Ret        ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg);
-Ret        ftk_window_disable_update(FtkWidget* thiz);
 Ret        ftk_window_enable_update(FtkWidget* thiz);
+Ret        ftk_window_disable_update(FtkWidget* thiz);
 
 FTK_END_DECLS
 

@@ -45,10 +45,13 @@ typedef struct _FtkTextBuffer
 
 FtkTextBuffer* ftk_text_buffer_create(size_t init_buffer_length);
 
-Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text);
-Ret  ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length);
-Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count);
-int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count);
+Ret   ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text);
+Ret   ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length);
+Ret   ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count);
+int   ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count);
+
+Ret   ftk_text_buffer_reset(FtkTextBuffer* thiz);
+char* ftk_text_buffer_append_string(FtkTextBuffer* thiz, const char* str);
 
 void ftk_text_buffer_destroy(FtkTextBuffer* thiz);
 

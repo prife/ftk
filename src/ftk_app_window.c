@@ -90,7 +90,7 @@ static void ftk_app_window_destroy(FtkWidget* thiz)
 
 FtkWidget* ftk_app_window_create(void)
 {
-	FtkWidget* thiz = ftk_window_create_with_type(FTK_WINDOW, 0, 0, 0, 0);
+	FtkWidget* thiz = ftk_window_create_ex(FTK_WINDOW, 0, 0, 0, 0, 0);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));

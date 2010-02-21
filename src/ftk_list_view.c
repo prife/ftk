@@ -204,6 +204,7 @@ static Ret ftk_list_view_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_list_view_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_FAIL;
+	DECL_PRIV0(thiz, priv);
 
 	switch(event->type)
 	{
@@ -217,6 +218,15 @@ static Ret ftk_list_view_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MOUSE_DOWN:
 		{
 			ret = ftk_list_view_on_mouse_event(thiz, event);
+			break;
+		}
+		case FTK_EVT_RESIZE:
+		case FTK_EVT_MOVE_RESIZE:
+		{
+			if(priv->item_height > 0)
+			{
+				priv->visible_nr = ftk_widget_height(thiz)/priv->item_height;
+			}
 			break;
 		}
 		default:break;
@@ -387,7 +397,7 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	priv->top_margin = FTK_V_MARGIN;//FTK_HALF(margin);
 	priv->botton_margin = margin-FTK_V_MARGIN;//FTK_HALF(margin);
 	priv->visible_start = 0;
-	priv->current      = -1;
+	priv->current      = 0;
 	priv->is_active = 0;
 	priv->vscroll_bar = ftk_scroll_bar_create(thiz, width - FTK_SCROLL_BAR_WIDTH, priv->top_margin, 
 		FTK_SCROLL_BAR_WIDTH, item_height * priv->visible_nr);

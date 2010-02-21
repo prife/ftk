@@ -48,7 +48,7 @@ static int ftk_source_timer_check(FtkSource* thiz)
 {
 	DECL_PRIV(thiz, priv);
 	int t = priv->next_time - ftk_get_relative_time();
-	
+
 	t = t < 0 ? 0 : t;
 
 	return t;
@@ -59,6 +59,16 @@ static void ftk_source_timer_calc_timer(PrivInfo* priv)
 	priv->next_time = ftk_get_relative_time() + priv->interval;
 
 	return;
+}
+
+Ret ftk_source_timer_reset(FtkSource* thiz)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	ftk_source_timer_calc_timer(priv);
+
+	return RET_OK;
 }
 
 static Ret ftk_source_timer_dispatch(FtkSource* thiz)
@@ -74,10 +84,7 @@ static Ret ftk_source_timer_dispatch(FtkSource* thiz)
 	}
 
 	ret = priv->action(priv->user_data);
-	if(ret == RET_OK)
-	{
-		ftk_source_timer_calc_timer(priv);
-	}
+	ftk_source_timer_calc_timer(priv);
 
 	return ret;
 }

@@ -1,6 +1,6 @@
 include $(abs_top_srcdir)/src/rules.mk
 
-SUBDIRS=. os backend compiler demos test
+SUBDIRS=. im os backend compiler demos test
 
 lib_LTLIBRARIES=libftk.la
 
@@ -41,12 +41,20 @@ libftk_la_SOURCES=\
 	ftk_popup_menu.c      ftk_animator_alpha.c     ftk_combo_box.c \
 	ftk_clipboard.c       ftk_input_method_manager.c \
 	ftk_allocator.c            ftk_allocator_default.c \
-	ftk_allocator_profile.c  ftk_image_bmp_decoder.c
+	ftk_allocator_profile.c  ftk_image_bmp_decoder.c \
+	im/ftk_lookup_table.c ftk_input_method_preeditor.c \
+	im/ftk_input_method_py.c im/ftk_input_method_util.c
+
+if ENABLE_HANDWRITE
+libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
+	fhw/fhw_primitive_recognizer.c
+endif
 
 libftk_la_CFLAGS=
 
 if ENABLE_CAIRO
 libftk_la_SOURCES+=ftk_cairo.c
+libftk_la_SOURCES += im/ftk_stroke_painter_cairo.c
 endif
 
 if ENABLE_TSLIB
@@ -130,6 +138,6 @@ ftk_HEADERS=\
 	ftk_combo_box.h           ftk_clipboard.h \
 	ftk_input_method_manager.h ftk_input_method.h \
 	ftk_allocator.h            ftk_allocator_default.h \
-	ftk_allocator_profile.h
+	ftk_allocator_profile.h    ftk_input_method_preeditor.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  ftk_image_bmp_decoder.h

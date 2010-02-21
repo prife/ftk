@@ -81,6 +81,7 @@ typedef enum _FtkWidgetType
 	FTK_WIDGET_NONE   = 0,
 	FTK_WINDOW = 1,
 	FTK_DIALOG,
+	FTK_WINDOW_ANY,
 	FTK_STATUS_PANEL,
 	FTK_MENU_PANEL,
 	FTK_MENU_ITEM,
@@ -138,7 +139,18 @@ typedef enum _FtkWidgetAttr
 typedef void (*FtkDestroy)(void* user_data);
 typedef Ret (*FtkIdle)(void* user_data);
 typedef Ret (*FtkTimer)(void* user_data);
+typedef int (*FtkCompare)(const void* obj1, const void* obj2);
 typedef Ret (*FtkListener)(void* user_data, void* obj);
+
+#define FTK_IM_RAW_TEXT_LENGTH 31
+#define FTK_IM_CANDIDATE_BUFF_LENGTH 1023
+
+typedef struct _FtkCommitInfo
+{
+	size_t candidate_nr;
+	char raw_text[FTK_IM_RAW_TEXT_LENGTH + 1];
+	char candidates[FTK_IM_CANDIDATE_BUFF_LENGTH + 1];
+}FtkCommitInfo;
 
 #define FTK_INHERITE_FROM(parent) extern int a;
 
@@ -152,6 +164,7 @@ typedef Ret (*FtkListener)(void* user_data, void* obj);
 #define FTK_HALF(a)    ((a)>>1)
 #define FTK_MIN(a, b) (a) < (b) ? (a) : (b)
 #define FTK_MAX(a, b) (a) < (b) ? (b) : (a)
+#define FTK_ABS(a) (a) < 0 ? -(a) : a
 
 #define FTK_MASK_BITS(val32, index) (((val32) << ((index)%32)) & 0x80000000)
 

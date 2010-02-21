@@ -114,6 +114,16 @@ Ret ftk_list_model_default_add(FtkListModel* thiz, void* item)
 	return RET_OK;
 }
 
+static Ret ftk_list_model_default_reset(FtkListModel* thiz)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->nr = 0;
+
+	return RET_OK;
+}
+
 Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index)
 {
 	DECL_PRIV(thiz, priv);
@@ -142,6 +152,7 @@ FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkDestroy destroy)
 		thiz->get_total = ftk_list_model_default_get_total;
 		thiz->get_data  = ftk_list_model_default_get_data;
 		thiz->add       = ftk_list_model_default_add;
+		thiz->reset     = ftk_list_model_default_reset;
 		thiz->remove    = ftk_list_model_default_remove;
 		thiz->destroy   = ftk_list_model_default_destroy;
 

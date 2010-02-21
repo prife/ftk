@@ -43,8 +43,10 @@ struct _FtkGlobals
 	FtkSource*   primary_source;
 	FtkAllocator* allocator;
 	FtkWndManager* wnd_manager;
+	FtkWidget* input_method_preeditor;
 	FtkBitmapFactory* bitmap_factory;
 	FtkSourcesManager* sources_manager;
+	FtkInputMethodManager* input_manager_manager;
 }g_globals;
 
 FtkFont*          ftk_default_font(void)
@@ -75,6 +77,16 @@ FtkSource*         ftk_primary_source(void)
 FtkAllocator*      ftk_default_allocator(void)
 {
 	return g_globals.allocator;
+}
+
+FtkWidget* ftk_default_input_method_preeditor(void)
+{
+	return g_globals.input_method_preeditor;
+}
+
+FtkInputMethodManager* ftk_default_input_method_manager(void)
+{
+	return g_globals.input_manager_manager;
 }
 
 FtkMainLoop*      ftk_default_main_loop(void)
@@ -190,3 +202,18 @@ void ftk_set_allocator(FtkAllocator* allocator)
 
 	return;
 }
+
+void ftk_set_input_method_preeditor(FtkWidget* input_method_preeditor)
+{
+	g_globals.input_method_preeditor = input_method_preeditor;
+
+	return;
+}
+
+void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager)
+{
+	g_globals.input_manager_manager = input_manager_manager;
+
+	return;
+}
+

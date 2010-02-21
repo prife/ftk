@@ -34,6 +34,8 @@
 
 #include "ftk_widget.h"
 
+FTK_BEGIN_DECLS
+
 typedef enum _FtkInputType
 {
 	FTK_INPUT_NORMAL= 0,
@@ -43,6 +45,8 @@ typedef enum _FtkInputType
 	FTK_INPUT_EMAIL,
 	FTK_INPUT_ALL
 }FtkInputType;
+
+#define FTK_IM_MAX_CANDIDATES  20
 
 struct _FtkInputMethod;
 typedef struct _FtkInputMethod FtkInputMethod;
@@ -56,6 +60,8 @@ typedef void (*FtkInputMethodDestroy)(FtkInputMethod* thiz);
 struct _FtkInputMethod
 {
 	const char* name;
+
+	int ref;
 
 	FtkInputMethodFocusIn     focus_in;
 	FtkInputMethodFocusOut    focus_out;
@@ -103,6 +109,36 @@ static inline void ftk_input_method_destroy(FtkInputMethod* thiz)
 
 	return;
 }
+
+static inline void ftk_input_method_ref(FtkInputMethod* thiz)
+{
+	if(thiz != NULL)
+	{
+		thiz->ref++;
+	}
+
+	return;
+}
+
+static inline void ftk_input_method_unref(FtkInputMethod* thiz)
+{
+	if(thiz != NULL)
+	{
+		thiz->ref--;
+		if(thiz->ref == 0)
+		{
+			ftk_input_method_destroy(thiz);	
+		}
+		else
+		{
+			assert(thiz->ref > 0);
+		}
+	}
+
+	return;
+}
+
+FTK_END_DECLS
 
 #endif/*FTK_INPUT_METHOD_H*/
 

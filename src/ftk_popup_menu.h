@@ -37,7 +37,11 @@
 FTK_BEGIN_DECLS
 
 FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, const char* title);
+
+/*XXX: info->extra_user_data is the listener function.*/
 Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDestroy on_item_destroy);
+int ftk_popup_menu_get_selected(FtkWidget* thiz);
+int ftk_popup_menu_calc_height(int visible_items);
 
 FTK_END_DECLS
 

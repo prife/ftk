@@ -53,6 +53,7 @@ struct _FtkWidgetInfo
 	FtkGc gc[FTK_WIDGET_STATE_NR];
 	void* user_data;
 	char* text;
+	size_t text_buff_length;
 	FtkDestroy user_data_destroy;
 };
 
@@ -306,32 +307,63 @@ void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data)
 
 void ftk_widget_move(FtkWidget* thiz, int x, int y)
 {
+	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	if(thiz->priv->left == x && thiz->priv->top  == y)
+	{
+		return;
+	}
 
 	thiz->priv->left = x;
 	thiz->priv->top  = y;
+
+	event.widget = thiz;
+	event.type = FTK_EVT_MOVE;
+	ftk_widget_event(thiz, &event);
 
 	return;
 }
 
 void ftk_widget_resize(FtkWidget* thiz, int width, int height)
 {
+	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	if(thiz->priv->width == width && thiz->priv->height == height)
+	{
+		return;
+	}
 
 	thiz->priv->width = width;
 	thiz->priv->height = height;
+
+	event.widget = thiz;
+	event.type = FTK_EVT_RESIZE;
+	ftk_widget_event(thiz, &event);
 
 	return;
 }
 
 void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height)
 {
+	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
+	
+	if(thiz->priv->left == x && thiz->priv->top  == y
+		&& thiz->priv->width == width && thiz->priv->height == height)
+	{
+		return;
+	}
 
 	thiz->priv->left = x;
 	thiz->priv->top  = y;
 	thiz->priv->width = width;
 	thiz->priv->height = height;
+	
+	event.widget = thiz;
+	event.type = FTK_EVT_MOVE_RESIZE;
+	ftk_widget_event(thiz, &event);
 
 	return;
 }
@@ -680,6 +712,8 @@ void ftk_widget_paint(FtkWidget* thiz)
 	{
 		FtkRect rect = {0};
 	
+		rect.x = ftk_widget_left_abs(thiz);
+		rect.y = ftk_widget_top_abs(thiz);
 		rect.width  = ftk_widget_width(thiz);
 		rect.height = ftk_widget_height(thiz);
 		ftk_window_enable_update(thiz);
@@ -698,16 +732,41 @@ void    ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 	return;
 }
 
+void    ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
+{
+	return_if_fail(thiz != NULL && state < FTK_WIDGET_STATE_NR && gc != NULL);
+
+	ftk_gc_reset(thiz->priv->gc+state);
+	ftk_gc_copy(thiz->priv->gc+state, gc);
+
+	return;
+}
+
 void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
-	
-	FTK_FREE(thiz->priv->text);
 
-	if(text != NULL)
+	if(thiz->priv->text != NULL 
+		&& text != NULL 
+		&& thiz->priv->text_buff_length > strlen(text))
 	{
-		thiz->priv->text = FTK_STRDUP(text);
+		strcpy(thiz->priv->text, text);
 	}
+	else
+	{
+		FTK_FREE(thiz->priv->text);
+
+		if(text != NULL)
+		{
+			thiz->priv->text = FTK_STRDUP(text);
+			thiz->priv->text_buff_length = strlen(text) + 1;
+		}
+		else
+		{
+			thiz->priv->text_buff_length = 0;
+		}
+	}
+
 	ftk_widget_invalidate(thiz);
 
 	return;

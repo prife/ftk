@@ -44,5 +44,7 @@ Ret  ftk_input_method_manager_register(FtkInputMethodManager* thiz, FtkInputMeth
 Ret  ftk_input_method_manager_unregister(FtkInputMethodManager* thiz, FtkInputMethod* im);
 void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz);
 
+int ftk_input_method_chooser(void);
+
 #endif/*FTK_INPUT_METHOD_MANAGER_H*/
 

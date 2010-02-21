@@ -35,7 +35,7 @@
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
 
-#define FTK_MAX_DIRTY_RECT 8
+#define FTK_MAX_DIRTY_RECT 16
 
 typedef struct _PrivInfo
 {
@@ -198,8 +198,8 @@ static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_n
 			return temp;
 		}
 	}
-	
-	return focus_widget;
+
+	return parent;
 }
 
 static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
@@ -211,7 +211,10 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 	if(priv->focus_widget == NULL)
 	{
 		if(FTK_EVT_KEY_UP == event->type 
-		&& (event->u.key.code == FTK_KEY_RIGHT || event->u.key.code == FTK_KEY_DOWN))
+			&& (event->u.key.code == FTK_KEY_RIGHT 
+				|| event->u.key.code == FTK_KEY_DOWN 
+				|| event->u.key.code == FTK_KEY_LEFT
+				|| event->u.key.code == FTK_KEY_UP))
 		{
 			ftk_window_set_focus(thiz, thiz->children);
 		}
@@ -221,30 +224,35 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 
 	ret = ftk_widget_event(priv->focus_widget, event);
 	
-	if(ret == RET_REMOVE || event->type == FTK_EVT_KEY_UP)
+	if(ret == RET_REMOVE)
 	{
 		return ret;
 	}
 
-	switch(event->u.key.code)
+	if(event->type == FTK_EVT_KEY_UP)
 	{
-		case FTK_KEY_LEFT:
-		case FTK_KEY_UP:
+		switch(event->u.key.code)
 		{
-			focus_widget = ftk_window_find_prev_focus(priv->focus_widget, 1);
-			ret = ftk_window_set_focus(thiz, focus_widget);
-			break;
-		}
-		case FTK_KEY_DOWN:
-		case FTK_KEY_RIGHT:
-		case FTK_KEY_TAB:
-		{
-			focus_widget = ftk_window_find_next_focus(priv->focus_widget, 1);
-			ret = ftk_window_set_focus(thiz, focus_widget);
+			case FTK_KEY_LEFT:
+			case FTK_KEY_UP:
+			{
+				focus_widget = ftk_window_find_prev_focus(priv->focus_widget, 1);
+				ret = ftk_window_set_focus(thiz, focus_widget);
+				break;
+			}
+			case FTK_KEY_DOWN:
+			case FTK_KEY_RIGHT:
+			case FTK_KEY_TAB:
+			{
+				focus_widget = ftk_window_find_next_focus(priv->focus_widget, 1);
+				ret = ftk_window_set_focus(thiz, focus_widget);
 
-			break;
+				break;
+			}
+			default:break;
 		}
-		default:break;
+
+		ftk_logd("%s: FTK_EVT_KEY_UP\n", __func__);
 	}
 
 	return ret;
@@ -300,8 +308,8 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_SHOW:
 		{
 			FtkEvent event = {0};
-			event.type = FTK_EVT_SHOW;
 			event.widget = thiz;
+			event.type = FTK_EVT_SHOW;
 			ftk_window_realize(thiz);
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 			break;
@@ -309,8 +317,8 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_HIDE:
 		{
 			FtkEvent event = {0};
-			event.type = FTK_EVT_HIDE;
 			event.widget = thiz;
+			event.type = FTK_EVT_HIDE;
 			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
 			break;
 		}
@@ -329,12 +337,14 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MOUSE_DOWN:
 		case FTK_EVT_MOUSE_UP:
 		case FTK_EVT_MOUSE_MOVE:
+		case FTK_EVT_MOUSE_LONG_PRESS:
 		{
 			ret = ftk_window_on_mouse_event(thiz, event);
 			break;
 		}
 		case FTK_EVT_KEY_DOWN:
 		case FTK_EVT_KEY_UP:
+		case FTK_EVT_KEY_LONG_PRESS:
 		{
 			ret = ftk_window_on_key_event(thiz, event);
 			break;
@@ -421,10 +431,6 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
-	if(!priv->mapped)
-	{
-		ftk_logd("%s: %s is not mapped\n", __func__, ftk_widget_get_text(thiz));
-	}
 	if(priv->update_disabled || !ftk_widget_is_visible(thiz) || !priv->mapped)
 	{
 		return RET_FAIL;
@@ -434,6 +440,21 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	yoffset = rect->y;
 
 	return ftk_display_update_and_notify(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
+}
+
+Ret        ftk_window_paint_forcely(FtkWidget* thiz)
+{
+	int mapped = 0;
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	mapped = priv->mapped;
+	
+	priv->mapped = 1;
+	ftk_widget_paint(thiz);
+	priv->mapped = mapped;
+
+	return RET_OK;
 }
 
 Ret ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
@@ -487,6 +508,8 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 
 Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 {
+	int i = 0;
+	FtkRect* r = NULL;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && rect != NULL, RET_FAIL);
 	
@@ -499,7 +522,18 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 	{
 		ftk_window_idle_invalidate(thiz);
 	}
-	
+
+	for(i = 0; i < priv->dirty_rect_nr; i++)
+	{
+		r = priv->dirty_rect + i;
+		if(r->x == rect->x && r->x == rect->y 
+			&& r->width == rect->width && r->height == rect->height)
+		{
+			ftk_logd("%s: remove repeated rect\n", __func__);
+			return RET_OK;
+		}
+	}
+
 	priv->dirty_rect[priv->dirty_rect_nr] = *rect;
 	priv->dirty_rect_nr++;
 		
@@ -522,7 +556,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 
 FtkWidget* ftk_window_create(int x, int y, int width, int height)
 {
-	return ftk_window_create_with_type(FTK_WINDOW, x, y, width, height);
+	return ftk_window_create_ex(FTK_WINDOW, 0, x, y, width, height);
 }
 
 FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int width, int height)
@@ -533,28 +567,22 @@ FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int w
 	thiz->priv_subclass[0] = FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		do
-		{
-			FtkGc gc = {0};
-			DECL_PRIV0(thiz, priv);	
-			if(priv == NULL)
-			{
-				break;
-			}
-			gc.mask = FTK_GC_BG | FTK_GC_FG;
-			priv->display = ftk_default_display();
+		FtkGc gc = {0};
+		DECL_PRIV0(thiz, priv);	
+		
+		gc.mask = FTK_GC_BG | FTK_GC_FG;
+		priv->display = ftk_default_display();
 
-			ftk_widget_init(thiz, type, 0);
-			ftk_widget_move(thiz, x, y);
-			ftk_widget_resize(thiz, width, height);
+		ftk_widget_init(thiz, type, 0);
+		ftk_widget_move(thiz, x, y);
+		ftk_widget_resize(thiz, width, height);
 
-			thiz->on_event = ftk_window_on_event;
-			thiz->on_paint = ftk_window_on_paint;
-			thiz->destroy  = ftk_window_destroy;
-			ftk_widget_set_attr(thiz, attr);
+		thiz->on_event = ftk_window_on_event;
+		thiz->on_paint = ftk_window_on_paint;
+		thiz->destroy  = ftk_window_destroy;
+		ftk_widget_set_attr(thiz, attr);
 
-			ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
-		}while(0);
+		ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 	}
 	else
 	{
@@ -562,11 +590,6 @@ FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int w
 	}
 
 	return thiz;
-}
-
-FtkWidget* ftk_window_create_with_type(int type, int x, int y, int width, int height)
-{
-	return ftk_window_create_ex(type, 0, x, y, width, height);
 }
 
 Ret ftk_window_disable_update(FtkWidget* thiz)
@@ -583,6 +606,7 @@ Ret ftk_window_enable_update(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
+	return_val_if_fail(priv->update_disabled > 0, RET_FAIL);
 
 	priv->update_disabled--;
 
@@ -597,10 +621,10 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
-	gc.mask = FTK_GC_BG;
 	gc.bg = bg;
+	gc.mask = FTK_GC_BG;
 	
-	if(gc.mask)
+	if(bitmap != NULL)
 	{
 		gc.mask |= FTK_GC_BITMAP;
 		gc.bitmap = bitmap;

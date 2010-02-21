@@ -32,6 +32,12 @@
 #include "ftk_allocator.h"
 #include "ftk_input_method_manager.h"
 
+#include "ftk_input_method_py.h"
+
+#ifdef USE_HANDWRITE
+#include "ftk_input_method_hw.h"
+#endif
+
 #define FTK_INPUT_METHOD_MAX_NR 6
 
 struct _FtkInputMethodManager
@@ -43,7 +49,14 @@ struct _FtkInputMethodManager
 FtkInputMethodManager* ftk_input_method_manager_create(void)
 {
 	FtkInputMethodManager* thiz = FTK_ZALLOC(sizeof(FtkInputMethodManager));
-
+	if(thiz != NULL)
+	{
+		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
+		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
+#ifdef USE_HANDWRITE
+		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());
+#endif
+	}
 	return thiz;
 }
 
@@ -104,8 +117,54 @@ void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz)
 			ftk_input_method_destroy(thiz->methods[i]);
 			thiz->methods[i] = NULL;
 		}
+		
+		FTK_ZFREE(thiz, sizeof(FtkInputMethodManager));
 	}
 
 	return;
+}
+
+#include "ftk_dialog.h"
+#include "ftk_globals.h"
+#include "ftk_popup_menu.h"
+
+int ftk_input_method_chooser(void)
+{
+	int i = 0;
+	int h = 150;
+	int nr = 0;
+	FtkInputMethod* im = NULL;
+	FtkWidget* im_chooser = NULL;
+	FtkListItemInfo im_infos[FTK_INPUT_METHOD_MAX_NR+1];
+	FtkInputMethodManager* im_mgr = ftk_default_input_method_manager();
+
+	memset(im_infos, 0x00, sizeof(im_infos));
+	nr = ftk_input_method_manager_count(im_mgr);
+
+	h = ftk_popup_menu_calc_height(nr + 1);
+	im_chooser = ftk_popup_menu_create(0, 0, 0, h, NULL, "Input Method");
+
+	for(i = 0; i < nr; i++)
+	{
+		ftk_input_method_manager_get(im_mgr, i, &im);
+		im_infos[i].text = (char*)im->name;
+		im_infos[i].type = FTK_LIST_ITEM_NORMAL;
+		im_infos[i].extra_user_data = ftk_dialog_quit;
+		im_infos[i].user_data = im_chooser;
+	}
+	
+	im_infos[i].text = "None";
+	im_infos[i].type = FTK_LIST_ITEM_NORMAL;
+	im_infos[i].extra_user_data = ftk_dialog_quit;
+	im_infos[i].user_data = im_chooser;
+	
+	ftk_popup_menu_init(im_chooser, im_infos, i + 1, NULL);
+
+	ftk_widget_ref(im_chooser);
+	ftk_dialog_run(im_chooser);
+	i = ftk_popup_menu_get_selected(im_chooser);
+	ftk_widget_unref(im_chooser);
+
+	return i;
 }
 

@@ -34,6 +34,7 @@
 #include "ftk_globals.h"
 #include "ftk_text_buffer.h"
 #include "ftk_source_timer.h"
+#include "ftk_input_method_preeditor.h"
 
 typedef struct _PrivInfo
 {
@@ -41,10 +42,10 @@ typedef struct _PrivInfo
 	int   caret_visible;
 	int   visible_start;
 	int   visible_end;
-	int   selected_start;
 	int   selected_end;
-	int   preedit_start;
-	int   preedit_end;
+	int   selected_start;
+	int   input_method;
+	FtkPoint caret_pos;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
 }PrivInfo;
@@ -125,16 +126,31 @@ static Ret ftk_entry_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
 	return ftk_entry_get_offset_by_pointer(thiz, event->u.mouse.x);
 }
 
+static Ret ftk_entry_input_str(FtkWidget* thiz, const char* str)
+{
+	int count = 0;
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL && str != NULL, RET_FAIL);
+
+	count = utf8_count_char(str, strlen(str));
+	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+	ftk_entry_move_caret(thiz, count);	
+
+	if(priv->visible_start >= 0)
+	{
+		priv->visible_end = -1;
+	}
+
+	return RET_OK;
+}
+
 static Ret ftk_entry_input_char(FtkWidget* thiz, char c)
 {
 	char str[2] = {0};
-	DECL_PRIV0(thiz, priv);
-	
 	str[0] = c;
-	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
-	ftk_entry_move_caret(thiz, 1);	
+	str[1] = '\0';
 
-	return RET_OK;
+	return ftk_entry_input_str(thiz, str);
 }
 
 static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
@@ -195,23 +211,52 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 
 	return ret;
 }
+	
+static Ret ftk_entry_act_commit(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	FtkInputMethod* im = NULL;
+
+	ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+
+	if(im != NULL)
+	{
+		FtkEvent event = {0};
+		event.type = FTK_EVT_IM_ACT_COMMIT;
+		ftk_input_method_handle_event(im, &event);
+	}
+
+	return RET_OK;
+}
 
 static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
+	FtkInputMethod* im = NULL;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
+			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+			if(im != NULL)
+			{
+				ftk_input_method_focus_in(im, thiz);
+			}
 			ftk_source_ref(priv->caret_timer);
+			ftk_source_timer_reset(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
 		case FTK_EVT_FOCUS_OUT:
 		{
+			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+			if(im != NULL)
+			{
+				ftk_input_method_focus_out(im);
+			}
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
@@ -232,6 +277,34 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MOUSE_UP:
 		{
 			ret = ftk_entry_handle_mouse_evevnt(thiz, event);
+			break;
+		}
+		case FTK_EVT_IM_PREEDIT:
+		{
+			ftk_input_method_preeditor_show(thiz, &(priv->caret_pos), event->u.extra);
+			break;
+		}
+		case FTK_EVT_IM_COMMIT:
+		{
+			ftk_entry_input_str(thiz, event->u.extra);
+			ftk_entry_act_commit(thiz);
+			break;
+		}
+		case FTK_EVT_MOUSE_LONG_PRESS:
+		{
+			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+			if(im != NULL)
+			{
+				ftk_input_method_focus_out(im);
+			}
+			im = NULL;
+			priv->input_method = ftk_input_method_chooser();
+			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+			if(im != NULL)
+			{
+				ftk_input_method_focus_in(im, thiz);
+			}
+
 			break;
 		}
 		default:break;
@@ -257,11 +330,14 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
 		priv->caret_visible = !priv->caret_visible;
 
-		extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, priv->caret - priv->visible_start);
+		extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, 
+			priv->caret - priv->visible_start);
 
 		ftk_canvas_reset_gc(canvas, &gc);
 		x += extent + FTK_ENTRY_LEFT_MARGIN - 1;
 		y += FTK_ENTRY_TOP_MARGIN;
+		priv->caret_pos.x = x;
+		priv->caret_pos.y = y;
 		ftk_canvas_draw_vline(canvas, x, y, height - 2 * FTK_ENTRY_TOP_MARGIN);
 		FTK_END_PAINT();
 	}
@@ -317,7 +393,14 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
-	
+		FtkInputMethod* im = NULL;
+
+		ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+		if(im != NULL)
+		{
+			ftk_input_method_focus_out(im);
+		}
+
 		ftk_source_disable(priv->caret_timer);
 		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 		ftk_source_unref(priv->caret_timer);
@@ -348,6 +431,7 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		ftk_widget_resize(thiz, width, height);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
+		priv->input_method = -1;
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
 		ftk_widget_append_child(parent, thiz);
@@ -397,6 +481,16 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;
 	ftk_widget_invalidate(thiz);
+
+	return RET_OK;
+}
+
+Ret ftk_entry_set_input_method(FtkWidget* thiz, int index)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->input_method = index;
 
 	return RET_OK;
 }

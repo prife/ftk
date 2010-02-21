@@ -259,7 +259,7 @@ static void ftk_menu_panel_destroy(FtkWidget* thiz)
 
 FtkWidget* ftk_menu_panel_create(void)
 {
-	FtkWidget* thiz = ftk_window_create_with_type(FTK_MENU_PANEL, 0, 0, 0, 0);
+	FtkWidget* thiz = ftk_window_create_ex(FTK_MENU_PANEL, 0, 0, 0, 0, 0);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));

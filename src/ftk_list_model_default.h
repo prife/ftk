@@ -48,6 +48,7 @@ typedef enum _FtkListItemType
 typedef struct _FtkListItemInfo
 {
 	char* text;
+	int   value; /*to store other info.*/
 	int   state; /*used for FTK_LIST_ITEM_RADIO and FTK_LIST_ITEM_CHECK*/
 	FtkListItemType type;
 	FtkBitmap* left_icon;

@@ -42,6 +42,7 @@
 #include "ftk_status_panel.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_allocator_default.h"
+#include "ftk_input_method_preeditor.h"
 #include "ftk_wnd_manager_default.h"
 
 #ifdef FTK_MEMORY_PROFILE
@@ -66,17 +67,17 @@ static Ret ftk_init_font(void)
 	FtkFont* font = NULL;
 	char filename[FTK_MAX_PATH] = {0};
 #ifdef USE_FREETYPE
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
 	if((font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE)) == NULL)
 	{
-		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
-		font = ftk_font_freetype_create(filename, 0, 0, 0);
+		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+		font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE);
 	}
 #else
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
 	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
 	{
-		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
+		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
 		font = ftk_font_default_create(filename, 0, 0, 0);
 	}
 #endif
@@ -164,6 +165,12 @@ static void ftk_deinit(void)
 		ftk_set_shared_canvas(NULL);
 	}
 
+	if(ftk_default_input_method_manager() != NULL)
+	{
+		ftk_input_method_manager_destroy(ftk_default_input_method_manager());
+		ftk_set_input_method_manager(NULL);
+	}
+
 	if(ftk_default_allocator() != NULL)
 	{
 		ftk_allocator_destroy(ftk_default_allocator());
@@ -245,10 +252,14 @@ Ret ftk_init(int argc, char* argv[])
 	display = ftk_default_display();
 	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), bg));
 
+	ftk_set_input_method_manager(ftk_input_method_manager_create());
+
 	if(!disable_status_panel)
 	{
 		ftk_init_panel();
 	}
+
+	ftk_set_input_method_preeditor(ftk_input_method_preeditor_create());
 
 	if(enable_cursor)
 	{
