@@ -138,6 +138,7 @@ ftk_HEADERS=\
 	ftk_combo_box.h           ftk_clipboard.h \
 	ftk_input_method_manager.h ftk_input_method.h \
 	ftk_allocator.h            ftk_allocator_default.h \
-	ftk_allocator_profile.h    ftk_input_method_preeditor.h
+	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
+	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  ftk_image_bmp_decoder.h
