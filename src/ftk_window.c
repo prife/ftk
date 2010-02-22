@@ -229,7 +229,7 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 		return ret;
 	}
 
-	if(event->type == FTK_EVT_KEY_UP)
+	if(event->type == FTK_EVT_KEY_DOWN)
 	{
 		switch(event->u.key.code)
 		{

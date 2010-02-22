@@ -47,7 +47,7 @@ typedef struct _PrivInfo
 }PrivInfo;
 
 #define IDC_LIST  1001
-#define IDC_LABEL 1000
+#define IDC_RAW_TEXT 1000
 #define FTK_IM_PREEDITOR_WIDTH       120
 #define FTK_IM_PREEDITOR_MAX_ROW     5
 #define FTK_IM_PREEDITOR_ITEM_HEIGHT 20
@@ -127,7 +127,7 @@ static Ret ftk_input_method_preeditor_resize(FtkWidget* thiz, int candidate_nr, 
 	}
 
 	ftk_widget_move_resize(thiz, x, y, w, h);
-	ftk_widget_move_resize(ftk_widget_lookup(thiz, IDC_LABEL), 0, 
+	ftk_widget_move_resize(ftk_widget_lookup(thiz, IDC_RAW_TEXT), 0, 
 		0, w, FTK_IM_PREEDITOR_ITEM_HEIGHT);
 	ftk_widget_move_resize(ftk_widget_lookup(thiz, IDC_LIST), 0, 
 		FTK_IM_PREEDITOR_ITEM_HEIGHT, w, h - FTK_IM_PREEDITOR_ITEM_HEIGHT);
@@ -170,13 +170,20 @@ FtkWidget* ftk_input_method_preeditor_create(void)
 	ftk_widget_set_text(popup, "im preeditor");
 	render = ftk_list_render_default_create();
 	button = ftk_button_create(popup, 0, 0, w, FTK_IM_PREEDITOR_ITEM_HEIGHT);
-	ftk_widget_set_id(button, IDC_LABEL);
+	ftk_widget_set_id(button, IDC_RAW_TEXT);
+	ftk_widget_unset_attr(button, FTK_ATTR_TRANSPARENT);
 
-	gc = *ftk_widget_get_gc(button);
-	gc.mask = gc.mask & (~FTK_GC_BITMAP);
+	gc.mask = FTK_GC_BG | FTK_GC_FG;
+	gc.bg = ftk_theme_get_bg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_NORMAL);
+	gc.fg = ftk_theme_get_fg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_NORMAL);
 	ftk_widget_reset_gc(button, FTK_WIDGET_NORMAL, &gc);
+	
+	gc.bg = ftk_theme_get_bg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_FOCUSED);
+	gc.fg = ftk_theme_get_fg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_FOCUSED);
 	ftk_widget_reset_gc(button, FTK_WIDGET_FOCUSED, &gc);
+	
 	gc.bg = ftk_theme_get_bg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_ACTIVE);
+	gc.fg = ftk_theme_get_fg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_ACTIVE);
 	ftk_widget_reset_gc(button, FTK_WIDGET_ACTIVE, &gc);
 
 	list = ftk_list_view_create(popup, 0, FTK_IM_PREEDITOR_ITEM_HEIGHT, 

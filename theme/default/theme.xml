@@ -1,8 +1,8 @@
 <theme name="default">
 
-<button bg_image[normal]="btn_default_normal.png" 
-	bg_image[focused]="btn_default_selected.png" 
-	bg_image[active]="btn_default_pressed.png" 
+<button bg_image[normal]="btn_default_normal.png" bg[normal]="ffd0d0d0"
+	bg_image[focused]="btn_default_selected.png" bg[focused]="ffffbb00"
+	bg_image[active]="btn_default_pressed.png" bg[active]="ffe2ceee"
 	bg_image[disable]="btn_default_normal_disable.png"/> 
 
 <progress_bar  
