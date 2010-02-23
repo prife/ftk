@@ -43,7 +43,7 @@
 				UseUnicodeResponseFiles="false"
 				AdditionalOptions="/D ROOT_DIR=&quot;$(SolutionDir)&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\im&quot;;&quot;$(SolutionDir)\..\..\fhw&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;$(NOINHERIT)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\im&quot;;&quot;$(SolutionDir)\..\..\fhw&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;$(NOINHERIT)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -713,6 +713,86 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_input_method_manager.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_input_method_preeditor.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\im\ftk_input_method_py.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\im\ftk_input_method_util.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_label.c"
 				>
 				<FileConfiguration
@@ -794,6 +874,26 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_log.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\im\ftk_lookup_table.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1555,6 +1655,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\im\ftk_handwrite_engine.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\ftk_icon_cache.h"
 				>
 			</File>
@@ -1587,6 +1691,26 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\ftk_input_method.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_input_method_manager.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_input_method_preeditor.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\im\ftk_input_method_py.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\im\ftk_input_method_util.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\ftk_key.h"
 				>
 			</File>
@@ -1616,6 +1740,10 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_log.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\im\ftk_lookup_table.h"
 				>
 			</File>
 			<File
