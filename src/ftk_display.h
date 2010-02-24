@@ -1,7 +1,7 @@
 /*
  * File: ftk_display.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * Brief:   interface to display output.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *

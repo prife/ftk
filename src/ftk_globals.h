@@ -41,6 +41,7 @@
 #include "ftk_bitmap_factory.h"
 #include "ftk_sources_manager.h"
 #include "ftk_input_method_manager.h"
+#include "ftk_input_method_preeditor.h"
 
 FTK_BEGIN_DECLS
 
@@ -57,7 +58,7 @@ FtkTheme*          ftk_default_theme(void);
 FtkSource*         ftk_primary_source(void);
 FtkAllocator*      ftk_default_allocator(void);
 FtkInputMethodManager* ftk_default_input_method_manager(void);
-FtkWidget*        ftk_default_input_method_preeditor(void);
+FtkImPreeditor*        ftk_default_input_method_preeditor(void);
 
 void ftk_set_font(FtkFont* font);
 void ftk_set_display(FtkDisplay* display);
@@ -72,7 +73,7 @@ void ftk_set_theme(FtkTheme* theme);
 void ftk_set_primary_source(FtkSource* source);
 void ftk_set_allocator(FtkAllocator* allocator);
 void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager);
-void ftk_set_input_method_preeditor(FtkWidget* input_method_preeditor);
+void ftk_set_input_method_preeditor(FtkImPreeditor* input_method_preeditor);
 
 FTK_END_DECLS
 

@@ -281,7 +281,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_IM_PREEDIT:
 		{
-			ftk_input_method_preeditor_show(thiz, &(priv->caret_pos), event->u.extra);
+			ftk_im_show_preeditor(thiz, &(priv->caret_pos), event->u.extra);
 			break;
 		}
 		case FTK_EVT_IM_COMMIT:

@@ -738,7 +738,8 @@ static void ftk_wnd_manager_default_destroy(FtkWndManager* thiz)
 			ftk_widget_unref(win);
 		}
 
-		FTK_ZFREE(thiz, sizeof(FtkWndManager));
+		ftk_source_unref(priv->long_press_timer);
+		FTK_ZFREE(thiz, sizeof(FtkWndManager) + sizeof(PrivInfo));
 	}
 
 	return;

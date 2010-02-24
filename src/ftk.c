@@ -42,7 +42,7 @@
 #include "ftk_status_panel.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_allocator_default.h"
-#include "ftk_input_method_preeditor.h"
+#include "ftk_input_method_preeditor_default.h"
 #include "ftk_wnd_manager_default.h"
 
 #ifdef FTK_MEMORY_PROFILE
@@ -259,7 +259,7 @@ Ret ftk_init(int argc, char* argv[])
 		ftk_init_panel();
 	}
 
-	ftk_set_input_method_preeditor(ftk_input_method_preeditor_create());
+	ftk_set_input_method_preeditor(ftk_input_method_preeditor_default_create());
 
 	if(enable_cursor)
 	{

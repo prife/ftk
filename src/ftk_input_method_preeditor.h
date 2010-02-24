@@ -29,7 +29,6 @@
  *
  */
 
-
 #ifndef FTK_INPUT_METHOD_PREEDITOR_H
 #define FTK_INPUT_METHOD_PREEDITOR_H
 
@@ -37,14 +36,73 @@
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_input_method_preeditor_create(void);
-Ret ftk_input_method_preeditor_reset(FtkWidget* thiz);
-Ret ftk_input_method_preeditor_disconnect(FtkWidget* thiz);
-Ret ftk_input_method_preeditor_connect(FtkWidget* thiz, FtkWidget* editor);
-Ret ftk_input_method_preeditor_set_raw_text(FtkWidget* thiz, const char* text);
-Ret ftk_input_method_preeditor_add_candidate(FtkWidget* thiz, const char* text);
+struct _FtkImPreeditor;
+typedef struct _FtkImPreeditor FtkImPreeditor;
 
-Ret ftk_input_method_preeditor_show(FtkWidget* editor, FtkPoint* caret_pos, FtkCommitInfo* info);
+typedef Ret  (*FtkInputMethodPreeditorHide)(FtkImPreeditor* thiz);
+typedef Ret  (*FtkInputMethodPreeditorReset)(FtkImPreeditor* thiz);
+typedef Ret  (*FtkInputMethodPreeditorSetEditor)(FtkImPreeditor* thiz, FtkWidget* editor);
+typedef Ret  (*FtkInputMethodPreeditorSetRawText)(FtkImPreeditor* thiz, const char* text);
+typedef Ret  (*FtkInputMethodPreeditorAddCandidate)(FtkImPreeditor* thiz, const char* text);
+typedef Ret  (*FtkInputMethodPreeditorShow)(FtkImPreeditor* thiz, FtkPoint* caret);
+typedef void (*FtkInputMethodPreeditorDestroy)(FtkImPreeditor* thiz);
+
+struct _FtkImPreeditor
+{
+	FtkInputMethodPreeditorHide         hide;
+	FtkInputMethodPreeditorShow         show;
+	FtkInputMethodPreeditorReset        reset;
+	FtkInputMethodPreeditorSetEditor    set_editor;
+	FtkInputMethodPreeditorSetRawText   set_raw_text;
+	FtkInputMethodPreeditorAddCandidate add_candidate;
+	FtkInputMethodPreeditorDestroy      destroy;
+
+	char priv[1];
+};
+
+static inline Ret ftk_input_method_preeditor_reset(FtkImPreeditor* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->reset != NULL, RET_FAIL);
+
+	return thiz->reset(thiz);
+}
+
+static inline Ret ftk_input_method_preeditor_set_editor(FtkImPreeditor* thiz, FtkWidget* editor)
+{
+	return_val_if_fail(thiz != NULL && thiz->set_editor != NULL, RET_FAIL);
+
+	return thiz->set_editor(thiz, editor);
+}
+
+static inline Ret ftk_input_method_preeditor_set_raw_text(FtkImPreeditor* thiz, const char* text)
+{
+	return_val_if_fail(thiz != NULL && thiz->set_raw_text != NULL, RET_FAIL);
+
+	return thiz->set_raw_text(thiz, text);
+}
+
+static inline Ret ftk_input_method_preeditor_add_candidate(FtkImPreeditor* thiz, const char* text)
+{
+	return_val_if_fail(thiz != NULL && thiz->add_candidate != NULL, RET_FAIL);
+
+	return thiz->add_candidate(thiz, text);
+}
+
+static inline Ret ftk_input_method_preeditor_hide(FtkImPreeditor* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->hide != NULL, RET_FAIL);
+
+	return thiz->hide(thiz);
+}
+
+static inline Ret ftk_input_method_preeditor_show(FtkImPreeditor* thiz, FtkPoint* caret)
+{
+	return_val_if_fail(thiz != NULL && thiz->show != NULL, RET_FAIL);
+
+	return thiz->show(thiz, caret);
+}
+
+Ret ftk_im_show_preeditor(FtkWidget* editor, FtkPoint* caret_pos, FtkCommitInfo* info);
 
 FTK_END_DECLS
 

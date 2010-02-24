@@ -197,6 +197,8 @@ typedef struct _FtkCommitInfo
 #define FTK_LABEL_TOP_MARGIN  1
 #define FTK_CLIPBOARD_SIZE    1024
 #define FTK_TITLE_LENGTH      15
+#define FTK_IM_PREEDITOR_MAX_ROW     5
+
 #ifdef __cplusplus
 #define FTK_BEGIN_DECLS extern "C" {
 #define FTK_END_DECLS }

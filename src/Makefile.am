@@ -43,6 +43,7 @@ libftk_la_SOURCES=\
 	ftk_allocator.c            ftk_allocator_default.c \
 	ftk_allocator_profile.c  ftk_image_bmp_decoder.c \
 	im/ftk_lookup_table.c ftk_input_method_preeditor.c \
+	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c
 
 if ENABLE_HANDWRITE
