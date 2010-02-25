@@ -37,6 +37,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_combobox", "demo_combo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_xul", "demo_xul\demo_xul.vcproj", "{7FFDF317-5BDB-4E5D-9D8B-2E55987D7412}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_ime", "demo_ime\demo_ime.vcproj", "{37D376DD-5286-447F-8858-F94610E65BE1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -115,6 +117,10 @@ Global
 		{7FFDF317-5BDB-4E5D-9D8B-2E55987D7412}.Debug|Win32.Build.0 = Debug|Win32
 		{7FFDF317-5BDB-4E5D-9D8B-2E55987D7412}.Release|Win32.ActiveCfg = Release|Win32
 		{7FFDF317-5BDB-4E5D-9D8B-2E55987D7412}.Release|Win32.Build.0 = Release|Win32
+		{37D376DD-5286-447F-8858-F94610E65BE1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{37D376DD-5286-447F-8858-F94610E65BE1}.Debug|Win32.Build.0 = Debug|Win32
+		{37D376DD-5286-447F-8858-F94610E65BE1}.Release|Win32.ActiveCfg = Release|Win32
+		{37D376DD-5286-447F-8858-F94610E65BE1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
