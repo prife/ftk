@@ -1,3 +1,4 @@
+#include "ftk.h"
 #include "ftk_source_idle.h"
 #include "ftk_sources_manager.h"
 
@@ -12,7 +13,9 @@ int main(int argc, char* argv[])
 	int n = 64;
 	
 	FtkSource* source = NULL;
-	FtkSourcesManager* thiz = ftk_sources_manager_create(n);
+	FtkSourcesManager* thiz = NULL;
+	ftk_set_allocator(ftk_allocator_default_create());
+	thiz = ftk_sources_manager_create(n);
 	for(i = 0; i < n; i++)
 	{
 		source = ftk_source_idle_create(idle, NULL);

@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
 	int i = 0;
 	FtkSource* thiz = NULL;
 	const char* filename = argv[1] != NULL ? argv[1] : "/dev/input/event0";
+	ftk_set_allocator(ftk_allocator_default_create());
 	thiz = ftk_source_tslib_create(filename, on_event, NULL);
 	assert(ftk_source_get_fd(thiz) > 0);
 	assert(ftk_source_check(thiz) < 0);

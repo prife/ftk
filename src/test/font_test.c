@@ -1,3 +1,4 @@
+#include "ftk.h"
 #ifdef USE_FREETYPE 
 #include "ftk_font_freetype.h"
 #else
@@ -9,7 +10,8 @@ int main(int argc, char* argv[])
 	FtkGlyph glyph = {0};
 	unsigned short c = 'a';
 	FtkFont* font = NULL;
-	const char* filename = argv[1] != NULL ? argv[1] : "./unicode.fnt";
+	const char* filename = argv[1] != NULL ? argv[1] : "../../data/unicode.fnt";
+	ftk_set_allocator(ftk_allocator_default_create());
 #ifdef USE_FREETYPE 
 	font = ftk_font_freetype_create(filename, 0, 0, 16);
 #else

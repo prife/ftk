@@ -1,4 +1,5 @@
-#include  "ftk_theme.h"
+#include "ftk.h"
+#include "ftk_theme.h"
 
 const char* xml = "\
 <theme name=\"android\" >\
@@ -27,10 +28,12 @@ const char* xml = "\
 int main(int argc, char* argv[])
 {
 	FtkColor c = {0};
+	FtkTheme* thiz = NULL;
 	FtkWidgetState state = FTK_WIDGET_NORMAL;
 	FtkWidgetType type = FTK_ENTRY;
-	FtkTheme* thiz = ftk_theme_create(0);
-
+	
+	ftk_set_allocator(ftk_allocator_default_create());
+	thiz = ftk_theme_create(0);
 	assert(ftk_theme_parse_data(thiz, xml, strlen(xml)) == RET_OK);
 
 	for(; state < FTK_WIDGET_STATE_NR; state++)

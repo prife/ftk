@@ -2,7 +2,7 @@
 
 Ret timeout_quit(void* user_data)
 {
-	ftk_main_loop_quit(ftk_default_main_loop());
+	ftk_quit();
 
 	printf("%s:%d\n", __func__, __LINE__);
 	return RET_REMOVE;

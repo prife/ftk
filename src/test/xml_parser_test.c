@@ -1,3 +1,4 @@
+#include "ftk.h"
 #include "ftk_xml_parser.h"
 #include "xml_builder_dump.h"
 
@@ -30,11 +31,14 @@ char* read_file(const char* file_name)
 	return buffer;
 }
 
-
 int main(int argc, char* argv[])
 {
-	FtkXmlParser* thiz = ftk_xml_parser_create();
-	FtkXmlBuilder* builder = ftk_xml_builder_dump_create(NULL);
+	FtkXmlParser* thiz = NULL;
+	FtkXmlBuilder* builder = NULL;
+
+	ftk_set_allocator(ftk_allocator_default_create());
+	thiz = ftk_xml_parser_create();
+	builder = ftk_xml_builder_dump_create(NULL);
 	ftk_xml_parser_set_builder(thiz, builder);
 	ftk_xml_parser_parse(thiz, XML, strlen(XML));
 	

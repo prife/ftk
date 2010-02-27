@@ -1,4 +1,4 @@
-#include "ftk_globals.h"
+#include "ftk.h"
 #include "ftk_bitmap.h"
 #include "ftk_allocator_default.h"
 

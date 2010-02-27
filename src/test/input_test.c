@@ -1,3 +1,4 @@
+#include "ftk.h"
 #include "ftk_source_input.h"
 
 Ret on_event(void* user_data, FtkEvent* event)
@@ -27,6 +28,8 @@ int main(int argc, char* argv[])
 	int i = 0;
 	FtkSource* thiz = NULL;
 	const char* filename = argv[1] != NULL ? argv[1] : "/dev/input/event2";
+	
+	ftk_set_allocator(ftk_allocator_default_create());
 	thiz = ftk_source_input_create(filename, on_event, NULL);
 	assert(ftk_source_get_fd(thiz) > 0);
 	assert(ftk_source_check(thiz) < 0);

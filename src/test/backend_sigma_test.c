@@ -120,6 +120,7 @@ void mire_bitmap(FtkBitmap* bitmap)
 int main(int argc, char* argv[])
 {
 	ftk_backend_init(argc, argv);
+	ftk_set_allocator(ftk_allocator_default_create());
 	FtkDisplay* thiz = ftk_default_display();
 
 	if(thiz != NULL)

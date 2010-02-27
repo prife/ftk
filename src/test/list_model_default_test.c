@@ -1,10 +1,11 @@
-#include "ftk_list_model_default.h"
+#include "ftk.h"
 
 int main(int argc, char* argv[])
 {
 	int i = 0;
 	FtkListItemInfo info ={0};
 	FtkListItemInfo* pinfo = NULL;
+	ftk_set_allocator(ftk_allocator_default_create());
 	FtkListModel* thiz = ftk_list_model_default_create(0, NULL);
 	
 	for(i = 0; i < 100; i++)

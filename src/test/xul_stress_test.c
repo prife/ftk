@@ -1,19 +1,11 @@
 #include "ftk.h"
 #include "ftk_xul.h"
 
-const char* t1 = "<window> </window>";
-
 #define IDC_QUIT 100
-
-const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
-{
-	snprintf(out_path, FTK_MAX_PATH, "%s/%s", TESTDATA_DIR, path);
-
-	return out_path;
-}
 
 int i = 0;
 FtkWidget* win[100] = {0};
+const char* t1 = "<window> </window>";
 
 static Ret timeout(void* ctx)
 {
@@ -55,3 +47,4 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+

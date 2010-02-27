@@ -14,6 +14,7 @@ int main(int argc, char* argv[])
 {
 	int n = 0;
 
+	ftk_set_allocator(ftk_allocator_default_create());
 	FtkSource* thiz = ftk_source_timer_create(1500, my_action, &n);
 	while(1)
 	{

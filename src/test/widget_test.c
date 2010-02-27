@@ -28,12 +28,13 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#include "ftk_widget.h"
+#include "ftk.h"
 
 int main(int argc, char* argv[])
 {
 	FtkColor color = {0};
-	FtkWidget* thiz = calloc(1, sizeof(FtkWidget));
+	ftk_set_allocator(ftk_allocator_default_create());
+	FtkWidget* thiz = FTK_ZALLOC(sizeof(FtkWidget));
 	FtkCanvas* canvas = ftk_canvas_create(240, 320, color);
 	ftk_widget_init(thiz, 1, 100);
 	ftk_widget_set_canvas(thiz, canvas);
@@ -52,8 +53,6 @@ int main(int argc, char* argv[])
 	ftk_widget_set_insensitive(thiz, 0);
 	assert(!ftk_widget_is_insensitive(thiz));
 	assert(!ftk_widget_is_visible(thiz));
-	ftk_widget_show(thiz, 1);
-	assert(ftk_widget_is_visible(thiz));
 	assert(!ftk_widget_is_focused(thiz));
 	ftk_widget_set_focused(thiz, 1);	
 	assert(ftk_widget_is_focused(thiz));

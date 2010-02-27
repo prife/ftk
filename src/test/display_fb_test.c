@@ -119,6 +119,7 @@ void mire_bitmap(FtkBitmap* bitmap)
 
 int main(int argc, char* argv[])
 {
+	ftk_set_allocator(ftk_allocator_default_create());
 	const char* filename = argv[1] != NULL ? argv[1] : FTK_FB_NAME;
 	FtkDisplay* thiz = ftk_display_fb_create(filename);
 

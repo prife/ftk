@@ -1,12 +1,12 @@
+#include "ftk.h"
+#include "ftk_globals.h"
 #include "ftk_main_loop.h"
 #include "ftk_source_idle.h"
 #include "ftk_source_timer.h"
 
 Ret timeout_quit(void* user_data)
 {
-	FtkMainLoop* thiz = (FtkMainLoop*)user_data;
-
-	ftk_main_loop_quit(thiz);
+	ftk_quit();
 
 	printf("%s:%d\n", __func__, __LINE__);
 	return RET_REMOVE;
@@ -27,22 +27,18 @@ Ret idle(void* user_data)
 int main(int argc, char* argv[])
 {
 	FtkSource* source = NULL;
-	FtkSourcesManager* sources_manager = ftk_sources_manager_create(64);
-	FtkMainLoop* thiz = ftk_main_loop_create(sources_manager);
+	ftk_init(argc, argv);
 
 	source = ftk_source_idle_create(idle, NULL);
-	ftk_main_loop_add_source(thiz, source);
+	ftk_main_loop_add_source(ftk_default_main_loop(), source);
 
-	source = ftk_source_timer_create(1000, timeout_repeat, thiz);
-	ftk_main_loop_add_source(thiz, source);
+	source = ftk_source_timer_create(1000, timeout_repeat, NULL);
+	ftk_main_loop_add_source(ftk_default_main_loop(), source);
 
-	source = ftk_source_timer_create(10000, timeout_quit, thiz);
-	ftk_main_loop_add_source(thiz, source);
+	source = ftk_source_timer_create(5000, timeout_quit, NULL);
+	ftk_main_loop_add_source(ftk_default_main_loop(), source);
 
-	ftk_main_loop_run(thiz);
-	fflush(stdout);
-	ftk_main_loop_destroy(thiz);
-	ftk_sources_manager_destroy(sources_manager);
+	ftk_run();
 
 	return 0;
 }

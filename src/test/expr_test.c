@@ -54,6 +54,7 @@ int main(int argc, char* argv[])
 	int i = 0;
 	double val = 0;
 
+	ftk_set_allocator(ftk_allocator_default_create());
 	while(g_aTestcase[i].expr != NULL)
 	{
 		val = ftk_expr_eval(g_aTestcase[i].expr);

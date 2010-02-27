@@ -1,3 +1,4 @@
+#include "ftk.h"
 #include "ftk_source_primary.h"
 
 Ret my_action(void* user_data)
@@ -20,6 +21,7 @@ int main(int argc, char* argv[])
 	int ret =  0;
 	fd_set fdset;
 	struct timeval tv = {0};
+	ftk_set_allocator(ftk_allocator_default_create());
 	FtkSource* thiz = ftk_source_primary_create(on_event, NULL);
 	fd = ftk_source_get_fd(thiz);
 	assert(fd >= 0);

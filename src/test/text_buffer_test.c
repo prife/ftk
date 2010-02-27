@@ -1,3 +1,4 @@
+#include "ftk.h"
 #include "ftk_text_buffer.h"
 
 void english_test(void)
@@ -59,6 +60,8 @@ void chinese_test(void)
 
 int main(int argc, char* argv[])
 {
+	ftk_set_allocator(ftk_allocator_default_create());
+
 	english_test();
 	chinese_test();
 
