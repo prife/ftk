@@ -187,7 +187,7 @@ static Ret  ftk_input_method_py_handle_event(FtkInputMethod* thiz, FtkEvent* eve
 			}
 			else
 			{
-				priv->commit_info.candidate_nr = 1;
+				priv->commit_info.candidate_nr = (priv->raw_text_size) > 0 ? 1 : 0;
 				strcpy(priv->commit_info.candidates, priv->commit_info.raw_text);
 			}
 			evt.type = FTK_EVT_IM_PREEDIT;
