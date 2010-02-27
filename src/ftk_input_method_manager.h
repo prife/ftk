@@ -38,7 +38,7 @@ struct _FtkInputMethodManager;
 typedef struct _FtkInputMethodManager FtkInputMethodManager;
 
 FtkInputMethodManager* ftk_input_method_manager_create(void);
-Ret  ftk_input_method_manager_count(FtkInputMethodManager* thiz);
+size_t  ftk_input_method_manager_count(FtkInputMethodManager* thiz);
 Ret  ftk_input_method_manager_get(FtkInputMethodManager* thiz, size_t index, FtkInputMethod** im);
 Ret  ftk_input_method_manager_register(FtkInputMethodManager* thiz, FtkInputMethod* im);
 Ret  ftk_input_method_manager_unregister(FtkInputMethodManager* thiz, FtkInputMethod* im);
