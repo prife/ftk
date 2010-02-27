@@ -32,10 +32,14 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_entry_set_text(entry, "Single line editor, 也就是说你只能输入一行文字.");
 	ftk_entry_set_input_method(entry, 2);
 	
-	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);
+	button = ftk_button_create(win, width/4, height/2, width/2, 60);
 	ftk_widget_set_text(button, "quit");
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	ftk_window_set_focus(win, button);
+	
+	entry = ftk_entry_create(win, 10, height-60, ftk_widget_width(win) - 20, 30);
+	ftk_entry_set_text(entry, "Single line editor");
+	ftk_entry_set_input_method(entry, 0);
 
 	ftk_widget_set_text(win, "entry demo");
 	ftk_widget_show_all(win, 1);
