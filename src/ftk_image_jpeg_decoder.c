@@ -31,12 +31,41 @@
 #include "ftk_image_jpeg_decoder.h"
 #include <setjmp.h>
 #include <jpeglib.h>
+#include "ftk_mmap.h"
 
 static Ret ftk_image_jpeg_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {
-	return_val_if_fail(filename != NULL, RET_FAIL);
+	unsigned char* data = NULL;
+	size_t length = 0;
+	char identifier[4] = {0};
+	FtkMmap* m = ftk_mmap_create(filename, 0, -1);
 
-	return (strstr(filename, ".jpg") != NULL || strstr(filename, ".jpeg") != NULL) ? RET_OK : RET_FAIL;
+	return_val_if_fail(m != NULL, RET_FAIL);
+
+	data = ftk_mmap_data(m);
+	length = ftk_mmap_length(m);
+
+	/* check SOI */
+	if (data[0] != 0xFF || data[1] != 0xD8)
+		goto fail;	/* not JPEG image */
+	/* check Identifier */
+	memcpy(identifier, data+6, sizeof(identifier));
+	if (strncmp(identifier, "JFIF", 4) != 0 && strncmp(identifier, "Exif", 4) != 0)
+		goto fail;
+	/* check EOI */
+	if (data[length-2] == 0xFF && data[length-1] == 0xD9) 
+	{
+		ftk_mmap_destroy(m);
+		return RET_OK;
+	} 
+	else
+	{
+		fprintf(stderr, "%s: JPEG EOI is incorrect: 0x%02X%02X\n", __func__, data[length-2], data[length-1]);
+		goto fail;	/* JPEG image has no end */
+	}
+fail:
+	ftk_mmap_destroy(m);
+	return RET_FAIL;
 }
 
 struct my_error_mgr
