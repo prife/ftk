@@ -25,6 +25,7 @@
 /*
  * History:
  * ================================================================
+ * 2010-03-05 Tao Yu <yut616@gmail.com> enable support of 16 bits.
  * 2009-10-06 Li XianJing <xianjimli@hotmail.com> created
  *
  */
@@ -48,6 +49,8 @@ typedef struct _PrivInfo
 	int depth;
 	int pixelsize;
 	unsigned char* bits;
+	FtkBitmapCopyFromData copy_from_data;
+	FtkBitmapCopyToData   copy_to_data;
 }PrivInfo;
 
 static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
@@ -59,7 +62,8 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	{
 		int display_width  = priv->width;
 		int display_height = priv->height;
-		ret = ftk_bitmap_copy_to_data_bgra32(bitmap, rect, priv->bits, xoffset, yoffset, display_width, display_height);
+		ret = priv->copy_to_data(bitmap, rect, 
+			priv->bits, xoffset, yoffset, display_width, display_height); 
 		XPutImage(priv->display, priv->win, priv->gc, priv->ximage,
 			xoffset, yoffset, xoffset, yoffset, rect->width, rect->height); 
 	//	ftk_logd("%s: %d %d %d %d\n", __func__, rect->x, rect->y, rect->width, rect->height);
@@ -106,7 +110,7 @@ static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	rect.width = bw;
 	rect.height = bh;
 
-	return ftk_bitmap_copy_from_data_bgra32(bitmap, priv->bits, w, h, &rect);
+	return priv->copy_from_data(bitmap, priv->bits, w, h, &rect);
 }
 
 static void ftk_display_x11_destroy(FtkDisplay* thiz)
@@ -167,20 +171,32 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 		priv->visual  = DefaultVisualOfScreen(DefaultScreenOfDisplay(display));
 		priv->depth   = DefaultDepth(display, screen);
 		
-		if(priv->depth == 8) priv->pixelsize = 1;
-		else if(priv->depth == 16) priv->pixelsize = 2;
-		else priv->pixelsize = 4;
+		if(priv->depth >= 24) priv->pixelsize = 4;
+		else if(priv->depth > 8) priv->pixelsize = 2;	/* 15, 16 */
+		else priv->pixelsize = 1;			/* 1, 2, 4, 8 */
 
-		assert(priv->pixelsize == 4);
+		ftk_logd("%s: pixelsize=%d, depth=%d\n", __func__, priv->pixelsize, priv->depth);
+
+		if(priv->pixelsize == 2)
+		{
+			priv->copy_to_data   = ftk_bitmap_copy_to_data_rgb565;
+			priv->copy_from_data = ftk_bitmap_copy_from_data_rgb565;
+		}
+		else if(priv->pixelsize == 4)
+		{
+			priv->copy_to_data   = ftk_bitmap_copy_to_data_bgra32;
+			priv->copy_from_data = ftk_bitmap_copy_from_data_bgra32;
+		}
+		else
+		{
+			assert(!"not supported depth.");
+		}
 		priv->bits = FTK_ZALLOC(width * height * priv->pixelsize);
-		/*FIXME: force to 32bit*/
 		priv->ximage = XCreateImage(display, priv->visual, priv->depth, ZPixmap,
 			0, (char*)priv->bits, width, height,
 			32, width * priv->pixelsize);
 
 		*event_source = ftk_source_x11_create(thiz, on_event, ctx);
-
-		ftk_logd("%s: pixelsize=%d\n", __func__, priv->pixelsize);
 	}
 
 	return thiz;
