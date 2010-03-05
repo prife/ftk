@@ -204,6 +204,7 @@ static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect
 	ftk_bitmap_copy_to_data_bgra32(bitmap, rect, 
 		priv->bits, xoffset, yoffset, display_width, display_height); 
 
+	/* top-down bitmap */
 	FtkColor* src = (FtkColor*)priv->bits;
 	FtkColor* dst = (FtkColor*)priv->revert_bits + ((DISPLAY_HEIGHT - 1) * DISPLAY_WIDTH);
 	for(j = 0; j < DISPLAY_HEIGHT; j++)
@@ -216,6 +217,7 @@ static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect
 		dst -= DISPLAY_WIDTH;
 	}
 
+	/* The origin for DIBs is the lower-left corner of the bitmap */
 	::SetDIBits(GetDC(priv->wnd), priv->hBitmap, 0, DISPLAY_HEIGHT, priv->revert_bits, &bmi, DIB_RGB_COLORS);
 
 	InvalidateRect(priv->wnd, NULL, FALSE);
