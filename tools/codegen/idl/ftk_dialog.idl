@@ -1,0 +1,12 @@
+#include "ftk_typedef.idl"
+
+interface FtkDialog
+{
+	FtkWidgetPtr ftk_dialog_create(in int x, in int y, in int width, in int height);
+	FtkWidgetPtr ftk_dialog_create_ex(in int attr, in int x, in int y, in int width, in int height);
+	Ret ftk_dialog_set_icon(inout FtkWidgetPtr thiz, in FtkBitmapPtr icon);
+	Ret ftk_dialog_hide_title(inout FtkWidgetPtr thiz);
+	int ftk_dialog_run(inout FtkWidgetPtr thiz);
+	Ret ftk_dialog_quit(inout FtkWidgetPtr thiz);
+	Ret ftk_dialog_quit_after(inout FtkWidgetPtr thiz, in int ms);
+};

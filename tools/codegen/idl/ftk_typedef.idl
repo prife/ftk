@@ -1,0 +1,216 @@
+
+typedef long int;
+typedef char uchar;
+typedef unsigned long size_t;
+typedef unsigned long ulong;
+typedef unsigned short ushort;
+typedef long voidPtr;
+
+enum FtkBool
+{
+	FTK_TRUE,
+	FTK_FALSE
+};
+
+struct FtkPoint
+{
+	int x;
+	int y;
+};
+
+struct FtkRect
+{
+	int x;
+	int y;
+	int width;
+	int height;
+};
+
+struct FtkColor
+{
+	uchar b;
+	uchar g;
+	uchar r;
+	uchar a;
+};
+
+enum FtkEventType
+{
+	FTK_EVT_NOP,
+	FTK_EVT_IDLE,
+	FTK_EVT_TIMER,
+	FTK_EVT_QUIT,
+	FTK_EVT_KEY_UP,
+	FTK_EVT_KEY_DOWN,
+	FTK_EVT_MOUSE_MOVE,
+	FTK_EVT_MOUSE_DOWN,
+	FTK_EVT_MOUSE_LONG_PRESS,
+	FTK_EVT_KEY_LONG_PRESS,
+	FTK_EVT_MOUSE_UP,
+	FTK_EVT_HIDE,
+	FTK_EVT_SHOW,
+	FTK_EVT_MAP,
+	FTK_EVT_UNMAP,
+	FTK_EVT_UPDATE,
+	FTK_EVT_MOVE,
+	FTK_EVT_RESIZE,
+	FTK_EVT_MOVE_RESIZE,
+	FTK_EVT_FOCUS_IN,
+	FTK_EVT_FOCUS_OUT,
+	FTK_EVT_ADD_CHILD,
+	FTK_EVT_IM_COMMIT,
+	FTK_EVT_IM_PREEDIT,
+	FTK_EVT_IM_ACT_COMMIT,
+	FTK_EVT_REMOVE_CHILD,
+	FTK_EVT_WND_DESTROY,
+	FTK_EVT_RELAYOUT_WND,
+	FTK_EVT_ADD_SOURCE,
+	FTK_EVT_REMOVE_SOURCE,
+	FTK_EVT_THEME_CHANGED,
+	FTK_EVT_LOCALE_CHANGED,
+	FTK_EVT_DISPLAY_CHANGED, 
+	FTK_EVT_TOP_WND_CHANGED,
+	FTK_EVT_WND_CONFIG_CHANGED
+};
+
+enum Ret
+{
+	RET_OK,
+	RET_FAIL,
+	RET_REMOVE,
+	RET_CONTINUE,
+	RET_FOUND,
+	RET_NEXT,
+	RET_QUIT,
+	RET_IGNORED,
+	RET_NO_TARGET,
+	RET_OUT_OF_SPACE
+};
+
+enum FtkWidgetType
+{
+	FTK_WIDGET_NONE,
+	FTK_WINDOW,
+	FTK_DIALOG,
+	FTK_WINDOW_ANY,
+	FTK_STATUS_PANEL,
+	FTK_MENU_PANEL,
+	FTK_MENU_ITEM,
+	FTK_LABEL,
+	FTK_BUTTON,
+	FTK_IMAGE,
+	FTK_ENTRY,
+	FTK_PAINTER,
+	FTK_WAIT_BOX,
+	FTK_STATUS_ITEM,
+	FTK_PROGRESS_BAR,
+	FTK_RADIO_GROUP,
+	FTK_RADIO_BUTTON,
+	FTK_CHECK_BUTTON,
+	FTK_SCROLL_VBAR,
+	FTK_SCROLL_HBAR,
+	FTK_LIST_VIEW,
+	FTK_ICON_VIEW,
+	FTK_TEXT_VIEW,
+	FTK_COMBO_BOX,
+	FTK_WIDGET_TYPE_NR
+};
+
+enum FtkLogLevel
+{
+	FTK_LOG_V,
+	FTK_LOG_D,
+	FTK_LOG_E
+};
+
+enum FtkWidgetState
+{
+	FTK_WIDGET_NORMAL,
+	FTK_WIDGET_FOCUSED,
+	FTK_WIDGET_ACTIVE,
+	FTK_WIDGET_INSENSITIVE,
+	FTK_WIDGET_STATE_NR
+};
+
+enum FtkWidgetAttr
+{
+	FTK_ATTR_TRANSPARENT     ,
+	FTK_ATTR_NO_FOCUS        ,
+	FTK_ATTR_BG_CENTER       ,
+	FTK_ATTR_BG_TILE         ,
+	FTK_ATTR_BG_FOUR_CORNER  ,
+	FTK_ATTR_INSENSITIVE     ,
+	FTK_ATTR_FOCUSED         ,
+	FTK_ATTR_IGNORE_CLOSE    ,
+	FTK_ATTR_QUIT_WHEN_CLOSE , 
+	FTK_ATTR_AUTO_LAYOUT     ,
+	FTK_ATTR_POPUP            
+};
+
+struct FtkEvent
+{
+	FtkEventType type;
+	voidPtr widget;
+	size_t time;
+	/*FIXME*/
+};
+
+/*We don't care the real value, just need the symbols*/
+const ulong FTK_H_MARGIN             = 1;
+const ulong FTK_V_MARGIN             = 1;
+const ulong FTK_MAX_PATH             = 1;
+const ulong FTK_MAX_WINDOWS          = 1;
+const ulong FTK_SPACE_WIDTH          = 1;
+const ulong FTK_MAX_IMAGE_DECODERS   = 1;
+const ulong FTK_STATUS_PANEL_HEIGHT  = 1;
+const ulong FTK_DIALOG_MARGIN        = 1;
+const ulong FTK_DIALOG_BORDER        = 1;
+const ulong FTK_DIALOG_TITLE_HEIGHT  = 1;
+const ulong FTK_SCROLL_BAR_WIDTH     = 1;
+const ulong FTK_MENU_MAX_ITEM        = 1;
+const ulong FTK_MENU_ITEM_HEIGHT     = 1;
+const ulong FTK_MENU_ITEM_WIDTH      = 1;
+const ulong FTK_POPUP_MENU_ITEM_HEIGHT = 1;
+const ulong FTK_FONT_SIZE              = 1;
+const ulong FTK_LABEL_LEFT_MARGIN      = 1;
+const ulong FTK_LABEL_TOP_MARGIN       = 1;
+const ulong FTK_CLIPBOARD_SIZE         = 1;
+const ulong FTK_TITLE_LENGTH           = 1;
+const ulong FTK_IM_PREEDITOR_MAX_ROW   = 1;
+
+typedef voidPtr FtkRectPtr;
+typedef voidPtr FtkGlyphPtr;
+typedef voidPtr FtkFontPtr;
+typedef voidPtr FtkColorPtr;
+typedef voidPtr FtkBitmapPtr;
+typedef voidPtr FtkGcPtr;
+typedef voidPtr FtkCanvasPtr;
+typedef voidPtr CStrPtr;
+typedef voidPtr StrPtr;
+typedef voidPtr StrPtr2;
+typedef voidPtr CStrPtr2;
+typedef voidPtr StrArray;
+typedef voidPtr FtkDestroy;
+typedef voidPtr FtkEventPtr;
+typedef voidPtr FtkWidgetPtr;
+typedef voidPtr FtkTranslatePath;
+typedef voidPtr FtkLoadImage;
+typedef voidPtr FtkTranslateText;
+typedef voidPtr FtkDisplayPtr;
+typedef voidPtr FtkMainLoopPtr;
+typedef voidPtr FtkWndManagerPtr;
+typedef voidPtr FtkBitmapFactoryPtr;
+typedef voidPtr FtkSourcesManagerPtr;
+typedef voidPtr FtkThemePtr;
+typedef voidPtr FtkAllocatorPtr;
+typedef voidPtr FtkInputMethodManagerPtr;
+typedef voidPtr FtkImPreeditorPtr;
+typedef voidPtr FtkSourcePtr;
+typedef voidPtr FtkImageDecoderPtr;
+typedef voidPtr FtkIconCachePtr;
+typedef voidPtr FtkOnEvent;
+typedef voidPtr FtkListener;
+typedef voidPtr FtkDisplayOnUpdate;
+typedef voidPtr FtkIconViewItemPtr;
+typedef voidPtr FtkIconViewItemPtr2;
+

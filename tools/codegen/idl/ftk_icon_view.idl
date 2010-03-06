@@ -1,0 +1,15 @@
+#include "ftk_typedef.idl"
+
+interface FtkIconView
+{
+	FtkWidgetPtr ftk_icon_view_create(inout FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+
+	Ret ftk_icon_view_set_item_size(inout FtkWidgetPtr thiz, in size_t size);
+	Ret ftk_icon_view_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListener listener, in voidPtr ctx);
+
+	size_t ftk_icon_view_get_count(inout FtkWidgetPtr thiz);
+	Ret ftk_icon_view_remove(inout FtkWidgetPtr thiz, in size_t index);
+	Ret ftk_icon_view_add(inout FtkWidgetPtr thiz, in FtkIconViewItemPtr item);
+	Ret ftk_icon_view_get(inout FtkWidgetPtr thiz, in size_t index, in FtkIconViewItemPtr2 item);
+};
+

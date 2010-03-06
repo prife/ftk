@@ -1,0 +1,46 @@
+#include "ftk_typedef.idl"
+
+interface FtkCanvas
+{
+	enum FtkBgStyle
+	{
+		FTK_BG_NORMAL,
+		FTK_BG_TILE,
+		FTK_BG_CENTER,
+		FTK_BG_FOUR_CORNER
+	};
+
+	FtkCanvasPtr ftk_canvas_create(in int w, in int h, in FtkColor clear_color);
+
+	Ret ftk_canvas_reset_gc(inout FtkCanvasPtr thiz, in FtkGcPtr gc);
+	Ret ftk_canvas_set_gc(inout FtkCanvasPtr thiz, in FtkGcPtr gc);
+
+	Ret ftk_canvas_draw_vline(inout FtkCanvasPtr thiz, in int x, in int y, in int h);
+	Ret ftk_canvas_draw_hline(inout FtkCanvasPtr thiz, in int x, in int y, in int w);
+	Ret ftk_canvas_draw_rect(inout FtkCanvasPtr thiz, in int x, in int y, in int w, in int h, in int fill);
+	Ret ftk_canvas_draw_round_rect(inout FtkCanvasPtr thiz, in int x, in int y, in int w, in int h, in int fill);
+	Ret ftk_canvas_draw_string(inout FtkCanvasPtr thiz, in int x, in int y, in CStrPtr str, in int len);
+	Ret ftk_canvas_draw_string_ex(inout FtkCanvasPtr thiz, in int x, in int y, in CStrPtr str, in int len, in int vcenter);
+
+	int ftk_canvas_font_height(inout FtkCanvasPtr thiz);
+	int ftk_canvas_get_extent(inout FtkCanvasPtr thiz, in CStrPtr str, in int len);
+	int ftk_canvas_get_char_extent(inout FtkCanvasPtr thiz, in unsigned short unicode);
+	CStrPtr ftk_canvas_calc_str_visible_range(inout FtkCanvasPtr thiz, in CStrPtr start, in int vstart, in int vend, in int width);
+
+	Ret ftk_canvas_draw_bitmap(inout FtkCanvasPtr thiz, in FtkBitmapPtr bitmap, in int x, in int y, in int w, in int h, in int xoffset, in int yoffset);
+	Ret ftk_canvas_draw_bg_image(inout FtkCanvasPtr canvas, in FtkBitmapPtr bitmap, in FtkBgStyle style, in int x, in int y, in int w, in int h);
+
+	/*the difference between draw and set is: set operation ignore the alpha channel.*/
+	Ret ftk_canvas_set_bitmap(inout FtkCanvasPtr thiz, in FtkBitmapPtr bitmap, in int x, in int y, in int w, in int h, in int xoffset, in int yoffset);
+	Ret ftk_canvas_set_bg_image(inout FtkCanvasPtr canvas, in FtkBitmapPtr bitmap, in FtkBgStyle style, in int x, in int y, in int w, in int h);
+
+	FtkColorPtr ftk_canvas_get_pixel(inout FtkCanvasPtr thiz, in int x, in int y);
+	Ret ftk_canvas_put_pixel(inout FtkCanvasPtr thiz, in int x, in int y, in FtkColor val);
+
+	FtkBitmapPtr ftk_canvas_bitmap(inout FtkCanvasPtr thiz);
+	void ftk_canvas_destroy(inout FtkCanvasPtr thiz);
+
+	int ftk_font_get_char_extent(inout FtkFontPtr thiz, in unsigned short unicode);
+	CStrPtr ftk_font_calc_str_visible_range(inout FtkFontPtr thiz, in CStrPtr start, in int vstart, in int vend, in int width);
+};
+

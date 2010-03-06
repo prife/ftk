@@ -1,0 +1,11 @@
+#include "ftk_typedef.idl"
+
+interface FtkXul
+{
+	FtkWidgetPtr ftk_xul_load(in CStrPtr xml, in int length);
+	FtkWidgetPtr ftk_xul_load_ex(in CStrPtr xml, in int length, 
+		in FtkTranslateText tr_text, in FtkLoadImage load_image);
+	FtkWidgetPtr ftk_xul_load_file(in CStrPtr filename, in 
+		FtkTranslateText tr_text, in FtkLoadImage load_image);
+};
+

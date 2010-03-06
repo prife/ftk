@@ -1,0 +1,14 @@
+#include "ftk_typedef.idl"
+
+struct FtkGlyph
+{
+	long unused;
+};
+
+interface FtkFont
+{
+	int      ftk_font_height(inout FtkFontPtr thiz);
+	Ret      ftk_font_lookup (inout FtkFontPtr thiz, inout unsigned short code, inout FtkGlyphPtr glyph);
+	void     ftk_font_destroy(inout FtkFontPtr thiz);
+};
+

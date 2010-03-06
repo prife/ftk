@@ -1,1 +1,1 @@
-SUBDIRS=cross-build fontextract imconvert
+SUBDIRS=cross-build fontextract imconvert codegen
