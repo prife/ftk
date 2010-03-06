@@ -1,0 +1,6 @@
+#include "ftk_typedef.idl"
+
+interface FtkImageBmpDecoder
+{
+	FtkImageDecoderPtr ftk_image_bmp_decoder_create();
+};
