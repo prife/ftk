@@ -1,0 +1,14 @@
+#include "ftk_typedef.idl"
+
+interface FtkSource
+{
+	Ret ftk_source_disable(inout FtkSourcePtr thiz);
+	Ret ftk_source_enable(inout FtkSourcePtr thiz);
+	int ftk_source_get_fd(inout FtkSourcePtr thiz);
+	int ftk_source_check(inout FtkSourcePtr thiz);
+	Ret ftk_source_dispatch(inout FtkSourcePtr thiz);
+	void ftk_source_destroy(inout FtkSourcePtr thiz);
+	void ftk_source_ref(inout FtkSourcePtr thiz);
+	void ftk_source_unref(inout FtkSourcePtr thiz);
+};
+

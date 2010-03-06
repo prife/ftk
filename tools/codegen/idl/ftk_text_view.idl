@@ -1,0 +1,10 @@
+#include "ftk_typedef.idl"
+
+interface FtkTextView
+{
+	FtkWidgetPtr ftk_text_view_create(inout FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+	CStrPtr ftk_text_view_get_text(inout FtkWidgetPtr thiz);
+	Ret ftk_text_view_set_text(inout FtkWidgetPtr thiz, in CStrPtr text);
+	Ret ftk_text_view_insert_text(inout FtkWidgetPtr thiz, in size_t pos, in CStrPtr text);
+	Ret ftk_text_view_set_readonly(inout FtkWidgetPtr thiz, in int ro);
+};

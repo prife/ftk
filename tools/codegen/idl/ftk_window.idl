@@ -1,0 +1,19 @@
+#include "ftk_typedef.idl"
+
+interface FtkWindow
+{
+	FtkWidgetPtr ftk_window_create(in int x, in int y, in int width, in int height);
+	FtkWidgetPtr ftk_window_create_ex(in int type, in uint attr, in int x, in int y, in int width, in int height);
+	Ret        ftk_window_set_focus(inout FtkWidgetPtr thiz, in FtkWidgetPtr focus_widget);
+	FtkWidgetPtr ftk_window_get_focus(inout FtkWidgetPtr thiz);
+	Ret        ftk_window_grab(inout FtkWidgetPtr thiz, in FtkWidgetPtr grab_widget);
+	Ret        ftk_window_ungrab(inout FtkWidgetPtr thiz, in FtkWidgetPtr grab_widget);
+	Ret        ftk_window_paint_forcely(inout FtkWidgetPtr thiz);
+	Ret        ftk_window_update(inout FtkWidgetPtr thiz, in FtkRectPtr rect);
+	int        ftk_window_is_fullscreen(inout FtkWidgetPtr thiz);
+	Ret        ftk_window_set_fullscreen(inout FtkWidgetPtr thiz, in int fullscreen);
+	Ret        ftk_window_invalidate(inout FtkWidgetPtr thiz, in FtkRectPtr rect);
+	Ret        ftk_window_set_background_with_alpha(inout FtkWidgetPtr thiz, in FtkBitmapPtr bitmap, in FtkColor bg);
+	Ret        ftk_window_enable_update(inout FtkWidgetPtr thiz);
+	Ret        ftk_window_disable_update(inout FtkWidgetPtr thiz);
+};

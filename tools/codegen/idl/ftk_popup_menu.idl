@@ -1,0 +1,9 @@
+#include "ftk_typedef.idl"
+
+interface FtkPopupMenu
+{
+	FtkWidgetPtr ftk_popup_menu_create(in int x, in int y, in int w, in int h, in FtkBitmapPtr icon, in CStrPtr title);
+	Ret ftk_popup_menu_init(inout FtkWidgetPtr thiz, in FtkListItemInfoPtr info, in size_t nr, in FtkDestroy on_item_destroy);
+	int ftk_popup_menu_get_selected(inout FtkWidgetPtr thiz);
+	int ftk_popup_menu_calc_height(in int visible_items);
+};

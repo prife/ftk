@@ -1,0 +1,6 @@
+#include "ftk_typedef.idl"
+
+interface FtkWndManagerDefault
+{
+	FtkWndManagerPtr ftk_wnd_manager_default_create(inout FtkMainLoopPtr main_loop);
+};

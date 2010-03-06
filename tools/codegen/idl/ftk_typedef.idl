@@ -1,11 +1,14 @@
 
 typedef long int;
 typedef char uchar;
+typedef unsigned long uint;
 typedef unsigned long size_t;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
 typedef long voidPtr;
-
+typedef voidPtr FtkIdle;
+typedef voidPtr FtkListItemInfoPtr;
+typedef voidPtr FtkMmapPtr;
 typedef voidPtr FtkRectPtr;
 typedef voidPtr FtkGlyphPtr;
 typedef voidPtr FtkFontPtr;
@@ -36,6 +39,7 @@ typedef voidPtr FtkImPreeditorPtr;
 typedef voidPtr FtkSourcePtr;
 typedef voidPtr FtkImageDecoderPtr;
 typedef voidPtr FtkIconCachePtr;
+typedef voidPtr FtkTimer;
 typedef voidPtr FtkOnEvent;
 typedef voidPtr FtkListener;
 typedef voidPtr FtkDisplayOnUpdate;
@@ -43,6 +47,8 @@ typedef voidPtr FtkIconViewItemPtr;
 typedef voidPtr FtkIconViewItemPtr2;
 typedef voidPtr FtkListModelPtr;
 typedef voidPtr FtkListRenderPtr;
+typedef voidPtr FtkSpritePtr;
+typedef voidPtr FtkTranslatorPtr;
 
 enum FtkBool
 {

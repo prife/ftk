@@ -30,6 +30,10 @@
 :%s/\<FtkIconViewItem\*\*/FtkIconViewItemPtr2/g
 :%s/\<FtkListModel\*/FtkListModelPtr/g
 :%s/\<FtkListRender\*/FtkListRenderPtr/g
+:%s/\<FtkMmap\*/FtkMmapPtr/g
+:%s/\<FtkTranslator\*/FtkTranslatorPtr/g
+:%s/\<FtkSprite\*/FtkSpritePtr/g
+:%s/\<FtkListItemInfo\*/FtkListItemInfoPtr/g
 :%s/\<void\*/voidPtr/g
 :%s/(Ftk/(inout Ftk/g
 :%s/, /, in /g

@@ -1,0 +1,9 @@
+#include "ftk_typedef.idl"
+
+interface FtkUtil
+{
+	unsigned short utf8_get_char (in CStrPtr p, in StrPtr2 next);
+	unsigned short utf8_get_prev_char (in CStrPtr p, in CStrPtr2 prev);
+	int utf8_count_char(in CStrPtr begin, in size_t length);
+	FtkColor ftk_parse_color(in CStrPtr value);
+};

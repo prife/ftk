@@ -1,0 +1,8 @@
+#include "ftk_typedef.idl"
+
+interface FtkWaitBox
+{
+	FtkWidgetPtr ftk_wait_box_create(inout FtkWidgetPtr parent, in int x, in int y);
+	Ret ftk_wait_box_start_waiting(inout FtkWidgetPtr thiz);
+	Ret ftk_wait_box_stop_waiting(inout FtkWidgetPtr thiz);
+};
