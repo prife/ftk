@@ -28,6 +28,8 @@
 :%s/\<FtkIconCache\*/FtkIconCachePtr/g
 :%s/\<FtkIconViewItem\*/FtkIconViewItemPtr/g
 :%s/\<FtkIconViewItem\*\*/FtkIconViewItemPtr2/g
+:%s/\<FtkListModel\*/FtkListModelPtr/g
+:%s/\<FtkListRender\*/FtkListRenderPtr/g
 :%s/\<void\*/voidPtr/g
 :%s/(Ftk/(inout Ftk/g
 :%s/, /, in /g

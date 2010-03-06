@@ -1,0 +1,11 @@
+#include "ftk_typedef.idl"
+
+interface FtkListView
+{
+	FtkWidgetPtr ftk_list_view_create(inout FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+	Ret ftk_list_view_init(inout FtkWidgetPtr thiz, in FtkListModelPtr model, in FtkListRenderPtr render, in int item_height);
+	int ftk_list_view_get_selected(inout FtkWidgetPtr thiz);
+	FtkListModelPtr ftk_list_view_get_model(inout FtkWidgetPtr thiz);
+	Ret ftk_list_view_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListener listener, in voidPtr ctx);
+
+};

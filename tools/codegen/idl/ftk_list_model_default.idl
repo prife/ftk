@@ -1,0 +1,8 @@
+#include "ftk_typedef.idl"
+
+interface FtkListModelDefault
+{
+	FtkListModelPtr ftk_list_model_default_create(in size_t init_nr, in FtkDestroy destroy);
+};
+
+

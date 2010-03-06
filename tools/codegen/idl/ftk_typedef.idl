@@ -6,10 +6,56 @@ typedef unsigned long ulong;
 typedef unsigned short ushort;
 typedef long voidPtr;
 
+typedef voidPtr FtkRectPtr;
+typedef voidPtr FtkGlyphPtr;
+typedef voidPtr FtkFontPtr;
+typedef voidPtr FtkColorPtr;
+typedef voidPtr FtkBitmapPtr;
+typedef voidPtr FtkGcPtr;
+typedef voidPtr FtkCanvasPtr;
+typedef voidPtr CStrPtr;
+typedef voidPtr StrPtr;
+typedef voidPtr StrPtr2;
+typedef voidPtr CStrPtr2;
+typedef voidPtr StrArray;
+typedef voidPtr FtkDestroy;
+typedef voidPtr FtkEventPtr;
+typedef voidPtr FtkWidgetPtr;
+typedef voidPtr FtkTranslatePath;
+typedef voidPtr FtkLoadImage;
+typedef voidPtr FtkTranslateText;
+typedef voidPtr FtkDisplayPtr;
+typedef voidPtr FtkMainLoopPtr;
+typedef voidPtr FtkWndManagerPtr;
+typedef voidPtr FtkBitmapFactoryPtr;
+typedef voidPtr FtkSourcesManagerPtr;
+typedef voidPtr FtkThemePtr;
+typedef voidPtr FtkAllocatorPtr;
+typedef voidPtr FtkInputMethodManagerPtr;
+typedef voidPtr FtkImPreeditorPtr;
+typedef voidPtr FtkSourcePtr;
+typedef voidPtr FtkImageDecoderPtr;
+typedef voidPtr FtkIconCachePtr;
+typedef voidPtr FtkOnEvent;
+typedef voidPtr FtkListener;
+typedef voidPtr FtkDisplayOnUpdate;
+typedef voidPtr FtkIconViewItemPtr;
+typedef voidPtr FtkIconViewItemPtr2;
+typedef voidPtr FtkListModelPtr;
+typedef voidPtr FtkListRenderPtr;
+
 enum FtkBool
 {
 	FTK_TRUE,
 	FTK_FALSE
+};
+
+enum FtkListItemType
+{
+	FTK_LIST_ITEM_NORMAL,
+	FTK_LIST_ITEM_RADIO,
+	FTK_LIST_ITEM_CHECK,
+	FTK_LIST_ITEM_MORE 
 };
 
 struct FtkPoint
@@ -24,6 +70,18 @@ struct FtkRect
 	int y;
 	int width;
 	int height;
+};
+
+struct FtkListItemInfo
+{
+	StrPtr text;
+	int   value; 
+	int   state; 
+	FtkListItemType type;
+	FtkBitmapPtr left_icon;
+	FtkBitmapPtr right_icon;
+	voidPtr      user_data;
+	voidPtr      extra_user_data;
 };
 
 struct FtkColor
@@ -177,41 +235,5 @@ const ulong FTK_LABEL_TOP_MARGIN       = 1;
 const ulong FTK_CLIPBOARD_SIZE         = 1;
 const ulong FTK_TITLE_LENGTH           = 1;
 const ulong FTK_IM_PREEDITOR_MAX_ROW   = 1;
-
-typedef voidPtr FtkRectPtr;
-typedef voidPtr FtkGlyphPtr;
-typedef voidPtr FtkFontPtr;
-typedef voidPtr FtkColorPtr;
-typedef voidPtr FtkBitmapPtr;
-typedef voidPtr FtkGcPtr;
-typedef voidPtr FtkCanvasPtr;
-typedef voidPtr CStrPtr;
-typedef voidPtr StrPtr;
-typedef voidPtr StrPtr2;
-typedef voidPtr CStrPtr2;
-typedef voidPtr StrArray;
-typedef voidPtr FtkDestroy;
-typedef voidPtr FtkEventPtr;
-typedef voidPtr FtkWidgetPtr;
-typedef voidPtr FtkTranslatePath;
-typedef voidPtr FtkLoadImage;
-typedef voidPtr FtkTranslateText;
-typedef voidPtr FtkDisplayPtr;
-typedef voidPtr FtkMainLoopPtr;
-typedef voidPtr FtkWndManagerPtr;
-typedef voidPtr FtkBitmapFactoryPtr;
-typedef voidPtr FtkSourcesManagerPtr;
-typedef voidPtr FtkThemePtr;
-typedef voidPtr FtkAllocatorPtr;
-typedef voidPtr FtkInputMethodManagerPtr;
-typedef voidPtr FtkImPreeditorPtr;
-typedef voidPtr FtkSourcePtr;
-typedef voidPtr FtkImageDecoderPtr;
-typedef voidPtr FtkIconCachePtr;
-typedef voidPtr FtkOnEvent;
-typedef voidPtr FtkListener;
-typedef voidPtr FtkDisplayOnUpdate;
-typedef voidPtr FtkIconViewItemPtr;
-typedef voidPtr FtkIconViewItemPtr2;
 
 
