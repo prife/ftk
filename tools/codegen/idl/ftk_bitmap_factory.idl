@@ -3,7 +3,7 @@
 interface FtkBitmapFactory
 {
 	FtkBitmapFactoryPtr ftk_bitmap_factory_create();
-	FtkBitmapPtr ftk_bitmap_factory_load(inout FtkBitmapFactoryPtr thiz, in CStrPtr filename);
-	Ret        ftk_bitmap_factory_add_decoder(inout FtkBitmapFactoryPtr thiz, in FtkImageDecoderPtr decoder);
-	void       ftk_bitmap_factory_destroy(inout FtkBitmapFactoryPtr thiz);
+	FtkBitmapPtr ftk_bitmap_factory_load(in FtkBitmapFactoryPtr thiz, in CStrPtr filename);
+	Ret        ftk_bitmap_factory_add_decoder(in FtkBitmapFactoryPtr thiz, in FtkImageDecoderPtr decoder);
+	void       ftk_bitmap_factory_destroy(in FtkBitmapFactoryPtr thiz);
 };

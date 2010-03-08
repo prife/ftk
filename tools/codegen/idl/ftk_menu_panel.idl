@@ -3,8 +3,8 @@
 interface FtkMenuPanel : FtkWidget
 {
 	FtkWidgetPtr ftk_menu_panel_create();
-	Ret ftk_menu_panel_relayout(inout FtkWidgetPtr thiz);
-	Ret ftk_menu_panel_add(inout FtkWidgetPtr thiz, in FtkWidgetPtr item);
-	Ret ftk_menu_panel_remove(inout FtkWidgetPtr thiz, in FtkWidgetPtr item);
+	Ret ftk_menu_panel_relayout(in FtkWidgetPtr thiz);
+	Ret ftk_menu_panel_add(in FtkWidgetPtr thiz, in FtkWidgetPtr item);
+	Ret ftk_menu_panel_remove(in FtkWidgetPtr thiz, in FtkWidgetPtr item);
 };
 

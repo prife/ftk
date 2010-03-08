@@ -3,9 +3,9 @@
 interface FtkBitmap
 {
 	FtkBitmapPtr ftk_bitmap_create(in int w, in int h, in FtkColor clear_color);
-	int          ftk_bitmap_width(inout FtkBitmapPtr thiz);
-	int          ftk_bitmap_height(inout FtkBitmapPtr thiz);
-	FtkColorPtr  ftk_bitmap_bits(inout FtkBitmapPtr thiz);
-	void         ftk_bitmap_ref(inout FtkBitmapPtr thiz);
-	void         ftk_bitmap_unref(inout FtkBitmapPtr thiz);
+	int          ftk_bitmap_width(in FtkBitmapPtr thiz);
+	int          ftk_bitmap_height(in FtkBitmapPtr thiz);
+	FtkColorPtr  ftk_bitmap_bits(in FtkBitmapPtr thiz);
+	void         ftk_bitmap_ref(in FtkBitmapPtr thiz);
+	void         ftk_bitmap_unref(in FtkBitmapPtr thiz);
 };

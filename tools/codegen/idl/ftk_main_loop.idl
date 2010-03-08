@@ -2,10 +2,10 @@
 
 interface FtkMainLoop
 {
-	FtkMainLoopPtr ftk_main_loop_create(inout FtkSourcesManagerPtr sources_manager);
-	Ret  ftk_main_loop_run(inout FtkMainLoopPtr thiz);
-	Ret  ftk_main_loop_quit(inout FtkMainLoopPtr thiz);
-	Ret  ftk_main_loop_add_source(inout FtkMainLoopPtr thiz, in FtkSourcePtr source);
-	Ret  ftk_main_loop_remove_source(inout FtkMainLoopPtr thiz, in FtkSourcePtr source);
-	void ftk_main_loop_destroy(inout FtkMainLoopPtr thiz);
+	FtkMainLoopPtr ftk_main_loop_create(in FtkSourcesManagerPtr sources_manager);
+	Ret  ftk_main_loop_run(in FtkMainLoopPtr thiz);
+	Ret  ftk_main_loop_quit(in FtkMainLoopPtr thiz);
+	Ret  ftk_main_loop_add_source(in FtkMainLoopPtr thiz, in FtkSourcePtr source);
+	Ret  ftk_main_loop_remove_source(in FtkMainLoopPtr thiz, in FtkSourcePtr source);
+	void ftk_main_loop_destroy(in FtkMainLoopPtr thiz);
 };

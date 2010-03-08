@@ -2,5 +2,5 @@
 
 interface FtkWndManagerDefault
 {
-	FtkWndManagerPtr ftk_wnd_manager_default_create(inout FtkMainLoopPtr main_loop);
+	FtkWndManagerPtr ftk_wnd_manager_default_create(in FtkMainLoopPtr main_loop);
 };

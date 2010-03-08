@@ -2,5 +2,5 @@
 
 interface FtkSourcePrimary
 {
-	FtkSourcePtr ftk_source_primary_create(inout FtkOnEventFunc on_event, in voidPtr user_data);
+	FtkSourcePtr ftk_source_primary_create(in FtkOnEventFunc on_event, in voidPtr user_data);
 };

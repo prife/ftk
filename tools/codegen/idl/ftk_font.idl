@@ -7,8 +7,8 @@ struct FtkGlyph
 
 interface FtkFont
 {
-	int      ftk_font_height(inout FtkFontPtr thiz);
-	Ret      ftk_font_lookup (inout FtkFontPtr thiz, inout unsigned short code, inout FtkGlyphPtr glyph);
-	void     ftk_font_destroy(inout FtkFontPtr thiz);
+	int      ftk_font_height(in FtkFontPtr thiz);
+	Ret      ftk_font_lookup (in FtkFontPtr thiz, in unsigned short code, in FtkGlyphPtr glyph);
+	void     ftk_font_destroy(in FtkFontPtr thiz);
 };
 

@@ -3,15 +3,15 @@
 interface  FtkSourcesManager
 {
 	FtkSourcesManagerPtr ftk_sources_manager_create(in int max_source_nr);
-	Ret  ftk_sources_manager_add(inout FtkSourcesManagerPtr thiz, in FtkSourcePtr source);
-	Ret  ftk_sources_manager_remove(inout FtkSourcesManagerPtr thiz, in FtkSourcePtr source);
+	Ret  ftk_sources_manager_add(in FtkSourcesManagerPtr thiz, in FtkSourcePtr source);
+	Ret  ftk_sources_manager_remove(in FtkSourcesManagerPtr thiz, in FtkSourcePtr source);
 
-	int  ftk_sources_manager_get_count(inout FtkSourcesManagerPtr thiz);
-	FtkSourcePtr ftk_sources_manager_get(inout FtkSourcesManagerPtr thiz, in int i);
+	int  ftk_sources_manager_get_count(in FtkSourcesManagerPtr thiz);
+	FtkSourcePtr ftk_sources_manager_get(in FtkSourcesManagerPtr thiz, in int i);
 
 	/*Tell the main-loop break current loop and reselect.*/
-	int ftk_sources_manager_need_refresh(inout FtkSourcesManagerPtr thiz);
-	Ret  ftk_sources_manager_set_need_refresh(inout FtkSourcesManagerPtr thiz);
+	int ftk_sources_manager_need_refresh(in FtkSourcesManagerPtr thiz);
+	Ret  ftk_sources_manager_set_need_refresh(in FtkSourcesManagerPtr thiz);
 
-	void ftk_sources_manager_destroy(inout FtkSourcesManagerPtr thiz);
+	void ftk_sources_manager_destroy(in FtkSourcesManagerPtr thiz);
 };

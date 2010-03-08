@@ -3,6 +3,6 @@
 interface FtkIconCache
 {
 	FtkIconCachePtr ftk_icon_cache_create(in StrArray root_path, in CStrPtr rel_path);
-	FtkBitmapPtr ftk_icon_cache_load(inout FtkIconCachePtr thiz, in CStrPtr filename);
-	void ftk_icon_cache_destroy(inout FtkIconCachePtr thiz);
+	FtkBitmapPtr ftk_icon_cache_load(in FtkIconCachePtr thiz, in CStrPtr filename);
+	void ftk_icon_cache_destroy(in FtkIconCachePtr thiz);
 };

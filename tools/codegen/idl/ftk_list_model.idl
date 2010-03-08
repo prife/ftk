@@ -2,14 +2,14 @@
 
 interface FtkListModel
 {
-	Ret ftk_list_model_enable_notify(inout FtkListModelPtr thiz);
-	Ret ftk_list_model_disable_notify(inout FtkListModelPtr thiz);
-	Ret ftk_list_model_set_changed_listener(inout FtkListModelPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
-	Ret ftk_list_model_notify(inout FtkListModelPtr thiz);
-	Ret ftk_list_model_add(inout FtkListModelPtr thiz, in voidPtr item);
-	Ret ftk_list_model_remove(inout FtkListModelPtr thiz, in size_t index);
-	Ret ftk_list_model_reset(inout FtkListModelPtr thiz);
-	int ftk_list_model_get_total(inout FtkListModelPtr thiz);
-	Ret ftk_list_model_get_data(inout FtkListModelPtr thiz, in size_t index, in voidPtr ret);
-	void ftk_list_model_destroy(inout FtkListModelPtr thiz);
+	Ret ftk_list_model_enable_notify(in FtkListModelPtr thiz);
+	Ret ftk_list_model_disable_notify(in FtkListModelPtr thiz);
+	Ret ftk_list_model_set_changed_listener(in FtkListModelPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
+	Ret ftk_list_model_notify(in FtkListModelPtr thiz);
+	Ret ftk_list_model_add(in FtkListModelPtr thiz, in voidPtr item);
+	Ret ftk_list_model_remove(in FtkListModelPtr thiz, in size_t index);
+	Ret ftk_list_model_reset(in FtkListModelPtr thiz);
+	int ftk_list_model_get_total(in FtkListModelPtr thiz);
+	Ret ftk_list_model_get_data(in FtkListModelPtr thiz, in size_t index, in voidPtr ret);
+	void ftk_list_model_destroy(in FtkListModelPtr thiz);
 };

@@ -2,8 +2,8 @@
 
 interface FtkImageDecoder
 {
-	Ret ftk_image_decoder_match(inout FtkImageDecoderPtr thiz, in CStrPtr filename);
-	FtkBitmapPtr ftk_image_decoder_decode(inout FtkImageDecoderPtr thiz, in CStrPtr filename);
-	void ftk_image_decoder_destroy(inout FtkImageDecoderPtr thiz);
+	Ret ftk_image_decoder_match(in FtkImageDecoderPtr thiz, in CStrPtr filename);
+	FtkBitmapPtr ftk_image_decoder_decode(in FtkImageDecoderPtr thiz, in CStrPtr filename);
+	void ftk_image_decoder_destroy(in FtkImageDecoderPtr thiz);
 };
 

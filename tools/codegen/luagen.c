@@ -495,9 +495,11 @@ static void lua_code_gen_get_func(CodeGenInfo *info, const char* name, TypeInfo*
 {
 	g_string_append_printf(info->str_funcs, "static int tolua_get_%s_%s(lua_State* tolua_S)\n", name, var);
 	g_string_append(info->str_funcs, "{\n");
+	g_string_append_printf(info->str_funcs, "	%s retv;\n", type_info->lua_name);
 	g_string_append_printf(info->str_funcs, "	%s* thiz = (%s*)  tolua_tousertype(tolua_S, 1, 0);\n", name, name);
 	g_string_append(info->str_funcs, "	return_val_if_fail(thiz != NULL, 0);\n");
-	g_string_append_printf(info->str_funcs, "	%s(tolua_S, (%s)thiz->%s);\n", type_info->push, type_info->lua_name, var);
+	g_string_append_printf(info->str_funcs, "	retv = (%s)thiz->%s;\n", type_info->lua_name, var);
+	g_string_append_printf(info->str_funcs, type_info->push, type_info->lua_name);
 	g_string_append(info->str_funcs, "\n	return 1;\n");
 	g_string_append(info->str_funcs, "}\n\n");
 

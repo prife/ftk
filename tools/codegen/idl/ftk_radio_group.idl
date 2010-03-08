@@ -2,7 +2,7 @@
 
 interface FtkRadioGroup : FtkWidget
 {
-	FtkWidgetPtr ftk_radio_group_create(inout FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
-	Ret  ftk_radio_group_set_checked(inout FtkWidgetPtr thiz, in FtkWidgetPtr radio);
+	FtkWidgetPtr ftk_radio_group_create(in FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+	Ret  ftk_radio_group_set_checked(in FtkWidgetPtr thiz, in FtkWidgetPtr radio);
 };
 

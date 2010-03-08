@@ -2,6 +2,6 @@
 
 interface FtkMenuItem : FtkWidget
 {
-	FtkWidgetPtr ftk_menu_item_create(inout FtkWidgetPtr parent);
-	Ret ftk_menu_item_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
+	FtkWidgetPtr ftk_menu_item_create(in FtkWidgetPtr parent);
+	Ret ftk_menu_item_set_clicked_listener(in FtkWidgetPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
 };
