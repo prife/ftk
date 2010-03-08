@@ -131,3 +131,30 @@ TOLUA_API int tolua_getfieldboolean (lua_State* L, int lo, int index, int def)
  lua_pop(L,1);
  return v;
 }
+
+char** tolua_tostrings(lua_State *L, size_t index, char** def) 
+{
+	int i = 0;
+	int n = 0;
+	const char** strs = NULL;
+
+	luaL_checktype(L, index, LUA_TTABLE);
+	n = luaL_getn(L, index);
+
+	if(n <= 0) return def;
+
+	strs = malloc((n + 1) * sizeof(char*));
+
+	for (i=1; i<=n; i++)
+	{		
+		int top = 0;
+		lua_rawgeti(L, index, i);  // push t[i]
+		top = lua_gettop(L);
+		strs[i-1] = lua_tostring(L, top);
+		printf("%s\n", strs[i-1]);
+	}
+	strs[n] = NULL;
+
+	return strs;
+}
+
