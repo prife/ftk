@@ -2,8 +2,8 @@
 
 interface FtkDisplay
 {
-	Ret ftk_display_reg_update_listener(inout FtkDisplayPtr thiz, in FtkDisplayOnUpdate on_update, in voidPtr ctx);
-	Ret ftk_display_unreg_update_listener(inout FtkDisplayPtr thiz, in FtkDisplayOnUpdate on_update, in voidPtr ctx);
+	Ret ftk_display_reg_update_listener(inout FtkDisplayPtr thiz, in FtkDisplayOnUpdateFunc on_update, in voidPtr ctx);
+	Ret ftk_display_unreg_update_listener(inout FtkDisplayPtr thiz, in FtkDisplayOnUpdateFunc on_update, in voidPtr ctx);
 	Ret ftk_display_notify(inout FtkDisplayPtr thiz, in int before, in FtkBitmapPtr bitmap, in FtkRectPtr rect, in int xoffset, in int yoffset);
 	Ret ftk_display_update(inout FtkDisplayPtr thiz, in FtkBitmapPtr bitmap, in FtkRectPtr rect, in int xoffset, in int yoffset);
 	Ret ftk_display_update_and_notify(inout FtkDisplayPtr thiz, in 	FtkBitmapPtr bitmap, in FtkRectPtr rect, in int xoffset, in int yoffset);

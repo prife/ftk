@@ -1,6 +1,6 @@
-#include "ftk_typedef.idl"
+#include "ftk_widget.idl"
 
-interface FtkMenuPanel
+interface FtkMenuPanel : FtkWidget
 {
 	FtkWidgetPtr ftk_menu_panel_create();
 	Ret ftk_menu_panel_relayout(inout FtkWidgetPtr thiz);

@@ -1,6 +1,6 @@
-#include "ftk_typedef.idl"
+#include "ftk_window.idl"
 
-interface FtkDialog
+interface FtkDialog : FtkWindow
 {
 	FtkWidgetPtr ftk_dialog_create(in int x, in int y, in int width, in int height);
 	FtkWidgetPtr ftk_dialog_create_ex(in int attr, in int x, in int y, in int width, in int height);

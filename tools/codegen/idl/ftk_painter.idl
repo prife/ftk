@@ -1,7 +1,7 @@
-#include "ftk_typedef.idl"
+#include "ftk_widget.idl"
 
-interface FtkPainter
+interface FtkPainter : FtkWidget
 {
-	FtkWidget* ftk_painter_create(FtkWidget* parent, int x, int y, int width, int height);
-	Ret ftk_painter_set_paint_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+	FtkWidgetPtr ftk_painter_create(inout FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+	Ret ftk_painter_set_paint_listener(inout FtkWidgetPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
 };

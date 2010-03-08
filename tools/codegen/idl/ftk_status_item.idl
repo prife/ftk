@@ -1,9 +1,9 @@
-#include "ftk_typedef.idl"
+#include "ftk_widget.idl"
 
-interface FtkStatusItem
+interface FtkStatusItem : FtkWidget
 {
 	FtkWidgetPtr ftk_status_item_create(inout FtkWidgetPtr parent, in int pos, in int width);
 	Ret ftk_status_item_set_position(inout FtkWidgetPtr thiz, in int pos);
 	int ftk_status_item_get_position(inout FtkWidgetPtr thiz);
-	Ret ftk_status_item_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListener listener, in voidPtr ctx);
+	Ret ftk_status_item_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
 };

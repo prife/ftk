@@ -1,7 +1,7 @@
-#include "ftk_typedef.idl"
+#include "ftk_widget.idl"
 
-interface FtkMenuItem
+interface FtkMenuItem : FtkWidget
 {
 	FtkWidgetPtr ftk_menu_item_create(inout FtkWidgetPtr parent);
-	Ret ftk_menu_item_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListener listener, in voidPtr ctx);
+	Ret ftk_menu_item_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
 };

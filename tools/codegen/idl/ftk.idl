@@ -1,6 +1,6 @@
 #include "ftk_typedef.idl"
 
-interface FtkGlobalFunc
+interface Ftk
 {
 	FtkFontPtr          ftk_default_font();
 	FtkDisplayPtr       ftk_default_display();
@@ -32,8 +32,7 @@ interface FtkGlobalFunc
 	void ftk_set_input_method_manager(in FtkInputMethodManagerPtr input_manager_manager);
 	void ftk_set_input_method_preeditor(in FtkImPreeditorPtr input_method_preeditor);
 
-
-	Ret  ftk_init(in int argc, in StrPtr StrArray);
+	Ret ftk_init(in int argc, in StrArray argv);
 	Ret  ftk_run();
 	void ftk_quit();
 };

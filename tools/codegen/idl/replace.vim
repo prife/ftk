@@ -37,4 +37,12 @@
 :%s/\<void\*/voidPtr/g
 :%s/(Ftk/(inout Ftk/g
 :%s/, /, in /g
+:%s/\<FtkTimer\>/FtkTimerFunc/g
+:%s/\<FtkOnEvent\>/FtkOnEventFunc/g
+:%s/\<FtkListener\>/FtkListenerFunc/g
+:%s/\<FtkDestroy\>/FtkDestroyFunc/g
+:%s/\<FtkLoadImage\>/FtkLoadImageFunc/g
+:%s/\<FtkTranslateText\>/FtkTranslateTextFunc/g
+:%s/\<FtkTranslatePath\>/FtkTranslatePathFunc/g
+:%s/\<FtkDisplayOnUpdate\>/FtkDisplayOnUpdateFunc/g
 :wq

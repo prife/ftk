@@ -1,8 +1,8 @@
-#include "ftk_typedef.idl"
+#include "ftk_widget.idl"
 
-interface FtkButton
+interface FtkButton : FtkWidget
 {
 	FtkWidgetPtr ftk_button_create(in FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
-	Ret ftk_button_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListener listener, in voidPtr ctx);
+	Ret ftk_button_set_clicked_listener(inout FtkWidgetPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
 };
 
