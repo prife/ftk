@@ -118,8 +118,20 @@ static int ltk_widget_lookup(lua_State *L)
 	return 1;
 }
 
+static int ltk_pass_strings(lua_State *L)
+{
+	int n1 = lua_tonumber(L, 1);
+	char** array = tolua_tostrings(L, 2, NULL);
+	int n2 = lua_tonumber(L, 3);
+	char* str = lua_tostring(L, 4);
+	free(array);
+	printf("n1=%d n2=%d str=%s\n", n1, n2, str);
+	return 1;
+}
+
 static const struct luaL_reg mylib [] =
 {
+	{"ltk_pass_strings",               ltk_pass_strings},
 	{"ftk_init",               ltk_init},
 	{"ftk_run",                ltk_run},
 	{"ftk_quit",               ltk_quit},

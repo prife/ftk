@@ -132,7 +132,7 @@ TOLUA_API int tolua_getfieldboolean (lua_State* L, int lo, int index, int def)
  return v;
 }
 
-char** tolua_tostrings(lua_State *L, size_t index, char** def) 
+TOLUA_API char** tolua_tostrings(lua_State *L, size_t index, char** def) 
 {
 	int i = 0;
 	int n = 0;
