@@ -118,17 +118,47 @@ static FtkBitmap* load_png (const char *filename)
 	}
 	else if(info_ptr->color_type == PNG_COLOR_TYPE_RGB)
 	{
-		for(y = 0; y < h; y++)
+		if(0 == info_ptr->num_trans)
 		{
-			src = row_pointers[y];
-			for(x = 0; x < w; x++)
+			for(y = 0; y < h; y++)
 			{
-				dst->r = src[0];
-				dst->g = src[1];
-				dst->b = src[2];
-				dst->a = 0xff;
-				src +=3;
-				dst++;
+				src = row_pointers[y];
+				for(x = 0; x < w; x++)
+				{
+					dst->r = src[0];
+					dst->g = src[1];
+					dst->b = src[2];
+					dst->a = 0xff;
+					src += 3;
+					dst++;
+				}
+			}
+		}
+		else 
+		{
+			/* According to PNG_EXPAND_tRNS to build in an alpha channel using trans_value. */
+			png_byte red = png_ptr->trans_values.red & 0xff;
+			png_byte green = png_ptr->trans_values.green & 0xff;
+			png_byte blue = png_ptr->trans_values.blue & 0xff;
+			for(y = 0; y < h; y++)
+			{
+				src = row_pointers[y];
+				for(x = 0; x < w; x++)
+				{
+					if(src[0] == red && src[1] == green && src[2] == blue)
+					{
+						dst->a = 0;
+					}
+					else
+					{
+						dst->a = 0xff;
+					}
+					dst->r = src[0];
+					dst->g = src[1];
+					dst->b = src[2];
+					src += 3;
+					dst++;
+				}
 			}
 		}
 	}
@@ -142,8 +172,8 @@ static FtkBitmap* load_png (const char *filename)
 		FTK_FREE(row_pointers[y]);
 	}
 	FTK_FREE(row_pointers);
-   	png_destroy_read_struct(&png_ptr, &info_ptr, NULL); 
-    fclose(fp);
+	png_destroy_read_struct(&png_ptr, &info_ptr, NULL); 
+	fclose(fp);
 
 	return bitmap;
 }

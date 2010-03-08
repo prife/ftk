@@ -25,12 +25,18 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_image_set_image(image, 
 		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/png_RGB_tRNS.png", TESTDATA_DIR);
+	image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
+	ftk_image_set_image(image, 
+		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
+	ftk_widget_set_attr(image, FTK_ATTR_TRANSPARENT);
+
 	ftk_snprintf(filename, FTK_MAX_PATH, "%s/Calculator.png", TESTDATA_DIR);
 	image = ftk_image_create(win, ftk_widget_width(win)/2, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
 		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
-	
+
 	ftk_snprintf(filename, FTK_MAX_PATH, "%s/t8.bmp", TESTDATA_DIR);
 	image = ftk_image_create(win, 0, ftk_widget_height(win)/2, ftk_widget_width(win)/2, ftk_widget_height(win)/2);
 	ftk_image_set_image(image, 
