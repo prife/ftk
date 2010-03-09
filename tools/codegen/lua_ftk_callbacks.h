@@ -11,4 +11,6 @@ void lua_ftk_destroy_func(void* user_data);
 Ret lua_ftk_idle_func(void* user_data);
 Ret lua_ftk_timer_func(void* user_data);
 
+void lua_callbacks_init(lua_State* L);
+
 #endif/*LUA_FTK_CALLBACKS_H*/

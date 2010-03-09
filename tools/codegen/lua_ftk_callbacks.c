@@ -1,4 +1,16 @@
 #include <ftk.h>
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
+
+static lua_State* s_current_L = NULL;
+
+void lua_callbacks_init(lua_State* L)
+{
+	s_current_L = L;
+
+	return;
+}
 
 Ret lua_ftk_prepare_options_menu_func(void* ctx, FtkWidget* menu_panel)
 {
@@ -46,8 +58,16 @@ int lua_ftk_compare_func(const void* obj1, const void* obj2)
 
 Ret lua_ftk_listener_func(void* user_data, void* obj)
 {
-	printf("%s:%d\n", __func__, __LINE__);
+    Ret ret = RET_OK;
+    const char* func = user_data;
+    lua_State *L = s_current_L;
 
-	return RET_OK;
+    lua_getglobal(L, func);
+    lua_pushlightuserdata(L, obj);
+    lua_call(L, 1, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return ret;
 }
 
