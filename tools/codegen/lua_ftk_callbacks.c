@@ -1,5 +1,10 @@
 #include <ftk.h>
 
+Ret lua_ftk_prepare_options_menu_func(void* ctx, FtkWidget* menu_panel)
+{
+	return RET_OK;
+}
+
 Ret lua_ftk_on_event_func(void* user_data, FtkEvent* event)
 {
 	printf("%s:%d\n", __func__, __LINE__);

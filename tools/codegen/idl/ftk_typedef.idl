@@ -50,6 +50,7 @@ typedef voidPtr FtkLoadImageFunc;
 typedef voidPtr FtkTranslateTextFunc;
 typedef voidPtr FtkTranslatePathFunc;
 typedef voidPtr FtkDisplayOnUpdateFunc;
+typedef voidPtr FtkPrepareOptionsMenuFunc;
 
 enum FtkBool
 {

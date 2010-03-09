@@ -3,9 +3,5 @@
 interface FtkXul
 {
 	FtkWidgetPtr ftk_xul_load(in CStrPtr xml, in int length);
-	FtkWidgetPtr ftk_xul_load_ex(in CStrPtr xml, in int length, 
-		in FtkTranslateTextFunc tr_text, in FtkLoadImageFunc load_image);
-	FtkWidgetPtr ftk_xul_load_file(in CStrPtr filename, in 
-		FtkTranslateTextFunc tr_text, in FtkLoadImageFunc load_image);
 };
 
