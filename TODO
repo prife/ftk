@@ -1,16 +1,7 @@
-o basic widget.
-  listview
-  scrollbar.
-
-o input method
+o lua bindings(working).
 o screen rotate
-o mouse cursor
-o cairo
-
 o document
-o port to windows.
-o Javascript and XML binding.
-o port j2me
 o port webkit
+o port j2me
 o desktop env.
 
