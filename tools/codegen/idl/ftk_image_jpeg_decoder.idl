@@ -1,6 +1,0 @@
-#include "ftk_typedef.idl"
-
-interface FtkImageJpegDecoder
-{
-	FtkImageDecoderPtr ftk_image_jpeg_decoder_create();
-};
