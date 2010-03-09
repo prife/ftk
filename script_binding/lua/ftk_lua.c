@@ -261,6 +261,9 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_wait_box_init(L);
 	tolua_ftk_wnd_manager_init(L);
 #endif
+
+	lua_callbacks_init(L);
+
 	return 1;
 }
 
