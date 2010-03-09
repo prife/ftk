@@ -36,6 +36,59 @@
 #include "ftk_xul.h"
 #include "ftk_lua.h"
 
+#include "lua_ftk_callbacks.h"
+#include "lua_ftk_bitmap_factory.h"
+#include "lua_ftk_bitmap.h"
+#include "lua_ftk_button.h"
+#include "lua_ftk_callbacks.h"
+#include "lua_ftk_canvas.h"
+#include "lua_ftk_check_button.h"
+#include "lua_ftk_clipboard.h"
+#include "lua_ftk_combo_box.h"
+#include "lua_ftk_display.h"
+#include "lua_ftk_entry.h"
+#include "lua_ftk_font.h"
+#include "lua_ftk_gc.h"
+#include "lua_ftk.h"
+#include "lua_ftk_icon_cache.h"
+#include "lua_ftk_icon_view.h"
+#include "lua_ftk_image_decoder.h"
+#include "lua_ftk_image.h"
+#include "lua_ftk_label.h"
+#include "lua_ftk_list_model_default.h"
+#include "lua_ftk_list_model.h"
+#include "lua_ftk_list_render_default.h"
+#include "lua_ftk_list_render.h"
+#include "lua_ftk_list_view.h"
+#include "lua_ftk_main_loop.h"
+#include "lua_ftk_menu_item.h"
+#include "lua_ftk_menu_panel.h"
+#include "lua_ftk_message_box.h"
+#include "lua_ftk_mmap.h"
+#include "lua_ftk_painter.h"
+#include "lua_ftk_popup_menu.h"
+#include "lua_ftk_progress_bar.h"
+#include "lua_ftk_radio_group.h"
+#include "lua_ftk_scroll_bar.h"
+#include "lua_ftk_source.h"
+#include "lua_ftk_source_idle.h"
+#include "lua_ftk_sources_manager.h"
+#include "lua_ftk_source_timer.h"
+#include "lua_ftk_sprite.h"
+#include "lua_ftk_status_item.h"
+#include "lua_ftk_status_panel.h"
+#include "lua_ftk_text_view.h"
+#include "lua_ftk_theme.h"
+#include "lua_ftk_translator.h"
+#include "lua_ftk_typedef.h"
+#include "lua_ftk_wait_box.h"
+#include "lua_ftk_widget.h"
+#include "lua_ftk_window.h"
+#include "lua_ftk_wnd_manager.h"
+#include "lua_ftk_xul.h"
+#include "lua_ftk_dialog.h"
+#include "lua_ftk_app_window.h"
+
 static int ltk_init(lua_State *L)
 {
 	lua_pushinteger(L, ftk_init(0, NULL));
@@ -149,11 +202,65 @@ int ftk_lua_init(lua_State *L)
 	
 	for (; lib->func; lib++) 
 	{
-		lua_register(L, lib->name, lib->func);
+	//	lua_register(L, lib->name, lib->func);
 	}
 
 	s_current_L = L;
-
+	tolua_ftk_init(L);
+	tolua_ftk_widget_init(L);
+	tolua_ftk_window_init(L);
+	tolua_ftk_xul_init(L);
+	tolua_ftk_app_window_init(L);
+	tolua_ftk_label_init(L);
+	tolua_ftk_button_init(L);
+	tolua_ftk_entry_init(L);
+#if 0
+	tolua_ftk_bitmap_factory_init(L);
+	tolua_ftk_bitmap_init(L);
+	tolua_ftk_callbacks_init(L);
+	tolua_ftk_canvas_init(L);
+	tolua_ftk_check_button_init(L);
+	tolua_ftk_clipboard_init(L);
+	tolua_ftk_combo_box_init(L);
+	tolua_ftk_dialog_init(L);
+	tolua_ftk_display_init(L);
+	tolua_ftk_font_default_init(L);
+	tolua_ftk_font_free_type_init(L);
+	tolua_ftk_font_init(L);
+	tolua_ftk_gc_init(L);
+	tolua_ftk_icon_cache_init(L);
+	tolua_ftk_icon_view_init(L);
+	tolua_ftk_image_decoder_init(L);
+	tolua_ftk_image_init(L);
+	tolua_ftk_list_model_default_init(L);
+	tolua_ftk_list_model_init(L);
+	tolua_ftk_list_render_default_init(L);
+	tolua_ftk_list_render_init(L);
+	tolua_ftk_list_view_init(L);
+	tolua_ftk_main_loop_init(L);
+	tolua_ftk_menu_item_init(L);
+	tolua_ftk_menu_panel_init(L);
+	tolua_ftk_message_box_init(L);
+	tolua_ftk_mmap_init(L);
+	tolua_ftk_painter_init(L);
+	tolua_ftk_popup_menu_init(L);
+	tolua_ftk_progress_bar_init(L);
+	tolua_ftk_radio_group_init(L);
+	tolua_ftk_scroll_bar_init(L);
+	tolua_ftk_source_init(L);
+	tolua_ftk_source_idle_init(L);
+	tolua_ftk_sources_manager_init(L);
+	tolua_ftk_source_timer_init(L);
+	tolua_ftk_sprite_init(L);
+	tolua_ftk_status_item_init(L);
+	tolua_ftk_status_panel_init(L);
+	tolua_ftk_text_view_init(L);
+	tolua_ftk_theme_init(L);
+	tolua_ftk_translator_init(L);
+	tolua_ftk_typedef_init(L);
+	tolua_ftk_wait_box_init(L);
+	tolua_ftk_wnd_manager_init(L);
+#endif
 	return 1;
 }
 
