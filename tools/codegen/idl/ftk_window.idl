@@ -2,8 +2,6 @@
 
 interface FtkWindow : FtkWidget
 {
-	FtkWidgetPtr ftk_window_create(in int x, in int y, in int width, in int height);
-	FtkWidgetPtr ftk_window_create_ex(in int type, in uint attr, in int x, in int y, in int width, in int height);
 	Ret        ftk_window_set_focus(in FtkWidgetPtr thiz, in FtkWidgetPtr focus_widget);
 	FtkWidgetPtr ftk_window_get_focus(in FtkWidgetPtr thiz);
 	Ret        ftk_window_grab(in FtkWidgetPtr thiz, in FtkWidgetPtr grab_widget);

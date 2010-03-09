@@ -1,8 +1,9 @@
 #include "ftk_widget.idl"
 
+typedef voidPtr FtkEntryPtr;
 interface FtkEntry : FtkWidget
 {
-	FtkWidgetPtr ftk_entry_create(in FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+	FtkEntryPtr ftk_entry_create(in FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
 	CStrPtr ftk_entry_get_text(in FtkWidgetPtr thiz);
 	Ret ftk_entry_set_text(in FtkWidgetPtr thiz, in CStrPtr text);
 	Ret ftk_entry_set_input_method(in FtkWidgetPtr thiz, in int index);
