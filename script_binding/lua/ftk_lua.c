@@ -36,17 +36,25 @@
 #include "ftk_xul.h"
 #include "ftk_lua.h"
 
+#include "lua_ftk_xul.h"
+#include "lua_ftk_widget.h"
+#include "lua_ftk_window.h"
+#include "lua_ftk_label.h"
+#include "lua_ftk_entry.h"
+#include "lua_ftk_button.h"
+#include "lua_ftk_typedef.h"
+#include "lua_ftk_app_window.h"
+
+#if 0
 #include "lua_ftk_callbacks.h"
 #include "lua_ftk_bitmap_factory.h"
 #include "lua_ftk_bitmap.h"
-#include "lua_ftk_button.h"
 #include "lua_ftk_callbacks.h"
 #include "lua_ftk_canvas.h"
 #include "lua_ftk_check_button.h"
 #include "lua_ftk_clipboard.h"
 #include "lua_ftk_combo_box.h"
 #include "lua_ftk_display.h"
-#include "lua_ftk_entry.h"
 #include "lua_ftk_font.h"
 #include "lua_ftk_gc.h"
 #include "lua_ftk.h"
@@ -54,7 +62,6 @@
 #include "lua_ftk_icon_view.h"
 #include "lua_ftk_image_decoder.h"
 #include "lua_ftk_image.h"
-#include "lua_ftk_label.h"
 #include "lua_ftk_list_model_default.h"
 #include "lua_ftk_list_model.h"
 #include "lua_ftk_list_render_default.h"
@@ -80,14 +87,10 @@
 #include "lua_ftk_text_view.h"
 #include "lua_ftk_theme.h"
 #include "lua_ftk_translator.h"
-#include "lua_ftk_typedef.h"
 #include "lua_ftk_wait_box.h"
-#include "lua_ftk_widget.h"
-#include "lua_ftk_window.h"
 #include "lua_ftk_wnd_manager.h"
-#include "lua_ftk_xul.h"
 #include "lua_ftk_dialog.h"
-#include "lua_ftk_app_window.h"
+#endif
 
 static int ltk_init(lua_State *L)
 {
