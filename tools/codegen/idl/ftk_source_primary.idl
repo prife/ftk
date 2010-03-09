@@ -1,6 +1,0 @@
-#include "ftk_typedef.idl"
-
-interface FtkSourcePrimary
-{
-	FtkSourcePtr ftk_source_primary_create(in FtkOnEventFunc on_event, in voidPtr user_data);
-};

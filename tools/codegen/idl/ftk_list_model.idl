@@ -10,6 +10,6 @@ interface FtkListModel
 	Ret ftk_list_model_remove(in FtkListModelPtr thiz, in size_t index);
 	Ret ftk_list_model_reset(in FtkListModelPtr thiz);
 	int ftk_list_model_get_total(in FtkListModelPtr thiz);
-	Ret ftk_list_model_get_data(in FtkListModelPtr thiz, in size_t index, in voidPtr ret);
+	Ret ftk_list_model_get_data(in FtkListModelPtr thiz, in size_t index, out voidPtr ret);
 	void ftk_list_model_destroy(in FtkListModelPtr thiz);
 };

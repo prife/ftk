@@ -11,8 +11,8 @@ interface FtkWndManager
 	Ret  ftk_wnd_manager_get_work_area(in FtkWndManagerPtr thiz, in FtkRectPtr rect);
 	Ret  ftk_wnd_manager_queue_event(in FtkWndManagerPtr thiz, in FtkEventPtr event);
 	Ret  ftk_wnd_manager_dispatch_event(in FtkWndManagerPtr thiz, in FtkEventPtr event);
-	Ret  ftk_wnd_manager_add_global_listener(in FtkWndManagerPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
-	Ret  ftk_wnd_manager_remove_global_listener(in FtkWndManagerPtr thiz, in FtkListenerFunc listener, in voidPtr ctx);
+	Ret  ftk_wnd_manager_add_global_listener(in FtkWndManagerPtr thiz, in FtkListenerFunc listener);
+	Ret  ftk_wnd_manager_remove_global_listener(in FtkWndManagerPtr thiz, in FtkListenerFunc listener);
 	void ftk_wnd_manager_destroy(in FtkWndManagerPtr thiz);
 };
 
