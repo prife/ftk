@@ -1,6 +1,6 @@
 xml=[[
 <?xml version="1.0" encoding="utf-8"?>
-<window value="Hello FTK!" attrs="FTK_ATTR_QUIT_WHEN_CLOSE">
+<window value="Hello FTK!" attrs="$FTK_ATTR_QUIT_WHEN_CLOSE">
 </window>
 ]]
 

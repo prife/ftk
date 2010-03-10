@@ -302,13 +302,13 @@ static int lua_ftk_widget_has_attr(lua_State* tolua_S)
 	tolua_Error err = {0};
 	int retv;
 	FtkWidget* thiz;
-	FtkWidgetAttr attr;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isusertype(tolua_S, 2, "FtkWidgetAttr", 0, &err);
+	int attr;
+	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isnumber(tolua_S, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(tolua_S, 1, 0);
-	attr = *(FtkWidgetAttr*)tolua_tousertype(tolua_S, 2, 0);
+	attr = tolua_tonumber(tolua_S, 2, 0);
 	retv = ftk_widget_has_attr(thiz, attr);
 	tolua_pushnumber(tolua_S, (lua_Number)retv);
 
@@ -318,7 +318,7 @@ static int lua_ftk_widget_has_attr(lua_State* tolua_S)
 static int lua_ftk_widget_state(lua_State* tolua_S)
 {
 	tolua_Error err = {0};
-	FtkWidgetState retv;
+	int retv;
 	FtkWidget* thiz;
 	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err);
 
@@ -326,7 +326,7 @@ static int lua_ftk_widget_state(lua_State* tolua_S)
 
 	thiz = tolua_tousertype(tolua_S, 1, 0);
 	retv = ftk_widget_state(thiz);
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkWidgetState");
+	tolua_pushnumber(tolua_S, (lua_Number)retv);
 
 	return 1;
 }
@@ -649,13 +649,13 @@ static int lua_ftk_widget_set_attr(lua_State* tolua_S)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	FtkWidgetAttr attr;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isusertype(tolua_S, 2, "FtkWidgetAttr", 0, &err);
+	int attr;
+	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isnumber(tolua_S, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(tolua_S, 1, 0);
-	attr = *(FtkWidgetAttr*)tolua_tousertype(tolua_S, 2, 0);
+	attr = tolua_tonumber(tolua_S, 2, 0);
 	ftk_widget_set_attr(thiz, attr);
 
 	return 1;
@@ -665,13 +665,13 @@ static int lua_ftk_widget_unset_attr(lua_State* tolua_S)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	FtkWidgetAttr attr;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isusertype(tolua_S, 2, "FtkWidgetAttr", 0, &err);
+	int attr;
+	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isnumber(tolua_S, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(tolua_S, 1, 0);
-	attr = *(FtkWidgetAttr*)tolua_tousertype(tolua_S, 2, 0);
+	attr = tolua_tonumber(tolua_S, 2, 0);
 	ftk_widget_unset_attr(thiz, attr);
 
 	return 1;
@@ -697,14 +697,14 @@ static int lua_ftk_widget_set_gc(lua_State* tolua_S)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	FtkWidgetState state;
+	int state;
 	FtkGc* gc;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isusertype(tolua_S, 2, "FtkWidgetState", 0, &err) && tolua_isusertype(tolua_S, 3, "FtkGc", 0, &err);
+	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isnumber(tolua_S, 2, 0, &err) && tolua_isusertype(tolua_S, 3, "FtkGc", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(tolua_S, 1, 0);
-	state = *(FtkWidgetState*)tolua_tousertype(tolua_S, 2, 0);
+	state = tolua_tonumber(tolua_S, 2, 0);
 	gc = tolua_tousertype(tolua_S, 3, 0);
 	ftk_widget_set_gc(thiz, state, gc);
 
@@ -715,14 +715,14 @@ static int lua_ftk_widget_reset_gc(lua_State* tolua_S)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	FtkWidgetState state;
+	int state;
 	FtkGc* gc;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isusertype(tolua_S, 2, "FtkWidgetState", 0, &err) && tolua_isusertype(tolua_S, 3, "FtkGc", 0, &err);
+	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isnumber(tolua_S, 2, 0, &err) && tolua_isusertype(tolua_S, 3, "FtkGc", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(tolua_S, 1, 0);
-	state = *(FtkWidgetState*)tolua_tousertype(tolua_S, 2, 0);
+	state = tolua_tonumber(tolua_S, 2, 0);
 	gc = tolua_tousertype(tolua_S, 3, 0);
 	ftk_widget_reset_gc(thiz, state, gc);
 

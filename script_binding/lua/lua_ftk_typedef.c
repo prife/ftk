@@ -218,6 +218,10 @@ static void tolua_reg_types (lua_State* tolua_S)
 	tolua_constant(tolua_S, "FTK_KEY_WLAN", FTK_KEY_WLAN);
 	tolua_constant(tolua_S, "FTK_KEY_POWER", FTK_KEY_POWER);
 	tolua_constant(tolua_S, "FTK_KEY_MENU", FTK_KEY_MENU);
+	tolua_constant(tolua_S, "FTK_BG_NORMAL", FTK_BG_NORMAL);
+	tolua_constant(tolua_S, "FTK_BG_TILE", FTK_BG_TILE);
+	tolua_constant(tolua_S, "FTK_BG_CENTER", FTK_BG_CENTER);
+	tolua_constant(tolua_S, "FTK_BG_FOUR_CORNER", FTK_BG_FOUR_CORNER);
 }
 
 static int tolua_get_FtkPoint_x(lua_State* tolua_S)
