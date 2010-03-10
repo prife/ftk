@@ -1,6 +1,6 @@
-#include "ftk_typedef.idl"
+#include "ftk_source.idl"
 
-interface FtkSourceIdle
+interface FtkSourceIdle : FtkSource
 {
 	FtkSourcePtr ftk_source_idle_create(in FtkIdle action, in voidPtr user_data);
 };

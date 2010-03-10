@@ -339,6 +339,15 @@ enum FtkKey
 	FTK_KEY_MENU        
 };
 
+enum FtkBgStyle
+{
+	FTK_BG_NORMAL,
+	FTK_BG_TILE,
+	FTK_BG_CENTER,
+	FTK_BG_FOUR_CORNER
+};
+
+
 /*We don't care the real value, just need the symbols*/
 const ulong FTK_H_MARGIN             = 1;
 const ulong FTK_V_MARGIN             = 1;

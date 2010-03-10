@@ -2,14 +2,6 @@
 
 interface FtkCanvas
 {
-	enum FtkBgStyle
-	{
-		FTK_BG_NORMAL,
-		FTK_BG_TILE,
-		FTK_BG_CENTER,
-		FTK_BG_FOUR_CORNER
-	};
-
 	FtkCanvasPtr ftk_canvas_create(in int w, in int h, in FtkColor clear_color);
 
 	Ret ftk_canvas_reset_gc(in FtkCanvasPtr thiz, in FtkGcPtr gc);

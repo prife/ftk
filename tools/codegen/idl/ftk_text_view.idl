@@ -1,8 +1,9 @@
 #include "ftk_widget.idl"
 
+typedef voidPtr FtkTextViewPtr;
 interface FtkTextView : FtkWidget
 {
-	FtkWidgetPtr ftk_text_view_create(in FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
+	FtkTextViewPtr ftk_text_view_create(in FtkWidgetPtr parent, in int x, in int y, in int width, in int height);
 	CStrPtr ftk_text_view_get_text(in FtkWidgetPtr thiz);
 	Ret ftk_text_view_set_text(in FtkWidgetPtr thiz, in CStrPtr text);
 	Ret ftk_text_view_insert_text(in FtkWidgetPtr thiz, in size_t pos, in CStrPtr text);
