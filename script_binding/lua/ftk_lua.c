@@ -48,6 +48,7 @@
 #include "lua_ftk_source_idle.h"
 #include "lua_ftk_source_timer.h"
 #include "lua_ftk_main_loop.h"
+#include "lua_ftk_combo_box.h"
 
 #if 0
 #include "lua_ftk_callbacks.h"
@@ -57,7 +58,6 @@
 #include "lua_ftk_canvas.h"
 #include "lua_ftk_check_button.h"
 #include "lua_ftk_clipboard.h"
-#include "lua_ftk_combo_box.h"
 #include "lua_ftk_display.h"
 #include "lua_ftk_font.h"
 #include "lua_ftk.h"
@@ -221,6 +221,7 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_source_timer_init(L);
 	tolua_ftk_main_loop_init(L);
 	tolua_ftk_typedef_init(L);
+	tolua_ftk_combo_box_init(L);
 #if 0
 	tolua_ftk_bitmap_factory_init(L);
 	tolua_ftk_bitmap_init(L);
@@ -228,7 +229,6 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_canvas_init(L);
 	tolua_ftk_check_button_init(L);
 	tolua_ftk_clipboard_init(L);
-	tolua_ftk_combo_box_init(L);
 	tolua_ftk_dialog_init(L);
 	tolua_ftk_display_init(L);
 	tolua_ftk_font_default_init(L);
