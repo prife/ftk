@@ -48,7 +48,6 @@
 #include "lua_ftk_source_idle.h"
 #include "lua_ftk_source_timer.h"
 #include "lua_ftk_main_loop.h"
-#include "lua_ftk_gc.h"
 
 #if 0
 #include "lua_ftk_callbacks.h"
@@ -222,7 +221,6 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_source_timer_init(L);
 	tolua_ftk_main_loop_init(L);
 	tolua_ftk_typedef_init(L);
-	tolua_ftk_gc_init(L);
 #if 0
 	tolua_ftk_bitmap_factory_init(L);
 	tolua_ftk_bitmap_init(L);
