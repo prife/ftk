@@ -6,7 +6,6 @@ typedef unsigned long size_t;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
 typedef long voidPtr;
-typedef voidPtr FtkIdle;
 typedef voidPtr FtkListItemInfoPtr;
 typedef voidPtr FtkMmapPtr;
 typedef voidPtr FtkRectPtr;
@@ -42,6 +41,7 @@ typedef voidPtr FtkListRenderPtr;
 typedef voidPtr FtkSpritePtr;
 typedef voidPtr FtkTranslatorPtr;
 
+typedef voidPtr FtkIdleFunc;
 typedef voidPtr FtkTimerFunc;
 typedef voidPtr FtkOnEventFunc;
 typedef voidPtr FtkListenerFunc;
@@ -66,10 +66,40 @@ enum FtkListItemType
 	FTK_LIST_ITEM_MORE 
 };
 
+enum FtkGcMask
+{
+	FTK_GC_BG        ,
+	FTK_GC_FG        ,
+	FTK_GC_FONT      ,
+	FTK_GC_ALPHA     ,
+	FTK_GC_BITMAP    ,
+	FTK_GC_LINE_MASK 
+};
+
 struct FtkPoint
 {
 	int x;
 	int y;
+};
+
+struct FtkColor
+{
+	uchar b;
+	uchar g;
+	uchar r;
+	uchar a;
+};
+
+struct FtkGc
+{
+	int ref;
+	int mask;
+	FtkColor   bg;
+	FtkColor   fg;
+	FtkFontPtr   font;
+	FtkBitmapPtr bitmap;
+	StrPtr alpha;
+	int line_mask;
 };
 
 struct FtkRect
@@ -90,14 +120,6 @@ struct FtkListItemInfo
 	FtkBitmapPtr right_icon;
 	voidPtr      user_data;
 	voidPtr      extra_user_data;
-};
-
-struct FtkColor
-{
-	uchar b;
-	uchar g;
-	uchar r;
-	uchar a;
 };
 
 enum FtkEventType

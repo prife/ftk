@@ -2,5 +2,5 @@
 
 interface FtkSourceIdle : FtkSource
 {
-	FtkSourcePtr ftk_source_idle_create(in FtkIdle action, in voidPtr user_data);
+	FtkSourcePtr ftk_source_idle_create(in FtkIdleFunc action);
 };

@@ -247,6 +247,7 @@ static gboolean lua_code_gen_end_interface(CodeGenInfo *info)
 typedef struct _TypeInfo
 {
 	gboolean is_function;
+	gboolean is_userdata;
 
 	char name[STR_LENGTH+1];
 	char lua_name[STR_LENGTH+1];
@@ -454,6 +455,7 @@ static int get_type_info(IDL_tree type, TypeInfo* info)
 		else
 		{
 			userdata_type_init(type_str, info);
+			info->is_userdata = TRUE;
 		}
 		strcpy(info->orignal_name, type_str);
 	}
@@ -593,7 +595,14 @@ static void lua_code_gen_get_func(CodeGenInfo *info, const char* name, TypeInfo*
 	g_string_append_printf(info->str_funcs, "	%s retv;\n", type_info->lua_name);
 	g_string_append_printf(info->str_funcs, "	%s* thiz = (%s*)  tolua_tousertype(L, 1, 0);\n", name, name);
 	g_string_append(info->str_funcs, "	return_val_if_fail(thiz != NULL, 0);\n");
-	g_string_append_printf(info->str_funcs, "	retv = (%s)thiz->%s;\n", type_info->lua_name, var);
+	if(type_info->is_userdata)
+	{
+		g_string_append_printf(info->str_funcs, "	retv = (%s)&(thiz->%s);\n", type_info->lua_name, var);
+	}
+	else
+	{
+		g_string_append_printf(info->str_funcs, "	retv = (%s)thiz->%s;\n", type_info->lua_name, var);
+	}
 	g_string_append_printf(info->str_funcs, type_info->push, type_info->lua_name);
 	g_string_append(info->str_funcs, "\n	return 1;\n");
 	g_string_append(info->str_funcs, "}\n\n");
@@ -607,7 +616,7 @@ static void lua_code_gen_set_func(CodeGenInfo *info, const char* name, TypeInfo*
 	g_string_append(info->str_funcs, "{\n");
 	g_string_append_printf(info->str_funcs, "	%s* thiz = (%s*)  tolua_tousertype(L, 1, 0);\n", name, name);
 	g_string_append(info->str_funcs, "	return_val_if_fail(thiz != NULL, 0);\n");
-	g_string_append_printf(info->str_funcs, "	thiz->%s = ((%s) %s(L, 2, 0));\n", var, type_info->name, type_info->pop);
+	g_string_append_printf(info->str_funcs, "	thiz->%s = (%s) (%s(L, 2, 0));\n", var, type_info->name, type_info->pop);
 	g_string_append(info->str_funcs, "\n	return 1;\n");
 	g_string_append(info->str_funcs, "}\n\n");
 
@@ -633,7 +642,7 @@ static gboolean lua_code_gen_on_struct(struct _IDL_TYPE_STRUCT s, CodeGenInfo *i
 	g_string_append_printf(info->str_funcs, "int lua_%s_create(lua_State* L)\n", lower_name);
 	g_string_append_printf(info->str_funcs, "{\n");
 	g_string_append_printf(info->str_funcs, "	%s* retv = calloc(1, sizeof(%s));\n", name, name);
-	g_string_append_printf(info->str_funcs, "	tolua_pushusertype(L, (void*)retv, \"%s\");\n\n", name);
+	g_string_append_printf(info->str_funcs, "	tolua_pushusertype_and_takeownership(L, (void*)retv, \"%s\");\n\n", name);
 	g_string_append_printf(info->str_funcs, "	return 1;\n}\n\n");
 
 	g_string_append_printf(info->str_init, "	tolua_beginmodule(L, \"%s\");\n", name);
