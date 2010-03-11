@@ -2,12 +2,12 @@
 #include "lua_ftk_label.h"
 #include "lua_ftk_callbacks.h"
 
-static void tolua_reg_types (lua_State* tolua_S)
+static void tolua_reg_types (lua_State* L)
 {
-	tolua_usertype(tolua_S, "FtkLabel");
+	tolua_usertype(L, "FtkLabel");
 }
 
-static int lua_ftk_label_create(lua_State* tolua_S)
+static int lua_ftk_label_create(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkLabel* retv;
@@ -16,32 +16,33 @@ static int lua_ftk_label_create(lua_State* tolua_S)
 	int y;
 	int width;
 	int height;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err) && tolua_isnumber(tolua_S, 2, 0, &err) && tolua_isnumber(tolua_S, 3, 0, &err) && tolua_isnumber(tolua_S, 4, 0, &err) && tolua_isnumber(tolua_S, 5, 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err) && tolua_isnumber(L, 4, 0, &err) && tolua_isnumber(L, 5, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	parent = tolua_tousertype(tolua_S, 1, 0);
-	x = tolua_tonumber(tolua_S, 2, 0);
-	y = tolua_tonumber(tolua_S, 3, 0);
-	width = tolua_tonumber(tolua_S, 4, 0);
-	height = tolua_tonumber(tolua_S, 5, 0);
+	parent = tolua_tousertype(L, 1, 0);
+	x = tolua_tonumber(L, 2, 0);
+	y = tolua_tonumber(L, 3, 0);
+	width = tolua_tonumber(L, 4, 0);
+	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_label_create(parent, x, y, width, height);
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkLabel");
+	tolua_pushusertype(L, (void*)retv, "FtkLabel");
 
 	return 1;
 }
 
-int tolua_ftk_label_init(lua_State* tolua_S)
+int tolua_ftk_label_init(lua_State* L)
 {
-	tolua_open(tolua_S);
-	tolua_reg_types(tolua_S);
-	tolua_module(tolua_S, NULL, 0);
-	tolua_beginmodule(tolua_S, NULL);
-	tolua_cclass(tolua_S,"FtkLabel", "FtkLabel", "FtkWidget", NULL);
-	tolua_beginmodule(tolua_S, "FtkLabel");
-	tolua_function(tolua_S, "Create", lua_ftk_label_create);
-	tolua_endmodule(tolua_S);
-	tolua_endmodule(tolua_S);
+	tolua_open(L);
+	tolua_reg_types(L);
+	tolua_module(L, NULL, 0);
+	tolua_beginmodule(L, NULL);
+	tolua_cclass(L,"FtkLabel", "FtkLabel", "FtkWidget", NULL);
+	tolua_beginmodule(L, "FtkLabel");
+	tolua_function(L, "Create", lua_ftk_label_create);
+	tolua_endmodule(L);
+	tolua_endmodule(L);
+
 
 	return 1;
 }

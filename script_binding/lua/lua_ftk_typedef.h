@@ -6,7 +6,7 @@
 #ifndef LUA_FtkTypedef_H
 #define LUA_FtkTypedef_H
 
-int tolua_ftk_typedef_init(lua_State* tolua_S);
+int tolua_ftk_typedef_init(lua_State* L);
 
 #endif/*LUA_FtkTypedef_H*/
 

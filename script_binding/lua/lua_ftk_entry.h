@@ -8,7 +8,7 @@
 #define LUA_FtkEntry_H
 
 typedef FtkWidget FtkEntry;
-int tolua_ftk_entry_init(lua_State* tolua_S);
+int tolua_ftk_entry_init(lua_State* L);
 
 #endif/*LUA_FtkEntry_H*/
 

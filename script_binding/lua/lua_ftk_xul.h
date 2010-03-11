@@ -6,7 +6,7 @@
 #ifndef LUA_FtkXul_H
 #define LUA_FtkXul_H
 
-int tolua_ftk_xul_init(lua_State* tolua_S);
+int tolua_ftk_xul_init(lua_State* L);
 
 #endif/*LUA_FtkXul_H*/
 

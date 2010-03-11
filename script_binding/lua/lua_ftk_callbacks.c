@@ -40,14 +40,32 @@ void lua_ftk_destroy_func(void* user_data)
 
 Ret lua_ftk_idle_func(void* user_data)
 {
+    Ret ret = RET_OK;
+    const char* func = user_data;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+    lua_call(L, 0, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
 	printf("%s:%d\n", __func__, __LINE__);
-	return RET_OK;
+    return ret;
 }
 
 Ret lua_ftk_timer_func(void* user_data)
 {
-	printf("%s:%d\n", __func__, __LINE__);
-	return RET_OK;
+    Ret ret = RET_OK;
+    const char* func = user_data;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+    lua_call(L, 0, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+	printf("%s:%d ret=%d\n", __func__, __LINE__, ret);
+    return ret;
 }
 
 int lua_ftk_compare_func(const void* obj1, const void* obj2)

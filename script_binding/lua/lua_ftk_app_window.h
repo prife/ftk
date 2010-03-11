@@ -8,7 +8,7 @@
 #define LUA_FtkAppWindow_H
 
 typedef FtkWindow FtkAppWindow;
-int tolua_ftk_app_window_init(lua_State* tolua_S);
+int tolua_ftk_app_window_init(lua_State* L);
 
 #endif/*LUA_FtkAppWindow_H*/
 

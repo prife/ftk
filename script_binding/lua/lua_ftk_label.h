@@ -8,7 +8,7 @@
 #define LUA_FtkLabel_H
 
 typedef FtkWidget FtkLabel;
-int tolua_ftk_label_init(lua_State* tolua_S);
+int tolua_ftk_label_init(lua_State* L);
 
 #endif/*LUA_FtkLabel_H*/
 

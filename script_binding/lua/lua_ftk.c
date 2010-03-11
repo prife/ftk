@@ -2,409 +2,410 @@
 #include "lua_ftk.h"
 #include "lua_ftk_callbacks.h"
 
-static void tolua_reg_types (lua_State* tolua_S)
+static void tolua_reg_types (lua_State* L)
 {
-	tolua_usertype(tolua_S, "Ftk");
+	tolua_usertype(L, "Ftk");
 }
 
-static int lua_ftk_default_font(lua_State* tolua_S)
+static int lua_ftk_default_font(lua_State* L)
 {
 	FtkFont* retv;
 	retv = ftk_default_font();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkFont");
+	tolua_pushusertype(L, (void*)retv, "FtkFont");
 
 	return 1;
 }
 
-static int lua_ftk_default_display(lua_State* tolua_S)
+static int lua_ftk_default_display(lua_State* L)
 {
 	FtkDisplay* retv;
 	retv = ftk_default_display();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkDisplay");
+	tolua_pushusertype(L, (void*)retv, "FtkDisplay");
 
 	return 1;
 }
 
-static int lua_ftk_default_main_loop(lua_State* tolua_S)
+static int lua_ftk_default_main_loop(lua_State* L)
 {
 	FtkMainLoop* retv;
 	retv = ftk_default_main_loop();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkMainLoop");
+	tolua_pushusertype(L, (void*)retv, "FtkMainLoop");
 
 	return 1;
 }
 
-static int lua_ftk_default_log_level(lua_State* tolua_S)
+static int lua_ftk_default_log_level(lua_State* L)
 {
 	FtkLogLevel retv;
 	retv = ftk_default_log_level();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkLogLevel");
+	tolua_pushusertype(L, (void*)retv, "FtkLogLevel");
 
 	return 1;
 }
 
-static int lua_ftk_default_wnd_manager(lua_State* tolua_S)
+static int lua_ftk_default_wnd_manager(lua_State* L)
 {
 	FtkWndManager* retv;
 	retv = ftk_default_wnd_manager();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkWndManager");
+	tolua_pushusertype(L, (void*)retv, "FtkWndManager");
 
 	return 1;
 }
 
-static int lua_ftk_default_status_panel(lua_State* tolua_S)
+static int lua_ftk_default_status_panel(lua_State* L)
 {
 	FtkWidget* retv;
 	retv = ftk_default_status_panel();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkWidget");
+	tolua_pushusertype(L, (void*)retv, "FtkWidget");
 
 	return 1;
 }
 
-static int lua_ftk_default_bitmap_factory(lua_State* tolua_S)
+static int lua_ftk_default_bitmap_factory(lua_State* L)
 {
 	FtkBitmapFactory* retv;
 	retv = ftk_default_bitmap_factory();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkBitmapFactory");
+	tolua_pushusertype(L, (void*)retv, "FtkBitmapFactory");
 
 	return 1;
 }
 
-static int lua_ftk_default_sources_manager(lua_State* tolua_S)
+static int lua_ftk_default_sources_manager(lua_State* L)
 {
 	FtkSourcesManager* retv;
 	retv = ftk_default_sources_manager();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkSourcesManager");
+	tolua_pushusertype(L, (void*)retv, "FtkSourcesManager");
 
 	return 1;
 }
 
-static int lua_ftk_shared_canvas(lua_State* tolua_S)
+static int lua_ftk_shared_canvas(lua_State* L)
 {
 	FtkCanvas* retv;
 	retv = ftk_shared_canvas();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkCanvas");
+	tolua_pushusertype(L, (void*)retv, "FtkCanvas");
 
 	return 1;
 }
 
-static int lua_ftk_default_theme(lua_State* tolua_S)
+static int lua_ftk_default_theme(lua_State* L)
 {
 	FtkTheme* retv;
 	retv = ftk_default_theme();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkTheme");
+	tolua_pushusertype(L, (void*)retv, "FtkTheme");
 
 	return 1;
 }
 
-static int lua_ftk_primary_source(lua_State* tolua_S)
+static int lua_ftk_primary_source(lua_State* L)
 {
 	FtkSource* retv;
 	retv = ftk_primary_source();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkSource");
+	tolua_pushusertype(L, (void*)retv, "FtkSource");
 
 	return 1;
 }
 
-static int lua_ftk_default_allocator(lua_State* tolua_S)
+static int lua_ftk_default_allocator(lua_State* L)
 {
 	FtkAllocator* retv;
 	retv = ftk_default_allocator();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkAllocator");
+	tolua_pushusertype(L, (void*)retv, "FtkAllocator");
 
 	return 1;
 }
 
-static int lua_ftk_default_input_method_manager(lua_State* tolua_S)
+static int lua_ftk_default_input_method_manager(lua_State* L)
 {
 	FtkInputMethodManager* retv;
 	retv = ftk_default_input_method_manager();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkInputMethodManager");
+	tolua_pushusertype(L, (void*)retv, "FtkInputMethodManager");
 
 	return 1;
 }
 
-static int lua_ftk_default_input_method_preeditor(lua_State* tolua_S)
+static int lua_ftk_default_input_method_preeditor(lua_State* L)
 {
 	FtkImPreeditor* retv;
 	retv = ftk_default_input_method_preeditor();
-	tolua_pushusertype(tolua_S, (void*)retv, "FtkImPreeditor");
+	tolua_pushusertype(L, (void*)retv, "FtkImPreeditor");
 
 	return 1;
 }
 
-static int lua_ftk_set_font(lua_State* tolua_S)
+static int lua_ftk_set_font(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkFont* font;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkFont", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkFont", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	font = tolua_tousertype(tolua_S, 1, 0);
+	font = tolua_tousertype(L, 1, 0);
 	ftk_set_font(font);
 
 	return 1;
 }
 
-static int lua_ftk_set_display(lua_State* tolua_S)
+static int lua_ftk_set_display(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkDisplay* display;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkDisplay", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkDisplay", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	display = tolua_tousertype(tolua_S, 1, 0);
+	display = tolua_tousertype(L, 1, 0);
 	ftk_set_display(display);
 
 	return 1;
 }
 
-static int lua_ftk_set_main_loop(lua_State* tolua_S)
+static int lua_ftk_set_main_loop(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkMainLoop* main_loop;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkMainLoop", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkMainLoop", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	main_loop = tolua_tousertype(tolua_S, 1, 0);
+	main_loop = tolua_tousertype(L, 1, 0);
 	ftk_set_main_loop(main_loop);
 
 	return 1;
 }
 
-static int lua_ftk_set_log_level(lua_State* tolua_S)
+static int lua_ftk_set_log_level(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkLogLevel level;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkLogLevel", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkLogLevel", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	level = *(FtkLogLevel*)tolua_tousertype(tolua_S, 1, 0);
+	level = *(FtkLogLevel*)tolua_tousertype(L, 1, 0);
 	ftk_set_log_level(level);
 
 	return 1;
 }
 
-static int lua_ftk_set_status_panel(lua_State* tolua_S)
+static int lua_ftk_set_status_panel(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkWidget* status_panel;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWidget", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	status_panel = tolua_tousertype(tolua_S, 1, 0);
+	status_panel = tolua_tousertype(L, 1, 0);
 	ftk_set_status_panel(status_panel);
 
 	return 1;
 }
 
-static int lua_ftk_set_wnd_manager(lua_State* tolua_S)
+static int lua_ftk_set_wnd_manager(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkWndManager* wnd_manager;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkWndManager", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkWndManager", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	wnd_manager = tolua_tousertype(tolua_S, 1, 0);
+	wnd_manager = tolua_tousertype(L, 1, 0);
 	ftk_set_wnd_manager(wnd_manager);
 
 	return 1;
 }
 
-static int lua_ftk_set_bitmap_factory(lua_State* tolua_S)
+static int lua_ftk_set_bitmap_factory(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkBitmapFactory* bitmap_factory;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkBitmapFactory", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkBitmapFactory", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	bitmap_factory = tolua_tousertype(tolua_S, 1, 0);
+	bitmap_factory = tolua_tousertype(L, 1, 0);
 	ftk_set_bitmap_factory(bitmap_factory);
 
 	return 1;
 }
 
-static int lua_ftk_set_sources_manager(lua_State* tolua_S)
+static int lua_ftk_set_sources_manager(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkSourcesManager* sources_manager;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkSourcesManager", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkSourcesManager", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	sources_manager = tolua_tousertype(tolua_S, 1, 0);
+	sources_manager = tolua_tousertype(L, 1, 0);
 	ftk_set_sources_manager(sources_manager);
 
 	return 1;
 }
 
-static int lua_ftk_set_shared_canvas(lua_State* tolua_S)
+static int lua_ftk_set_shared_canvas(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkCanvas* canvas;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkCanvas", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkCanvas", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	canvas = tolua_tousertype(tolua_S, 1, 0);
+	canvas = tolua_tousertype(L, 1, 0);
 	ftk_set_shared_canvas(canvas);
 
 	return 1;
 }
 
-static int lua_ftk_set_theme(lua_State* tolua_S)
+static int lua_ftk_set_theme(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkTheme* theme;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkTheme", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkTheme", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	theme = tolua_tousertype(tolua_S, 1, 0);
+	theme = tolua_tousertype(L, 1, 0);
 	ftk_set_theme(theme);
 
 	return 1;
 }
 
-static int lua_ftk_set_primary_source(lua_State* tolua_S)
+static int lua_ftk_set_primary_source(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkSource* source;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkSource", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkSource", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	source = tolua_tousertype(tolua_S, 1, 0);
+	source = tolua_tousertype(L, 1, 0);
 	ftk_set_primary_source(source);
 
 	return 1;
 }
 
-static int lua_ftk_set_allocator(lua_State* tolua_S)
+static int lua_ftk_set_allocator(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkAllocator* allocator;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkAllocator", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkAllocator", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	allocator = tolua_tousertype(tolua_S, 1, 0);
+	allocator = tolua_tousertype(L, 1, 0);
 	ftk_set_allocator(allocator);
 
 	return 1;
 }
 
-static int lua_ftk_set_input_method_manager(lua_State* tolua_S)
+static int lua_ftk_set_input_method_manager(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkInputMethodManager* input_manager_manager;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkInputMethodManager", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkInputMethodManager", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	input_manager_manager = tolua_tousertype(tolua_S, 1, 0);
+	input_manager_manager = tolua_tousertype(L, 1, 0);
 	ftk_set_input_method_manager(input_manager_manager);
 
 	return 1;
 }
 
-static int lua_ftk_set_input_method_preeditor(lua_State* tolua_S)
+static int lua_ftk_set_input_method_preeditor(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkImPreeditor* input_method_preeditor;
-	int param_ok = tolua_isusertype(tolua_S, 1, "FtkImPreeditor", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkImPreeditor", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	input_method_preeditor = tolua_tousertype(tolua_S, 1, 0);
+	input_method_preeditor = tolua_tousertype(L, 1, 0);
 	ftk_set_input_method_preeditor(input_method_preeditor);
 
 	return 1;
 }
 
-static int lua_ftk_init(lua_State* tolua_S)
+static int lua_ftk_init(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
 	int argc;
 	char** argv;
-	int param_ok = tolua_isnumber(tolua_S, 1, 0, &err) && tolua_istable(tolua_S, 2, 0, &err);
+	int param_ok = tolua_isnumber(L, 1, 0, &err) && tolua_istable(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	argc = tolua_tonumber(tolua_S, 1, 0);
-	argv = tolua_tostrings(tolua_S, 2, 0);
+	argc = tolua_tonumber(L, 1, 0);
+	argv = tolua_tostrings(L, 2, 0);
 	retv = ftk_init(argc, argv);
-	tolua_pushnumber(tolua_S, (lua_Number)retv);
+	tolua_pushnumber(L, (lua_Number)retv);
 	free(argv);
 
 	return 1;
 }
 
-static int lua_ftk_run(lua_State* tolua_S)
+static int lua_ftk_run(lua_State* L)
 {
 	Ret retv;
 	retv = ftk_run();
-	tolua_pushnumber(tolua_S, (lua_Number)retv);
+	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
 }
 
-static int lua_ftk_quit(lua_State* tolua_S)
+static int lua_ftk_quit(lua_State* L)
 {
 	ftk_quit();
 
 	return 1;
 }
 
-int tolua_ftk_init(lua_State* tolua_S)
+int tolua_ftk_init(lua_State* L)
 {
-	tolua_open(tolua_S);
-	tolua_reg_types(tolua_S);
-	tolua_module(tolua_S, NULL, 0);
-	tolua_beginmodule(tolua_S, NULL);
-	tolua_cclass(tolua_S,"Ftk", "Ftk", "", NULL);
-	tolua_beginmodule(tolua_S, "Ftk");
-	tolua_function(tolua_S, "DefaultFont", lua_ftk_default_font);
-	tolua_function(tolua_S, "DefaultDisplay", lua_ftk_default_display);
-	tolua_function(tolua_S, "DefaultMainLoop", lua_ftk_default_main_loop);
-	tolua_function(tolua_S, "DefaultLogLevel", lua_ftk_default_log_level);
-	tolua_function(tolua_S, "DefaultWndManager", lua_ftk_default_wnd_manager);
-	tolua_function(tolua_S, "DefaultStatusPanel", lua_ftk_default_status_panel);
-	tolua_function(tolua_S, "DefaultBitmapFactory", lua_ftk_default_bitmap_factory);
-	tolua_function(tolua_S, "DefaultSourcesManager", lua_ftk_default_sources_manager);
-	tolua_function(tolua_S, "SharedCanvas", lua_ftk_shared_canvas);
-	tolua_function(tolua_S, "DefaultTheme", lua_ftk_default_theme);
-	tolua_function(tolua_S, "PrimarySource", lua_ftk_primary_source);
-	tolua_function(tolua_S, "DefaultAllocator", lua_ftk_default_allocator);
-	tolua_function(tolua_S, "DefaultInputMethodManager", lua_ftk_default_input_method_manager);
-	tolua_function(tolua_S, "DefaultInputMethodPreeditor", lua_ftk_default_input_method_preeditor);
-	tolua_function(tolua_S, "SetFont", lua_ftk_set_font);
-	tolua_function(tolua_S, "SetDisplay", lua_ftk_set_display);
-	tolua_function(tolua_S, "SetMainLoop", lua_ftk_set_main_loop);
-	tolua_function(tolua_S, "SetLogLevel", lua_ftk_set_log_level);
-	tolua_function(tolua_S, "SetStatusPanel", lua_ftk_set_status_panel);
-	tolua_function(tolua_S, "SetWndManager", lua_ftk_set_wnd_manager);
-	tolua_function(tolua_S, "SetBitmapFactory", lua_ftk_set_bitmap_factory);
-	tolua_function(tolua_S, "SetSourcesManager", lua_ftk_set_sources_manager);
-	tolua_function(tolua_S, "SetSharedCanvas", lua_ftk_set_shared_canvas);
-	tolua_function(tolua_S, "SetTheme", lua_ftk_set_theme);
-	tolua_function(tolua_S, "SetPrimarySource", lua_ftk_set_primary_source);
-	tolua_function(tolua_S, "SetAllocator", lua_ftk_set_allocator);
-	tolua_function(tolua_S, "SetInputMethodManager", lua_ftk_set_input_method_manager);
-	tolua_function(tolua_S, "SetInputMethodPreeditor", lua_ftk_set_input_method_preeditor);
-	tolua_function(tolua_S, "Init", lua_ftk_init);
-	tolua_function(tolua_S, "Run", lua_ftk_run);
-	tolua_function(tolua_S, "Quit", lua_ftk_quit);
-	tolua_endmodule(tolua_S);
-	tolua_endmodule(tolua_S);
+	tolua_open(L);
+	tolua_reg_types(L);
+	tolua_module(L, NULL, 0);
+	tolua_beginmodule(L, NULL);
+	tolua_cclass(L,"Ftk", "Ftk", "", NULL);
+	tolua_beginmodule(L, "Ftk");
+	tolua_function(L, "DefaultFont", lua_ftk_default_font);
+	tolua_function(L, "DefaultDisplay", lua_ftk_default_display);
+	tolua_function(L, "DefaultMainLoop", lua_ftk_default_main_loop);
+	tolua_function(L, "DefaultLogLevel", lua_ftk_default_log_level);
+	tolua_function(L, "DefaultWndManager", lua_ftk_default_wnd_manager);
+	tolua_function(L, "DefaultStatusPanel", lua_ftk_default_status_panel);
+	tolua_function(L, "DefaultBitmapFactory", lua_ftk_default_bitmap_factory);
+	tolua_function(L, "DefaultSourcesManager", lua_ftk_default_sources_manager);
+	tolua_function(L, "SharedCanvas", lua_ftk_shared_canvas);
+	tolua_function(L, "DefaultTheme", lua_ftk_default_theme);
+	tolua_function(L, "PrimarySource", lua_ftk_primary_source);
+	tolua_function(L, "DefaultAllocator", lua_ftk_default_allocator);
+	tolua_function(L, "DefaultInputMethodManager", lua_ftk_default_input_method_manager);
+	tolua_function(L, "DefaultInputMethodPreeditor", lua_ftk_default_input_method_preeditor);
+	tolua_function(L, "SetFont", lua_ftk_set_font);
+	tolua_function(L, "SetDisplay", lua_ftk_set_display);
+	tolua_function(L, "SetMainLoop", lua_ftk_set_main_loop);
+	tolua_function(L, "SetLogLevel", lua_ftk_set_log_level);
+	tolua_function(L, "SetStatusPanel", lua_ftk_set_status_panel);
+	tolua_function(L, "SetWndManager", lua_ftk_set_wnd_manager);
+	tolua_function(L, "SetBitmapFactory", lua_ftk_set_bitmap_factory);
+	tolua_function(L, "SetSourcesManager", lua_ftk_set_sources_manager);
+	tolua_function(L, "SetSharedCanvas", lua_ftk_set_shared_canvas);
+	tolua_function(L, "SetTheme", lua_ftk_set_theme);
+	tolua_function(L, "SetPrimarySource", lua_ftk_set_primary_source);
+	tolua_function(L, "SetAllocator", lua_ftk_set_allocator);
+	tolua_function(L, "SetInputMethodManager", lua_ftk_set_input_method_manager);
+	tolua_function(L, "SetInputMethodPreeditor", lua_ftk_set_input_method_preeditor);
+	tolua_function(L, "Init", lua_ftk_init);
+	tolua_function(L, "Run", lua_ftk_run);
+	tolua_function(L, "Quit", lua_ftk_quit);
+	tolua_endmodule(L);
+	tolua_endmodule(L);
+
 
 	return 1;
 }
