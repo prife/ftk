@@ -147,6 +147,12 @@ Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);
 #define FTK_END_PAINT() \
 	return ftk_widget_update(thiz);
 
+#define FTK_POINT_IN_WIDGET(x, y, widget) \
+	((x >= ftk_widget_left_abs(widget)) \
+	&& (y >= ftk_widget_top_abs(widget)) \
+	&& (x < (ftk_widget_left_abs(widget) + ftk_widget_width(widget))) \
+	&& (y < (ftk_widget_top_abs(widget) + ftk_widget_height(widget))))
+
 FTK_END_DECLS
 
 #endif/*FTK_WIDGET_H*/

@@ -58,11 +58,17 @@ static Ret ftk_button_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
+			int x = event->u.mouse.x;
+			int y = event->u.mouse.y;
+
 			if(ftk_widget_is_active(thiz))
 			{
 				ftk_widget_set_active(thiz, 0);
 				ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
-				ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+				if(FTK_POINT_IN_WIDGET(x, y, thiz))
+				{
+					ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+				}
 			}
 			//ftk_logd("%s: FTK_EVT_MOUSE_UP: %s\n", __func__, ftk_widget_get_text(thiz));
 			break;
