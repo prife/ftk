@@ -266,7 +266,7 @@ static void int_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "lua_Number");
 	strcpy(info->check    , "tolua_isnumber(L, %d, 0, &err)");
 	strcpy(info->pop      , "tolua_tonumber");
-	strcpy(info->push     , "	tolua_pushnumber(L, (%s)retv);\n");
+	strcpy(info->push     , "	tolua_pushnumber(L, (lua_Number)retv);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -279,7 +279,7 @@ static void ret_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "lua_Number");
 	strcpy(info->check    , "tolua_isnumber(L, %d, 0, &err)");
 	strcpy(info->pop      , "tolua_tonumber");
-	strcpy(info->push     , "	tolua_pushnumber(L, (%s)retv);\n");
+	strcpy(info->push     , "	tolua_pushnumber(L, (lua_Number)retv);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -291,8 +291,8 @@ static void str_type_init(TypeInfo* info)
 	strcpy(info->name     , "char*");
 	strcpy(info->lua_name , "char*");
 	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
-	strcpy(info->pop      , "tolua_tostring");
-	strcpy(info->push     , "	tolua_pushstring(L, (%s)retv);\n");
+	strcpy(info->pop      , "(char*)tolua_tostring");
+	strcpy(info->push     , "	tolua_pushstring(L, (char*)retv);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -305,7 +305,7 @@ static void func_type_init(const char* name, TypeInfo* info)
 	strcpy(info->name     , "char*");
 	strcpy(info->lua_name , "void*");
 	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
-	strcpy(info->pop      , "tolua_tostring");
+	strcpy(info->pop      , "(char*)tolua_tostring");
 	strcpy(info->push     , "	assert(!\"not supported\");\n");
 	strcpy(info->free     , "");
 
@@ -336,9 +336,8 @@ static void userdata_type_init(const char* name, TypeInfo* info)
 	strcat(info->check    ,  name);
 	strcat(info->check    , "\", 0, &err)");
 	snprintf(info->pop, sizeof(info->pop), "*(%s*)tolua_tousertype", name);
-	strcpy(info->push     , "	tolua_pushusertype(L, (%s)retv, \"");
-	strcat(info->push     , usertype);
-	strcat(info->push, "\");\n");
+	sprintf(info->push, "	{%s* copy=malloc(sizeof(%s)); if(copy != NULL) memcpy(copy, &retv, sizeof(%s));tolua_pushusertype_and_takeownership(L, (%s*)copy, \"%s\");}\n",
+		info->name, info->name, info->name, info->name, usertype);
 	strcpy(info->free     , "");
 
 	return;
@@ -346,21 +345,24 @@ static void userdata_type_init(const char* name, TypeInfo* info)
 
 static void userdata_light_type_init(const char* name, TypeInfo* info)
 {
+	char* ptr = NULL;
 	char usertype[STR_LENGTH+1] = {0};
-	char* ptr = strstr(name, "Ptr");
+	
 	memset(info, 0x00, sizeof(TypeInfo));
-	assert(ptr != NULL);
 
-	strncpy(usertype, name, ptr-name);
 	strcpy(info->name     , name);
+	ptr = strstr(info->name, "Ptr");
+	strcpy(ptr, "*");
+
+	ptr = strstr(name, "Ptr");
+	strncpy(usertype, name, ptr-name);
 	strcpy(info->lua_name , "void*");
 	strcpy(info->check    , "tolua_isusertype(L, %d, \"");
 	strncat(info->check, name,  ptr - name);
 	strcat(info->check    , "\", 0, &err)");
 	strcpy(info->pop      , "tolua_tousertype");
-	strcpy(info->push     , "	tolua_pushusertype(L, (%s)retv, \"");
-	strcat(info->push     , usertype);
-	strcat(info->push, "\");\n");
+	sprintf(info->push, "   tolua_pushusertype(L, (%s)retv, \"%s\");\n",
+		info->name, usertype);
 	strcpy(info->free     , "");
 
 	return;
@@ -429,8 +431,6 @@ static int get_type_info(IDL_tree type, TypeInfo* info)
 		{
 			char* p = NULL;
 			userdata_light_type_init(type_str, info);
-			p = strstr(info->name, "Ptr");
-			strcpy(p, "*");
 		}
 		else if(is_function(type_str))
 		{
