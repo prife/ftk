@@ -235,7 +235,7 @@ FtkWidget* ftk_check_button_create(FtkWidget* parent, int x, int y, int width, i
 	return ftk_check_button_create_ex(parent, x, y, width, height, 0);	
 }
 
-FtkWidget* ftk_radio_button_create(FtkWidget* parent, int x, int y, int width, int height)
+FtkWidget* ftk_check_button_create_radio(FtkWidget* parent, int x, int y, int width, int height)
 {
 	return ftk_check_button_create_ex(parent, x, y, width, height, 1);	
 }

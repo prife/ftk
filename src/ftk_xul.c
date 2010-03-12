@@ -159,7 +159,7 @@ static FtkWidget* ftk_xul_radio_button_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
 
-	widget = ftk_radio_button_create(info->parent, info->x, info->y, info->w, info->h);
+	widget = ftk_check_button_create_radio(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
 		ftk_widget_set_text(widget, info->priv->tr_text(info->value));

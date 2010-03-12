@@ -39,7 +39,7 @@ FTK_INHERITE_FROM(Widget)
 FTK_BEGIN_DECLS
 
 FtkWidget* ftk_check_button_create(FtkWidget* parent, int x, int y, int width, int height);
-FtkWidget* ftk_radio_button_create(FtkWidget* parent, int x, int y, int width, int height);
+FtkWidget* ftk_check_button_create_radio(FtkWidget* parent, int x, int y, int width, int height);
 Ret        ftk_check_button_set_icon_position(FtkWidget* thiz, int at_right);
 int        ftk_check_button_get_checked(FtkWidget* thiz);
 Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked);
