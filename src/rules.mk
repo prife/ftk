@@ -4,5 +4,5 @@ INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DHAS_BMP \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)\"" -DLINUX -DFTK_SUPPORT_C99 -I$(abs_top_srcdir)/src/os/linux \
 	-DFTK_SHARED_CANVAS
 
-MYLDFLAGS=$(abs_top_builddir)/src/libftk.la -lpng -ljpeg
+MYLDFLAGS=$(abs_top_builddir)/src/libftk.la -lpng -ljpeg -lz
 
