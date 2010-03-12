@@ -25,7 +25,7 @@ static int lua_ftk_clipboard_set_text(lua_State* L)
 
 	return_val_if_fail(param_ok, 0);
 
-	text = tolua_tostring(L, 1, 0);
+	text = (char*)tolua_tostring(L, 1, 0);
 	retv = ftk_clipboard_set_text(text);
 	tolua_pushnumber(L, (lua_Number)retv);
 

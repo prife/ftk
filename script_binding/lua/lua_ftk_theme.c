@@ -18,7 +18,7 @@ static int lua_ftk_theme_create(lua_State* L)
 
 	init_default = tolua_tonumber(L, 1, 0);
 	retv = ftk_theme_create(init_default);
-	tolua_pushusertype(L, (void*)retv, "FtkTheme");
+   tolua_pushusertype(L, (FtkTheme*)retv, "FtkTheme");
 
 	return 1;
 }
@@ -34,7 +34,7 @@ static int lua_ftk_theme_parse_file(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = tolua_tostring(L, 2, 0);
+	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_theme_parse_file(thiz, filename);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -53,7 +53,7 @@ static int lua_ftk_theme_parse_data(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	data = tolua_tostring(L, 2, 0);
+	data = (char*)tolua_tostring(L, 2, 0);
 	length = tolua_tonumber(L, 3, 0);
 	retv = ftk_theme_parse_data(thiz, data, length);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -72,9 +72,9 @@ static int lua_ftk_theme_load_image(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = tolua_tostring(L, 2, 0);
+	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_theme_load_image(thiz, filename);
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -94,7 +94,7 @@ static int lua_ftk_theme_get_bg(lua_State* L)
 	type = *(FtkWidgetType*)tolua_tousertype(L, 2, 0);
 	state = *(FtkWidgetState*)tolua_tousertype(L, 3, 0);
 	retv = ftk_theme_get_bg(thiz, type, state);
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -114,7 +114,7 @@ static int lua_ftk_theme_get_bg_color(lua_State* L)
 	type = *(FtkWidgetType*)tolua_tousertype(L, 2, 0);
 	state = *(FtkWidgetState*)tolua_tousertype(L, 3, 0);
 	retv = ftk_theme_get_bg_color(thiz, type, state);
-	tolua_pushusertype(L, (void*)retv, "FtkColor");
+	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
 
 	return 1;
 }
@@ -134,7 +134,7 @@ static int lua_ftk_theme_get_fg_color(lua_State* L)
 	type = *(FtkWidgetType*)tolua_tousertype(L, 2, 0);
 	state = *(FtkWidgetState*)tolua_tousertype(L, 3, 0);
 	retv = ftk_theme_get_fg_color(thiz, type, state);
-	tolua_pushusertype(L, (void*)retv, "FtkColor");
+	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
 
 	return 1;
 }
@@ -154,7 +154,7 @@ static int lua_ftk_theme_get_border_color(lua_State* L)
 	type = *(FtkWidgetType*)tolua_tousertype(L, 2, 0);
 	state = *(FtkWidgetState*)tolua_tousertype(L, 3, 0);
 	retv = ftk_theme_get_border_color(thiz, type, state);
-	tolua_pushusertype(L, (void*)retv, "FtkColor");
+	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
 
 	return 1;
 }

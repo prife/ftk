@@ -17,10 +17,10 @@ static int lua_ftk_translator_create(lua_State* L)
 
 	return_val_if_fail(param_ok, 0);
 
-	package = tolua_tostring(L, 1, 0);
-	locale = tolua_tostring(L, 2, 0);
+	package = (char*)tolua_tostring(L, 1, 0);
+	locale = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_translator_create(package, locale);
-	tolua_pushusertype(L, (void*)retv, "FtkTranslator");
+   tolua_pushusertype(L, (FtkTranslator*)retv, "FtkTranslator");
 
 	return 1;
 }
@@ -36,7 +36,7 @@ static int lua_ftk_translator_get_text(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	text = tolua_tostring(L, 2, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_translator_get_text(thiz, text);
 	tolua_pushstring(L, (char*)retv);
 

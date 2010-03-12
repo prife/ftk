@@ -22,7 +22,7 @@ static int lua_ftk_status_item_create(lua_State* L)
 	pos = tolua_tonumber(L, 2, 0);
 	width = tolua_tonumber(L, 3, 0);
 	retv = ftk_status_item_create(parent, pos, width);
-	tolua_pushusertype(L, (void*)retv, "FtkStatusItem");
+   tolua_pushusertype(L, (FtkStatusItem*)retv, "FtkStatusItem");
 
 	return 1;
 }
@@ -72,7 +72,7 @@ static int lua_ftk_status_item_set_clicked_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_status_item_set_clicked_listener(thiz, lua_ftk_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 

@@ -51,7 +51,7 @@ static int lua_ftk_list_model_set_changed_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	ctx = tolua_tousertype(L, 3, 0);
 	retv = ftk_list_model_set_changed_listener(thiz, lua_ftk_listener_func, listener, ctx);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -158,7 +158,7 @@ static int lua_ftk_list_model_get_data(lua_State* L)
 	index = tolua_tonumber(L, 2, 0);
 	retv = ftk_list_model_get_data(thiz, index, &ret);
 	tolua_pushnumber(L, (lua_Number)retv);
-	tolua_pushusertype(L, (void*)retv, "void");
+   tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }

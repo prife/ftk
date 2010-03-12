@@ -18,7 +18,7 @@ static int lua_ftk_display_reg_update_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	on_update = tolua_tostring(L, 2, 0);
+	on_update = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_display_reg_update_listener(thiz, lua_ftk_display_on_update_func, on_update);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -36,7 +36,7 @@ static int lua_ftk_display_unreg_update_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	on_update = tolua_tostring(L, 2, 0);
+	on_update = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_display_unreg_update_listener(thiz, lua_ftk_display_on_update_func, on_update);
 	tolua_pushnumber(L, (lua_Number)retv);
 

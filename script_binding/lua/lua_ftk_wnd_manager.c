@@ -180,7 +180,7 @@ static int lua_ftk_wnd_manager_add_global_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_wnd_manager_add_global_listener(thiz, lua_ftk_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -198,7 +198,7 @@ static int lua_ftk_wnd_manager_remove_global_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_wnd_manager_remove_global_listener(thiz, lua_ftk_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 

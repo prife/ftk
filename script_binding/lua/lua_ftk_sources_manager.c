@@ -18,7 +18,7 @@ static int lua_ftk_sources_manager_create(lua_State* L)
 
 	max_source_nr = tolua_tonumber(L, 1, 0);
 	retv = ftk_sources_manager_create(max_source_nr);
-	tolua_pushusertype(L, (void*)retv, "FtkSourcesManager");
+   tolua_pushusertype(L, (FtkSourcesManager*)retv, "FtkSourcesManager");
 
 	return 1;
 }
@@ -88,7 +88,7 @@ static int lua_ftk_sources_manager_get(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	i = tolua_tonumber(L, 2, 0);
 	retv = ftk_sources_manager_get(thiz, i);
-	tolua_pushusertype(L, (void*)retv, "FtkSource");
+   tolua_pushusertype(L, (FtkSource*)retv, "FtkSource");
 
 	return 1;
 }

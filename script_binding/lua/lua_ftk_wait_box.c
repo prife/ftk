@@ -22,7 +22,7 @@ static int lua_ftk_wait_box_create(lua_State* L)
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
 	retv = ftk_wait_box_create(parent, x, y);
-	tolua_pushusertype(L, (void*)retv, "FtkWaitBox");
+   tolua_pushusertype(L, (FtkWaitBox*)retv, "FtkWaitBox");
 
 	return 1;
 }

@@ -11,7 +11,7 @@ static int lua_ftk_menu_panel_create(lua_State* L)
 {
 	FtkMenuPanel* retv;
 	retv = ftk_menu_panel_create();
-	tolua_pushusertype(L, (void*)retv, "FtkMenuPanel");
+   tolua_pushusertype(L, (FtkMenuPanel*)retv, "FtkMenuPanel");
 
 	return 1;
 }

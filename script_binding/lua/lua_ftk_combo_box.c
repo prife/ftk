@@ -26,7 +26,7 @@ static int lua_ftk_combo_box_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_combo_box_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (void*)retv, "FtkComboBox");
+   tolua_pushusertype(L, (FtkComboBox*)retv, "FtkComboBox");
 
 	return 1;
 }
@@ -58,7 +58,7 @@ static int lua_ftk_combo_box_set_text(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	text = tolua_tostring(L, 2, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_combo_box_set_text(thiz, text);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -78,7 +78,7 @@ static int lua_ftk_combo_box_append(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	icon = tolua_tousertype(L, 2, 0);
-	text = tolua_tostring(L, 3, 0);
+	text = (char*)tolua_tostring(L, 3, 0);
 	retv = ftk_combo_box_append(thiz, icon, text);
 	tolua_pushnumber(L, (lua_Number)retv);
 

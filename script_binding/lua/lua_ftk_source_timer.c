@@ -18,9 +18,9 @@ static int lua_ftk_source_timer_create(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	interval = tolua_tonumber(L, 1, 0);
-	action = tolua_tostring(L, 2, 0);
+	action = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_source_timer_create(interval, lua_ftk_timer_func, action);
-	tolua_pushusertype(L, (void*)retv, "FtkSource");
+   tolua_pushusertype(L, (FtkSource*)retv, "FtkSource");
 
 	return 1;
 }

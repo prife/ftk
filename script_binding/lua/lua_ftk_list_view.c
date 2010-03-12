@@ -26,7 +26,7 @@ static int lua_ftk_list_view_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_list_view_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (void*)retv, "FtkListView");
+   tolua_pushusertype(L, (FtkListView*)retv, "FtkListView");
 
 	return 1;
 }
@@ -80,7 +80,7 @@ static int lua_ftk_list_view_get_model(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_list_view_get_model(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkListModel");
+   tolua_pushusertype(L, (FtkListModel*)retv, "FtkListModel");
 
 	return 1;
 }
@@ -96,7 +96,7 @@ static int lua_ftk_list_view_set_clicked_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_list_view_set_clicked_listener(thiz, lua_ftk_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 

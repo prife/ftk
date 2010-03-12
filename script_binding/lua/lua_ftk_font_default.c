@@ -19,12 +19,12 @@ static int lua_ftk_font_default_create(lua_State* L)
 
 	return_val_if_fail(param_ok, 0);
 
-	filename = tolua_tostring(L, 1, 0);
+	filename = (char*)tolua_tostring(L, 1, 0);
 	bold = tolua_tonumber(L, 2, 0);
 	italic = tolua_tonumber(L, 3, 0);
 	size = tolua_tonumber(L, 4, 0);
 	retv = ftk_font_default_create(filename, bold, italic, size);
-	tolua_pushusertype(L, (void*)retv, "FtkFont");
+   tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
 
 	return 1;
 }

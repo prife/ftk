@@ -11,7 +11,7 @@ static int lua_ftk_app_window_create(lua_State* L)
 {
 	FtkAppWindow* retv;
 	retv = ftk_app_window_create();
-	tolua_pushusertype(L, (void*)retv, "FtkAppWindow");
+   tolua_pushusertype(L, (FtkAppWindow*)retv, "FtkAppWindow");
 
 	return 1;
 }
@@ -27,7 +27,7 @@ static int lua_ftk_app_window_set_on_prepare_options_menu(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	on_prepare_options_menu = tolua_tostring(L, 2, 0);
+	on_prepare_options_menu = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_app_window_set_on_prepare_options_menu(thiz, lua_ftk_prepare_options_menu_func, on_prepare_options_menu);
 	tolua_pushnumber(L, (lua_Number)retv);
 

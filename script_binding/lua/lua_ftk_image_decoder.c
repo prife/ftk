@@ -18,7 +18,7 @@ static int lua_ftk_image_decoder_match(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = tolua_tostring(L, 2, 0);
+	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_image_decoder_match(thiz, filename);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -36,9 +36,9 @@ static int lua_ftk_image_decoder_decode(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = tolua_tostring(L, 2, 0);
+	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_image_decoder_decode(thiz, filename);
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }

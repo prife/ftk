@@ -26,7 +26,7 @@ static int lua_ftk_scroll_bar_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_scroll_bar_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (void*)retv, "FtkScrollBar");
+   tolua_pushusertype(L, (FtkScrollBar*)retv, "FtkScrollBar");
 
 	return 1;
 }
@@ -64,7 +64,7 @@ static int lua_ftk_scroll_bar_set_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_scroll_bar_set_listener(thiz, lua_ftk_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 

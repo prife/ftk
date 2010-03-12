@@ -276,7 +276,7 @@ static int lua_ftk_widget_get_gc(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_get_gc(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkGc");
+   tolua_pushusertype(L, (FtkGc*)retv, "FtkGc");
 
 	return 1;
 }
@@ -292,7 +292,7 @@ static int lua_ftk_widget_canvas(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_canvas(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkCanvas");
+   tolua_pushusertype(L, (FtkCanvas*)retv, "FtkCanvas");
 
 	return 1;
 }
@@ -342,7 +342,7 @@ static int lua_ftk_widget_user_data(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_user_data(thiz);
-	tolua_pushusertype(L, (void*)retv, "void");
+   tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }
@@ -687,7 +687,7 @@ static int lua_ftk_widget_set_user_data(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	destroy = tolua_tostring(L, 2, 0);
+	destroy = (char*)tolua_tostring(L, 2, 0);
 	ftk_widget_set_user_data(thiz, lua_ftk_destroy_func, destroy);
 
 	return 1;
@@ -739,7 +739,7 @@ static int lua_ftk_widget_set_text(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	text = tolua_tostring(L, 2, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
 	ftk_widget_set_text(thiz, text);
 
 	return 1;
@@ -756,7 +756,7 @@ static int lua_ftk_widget_toplevel(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_toplevel(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -772,7 +772,7 @@ static int lua_ftk_widget_parent(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_parent(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -788,7 +788,7 @@ static int lua_ftk_widget_prev(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_prev(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -804,7 +804,7 @@ static int lua_ftk_widget_next(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_next(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -820,7 +820,7 @@ static int lua_ftk_widget_child(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_child(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -836,7 +836,7 @@ static int lua_ftk_widget_last_child(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_last_child(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -854,7 +854,7 @@ static int lua_ftk_widget_lookup(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	id = tolua_tonumber(L, 2, 0);
 	retv = ftk_widget_lookup(thiz, id);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -874,7 +874,7 @@ static int lua_ftk_widget_find_target(lua_State* L)
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
 	retv = ftk_widget_find_target(thiz, x, y);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }

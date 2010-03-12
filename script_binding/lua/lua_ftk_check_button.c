@@ -26,12 +26,12 @@ static int lua_ftk_check_button_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_check_button_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (void*)retv, "FtkCheckButton");
+   tolua_pushusertype(L, (FtkCheckButton*)retv, "FtkCheckButton");
 
 	return 1;
 }
 
-static int lua_ftk_radio_button_create(lua_State* L)
+static int lua_ftk_check_button_create_radio(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkCheckButton* retv;
@@ -49,8 +49,8 @@ static int lua_ftk_radio_button_create(lua_State* L)
 	y = tolua_tonumber(L, 3, 0);
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
-	retv = ftk_radio_button_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (void*)retv, "FtkCheckButton");
+	retv = ftk_check_button_create_radio(parent, x, y, width, height);
+   tolua_pushusertype(L, (FtkCheckButton*)retv, "FtkCheckButton");
 
 	return 1;
 }
@@ -118,7 +118,7 @@ static int lua_ftk_check_button_set_clicked_listener(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	listener = tolua_tostring(L, 2, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_check_button_set_clicked_listener(thiz, lua_ftk_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -134,7 +134,7 @@ int tolua_ftk_check_button_init(lua_State* L)
 	tolua_cclass(L,"FtkCheckButton", "FtkCheckButton", "FtkWidget", NULL);
 	tolua_beginmodule(L, "FtkCheckButton");
 	tolua_function(L, "Create", lua_ftk_check_button_create);
-	tolua_function(L, "Create", lua_ftk_radio_button_create);
+	tolua_function(L, "CreateRadio", lua_ftk_check_button_create_radio);
 	tolua_function(L, "SetIconPosition", lua_ftk_check_button_set_icon_position);
 	tolua_function(L, "GetChecked", lua_ftk_check_button_get_checked);
 	tolua_function(L, "SetChecked", lua_ftk_check_button_set_checked);

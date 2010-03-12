@@ -26,9 +26,9 @@ static int lua_ftk_popup_menu_create(lua_State* L)
 	w = tolua_tonumber(L, 3, 0);
 	h = tolua_tonumber(L, 4, 0);
 	icon = tolua_tousertype(L, 5, 0);
-	title = tolua_tostring(L, 6, 0);
+	title = (char*)tolua_tostring(L, 6, 0);
 	retv = ftk_popup_menu_create(x, y, w, h, icon, title);
-	tolua_pushusertype(L, (void*)retv, "FtkPopupMenu");
+   tolua_pushusertype(L, (FtkPopupMenu*)retv, "FtkPopupMenu");
 
 	return 1;
 }
@@ -48,7 +48,7 @@ static int lua_ftk_popup_menu_init(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	info = tolua_tousertype(L, 2, 0);
 	nr = tolua_tonumber(L, 3, 0);
-	on_item_destroy = tolua_tostring(L, 4, 0);
+	on_item_destroy = (char*)tolua_tostring(L, 4, 0);
 	retv = ftk_popup_menu_init(thiz, info, nr, lua_ftk_destroy_func, on_item_destroy);
 	tolua_pushnumber(L, (lua_Number)retv);
 

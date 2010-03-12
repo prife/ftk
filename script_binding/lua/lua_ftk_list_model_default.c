@@ -18,9 +18,9 @@ static int lua_ftk_list_model_default_create(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	init_nr = tolua_tonumber(L, 1, 0);
-	destroy = tolua_tostring(L, 2, 0);
+	destroy = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_list_model_default_create(init_nr, lua_ftk_destroy_func, destroy);
-	tolua_pushusertype(L, (void*)retv, "FtkListModel");
+   tolua_pushusertype(L, (FtkListModel*)retv, "FtkListModel");
 
 	return 1;
 }

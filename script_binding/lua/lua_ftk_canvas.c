@@ -22,7 +22,7 @@ static int lua_ftk_canvas_create(lua_State* L)
 	h = tolua_tonumber(L, 2, 0);
 	clear_color = *(FtkColor*)tolua_tousertype(L, 3, 0);
 	retv = ftk_canvas_create(w, h, clear_color);
-	tolua_pushusertype(L, (void*)retv, "FtkCanvas");
+   tolua_pushusertype(L, (FtkCanvas*)retv, "FtkCanvas");
 
 	return 1;
 }
@@ -175,7 +175,7 @@ static int lua_ftk_canvas_draw_string(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
-	str = tolua_tostring(L, 4, 0);
+	str = (char*)tolua_tostring(L, 4, 0);
 	len = tolua_tonumber(L, 5, 0);
 	retv = ftk_canvas_draw_string(thiz, x, y, str, len);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -200,7 +200,7 @@ static int lua_ftk_canvas_draw_string_ex(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
-	str = tolua_tostring(L, 4, 0);
+	str = (char*)tolua_tostring(L, 4, 0);
 	len = tolua_tonumber(L, 5, 0);
 	vcenter = tolua_tonumber(L, 6, 0);
 	retv = ftk_canvas_draw_string_ex(thiz, x, y, str, len, vcenter);
@@ -237,7 +237,7 @@ static int lua_ftk_canvas_get_extent(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	str = tolua_tostring(L, 2, 0);
+	str = (char*)tolua_tostring(L, 2, 0);
 	len = tolua_tonumber(L, 3, 0);
 	retv = ftk_canvas_get_extent(thiz, str, len);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -277,7 +277,7 @@ static int lua_ftk_canvas_calc_str_visible_range(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	start = tolua_tostring(L, 2, 0);
+	start = (char*)tolua_tostring(L, 2, 0);
 	vstart = tolua_tonumber(L, 3, 0);
 	vend = tolua_tonumber(L, 4, 0);
 	width = tolua_tonumber(L, 5, 0);
@@ -418,7 +418,7 @@ static int lua_ftk_canvas_get_pixel(lua_State* L)
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
 	retv = ftk_canvas_get_pixel(thiz, x, y);
-	tolua_pushusertype(L, (void*)retv, "FtkColor");
+   tolua_pushusertype(L, (FtkColor*)retv, "FtkColor");
 
 	return 1;
 }
@@ -456,7 +456,7 @@ static int lua_ftk_canvas_bitmap(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_canvas_bitmap(thiz);
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -507,7 +507,7 @@ static int lua_ftk_font_calc_str_visible_range(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	start = tolua_tostring(L, 2, 0);
+	start = (char*)tolua_tostring(L, 2, 0);
 	vstart = tolua_tonumber(L, 3, 0);
 	vend = tolua_tonumber(L, 4, 0);
 	width = tolua_tonumber(L, 5, 0);

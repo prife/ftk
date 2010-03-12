@@ -17,10 +17,10 @@ static int lua_ftk_xul_load(lua_State* L)
 
 	return_val_if_fail(param_ok, 0);
 
-	xml = tolua_tostring(L, 1, 0);
+	xml = (char*)tolua_tostring(L, 1, 0);
 	length = tolua_tonumber(L, 2, 0);
 	retv = ftk_xul_load(xml, length);
-	tolua_pushusertype(L, (void*)retv, "FtkWidget");
+   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }

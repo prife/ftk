@@ -202,7 +202,7 @@ static int tolua_get_FtkGc_bg(lua_State* L)
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)&(thiz->bg);
-	tolua_pushusertype(L, (void*)retv, "FtkColor");
+	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
 
 	return 1;
 }
@@ -222,7 +222,7 @@ static int tolua_get_FtkGc_fg(lua_State* L)
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)&(thiz->fg);
-	tolua_pushusertype(L, (void*)retv, "FtkColor");
+	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
 
 	return 1;
 }
@@ -242,7 +242,7 @@ static int tolua_get_FtkGc_font(lua_State* L)
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->font;
-	tolua_pushusertype(L, (void*)retv, "FtkFont");
+   tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
 
 	return 1;
 }
@@ -262,7 +262,7 @@ static int tolua_get_FtkGc_bitmap(lua_State* L)
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->bitmap;
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -291,7 +291,7 @@ static int tolua_set_FtkGc_alpha(lua_State* L)
 {
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->alpha = (char*) (tolua_tostring(L, 2, 0));
+	thiz->alpha = (char*) ((char*)tolua_tostring(L, 2, 0));
 
 	return 1;
 }
@@ -427,7 +427,7 @@ static int tolua_set_FtkListItemInfo_text(lua_State* L)
 {
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->text = (char*) (tolua_tostring(L, 2, 0));
+	thiz->text = (char*) ((char*)tolua_tostring(L, 2, 0));
 
 	return 1;
 }
@@ -478,7 +478,7 @@ static int tolua_get_FtkListItemInfo_type(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)&(thiz->type);
-	tolua_pushusertype(L, (void*)retv, "FtkListItemType");
+	{FtkListItemType* copy=malloc(sizeof(FtkListItemType)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkListItemType));tolua_pushusertype_and_takeownership(L, (FtkListItemType*)copy, "FtkListItemType");}
 
 	return 1;
 }
@@ -498,7 +498,7 @@ static int tolua_get_FtkListItemInfo_left_icon(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->left_icon;
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -518,7 +518,7 @@ static int tolua_get_FtkListItemInfo_right_icon(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->right_icon;
-	tolua_pushusertype(L, (void*)retv, "FtkBitmap");
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -538,7 +538,7 @@ static int tolua_get_FtkListItemInfo_user_data(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->user_data;
-	tolua_pushusertype(L, (void*)retv, "void");
+   tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }
@@ -558,7 +558,7 @@ static int tolua_get_FtkListItemInfo_extra_user_data(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->extra_user_data;
-	tolua_pushusertype(L, (void*)retv, "void");
+   tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }
@@ -586,7 +586,7 @@ static int tolua_get_FtkEvent_type(lua_State* L)
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)&(thiz->type);
-	tolua_pushusertype(L, (void*)retv, "FtkEventType");
+	{FtkEventType* copy=malloc(sizeof(FtkEventType)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkEventType));tolua_pushusertype_and_takeownership(L, (FtkEventType*)copy, "FtkEventType");}
 
 	return 1;
 }
@@ -606,7 +606,7 @@ static int tolua_get_FtkEvent_widget(lua_State* L)
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->widget;
-	tolua_pushusertype(L, (void*)retv, "void");
+   tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }

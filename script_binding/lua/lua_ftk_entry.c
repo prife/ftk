@@ -26,7 +26,7 @@ static int lua_ftk_entry_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_entry_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (void*)retv, "FtkEntry");
+   tolua_pushusertype(L, (FtkEntry*)retv, "FtkEntry");
 
 	return 1;
 }
@@ -58,7 +58,7 @@ static int lua_ftk_entry_set_text(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	text = tolua_tostring(L, 2, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_entry_set_text(thiz, text);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -96,7 +96,7 @@ static int lua_ftk_entry_insert_text(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	pos = tolua_tonumber(L, 2, 0);
-	text = tolua_tostring(L, 3, 0);
+	text = (char*)tolua_tostring(L, 3, 0);
 	retv = ftk_entry_insert_text(thiz, pos, text);
 	tolua_pushnumber(L, (lua_Number)retv);
 
