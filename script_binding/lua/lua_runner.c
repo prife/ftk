@@ -33,8 +33,26 @@
 #include "ftk_lua.h"
 #include "ftk_mmap.h"
 
+static void l_message (const char *pname, const char *msg) {
+  if (pname) fprintf(stderr, "%s: ", pname);
+  fprintf(stderr, "%s\n", msg);
+  fflush(stderr);
+}
+
+
+static int report (lua_State *L, int status) {
+  if (status && !lua_isnil(L, -1)) {
+    const char *msg = lua_tostring(L, -1);
+    if (msg == NULL) msg = "(error object is not a string)";
+    l_message("ftk_run", msg);
+    lua_pop(L, 1);
+  }
+  return status;
+}
+
 int main(int argc, char* argv[])
 {
+	int ret = 0;
 	lua_State *L = NULL;
 
 	if(argc != 2)
@@ -47,7 +65,8 @@ int main(int argc, char* argv[])
 	L = lua_open();
 	luaL_openlibs(L);
 	ftk_lua_init(L);
-	(void)luaL_dofile(L, argv[1]);
+	ret = luaL_dofile(L, argv[1]);
+	report(L, ret);
 	lua_close(L);
 
 	return 0;
