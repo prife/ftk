@@ -13,16 +13,6 @@ typedef enum _FileManagerType
 
 Ret file_manager_set_path(FtkListModel* model, const char* path, FileManagerType type, const char* mime_type);
 
-static void item_destroy(FtkListItemInfo* info)
-{
-	if(info != NULL)
-	{
-		FTK_FREE(info->text);
-	}
-
-	return;
-}
-
 typedef struct _AppInfo
 {
 	FtkBitmap* file;
@@ -174,7 +164,7 @@ FtkWidget* file_manager_create(const char* path, FileManagerType type, const cha
 	ftk_widget_set_text(win, "File Manager");
 	ftk_app_window_set_on_prepare_options_menu(win, on_prepare_options_menu, win);
 	ftk_list_view_set_clicked_listener(list, on_item_clicked, NULL);
-	model = ftk_list_model_default_create(10, (FtkDestroy)item_destroy);
+	model = ftk_list_model_default_create(10);
 	render = ftk_list_render_default_create();
 
 	g_app_info.model = model;
