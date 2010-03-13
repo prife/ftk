@@ -8,10 +8,10 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
+	win:SetText("Demo entry")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
-	win:SetText("Demo button")
+	
 	app_win=win
-
 	width=win:Width()
 	height=win:Height()
 
@@ -37,7 +37,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"entry"})
 AppInit()
 Ftk.Run()
 

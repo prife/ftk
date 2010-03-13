@@ -65,7 +65,7 @@ static int lua_ftk_scroll_bar_set_listener(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	listener = (char*)tolua_tostring(L, 2, 0);
-	retv = ftk_scroll_bar_set_listener(thiz, lua_ftk_listener_func, listener);
+	retv = ftk_scroll_bar_set_listener(thiz, lua_ftk_widget_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;

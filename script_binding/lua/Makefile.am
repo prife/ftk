@@ -9,7 +9,7 @@ ftk_run_SOURCES=ftk_lua.c lua_runner.c tolua_event.c  tolua_is.c  tolua_map.c  t
 	lua_ftk_source_timer.c lua_ftk_main_loop.c lua_ftk_source_idle.c lua_ftk_source.c  \
 	lua_ftk_combo_box.c lua_ftk_dialog.c lua_ftk_theme.c lua_ftk_bitmap.c \
 	lua_ftk_bitmap_factory.c lua_ftk_check_button.c lua_ftk_icon_view.c lua_ftk_image.c \
-	lua_ftk_menu_item.c lua_ftk_menu_panel.c lua_ftk_message_box.c lua_ftk_painter.c \
+	lua_ftk_menu_item.c lua_ftk_menu_panel.c lua_ftk_painter.c \
 	lua_ftk_progress_bar.c lua_ftk_radio_group.c lua_ftk_scroll_bar.c\
 	lua_ftk_status_item.c lua_ftk_status_panel.c lua_ftk_text_view.c lua_ftk_wait_box.c \
 	lua_ftk_popup_menu.c
@@ -21,7 +21,7 @@ ftk_run_CFLAGS=-DLUA_USE_LINUX -I$(srcdir)/lua
 EXTRA_DIST=ftk_lua.h \
 	lua_ftk_app_window.h           lua_ftk_menu_item.h\
 	lua_ftk_bitmap_factory.h       lua_ftk_menu_panel.h\
-	lua_ftk_bitmap.h               lua_ftk_message_box.h\
+	lua_ftk_bitmap.h               \
 	lua_ftk_button.h               lua_ftk_mmap.h\
 	lua_ftk_callbacks.h            lua_ftk_painter.h\
 	lua_ftk_canvas.h               lua_ftk_popup_menu.h\
@@ -45,8 +45,13 @@ EXTRA_DIST=ftk_lua.h \
 	lua_ftk_list_render.h          lua_ftk_wnd_manager.h\
 	lua_ftk_list_view.h            lua_ftk_xul.h\
 	lua_ftk_main_loop.h \
-	demo1.lua  demo3.lua  demo_button.lua \
-	demo_combo_box.lua  demo_entry.lua \
-	demo2.lua  demo4.lua  demo_check_button.lua \
-	demo_dialog.lua     demo_label.lua
+	demo1.lua              demo_icon_view.lua\
+	demo2.lua              demo_label.lua\
+	demo3.lua              demo_menu.lua\
+	demo4.lua              demo_msgbox.lua\
+	demo_button.lua        demo_popup.lua\
+	demo_check_button.lua  demo_progressbar.lua\
+	demo_combo_box.lua     demo_scrollbar.lua\
+	demo_dialog.lua        demo_text_view.lua\
+	demo_entry.lua         demo_wait_box.lua
 

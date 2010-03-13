@@ -364,6 +364,85 @@ static int lua_ftk_quit(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_tips(lua_State* L)
+{
+	tolua_Error err = {0};
+	int retv;
+	char* text;
+	int param_ok = tolua_isstring(L, 1, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	text = (char*)tolua_tostring(L, 1, 0);
+	retv = ftk_tips(text);
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int lua_ftk_warning(lua_State* L)
+{
+	tolua_Error err = {0};
+	int retv;
+	char* title;
+	char* text;
+	char** buttons;
+	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_istable(L, 3, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	title = (char*)tolua_tostring(L, 1, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
+	buttons = tolua_tostrings(L, 3, 0);
+	retv = ftk_warning(title, text, buttons);
+	tolua_pushnumber(L, (lua_Number)retv);
+	free(buttons);
+
+	return 1;
+}
+
+static int lua_ftk_question(lua_State* L)
+{
+	tolua_Error err = {0};
+	int retv;
+	char* title;
+	char* text;
+	char** buttons;
+	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_istable(L, 3, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	title = (char*)tolua_tostring(L, 1, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
+	buttons = tolua_tostrings(L, 3, 0);
+	retv = ftk_question(title, text, buttons);
+	tolua_pushnumber(L, (lua_Number)retv);
+	free(buttons);
+
+	return 1;
+}
+
+static int lua_ftk_infomation(lua_State* L)
+{
+	tolua_Error err = {0};
+	int retv;
+	char* title;
+	char* text;
+	char** buttons;
+	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_istable(L, 3, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	title = (char*)tolua_tostring(L, 1, 0);
+	text = (char*)tolua_tostring(L, 2, 0);
+	buttons = tolua_tostrings(L, 3, 0);
+	retv = ftk_infomation(title, text, buttons);
+	tolua_pushnumber(L, (lua_Number)retv);
+	free(buttons);
+
+	return 1;
+}
+
 int tolua_ftk_init(lua_State* L)
 {
 	tolua_open(L);
@@ -403,6 +482,10 @@ int tolua_ftk_init(lua_State* L)
 	tolua_function(L, "Init", lua_ftk_init);
 	tolua_function(L, "Run", lua_ftk_run);
 	tolua_function(L, "Quit", lua_ftk_quit);
+	tolua_function(L, "Tips", lua_ftk_tips);
+	tolua_function(L, "Warning", lua_ftk_warning);
+	tolua_function(L, "Question", lua_ftk_question);
+	tolua_function(L, "Infomation", lua_ftk_infomation);
 	tolua_endmodule(L);
 	tolua_endmodule(L);
 

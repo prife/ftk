@@ -60,7 +60,6 @@
 #include "lua_ftk_icon_view.h"
 #include "lua_ftk_menu_item.h"
 #include "lua_ftk_menu_panel.h"
-#include "lua_ftk_message_box.h"
 #include "lua_ftk_painter.h"
 #include "lua_ftk_progress_bar.h"
 #include "lua_ftk_radio_group.h"
@@ -232,7 +231,6 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_image_init(L);
 	tolua_ftk_menu_item_init(L);
 	tolua_ftk_menu_panel_init(L);
-	tolua_ftk_message_box_init(L);
 	tolua_ftk_painter_init(L);
 	tolua_ftk_progress_bar_init(L);
 	tolua_ftk_radio_group_init(L);
