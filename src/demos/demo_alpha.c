@@ -28,18 +28,12 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 
 static void create_ani_window(int type, int sync)
 {
-	int delta = 0;
-	int width = 0;
-	int height = 0;
 	FtkGc gc = {0};
 	char filename[FTK_MAX_PATH+1] = {0};
 	FtkWidget* win = ftk_app_window_create();
 	FtkAnimator* ani = ftk_animator_alpha_create(1);
 	
 	gc.mask = FTK_GC_BITMAP;
-	width = ftk_widget_width(win);
-	height = ftk_widget_height(win);
-	delta = height/6;
 
 	ftk_snprintf(filename, FTK_MAX_PATH, "%s/jpeg1.jpg", TESTDATA_DIR);
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
