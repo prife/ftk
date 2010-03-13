@@ -128,6 +128,13 @@ void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz)
 #include "ftk_globals.h"
 #include "ftk_popup_menu.h"
 
+static Ret on_im_selected(void* ctx, void* item)
+{
+	ftk_dialog_quit(ctx);
+
+	return RET_QUIT;
+}
+
 int ftk_input_method_chooser(void)
 {
 	int i = 0;
@@ -149,13 +156,11 @@ int ftk_input_method_chooser(void)
 		ftk_input_method_manager_get(im_mgr, i, &im);
 		im_infos[i].text = (char*)im->name;
 		im_infos[i].type = FTK_LIST_ITEM_NORMAL;
-		im_infos[i].extra_user_data = ftk_dialog_quit;
 		im_infos[i].user_data = im_chooser;
 	}
 	
 	im_infos[i].text = "None";
 	im_infos[i].type = FTK_LIST_ITEM_NORMAL;
-	im_infos[i].extra_user_data = ftk_dialog_quit;
 	im_infos[i].user_data = im_chooser;
 	
 	for(i = 0; i < (nr + 1); i++)
@@ -163,6 +168,7 @@ int ftk_input_method_chooser(void)
 		ftk_popup_menu_add(im_chooser, im_infos+i);
 	}
 
+	ftk_popup_menu_set_clicked_listener(im_chooser, on_im_selected, im_chooser);	
 	ftk_widget_ref(im_chooser);
 	ftk_dialog_run(im_chooser);
 	i = ftk_popup_menu_get_selected(im_chooser);
