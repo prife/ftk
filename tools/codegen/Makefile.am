@@ -1,2 +1,2 @@
 SUBDIRS=idl
-EXTRA_DIST=build.sh luagen.c
+EXTRA_DIST=build.sh  lua_all.sh luagen.c
