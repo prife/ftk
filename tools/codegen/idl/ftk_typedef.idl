@@ -35,7 +35,6 @@ typedef voidPtr FtkSourcePtr;
 typedef voidPtr FtkImageDecoderPtr;
 typedef voidPtr FtkIconCachePtr;
 typedef voidPtr FtkIconViewItemPtr;
-typedef voidPtr FtkIconViewItemPtr2;
 typedef voidPtr FtkListModelPtr;
 typedef voidPtr FtkListRenderPtr;
 typedef voidPtr FtkSpritePtr;
@@ -51,6 +50,8 @@ typedef voidPtr FtkTranslateTextFunc;
 typedef voidPtr FtkTranslatePathFunc;
 typedef voidPtr FtkDisplayOnUpdateFunc;
 typedef voidPtr FtkPrepareOptionsMenuFunc;
+typedef voidPtr FtkWidgetListenerFunc;
+typedef voidPtr FtkListItemListenerFunc;
 
 enum FtkBool
 {
@@ -115,11 +116,18 @@ struct FtkListItemInfo
 	StrPtr text;
 	int   value; 
 	int   state; 
-	FtkListItemType type;
+	int   type;
 	FtkBitmapPtr left_icon;
 	FtkBitmapPtr right_icon;
 	voidPtr      user_data;
 	voidPtr      extra_user_data;
+};
+
+struct FtkIconViewItem
+{
+	StrPtr text;
+	FtkBitmapPtr icon;
+	StrPtr user_data;
 };
 
 enum FtkEventType
