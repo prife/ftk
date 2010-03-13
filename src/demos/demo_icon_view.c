@@ -18,7 +18,9 @@ static Ret button_more_clicked(void* ctx, void* obj)
 	
 	for(j=0; j < 4; j++)
 	{
-		ftk_snprintf(item.text, sizeof(item.text), "%d", i);
+		char text[100] = {0};
+		ftk_snprintf(text, sizeof(text), "%d", i);
+		item.text = text;
 		ftk_bitmap_ref(item.icon);
 		item.user_data = (void*)i;
 		ftk_icon_view_add(icon_view, &item);
@@ -68,12 +70,14 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_icon_view_set_clicked_listener(icon_view, item_clicked, win);
 	for(; i < 4; i++)
 	{
-		ftk_snprintf(item.text, sizeof(item.text), "%d", i);
-		ftk_bitmap_ref(item.icon);
+		char text[100] = {0};
+		ftk_snprintf(text, sizeof(text), "%d", i);
+		item.text = text;
 		item.user_data = (void*)i;
 		ftk_icon_view_add(icon_view, &item);
 	}
-
+	
+	ftk_bitmap_unref(item.icon);
 	ftk_widget_set_text(win, "icon view demo");
 	ftk_widget_show_all(win, 1);
 	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);

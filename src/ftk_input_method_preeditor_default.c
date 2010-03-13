@@ -53,11 +53,6 @@ typedef struct _PrivInfo
 #define FTK_IM_PREEDITOR_ITEM_HEIGHT 20
 #define FTK_ROW_HEIGHT (ftk_font_height(ftk_default_font()) + 2 * FTK_V_MARGIN)
 
-static void list_item_info_destroy(void* user_data)
-{
-	return;
-}
-
 static Ret ftk_popup_on_raw_text_clicked(void* ctx, void* button)
 {
 	PrivInfo* priv = ctx;
@@ -228,7 +223,6 @@ FtkImPreeditor* ftk_input_method_preeditor_default_create(void)
 	int x = 0;
 	int y = 0;
 	FtkGc gc = {0};
-	PrivInfo*  priv  = NULL;
 	FtkWidget* list  = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* popup = NULL;
@@ -238,7 +232,7 @@ FtkImPreeditor* ftk_input_method_preeditor_default_create(void)
 	int w = FTK_IM_PREEDITOR_WIDTH;
 	int h = FTK_IM_PREEDITOR_ITEM_HEIGHT * FTK_IM_PREEDITOR_MAX_ROW;
 
-	model = ftk_list_model_default_create(10, list_item_info_destroy);
+	model = ftk_list_model_default_create(10);
 	return_val_if_fail(model != NULL, NULL);
 
 	popup = ftk_window_create_ex(FTK_WINDOW_ANY, 0, x, y, w, h);
@@ -284,7 +278,7 @@ FtkImPreeditor* ftk_input_method_preeditor_default_create(void)
 		priv->model = model;
 		priv->widget = popup;
 		priv->raw_text_button = button;
-		priv->text_buffer = ftk_text_buffer_create(256);
+		priv->text_buffer = ftk_text_buffer_create(1024);
 
 		ftk_button_set_clicked_listener(button, ftk_popup_on_raw_text_clicked, priv);
 		ftk_list_view_set_clicked_listener(list, ftk_popup_on_item_clicked, priv);

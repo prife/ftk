@@ -38,10 +38,10 @@ FTK_BEGIN_DECLS
 
 FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, const char* title);
 
-/*XXX: info->extra_user_data is the listener function.*/
-Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDestroy on_item_destroy);
 int ftk_popup_menu_get_selected(FtkWidget* thiz);
-int ftk_popup_menu_calc_height(int visible_items);
+Ret ftk_popup_menu_add(FtkWidget* thiz, FtkListItemInfo* info);
+int ftk_popup_menu_calc_height(int has_title, int visible_items);
+Ret ftk_popup_menu_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
 FTK_END_DECLS
 

@@ -56,7 +56,6 @@ static Ret ftk_text_buffer_extend(FtkTextBuffer* thiz, size_t length)
 	}
 
 	buffer_length = (thiz->buffer_length + length + 10);
-
 	buffer_length = buffer_length + (buffer_length>>1);
 
 	if((buffer = FTK_REALLOC(thiz->buffer, buffer_length)) != NULL)
@@ -209,7 +208,8 @@ char* ftk_text_buffer_append_string(FtkTextBuffer* thiz, const char* str)
 	return_val_if_fail(ftk_text_buffer_extend(thiz, str_len) == RET_OK, NULL);
 
 	start = thiz->buffer + thiz->length;
-	memcpy(start, str, str_len);
+	strcpy(start, str);
+
 	thiz->length += str_len;
 
 	return start;

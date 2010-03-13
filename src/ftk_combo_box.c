@@ -71,19 +71,6 @@ static void ftk_combo_box_destroy(FtkWidget* thiz)
 	return;
 }
 
-static void list_item_info_destroy(void* user_data)
-{
-	FtkListItemInfo* info = user_data;
-
-	if(info != NULL)
-	{
-		FTK_FREE(info->text);
-		info->text = NULL;
-	}
-
-	return;
-}
-
 static Ret ftk_popup_on_item_clicked(void* ctx, void* list)
 {
 	FtkListItemInfo* info = NULL;
@@ -226,7 +213,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 
 		ftk_widget_resize(thiz, width, h + (FTK_V_MARGIN << 1));
 
-		priv->model = ftk_list_model_default_create(10, list_item_info_destroy);
+		priv->model = ftk_list_model_default_create(10);
 	}
 	else
 	{
@@ -259,7 +246,7 @@ Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	info.type = FTK_LIST_ITEM_NORMAL;
-	info.text = ftk_strdup(text);
+	info.text = text;
 	info.left_icon = icon;
 	info.user_data = priv->entry;
 	

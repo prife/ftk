@@ -3,6 +3,7 @@
 
 void english_test(void)
 {
+	int i = 0;
 	FtkTextBuffer* thiz = ftk_text_buffer_create(6);
 	assert(ftk_text_buffer_insert(thiz, 0, "b") == RET_OK);
 	assert(strcmp(thiz->buffer, "b") == 0);
@@ -29,6 +30,14 @@ void english_test(void)
 	assert(ftk_text_buffer_delete_chars(thiz, 1, -1) == RET_OK);
 	assert(strcmp(thiz->buffer, "") == 0);
 
+	ftk_text_buffer_reset(thiz);
+	assert(thiz->length == 0);
+
+	for(i = 0; i < 1000; i++)
+	{
+		assert(strcmp(ftk_text_buffer_append_string(thiz, "123"), "123") == 0);
+		assert(thiz->length == (i+1) * 4);
+	}
 	ftk_text_buffer_destroy(thiz);
 
 	return;

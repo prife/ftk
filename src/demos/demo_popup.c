@@ -26,8 +26,8 @@ static Ret button_normal_clicked(void* ctx, void* obj)
 	for(i = 0; i < FTK_ARRAY_SIZE(g_infos); i++)
 	{
 		g_infos[i].type = FTK_LIST_ITEM_NORMAL;
+		ftk_popup_menu_add(thiz, g_infos+i);
 	}
-	ftk_popup_menu_init(thiz, g_infos, FTK_ARRAY_SIZE(g_infos), NULL);
 	ftk_bitmap_unref(icon);
 	
 	ftk_widget_show_all(thiz, 1);
@@ -45,8 +45,8 @@ static Ret button_radio_clicked(void* ctx, void* obj)
 	{
 		g_infos[i].type = FTK_LIST_ITEM_RADIO;
 		g_infos[i].state = i == 0;
+		ftk_popup_menu_add(thiz, g_infos+i);
 	}
-	ftk_popup_menu_init(thiz, g_infos, FTK_ARRAY_SIZE(g_infos), NULL);
 	ftk_bitmap_unref(icon);
 	
 	ftk_widget_show_all(thiz, 1);
@@ -64,8 +64,8 @@ static Ret button_check_clicked(void* ctx, void* obj)
 	{
 		g_infos[i].type = FTK_LIST_ITEM_CHECK;
 		g_infos[i].state = i%2;
+		ftk_popup_menu_add(thiz, g_infos+i);
 	}
-	ftk_popup_menu_init(thiz, g_infos, FTK_ARRAY_SIZE(g_infos), NULL);
 	ftk_bitmap_unref(icon);
 
 	ftk_widget_show_all(thiz, 1);

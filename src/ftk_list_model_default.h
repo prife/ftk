@@ -45,6 +45,7 @@ typedef enum _FtkListItemType
 	FTK_LIST_ITEM_MORE    /*draw MORE icon at right side, which means click this item will lead to more UI. */
 }FtkListItemType;
 
+#define FTK_LIST_TEXT_LENGTH 31
 typedef struct _FtkListItemInfo
 {
 	char* text;
@@ -57,7 +58,7 @@ typedef struct _FtkListItemInfo
 	void*      extra_user_data;
 }FtkListItemInfo;
 
-FtkListModel* ftk_list_model_default_create(size_t init_nr, FtkDestroy destroy);
+FtkListModel* ftk_list_model_default_create(size_t init_nr);
 
 FTK_END_DECLS
 

@@ -35,10 +35,33 @@
 #include "ftk_popup_menu.h"
 #include "ftk_list_render_default.h"
 
-#define FTK_POPUP_MENU_LIST_ID 1000
+typedef struct _PrivInfo
+{
+	FtkWidget*     list;
+	FtkListModel*  model;
+	FtkListener    listener;
+	void*          listener_ctx;
+	FtkWidgetDestroy parent_destroy;
+}PrivInfo;
 
+static Ret ftk_popup_menu_init(FtkWidget* thiz);
+
+static void ftk_popup_menu_destroy(FtkWidget* thiz)
+{
+	DECL_PRIV2(thiz, priv);
+
+	if(priv->parent_destroy != NULL)
+	{
+		priv->parent_destroy(thiz);
+	}
+
+	FTK_ZFREE(priv, sizeof(PrivInfo));
+
+	return;
+}
 static Ret ftk_popup_menu_on_item_clicked(void* ctx, void* list)
 {
+	FtkWidget* thiz = ctx;
 	FtkListItemInfo* info = NULL;
 	int i = ftk_list_view_get_selected(list);
 	FtkListModel* model = ftk_list_view_get_model(list);
@@ -46,14 +69,14 @@ static Ret ftk_popup_menu_on_item_clicked(void* ctx, void* list)
 	
 	if(info != NULL)
 	{
-		FtkListener listener = (FtkListener)info->extra_user_data;
-		if(listener != NULL)
+		DECL_PRIV2(thiz, priv);
+		if(priv->listener != NULL)
 		{
-			listener(info->user_data, info);
+			priv->listener(priv->listener_ctx, info);
 		}
 	}
 
-	ftk_widget_unref(ctx);
+	ftk_widget_unref(thiz);
 
 	ftk_logd("%s: %d/%d\n", __func__, i, ftk_list_model_get_total(model));
 
@@ -62,9 +85,14 @@ static Ret ftk_popup_menu_on_item_clicked(void* ctx, void* list)
 
 FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, const char* title)
 {
+	PrivInfo* priv = NULL;
 	int has_title = icon != NULL || title != NULL;
 	FtkWidget* thiz = ftk_dialog_create(x, y, w, h);
+	
+	return_val_if_fail(thiz != NULL, NULL);
 
+	thiz->priv_subclass[2] = FTK_ZALLOC(sizeof(PrivInfo));
+	priv = thiz->priv_subclass[2];
 	if(has_title)
 	{
 		ftk_dialog_set_icon(thiz, icon);
@@ -75,58 +103,81 @@ FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, co
 		ftk_dialog_hide_title(thiz);
 	}
 
+	priv->parent_destroy = thiz->destroy;
+	thiz->destroy = ftk_popup_menu_destroy;
+
+	ftk_popup_menu_init(thiz);
+
 	return thiz;
 }
 
-Ret ftk_popup_menu_init(FtkWidget* thiz, FtkListItemInfo* info, size_t nr, FtkDestroy on_item_destroy)
+static Ret ftk_popup_menu_init(FtkWidget* thiz)
 {
 	int w = 0;
 	int h = 0;
-	size_t i = 0;
+	DECL_PRIV2(thiz, priv);
 	FtkWidget* list = NULL;
 	FtkListModel* model = NULL;
 	FtkListRender* render = NULL;
-	return_val_if_fail(thiz != NULL && info != NULL, RET_FAIL);
-	return_val_if_fail(ftk_widget_lookup(thiz, FTK_POPUP_MENU_LIST_ID) == NULL, RET_FAIL);
+	
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	w = ftk_widget_width(thiz)  - 2 * FTK_DIALOG_BORDER;
 	h = ftk_widget_height(thiz) - FTK_DIALOG_BORDER - FTK_DIALOG_TITLE_HEIGHT;
 
 	list = ftk_list_view_create(thiz, 0, 0, w, h);
-	ftk_widget_set_id(list, FTK_POPUP_MENU_LIST_ID);
 	ftk_list_view_set_clicked_listener(list, ftk_popup_menu_on_item_clicked, thiz);
-	ftk_window_set_focus(thiz, list);
 
-	model = ftk_list_model_default_create(nr, on_item_destroy);
+	model = ftk_list_model_default_create(10);
 	render = ftk_list_render_default_create();
 
-	for(i = 0; i < nr; i++)
-	{
-		ftk_list_model_add(model, info+i);
-	}
+	priv->model = model;
+	priv->list = list;
 
+	ftk_window_set_focus(thiz, list);
 	ftk_list_view_init(list, model, render, FTK_POPUP_MENU_ITEM_HEIGHT);
 	ftk_list_model_unref(model);
 
 	return RET_OK;
 }
 
-int ftk_popup_menu_get_selected(FtkWidget* thiz)
+Ret ftk_popup_menu_add(FtkWidget* thiz, FtkListItemInfo* info)
 {
-	FtkWidget* list = NULL;
-	return_val_if_fail(thiz != NULL, -1);
+	DECL_PRIV2(thiz, priv);
+	return_val_if_fail(priv != NULL && info != NULL, RET_FAIL);
 
-	list = ftk_widget_lookup(thiz, FTK_POPUP_MENU_LIST_ID);
-	return_val_if_fail(list != NULL, -1);
-
-	return ftk_list_view_get_selected(list);
-
+	return ftk_list_model_add(priv->model, info);
 }
 
-int ftk_popup_menu_calc_height(int visible_items)
+Ret ftk_popup_menu_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
 {
-	return FTK_DIALOG_TITLE_HEIGHT 
-		+ 2 * FTK_DIALOG_BORDER + 
-		visible_items * FTK_POPUP_MENU_ITEM_HEIGHT;
+	DECL_PRIV2(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->listener = listener;
+	priv->listener_ctx = ctx;
+
+	return RET_OK;
+}
+
+int ftk_popup_menu_get_selected(FtkWidget* thiz)
+{
+	DECL_PRIV2(thiz, priv);
+	return_val_if_fail(thiz != NULL, -1);
+
+	return ftk_list_view_get_selected(priv->list);
+}
+
+int ftk_popup_menu_calc_height(int has_title, int visible_items)
+{
+	int height = visible_items * FTK_POPUP_MENU_ITEM_HEIGHT;
+	
+	height += 2 * FTK_DIALOG_BORDER;
+	if(has_title)
+	{
+		height += FTK_DIALOG_TITLE_HEIGHT;
+	}
+
+	return height;
 }
 

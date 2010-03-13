@@ -40,7 +40,7 @@ static Ret ftk_image_jpeg_decoder_match(FtkImageDecoder* thiz, const char* filen
 	char identifier[4] = {0};
 	FtkMmap* m = ftk_mmap_create(filename, 0, -1);
 
-	return_val_if_fail(m != NULL, RET_FAIL);
+	if(m == NULL) return RET_FAIL;
 
 	data = ftk_mmap_data(m);
 	length = ftk_mmap_length(m);

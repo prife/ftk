@@ -141,7 +141,7 @@ int ftk_input_method_chooser(void)
 	memset(im_infos, 0x00, sizeof(im_infos));
 	nr = ftk_input_method_manager_count(im_mgr);
 
-	h = ftk_popup_menu_calc_height(nr + 1);
+	h = ftk_popup_menu_calc_height(FTK_TRUE, nr + 1);
 	im_chooser = ftk_popup_menu_create(0, 0, 0, h, NULL, "Input Method");
 
 	for(i = 0; i < nr; i++)
@@ -158,7 +158,10 @@ int ftk_input_method_chooser(void)
 	im_infos[i].extra_user_data = ftk_dialog_quit;
 	im_infos[i].user_data = im_chooser;
 	
-	ftk_popup_menu_init(im_chooser, im_infos, i + 1, NULL);
+	for(i = 0; i < (nr + 1); i++)
+	{
+		ftk_popup_menu_add(im_chooser, im_infos+i);
+	}
 
 	ftk_widget_ref(im_chooser);
 	ftk_dialog_run(im_chooser);

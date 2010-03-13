@@ -137,10 +137,10 @@ typedef enum _FtkWidgetAttr
 }FtkWidgetAttr;
 
 typedef void (*FtkDestroy)(void* user_data);
-typedef Ret (*FtkIdle)(void* user_data);
-typedef Ret (*FtkTimer)(void* user_data);
-typedef int (*FtkCompare)(const void* obj1, const void* obj2);
-typedef Ret (*FtkListener)(void* user_data, void* obj);
+typedef Ret  (*FtkIdle)(void* user_data);
+typedef Ret  (*FtkTimer)(void* user_data);
+typedef int  (*FtkCompare)(const void* obj1, const void* obj2);
+typedef Ret  (*FtkListener)(void* user_data, void* obj);
 
 #define FTK_IM_RAW_TEXT_LENGTH 31
 #define FTK_IM_CANDIDATE_BUFF_LENGTH 1023
@@ -160,6 +160,7 @@ typedef struct _FtkCommitInfo
 #define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
 #define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL
+#define DECL_PRIV2(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[2] : NULL
 
 #define FTK_HALF(a)    ((a)>>1)
 #define FTK_MIN(a, b) (a) < (b) ? (a) : (b)
