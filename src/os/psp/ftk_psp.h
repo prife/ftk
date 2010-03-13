@@ -61,7 +61,9 @@ char* ftk_get_testdata_dir(void);
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
 
-#define usleep sceKernelDelayThread
+#define usleep		sceKernelDelayThread
+#define exit(...)	sceKernelExitGame()
+#define printf		pspDebugScreenPrintf
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
