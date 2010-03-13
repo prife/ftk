@@ -9,6 +9,7 @@ Ret  lau_ftk_widget_on_event_func(FtkWidget* thiz, FtkEvent* event);
 Ret lua_ftk_prepare_options_menu_func(void* ctx, FtkWidget* menu_panel);
 Ret lua_ftk_list_item_listener_func(void* user_data, void* obj);
 Ret lua_ftk_icon_view_item_listener_func(void* user_data, void* obj);
+Ret lua_ftk_widget_listener_func(void* user_data, void* obj);
 void lua_ftk_destroy_func(void* user_data);
 Ret lua_ftk_idle_func(void* user_data);
 Ret lua_ftk_timer_func(void* user_data);

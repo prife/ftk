@@ -1,22 +1,26 @@
 app_win=nil
 
 function OnQuit(button)
+	print("OnQuit: " .. button:GetText())
 	Ftk.Quit()
 
 	return RET_OK
 end
 
 function OnHide(button)
+	print("OnHide: " .. button:GetText())
 	app_win:Lookup(100):Show(0)
 	return RET_OK
 end
 
 function OnShow(button)
+	print("OnShow: " .. button:GetText())
 	app_win:Lookup(100):Show(1)
 	return RET_OK
 end
 
 function OnClicked(button)
+	print("OnShow: " .. button:GetText())
 	print("Clicked")
 	return RET_OK
 end

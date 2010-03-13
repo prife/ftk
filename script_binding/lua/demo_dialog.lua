@@ -10,7 +10,6 @@ end
 function OnNormalQuit(button)
 	print("OnNormalQuit")
 	app_dialog:Unref();
-	app_dialog=nil
 	return RET_OK;
 end
 
@@ -27,7 +26,7 @@ function CreateDialog(modal)
 	theme=Ftk.DefaultTheme()
 	icon=theme:LoadImage("info.png")
 	dialog:SetIcon(icon)
-	app_dialog = app_dialog
+	app_dialog = dialog
 
 	label=FtkLabel.Create(dialog, width/6, height/4, 5*width/6, 20)
 	label:SetText("Are you sure to quit?")

@@ -43,7 +43,7 @@ static int lua_ftk_button_set_clicked_listener(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	listener = (char*)tolua_tostring(L, 2, 0);
-	retv = ftk_button_set_clicked_listener(thiz, lua_ftk_listener_func, listener);
+	retv = ftk_button_set_clicked_listener(thiz, lua_ftk_widget_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
