@@ -33,23 +33,19 @@ static int lua_ftk_popup_menu_create(lua_State* L)
 	return 1;
 }
 
-static int lua_ftk_popup_menu_init(lua_State* L)
+static int lua_ftk_popup_menu_add(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
 	FtkWidget* thiz;
 	FtkListItemInfo* info;
-	int nr;
-	char* on_item_destroy;
-	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isusertype(L, 2, "FtkListItemInfo", 0, &err) && tolua_isnumber(L, 3, 0, &err) && tolua_isstring(L, 4, 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isusertype(L, 2, "FtkListItemInfo", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
 	info = tolua_tousertype(L, 2, 0);
-	nr = tolua_tonumber(L, 3, 0);
-	on_item_destroy = (char*)tolua_tostring(L, 4, 0);
-	retv = ftk_popup_menu_init(thiz, info, nr, lua_ftk_destroy_func, on_item_destroy);
+	retv = ftk_popup_menu_add(thiz, info);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
@@ -75,13 +71,33 @@ static int lua_ftk_popup_menu_calc_height(lua_State* L)
 {
 	tolua_Error err = {0};
 	int retv;
+	int has_title;
 	int visible_items;
-	int param_ok = tolua_isnumber(L, 1, 0, &err);
+	int param_ok = tolua_isnumber(L, 1, 0, &err) && tolua_isnumber(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	visible_items = tolua_tonumber(L, 1, 0);
-	retv = ftk_popup_menu_calc_height(visible_items);
+	has_title = tolua_tonumber(L, 1, 0);
+	visible_items = tolua_tonumber(L, 2, 0);
+	retv = ftk_popup_menu_calc_height(has_title, visible_items);
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int lua_ftk_popup_menu_set_clicked_listener(lua_State* L)
+{
+	tolua_Error err = {0};
+	Ret retv;
+	FtkWidget* thiz;
+	char* listener;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
+	retv = ftk_popup_menu_set_clicked_listener(thiz, lua_ftk_list_item_listener_func, listener);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
@@ -96,9 +112,10 @@ int tolua_ftk_popup_menu_init(lua_State* L)
 	tolua_cclass(L,"FtkPopupMenu", "FtkPopupMenu", "FtkWidget", NULL);
 	tolua_beginmodule(L, "FtkPopupMenu");
 	tolua_function(L, "Create", lua_ftk_popup_menu_create);
-	tolua_function(L, "Init", lua_ftk_popup_menu_init);
+	tolua_function(L, "Add", lua_ftk_popup_menu_add);
 	tolua_function(L, "GetSelected", lua_ftk_popup_menu_get_selected);
 	tolua_function(L, "CalcHeight", lua_ftk_popup_menu_calc_height);
+	tolua_function(L, "SetClickedListener", lua_ftk_popup_menu_set_clicked_listener);
 	tolua_endmodule(L);
 	tolua_endmodule(L);
 

@@ -70,9 +70,9 @@
 #include "lua_ftk_status_panel.h"
 #include "lua_ftk_wait_box.h"
 #include "lua_ftk_image.h"
+#include "lua_ftk_popup_menu.h"
 
 #if 0
-#include "lua_ftk_popup_menu.h"
 #include "lua_ftk_mmap.h"
 #include "lua_ftk_canvas.h"
 #include "lua_ftk_clipboard.h"
@@ -241,9 +241,9 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_status_panel_init(L);
 	tolua_ftk_text_view_init(L);
 	tolua_ftk_wait_box_init(L);
+	tolua_ftk_popup_menu_init(L);
 
 #if 0
-	tolua_ftk_popup_menu_init(L);
 	tolua_ftk_callbacks_init(L);
 	tolua_ftk_canvas_init(L);
 	tolua_ftk_clipboard_init(L);

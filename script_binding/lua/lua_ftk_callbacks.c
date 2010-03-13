@@ -89,3 +89,32 @@ Ret lua_ftk_listener_func(void* user_data, void* obj)
     return ret;
 }
 
+Ret lua_ftk_list_item_listener_func(void* user_data, void* obj)
+{
+    Ret ret = RET_OK;
+    const char* func = user_data;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+	tolua_pushusertype(L, obj, "FtkListItemInfo");
+    lua_call(L, 1, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return ret;
+}
+
+Ret lua_ftk_icon_view_item_listener_func(void* user_data, void* obj)
+{
+    Ret ret = RET_OK;
+    const char* func = user_data;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+	tolua_pushusertype(L, obj, "FtkIconViewItem");
+    lua_call(L, 1, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return ret;
+}

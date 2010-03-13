@@ -9,6 +9,7 @@ static void tolua_reg_types (lua_State* L)
 	tolua_usertype(L, "FtkGc");
 	tolua_usertype(L, "FtkRect");
 	tolua_usertype(L, "FtkListItemInfo");
+	tolua_usertype(L, "FtkIconViewItem");
 	tolua_usertype(L, "FtkEvent");
 }
 
@@ -474,11 +475,11 @@ static int tolua_set_FtkListItemInfo_state(lua_State* L)
 
 static int tolua_get_FtkListItemInfo_type(lua_State* L)
 {
-	void* retv;
+	lua_Number retv;
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)&(thiz->type);
-	{FtkListItemType* copy=malloc(sizeof(FtkListItemType)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkListItemType));tolua_pushusertype_and_takeownership(L, (FtkListItemType*)copy, "FtkListItemType");}
+	retv = (lua_Number)thiz->type;
+	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
 }
@@ -487,7 +488,7 @@ static int tolua_set_FtkListItemInfo_type(lua_State* L)
 {
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->type = (FtkListItemType) (*(FtkListItemType*)tolua_tousertype(L, 2, 0));
+	thiz->type = (int) (tolua_tonumber(L, 2, 0));
 
 	return 1;
 }
@@ -568,6 +569,74 @@ static int tolua_set_FtkListItemInfo_extra_user_data(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	thiz->extra_user_data = (void*) (tolua_tousertype(L, 2, 0));
+
+	return 1;
+}
+
+int lua_ftk_icon_view_item_create(lua_State* L)
+{
+	FtkIconViewItem* retv = calloc(1, sizeof(FtkIconViewItem));
+	tolua_pushusertype_and_takeownership(L, (void*)retv, "FtkIconViewItem");
+
+	return 1;
+}
+
+static int tolua_get_FtkIconViewItem_text(lua_State* L)
+{
+	char* retv;
+	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (char*)thiz->text;
+	tolua_pushstring(L, (char*)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkIconViewItem_text(lua_State* L)
+{
+	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->text = (char*) ((char*)tolua_tostring(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkIconViewItem_icon(lua_State* L)
+{
+	void* retv;
+	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (void*)thiz->icon;
+   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+
+	return 1;
+}
+
+static int tolua_set_FtkIconViewItem_icon(lua_State* L)
+{
+	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->icon = (FtkBitmap*) (tolua_tousertype(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkIconViewItem_user_data(lua_State* L)
+{
+	char* retv;
+	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (char*)thiz->user_data;
+	tolua_pushstring(L, (char*)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkIconViewItem_user_data(lua_State* L)
+{
+	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->user_data = (char*) ((char*)tolua_tostring(L, 2, 0));
 
 	return 1;
 }
@@ -691,6 +760,13 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_variable(L, "right_icon",tolua_get_FtkListItemInfo_right_icon, tolua_set_FtkListItemInfo_right_icon);
 	tolua_variable(L, "user_data",tolua_get_FtkListItemInfo_user_data, tolua_set_FtkListItemInfo_user_data);
 	tolua_variable(L, "extra_user_data",tolua_get_FtkListItemInfo_extra_user_data, tolua_set_FtkListItemInfo_extra_user_data);
+	tolua_endmodule(L);
+	tolua_cclass(L, "FtkIconViewItem", "FtkIconViewItem", "", NULL);
+	tolua_beginmodule(L, "FtkIconViewItem");
+	tolua_function(L, "Create", lua_ftk_icon_view_item_create);
+	tolua_variable(L, "text",tolua_get_FtkIconViewItem_text, tolua_set_FtkIconViewItem_text);
+	tolua_variable(L, "icon",tolua_get_FtkIconViewItem_icon, tolua_set_FtkIconViewItem_icon);
+	tolua_variable(L, "user_data",tolua_get_FtkIconViewItem_user_data, tolua_set_FtkIconViewItem_user_data);
 	tolua_endmodule(L);
 	tolua_cclass(L, "FtkEvent", "FtkEvent", "", NULL);
 	tolua_beginmodule(L, "FtkEvent");
