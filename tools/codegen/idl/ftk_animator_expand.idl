@@ -1,0 +1,8 @@
+#include "ftk_animator.idl"
+
+typedef voidPtr FtkAnimatorExpandPtr;
+
+interface FtkAnimatorExpand : FtkAnimator
+{
+	FtkAnimatorExpandPtr ftk_animator_expand_create(in int destroy_when_stop);
+};

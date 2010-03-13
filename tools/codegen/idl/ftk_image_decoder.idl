@@ -1,9 +1,0 @@
-#include "ftk_typedef.idl"
-
-interface FtkImageDecoder
-{
-	Ret ftk_image_decoder_match(in FtkImageDecoderPtr thiz, in CStrPtr filename);
-	FtkBitmapPtr ftk_image_decoder_decode(in FtkImageDecoderPtr thiz, in CStrPtr filename);
-	void ftk_image_decoder_destroy(in FtkImageDecoderPtr thiz);
-};
-

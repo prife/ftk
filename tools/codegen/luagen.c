@@ -361,7 +361,7 @@ static void userdata_light_type_init(const char* name, TypeInfo* info)
 	strncat(info->check, name,  ptr - name);
 	strcat(info->check    , "\", 0, &err)");
 	strcpy(info->pop      , "tolua_tousertype");
-	sprintf(info->push, "   tolua_pushusertype(L, (%s)retv, \"%s\");\n",
+	sprintf(info->push, "	tolua_pushusertype(L, (%s)retv, \"%s\");\n",
 		info->name, usertype);
 	strcpy(info->free     , "");
 

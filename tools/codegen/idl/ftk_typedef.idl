@@ -39,7 +39,7 @@ typedef voidPtr FtkListModelPtr;
 typedef voidPtr FtkListRenderPtr;
 typedef voidPtr FtkSpritePtr;
 typedef voidPtr FtkTranslatorPtr;
-
+typedef voidPtr FtkAnimatorPtr;
 typedef voidPtr FtkIdleFunc;
 typedef voidPtr FtkTimerFunc;
 typedef voidPtr FtkOnEventFunc;
@@ -65,6 +65,18 @@ enum FtkListItemType
 	FTK_LIST_ITEM_RADIO,
 	FTK_LIST_ITEM_CHECK,
 	FTK_LIST_ITEM_MORE 
+};
+
+enum FtkExpandType
+{
+    FTK_ANI_NONE,
+    FTK_ANI_TO_RIGHT,
+    FTK_ANI_TO_DOWN,
+    FTK_ANI_TO_UP,
+    FTK_ANI_TO_EAST_SOUTH,
+    FTK_ANI_TO_EAST_NORTH,
+    FTK_ANI_TO_BRINK,
+    FTK_ANI_ALPHA
 };
 
 enum FtkGcMask

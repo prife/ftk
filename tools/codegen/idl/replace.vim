@@ -34,8 +34,9 @@
 :%s/\<FtkTranslator\*/FtkTranslatorPtr/g
 :%s/\<FtkSprite\*/FtkSpritePtr/g
 :%s/\<FtkListItemInfo\*/FtkListItemInfoPtr/g
+:%s/\<FtkAnimator\*/FtkAnimatorPtr/g
 :%s/\<void\*/voidPtr/g
-:%s/(Ftk/(inout Ftk/g
+:%s/(Ftk/(in Ftk/g
 :%s/, /, in /g
 :%s/\<FtkTimer\>/FtkTimerFunc/g
 :%s/\<FtkOnEvent\>/FtkOnEventFunc/g
