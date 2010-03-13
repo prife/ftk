@@ -82,7 +82,7 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 	return bitmap;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(PSP)
 static const char* s_default_path[FTK_ICON_PATH_NR];
 static void ftk_init_default_path()
 {

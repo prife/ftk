@@ -246,7 +246,7 @@ Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	info.type = FTK_LIST_ITEM_NORMAL;
-	info.text = text;
+	info.text = (char *)text;
 	info.left_icon = icon;
 	info.user_data = priv->entry;
 	

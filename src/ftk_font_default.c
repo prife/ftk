@@ -47,6 +47,7 @@ static Ret ftk_font_default_load(FtkFont* thiz, const char* filename)
 {
 	DECL_PRIV(thiz, priv);
 
+	ftk_logd("%s: default font: %s\n", __func__, filename);
 	priv->mmap = ftk_mmap_create(filename, 0, -1);
 	if(priv->mmap != NULL)
 	{

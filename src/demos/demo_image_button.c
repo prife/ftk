@@ -2,46 +2,46 @@
 
 const char* pngs[] = 
 {
-	TESTDATA_DIR"/Camera.png",
-	TESTDATA_DIR"/Notes.png",
-	TESTDATA_DIR"/RSS.png",
-	TESTDATA_DIR"/Calculator.png",
-	TESTDATA_DIR"/Twitter.png",
-	TESTDATA_DIR"/Clock.png",
-	TESTDATA_DIR"/Games.png",
-	TESTDATA_DIR"/Youtube.png",
-	TESTDATA_DIR"/AIM.png",
-	TESTDATA_DIR"/LastFm.png",
-	TESTDATA_DIR"/IP.png",
-	TESTDATA_DIR"/Acrobat.png",
-	TESTDATA_DIR"/Settings.png",
-	TESTDATA_DIR"/App",
-	TESTDATA_DIR"/Customize.png",
-	TESTDATA_DIR"/Skype.png",
-	TESTDATA_DIR"/Linkedin.png",
-	TESTDATA_DIR"/Calender.png",
-	TESTDATA_DIR"/Call.png",
-	TESTDATA_DIR"/Install.png",
-	TESTDATA_DIR"/Facebook.png",
-	TESTDATA_DIR"/iPod.png",
-	TESTDATA_DIR"/Chat.png",
-	TESTDATA_DIR"/WLM.png",
-	TESTDATA_DIR"/Flickr.png",
-	TESTDATA_DIR"/Photos.png",
-	TESTDATA_DIR"/Stock.png",
-	TESTDATA_DIR"/Delicious.png",
-	TESTDATA_DIR"/Maps.png",
-	TESTDATA_DIR"/iTunes.png",
-	TESTDATA_DIR"/Memory.png",
-	TESTDATA_DIR"/Weather.png",
-	TESTDATA_DIR"/Wordpress.png",
-	TESTDATA_DIR"/iradio.png",
-	TESTDATA_DIR"/Safari.png",
-	TESTDATA_DIR"/Google.png",
-	TESTDATA_DIR"/Yahoo.png",
-	TESTDATA_DIR"/VLC.png",
-	TESTDATA_DIR"/Sms.png",
-	TESTDATA_DIR"/Mail.png",
+	"/Camera.png",
+	"/Notes.png",
+	"/RSS.png",
+	"/Calculator.png",
+	"/Twitter.png",
+	"/Clock.png",
+	"/Games.png",
+	"/Youtube.png",
+	"/AIM.png",
+	"/LastFm.png",
+	"/IP.png",
+	"/Acrobat.png",
+	"/Settings.png",
+	"/App",
+	"/Customize.png",
+	"/Skype.png",
+	"/Linkedin.png",
+	"/Calender.png",
+	"/Call.png",
+	"/Install.png",
+	"/Facebook.png",
+	"/iPod.png",
+	"/Chat.png",
+	"/WLM.png",
+	"/Flickr.png",
+	"/Photos.png",
+	"/Stock.png",
+	"/Delicious.png",
+	"/Maps.png",
+	"/iTunes.png",
+	"/Memory.png",
+	"/Weather.png",
+	"/Wordpress.png",
+	"/iradio.png",
+	"/Safari.png",
+	"/Google.png",
+	"/Yahoo.png",
+	"/VLC.png",
+	"/Sms.png",
+	"/Mail.png",
 	NULL
 };
 
@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
 	int j = 0;
 	int width = 0;
 	int height = 0;
+	char filename[FTK_MAX_PATH] = {0};
 	FtkGc gc = {0};
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
@@ -71,7 +72,8 @@ int main(int argc, char* argv[])
 	{
 		for(j = 0; j < width/80; j++)
 		{
-			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[i + 2]);
+			ftk_snprintf(filename, sizeof(filename), "%s%s", TESTDATA_DIR, pngs[i + 2]);
+			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 			button = ftk_button_create(win, j * 80, i * 80, ftk_bitmap_width(gc.bitmap), ftk_bitmap_height(gc.bitmap));
 			if(i == 0)
 			{
@@ -80,11 +82,13 @@ int main(int argc, char* argv[])
 			ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
 			ftk_bitmap_unref(gc.bitmap);
 
-			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[1]);
+			ftk_snprintf(filename, sizeof(filename), "%s%s", TESTDATA_DIR, pngs[1]);
+			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 			ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
 			ftk_bitmap_unref(gc.bitmap);
 
-			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), pngs[0]);
+			ftk_snprintf(filename, sizeof(filename), "%s%s", TESTDATA_DIR, pngs[0]);
+			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 			ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
 			ftk_bitmap_unref(gc.bitmap);
 
