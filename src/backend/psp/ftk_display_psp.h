@@ -1,7 +1,7 @@
 /*
- * File: ftk_platform.h    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * File: ftk_display_psp.h    
+ * Author:  Tao Yu <yut616@gmail.com> 
+ * Brief:   PSP Display.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,37 +25,22 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-03-11 Tao Yu <yut616@gmail.com> created.
  *
  */
-#ifndef FTK_PLATFORM_H
-#define FTK_PLATFORM_H
 
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+#ifndef FTK_DISPLAY_PSP_H
+#define FTK_DISPLAY_PSP_H
 
-#ifdef LINUX
-#include "ftk_linux.h"
-#endif
+#include "ftk_display.h"
+#include "ftk_event.h"
+#include "ftk_source.h"
 
-#ifdef WIN32
-#include "ftk_win32.h"
-#endif
+FtkDisplay* ftk_display_psp_create(FtkSource** event_source, FtkOnEvent on_event, void* ctx);
 
-#ifdef ARM_ADS
-#include "ftk_ads.h"
-#endif
+Ret   ftk_display_psp_on_resize(FtkDisplay* thiz, int width, int height);
+void* ftk_display_psp_get_xdisplay(FtkDisplay* thiz);
+void* ftk_display_psp_get_xwindow(FtkDisplay* thiz);
 
-#ifdef PSP
-#include "ftk_psp.h"
-#endif
-
-int  ftk_platform_init(int argc, char** argv);
-void ftk_platform_deinit(void);
-size_t ftk_get_relative_time(void);
-
-#endif/*FTK_PLATFORM_H*/
+#endif/*FTK_DISPLAY_PSP_H*/
 

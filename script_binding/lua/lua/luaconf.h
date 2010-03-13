@@ -44,7 +44,10 @@
 #define LUA_DL_DYLD		/* does not need extra library */
 #endif
 
-
+#if defined(LUA_USE_PSP)
+#define LUA_USE_POSIX
+#define LUA_USE_READLINE	/* needs some extra libraries */
+#endif
 
 /*
 @@ LUA_USE_POSIX includes all functionallity listed as X/Open System

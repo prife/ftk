@@ -15,8 +15,16 @@ ftk_run_SOURCES=ftk_lua.c lua_runner.c tolua_event.c  tolua_is.c  tolua_map.c  t
 	lua_ftk_popup_menu.c
 
 ftk_run_LDFLAGS=$(MYLDFLAGS) $(abs_top_builddir)/script_binding/lua/lua/.libs/liblua.a \
-	-lpng -ljpeg  -ldl
-ftk_run_CFLAGS=-DLUA_USE_LINUX -I$(srcdir)/lua
+	-lpng -ljpeg
+
+if FTK_BACKEND_PSP
+ftk_run_CFLAGS=-DLUA_USE_PSP
+else
+ftk_run_CFLAGS=-DLUA_USE_LINUX
+ftk_run_LDFLAGS+=-ldl
+endif
+
+ftk_run_CFLAGS+=-I$(srcdir)/lua
 
 EXTRA_DIST=ftk_lua.h \
 	lua_ftk_app_window.h           lua_ftk_menu_item.h\

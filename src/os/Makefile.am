@@ -1,1 +1,1 @@
-SUBDIRS=linux windows
+SUBDIRS=linux windows psp

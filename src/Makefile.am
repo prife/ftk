@@ -20,6 +20,16 @@ LINUX_SIGMA=$(srcdir)/backend/sigma/ftk_backend_sigma.c \
 	$(srcdir)/backend/fb/ftk_source_input.c \
 	$(srcdir)/backend/sigma/ftk_display_sigma.c
 
+PSP=$(srcdir)/backend/psp/ftk_backend_psp.c \
+	$(srcdir)/backend/psp/ftk_display_psp.c
+
+OS_LINUX=\
+	$(srcdir)/os/linux/ftk_mmap_linux.c  \
+	$(srcdir)/os/linux/ftk_linux.c 
+OS_PSP=\
+	$(srcdir)/os/psp/ftk_mmap_psp.c \
+	$(srcdir)/os/psp/ftk_psp.c 
+
 libftk_la_SOURCES=\
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	ftk_label.c           ftk_source_timer.c \
@@ -31,8 +41,6 @@ libftk_la_SOURCES=\
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c \
 	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c  \
-	$(srcdir)/os/linux/ftk_mmap_linux.c  \
-	$(srcdir)/os/linux/ftk_linux.c  \
 	ftk_gesture.c         ftk_wait_box.c  ftk_scroll_bar.c \
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
@@ -71,21 +79,26 @@ libftk_la_SOURCES+=fontdata.c ftk_font_default.c
 endif
 
 if FTK_BACKEND_FB
-libftk_la_SOURCES+=$(LINUX_NATIVE)
+libftk_la_SOURCES+=$(LINUX_NATIVE) $(OS_LINUX)
 endif
 
 if FTK_BACKEND_X11
-libftk_la_SOURCES+=$(LINUX_X11)
+libftk_la_SOURCES+=$(LINUX_X11) $(OS_LINUX)
 endif
 
 if FTK_BACKEND_DFB
-libftk_la_SOURCES+=$(LINUX_DFB)
+libftk_la_SOURCES+=$(LINUX_DFB) $(OS_LINUX)
 endif
 
 if FTK_BACKEND_SIGMA
-libftk_la_SOURCES+=$(LINUX_SIGMA)
+libftk_la_SOURCES+=$(LINUX_SIGMA) $(OS_LINUX)
 libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/sigma
 libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/fb
+endif
+
+if FTK_BACKEND_PSP
+libftk_la_SOURCES+=$(PSP) $(OS_PSP)
+libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/psp
 endif
 
 if FONT_ENGINE_FREETYPE

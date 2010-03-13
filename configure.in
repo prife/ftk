@@ -13,6 +13,14 @@ AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 
 # Checks for libraries.
+case "$with_backend" in
+	psp*)
+		AC_CHECK_LIB([m], [main])
+		AC_CHECK_LIB([pspsdk], [main])
+		AC_CHECK_LIB([pspkernel], [main])
+		AC_CHECK_LIB([psplibc], [main])
+		AC_CHECK_LIB([z], [main])
+esac
 # FIXME: Replace `main' with a function in `-ljpeg':
 AC_CHECK_LIB([jpeg], [main])
 # FIXME: Replace `main' with a function in `-lpng':
@@ -21,7 +29,7 @@ AC_CHECK_LIB([png], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h execinfo.h])
 
-AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb|linux-sigma],
+AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb|linux-sigma|psp],
                     [use which display/input backend])])
 
 case "$with_backend" in
@@ -43,6 +51,10 @@ case "$with_backend" in
 		backend="sigma"
 		CFLAGS="$CFLAGS $SIGMA_CFLAGS";
 		LDFLAGS="$LDFLAGS $SIGMA_OBJS $SIGMA_LIBS";;
+	psp*)
+		backend="psp"
+		CFLAGS="$CFLAGS $PSP_CFLAGS";
+		LDFLAGS="$LDFLAGS $PSP_OBJS $PSP_LIBS $PSP_LDFLAGS";;
 	*)
 		backend="fb"
 		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE";;
@@ -54,6 +66,7 @@ AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
 AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
 AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
 AM_CONDITIONAL(FTK_BACKEND_SIGMA, test "$backend" = "sigma")
+AM_CONDITIONAL(FTK_BACKEND_PSP, test "$backend" = "psp")
 
 AC_ARG_WITH(fontengine, [AC_HELP_STRING([--with-fontengine=default|freetype],
                     [use which font engine])])
@@ -126,11 +139,13 @@ AC_CONFIG_FILES([ftk.pc
                 src/backend/directfb/Makefile
                 src/backend/fb/Makefile
                 src/backend/sigma/Makefile
+                src/backend/psp/Makefile
                 src/backend/x11-emu/Makefile
                 src/backend/win32/Makefile
                 src/os/Makefile
                 src/os/linux/Makefile
                 src/os/windows/Makefile
+                src/os/psp/Makefile
                 src/compiler/Makefile
                 src/compiler/ads/Makefile
                 src/compiler/vs2008/Makefile

@@ -1,7 +1,8 @@
+
 /*
- * File: ftk_platform.h    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * File: ftk_psp.h
+ * Author:  Tao Yu <yut616@gmail.com>
+ * Brief:   psp specific functions.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,37 +26,38 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-03-11 Tao Yu <yut616@gmail.com> created.
  *
  */
-#ifndef FTK_PLATFORM_H
-#define FTK_PLATFORM_H
 
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+#ifndef FTK_PSP_H
+#define FTK_PSP_H
 
-#ifdef LINUX
-#include "ftk_linux.h"
+#include <psputils.h>
+#include <pspkernel.h>
+#include <pspdebug.h>
+#include <pspctrl.h>
+#include <pspiofilemgr.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <ctype.h>
+#include <sys/select.h>
+#include <sys/time.h>
+#include <sys/socket.h>
+
+#define ftk_strncpy   strncpy
+#define ftk_snprintf  snprintf
+#define ftk_vsnprintf vsnprintf 
+
+#define usleep sceKernelDelayThread
+
+#ifdef HAVE_CONFIG_H
+#include "config.h"
 #endif
 
-#ifdef WIN32
-#include "ftk_win32.h"
-#endif
+#define FTK_HAS_MAIN 1
 
-#ifdef ARM_ADS
-#include "ftk_ads.h"
-#endif
-
-#ifdef PSP
-#include "ftk_psp.h"
-#endif
-
-int  ftk_platform_init(int argc, char** argv);
-void ftk_platform_deinit(void);
-size_t ftk_get_relative_time(void);
-
-#endif/*FTK_PLATFORM_H*/
+#endif/*FTK_PSP_H*/
 

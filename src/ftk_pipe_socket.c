@@ -42,6 +42,8 @@ static Ret make_sock_pipe(int pipes[2])
 {
 #ifdef WIN32
 	win32_socketpair(pipes);
+#elif PSP
+	pipe(pipes);	
 #else
 	socketpair(AF_UNIX, SOCK_STREAM, 0, pipes);	
 #endif
