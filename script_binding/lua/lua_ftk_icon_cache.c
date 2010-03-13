@@ -20,7 +20,7 @@ static int lua_ftk_icon_cache_create(lua_State* L)
 	root_path = tolua_tostrings(L, 1, 0);
 	rel_path = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_icon_cache_create(root_path, rel_path);
-   tolua_pushusertype(L, (FtkIconCache*)retv, "FtkIconCache");
+	tolua_pushusertype(L, (FtkIconCache*)retv, "FtkIconCache");
 	free(root_path);
 
 	return 1;
@@ -39,7 +39,7 @@ static int lua_ftk_icon_cache_load(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_icon_cache_load(thiz, filename);
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }

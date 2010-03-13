@@ -36,7 +36,7 @@ static int lua_ftk_window_get_focus(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_window_get_focus(thiz);
-   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
+	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }

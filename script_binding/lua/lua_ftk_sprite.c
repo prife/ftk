@@ -11,7 +11,7 @@ static int lua_ftk_sprite_create(lua_State* L)
 {
 	FtkSprite* retv;
 	retv = ftk_sprite_create();
-   tolua_pushusertype(L, (FtkSprite*)retv, "FtkSprite");
+	tolua_pushusertype(L, (FtkSprite*)retv, "FtkSprite");
 
 	return 1;
 }

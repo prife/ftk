@@ -20,7 +20,7 @@ static int lua_ftk_translator_create(lua_State* L)
 	package = (char*)tolua_tostring(L, 1, 0);
 	locale = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_translator_create(package, locale);
-   tolua_pushusertype(L, (FtkTranslator*)retv, "FtkTranslator");
+	tolua_pushusertype(L, (FtkTranslator*)retv, "FtkTranslator");
 
 	return 1;
 }

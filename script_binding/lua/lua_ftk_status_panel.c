@@ -18,7 +18,7 @@ static int lua_ftk_status_panel_create(lua_State* L)
 
 	size = tolua_tonumber(L, 1, 0);
 	retv = ftk_status_panel_create(size);
-   tolua_pushusertype(L, (FtkStatusPanel*)retv, "FtkStatusPanel");
+	tolua_pushusertype(L, (FtkStatusPanel*)retv, "FtkStatusPanel");
 
 	return 1;
 }

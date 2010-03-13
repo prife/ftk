@@ -24,7 +24,7 @@ static int lua_ftk_dialog_create(lua_State* L)
 	width = tolua_tonumber(L, 3, 0);
 	height = tolua_tonumber(L, 4, 0);
 	retv = ftk_dialog_create(x, y, width, height);
-   tolua_pushusertype(L, (FtkDialog*)retv, "FtkDialog");
+	tolua_pushusertype(L, (FtkDialog*)retv, "FtkDialog");
 
 	return 1;
 }
@@ -48,7 +48,7 @@ static int lua_ftk_dialog_create_ex(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_dialog_create_ex(attr, x, y, width, height);
-   tolua_pushusertype(L, (FtkDialog*)retv, "FtkDialog");
+	tolua_pushusertype(L, (FtkDialog*)retv, "FtkDialog");
 
 	return 1;
 }

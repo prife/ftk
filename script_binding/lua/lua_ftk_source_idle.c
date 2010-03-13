@@ -18,7 +18,7 @@ static int lua_ftk_source_idle_create(lua_State* L)
 
 	action = (char*)tolua_tostring(L, 1, 0);
 	retv = ftk_source_idle_create(lua_ftk_idle_func, action);
-   tolua_pushusertype(L, (FtkSource*)retv, "FtkSource");
+	tolua_pushusertype(L, (FtkSource*)retv, "FtkSource");
 
 	return 1;
 }

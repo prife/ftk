@@ -22,7 +22,7 @@ static int lua_ftk_canvas_create(lua_State* L)
 	h = tolua_tonumber(L, 2, 0);
 	clear_color = *(FtkColor*)tolua_tousertype(L, 3, 0);
 	retv = ftk_canvas_create(w, h, clear_color);
-   tolua_pushusertype(L, (FtkCanvas*)retv, "FtkCanvas");
+	tolua_pushusertype(L, (FtkCanvas*)retv, "FtkCanvas");
 
 	return 1;
 }
@@ -418,7 +418,7 @@ static int lua_ftk_canvas_get_pixel(lua_State* L)
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
 	retv = ftk_canvas_get_pixel(thiz, x, y);
-   tolua_pushusertype(L, (FtkColor*)retv, "FtkColor");
+	tolua_pushusertype(L, (FtkColor*)retv, "FtkColor");
 
 	return 1;
 }
@@ -456,7 +456,7 @@ static int lua_ftk_canvas_bitmap(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_canvas_bitmap(thiz);
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }

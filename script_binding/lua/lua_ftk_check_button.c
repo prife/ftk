@@ -26,7 +26,7 @@ static int lua_ftk_check_button_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_check_button_create(parent, x, y, width, height);
-   tolua_pushusertype(L, (FtkCheckButton*)retv, "FtkCheckButton");
+	tolua_pushusertype(L, (FtkCheckButton*)retv, "FtkCheckButton");
 
 	return 1;
 }
@@ -50,7 +50,7 @@ static int lua_ftk_check_button_create_radio(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_check_button_create_radio(parent, x, y, width, height);
-   tolua_pushusertype(L, (FtkCheckButton*)retv, "FtkCheckButton");
+	tolua_pushusertype(L, (FtkCheckButton*)retv, "FtkCheckButton");
 
 	return 1;
 }

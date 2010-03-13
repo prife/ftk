@@ -70,25 +70,22 @@
 #include "lua_ftk_wait_box.h"
 #include "lua_ftk_image.h"
 #include "lua_ftk_popup_menu.h"
-
-#if 0
+#include "lua_ftk_animator.h"
+#include "lua_ftk_animator_alpha.h"
+#include "lua_ftk_animator_expand.h"
 #include "lua_ftk_mmap.h"
 #include "lua_ftk_canvas.h"
 #include "lua_ftk_clipboard.h"
 #include "lua_ftk_display.h"
 #include "lua_ftk_font.h"
 #include "lua_ftk_icon_cache.h"
-#include "lua_ftk_image_decoder.h"
 #include "lua_ftk_list_view.h"
 #include "lua_ftk_list_model_default.h"
 #include "lua_ftk_list_model.h"
 #include "lua_ftk_list_render_default.h"
 #include "lua_ftk_list_render.h"
-#include "lua_ftk_sources_manager.h"
 #include "lua_ftk_sprite.h"
-#include "lua_ftk_translator.h"
 #include "lua_ftk_wnd_manager.h"
-#endif
 
 static int ltk_init(lua_State *L)
 {
@@ -240,28 +237,23 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_text_view_init(L);
 	tolua_ftk_wait_box_init(L);
 	tolua_ftk_popup_menu_init(L);
-
-#if 0
-	tolua_ftk_callbacks_init(L);
+	tolua_ftk_animator_init(L);
+	tolua_ftk_animator_alpha_init(L);
+	tolua_ftk_animator_expand_init(L);
 	tolua_ftk_canvas_init(L);
 	tolua_ftk_clipboard_init(L);
 	tolua_ftk_display_init(L);
-	tolua_ftk_font_default_init(L);
-	tolua_ftk_font_free_type_init(L);
 	tolua_ftk_font_init(L);
 	tolua_ftk_icon_cache_init(L);
-	tolua_ftk_image_decoder_init(L);
+
 	tolua_ftk_list_model_default_init(L);
 	tolua_ftk_list_model_init(L);
 	tolua_ftk_list_render_default_init(L);
 	tolua_ftk_list_render_init(L);
 	tolua_ftk_list_view_init(L);
 	tolua_ftk_mmap_init(L);
-	tolua_ftk_sources_manager_init(L);
 	tolua_ftk_sprite_init(L);
-	tolua_ftk_translator_init(L);
 	tolua_ftk_wnd_manager_init(L);
-#endif
 
 	lua_callbacks_init(L);
 

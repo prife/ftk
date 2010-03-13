@@ -243,7 +243,7 @@ static int tolua_get_FtkGc_font(lua_State* L)
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->font;
-   tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
+	tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
 
 	return 1;
 }
@@ -263,7 +263,7 @@ static int tolua_get_FtkGc_bitmap(lua_State* L)
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->bitmap;
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -499,7 +499,7 @@ static int tolua_get_FtkListItemInfo_left_icon(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->left_icon;
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -519,7 +519,7 @@ static int tolua_get_FtkListItemInfo_right_icon(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->right_icon;
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -539,7 +539,7 @@ static int tolua_get_FtkListItemInfo_user_data(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->user_data;
-   tolua_pushusertype(L, (void*)retv, "void");
+	tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }
@@ -559,7 +559,7 @@ static int tolua_get_FtkListItemInfo_extra_user_data(lua_State* L)
 	FtkListItemInfo* thiz = (FtkListItemInfo*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->extra_user_data;
-   tolua_pushusertype(L, (void*)retv, "void");
+	tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }
@@ -607,7 +607,7 @@ static int tolua_get_FtkIconViewItem_icon(lua_State* L)
 	FtkIconViewItem* thiz = (FtkIconViewItem*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->icon;
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -675,7 +675,7 @@ static int tolua_get_FtkEvent_widget(lua_State* L)
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->widget;
-   tolua_pushusertype(L, (void*)retv, "void");
+	tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }
@@ -781,6 +781,14 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_constant(L, "FTK_LIST_ITEM_RADIO", FTK_LIST_ITEM_RADIO);
 	tolua_constant(L, "FTK_LIST_ITEM_CHECK", FTK_LIST_ITEM_CHECK);
 	tolua_constant(L, "FTK_LIST_ITEM_MORE", FTK_LIST_ITEM_MORE);
+	tolua_constant(L, "FTK_ANI_NONE", FTK_ANI_NONE);
+	tolua_constant(L, "FTK_ANI_TO_RIGHT", FTK_ANI_TO_RIGHT);
+	tolua_constant(L, "FTK_ANI_TO_DOWN", FTK_ANI_TO_DOWN);
+	tolua_constant(L, "FTK_ANI_TO_UP", FTK_ANI_TO_UP);
+	tolua_constant(L, "FTK_ANI_TO_EAST_SOUTH", FTK_ANI_TO_EAST_SOUTH);
+	tolua_constant(L, "FTK_ANI_TO_EAST_NORTH", FTK_ANI_TO_EAST_NORTH);
+	tolua_constant(L, "FTK_ANI_TO_BRINK", FTK_ANI_TO_BRINK);
+	tolua_constant(L, "FTK_ANI_ALPHA", FTK_ANI_ALPHA);
 	tolua_constant(L, "FTK_GC_BG", FTK_GC_BG);
 	tolua_constant(L, "FTK_GC_FG", FTK_GC_FG);
 	tolua_constant(L, "FTK_GC_FONT", FTK_GC_FONT);

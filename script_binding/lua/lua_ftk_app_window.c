@@ -11,7 +11,7 @@ static int lua_ftk_app_window_create(lua_State* L)
 {
 	FtkAppWindow* retv;
 	retv = ftk_app_window_create();
-   tolua_pushusertype(L, (FtkAppWindow*)retv, "FtkAppWindow");
+	tolua_pushusertype(L, (FtkAppWindow*)retv, "FtkAppWindow");
 
 	return 1;
 }

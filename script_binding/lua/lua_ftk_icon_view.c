@@ -26,7 +26,7 @@ static int lua_ftk_icon_view_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_icon_view_create(parent, x, y, width, height);
-   tolua_pushusertype(L, (FtkIconView*)retv, "FtkIconView");
+	tolua_pushusertype(L, (FtkIconView*)retv, "FtkIconView");
 
 	return 1;
 }
@@ -134,7 +134,7 @@ static int lua_ftk_icon_view_get(lua_State* L)
 	index = tolua_tonumber(L, 2, 0);
 	retv = ftk_icon_view_get(thiz, index, &item);
 	tolua_pushnumber(L, (lua_Number)retv);
-   tolua_pushusertype(L, (FtkIconViewItem*)retv, "FtkIconViewItem");
+	tolua_pushusertype(L, (FtkIconViewItem*)retv, "FtkIconViewItem");
 
 	return 1;
 }

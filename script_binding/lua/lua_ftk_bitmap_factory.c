@@ -11,7 +11,7 @@ static int lua_ftk_bitmap_factory_create(lua_State* L)
 {
 	FtkBitmapFactory* retv;
 	retv = ftk_bitmap_factory_create();
-   tolua_pushusertype(L, (FtkBitmapFactory*)retv, "FtkBitmapFactory");
+	tolua_pushusertype(L, (FtkBitmapFactory*)retv, "FtkBitmapFactory");
 
 	return 1;
 }
@@ -29,7 +29,7 @@ static int lua_ftk_bitmap_factory_load(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_bitmap_factory_load(thiz, filename);
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }

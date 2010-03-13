@@ -24,7 +24,7 @@ static int lua_ftk_font_freetype_create(lua_State* L)
 	italic = tolua_tonumber(L, 3, 0);
 	size = tolua_tonumber(L, 4, 0);
 	retv = ftk_font_freetype_create(filename, bold, italic, size);
-   tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
+	tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
 
 	return 1;
 }

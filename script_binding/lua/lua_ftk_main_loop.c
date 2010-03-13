@@ -18,7 +18,7 @@ static int lua_ftk_main_loop_create(lua_State* L)
 
 	sources_manager = tolua_tousertype(L, 1, 0);
 	retv = ftk_main_loop_create(sources_manager);
-   tolua_pushusertype(L, (FtkMainLoop*)retv, "FtkMainLoop");
+	tolua_pushusertype(L, (FtkMainLoop*)retv, "FtkMainLoop");
 
 	return 1;
 }

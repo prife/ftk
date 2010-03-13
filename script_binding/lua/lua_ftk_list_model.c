@@ -7,6 +7,34 @@ static void tolua_reg_types (lua_State* L)
 	tolua_usertype(L, "FtkListModel");
 }
 
+static int lua_ftk_list_model_ref(lua_State* L)
+{
+	tolua_Error err = {0};
+	FtkListModel* thiz;
+	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	ftk_list_model_ref(thiz);
+
+	return 1;
+}
+
+static int lua_ftk_list_model_unref(lua_State* L)
+{
+	tolua_Error err = {0};
+	FtkListModel* thiz;
+	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	ftk_list_model_unref(thiz);
+
+	return 1;
+}
+
 static int lua_ftk_list_model_enable_notify(lua_State* L)
 {
 	tolua_Error err = {0};
@@ -39,49 +67,13 @@ static int lua_ftk_list_model_disable_notify(lua_State* L)
 	return 1;
 }
 
-static int lua_ftk_list_model_set_changed_listener(lua_State* L)
-{
-	tolua_Error err = {0};
-	Ret retv;
-	FtkListModel* thiz;
-	char* listener;
-	void* ctx;
-	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_isusertype(L, 3, "void", 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	thiz = tolua_tousertype(L, 1, 0);
-	listener = (char*)tolua_tostring(L, 2, 0);
-	ctx = tolua_tousertype(L, 3, 0);
-	retv = ftk_list_model_set_changed_listener(thiz, lua_ftk_listener_func, listener, ctx);
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int lua_ftk_list_model_notify(lua_State* L)
-{
-	tolua_Error err = {0};
-	Ret retv;
-	FtkListModel* thiz;
-	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	thiz = tolua_tousertype(L, 1, 0);
-	retv = ftk_list_model_notify(thiz);
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
 static int lua_ftk_list_model_add(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
 	FtkListModel* thiz;
-	void* item;
-	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err) && tolua_isusertype(L, 2, "void", 0, &err);
+	FtkListItemInfo* item;
+	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err) && tolua_isusertype(L, 2, "FtkListItemInfo", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
@@ -149,7 +141,7 @@ static int lua_ftk_list_model_get_data(lua_State* L)
 	Ret retv;
 	FtkListModel* thiz;
 	int index;
-	void* ret;
+	FtkListItemInfo* ret;
 	int param_ok = tolua_isusertype(L, 1, "FtkListModel", 0, &err) && tolua_isnumber(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
@@ -158,7 +150,7 @@ static int lua_ftk_list_model_get_data(lua_State* L)
 	index = tolua_tonumber(L, 2, 0);
 	retv = ftk_list_model_get_data(thiz, index, &ret);
 	tolua_pushnumber(L, (lua_Number)retv);
-   tolua_pushusertype(L, (void*)retv, "void");
+	tolua_pushusertype(L, (FtkListItemInfo*)retv, "FtkListItemInfo");
 
 	return 1;
 }
@@ -185,10 +177,10 @@ int tolua_ftk_list_model_init(lua_State* L)
 	tolua_beginmodule(L, NULL);
 	tolua_cclass(L,"FtkListModel", "FtkListModel", "", NULL);
 	tolua_beginmodule(L, "FtkListModel");
+	tolua_function(L, "Ref", lua_ftk_list_model_ref);
+	tolua_function(L, "Unref", lua_ftk_list_model_unref);
 	tolua_function(L, "EnableNotify", lua_ftk_list_model_enable_notify);
 	tolua_function(L, "DisableNotify", lua_ftk_list_model_disable_notify);
-	tolua_function(L, "SetChangedListener", lua_ftk_list_model_set_changed_listener);
-	tolua_function(L, "Notify", lua_ftk_list_model_notify);
 	tolua_function(L, "Add", lua_ftk_list_model_add);
 	tolua_function(L, "Remove", lua_ftk_list_model_remove);
 	tolua_function(L, "Reset", lua_ftk_list_model_reset);

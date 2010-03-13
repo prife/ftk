@@ -20,7 +20,7 @@ static int lua_ftk_xul_load(lua_State* L)
 	xml = (char*)tolua_tostring(L, 1, 0);
 	length = tolua_tonumber(L, 2, 0);
 	retv = ftk_xul_load(xml, length);
-   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
+	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }

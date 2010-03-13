@@ -28,7 +28,7 @@ static int lua_ftk_popup_menu_create(lua_State* L)
 	icon = tolua_tousertype(L, 5, 0);
 	title = (char*)tolua_tostring(L, 6, 0);
 	retv = ftk_popup_menu_create(x, y, w, h, icon, title);
-   tolua_pushusertype(L, (FtkPopupMenu*)retv, "FtkPopupMenu");
+	tolua_pushusertype(L, (FtkPopupMenu*)retv, "FtkPopupMenu");
 
 	return 1;
 }

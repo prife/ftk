@@ -22,7 +22,7 @@ static int lua_ftk_status_item_create(lua_State* L)
 	pos = tolua_tonumber(L, 2, 0);
 	width = tolua_tonumber(L, 3, 0);
 	retv = ftk_status_item_create(parent, pos, width);
-   tolua_pushusertype(L, (FtkStatusItem*)retv, "FtkStatusItem");
+	tolua_pushusertype(L, (FtkStatusItem*)retv, "FtkStatusItem");
 
 	return 1;
 }

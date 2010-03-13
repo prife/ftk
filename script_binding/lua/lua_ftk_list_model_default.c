@@ -12,15 +12,13 @@ static int lua_ftk_list_model_default_create(lua_State* L)
 	tolua_Error err = {0};
 	FtkListModel* retv;
 	int init_nr;
-	char* destroy;
-	int param_ok = tolua_isnumber(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err);
+	int param_ok = tolua_isnumber(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	init_nr = tolua_tonumber(L, 1, 0);
-	destroy = (char*)tolua_tostring(L, 2, 0);
-	retv = ftk_list_model_default_create(init_nr, lua_ftk_destroy_func, destroy);
-   tolua_pushusertype(L, (FtkListModel*)retv, "FtkListModel");
+	retv = ftk_list_model_default_create(init_nr);
+	tolua_pushusertype(L, (FtkListModel*)retv, "FtkListModel");
 
 	return 1;
 }

@@ -27,10 +27,10 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
-	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	win:SetText("Demo button")
+	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
+	
 	app_win=win
-
 	width=win:Width()
 	height=win:Height()
 

@@ -26,7 +26,7 @@ static int lua_ftk_radio_group_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_radio_group_create(parent, x, y, width, height);
-   tolua_pushusertype(L, (FtkRadioGroup*)retv, "FtkRadioGroup");
+	tolua_pushusertype(L, (FtkRadioGroup*)retv, "FtkRadioGroup");
 
 	return 1;
 }

@@ -18,7 +18,7 @@ static int lua_ftk_menu_item_create(lua_State* L)
 
 	parent = tolua_tousertype(L, 1, 0);
 	retv = ftk_menu_item_create(parent);
-   tolua_pushusertype(L, (FtkMenuItem*)retv, "FtkMenuItem");
+	tolua_pushusertype(L, (FtkMenuItem*)retv, "FtkMenuItem");
 
 	return 1;
 }

@@ -18,7 +18,7 @@ static int lua_ftk_theme_create(lua_State* L)
 
 	init_default = tolua_tonumber(L, 1, 0);
 	retv = ftk_theme_create(init_default);
-   tolua_pushusertype(L, (FtkTheme*)retv, "FtkTheme");
+	tolua_pushusertype(L, (FtkTheme*)retv, "FtkTheme");
 
 	return 1;
 }
@@ -74,7 +74,7 @@ static int lua_ftk_theme_load_image(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	filename = (char*)tolua_tostring(L, 2, 0);
 	retv = ftk_theme_load_image(thiz, filename);
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }
@@ -94,7 +94,7 @@ static int lua_ftk_theme_get_bg(lua_State* L)
 	type = *(FtkWidgetType*)tolua_tousertype(L, 2, 0);
 	state = *(FtkWidgetState*)tolua_tousertype(L, 3, 0);
 	retv = ftk_theme_get_bg(thiz, type, state);
-   tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
+	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 
 	return 1;
 }

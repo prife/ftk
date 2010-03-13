@@ -22,7 +22,7 @@ static int lua_ftk_mmap_create(lua_State* L)
 	offset = tolua_tonumber(L, 2, 0);
 	size = tolua_tonumber(L, 3, 0);
 	retv = ftk_mmap_create(filename, offset, size);
-   tolua_pushusertype(L, (FtkMmap*)retv, "FtkMmap");
+	tolua_pushusertype(L, (FtkMmap*)retv, "FtkMmap");
 
 	return 1;
 }
@@ -38,7 +38,7 @@ static int lua_ftk_mmap_data(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_mmap_data(thiz);
-   tolua_pushusertype(L, (void*)retv, "void");
+	tolua_pushusertype(L, (void*)retv, "void");
 
 	return 1;
 }

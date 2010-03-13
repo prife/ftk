@@ -11,7 +11,7 @@ static int lua_ftk_default_font(lua_State* L)
 {
 	FtkFont* retv;
 	retv = ftk_default_font();
-   tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
+	tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
 
 	return 1;
 }
@@ -20,7 +20,7 @@ static int lua_ftk_default_display(lua_State* L)
 {
 	FtkDisplay* retv;
 	retv = ftk_default_display();
-   tolua_pushusertype(L, (FtkDisplay*)retv, "FtkDisplay");
+	tolua_pushusertype(L, (FtkDisplay*)retv, "FtkDisplay");
 
 	return 1;
 }
@@ -29,7 +29,7 @@ static int lua_ftk_default_main_loop(lua_State* L)
 {
 	FtkMainLoop* retv;
 	retv = ftk_default_main_loop();
-   tolua_pushusertype(L, (FtkMainLoop*)retv, "FtkMainLoop");
+	tolua_pushusertype(L, (FtkMainLoop*)retv, "FtkMainLoop");
 
 	return 1;
 }
@@ -47,7 +47,7 @@ static int lua_ftk_default_wnd_manager(lua_State* L)
 {
 	FtkWndManager* retv;
 	retv = ftk_default_wnd_manager();
-   tolua_pushusertype(L, (FtkWndManager*)retv, "FtkWndManager");
+	tolua_pushusertype(L, (FtkWndManager*)retv, "FtkWndManager");
 
 	return 1;
 }
@@ -56,7 +56,7 @@ static int lua_ftk_default_status_panel(lua_State* L)
 {
 	FtkWidget* retv;
 	retv = ftk_default_status_panel();
-   tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
+	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -65,7 +65,7 @@ static int lua_ftk_default_bitmap_factory(lua_State* L)
 {
 	FtkBitmapFactory* retv;
 	retv = ftk_default_bitmap_factory();
-   tolua_pushusertype(L, (FtkBitmapFactory*)retv, "FtkBitmapFactory");
+	tolua_pushusertype(L, (FtkBitmapFactory*)retv, "FtkBitmapFactory");
 
 	return 1;
 }
@@ -74,7 +74,7 @@ static int lua_ftk_default_sources_manager(lua_State* L)
 {
 	FtkSourcesManager* retv;
 	retv = ftk_default_sources_manager();
-   tolua_pushusertype(L, (FtkSourcesManager*)retv, "FtkSourcesManager");
+	tolua_pushusertype(L, (FtkSourcesManager*)retv, "FtkSourcesManager");
 
 	return 1;
 }
@@ -83,7 +83,7 @@ static int lua_ftk_shared_canvas(lua_State* L)
 {
 	FtkCanvas* retv;
 	retv = ftk_shared_canvas();
-   tolua_pushusertype(L, (FtkCanvas*)retv, "FtkCanvas");
+	tolua_pushusertype(L, (FtkCanvas*)retv, "FtkCanvas");
 
 	return 1;
 }
@@ -92,7 +92,7 @@ static int lua_ftk_default_theme(lua_State* L)
 {
 	FtkTheme* retv;
 	retv = ftk_default_theme();
-   tolua_pushusertype(L, (FtkTheme*)retv, "FtkTheme");
+	tolua_pushusertype(L, (FtkTheme*)retv, "FtkTheme");
 
 	return 1;
 }
@@ -101,7 +101,7 @@ static int lua_ftk_primary_source(lua_State* L)
 {
 	FtkSource* retv;
 	retv = ftk_primary_source();
-   tolua_pushusertype(L, (FtkSource*)retv, "FtkSource");
+	tolua_pushusertype(L, (FtkSource*)retv, "FtkSource");
 
 	return 1;
 }
@@ -110,7 +110,7 @@ static int lua_ftk_default_allocator(lua_State* L)
 {
 	FtkAllocator* retv;
 	retv = ftk_default_allocator();
-   tolua_pushusertype(L, (FtkAllocator*)retv, "FtkAllocator");
+	tolua_pushusertype(L, (FtkAllocator*)retv, "FtkAllocator");
 
 	return 1;
 }
@@ -119,7 +119,7 @@ static int lua_ftk_default_input_method_manager(lua_State* L)
 {
 	FtkInputMethodManager* retv;
 	retv = ftk_default_input_method_manager();
-   tolua_pushusertype(L, (FtkInputMethodManager*)retv, "FtkInputMethodManager");
+	tolua_pushusertype(L, (FtkInputMethodManager*)retv, "FtkInputMethodManager");
 
 	return 1;
 }
@@ -128,7 +128,7 @@ static int lua_ftk_default_input_method_preeditor(lua_State* L)
 {
 	FtkImPreeditor* retv;
 	retv = ftk_default_input_method_preeditor();
-   tolua_pushusertype(L, (FtkImPreeditor*)retv, "FtkImPreeditor");
+	tolua_pushusertype(L, (FtkImPreeditor*)retv, "FtkImPreeditor");
 
 	return 1;
 }

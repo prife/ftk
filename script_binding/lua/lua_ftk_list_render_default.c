@@ -11,7 +11,7 @@ static int lua_ftk_list_render_default_create(lua_State* L)
 {
 	FtkListRender* retv;
 	retv = ftk_list_render_default_create();
-   tolua_pushusertype(L, (FtkListRender*)retv, "FtkListRender");
+	tolua_pushusertype(L, (FtkListRender*)retv, "FtkListRender");
 
 	return 1;
 }
