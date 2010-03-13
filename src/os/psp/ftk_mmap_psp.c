@@ -60,7 +60,7 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	{
 		thiz->length = size;
 		thiz->data = FTK_ZALLOC(size);
-		ret = write(thiz->fd, thiz->data, size);
+		ret = read(thiz->fd, thiz->data, size);
 	}
 
 	if(thiz->data == NULL || ret != size)

@@ -125,7 +125,6 @@ static Ret ftk_list_item_reset(FtkListItemInfo* info)
 
 static Ret ftk_list_item_copy(FtkListModel* thiz, FtkListItemInfo* dst, FtkListItemInfo* src)
 {
-	DECL_PRIV(thiz, priv);
 	return_val_if_fail(dst != NULL && src != NULL && thiz != NULL, RET_FAIL);
 	
 	memcpy(dst, src, sizeof(FtkListItemInfo));

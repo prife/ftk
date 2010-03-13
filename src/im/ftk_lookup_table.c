@@ -64,7 +64,7 @@ FtkLookupTable* ftk_lookup_table_create(const char* filename, int load_now, FtkC
 
 	if(thiz != NULL)
 	{
-		thiz->cmp = cmp != NULL ? cmp : strcmp;
+		thiz->cmp = (cmp != NULL ? cmp : (FtkCompare)strcmp);
 	}
 
 	return thiz;
@@ -98,48 +98,48 @@ Ret ftk_lookup_table_unload(FtkLookupTable* thiz)
 
 const char* ftk_lookup_table_lookup(FtkLookupTable* thiz, const char* key)
 {
-    int low    = 0;
-    int mid    = 0;
-    int high   = 0;
-    int result = 0;
+	int low    = 0;
+	int mid    = 0;
+	int high   = 0;
+	int result = 0;
 	const char* line = NULL;
-	return_val_if_fail(thiz != NULL && thiz->header != NULL && key != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && thiz->header != NULL && key != NULL, NULL);
 
-    high = thiz->header->nr - 1;
-    while(low <= high)
-    {
-        mid  = low + ((high - low) >> 1);
-    	line = ((char*)thiz->header) + thiz->doffset + thiz->header->offset[mid];
-        result = thiz->cmp(line, key);
+	high = thiz->header->nr - 1;
+	while(low <= high)
+	{
+		mid  = low + ((high - low) >> 1);
+		line = ((char*)thiz->header) + thiz->doffset + thiz->header->offset[mid];
+		result = thiz->cmp(line, key);
 
-        if(result == 0)
-        {
-        	if(mid == 0)
-        	{
-        		return line;
-        	}
+		if(result == 0)
+		{
+			if(mid == 0)
+			{
+				return line;
+			}
 
-        	/*find the first one.*/
-        	for(; mid >= 0; mid--)
-        	{
-    			line = ((char*)thiz->header) + thiz->doffset + thiz->header->offset[mid];
-        		if((result = thiz->cmp(line, key)) != 0) break;
-        	}
+			/*find the first one.*/
+			for(; mid >= 0; mid--)
+			{
+				line = ((char*)thiz->header) + thiz->doffset + thiz->header->offset[mid];
+				if((result = thiz->cmp(line, key)) != 0) break;
+			}
 			mid++;
-    		line = ((char*)thiz->header) + thiz->doffset + thiz->header->offset[mid];
+			line = ((char*)thiz->header) + thiz->doffset + thiz->header->offset[mid];
 
-            return line;
-        }
-        else if(result < 0)
-        {
-            low = mid + 1;
-        }
-        else
-        {
-            high = mid - 1;
-        }
-    }
-	
+			return line;
+		}
+		else if(result < 0)
+		{
+			low = mid + 1;
+		}
+		else
+		{
+			high = mid - 1;
+		}
+	}
+
 	return NULL;
 }
 

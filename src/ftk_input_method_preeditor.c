@@ -41,7 +41,6 @@
 Ret ftk_im_show_preeditor(FtkWidget* editor, FtkPoint* caret_pos, FtkCommitInfo* info)
 {
 	int i = 0;
-	int candidate_nr = 0;
 	const char* item = NULL;
 	FtkImPreeditor* preeditor = ftk_default_input_method_preeditor();
 

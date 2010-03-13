@@ -47,6 +47,16 @@
 #include <sys/time.h>
 #include <sys/socket.h>
 
+char* ftk_get_root_dir(void);
+char* ftk_get_data_dir(void);
+char* ftk_get_testdata_dir(void);
+
+#define FTK_ROOT_DIR   ftk_get_root_dir()
+#define DATA_DIR       ftk_get_root_dir()
+#define LOCAL_DATA_DIR ftk_get_root_dir()
+#define FTK_DATA_ROOT  ftk_get_data_dir()
+#define TESTDATA_DIR   ftk_get_testdata_dir()
+
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 

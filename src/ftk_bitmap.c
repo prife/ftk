@@ -488,7 +488,7 @@ Ret ftk_bitmap_copy_from_data_abgr32(FtkBitmap* bitmap, void* data,
 	{
 		for(ox = 0; ox < w; ox++)
 		{
-			psrc = src + ox;
+			psrc =(unsigned char*) (src + ox);
 			dst[ox].b = psrc[1]; 
 			dst[ox].g = psrc[2];
 			dst[ox].r = psrc[3];
@@ -539,7 +539,7 @@ Ret ftk_bitmap_copy_to_data_abgr32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	{
 		for(j = x, k = ox; j < w; j++, k++)
 		{
-			unsigned char* pdst = dst+k;
+			unsigned char* pdst = (unsigned char*)(dst+k);
 			FtkColor* psrc = src+j;
 			if(psrc->a == 0xff)
 			{

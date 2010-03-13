@@ -35,6 +35,9 @@
 #include "ftk_log.h"
 #include "ftk_display_psp.h"
 
+#define DISPLAY_WIDTH_PSP	480
+#define DISPLAY_HEIGHT_PSP	272
+
 typedef struct _PrivInfo
 {
 	int width;
@@ -97,9 +100,6 @@ static void ftk_display_psp_destroy(FtkDisplay* thiz)
 {
 	if(thiz != NULL)
 	{
-		DECL_PRIV(thiz, priv);
-
-		//FTK_FREE(priv->bits);
 		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
 	}
 
@@ -108,9 +108,8 @@ static void ftk_display_psp_destroy(FtkDisplay* thiz)
 
 FtkDisplay* ftk_display_psp_create(FtkSource** event_source, FtkOnEvent on_event, void* ctx)
 {
-	int width  = 480;
-	int height = 272;
-	int screen = 0;
+	int width  = DISPLAY_WIDTH_PSP;
+	int height = DISPLAY_HEIGHT_PSP;
 
 	ftk_logd("%s width=%d height=%d\n", __func__, width, height);
 

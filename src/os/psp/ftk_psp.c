@@ -31,6 +31,11 @@
 #include <signal.h>
 #include "ftk_typedef.h"
 #include "ftk_psp.h"
+#include "ftk_log.h"
+
+static char g_work_dir[FTK_MAX_PATH+1] = {0};
+static char g_data_dir[FTK_MAX_PATH+1] = {0};
+static char g_testdata_dir[FTK_MAX_PATH+1] = {0};
 
 /* Define the module info section */
 PSP_MODULE_INFO("FTK", 0, 1, 1);
@@ -66,13 +71,44 @@ static int SetupCallbacks(void)
 	return thid;
 }
 
-static Ret psp_init(void)
+char* ftk_get_root_dir(void)
 {
+	return g_work_dir;
+}
+
+char* ftk_get_data_dir(void)
+{
+	return g_data_dir;
+}
+
+char* ftk_get_testdata_dir(void)
+{
+	return g_testdata_dir;
+}
+
+static Ret psp_init(int argc, char** argv)
+{
+	char *p = NULL;
+	char *cmd = argv[0];
 	pspDebugScreenInit();
 	SetupCallbacks();
 
 	sceCtrlSetSamplingCycle(0);
 	sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
+
+	if(cmd) 
+	{
+		ftk_logd("%s: cmd: %s\n", __func__, cmd);
+		p = strrchr(cmd, '/');
+		if(p != NULL)
+		{
+			*p = '\0';
+			ftk_snprintf(g_work_dir, FTK_MAX_PATH, "%s", cmd);
+			ftk_snprintf(g_data_dir, FTK_MAX_PATH, "%s/data", g_work_dir);
+			ftk_snprintf(g_testdata_dir, FTK_MAX_PATH, "%s/testdata", g_work_dir);
+		}
+	}
+	ftk_logd("%s: work dir: %s\n", __func__, g_work_dir);
 	return RET_OK;
 }
 
@@ -86,7 +122,7 @@ size_t ftk_get_relative_time(void)
 
 int ftk_platform_init(int argc, char** argv)
 {
-	return psp_init();
+	return psp_init(argc, argv);
 }
 
 void ftk_platform_deinit(void)

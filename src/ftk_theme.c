@@ -388,7 +388,7 @@ static FtkXmlBuilder* ftk_theme_builder_create(void)
 	return thiz;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined(PSP)
 static const char* s_default_path[FTK_ICON_PATH_NR];
 
 static void ftk_init_default_path()

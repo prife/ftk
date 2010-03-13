@@ -1,13 +1,18 @@
 INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DHAS_BMP \
-	-DDATA_DIR="\"$(datadir)/ftk/base\"" -DFTK_DATA_ROOT="\"$(datadir)/ftk\"" \
-	-I$(abs_top_srcdir)/src -I$(abs_top_srcdir)/src/im -DTESTDATA_DIR="\"$(abs_top_srcdir)/testdata\"" \
-	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)\"" -DFTK_SUPPORT_C99 -I$(abs_top_srcdir)/src/os/linux \
+	-I$(abs_top_srcdir)/src -I$(abs_top_srcdir)/src/im \
+	-DFTK_SUPPORT_C99 \
 	-DFTK_SHARED_CANVAS
 
-#INCLUDES+=-DPSP
-INCLUDES+=-DLINUX
+#INCLUDES+= \
+	-DPSP \
+	-I$(abs_top_srcdir)/src/os/psp
 
-INCLUDES+=-I$(abs_top_srcdir)/src/os/psp
+INCLUDES+=-DLINUX \
+	-DDATA_DIR="\"$(datadir)/ftk/base\"" \
+	-DFTK_DATA_ROOT="\"$(datadir)/ftk\"" \
+	-DTESTDATA_DIR="\"$(abs_top_srcdir)/testdata\"" \
+	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)\"" \
+	-I$(abs_top_srcdir)/src/os/linux
 
 MYLDFLAGS=$(abs_top_builddir)/src/libftk.la -lpng -ljpeg -lz
 
