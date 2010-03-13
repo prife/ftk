@@ -14,10 +14,20 @@ void lua_callbacks_init(lua_State* L)
 
 Ret lua_ftk_prepare_options_menu_func(void* ctx, FtkWidget* menu_panel)
 {
-	return RET_OK;
+    Ret ret = RET_OK;
+    const char* func = ctx;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+	tolua_pushusertype(L, menu_panel, "FtkWidget");
+    lua_call(L, 1, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return ret;
 }
 
-Ret lua_ftk_on_event_func(void* user_data, FtkEvent* event)
+Ret lua_ftk_on_event_func(void* ctx, FtkEvent* event)
 {
 	printf("%s:%d\n", __func__, __LINE__);
 
@@ -31,17 +41,17 @@ Ret  lau_ftk_widget_on_event_func(FtkWidget* thiz, FtkEvent* event)
 	return RET_OK;
 }
 
-void lua_ftk_destroy_func(void* user_data)
+void lua_ftk_destroy_func(void* ctx)
 {
 	printf("%s:%d\n", __func__, __LINE__);
 
 	return;
 }
 
-Ret lua_ftk_idle_func(void* user_data)
+Ret lua_ftk_idle_func(void* ctx)
 {
     Ret ret = RET_OK;
-    const char* func = user_data;
+    const char* func = ctx;
     lua_State *L = s_current_L;
 
     lua_getglobal(L, func);
@@ -53,10 +63,10 @@ Ret lua_ftk_idle_func(void* user_data)
     return ret;
 }
 
-Ret lua_ftk_timer_func(void* user_data)
+Ret lua_ftk_timer_func(void* ctx)
 {
     Ret ret = RET_OK;
-    const char* func = user_data;
+    const char* func = ctx;
     lua_State *L = s_current_L;
 
     lua_getglobal(L, func);
@@ -74,10 +84,10 @@ int lua_ftk_compare_func(const void* obj1, const void* obj2)
 	return 0;
 }
 
-Ret lua_ftk_listener_func(void* user_data, void* obj)
+Ret lua_ftk_listener_func(void* ctx, void* obj)
 {
     Ret ret = RET_OK;
-    const char* func = user_data;
+    const char* func = ctx;
     lua_State *L = s_current_L;
 
     lua_getglobal(L, func);
@@ -89,10 +99,10 @@ Ret lua_ftk_listener_func(void* user_data, void* obj)
     return ret;
 }
 
-Ret lua_ftk_list_item_listener_func(void* user_data, void* obj)
+Ret lua_ftk_list_item_listener_func(void* ctx, void* obj)
 {
     Ret ret = RET_OK;
-    const char* func = user_data;
+    const char* func = ctx;
     lua_State *L = s_current_L;
 
     lua_getglobal(L, func);
@@ -104,10 +114,10 @@ Ret lua_ftk_list_item_listener_func(void* user_data, void* obj)
     return ret;
 }
 
-Ret lua_ftk_widget_listener_func(void* user_data, void* obj)
+Ret lua_ftk_widget_listener_func(void* ctx, void* obj)
 {
     Ret ret = RET_OK;
-    const char* func = user_data;
+    const char* func = ctx;
     lua_State *L = s_current_L;
 
     lua_getglobal(L, func);
@@ -118,10 +128,10 @@ Ret lua_ftk_widget_listener_func(void* user_data, void* obj)
 
     return ret;
 }
-Ret lua_ftk_icon_view_item_listener_func(void* user_data, void* obj)
+Ret lua_ftk_icon_view_item_listener_func(void* ctx, void* obj)
 {
     Ret ret = RET_OK;
-    const char* func = user_data;
+    const char* func = ctx;
     lua_State *L = s_current_L;
 
     lua_getglobal(L, func);

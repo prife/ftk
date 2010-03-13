@@ -35,4 +35,9 @@ interface Ftk
 	Ret ftk_init(in int argc, in StrArray argv);
 	Ret  ftk_run();
 	void ftk_quit();
+	
+	int ftk_tips(in CStrPtr text);
+	int ftk_warning(in CStrPtr title, in CStrPtr text, in StrArray buttons);
+	int ftk_question(in CStrPtr title, in CStrPtr text, in StrArray buttons);
+	int ftk_infomation(in CStrPtr title, in CStrPtr text, in StrArray buttons);
 };
