@@ -40,7 +40,7 @@ FTK_BEGIN_DECLS
 
 typedef struct _FtkIconViewItem
 {
-	char text[10];
+	char* text;
 	FtkBitmap* icon;
 	void* user_data;
 }FtkIconViewItem;

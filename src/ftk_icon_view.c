@@ -61,6 +61,8 @@ typedef struct _PrivInfo
 	FtkBitmap* item_active;
 }PrivInfo;
 
+static Ret ftk_icon_view_item_reset(FtkIconViewItem* item);
+
 static Ret ftk_icon_view_set_cursor(FtkWidget* thiz, int current)
 {
 	DECL_PRIV0(thiz, priv);
@@ -323,11 +325,7 @@ static void ftk_icon_view_destroy(FtkWidget* thiz)
 
 		for(i = 0; i < priv->nr; i++)
 		{
-			FtkBitmap* icon = priv->items[i].icon;
-			if(icon != NULL)
-			{
-				ftk_bitmap_unref(icon);
-			}
+			ftk_icon_view_item_reset(priv->items+i);
 		}
 		FTK_FREE(priv->items);
 		ftk_bitmap_unref(priv->item_focus);
@@ -444,13 +442,54 @@ static Ret ftk_icon_view_extend(FtkWidget* thiz, size_t delta)
 	return (priv->nr + delta) < priv->alloc_nr ? RET_OK : RET_FAIL;
 }
 
+static Ret ftk_icon_view_item_copy(FtkIconViewItem* dst, const FtkIconViewItem* src)
+{
+	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
+
+	memset(dst, 0x00, sizeof(FtkIconViewItem));
+
+	if(src->text != NULL)
+	{
+		dst->text = ftk_strdup(src->text);
+	}
+
+	if(src->icon != NULL)
+	{
+		dst->icon = src->icon;
+		ftk_bitmap_ref(dst->icon);
+	}
+
+	dst->user_data = src->user_data;
+
+	return RET_OK;
+}
+
+static Ret ftk_icon_view_item_reset(FtkIconViewItem* item)
+{
+	return_val_if_fail(item != NULL, RET_FAIL);
+
+	if(item->icon != NULL)
+	{
+		ftk_bitmap_unref(item->icon);
+	}
+
+	if(item->text != NULL)
+	{
+		FTK_FREE(item->text);
+	}
+
+	memset(item, 0x00, sizeof(item));
+
+	return RET_OK;
+}
+
 Ret ftk_icon_view_add(FtkWidget* thiz, const FtkIconViewItem* item)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && item != NULL, RET_FAIL);
 	return_val_if_fail(ftk_icon_view_extend(thiz, 1) == RET_OK, RET_FAIL);
 
-	priv->items[priv->nr] = *item;
+	ftk_icon_view_item_copy(priv->items+priv->nr, item);
 	priv->nr++;
 
 	ftk_icon_view_calc(thiz);
