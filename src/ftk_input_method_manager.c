@@ -124,6 +124,44 @@ void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz)
 	return;
 }
 
+Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, size_t index, FtkWidget* widget)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(index < thiz->nr)
+	{
+		ftk_input_method_focus_in(thiz->methods[index], widget);
+	}
+
+	return RET_OK;
+}
+
+Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, size_t index)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(index < thiz->nr)
+	{
+		ftk_input_method_focus_out(thiz->methods[index]);
+	}
+
+	return RET_OK;
+}
+
+Ret  ftk_input_method_manager_focus_act_commit(FtkInputMethodManager* thiz, size_t index)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(index < thiz->nr)
+	{
+		FtkEvent event = {0};
+		event.type = FTK_EVT_IM_ACT_COMMIT;
+		ftk_input_method_handle_event(thiz->methods[index], &event);
+	}
+
+	return RET_OK;
+}
+
 #include "ftk_dialog.h"
 #include "ftk_globals.h"
 #include "ftk_popup_menu.h"

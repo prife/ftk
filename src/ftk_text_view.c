@@ -26,7 +26,7 @@
  * History:
  * ================================================================
  * 2009-12-31 Li XianJing <xianjimli@hotmail.com> created
- *
+ * 2010-03-14 Li XianJing <xianjimli@hotmail.com> support input method.
  */
 
 #include "ftk_log.h"
@@ -35,8 +35,10 @@
 #include "ftk_globals.h"
 #include "ftk_text_buffer.h"
 #include "ftk_source_timer.h"
+#include "ftk_input_method_preeditor.h"
 
 #define FTK_TEXT_VIEW_MAX_LINE 512
+
 typedef struct _PrivInfo
 {
 	int   caret;
@@ -51,19 +53,20 @@ typedef struct _PrivInfo
 	int   readonly;
 	int   selected_start;
 	int   selected_end;
-	int   preedit_start;
-	int   preedit_end;
 	int   v_margin;
 	int   total_lines;
 	int   visible_lines;
+	int   input_method;
+	FtkPoint caret_pos;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
 	unsigned short line_offset[FTK_TEXT_VIEW_MAX_LINE];
 }PrivInfo;
 
-#define TEXT_VIEW_H_MARGIN 4
-#define TEXT_VIEW_V_MARGIN  1
+#define TEXT_VIEW_H_MARGIN    4
+#define TEXT_VIEW_V_MARGIN    1
 #define TEXT_VIEW_TOP_MARGIN  3
+
 #define TB_TEXT priv->text_buffer->buffer
 #define TB_LENGTH (int)(priv->text_buffer->length)
 #define HAS_TEXT(priv) (priv != NULL && priv->text_buffer != NULL && TB_LENGTH > 0) 
@@ -274,20 +277,28 @@ static Ret ftk_text_view_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
 	return ftk_text_view_get_offset_by_pointer(thiz, event->u.mouse.x, event->u.mouse.y);
 }
 
+static Ret ftk_text_view_input_str(FtkWidget* thiz, const char* str)
+{
+	int count = 0;
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL && str != NULL, RET_FAIL);
+
+	if(priv->readonly) return RET_FAIL;
+
+	count = utf8_count_char(str, strlen(str));
+	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+	ftk_text_view_relayout(thiz, priv->caret_at_line);
+	ftk_text_view_move_caret(thiz, count);	
+
+	return RET_OK;
+}
 static Ret ftk_text_view_input_char(FtkWidget* thiz, char c)
 {
 	char str[2] = {0};
 	DECL_PRIV0(thiz, priv);
 
-	if(!priv->readonly)
-	{
-		str[0] = c;
-		ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
-		ftk_text_view_relayout(thiz, priv->caret_at_line);
-		ftk_text_view_move_caret(thiz, 1);	
-	}
-
-	return RET_OK;
+	str[0] = c;
+	return ftk_text_view_input_str(thiz, str);
 }
 
 static Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
@@ -432,18 +443,21 @@ static Ret ftk_text_view_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
+	FtkInputMethod* im = NULL;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
+			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), priv->input_method, thiz);
 			ftk_source_ref(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
 		case FTK_EVT_FOCUS_OUT:
 		{
+			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), priv->input_method);
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
@@ -465,6 +479,36 @@ static Ret ftk_text_view_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MOUSE_UP:
 		{
 			ret = ftk_text_view_handle_mouse_evevnt(thiz, event);
+			break;
+		}
+		case FTK_EVT_IM_PREEDIT:
+		{
+			ftk_im_show_preeditor(thiz, &(priv->caret_pos), event->u.extra);
+			break;
+		}
+		case FTK_EVT_IM_COMMIT:
+		{
+			ftk_text_view_input_str(thiz, event->u.extra);
+			ftk_input_method_manager_focus_act_commit(ftk_default_input_method_manager(), priv->input_method);
+			break;
+		}
+		case FTK_EVT_MOUSE_LONG_PRESS:
+		{
+			if(priv->readonly) break;
+
+			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+			if(im != NULL)
+			{
+				ftk_input_method_focus_out(im);
+			}
+			im = NULL;
+			priv->input_method = ftk_input_method_chooser();
+			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
+			if(im != NULL)
+			{
+				ftk_input_method_focus_in(im, thiz);
+			}
+
 			break;
 		}
 		default:break;
@@ -585,6 +629,8 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 		priv->caret_x = TEXT_VIEW_H_MARGIN;
 		priv->caret_y = TEXT_VIEW_V_MARGIN;
 	}
+	priv->caret_pos.x = priv->caret_x;
+	priv->caret_pos.y = priv->caret_y;
 
 	ftk_text_view_on_paint_caret(thiz);
 
@@ -628,6 +674,7 @@ FtkWidget* ftk_text_view_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_move(thiz, x, y);
 		ftk_widget_resize(thiz, width, height);
 
+		priv->input_method = -1;
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_text_view_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
 		ftk_widget_append_child(parent, thiz);

@@ -212,23 +212,6 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 	
-static Ret ftk_entry_act_commit(FtkWidget* thiz)
-{
-	DECL_PRIV0(thiz, priv);
-	FtkInputMethod* im = NULL;
-
-	ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
-
-	if(im != NULL)
-	{
-		FtkEvent event = {0};
-		event.type = FTK_EVT_IM_ACT_COMMIT;
-		ftk_input_method_handle_event(im, &event);
-	}
-
-	return RET_OK;
-}
-
 static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
@@ -240,11 +223,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
-			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
-			if(im != NULL)
-			{
-				ftk_input_method_focus_in(im, thiz);
-			}
+			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), priv->input_method, thiz);
 			ftk_source_ref(priv->caret_timer);
 			ftk_source_timer_reset(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
@@ -252,11 +231,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_FOCUS_OUT:
 		{
-			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
-			if(im != NULL)
-			{
-				ftk_input_method_focus_out(im);
-			}
+			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), priv->input_method);
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
@@ -287,7 +262,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_IM_COMMIT:
 		{
 			ftk_entry_input_str(thiz, event->u.extra);
-			ftk_entry_act_commit(thiz);
+			ftk_input_method_manager_focus_act_commit(ftk_default_input_method_manager(), priv->input_method);
 			break;
 		}
 		case FTK_EVT_MOUSE_LONG_PRESS:
