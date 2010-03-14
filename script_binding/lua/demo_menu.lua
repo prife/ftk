@@ -41,7 +41,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo menu"})
+Ftk.Init(1, {"menu"})
 AppInit()
 Ftk.Run()
 

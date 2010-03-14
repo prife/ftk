@@ -25,9 +25,9 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
+	app_win=win
 	win:SetText("Demo progressbar")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
-	app_win=win
 
 	width=win:Width()
 	height=win:Height()

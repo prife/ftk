@@ -1,4 +1,3 @@
-app_win=nil
 model=nil
 
 function OnQuit(button)
@@ -14,6 +13,7 @@ function OnMore(button)
 		model:Add(info)
 	end
 	info=nil
+
 	return RET_OK
 end
 
@@ -31,7 +31,6 @@ function AppInit()
 	win=FtkAppWindow.Create()
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	win:SetText("Demo icon view")
-	app_win=win
 
 	width=win:Width()
 	height=win:Height()
@@ -50,6 +49,7 @@ function AppInit()
 	info=nil
 
 	list:Init(model, render, 40)
+	model:Unref()
 
 	button=FtkButton.Create(win, 10, 3 * height/4 + 20, width/3-10, 60)
 	button:SetText("More")
@@ -65,7 +65,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"listview"})
 AppInit()
 Ftk.Run()
 

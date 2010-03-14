@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	print("OnQuit: " .. button:GetText())
 	Ftk.Quit()
@@ -9,13 +7,13 @@ end
 
 function OnHide(button)
 	print("OnHide: " .. button:GetText())
-	app_win:Lookup(100):Show(0)
+	button:Toplevel():Lookup(100):Show(0)
 	return RET_OK
 end
 
 function OnShow(button)
 	print("OnShow: " .. button:GetText())
-	app_win:Lookup(100):Show(1)
+	button:Toplevel():Lookup(100):Show(1)
 	return RET_OK
 end
 
@@ -30,7 +28,6 @@ function AppInit()
 	win:SetText("Demo button")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	
-	app_win=win
 	width=win:Width()
 	height=win:Height()
 

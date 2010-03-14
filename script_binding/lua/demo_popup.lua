@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnMenuItemClicked(info)
 	print("OnMenuItemClicked: " .. info.text)
 end
@@ -7,8 +5,8 @@ end
 items={"Cut", "Copy", "Paste", "Select All"}
 
 function ShowPopup(type)
-	icon = FtkTheme.LoadImage(Ftk.DefaultTheme(), "info.png")
-	popup = FtkPopupMenu.Create(0, 0, 0, 200, icon, "Edit")
+	local icon = FtkTheme.LoadImage(Ftk.DefaultTheme(), "info.png")
+	local popup = FtkPopupMenu.Create(0, 0, 0, 200, icon, "Edit")
 	info = FtkListItemInfo.Create();
 	info.type = type;
 	for i=1,#items do
@@ -20,6 +18,7 @@ function ShowPopup(type)
 		info.text=items[i]
 		popup:Add(info)
 	end
+	icon:Unref()
 	popup:SetClickedListener("OnMenuItemClicked")
 	popup:ShowAll(1)
 end
@@ -49,9 +48,8 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
-	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	win:SetText("Demo popup")
-	app_win=win
+	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 
 	width=win:Width()
 	height=win:Height()
@@ -78,7 +76,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"popup"})
 AppInit()
 Ftk.Run()
 

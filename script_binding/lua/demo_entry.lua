@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	Ftk.Quit()
 
@@ -11,7 +9,6 @@ function AppInit()
 	win:SetText("Demo entry")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	
-	app_win=win
 	width=win:Width()
 	height=win:Height()
 

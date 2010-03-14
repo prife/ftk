@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	print("OnQuit: " .. button:GetText())
 	Ftk.Quit()
@@ -8,14 +6,14 @@ function OnQuit(button)
 end
 
 function OnStart(button)
-	wait_box=app_win:Lookup(1)
+	wait_box=button:Toplevel():Lookup(1)
 	wait_box:StartWaiting()
 
 	return RET_OK
 end
 
 function OnStop(button)
-	wait_box=app_win:Lookup(1)
+	wait_box=button:Toplevel():Lookup(1)
 	wait_box:StopWaiting()
 
 	return RET_OK
@@ -25,7 +23,6 @@ function AppInit()
 	win=FtkAppWindow.Create()
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	win:SetText("Demo waitbox")
-	app_win=win
 
 	width=win:Width()
 	height=win:Height()
@@ -51,7 +48,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo waitbox"})
+Ftk.Init(1, {"waitbox"})
 AppInit()
 Ftk.Run()
 

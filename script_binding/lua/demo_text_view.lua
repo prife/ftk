@@ -1,7 +1,5 @@
-app_win=nil
-
 function OnQuit(button)
-	text_view=app_win:Lookup(1)
+	text_view=button:Toplevel():Lookup(1)
 	print(text_view:GetText())
 
 	Ftk.Quit()
@@ -11,10 +9,9 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
-	win:SetText("Demo entry")
+	win:SetText("Demo text view")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	
-	app_win=win
 	width=win:Width()
 	height=win:Height()
 
@@ -39,7 +36,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"entry"})
+Ftk.Init(1, {"textview"})
 AppInit()
 Ftk.Run()
 

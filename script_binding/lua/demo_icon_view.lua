@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	Ftk.Quit()
 
@@ -7,8 +5,8 @@ function OnQuit(button)
 end
 
 function OnMore(button)
-	icon_view = app_win:Lookup(100);
-	item=FtkIconViewItem.Create()
+	local icon_view = button:Toplevel():Lookup(100);
+	local item=FtkIconViewItem.Create()
 	item.icon = FtkTheme.LoadImage(Ftk.DefaultTheme(), "flag-32.png")
 
 	for i=1, 10 do
@@ -29,9 +27,8 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
-	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	win:SetText("Demo icon view")
-	app_win=win
+	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 
 	width=win:Width()
 	height=win:Height()
@@ -63,7 +60,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"iconview"})
 AppInit()
 Ftk.Run()
 

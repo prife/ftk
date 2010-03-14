@@ -1,15 +1,11 @@
-app_win=nil
-app_dialog=nil
-
 function OnQuit(button)
 	Ftk.Quit()
-
 	return RET_OK
 end
 
 function OnNormalQuit(button)
 	print("OnNormalQuit")
-	app_dialog:Unref();
+	button:Toplevel():Unref();
 	return RET_OK;
 end
 
@@ -26,7 +22,6 @@ function CreateDialog(modal)
 	theme=Ftk.DefaultTheme()
 	icon=theme:LoadImage("info.png")
 	dialog:SetIcon(icon)
-	app_dialog = dialog
 
 	label=FtkLabel.Create(dialog, width/6, height/4, 5*width/6, 20)
 	label:SetText("Are you sure to quit?")
@@ -66,9 +61,8 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
+	win:SetText("Demo dialog")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
-	win:SetText("Demo button")
-	app_win=win
 
 	local width=win:Width()
 	local height=win:Height()
@@ -91,7 +85,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"dialog"})
 AppInit()
 Ftk.Run()
 

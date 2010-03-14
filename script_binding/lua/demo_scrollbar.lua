@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	print("OnQuit: " .. button:GetText())
 	Ftk.Quit()
@@ -15,8 +13,7 @@ end
 function AppInit()
 	win=FtkAppWindow.Create()
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
-	win:SetText("Demo button")
-	app_win=win
+	win:SetText("Demo scrollbar")
 
 	width=win:Width()
 	height=win:Height()
@@ -65,7 +62,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"scroll_bar"})
 AppInit()
 Ftk.Run()
 

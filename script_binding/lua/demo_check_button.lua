@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	Ftk.Quit()
 
@@ -14,8 +12,7 @@ end
 function AppInit()
 	win=FtkAppWindow.Create()
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
-	win:SetText("Demo button")
-	app_win=win
+	win:SetText("Demo check button")
 
 	width=win:Width()
 	height=win:Height()
@@ -60,7 +57,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"checkbutton"})
 AppInit()
 Ftk.Run()
 

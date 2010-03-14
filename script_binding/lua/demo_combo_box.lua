@@ -1,12 +1,8 @@
-app_win=nil
-
 function OnQuit(button)
-	
 	for i=1, 4 do
-		combo_box=app_win:Lookup(i)
+		combo_box=button:Toplevel():Lookup(i)
 		print(tostring(i) .. ":" .. combo_box:GetText())
 	end
-
 	Ftk.Quit()
 
 	return RET_OK
@@ -20,9 +16,8 @@ end
 
 function AppInit()
 	win=FtkAppWindow.Create()
+	win:SetText("Demo combobox")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
-	win:SetText("Demo button")
-	app_win=win
 
 	width=win:Width()
 	height=win:Height()
@@ -58,7 +53,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"combobox"})
 AppInit()
 Ftk.Run()
 

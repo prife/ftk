@@ -1,11 +1,10 @@
-
 function OnQuit(button)
 	Ftk.Quit()
 	print("button_quit_on_clicked")
 	return 0
 end
 
-Ftk.Init(1, {"demo1"})
+Ftk.Init(1, {"demo2"})
 win=FtkAppWindow.Create()
 w=win:Width()
 h=win:Height()

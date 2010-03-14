@@ -1,5 +1,3 @@
-app_win=nil
-
 function OnQuit(button)
 	print("OnQuit: " .. button:GetText())
 	Ftk.Quit()
@@ -8,21 +6,20 @@ function OnQuit(button)
 end
 
 function OnFullscreen(button)
-	app_win:SetFullscreen(1)	
+	button:Toplevel():SetFullscreen(1)	
 	return RET_OK
 end
 
 function OnUnfullscreen(button)
-	app_win:SetFullscreen(0)	
+	button:Toplevel():SetFullscreen(0)	
 	return RET_OK
 end
 
 function AppInit()
 	win=FtkAppWindow.Create()
-	win:SetText("Demo button")
+	win:SetText("Demo fullscreen")
 	win:SetAttr(FTK_ATTR_QUIT_WHEN_CLOSE)
 	
-	app_win=win
 	width=win:Width()
 	height=win:Height()
 
@@ -43,7 +40,7 @@ function AppInit()
 	return 1
 end
 
-Ftk.Init(1, {"demo button"})
+Ftk.Init(1, {"fullscreen"})
 AppInit()
 Ftk.Run()
 

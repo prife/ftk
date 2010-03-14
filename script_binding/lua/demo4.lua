@@ -17,13 +17,13 @@ xml=[[
 
 function OnQuit(button)
 	ftk_quit()
-	print("button_quit_on_clicked")
-	return 0
+	print(button:GetText() .. " Clicked.")
+	return RET_OK
 end
 
 function OnSave(button)
-	print("button_save_on_clicked")
-	return 0
+	print(button:GetText() .. " Clicked.")
+	return RET_OK
 end
 
 Ftk.Init(1, {"demo4"})
