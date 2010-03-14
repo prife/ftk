@@ -212,7 +212,7 @@ static int tolua_set_FtkGc_bg(lua_State* L)
 {
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->bg = (FtkColor) (*(FtkColor*)tolua_tousertype(L, 2, 0));
+	thiz->bg =  (*(FtkColor*)tolua_tousertype(L, 2, 0));
 
 	return 1;
 }
@@ -232,7 +232,7 @@ static int tolua_set_FtkGc_fg(lua_State* L)
 {
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->fg = (FtkColor) (*(FtkColor*)tolua_tousertype(L, 2, 0));
+	thiz->fg =  (*(FtkColor*)tolua_tousertype(L, 2, 0));
 
 	return 1;
 }

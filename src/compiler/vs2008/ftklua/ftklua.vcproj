@@ -2,11 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="ftk"
-	ProjectGUID="{12A0FDDD-7138-4320-A9D6-B5742065053E}"
-	RootNamespace="ftk"
+	Name="ftklua"
+	ProjectGUID="{4A21A5E4-43AB-4C32-B747-FAF4CD4CB429}"
+	RootNamespace="ftklua"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -40,18 +40,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				UseUnicodeResponseFiles="false"
-				AdditionalOptions="/D ROOT_DIR=&quot;$(SolutionDir)&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\im&quot;;&quot;$(SolutionDir)\..\..\fhw&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;$(NOINHERIT)"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\..\script_binding\lua\&quot;;&quot;$(SolutionDir)\..\..\..\script_binding\lua\lua\&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
-				BrowseInformation="1"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -107,12 +103,14 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\im&quot;;&quot;$(SolutionDir)\..\..\fhw&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;$(NOINHERIT)"
+				Optimization="2"
+				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\..\script_binding\lua\&quot;;&quot;$(SolutionDir)\..\..\..\script_binding\lua\lua\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -153,7 +151,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\fontdata.c"
+				RelativePath="..\..\..\..\script_binding\lua\ftk_lua.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -173,7 +171,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lapi.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -193,7 +191,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_allocator.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lauxlib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -213,7 +211,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_allocator_default.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lbaselib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -233,7 +231,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_allocator_profile.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lcode.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -253,7 +251,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_animator_alpha.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ldblib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -273,7 +271,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_animator_expand.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ldebug.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -293,7 +291,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_app_window.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ldo.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -313,7 +311,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\backend\win32\ftk_backend_win32.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ldump.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -333,7 +331,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_bitmap.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lfunc.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -353,7 +351,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_bitmap_factory.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lgc.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -373,7 +371,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_button.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\linit.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -393,7 +391,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_canvas.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\liolib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -413,7 +411,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_check_button.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\llex.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -433,7 +431,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_clipboard.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lmathlib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -453,7 +451,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_combo_box.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lmem.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -473,7 +471,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_dialog.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\loadlib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -493,7 +491,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_display.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lobject.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -513,7 +511,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\backend\win32\ftk_display_win32.cpp"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lopcodes.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -533,7 +531,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_entry.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\loslib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -553,7 +551,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_expr.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lparser.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -573,7 +571,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_font_default.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lstate.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -593,7 +591,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_gesture.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lstring.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -613,7 +611,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_globals.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lstrlib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -633,7 +631,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_icon_cache.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ltable.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -653,7 +651,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_icon_view.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ltablib.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -673,7 +671,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ltm.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -693,7 +691,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image_bmp_decoder.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lua.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -713,7 +711,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\os\windows\ftk_image_win32_decoder.cpp"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -733,7 +731,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method_manager.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_animator.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -753,7 +751,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method_preeditor.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_animator_alpha.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -773,7 +771,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method_preeditor_default.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_animator_expand.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -793,7 +791,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_input_method_py.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_app_window.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -813,7 +811,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_input_method_util.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_bitmap.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -833,7 +831,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_label.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_bitmap_factory.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -853,7 +851,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_model_default.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_button.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -873,7 +871,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_render_default.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_callbacks.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -893,7 +891,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_view.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_canvas.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -913,7 +911,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_log.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_check_button.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -933,7 +931,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_lookup_table.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_clipboard.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -953,7 +951,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_main_loop.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_combo_box.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -973,7 +971,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_menu_item.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_dialog.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -993,7 +991,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_menu_panel.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_display.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1013,7 +1011,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_message_box.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_entry.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1033,7 +1031,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\os\windows\ftk_mmap_win32.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1053,7 +1051,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_painter.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font_default.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1073,7 +1071,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_pipe_socket.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_icon_cache.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1093,7 +1091,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_popup_menu.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_icon_view.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1113,7 +1111,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_progress_bar.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_image.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1133,7 +1131,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_radio_group.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_label.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1153,7 +1151,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_scroll_bar.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_model.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1173,7 +1171,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source_idle.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_model_default.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1193,7 +1191,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source_primary.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_render.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1213,7 +1211,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source_timer.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_render_default.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1233,7 +1231,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\backend\win32\ftk_source_win32.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_view.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1253,7 +1251,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_sources_manager.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_main_loop.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1273,7 +1271,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_sprite.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_menu_item.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1293,7 +1291,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_status_item.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_menu_panel.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1313,7 +1311,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_status_panel.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_mmap.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1333,7 +1331,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_text_buffer.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_painter.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1353,7 +1351,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_text_view.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_popup_menu.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1373,7 +1371,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_theme.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_progress_bar.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1393,7 +1391,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_util.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_radio_group.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1413,7 +1411,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_wait_box.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_scroll_bar.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1433,7 +1431,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_widget.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_source.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1453,7 +1451,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\os\windows\ftk_win32.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_source_idle.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1473,7 +1471,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_window.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_source_timer.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1493,7 +1491,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_wnd_manager_default.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_sprite.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1513,7 +1511,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_xml_parser.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_status_item.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1533,7 +1531,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_xul.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_status_panel.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1553,14 +1551,194 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\stdafx.cpp"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_text_view.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_theme.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_translator.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_typedef.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_wait_box.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_widget.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_window.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_wnd_manager.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_xul.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua\luac.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
 					/>
 				</FileConfiguration>
 				<FileConfiguration
@@ -1568,7 +1746,187 @@
 					>
 					<Tool
 						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="1"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua\lundump.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua\lvm.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua\lzio.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua\print.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\tolua_event.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\tolua_is.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\tolua_map.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\tolua_push.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\tolua_to.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
 					/>
 				</FileConfiguration>
 			</File>
@@ -1579,363 +1937,311 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\fontdata.h"
+				RelativePath="..\..\..\..\script_binding\lua\ftk_lua.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lapi.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_allocator.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lauxlib.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_allocator_default.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lcode.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_allocator_profile.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ldebug.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_animator.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ldo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_animator_alpha.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lfunc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_animator_expand.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lgc.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_app_window.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\llex.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_backend.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\llimits.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_bitmap.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lmem.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_bitmap_factory.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lobject.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_button.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lopcodes.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_cairo.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lparser.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_canvas.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lstate.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_check_button.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lstring.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_clipboard.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ltable.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_combo_box.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\ltm.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_dialog.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lua.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_display.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\backend\win32\ftk_display_win32.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_animator.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_entry.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_animator_alpha.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_event.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_animator_expand.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_expr.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_app_window.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_font.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_bitmap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_font_default.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_bitmap_factory.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_font_freetype.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_button.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_gc.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_callbacks.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_gesture.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_canvas.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_gesture_listener.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_check_button.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_globals.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_clipboard.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_handwrite_engine.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_combo_box.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_icon_cache.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_dialog.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_icon_view.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_display.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_entry.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image_bmp_decoder.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image_decoder.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font_default.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image_jpeg_decoder.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_icon_cache.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_image_png_decoder.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_icon_view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\os\windows\ftk_image_win32_decoder.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_image.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_label.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method_manager.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_model.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method_preeditor.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_model_default.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_input_method_preeditor_default.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_render.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_input_method_py.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_render_default.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_input_method_util.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_list_view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_key.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_main_loop.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_label.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_menu_item.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_model.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_menu_panel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_model_default.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_mmap.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_render.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_painter.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_render_default.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_popup_menu.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_list_view.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_progress_bar.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_log.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_radio_group.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_lookup_table.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_scroll_bar.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_main_loop.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_source.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_menu_item.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_source_idle.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_menu_panel.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_source_timer.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_message_box.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_sprite.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_mmap.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_status_item.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_painter.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_status_panel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_platform.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_text_view.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_popup_menu.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_theme.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_progress_bar.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_translator.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_radio_group.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_typedef.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_scroll_bar.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_wait_box.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_widget.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source_idle.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_window.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source_primary.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_wnd_manager.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_source_timer.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_xul.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\backend\win32\ftk_source_win32.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\luaconf.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_sources_manager.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lualib.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_sprite.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lundump.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_status_item.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lvm.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_status_panel.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua\lzio.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_text_buffer.h"
+				RelativePath="..\..\..\..\script_binding\lua\tolua++.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_text_view.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_theme.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_typedef.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_util.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_wait_box.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_widget.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\os\windows\ftk_win32.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_window.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_wnd_manager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_wnd_manager_default.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_xml_builder.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_xml_parser.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\ftk_xul.h"
-				>
-			</File>
-			<File
-				RelativePath=".\stdafx.h"
+				RelativePath="..\..\..\..\script_binding\lua\tolua_event.h"
 				>
 			</File>
 		</Filter>

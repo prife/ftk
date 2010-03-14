@@ -39,6 +39,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_xul", "demo_xul\demo_x
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "demo_ime", "demo_ime\demo_ime.vcproj", "{37D376DD-5286-447F-8858-F94610E65BE1}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftklua", "ftklua\ftklua.vcproj", "{4A21A5E4-43AB-4C32-B747-FAF4CD4CB429}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ftklua_run", "ftklua_run\ftklua_run.vcproj", "{B070945A-D3D2-4C4C-B000-376FB6191644}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -121,6 +125,14 @@ Global
 		{37D376DD-5286-447F-8858-F94610E65BE1}.Debug|Win32.Build.0 = Debug|Win32
 		{37D376DD-5286-447F-8858-F94610E65BE1}.Release|Win32.ActiveCfg = Release|Win32
 		{37D376DD-5286-447F-8858-F94610E65BE1}.Release|Win32.Build.0 = Release|Win32
+		{4A21A5E4-43AB-4C32-B747-FAF4CD4CB429}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4A21A5E4-43AB-4C32-B747-FAF4CD4CB429}.Debug|Win32.Build.0 = Debug|Win32
+		{4A21A5E4-43AB-4C32-B747-FAF4CD4CB429}.Release|Win32.ActiveCfg = Release|Win32
+		{4A21A5E4-43AB-4C32-B747-FAF4CD4CB429}.Release|Win32.Build.0 = Release|Win32
+		{B070945A-D3D2-4C4C-B000-376FB6191644}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B070945A-D3D2-4C4C-B000-376FB6191644}.Debug|Win32.Build.0 = Debug|Win32
+		{B070945A-D3D2-4C4C-B000-376FB6191644}.Release|Win32.ActiveCfg = Release|Win32
+		{B070945A-D3D2-4C4C-B000-376FB6191644}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
