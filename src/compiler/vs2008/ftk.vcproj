@@ -973,6 +973,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_main_loop_select.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_menu_item.c"
 				>
 				<FileConfiguration
