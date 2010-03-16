@@ -26,7 +26,7 @@
  * History:
  * ================================================================
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
- *
+ * 2010-3-16 woodysu<yapo_su@hotmail.com> modified. 
  */
 #include "ftk_log.h"
 #include "ftk_util.h"
@@ -391,8 +391,9 @@ Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int 
 
 	return RET_OK;
 }
-// add by woodysu
-// the bitmap is Src , the FtkCanvas.bitmap is Dst
+
+/* add by woodysu*/
+/* the bitmap is Src , the FtkCanvas.bitmap is Dst*/
 Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, unsigned char alpha)
 {
 	int i=0, j=0, m=0, n=0;
