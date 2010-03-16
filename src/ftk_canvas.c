@@ -391,7 +391,53 @@ Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int 
 
 	return RET_OK;
 }
+// add by woodysu
+// the bitmap is Src , the FtkCanvas.bitmap is Dst
+Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, unsigned char alpha)
+{
+	int i=0, j=0, m=0, n=0;
+	FtkColor* src = NULL;
+	FtkColor* dst = NULL;
+	int width  = ftk_bitmap_width(thiz->bitmap); //Canvas width
+	int height = ftk_bitmap_height(thiz->bitmap);
+	int bitmap_width   = ftk_bitmap_width(bitmap);
+	int bitmap_height  = ftk_bitmap_height(bitmap);
 
+	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
+	return_val_if_fail(x < width, RET_FAIL);
+	return_val_if_fail(y < height, RET_FAIL);
+
+	src = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_bits(thiz->bitmap);
+        
+        if(w+x>width)
+		return RET_FAIL;
+	if(h+y>height)
+		return RET_FAIL;
+	
+	for(j=0 ; j<h ; j++)
+	{
+		n=j*bitmap_height/h;
+			for(i=0 ; i<w ; i++)
+			{
+				m=i*bitmap_width/w;
+				if(src[n*bitmap_width+m].a == 0xff)
+				{
+					dst[(j+y)*width+x+i]=src[n*bitmap_width+m];
+				}	
+				else
+				{
+					dst[(j+y)*width+x+i].r = (src[n*bitmap_width+m].r * src[n*bitmap_width+m].a + dst[(j+y)*width+x+i].r * (0xff - src[n*bitmap_width+m].a)) >> 8;
+					dst[(j+y)*width+x+i].g = (src[n*bitmap_width+m].g * src[n*bitmap_width+m].a + dst[(j+y)*width+x+i].g * (0xff - src[n*bitmap_width+m].a)) >> 8;
+					dst[(j+y)*width+x+i].b = (src[n*bitmap_width+m].b * src[n*bitmap_width+m].a + dst[(j+y)*width+x+i].b * (0xff - src[n*bitmap_width+m].a)) >> 8;
+				}
+			}	
+
+	}
+	
+	return 	RET_OK;
+
+}
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)
 {
 	int i = 0;
