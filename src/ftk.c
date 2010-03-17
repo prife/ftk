@@ -106,6 +106,11 @@ static Ret ftk_init_theme(const char* theme)
 
 static void ftk_deinit(void)
 {
+	if(ftk_default_input_method_preeditor() != NULL)
+	{
+		ftk_input_method_preeditor_destroy(ftk_default_input_method_preeditor());
+		ftk_set_input_method_preeditor(NULL);
+	}
 
 	if(ftk_default_wnd_manager() != NULL)
 	{
@@ -161,6 +166,12 @@ static void ftk_deinit(void)
 		ftk_set_input_method_manager(NULL);
 	}
 
+	if(ftk_default_config() != NULL)
+	{
+		ftk_config_destroy(ftk_default_config());
+		ftk_set_default_config(NULL);
+	}
+	
 	if(ftk_default_allocator() != NULL)
 	{
 		ftk_allocator_destroy(ftk_default_allocator());
@@ -170,6 +181,7 @@ static void ftk_deinit(void)
 	ftk_platform_deinit();
 
 	ftk_logd("%s: ftk exit.\n", __func__);
+
 	return;
 }
 

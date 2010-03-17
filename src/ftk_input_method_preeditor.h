@@ -102,6 +102,16 @@ static inline Ret ftk_input_method_preeditor_show(FtkImPreeditor* thiz, FtkPoint
 	return thiz->show(thiz, caret);
 }
 
+static inline void ftk_input_method_preeditor_destroy(FtkImPreeditor* thiz)
+{
+	if(thiz != NULL && thiz->destroy != NULL)
+	{
+		thiz->destroy(thiz);
+	}
+
+	return;
+}
+
 Ret ftk_im_show_preeditor(FtkWidget* editor, FtkPoint* caret_pos, FtkCommitInfo* info);
 
 FTK_END_DECLS
