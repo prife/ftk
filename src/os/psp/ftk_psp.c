@@ -129,3 +129,10 @@ void ftk_platform_deinit(void)
 {
 	return;
 }
+
+char *ftk_getcwd(char *buf, size_t size)
+{
+	return_val_if_fail(buf != NULL, NULL);
+	snprintf(buf, size, "%s", g_work_dir);
+	return buf;
+}
