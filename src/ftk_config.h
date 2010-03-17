@@ -59,7 +59,7 @@ Ret ftk_config_set_enable_status_bar(FtkConfig* thiz, int enable_status_bar);
 
 void ftk_config_destroy(FtkConfig* thiz);
 
-FTK_BEGIN_DECLS
+FTK_END_DECLS
 
 #endif/*FTK_CONFIG_H*/
 

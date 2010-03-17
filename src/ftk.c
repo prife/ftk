@@ -204,10 +204,10 @@ Ret ftk_init(int argc, char* argv[])
 
 	ftk_set_allocator(FTK_PROFILE(ftk_allocator_default_create()));
 
+	ftk_platform_init(argc, argv);
 	config = ftk_config_create();
 	ftk_set_default_config(config);
 	ftk_config_init(config, argc, argv);
-	ftk_platform_init(argc, argv);
 
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
