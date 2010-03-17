@@ -43,6 +43,7 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size);
 void*    ftk_mmap_data(FtkMmap* thiz);
 size_t   ftk_mmap_length(FtkMmap* thiz);
 void     ftk_mmap_destroy(FtkMmap* thiz);
+int      ftk_mmap_exist(const char* filename);
 
 FTK_END_DECLS
 

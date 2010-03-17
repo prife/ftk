@@ -16,8 +16,23 @@
 /* Define to 1 if you have the `jpeg' library (-ljpeg). */
 #define HAVE_LIBJPEG 1
 
+/* Define to 1 if you have the `m' library (-lm). */
+/* #undef HAVE_LIBM */
+
 /* Define to 1 if you have the `png' library (-lpng). */
 #define HAVE_LIBPNG 1
+
+/* Define to 1 if you have the `pspkernel' library (-lpspkernel). */
+/* #undef HAVE_LIBPSPKERNEL */
+
+/* Define to 1 if you have the `psplibc' library (-lpsplibc). */
+/* #undef HAVE_LIBPSPLIBC */
+
+/* Define to 1 if you have the `pspsdk' library (-lpspsdk). */
+/* #undef HAVE_LIBPSPSDK */
+
+/* Define to 1 if you have the `z' library (-lz). */
+/* #undef HAVE_LIBZ */
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1

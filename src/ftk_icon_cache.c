@@ -82,25 +82,15 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 	return bitmap;
 }
 
-#if defined(WIN32) || defined(PSP)
 static const char* s_default_path[FTK_ICON_PATH_NR];
 static void ftk_init_default_path()
 {
-	s_default_path[0] = FTK_DATA_ROOT;
-	s_default_path[1] = DATA_DIR;
-	s_default_path[2] = LOCAL_DATA_DIR;
-	s_default_path[3] = TESTDATA_DIR;
+	s_default_path[0] = ftk_config_get_data_root_dir(ftk_default_config());;
+	s_default_path[1] = ftk_config_get_data_dir(ftk_default_config());
+	s_default_path[2] = ftk_config_get_test_data_dir(ftk_default_config());
+
+	return;
 }
-#else
-static const char* s_default_path[FTK_ICON_PATH_NR]=
-{
-	FTK_DATA_ROOT,
-	DATA_DIR,
-	LOCAL_DATA_DIR,
-	TESTDATA_DIR
-};
-static void ftk_init_default_path() {}
-#endif
 
 FtkIconCache* ftk_icon_cache_create(const char* root_path[FTK_ICON_PATH_NR], const char* rel_path)
 {

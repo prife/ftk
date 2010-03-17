@@ -57,7 +57,8 @@ char* ftk_get_testdata_dir(void);
 
 #define _CRT_SECURE_NO_WARNINGS 1
 
-#define usleep                  Sleep
+#define usleep        Sleep
+#define ftk_getcwd    _getcwd
 
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);

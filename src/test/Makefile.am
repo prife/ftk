@@ -6,7 +6,7 @@ noinst_PROGRAMS=label_test widget_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
-	lookup_table_test
+	lookup_table_test config_test
 
 if FTK_BACKEND_SIGMA
 noinst_PROGRAMS+=backend_sigma_test
@@ -32,7 +32,10 @@ tslib_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
 endif
 endif
 
-lookup_table_test_SOURCES= lookup_table_test.c
+config_test_SOURCES=config_test.c
+config_test_LDFLAGS=$(MYLDFLAGS)
+
+lookup_table_test_SOURCES=lookup_table_test.c
 lookup_table_test_LDFLAGS=$(MYLDFLAGS)
 
 bmp_test_SOURCES=bmp_test.c

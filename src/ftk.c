@@ -66,20 +66,12 @@ static Ret ftk_init_font(void)
 {
 	FtkFont* font = NULL;
 	char filename[FTK_MAX_PATH] = {0};
+	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", 
+		ftk_config_get_data_dir(ftk_default_config()), FTK_FONT);
 #ifdef USE_FREETYPE
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
-	if((font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE)) == NULL)
-	{
-		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
-		font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE);
-	}
+	font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE);
 #else
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", DATA_DIR, FTK_FONT);
-	if((font = ftk_font_default_create(filename, 0, 0, 0)) == NULL)
-	{
-		ftk_snprintf(filename, sizeof(filename), "%s/data/%s", LOCAL_DATA_DIR, FTK_FONT);
-		font = ftk_font_default_create(filename, 0, 0, 0);
-	}
+	font = ftk_font_default_create(filename, 0, 0, 0);
 #endif
 	
 	if(font != NULL)
@@ -101,14 +93,12 @@ static Ret ftk_init_theme(const char* theme)
 	char filename[FTK_MAX_PATH] = {0};
 
 	ftk_set_theme(ftk_theme_create(theme == NULL));
+
 	if(theme != NULL)
 	{
-		ftk_snprintf(filename, sizeof(filename)-1, "%s/theme/%s/theme.xml", DATA_DIR, theme);
-		if(ftk_theme_parse_file(ftk_default_theme(), filename) != RET_OK)
-		{
-			ftk_snprintf(filename, sizeof(filename)-1, "%s/theme/%s/theme.xml", LOCAL_DATA_DIR, theme);
-			ftk_theme_parse_file(ftk_default_theme(), filename);
-		}
+		ftk_snprintf(filename, sizeof(filename)-1, "%s/theme/%s/theme.xml", 
+			ftk_config_get_data_dir(ftk_default_config()), theme);
+		ftk_theme_parse_file(ftk_default_theme(), filename);
 	}
 
 	return RET_OK;
@@ -208,35 +198,16 @@ static Ret ftk_enable_curosr(void)
 
 Ret ftk_init(int argc, char* argv[])
 {
-	int i = 0;
 	FtkColor bg = {0};
-	const char* theme = NULL;
+	FtkConfig* config = NULL;
 	FtkDisplay* display = NULL;
-	int disable_status_panel = 0;
-	int enable_cursor = 0;
 
-	for(i = 0; i < argc && argv != NULL && argv[i] != NULL; i++)
-	{
-		if(strcmp(argv[i], "--no-status-panel") == 0)
-		{
-			disable_status_panel = 1;
-			break;
-		}
-		else if(strcmp(argv[i], "--enable-cursor") == 0)
-		{
-			enable_cursor = 1;
-			break;
-		}
-		else if(strncmp(argv[i], "--theme=", 8) == 0)
-		{
-			theme = argv[i]+8;
-			ftk_logd("theme=%s\n", theme);
-			break;
-		}
-	}
-
-	ftk_platform_init(argc, argv);
 	ftk_set_allocator(FTK_PROFILE(ftk_allocator_default_create()));
+
+	config = ftk_config_create();
+	ftk_set_default_config(config);
+	ftk_config_init(config, argc, argv);
+	ftk_platform_init(argc, argv);
 
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
@@ -245,7 +216,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_init_font();
 	ftk_init_bitmap_factory();
 	
-	ftk_init_theme(theme);
+	ftk_init_theme(ftk_config_get_theme(config));
 	ftk_backend_init(argc, argv);
 
 	bg.a = 0xff;
@@ -254,14 +225,14 @@ Ret ftk_init(int argc, char* argv[])
 
 	ftk_set_input_method_manager(ftk_input_method_manager_create());
 
-	if(!disable_status_panel)
+	if(ftk_config_get_enable_status_bar(config))
 	{
 		ftk_init_panel();
 	}
 
 	ftk_set_input_method_preeditor(ftk_input_method_preeditor_default_create());
 
-	if(enable_cursor)
+	if(ftk_config_get_enable_cursor(config))
 	{
 		ftk_enable_curosr();
 	}

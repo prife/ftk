@@ -51,6 +51,7 @@
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
+#define ftk_getcwd    getcwd
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"

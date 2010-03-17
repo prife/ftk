@@ -41,6 +41,14 @@ struct _FtkMmap
 	size_t length;
 };
 
+int      ftk_mmap_exist(const char* filename)
+{
+	struct stat st = {0};
+	return_val_if_fail(filename != NULL, 0);
+
+	return stat(filename, &st) == 0;
+}
+
 FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 {
 	FtkMmap* thiz = NULL;

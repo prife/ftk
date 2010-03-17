@@ -32,7 +32,7 @@
 #define FTK_ICON_CACHE_H
 #include "ftk_bitmap.h"
 
-#define FTK_ICON_PATH_NR   4
+#define FTK_ICON_PATH_NR   3
 #define FTK_ICON_CACHE_MAX 64
 
 FTK_BEGIN_DECLS

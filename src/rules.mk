@@ -9,6 +9,7 @@ INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DHAS_BMP \
 
 INCLUDES+=-DLINUX \
 	-DDATA_DIR="\"$(datadir)/ftk/base\"" \
+	-DFTK_CNF="\"$(datadir)/ftk/ftk.cnf\"" \
 	-DFTK_DATA_ROOT="\"$(datadir)/ftk\"" \
 	-DTESTDATA_DIR="\"$(abs_top_srcdir)/testdata\"" \
 	-DLOCAL_DATA_DIR="\"$(abs_top_srcdir)\"" \

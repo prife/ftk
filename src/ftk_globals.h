@@ -34,6 +34,7 @@
 
 #include "ftk_font.h"
 #include "ftk_theme.h"
+#include "ftk_config.h"
 #include "ftk_source.h"
 #include "ftk_display.h"
 #include "ftk_allocator.h"
@@ -56,6 +57,7 @@ FtkSourcesManager* ftk_default_sources_manager(void);
 FtkCanvas*         ftk_shared_canvas(void);
 FtkTheme*          ftk_default_theme(void);
 FtkSource*         ftk_primary_source(void);
+FtkConfig*         ftk_default_config(void);
 FtkAllocator*      ftk_default_allocator(void);
 FtkInputMethodManager* ftk_default_input_method_manager(void);
 FtkImPreeditor*        ftk_default_input_method_preeditor(void);
@@ -71,6 +73,7 @@ void ftk_set_sources_manager(FtkSourcesManager* sources_manager);
 void ftk_set_shared_canvas(FtkCanvas* canvas);
 void ftk_set_theme(FtkTheme* theme);
 void ftk_set_primary_source(FtkSource* source);
+void ftk_set_default_config(FtkConfig* config);
 void ftk_set_allocator(FtkAllocator* allocator);
 void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager);
 void ftk_set_input_method_preeditor(FtkImPreeditor* input_method_preeditor);

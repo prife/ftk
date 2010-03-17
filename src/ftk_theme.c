@@ -33,6 +33,7 @@
 #include "ftk_util.h"
 #include "ftk_mmap.h"
 #include "ftk_theme.h"
+#include "ftk_globals.h"
 #include "ftk_icon_cache.h"
 #include "ftk_xml_parser.h"
 
@@ -100,13 +101,10 @@ static Ret ftk_theme_init_default(FtkTheme* thiz)
 {
 #if defined(LINUX) || defined(WIN32)
 	char filename[FTK_MAX_PATH] = {0};
-	ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", DATA_DIR);
-	if(ftk_theme_parse_file(thiz, filename) != RET_OK)
-	{
-		ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", LOCAL_DATA_DIR);
-		return ftk_theme_parse_file(thiz, filename);
-	}
-	return RET_OK;
+	ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", 
+		ftk_config_get_data_dir(ftk_default_config()));
+	
+	return ftk_theme_parse_file(thiz, filename);
 #else
 	return ftk_theme_parse_data(thiz, s_default_theme, strlen(s_default_theme));
 #endif
@@ -388,29 +386,15 @@ static FtkXmlBuilder* ftk_theme_builder_create(void)
 	return thiz;
 }
 
-#if defined(WIN32) || defined(PSP)
 static const char* s_default_path[FTK_ICON_PATH_NR];
-
 static void ftk_init_default_path()
 {
-	s_default_path[0] = DATA_DIR;
-	s_default_path[1] = FTK_DATA_ROOT;
-	s_default_path[2] = LOCAL_DATA_DIR;
-	s_default_path[3] = TESTDATA_DIR;
+	s_default_path[0] = ftk_config_get_data_dir(ftk_default_config());
+	s_default_path[1] = ftk_config_get_data_root_dir(ftk_default_config());;
+	s_default_path[2] = ftk_config_get_test_data_dir(ftk_default_config());
 
 	return;
 }
-
-#else
-static const char* s_default_path[FTK_ICON_PATH_NR]=
-{
-	DATA_DIR,
-	FTK_DATA_ROOT,
-	LOCAL_DATA_DIR,
-	TESTDATA_DIR
-};
-static void ftk_init_default_path() {}
-#endif
 
 Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 {
