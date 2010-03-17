@@ -139,7 +139,7 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 		
 		item.icon = app_info->icon_bitmap;
 		item.user_data = app_info;
-		strncpy(item.text, app_info->name, sizeof(item.text)-1);
+		item.text = app_info->name;
 		ftk_icon_view_add(icon_view, &item);
 	}
 
