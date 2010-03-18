@@ -26,7 +26,7 @@
  * History:
  * ================================================================
  * 2009-11-14 Li XianJing <xianjimli@hotmail.com> created
- *
+ * 2010-1-16  woodysu <yapo_su@hotmail.com>  modified (add BRINK)
  */
 
 #include "ftk_globals.h"
