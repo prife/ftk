@@ -157,4 +157,8 @@ ftk_HEADERS=\
 	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
 	ftk_animator_zoom.h
 
-EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h
+EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
+	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \
+	Android-build.sh Android.mk
+
+
