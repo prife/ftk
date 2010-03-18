@@ -39,7 +39,7 @@ libftk_la_SOURCES=\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
-	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c \
+	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c ftk_animator_zoom.c \
 	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c  \
 	ftk_gesture.c         ftk_wait_box.c  ftk_scroll_bar.c \
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
@@ -154,6 +154,7 @@ ftk_HEADERS=\
 	ftk_input_method_manager.h ftk_input_method.h \
 	ftk_allocator.h            ftk_allocator_default.h \
 	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
-	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h
+	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
+	ftk_animator_zoom.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h

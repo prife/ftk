@@ -56,6 +56,13 @@ typedef enum _FtkExpandType
 	FTK_ANI_ALPHA
 }FtkExpandType;
 
+typedef enum _FtkZoomType
+{
+	FTK_ANI_NONE_ZOOM = 0,
+	FTK_ANI_ZOOM_IN,
+	FTK_ANI_ZOOM_OUT
+}FtkZoomType;
+
 struct _FtkAnimator
 {
 	FtkAnimatorStart    start;
