@@ -1,9 +1,40 @@
+/*
+ * File: ftk_animator_zoom.c 
+ * Author:  woodysu <yapo_su@hotmail.com>
+ * Brief:   zoom animator.
+ *
+ * Copyright (c) 2009 - 2010  woodysu <yapo_su@hotmail.com>
+ *
+ * Licensed under the Academic Free License version 2.1
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/*
+ * History:
+ * ================================================================
+ * 2010-03-16 woodysu <yapo_su@hotmail.com> created
+ *
+ */
+
 #include "ftk_globals.h"
 #include "ftk_source_timer.h"
 #include "ftk_animator_zoom.h"
 
 #define ANI_ZOOM_STEPS 50
-#define SINGLE_STEP_DURATION 10
+#define SINGLE_STEP_DURATION 5 
 
 typedef struct _PrivInfo
 {
@@ -104,7 +135,6 @@ static Ret ftk_animator_zoom_calc_step(FtkAnimator* thiz)
 	y=0;
 /*----------------*/
 
-	printf("we are in calc step: %d, %d , %d , %d\n", x, y , w, h);
 	switch(priv->type)
 	{
 		case FTK_ANI_ZOOM_IN:
@@ -145,7 +175,6 @@ static Ret ftk_animator_zoom_step(FtkAnimator* thiz)
 	int y = ftk_widget_top(priv->win);
 	int w = ftk_widget_width(priv->win); 
 	int h = ftk_widget_height(priv->win);
-	printf("we are in zoom step");
 /*--will be fixed-- */
 	h=h+y;
 	y=0;
@@ -175,7 +204,6 @@ static Ret ftk_animator_zoom_step(FtkAnimator* thiz)
 		{
 			ftk_animator_destroy(thiz);
 		}
-		printf("we are in CALC return REMOVE\n");
 		return RET_REMOVE;
 	}
 	
@@ -218,14 +246,12 @@ static Ret ftk_animator_zoom_start(FtkAnimator* thiz, FtkWidget* win, int sync)
 	int height = 0 ;
 	int step_duration = 0;
 	DECL_PRIV(thiz, priv);
-	printf("OK we are in start zoom!\n");
 	FtkColor bg = {0};
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(win != NULL, RET_FAIL);
 	return_val_if_fail(priv->step != 0, RET_FAIL);
 	return_val_if_fail(priv->duration > 0, RET_FAIL);
 	return_val_if_fail(priv->start != priv->end, RET_FAIL);
-	printf("OK we are in start zoom2!\n");
 	bg.a = 0xff;
 	priv->sync = sync;
 	priv->snap = ftk_bitmap_create(ftk_display_width(display), ftk_display_height(display), bg);
@@ -236,18 +262,15 @@ static Ret ftk_animator_zoom_start(FtkAnimator* thiz, FtkWidget* win, int sync)
 	ftk_window_disable_update(win);
 	width = ftk_bitmap_width(priv->snap);
 	height = ftk_bitmap_height(priv->snap);
-	printf("OK we are in start zoom3!\n");
 	priv->canvas = ftk_canvas_create(width, height, bg);
 	ftk_canvas_draw_bitmap(priv->canvas, priv->snap, 0, 0, width, height, 0, 0);
 	step_duration = SINGLE_STEP_DURATION;
 
 	ftk_animator_zoom_init(thiz);
-	printf("OK we are in start zoom4!  %d \n", sync);
 
 	if(sync)
 	{
 		step_duration *= 1000;
-		printf("OK we are in start zoom5!\n");
 		while(ftk_animator_zoom_step(thiz) == RET_OK)
 		{
 			usleep(step_duration);
@@ -255,7 +278,6 @@ static Ret ftk_animator_zoom_start(FtkAnimator* thiz, FtkWidget* win, int sync)
 	}
 	else
 	{
-		printf("OK we are ZOOM6\n");
 		FtkSource* timer = ftk_source_timer_create(step_duration, (FtkTimer)ftk_animator_zoom_step, thiz);
 		ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	}

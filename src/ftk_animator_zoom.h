@@ -1,9 +1,9 @@
 /*
- * File: ftk_animator_expand.h   
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   expand animator.
+ * File: ftk_animator_zoom.h   
+ * Author:  woodysu <yapo_su@hotmail.com>
+ * Brief:   zoom animator.
  *
- * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ * Copyright (c) 2009 - 2010  woodysu  <yapo_su@hotmail.com>
  *
  * Licensed under the Academic Free License version 2.1
  *
@@ -25,7 +25,7 @@
 /*
  * History:
  * ================================================================
- * 2009-11-14 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-3-16 woodysu  <yapo_su@hotmail.com> created
  *
  */
 
