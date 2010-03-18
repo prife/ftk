@@ -204,6 +204,7 @@ static Ret ftk_animator_zoom_step(FtkAnimator* thiz)
 		{
 			ftk_animator_destroy(thiz);
 		}
+		ftk_wnd_manager_update(ftk_default_wnd_manager());
 		return RET_REMOVE;
 	}
 	
