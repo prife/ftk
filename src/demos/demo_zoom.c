@@ -91,9 +91,9 @@ static void create_app_window(void)
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-//	button = ftk_button_create(win, 5, height/6 + 60, width/2-5, 50);
-//	ftk_widget_set_text(button, "ZoomIn");
-//	ftk_button_set_clicked_listener(button, button_to_zoom_in_clicked, win);
+	button = ftk_button_create(win, 5, height/6 + 60, width/2-5, 50);
+	ftk_widget_set_text(button, "ZoomIn");
+	ftk_button_set_clicked_listener(button, button_to_zoom_in_clicked, win);
 
 	button = ftk_button_create(win, width/2, height/6 + 60, width/2-5, 50);
 	ftk_widget_set_text(button, "ZoomOut");

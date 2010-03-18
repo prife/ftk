@@ -91,7 +91,7 @@ static Ret ftk_animator_zoom_init(FtkAnimator* thiz)
 		case FTK_ANI_ZOOM_IN:
 		{
 			priv->x = w/2-(w/ANI_ZOOM_STEPS)/2;
-			priv->y = w/2-(h/ANI_ZOOM_STEPS)/2;
+			priv->y = h/2-(h/ANI_ZOOM_STEPS)/2;
 			priv->w = w/ANI_ZOOM_STEPS; 
 			priv->h = h/ANI_ZOOM_STEPS;
 			break;
@@ -182,15 +182,6 @@ static Ret ftk_animator_zoom_step(FtkAnimator* thiz)
 
 	if(ftk_animator_zoom_calc_step(thiz) != RET_OK)
 	{
-#if 0 
-		rect.x = x;
-		rect.y = y;
-		rect.width = w;
-		rect.height = h; 
-		bitmap = ftk_canvas_bitmap(ftk_widget_canvas(priv->canvas));
-		ftk_display_update(ftk_default_display(), bitmap, &rect, x, y);
-#endif 
-
 		ftk_canvas_destroy(priv->canvas);
 		ftk_bitmap_unref(priv->snap);
 		ftk_window_enable_update(priv->win);
@@ -199,7 +190,7 @@ static Ret ftk_animator_zoom_step(FtkAnimator* thiz)
 		priv->canvas = NULL;
 		priv->snap   = NULL;
 		priv->win    = NULL;
-		
+	        ftk_wnd_manager_update(ftk_default_wnd_manager());	
 		if(priv->destroy_when_stop)
 		{
 			ftk_animator_destroy(thiz);
