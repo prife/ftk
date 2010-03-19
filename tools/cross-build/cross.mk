@@ -7,17 +7,17 @@ all_dfb_clean:  zlib_clean png_clean jpeg_clean  libftk_clean tslib_clean freety
 check:
 	if [ ! -e packages ]; then mkdir packages;fi
 
-packages/zlib-1.2.3.tar.gz:
-	cd packages && wget http://www.zlib.net/zlib-1.2.3.tar.gz
-zlib-1.2.3: packages/zlib-1.2.3.tar.gz
-	tar xf packages/zlib-1.2.3.tar.gz
-zlib: zlib-1.2.3
+packages/zlib-1.2.4.tar.gz:
+	cd packages && wget http://www.zlib.net/zlib-1.2.4.tar.gz
+zlib-1.2.4: packages/zlib-1.2.4.tar.gz
+	tar xf packages/zlib-1.2.4.tar.gz
+zlib: zlib-1.2.4
 	export CC=$(TARGET_CC) PREFIX=$(PREFIX) && \
-	cd zlib-1.2.3 && \
+	cd zlib-1.2.4 && \
 	./configure --prefix=$(PREFIX) --shared &&\
 	make clean; make && make install
 zlib_clean:
-	cd zlib-1.2.3 && make clean
+	cd zlib-1.2.4 && make clean
 
 packages/libpng-1.2.35.tar.bz2:
 	cd packages && wget http://nchc.dl.sourceforge.net/sourceforge/libpng/libpng-1.2.35.tar.bz2
