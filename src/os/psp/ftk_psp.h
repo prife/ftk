@@ -65,6 +65,11 @@ char* ftk_get_testdata_dir(void);
 #define exit(...)	sceKernelExitGame()
 #define printf		pspDebugScreenPrintf
 
+#define ftk_pipe_pair(fds)				pipe(fds)
+#define ftk_pipe_close(fd)				close(fd)
+#define ftk_pipe_recv(fd, buf, length)	read(fd, buf, length)
+#define ftk_pipe_send(fd, buf, length)	write(fd, buf, length)
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
