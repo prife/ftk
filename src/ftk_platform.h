@@ -42,7 +42,11 @@
 #endif
 
 #ifdef WIN32
+#ifdef UCOS_SIM
+#include "ftk_ucos_sim.h"
+#else
 #include "ftk_win32.h"
+#endif
 #endif
 
 #ifdef ARM_ADS
