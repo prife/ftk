@@ -40,13 +40,7 @@ struct _FtkPipe
 
 static Ret make_sock_pipe(int pipes[2])
 {
-#ifdef WIN32
-	win32_socketpair(pipes);
-#elif PSP
-	pipe(pipes);
-#else
-	socketpair(AF_UNIX, SOCK_STREAM, 0, pipes);	
-#endif
+	ftk_pipe_pair(pipes);	
 
 	return RET_OK;
 }
@@ -70,22 +64,14 @@ int   ftk_pipe_read(FtkPipe* thiz, void* buff, size_t length)
 {
 	return_val_if_fail(thiz != NULL && buff != NULL, -1);
 
-#ifdef PSP
-	return read(thiz->read_fd, buff, length);
-#else
-	return recv(thiz->read_fd, buff, length, 0);
-#endif
+	return ftk_pipe_recv(thiz->read_fd, buff, length);
 }
 
 int ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length)
 {
 	return_val_if_fail(thiz != NULL && buff != NULL, -1);
 
-#ifdef PSP
-	return write(thiz->write_fd, buff, length);
-#else
-	return send(thiz->write_fd, buff, length, 0);
-#endif
+	return ftk_pipe_send(thiz->write_fd, buff, length);
 }
 
 int   ftk_pipe_get_read_handle(FtkPipe* thiz)
@@ -102,13 +88,9 @@ void  ftk_pipe_destroy(FtkPipe* thiz)
 {
 	if(thiz != NULL)
 	{
-#ifdef WIN32
-		closesocket(thiz->read_fd);
-		closesocket(thiz->write_fd);
-#else
-		close(thiz->read_fd);
-		close(thiz->write_fd);
-#endif
+		ftk_pipe_close(thiz->read_fd);
+		ftk_pipe_close(thiz->write_fd);
+
 		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
 
