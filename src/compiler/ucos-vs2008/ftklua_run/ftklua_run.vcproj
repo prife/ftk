@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\compiler\ucos-vs2005\UCOS_SIM\src\ucosii&quot;;&quot;$(ProjectDir)\..\..\..\compiler\ucos-vs2005\UCOS_SIM\src\ucosii-lib&quot;;&quot;$(ProjectDir)\..\..\..\&quot;;&quot;$(ProjectDir)\..\..\..\os\ucos-ii&quot;;&quot;$(ProjectDir)\..\..\..\..\script_binding\lua\&quot;;&quot;$(ProjectDir)\..\..\..\..\script_binding\lua\lua\&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..\..\compiler\ucos-vs2008\UCOS_SIM\src\ucosii&quot;;&quot;$(ProjectDir)\..\..\..\compiler\ucos-vs2008\UCOS_SIM\src\ucosii-lib&quot;;&quot;$(ProjectDir)\..\..\..\&quot;;&quot;$(ProjectDir)\..\..\..\os\ucos-ii&quot;;&quot;$(ProjectDir)\..\..\..\..\script_binding\lua\&quot;;&quot;$(ProjectDir)\..\..\..\..\script_binding\lua\lua\&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;UCOS_SIM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"

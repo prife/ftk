@@ -43,7 +43,7 @@
 				UseUnicodeResponseFiles="false"
 				AdditionalOptions="/D ROOT_DIR=&quot;$(SolutionDir)&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2005\UCOS_SIM\src\cfg&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2005\UCOS_SIM\src\ucosii&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2005\UCOS_SIM\src\ucosii-lib&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2005\UCOS_SIM\src\ucosii-port\win32\&quot;;&quot;$(ProjectDir)\..\..\os\uCOS-II&quot;;&quot;$(ProjectDir)\..\..\im&quot;;&quot;$(ProjectDir)\..\..\fhw&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)\..\..&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2008\UCOS_SIM\src\cfg&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2008\UCOS_SIM\src\ucosii&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2008\UCOS_SIM\src\ucosii-lib&quot;;&quot;$(ProjectDir)\..\..\compiler\ucos-vs2008\UCOS_SIM\src\ucosii-port\win32\&quot;;&quot;$(ProjectDir)\..\..\os\uCOS-II&quot;;&quot;$(ProjectDir)\..\..\im&quot;;&quot;$(ProjectDir)\..\..\fhw&quot;"
 				PreprocessorDefinitions="WIN32,_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;UCOS_SIM;$(NOINHERIT)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
