@@ -53,6 +53,11 @@
 #define ftk_vsnprintf vsnprintf 
 #define ftk_getcwd    getcwd
 
+#define ftk_pipe_pair(fds)				socketpair(AF_UNIX, SOCK_STREAM, 0, fds)
+#define ftk_pipe_close(fd)				close(fd)
+#define ftk_pipe_recv(fd, buf, length)	recv(fd, buf, length, 0)
+#define ftk_pipe_send(fd, buf, length)	send(fd, buf, length, 0)
+
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
