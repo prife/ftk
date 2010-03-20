@@ -50,7 +50,7 @@ static int report (lua_State *L, int status) {
   return status;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int ret = 0;
 	lua_State *L = NULL;
