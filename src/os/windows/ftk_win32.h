@@ -67,6 +67,11 @@ int   ftk_vsnprintf(char *str, size_t size, const char *format, va_list ap);
 size_t ftk_get_relative_time(void);
 int   win32_socketpair(SOCKET socks[2]);
 
+#define ftk_pipe_pair(fds)				win32_socketpair(fds)
+#define ftk_pipe_close(fd)				closesocket(fd)
+#define ftk_pipe_recv(fd, buf, length)	recv(fd, buf, length, 0)
+#define ftk_pipe_send(fd, buf, length)	send(fd, buf, length, 0)
+
 #endif
 
 #endif/*FTK_WIN32_H*/
