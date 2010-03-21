@@ -249,14 +249,16 @@ Ret ftk_init(int argc, char* argv[])
 		ftk_enable_curosr();
 	}
 
-	atexit(ftk_deinit);
-
 	return RET_OK;
 }
 
 Ret ftk_run(void)
 {
-	return ftk_main_loop_run(ftk_default_main_loop());
+	Ret ret = ftk_main_loop_run(ftk_default_main_loop());
+
+	ftk_deinit();
+
+	return ret;
 }
 
 void ftk_quit(void)
