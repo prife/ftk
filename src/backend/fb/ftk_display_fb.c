@@ -42,7 +42,7 @@
 #include <sys/ioctl.h>
 #include "ftk_display_fb.h"
 
-struct FB 
+struct FbInfo 
 {
 	int fd;
 	void* bits;
@@ -54,7 +54,7 @@ struct FB
 #define fb_height(fb) ((fb)->vi.yres)
 #define fb_size(fb) ((fb)->vi.xres * (fb)->vi.yres * fb->vi.bits_per_pixel/8)
 
-static int fb_open(struct FB *fb, const char* fbfilename)
+static int fb_open(struct FbInfo *fb, const char* fbfilename)
 {
 	fb->fd = open(fbfilename, O_RDWR);
 	if (fb->fd < 0)
@@ -67,10 +67,10 @@ static int fb_open(struct FB *fb, const char* fbfilename)
 	if (ioctl(fb->fd, FBIOGET_VSCREENINFO, &fb->vi) < 0)
 		goto fail;
 
-	ftk_logd("FB: %s\n", fbfilename);
-	ftk_logd("FB: xres=%d yres=%d bits_per_pixel=%d\n", 
+	ftk_logd("FbInfo: %s\n", fbfilename);
+	ftk_logd("FbInfo: xres=%d yres=%d bits_per_pixel=%d\n", 
 		fb->vi.xres, fb->vi.yres, fb->vi.bits_per_pixel);
-	ftk_logd("FB: red(%d %d) green(%d %d) blue(%d %d)\n", 
+	ftk_logd("FbInfo: red(%d %d) green(%d %d) blue(%d %d)\n", 
 		fb->vi.red.offset, fb->vi.red.length,
 		fb->vi.green.offset, fb->vi.green.length,
 		fb->vi.blue.offset, fb->vi.blue.length);
@@ -98,71 +98,12 @@ fail:
 	return -1;
 }
 
-static void fb_close(struct FB *fb)
+static void fb_close(struct FbInfo *fb)
 {
-	munmap(fb->bits, fb_size(fb));
-	close(fb->fd);
-
-	return;
-}
-
-typedef struct _PrivInfo
-{
-	struct FB fb;
-	FtkBitmapCopyFromData copy_from_data;
-	FtkBitmapCopyToData   copy_to_data;
-}PrivInfo;
-
-static Ret ftk_display_fb_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
-{
-	DECL_PRIV(thiz, priv);
-	int display_width  = fb_width(&priv->fb);
-	int display_height = fb_height(&priv->fb);
-
-	ftk_logd("%s: ox=%d oy=%d (%d %d %d %d)\n", __func__, xoffset, yoffset, 
-		rect->x, rect->y, rect->width, rect->height);
-	return priv->copy_to_data(bitmap, rect, 
-		priv->fb.bits, xoffset, yoffset, display_width, display_height); 
-}
-
-static int ftk_display_fb_width(FtkDisplay* thiz)
-{
-	DECL_PRIV(thiz, priv);
-
-	return priv->fb.vi.xres;
-}
-
-static int ftk_display_fb_height(FtkDisplay* thiz)
-{
-	DECL_PRIV(thiz, priv);
-
-	return priv->fb.vi.yres;
-}
-
-static Ret ftk_display_fb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
-{
-	FtkRect rect = {0};
-	DECL_PRIV(thiz, priv);
-	int w = ftk_display_width(thiz);
-	int h = ftk_display_height(thiz);
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	
-	rect.x = x;
-	rect.y = y;
-	rect.width = bw;
-	rect.height = bh;
-
-	return priv->copy_from_data(bitmap, priv->fb.bits, w, h, &rect);
-}
-
-static void ftk_display_fb_destroy(FtkDisplay* thiz)
-{
-	if(thiz != NULL)
+	if(fb != NULL)
 	{
-		DECL_PRIV(thiz, priv);
-		fb_close(&priv->fb);
-		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
+		munmap(fb->bits, fb_size(fb));
+		close(fb->fd);
 	}
 
 	return;
@@ -171,45 +112,36 @@ static void ftk_display_fb_destroy(FtkDisplay* thiz)
 FtkDisplay* ftk_display_fb_create(const char* filename)
 {
 	FtkDisplay* thiz = NULL;
+	struct FbInfo* fb = NULL;
 	return_val_if_fail(filename != NULL, NULL);
 
-	thiz = (FtkDisplay*)FTK_ZALLOC(sizeof(FtkDisplay) + sizeof(PrivInfo));
-	if(thiz != NULL)
+	fb = FTK_ZALLOC(sizeof(struct FbInfo));
+	return_val_if_fail(fb != NULL, NULL);
+
+	if(fb_open(fb, filename) == 0)
 	{
-		DECL_PRIV(thiz, priv);
-		if(fb_open(&priv->fb, filename) == 0)
+		FtkPixelFormat format = 0;
+		int bits_per_pixel = fb->vi.bits_per_pixel;
+		
+		if(bits_per_pixel == 16)
 		{
-			thiz->update   = ftk_display_fb_update;
-			thiz->width    = ftk_display_fb_width;
-			thiz->height   = ftk_display_fb_height;
-			thiz->snap     = ftk_display_fb_snap;
-			thiz->destroy  = ftk_display_fb_destroy;
-	
-			if(priv->fb.vi.bits_per_pixel == 16)
-			{
-				priv->copy_to_data   = ftk_bitmap_copy_to_data_rgb565;
-				priv->copy_from_data = ftk_bitmap_copy_from_data_rgb565;
-			}
-			else if(priv->fb.vi.bits_per_pixel == 24)
-			{
-				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgr24;
-				priv->copy_from_data = ftk_bitmap_copy_from_data_bgr24;
-			}
-			else if(priv->fb.vi.bits_per_pixel == 32)
-			{
-				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgra32;
-				priv->copy_from_data = ftk_bitmap_copy_from_data_bgra32;
-			}
-			else
-			{
-				assert(!"not supported framebuffer format.");
-			}
+			format = FTK_PIXEL_RGB565;
+		}
+		else if(bits_per_pixel == 24)
+		{
+			format = FTK_PIXEL_BGR24;
+		}
+		else if(bits_per_pixel == 32)
+		{
+			format = FTK_PIXEL_BGRA32;
 		}
 		else
 		{
-			ftk_logd("%s: open %s failed.\n", __func__, filename);
-			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
+			assert(!"not supported framebuffer format.");
 		}
+	
+		thiz = ftk_display_men_create(format, fb->vi.xres, fb->vi.yres, 
+			fb->bits, fb_close, fb);
 	}
 		
 	return thiz;

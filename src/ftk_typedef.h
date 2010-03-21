@@ -76,6 +76,14 @@ typedef enum _Ret
 	RET_OUT_OF_SPACE
 }Ret;
 
+typedef enum _FtkPixelFormat
+{
+	FTK_PIXEL_BGR24  = 1,
+	FTK_PIXEL_BGRA32 = 2,
+	FTK_PIXEL_RGB565 = 3,
+	FTK_PIXEL_ABGR32 = 4,
+}FtkPixelFormat;
+
 typedef enum _FtkWidgetType
 {
 	FTK_WIDGET_NONE   = 0,
