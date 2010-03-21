@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(SolutionDir)\src\cfg&quot;;&quot;$(SolutionDir)\src\ucosii&quot;;&quot;$(SolutionDir)\src\ucosii-port\WIN32&quot;;&quot;$(SolutionDir)\src\ucosii-lib&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;UCOS_SIM"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"

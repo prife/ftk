@@ -105,6 +105,7 @@ void C_AppMain(void)
 static int argc = 1;
 static char* argv[] = {"ftk", NULL};
 extern int ftk_main(int argc, char* argv[]);
+extern HANDLE ucoshandle;
 
 static void AppTask (void *p_arg)
 {
@@ -119,10 +120,16 @@ static void AppTask (void *p_arg)
 	OSTimeDly(10);
 
 	ftk_main(argc, argv); /* Task never return,so ftk_deinit() will be not called*/
+	_log("ftk end\n");
+#ifdef UCOS_SIM
+	ReleaseSemaphore(ucoshandle, 1, NULL); // increase count by one
+	OSTaskDel(OS_PRIO_SELF);
+#else
 	while(1)
 	{
 		_log(".");
-		OSTimeDly(500);
+		OSTimeDly(200);
 	}
+#endif
 }
 

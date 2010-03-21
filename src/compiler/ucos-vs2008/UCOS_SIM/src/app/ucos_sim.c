@@ -12,7 +12,10 @@
 #define DLY_REFRESHLCD			50
 
 // Global Variables:
-static DWORD		ThrdID;								//
+static HANDLE		winhandle;
+	   HANDLE		ucoshandle;
+static DWORD		WinThrdID;								//
+static DWORD		UcosThrdID;								//
 static TCHAR szTitle[] = TEXT("PC_SIM");
 static TCHAR szWindowClass[] = TEXT("Windows");
 
@@ -156,10 +159,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_DESTROY:
 		{
+			ftk_add_event(hWnd, message, wParam, lParam);
 			KillTimer(hWnd, IDC_TIMER_REFRESHLCD);
 			PostQuitMessage(0);
-			CloseWindow(hWnd);
-			ftk_add_event(hWnd, message, wParam, lParam);
+			ReleaseSemaphore(winhandle, 1, NULL); // increase count by one
 		}
 		break;
 	default:                      /* for messages that we don't deal with */
@@ -216,21 +219,78 @@ TIMERPROC RefreshLcd(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-void WorkThrd(LPVOID lpParam)
+////////////////////////////////////////////////////////////////////////////////
+
+void WinWorkThrd(LPVOID lpParam)
 {
 	HWND hWnd;
 
 	Sleep(10);
 	hWnd = MainWindowCreate();
-	fprintf(stderr, "Main Window Close\n");
 }
 
 extern void C_AppMain(void);
+void UcosWorkThrd(LPVOID lpParam)
+{
+	lpParam = lpParam;
+
+	C_AppMain();
+}
+
+
 
 int main(int argc, char *argv[])
 {
-	CreateThread(NULL, 0, (void*)WorkThrd, NULL, 0, &ThrdID);
+	HANDLE handles[2];
+	DWORD dwEvent;
 
-	C_AppMain();
+	ucoshandle = CreateSemaphore( 
+		NULL,	// default security attributes
+		0,		// initial count
+		1,		// maximum count
+		NULL);  // unnamed semaphore
+	if (ucoshandle == NULL) 
+	{ 
+		printf("CreateEvent error: %d\n", GetLastError() ); 
+		ExitProcess(0); 
+	} 
+
+	winhandle = CreateSemaphore( 
+		NULL,	// default security attributes
+		0,		// initial count
+		1,		// maximum count
+		NULL);  // unnamed semaphore
+	if (winhandle == NULL) 
+	{ 
+		printf("CreateEvent error: %d\n", GetLastError() ); 
+		ExitProcess(0); 
+	} 
+
+	/* first run ,must be*/
+	CreateThread(NULL, 0, (void*)UcosWorkThrd, NULL, 0, &UcosThrdID);
+	CreateThread(NULL, 0, (void*)WinWorkThrd, NULL, 0, &WinThrdID);
+	Sleep(15);
+
+	handles[0] = winhandle;
+	handles[1] = ucoshandle;
+	dwEvent = WaitForMultipleObjects( 
+		2,           // number of objects in array
+		handles,     // array of objects
+		FALSE,       // wait for any
+		INFINITE);   // indefinite wait
+
+	switch (dwEvent) 
+	{ 
+	case WAIT_OBJECT_0 + 0:
+	case WAIT_OBJECT_0 + 1:
+		CloseHandle(winhandle);
+		CloseHandle(ucoshandle);
+		break;
+	default: 
+		printf("Wait error: %d\n", GetLastError()); 
+		ExitProcess(0);
+		break;
+	}
+
 	return 0;
 }
