@@ -40,6 +40,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/ioctl.h>
+#include "ftk_display_mem.h"
 #include "ftk_display_fb.h"
 
 struct FbInfo 
@@ -104,6 +105,7 @@ static void fb_close(struct FbInfo *fb)
 	{
 		munmap(fb->bits, fb_size(fb));
 		close(fb->fd);
+		FTK_FREE(fb);
 	}
 
 	return;
