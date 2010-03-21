@@ -55,6 +55,9 @@ struct _FtkWidgetInfo
 	char* text;
 	size_t text_buff_length;
 	FtkDestroy user_data_destroy;
+
+	FtkListener event_listener;
+	void* event_listener_ctx;
 };
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz);
@@ -772,6 +775,17 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 	return;
 }
 
+void ftk_widget_set_event_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
+{
+	return_if_fail(thiz != NULL);
+
+	thiz->priv->event_listener = listener;
+	thiz->priv->event_listener_ctx = ctx;
+
+	return;
+}
+
+
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz)
 {
 	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
@@ -971,7 +985,15 @@ void ftk_widget_unref_self(FtkWidget* thiz)
 
 Ret ftk_widget_event(FtkWidget* thiz, FtkEvent* event)
 {
+	Ret ret = RET_OK;
 	return_val_if_fail(thiz != NULL && thiz->on_event != NULL && event != NULL, RET_FAIL);
+	
+	ret = FTK_CALL_LISTENER(thiz->priv->event_listener, thiz->priv->event_listener_ctx, event);
+	
+	if(ret == RET_REMOVE)
+	{
+		return RET_OK;
+	}
 
 	return thiz->on_event(thiz, event);
 }

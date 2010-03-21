@@ -113,6 +113,7 @@ void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data);
 void ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
 void ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
 void ftk_widget_set_text(FtkWidget* thiz, const char* text);
+void ftk_widget_set_event_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
 FtkWidget* ftk_widget_toplevel(FtkWidget* thiz);
 FtkWidget* ftk_widget_parent(FtkWidget* thiz);

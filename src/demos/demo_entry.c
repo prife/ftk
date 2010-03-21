@@ -7,6 +7,35 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret ftk_alpha_filter(void* ctx, void* data)
+{
+	FtkEvent* event = data;
+	if(event->type == FTK_EVT_KEY_UP || event->type == FTK_EVT_KEY_DOWN)
+	{
+		int code = event->u.key.code;
+		if(code >= FTK_KEY_0 && code <= FTK_KEY_9)
+		{
+			return RET_OK;
+		}
+		else if(code == FTK_KEY_UP 
+			|| code == FTK_KEY_DOWN
+			|| code == FTK_KEY_LEFT
+			|| code == FTK_KEY_RIGHT
+			|| code == FTK_KEY_BACKSPACE
+			|| code == FTK_KEY_DELETE
+			|| code == FTK_KEY_HOME
+			|| code == FTK_KEY_END
+			|| code == FTK_KEY_TAB)
+		{
+			return RET_OK;
+		}
+
+		return RET_REMOVE;
+	}
+
+	return RET_OK;
+}
+
 int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
@@ -21,7 +50,8 @@ int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	entry = ftk_entry_create(win, 10, 30, ftk_widget_width(win) - 20, 30);
-	ftk_entry_set_text(entry, "Single line editor");
+	ftk_entry_set_text(entry, "1234(digit only)");
+	ftk_widget_set_event_listener(entry, ftk_alpha_filter, NULL);
 
 	entry = ftk_entry_create(win, 10, 80, ftk_widget_width(win) - 20, 30);
 	ftk_entry_set_text(entry, "Single line editor, that means you can input a one line only.");
