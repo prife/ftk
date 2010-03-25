@@ -13,14 +13,6 @@ AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 
 # Checks for libraries.
-case "$with_backend" in
-	psp*)
-		AC_CHECK_LIB([m], [main])
-		AC_CHECK_LIB([pspsdk], [main])
-		AC_CHECK_LIB([pspkernel], [main])
-		AC_CHECK_LIB([psplibc], [main])
-		AC_CHECK_LIB([z], [main])
-esac
 # FIXME: Replace `main' with a function in `-ljpeg':
 AC_CHECK_LIB([jpeg], [main])
 # FIXME: Replace `main' with a function in `-lpng':

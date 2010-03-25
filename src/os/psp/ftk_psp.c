@@ -115,7 +115,7 @@ static Ret psp_init(int argc, char** argv)
 size_t ftk_get_relative_time(void)
 {
 	struct timeval now = {0};
-	gettimeofday(&now, NULL);
+	sceKernelLibcGettimeofday(&now, NULL);
 
 	return now.tv_sec*1000 + now.tv_usec/1000;
 }
