@@ -60,9 +60,9 @@ Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap,
 Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
 
-Ret ftk_bitmap_copy_from_data_abgr32(FtkBitmap* bitmap, 
+Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, 
 	void* data, size_t dw, size_t dh, FtkRect* rect);
-Ret ftk_bitmap_copy_to_data_abgr32(FtkBitmap* bitmap, FtkRect* rect, 
+Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
 
 typedef Ret (*FtkBitmapCopyFromData)(FtkBitmap* bitmap, 
