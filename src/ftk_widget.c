@@ -264,7 +264,7 @@ const char* ftk_widget_get_text(FtkWidget* thiz)
 {
 	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
 
-	return thiz->priv->text;
+	return thiz->priv->text != NULL ? thiz->priv->text : "";
 }
 
 void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
