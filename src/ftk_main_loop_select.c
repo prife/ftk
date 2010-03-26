@@ -107,7 +107,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 			source = ftk_sources_manager_get(thiz->sources_manager, i);
 
-			if((fd = ftk_source_get_fd(source)) >= 0 && FD_ISSET(fd, &thiz->fdset))
+			if( (ret > 0) && (fd = ftk_source_get_fd(source)) >= 0 && FD_ISSET(fd, &thiz->fdset))
 			{
 				if(ftk_source_dispatch(source) != RET_OK)
 				{
