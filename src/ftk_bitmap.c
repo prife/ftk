@@ -449,7 +449,7 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 }
 
 /*=====================================================================*/
-Ret ftk_bitmap_copy_from_data_abgr32(FtkBitmap* bitmap, void* data, 
+Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {
 	int x  = 0;
@@ -460,7 +460,7 @@ Ret ftk_bitmap_copy_from_data_abgr32(FtkBitmap* bitmap, void* data,
 	int oy = 0;
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
-	FtkColor* src = (FtkColor*)data;	/* data is ABGR */
+	FtkColor* src = (FtkColor*)data;	/* data is RGBA */
 	unsigned char* psrc = NULL;
 	FtkColor* dst = ftk_bitmap_bits(bitmap);
 
@@ -489,10 +489,10 @@ Ret ftk_bitmap_copy_from_data_abgr32(FtkBitmap* bitmap, void* data,
 		for(ox = 0; ox < w; ox++)
 		{
 			psrc =(unsigned char*) (src + ox);
-			dst[ox].b = psrc[1]; 
-			dst[ox].g = psrc[2];
-			dst[ox].r = psrc[3];
-			dst[ox].a = psrc[0];
+			dst[ox].r = psrc[0];
+			dst[ox].g = psrc[1];
+			dst[ox].b = psrc[2]; 
+			dst[ox].a = psrc[3];
 		}
 		src += dw; 
 		dst += bw;
@@ -501,7 +501,7 @@ Ret ftk_bitmap_copy_from_data_abgr32(FtkBitmap* bitmap, void* data,
 	return RET_OK;
 }
 
-Ret ftk_bitmap_copy_to_data_abgr32(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
+Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
 	int i = 0;
 	int j = 0;
@@ -512,7 +512,7 @@ Ret ftk_bitmap_copy_to_data_abgr32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	int y = rect != NULL ? rect->y : 0;
 	int w = rect != NULL ? rect->width : bw;
 	int h = rect != NULL ? rect->height : bh;
-	FtkColor* dst = data;	/* data is ABGR */
+	FtkColor* dst = data;	/* data is RGBA */
 	FtkColor* src = ftk_bitmap_bits(bitmap);
 
 	return_val_if_fail(ox < dw, RET_FAIL);
@@ -543,17 +543,17 @@ Ret ftk_bitmap_copy_to_data_abgr32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 			FtkColor* psrc = src+j;
 			if(psrc->a == 0xff)
 			{
-				pdst[0] = psrc->a;
-				pdst[1] = psrc->b;
-				pdst[2] = psrc->g;
-				pdst[3] = psrc->r;
+				pdst[0] = psrc->r;
+				pdst[1] = psrc->g;
+				pdst[2] = psrc->b;
+				pdst[3] = psrc->a;
 			}
 			else
 			{
-				pdst[0] = psrc->a;
-				FTK_ALPHA_1(psrc->b, pdst[1], psrc->a);
-				FTK_ALPHA_1(psrc->g, pdst[2], psrc->a);
-				FTK_ALPHA_1(psrc->r, pdst[3], psrc->a);
+				FTK_ALPHA_1(psrc->r, pdst[0], psrc->a);
+				FTK_ALPHA_1(psrc->g, pdst[1], psrc->a);
+				FTK_ALPHA_1(psrc->b, pdst[2], psrc->a);
+				pdst[3] = psrc->a;
 			}
 		}
 		src += bw;

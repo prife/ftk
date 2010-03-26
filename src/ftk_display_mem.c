@@ -150,10 +150,10 @@ FtkDisplay* ftk_display_men_create(FtkPixelFormat format,
 				priv->copy_from_data = ftk_bitmap_copy_from_data_bgra32;
 				break;
 			}
-			case FTK_PIXEL_ABGR32:
+			case FTK_PIXEL_RGBA32:
 			{
-				priv->copy_to_data   = ftk_bitmap_copy_to_data_abgr32;
-				priv->copy_from_data = ftk_bitmap_copy_from_data_abgr32;
+				priv->copy_to_data   = ftk_bitmap_copy_to_data_rgba32;
+				priv->copy_from_data = ftk_bitmap_copy_from_data_rgba32;
 				break;
 			}
 			default:

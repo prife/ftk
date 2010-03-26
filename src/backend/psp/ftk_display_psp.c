@@ -26,7 +26,7 @@
  * History:
  * ================================================================
  * 2010-03-11 Tao Yu <yut616@gmail.com> created.
- *
+ * 2010-03-26 Tao Yu <yut616@gmail.com> change the format to rgba, use linelen 512 for pixel operation.
  */
 
 #include <pspkernel.h>
@@ -35,6 +35,7 @@
 #include "ftk_log.h"
 #include "ftk_display_psp.h"
 
+#define DISPLAY_LINELEN_PSP	512
 #define DISPLAY_WIDTH_PSP	480
 #define DISPLAY_HEIGHT_PSP	272
 
@@ -42,6 +43,7 @@ typedef struct _PrivInfo
 {
 	int width;
 	int height;
+	int linelen;
 	int pixelsize;
 	unsigned char* bits;
 	FtkBitmapCopyFromData copy_from_data;
@@ -55,7 +57,7 @@ static Ret ftk_display_psp_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	int display_height = 0;
 	DECL_PRIV(thiz, priv);
 
-	display_width  = priv->width;
+	display_width  = priv->linelen;
 	display_height = priv->height;
 	ret = priv->copy_to_data(bitmap, rect, 
 			priv->bits, xoffset, yoffset, display_width, display_height); 
@@ -83,7 +85,7 @@ static Ret ftk_display_psp_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 {
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
-	int w = ftk_display_width(thiz);
+	int w = priv->linelen;
 	int h = ftk_display_height(thiz);
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
@@ -110,6 +112,7 @@ FtkDisplay* ftk_display_psp_create(FtkSource** event_source, FtkOnEvent on_event
 {
 	int width  = DISPLAY_WIDTH_PSP;
 	int height = DISPLAY_HEIGHT_PSP;
+	int linelen = DISPLAY_LINELEN_PSP;
 
 	ftk_logd("%s width=%d height=%d\n", __func__, width, height);
 
@@ -126,12 +129,13 @@ FtkDisplay* ftk_display_psp_create(FtkSource** event_source, FtkOnEvent on_event
 	
 		priv->width   = width;
 		priv->height  = height;
+		priv->linelen = linelen;
 		priv->pixelsize = 4;
 
 		if(priv->pixelsize == 4)
 		{
-			priv->copy_to_data   = ftk_bitmap_copy_to_data_abgr32;
-			priv->copy_from_data = ftk_bitmap_copy_from_data_abgr32;
+			priv->copy_to_data   = ftk_bitmap_copy_to_data_rgba32;
+			priv->copy_from_data = ftk_bitmap_copy_from_data_rgba32;
 		}
 		else
 		{
