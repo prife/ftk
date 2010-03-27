@@ -14,6 +14,7 @@ interface Ftk
 	FtkThemePtr          ftk_default_theme();
 	FtkSourcePtr         ftk_primary_source();
 	FtkAllocatorPtr      ftk_default_allocator();
+	FtkConfigPtr         ftk_default_config();
 	FtkInputMethodManagerPtr ftk_default_input_method_manager();
 	FtkImPreeditorPtr        ftk_default_input_method_preeditor();
 
@@ -27,6 +28,7 @@ interface Ftk
 	void ftk_set_sources_manager(in FtkSourcesManagerPtr sources_manager);
 	void ftk_set_shared_canvas(in FtkCanvasPtr canvas);
 	void ftk_set_theme(in FtkThemePtr theme);
+	void ftk_set_config(in FtkConfigPtr config);
 	void ftk_set_primary_source(in FtkSourcePtr source);
 	void ftk_set_allocator(in FtkAllocatorPtr allocator);
 	void ftk_set_input_method_manager(in FtkInputMethodManagerPtr input_manager_manager);

@@ -73,7 +73,7 @@ void ftk_set_sources_manager(FtkSourcesManager* sources_manager);
 void ftk_set_shared_canvas(FtkCanvas* canvas);
 void ftk_set_theme(FtkTheme* theme);
 void ftk_set_primary_source(FtkSource* source);
-void ftk_set_default_config(FtkConfig* config);
+void ftk_set_config(FtkConfig* config);
 void ftk_set_allocator(FtkAllocator* allocator);
 void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager);
 void ftk_set_input_method_preeditor(FtkImPreeditor* input_method_preeditor);

@@ -128,6 +128,22 @@ Ret lua_ftk_widget_listener_func(void* ctx, void* obj)
 
     return ret;
 }
+
+Ret lua_ftk_event_listener_func(void* ctx, void* obj)
+{
+    Ret ret = RET_OK;
+    const char* func = ctx;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+	tolua_pushusertype(L, obj, "FtkEvent");
+    lua_call(L, 1, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return ret;
+}
+
 Ret lua_ftk_icon_view_item_listener_func(void* ctx, void* obj)
 {
     Ret ret = RET_OK;

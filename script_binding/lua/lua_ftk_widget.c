@@ -745,6 +745,22 @@ static int lua_ftk_widget_set_text(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_widget_set_event_listener(lua_State* L)
+{
+	tolua_Error err = {0};
+	FtkWidget* thiz;
+	char* listener;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	listener = (char*)tolua_tostring(L, 2, 0);
+	ftk_widget_set_event_listener(thiz, lua_ftk_event_listener_func, listener);
+
+	return 1;
+}
+
 static int lua_ftk_widget_toplevel(lua_State* L)
 {
 	tolua_Error err = {0};
@@ -1050,6 +1066,7 @@ int tolua_ftk_widget_init(lua_State* L)
 	tolua_function(L, "SetGc", lua_ftk_widget_set_gc);
 	tolua_function(L, "ResetGc", lua_ftk_widget_reset_gc);
 	tolua_function(L, "SetText", lua_ftk_widget_set_text);
+	tolua_function(L, "SetEventListener", lua_ftk_widget_set_event_listener);
 	tolua_function(L, "Toplevel", lua_ftk_widget_toplevel);
 	tolua_function(L, "Parent", lua_ftk_widget_parent);
 	tolua_function(L, "Prev", lua_ftk_widget_prev);

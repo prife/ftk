@@ -115,6 +115,15 @@ static int lua_ftk_default_allocator(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_default_config(lua_State* L)
+{
+	FtkConfig* retv;
+	retv = ftk_default_config();
+	tolua_pushusertype(L, (FtkConfig*)retv, "FtkConfig");
+
+	return 1;
+}
+
 static int lua_ftk_default_input_method_manager(lua_State* L)
 {
 	FtkInputMethodManager* retv;
@@ -269,6 +278,20 @@ static int lua_ftk_set_theme(lua_State* L)
 
 	theme = tolua_tousertype(L, 1, 0);
 	ftk_set_theme(theme);
+
+	return 1;
+}
+
+static int lua_ftk_set_config(lua_State* L)
+{
+	tolua_Error err = {0};
+	FtkConfig* config;
+	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	config = tolua_tousertype(L, 1, 0);
+	ftk_set_config(config);
 
 	return 1;
 }
@@ -463,6 +486,7 @@ int tolua_ftk_init(lua_State* L)
 	tolua_function(L, "DefaultTheme", lua_ftk_default_theme);
 	tolua_function(L, "PrimarySource", lua_ftk_primary_source);
 	tolua_function(L, "DefaultAllocator", lua_ftk_default_allocator);
+	tolua_function(L, "DefaultConfig", lua_ftk_default_config);
 	tolua_function(L, "DefaultInputMethodManager", lua_ftk_default_input_method_manager);
 	tolua_function(L, "DefaultInputMethodPreeditor", lua_ftk_default_input_method_preeditor);
 	tolua_function(L, "SetFont", lua_ftk_set_font);
@@ -475,6 +499,7 @@ int tolua_ftk_init(lua_State* L)
 	tolua_function(L, "SetSourcesManager", lua_ftk_set_sources_manager);
 	tolua_function(L, "SetSharedCanvas", lua_ftk_set_shared_canvas);
 	tolua_function(L, "SetTheme", lua_ftk_set_theme);
+	tolua_function(L, "SetConfig", lua_ftk_set_config);
 	tolua_function(L, "SetPrimarySource", lua_ftk_set_primary_source);
 	tolua_function(L, "SetAllocator", lua_ftk_set_allocator);
 	tolua_function(L, "SetInputMethodManager", lua_ftk_set_input_method_manager);

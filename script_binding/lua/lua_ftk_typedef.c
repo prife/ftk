@@ -212,7 +212,7 @@ static int tolua_set_FtkGc_bg(lua_State* L)
 {
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->bg =  (*(FtkColor*)tolua_tousertype(L, 2, 0));
+	thiz->bg = (*(FtkColor*)tolua_tousertype(L, 2, 0));
 
 	return 1;
 }
@@ -232,7 +232,7 @@ static int tolua_set_FtkGc_fg(lua_State* L)
 {
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->fg =  (*(FtkColor*)tolua_tousertype(L, 2, 0));
+	thiz->fg = (*(FtkColor*)tolua_tousertype(L, 2, 0));
 
 	return 1;
 }
@@ -675,7 +675,7 @@ static int tolua_get_FtkEvent_widget(lua_State* L)
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	retv = (void*)thiz->widget;
-	tolua_pushusertype(L, (void*)retv, "void");
+	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
 
 	return 1;
 }
@@ -684,7 +684,7 @@ static int tolua_set_FtkEvent_widget(lua_State* L)
 {
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->widget = (void*) (tolua_tousertype(L, 2, 0));
+	thiz->widget = (FtkWidget*) (tolua_tousertype(L, 2, 0));
 
 	return 1;
 }

@@ -7,6 +7,13 @@ xml=[[
 Ftk.Init(1, {"demo1"})
 win=FtkXul.Load(xml, #xml)
 win:ShowAll(1)
+config=Ftk.DefaultConfig();
+print("GetTheme: "..config:GetTheme())
+print("GetDataDir: "..config:GetDataDir())
+print("GetDataRootDir: "..config:GetDataRootDir())
+print("GetTestDataDir: "..config:GetTestDataDir())
+print("GetEnableCursor: "..config:GetEnableCursor())
+print("GetEnableStatusBar: "..config:GetEnableStatusBar())
 Ftk.Run()
 
 

@@ -169,7 +169,7 @@ static void ftk_deinit(void)
 	if(ftk_default_config() != NULL)
 	{
 		ftk_config_destroy(ftk_default_config());
-		ftk_set_default_config(NULL);
+		ftk_set_config(NULL);
 	}
 	
 	if(ftk_default_allocator() != NULL)
@@ -218,7 +218,7 @@ Ret ftk_init(int argc, char* argv[])
 
 	ftk_platform_init(argc, argv);
 	config = ftk_config_create();
-	ftk_set_default_config(config);
+	ftk_set_config(config);
 	ftk_config_init(config, argc, argv);
 
 	ftk_set_sources_manager(ftk_sources_manager_create(64));

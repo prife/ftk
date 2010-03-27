@@ -202,7 +202,7 @@ void ftk_set_primary_source(FtkSource* source)
 	return;
 }
 
-void ftk_set_default_config(FtkConfig* config)
+void ftk_set_config(FtkConfig* config)
 {
 	g_globals.config = config;
 

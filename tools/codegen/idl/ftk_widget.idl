@@ -48,6 +48,7 @@ interface FtkWidget
 	void ftk_widget_set_gc(in FtkWidgetPtr thiz, in int state, in FtkGcPtr gc);
 	void ftk_widget_reset_gc(in FtkWidgetPtr thiz, in int state, in FtkGcPtr gc);
 	void ftk_widget_set_text(in FtkWidgetPtr thiz, in CStrPtr text);
+	void ftk_widget_set_event_listener(in FtkWidgetPtr thiz, in FtkEventListenerFunc listener);
 
 	FtkWidgetPtr ftk_widget_toplevel(in FtkWidgetPtr thiz);
 	FtkWidgetPtr ftk_widget_parent(in FtkWidgetPtr thiz);

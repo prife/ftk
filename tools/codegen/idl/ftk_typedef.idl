@@ -40,6 +40,7 @@ typedef voidPtr FtkListRenderPtr;
 typedef voidPtr FtkSpritePtr;
 typedef voidPtr FtkTranslatorPtr;
 typedef voidPtr FtkAnimatorPtr;
+typedef voidPtr FtkConfigPtr;
 typedef voidPtr FtkIdleFunc;
 typedef voidPtr FtkTimerFunc;
 typedef voidPtr FtkOnEventFunc;
@@ -51,6 +52,7 @@ typedef voidPtr FtkTranslatePathFunc;
 typedef voidPtr FtkDisplayOnUpdateFunc;
 typedef voidPtr FtkPrepareOptionsMenuFunc;
 typedef voidPtr FtkWidgetListenerFunc;
+typedef voidPtr FtkEventListenerFunc;
 typedef voidPtr FtkListItemListenerFunc;
 
 enum FtkBool
@@ -258,7 +260,7 @@ enum FtkWidgetAttr
 struct FtkEvent
 {
 	FtkEventType type;
-	voidPtr widget;
+	FtkWidgetPtr widget;
 	size_t time;
 	/*FIXME*/
 };

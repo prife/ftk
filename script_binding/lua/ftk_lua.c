@@ -85,6 +85,7 @@
 #include "lua_ftk_list_render_default.h"
 #include "lua_ftk_list_render.h"
 #include "lua_ftk_sprite.h"
+#include "lua_ftk_config.h"
 #include "lua_ftk_wnd_manager.h"
 
 int ftk_lua_init(lua_State *L) 
@@ -138,6 +139,7 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_list_view_init(L);
 	tolua_ftk_mmap_init(L);
 	tolua_ftk_sprite_init(L);
+	tolua_ftk_config_init(L);
 	tolua_ftk_wnd_manager_init(L);
 
 	lua_callbacks_init(L);
