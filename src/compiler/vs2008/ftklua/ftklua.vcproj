@@ -971,6 +971,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_config.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_dialog.c"
 				>
 				<FileConfiguration
@@ -2062,6 +2082,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_combo_box.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_config.h"
 				>
 			</File>
 			<File
