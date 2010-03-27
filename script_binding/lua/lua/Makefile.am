@@ -11,7 +11,6 @@ else
 liblua_la_CFLAGS=-DLUA_USE_LINUX
 endif
 
-liblua_la_CFLAGS+=-I/usr/include
 
 if FTK_BACKEND_PSP
 else
