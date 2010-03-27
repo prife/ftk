@@ -15,7 +15,7 @@ zlib: zlib-1.2.4
 	export CC=$(TARGET_CC) PREFIX=$(PREFIX) && \
 	cd zlib-1.2.4 && \
 	./configure --prefix=$(PREFIX) --shared &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 zlib_clean:
 	cd zlib-1.2.4 && make clean
 
@@ -26,7 +26,7 @@ libpng-1.2.35: packages/libpng-1.2.35.tar.bz2
 png: libpng-1.2.35
 	mkdir libpng-1.2.35/$(ARCH); cd libpng-1.2.35/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 png_clean:
 	rm -rf libpng-1.2.35/$(ARCH)
 
@@ -37,7 +37,7 @@ jpegsrc.v7: packages/jpegsrc.v7.tar.gz
 jpeg: jpegsrc.v7
 	mkdir jpeg-7/$(ARCH); cd jpeg-7/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 jpeg_clean:
 	rm -rf jpeg-7/$(ARCH)
 
@@ -49,7 +49,7 @@ tslib: tslib-1.0
 	cd tslib-1.0 && ./autogen.sh; cd -;\
 	mkdir tslib-1.0/$(ARCH); cd tslib-1.0/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX) -sysconfdir=$(PREFIX)/etc  ac_cv_func_malloc_0_nonnull=yes &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 tslib_clean:
 	rm -rf tslib-1.0/$(ARCH)
 tslib_source_clean:
@@ -62,7 +62,7 @@ freetype-2.3.9: packages/freetype-2.3.9.tar.gz
 freetype: freetype-2.3.9
 	mkdir freetype-2.3.9/$(ARCH); cd freetype-2.3.9/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 freetype_clean:
 	rm -rf freetype-2.3.9/$(ARCH)
 freetype_source_clean:
@@ -75,7 +75,7 @@ DirectFB-1.2.9: packages/DirectFB-1.2.9.tar.gz
 directfb: DirectFB-1.2.9
 	mkdir DirectFB-1.2.9/$(ARCH); cd DirectFB-1.2.9/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 directfb_clean:
 	rm -rf DirectFB-1.2.9/$(ARCH)
 directfb_source_clean:
@@ -85,7 +85,7 @@ libftk:
 	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
 	../configure ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
-	make clean; make && make install
+	make clean; make && make install DESTDIR=${STAGING}
 libftk_clean:
 	rm -rf ftk/$(ARCH)
 

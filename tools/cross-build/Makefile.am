@@ -1,1 +1,1 @@
-EXTRA_DIST=cross.mk  env.sh  README
+EXTRA_DIST=cross.mk  env.sh makedist.sh README

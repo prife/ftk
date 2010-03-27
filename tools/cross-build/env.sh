@@ -9,8 +9,8 @@ export PATH=/usr/local/arm-linux-4.1.1/bin/:$PATH
 #jz4740
 #######################################################
 #export ARCH=mipsel
-#export HOST_PARAM=--host=mipsel-linux
-#export TARGET_CC=mipsel-linux-gcc
+#export HOST_PARAM=--host=mipsel-openwrt-linux
+#export TARGET_CC=mipsel-openwrt-linux-gcc
 ##export PATH=/work/board/jz/mipseltools-gcc412-glibc261/bin:$PATH
 
 #sigma, 
@@ -26,7 +26,9 @@ export PATH=/usr/local/arm-linux-4.1.1/bin/:$PATH
 #export SIGMA_LIBS="-L$RUA_DIR/lib -Xlinker --start-group -ldcc -lrmmonitoring -lrmvdemux -lrmjpeg -lrmungif -lrmpng -lrmzlib -lrmhttp -lrmscc -lrmavicore -lrmmp4api -lrmmp4 -lrmmp4core -lrmdescriptordecoder -lrmmpeg4framework -lrmrtk86 -lrmwmaprodecoder -lrmwmaprodecodercore -lrmasfdemux -lrmasfdemuxcore -lrmstreamingprotocols -lrmcpputils -lrmcapture -lrmcw -lrmcore -lrmcdfs -lrua -lllad -lrmdtcpinterface -lrmdemuxwritekeyapi -lrmsoftmixer -lrmwmdrmndstub -lgbus -lrmdrm -Xlinker --end-group  -ldl -rdynamic"
 
 export BUILD_DIR=$PWD/$ARCH
-export PREFIX=$BUILD_DIR/usr
-export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig/
-export LDFLAGS="-L$PREFIX/lib"
-export CFLAGS="-I$PREFIX/include"
+export PREFIX=/opt
+export STAGING=${BUILD_DIR}/staging
+export DIST=${BUILD_DIR}/dist
+export PKG_CONFIG_PATH=${STAGING}/${PREFIX}/lib/pkgconfig/
+export LDFLAGS="-L${STAGING}/${PREFIX}/lib -Wl,-rpath -Wl,${PREFIX}/lib"
+export CFLAGS="-I${STAGING}/${PREFIX}/include"
