@@ -139,7 +139,7 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 		ftk_getcwd(cwd, sizeof(cwd));
 		ftk_snprintf(filename, sizeof(filename), "%s/%s/ftk.cnf", cwd, path);
 	}
-
+	ftk_normalize_path(filename);
 	if(!ftk_mmap_exist(filename))
 	{
 		return RET_FAIL;

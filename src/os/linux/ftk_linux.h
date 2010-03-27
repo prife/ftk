@@ -62,6 +62,8 @@
 #include "config.h"
 #endif
 
+#define FTK_PATH_DELIM '/'
+
 #define FTK_HAS_MAIN 1
 
 #endif/*FTK_LINUX_H*/

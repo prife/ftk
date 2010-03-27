@@ -79,6 +79,7 @@ size_t ftk_get_relative_time(void);
 #define ftk_fd_isset(fd, fdset)			ucos_fd_isset(fd, fdset)
 #define ftk_delay(t)					OSTimeDly(t>>1)
 
+#define FTK_PATH_DELIM '/'
 #endif
 
 #endif/*FTK_WIN32_H*/

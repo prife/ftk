@@ -74,6 +74,7 @@ char* ftk_get_testdata_dir(void);
 #include "config.h"
 #endif
 
+#define FTK_PATH_DELIM '/'
 #define FTK_HAS_MAIN 1
 char *ftk_getcwd(char *buf, size_t size);
 #endif/*FTK_PSP_H*/

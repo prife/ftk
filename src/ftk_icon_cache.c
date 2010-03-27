@@ -73,6 +73,7 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 	for(i = 0; i < FTK_ICON_PATH_NR; i++)
 	{
 		ftk_snprintf(path, sizeof(path), "%s/%s/%s", thiz->path[i], thiz->rel_path, filename);
+		ftk_normalize_path(path);
 		if((bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path)) != NULL)
 		{
 			return bitmap;

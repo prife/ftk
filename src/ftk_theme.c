@@ -103,7 +103,7 @@ static Ret ftk_theme_init_default(FtkTheme* thiz)
 	char filename[FTK_MAX_PATH] = {0};
 	ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", 
 		ftk_config_get_data_dir(ftk_default_config()));
-	
+	ftk_normalize_path(filename);	
 	return ftk_theme_parse_file(thiz, filename);
 #else
 	return ftk_theme_parse_data(thiz, s_default_theme, strlen(s_default_theme));
@@ -424,6 +424,7 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 	}
 
 	ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
+	ftk_normalize_path(icon_path);
 	thiz->icon_cache = ftk_icon_cache_create(s_default_path, icon_path);
 
 	return RET_OK;

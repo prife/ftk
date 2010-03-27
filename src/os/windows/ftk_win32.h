@@ -71,6 +71,7 @@ int   win32_socketpair(SOCKET socks[2]);
 #define ftk_pipe_close(fd)				closesocket(fd)
 #define ftk_pipe_recv(fd, buf, length)	recv(fd, buf, length, 0)
 #define ftk_pipe_send(fd, buf, length)	send(fd, buf, length, 0)
+#define FTK_PATH_DELIM '\\'
 
 #endif
 

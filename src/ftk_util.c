@@ -185,3 +185,20 @@ FtkColor ftk_parse_color( const char* value)
 	return color;
 }
 
+const char* ftk_normalize_path(char* path)
+{
+	char* p = path;
+	return_if_fail(path != NULL);
+	
+	while(*p)
+	{
+		if(*p == '/' || *p == '\\')
+		{
+			*p = FTK_PATH_DELIM;
+		}
+		p++;
+	}
+
+	return path;
+}
+
