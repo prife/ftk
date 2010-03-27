@@ -1,4 +1,3 @@
-
 #broncho 1900
 #######################################################
 export ARCH=arm
@@ -9,9 +8,15 @@ export PATH=/usr/local/arm-linux-4.1.1/bin/:$PATH
 #jz4740
 #######################################################
 #export ARCH=mipsel
+#export HOST_PARAM=--host=mipsel-linux
+#export TARGET_CC=mipsel-linux-gcc
+#export PATH=/work/board/jz/mipseltools-gcc412-glibc261/bin:$PATH
+
+#ben
+#######################################################
+#export ARCH=mipsel
 #export HOST_PARAM=--host=mipsel-openwrt-linux
 #export TARGET_CC=mipsel-openwrt-linux-gcc
-##export PATH=/work/board/jz/mipseltools-gcc412-glibc261/bin:$PATH
 
 #sigma, 
 # maybe you need change the path.
