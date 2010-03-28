@@ -1,1 +1,1 @@
-SUBDIRS=linux windows psp
+SUBDIRS=linux windows psp ucos-ii

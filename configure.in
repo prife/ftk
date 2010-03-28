@@ -138,6 +138,7 @@ AC_CONFIG_FILES([ftk.pc
                 src/os/linux/Makefile
                 src/os/windows/Makefile
                 src/os/psp/Makefile
+                src/os/ucos-ii/Makefile
                 src/compiler/Makefile
                 src/compiler/ads/Makefile
                 src/compiler/vs2008/Makefile

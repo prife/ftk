@@ -1,1 +1,1 @@
-SUBDIRS=ads  vs2008 
+SUBDIRS=ads  vs2008  ucos-vs2008

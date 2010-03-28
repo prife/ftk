@@ -155,7 +155,7 @@ ftk_HEADERS=\
 	ftk_allocator.h            ftk_allocator_default.h \
 	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
 	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
-	ftk_animator_zoom.h ftk_display_mem.h
+	ftk_animator_zoom.h ftk_display_mem.h ftk_config.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
 	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \
