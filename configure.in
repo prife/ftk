@@ -5,7 +5,7 @@ AC_PREREQ([2.60])
 AC_INIT(ftk, 0.1, xianjimli@hotmail.com)
 AC_CONFIG_SRCDIR([src/ftk_canvas.h])
 AC_CONFIG_HEADERS([config.h])
-AM_INIT_AUTOMAKE(ftk, 0.3)
+AM_INIT_AUTOMAKE(ftk, 0.4)
 AC_CONFIG_MACRO_DIR([m4])
 # Checks for programs.
 AC_PROG_CC
@@ -140,26 +140,6 @@ AC_CONFIG_FILES([ftk.pc
                 src/os/psp/Makefile
                 src/os/ucos-ii/Makefile
                 src/compiler/Makefile
-                src/compiler/ads/Makefile
-                src/compiler/vs2008/Makefile
-				src/compiler/vs2008/demo_menu/Makefile
-				src/compiler/vs2008/demo_button/Makefile
-				src/compiler/vs2008/demo_alpha/Makefile
-				src/compiler/vs2008/demo_images/Makefile
-				src/compiler/vs2008/demo_expand/Makefile
-				src/compiler/vs2008/demo_sprite/Makefile
-				src/compiler/vs2008/demo_textview/Makefile
-				src/compiler/vs2008/demo_transparent/Makefile
-				src/compiler/vs2008/demo_check/Makefile
-				src/compiler/vs2008/demo_icon_view/Makefile
-				src/compiler/vs2008/demo_list_view/Makefile
-				src/compiler/vs2008/demo_popup/Makefile
-				src/compiler/vs2008/demo_progress/Makefile
-				src/compiler/vs2008/demo_msgbox/Makefile
-				src/compiler/vs2008/demo_entry/Makefile
-				src/compiler/vs2008/demo_combobox/Makefile
-				src/compiler/vs2008/demo_xul/Makefile
-				src/compiler/vs2008/demo_ime/Makefile
                 script_binding/Makefile
                 script_binding/lua/Makefile
                 script_binding/lua/lua/Makefile
