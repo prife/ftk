@@ -21,6 +21,7 @@ LINUX_SIGMA=$(srcdir)/backend/sigma/ftk_backend_sigma.c \
 	$(srcdir)/backend/sigma/ftk_display_sigma.c
 
 PSP=$(srcdir)/backend/psp/ftk_backend_psp.c \
+	$(srcdir)/backend/psp/ftk_source_psp.c \
 	$(srcdir)/backend/psp/ftk_display_psp.c
 
 OS_LINUX=\

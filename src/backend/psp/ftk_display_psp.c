@@ -143,7 +143,7 @@ FtkDisplay* ftk_display_psp_create(FtkSource** event_source, FtkOnEvent on_event
 		}
 		priv->bits = (void *)(0x40000000 | (unsigned int)sceGeEdramGetAddr());
 
-		//*event_source = ftk_source_psp_create(thiz, on_event, ctx);
+		*event_source = ftk_source_psp_create(thiz, on_event, ctx);
 	}
 
 	return thiz;
