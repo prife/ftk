@@ -88,6 +88,7 @@ static Ret ftk_source_tslib_dispatch(FtkSource* thiz)
 		{
 			priv->event.type =  FTK_EVT_MOUSE_UP;
 		}
+		priv->pressed = 0;
 	}
 
 	if(priv->on_event != NULL && priv->event.type != FTK_EVT_NOP)
