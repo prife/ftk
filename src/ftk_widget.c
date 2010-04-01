@@ -922,7 +922,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz)
 			gc.mask = FTK_GC_FG;
 			gc.fg = ftk_widget_get_gc(thiz)->bg;
 			ftk_canvas_reset_gc(canvas, &gc); 
-			ftk_canvas_draw_rect(canvas, x, y, width, height, 1);
+			ftk_canvas_fast_fill_rect(canvas, x, y, width, height);
 		}
 
 		bitmap = priv->gc[priv->state].bitmap;

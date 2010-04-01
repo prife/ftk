@@ -206,6 +206,48 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	return RET_OK;
 }
 
+Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h)
+{
+	int width = 0;
+	int height = 0;
+	int iter_w = 0;
+	int iter_h = 0;
+	FtkColor* bits = NULL;
+	unsigned char alpha = 0;
+	FtkColor* pdst = NULL;
+	
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+	width  = ftk_bitmap_width(thiz->bitmap);
+	height = ftk_bitmap_height(thiz->bitmap);
+	bits   = ftk_bitmap_bits(thiz->bitmap);
+	return_val_if_fail(bits != NULL && x < width, RET_FAIL);
+	return_val_if_fail(y < height, RET_FAIL);	
+	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
+
+	x = x < 0 ? 0 : x;
+	y = y < 0 ? 0 : y;
+	w = (x + w) < width ? w : width - x;
+	h = (y + h) < height ? h : height - y;
+
+	iter_w = w;
+	iter_h = h;
+	bits += y * width;
+
+	while(iter_h--)
+	{
+		pdst = bits + x;
+		while(iter_w--)
+		{
+			*pdst = thiz->gc.fg;
+			pdst++;
+		}
+		iter_w = w;
+		bits += width;
+	}
+
+	return RET_OK;
+}
+
 Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 {
 	int i = 0;

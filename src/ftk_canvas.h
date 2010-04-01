@@ -64,6 +64,7 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len);
 int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode);
 const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width);
 
+Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h);
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
 Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h);
 
