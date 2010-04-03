@@ -105,18 +105,6 @@ struct FtkColor
 	uchar a;
 };
 
-struct FtkGc
-{
-	int ref;
-	int mask;
-	FtkColor   bg;
-	FtkColor   fg;
-	FtkFontPtr   font;
-	FtkBitmapPtr bitmap;
-	StrPtr alpha;
-	int line_mask;
-};
-
 struct FtkRect
 {
 	int x;
@@ -255,14 +243,6 @@ enum FtkWidgetAttr
 	FTK_ATTR_QUIT_WHEN_CLOSE , 
 	FTK_ATTR_AUTO_LAYOUT     ,
 	FTK_ATTR_POPUP            
-};
-
-struct FtkEvent
-{
-	FtkEventType type;
-	FtkWidgetPtr widget;
-	size_t time;
-	/*FIXME*/
 };
 
 enum FtkKey

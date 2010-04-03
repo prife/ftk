@@ -6,11 +6,9 @@ static void tolua_reg_types (lua_State* L)
 {
 	tolua_usertype(L, "FtkPoint");
 	tolua_usertype(L, "FtkColor");
-	tolua_usertype(L, "FtkGc");
 	tolua_usertype(L, "FtkRect");
 	tolua_usertype(L, "FtkListItemInfo");
 	tolua_usertype(L, "FtkIconViewItem");
-	tolua_usertype(L, "FtkEvent");
 }
 
 int lua_ftk_point_create(lua_State* L)
@@ -145,174 +143,6 @@ static int tolua_set_FtkColor_a(lua_State* L)
 	FtkColor* thiz = (FtkColor*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	thiz->a = (int) (tolua_tonumber(L, 2, 0));
-
-	return 1;
-}
-
-int lua_ftk_gc_create(lua_State* L)
-{
-	FtkGc* retv = calloc(1, sizeof(FtkGc));
-	tolua_pushusertype_and_takeownership(L, (void*)retv, "FtkGc");
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_ref(lua_State* L)
-{
-	lua_Number retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (lua_Number)thiz->ref;
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_ref(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->ref = (int) (tolua_tonumber(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_mask(lua_State* L)
-{
-	lua_Number retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (lua_Number)thiz->mask;
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_mask(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->mask = (int) (tolua_tonumber(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_bg(lua_State* L)
-{
-	void* retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)&(thiz->bg);
-	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_bg(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->bg = (*(FtkColor*)tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_fg(lua_State* L)
-{
-	void* retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)&(thiz->fg);
-	{FtkColor* copy=malloc(sizeof(FtkColor)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkColor));tolua_pushusertype_and_takeownership(L, (FtkColor*)copy, "FtkColor");}
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_fg(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->fg = (*(FtkColor*)tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_font(lua_State* L)
-{
-	void* retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)thiz->font;
-	tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_font(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->font = (FtkFont*) (tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_bitmap(lua_State* L)
-{
-	void* retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)thiz->bitmap;
-	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_bitmap(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->bitmap = (FtkBitmap*) (tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_alpha(lua_State* L)
-{
-	char* retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (char*)thiz->alpha;
-	tolua_pushstring(L, (char*)retv);
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_alpha(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->alpha = (char*) ((char*)tolua_tostring(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkGc_line_mask(lua_State* L)
-{
-	lua_Number retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (lua_Number)thiz->line_mask;
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_line_mask(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->line_mask = (int) (tolua_tonumber(L, 2, 0));
 
 	return 1;
 }
@@ -641,74 +471,6 @@ static int tolua_set_FtkIconViewItem_user_data(lua_State* L)
 	return 1;
 }
 
-int lua_ftk_event_create(lua_State* L)
-{
-	FtkEvent* retv = calloc(1, sizeof(FtkEvent));
-	tolua_pushusertype_and_takeownership(L, (void*)retv, "FtkEvent");
-
-	return 1;
-}
-
-static int tolua_get_FtkEvent_type(lua_State* L)
-{
-	void* retv;
-	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)&(thiz->type);
-	{FtkEventType* copy=malloc(sizeof(FtkEventType)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkEventType));tolua_pushusertype_and_takeownership(L, (FtkEventType*)copy, "FtkEventType");}
-
-	return 1;
-}
-
-static int tolua_set_FtkEvent_type(lua_State* L)
-{
-	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->type = (FtkEventType) (*(FtkEventType*)tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkEvent_widget(lua_State* L)
-{
-	void* retv;
-	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)thiz->widget;
-	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
-
-	return 1;
-}
-
-static int tolua_set_FtkEvent_widget(lua_State* L)
-{
-	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->widget = (FtkWidget*) (tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
-static int tolua_get_FtkEvent_time(lua_State* L)
-{
-	lua_Number retv;
-	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (lua_Number)thiz->time;
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int tolua_set_FtkEvent_time(lua_State* L)
-{
-	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->time = (int) (tolua_tonumber(L, 2, 0));
-
-	return 1;
-}
-
 int tolua_ftk_typedef_init(lua_State* L)
 {
 	tolua_open(L);
@@ -728,18 +490,6 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_variable(L, "g",tolua_get_FtkColor_g, tolua_set_FtkColor_g);
 	tolua_variable(L, "r",tolua_get_FtkColor_r, tolua_set_FtkColor_r);
 	tolua_variable(L, "a",tolua_get_FtkColor_a, tolua_set_FtkColor_a);
-	tolua_endmodule(L);
-	tolua_cclass(L, "FtkGc", "FtkGc", "", NULL);
-	tolua_beginmodule(L, "FtkGc");
-	tolua_function(L, "Create", lua_ftk_gc_create);
-	tolua_variable(L, "ref",tolua_get_FtkGc_ref, tolua_set_FtkGc_ref);
-	tolua_variable(L, "mask",tolua_get_FtkGc_mask, tolua_set_FtkGc_mask);
-	tolua_variable(L, "bg",tolua_get_FtkGc_bg, tolua_set_FtkGc_bg);
-	tolua_variable(L, "fg",tolua_get_FtkGc_fg, tolua_set_FtkGc_fg);
-	tolua_variable(L, "font",tolua_get_FtkGc_font, tolua_set_FtkGc_font);
-	tolua_variable(L, "bitmap",tolua_get_FtkGc_bitmap, tolua_set_FtkGc_bitmap);
-	tolua_variable(L, "alpha",tolua_get_FtkGc_alpha, tolua_set_FtkGc_alpha);
-	tolua_variable(L, "line_mask",tolua_get_FtkGc_line_mask, tolua_set_FtkGc_line_mask);
 	tolua_endmodule(L);
 	tolua_cclass(L, "FtkRect", "FtkRect", "", NULL);
 	tolua_beginmodule(L, "FtkRect");
@@ -767,13 +517,6 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_variable(L, "text",tolua_get_FtkIconViewItem_text, tolua_set_FtkIconViewItem_text);
 	tolua_variable(L, "icon",tolua_get_FtkIconViewItem_icon, tolua_set_FtkIconViewItem_icon);
 	tolua_variable(L, "user_data",tolua_get_FtkIconViewItem_user_data, tolua_set_FtkIconViewItem_user_data);
-	tolua_endmodule(L);
-	tolua_cclass(L, "FtkEvent", "FtkEvent", "", NULL);
-	tolua_beginmodule(L, "FtkEvent");
-	tolua_function(L, "Create", lua_ftk_event_create);
-	tolua_variable(L, "type",tolua_get_FtkEvent_type, tolua_set_FtkEvent_type);
-	tolua_variable(L, "widget",tolua_get_FtkEvent_widget, tolua_set_FtkEvent_widget);
-	tolua_variable(L, "time",tolua_get_FtkEvent_time, tolua_set_FtkEvent_time);
 	tolua_endmodule(L);
 	tolua_constant(L, "FTK_TRUE", FTK_TRUE);
 	tolua_constant(L, "FTK_FALSE", FTK_FALSE);

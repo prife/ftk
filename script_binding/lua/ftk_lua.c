@@ -37,6 +37,7 @@
 #include "ftk_lua.h"
 
 #include "lua_ftk_xul.h"
+#include "lua_ftk_structs.h"
 #include "lua_ftk_widget.h"
 #include "lua_ftk_window.h"
 #include "lua_ftk_label.h"
@@ -141,6 +142,7 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_sprite_init(L);
 	tolua_ftk_config_init(L);
 	tolua_ftk_wnd_manager_init(L);
+	tolua_ftk_structs_init(L);
 
 	lua_callbacks_init(L);
 
