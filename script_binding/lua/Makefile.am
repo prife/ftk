@@ -118,5 +118,6 @@ EXTRA_DIST=\
 	lua_ftk_xul.h\
 	tolua_event.h\
 	tolua++.h \
-	lua_ftk_config.h
+	lua_ftk_config.h \
+	lua_ftk_structs.h
 
