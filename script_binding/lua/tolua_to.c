@@ -136,7 +136,7 @@ TOLUA_API char** tolua_tostrings(lua_State *L, size_t index, char** def)
 {
 	int i = 0;
 	int n = 0;
-	const char** strs = NULL;
+	char** strs = NULL;
 
 	luaL_checktype(L, index, LUA_TTABLE);
 	n = luaL_getn(L, index);

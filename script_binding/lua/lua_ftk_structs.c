@@ -138,11 +138,11 @@ static int tolua_set_FtkGc_bitmap(lua_State* L)
 
 static int tolua_get_FtkGc_alpha(lua_State* L)
 {
-	char* retv;
+	lua_Number retv;
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	retv = (char*)thiz->alpha;
-	tolua_pushstring(L, (char*)retv);
+	retv = thiz->alpha;
+	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
 }
@@ -151,7 +151,7 @@ static int tolua_set_FtkGc_alpha(lua_State* L)
 {
 	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->alpha = (char*) ((char*)tolua_tostring(L, 2, 0));
+	thiz->alpha = (char)tolua_tonumber(L, 2, 0);
 
 	return 1;
 }
@@ -186,11 +186,11 @@ int lua_ftk_event_create(lua_State* L)
 
 static int tolua_get_FtkEvent_type(lua_State* L)
 {
-	void* retv;
+	lua_Number retv;
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)&(thiz->type);
-	{FtkEventType* copy=malloc(sizeof(FtkEventType)); if(copy != NULL) memcpy(copy, &retv, sizeof(FtkEventType));tolua_pushusertype_and_takeownership(L, (FtkEventType*)copy, "FtkEventType");}
+	retv = (lua_Number)thiz->type;
+	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
 }
@@ -199,7 +199,7 @@ static int tolua_set_FtkEvent_type(lua_State* L)
 {
 	FtkEvent* thiz = (FtkEvent*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
-	thiz->type = (FtkEventType) (*(FtkEventType*)tolua_tousertype(L, 2, 0));
+	thiz->type = tolua_tonumber(L, 2, 0);
 
 	return 1;
 }

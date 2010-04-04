@@ -1,9 +1,9 @@
 /*
- * File: ftk_ucos_pipe.c    
+ * File: ftk_ucos_sim.c    
  * Author:  MinPengli <MinPengli@gmail.com>
  * Brief: uCOS-II specific functions.
  *
- * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ * Copyright (c) 2009 - 2010  MinPengli <MinPengli@gmail.com>
  *
  * Licensed under the Academic Free License version 2.1
  *

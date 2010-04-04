@@ -1,6 +1,6 @@
 /*
  * File: ftk_ucos_sim.h
- * Author:  Li XianJing <xianjimli@hotmail.com>
+ * Author:  MinPengli <MinPengli@gmail.com>
  * Brief:   ucos specific functions.
  *
  * Copyright (c) 2009 - 2010  MinPengli <MinPengli@gmail.com>

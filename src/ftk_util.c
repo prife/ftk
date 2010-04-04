@@ -188,7 +188,7 @@ FtkColor ftk_parse_color( const char* value)
 const char* ftk_normalize_path(char* path)
 {
 	char* p = path;
-	return_if_fail(path != NULL);
+	return_val_if_fail(path != NULL, NULL);
 	
 	while(*p)
 	{
