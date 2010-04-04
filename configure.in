@@ -130,6 +130,7 @@ AC_CONFIG_FILES([ftk.pc
                 src/backend/Makefile
                 src/backend/directfb/Makefile
                 src/backend/fb/Makefile
+                src/backend/ucosii/Makefile
                 src/backend/sigma/Makefile
                 src/backend/psp/Makefile
                 src/backend/x11-emu/Makefile

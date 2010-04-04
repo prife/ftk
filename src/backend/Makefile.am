@@ -1,1 +1,1 @@
-SUBDIRS=directfb fb win32 x11-emu sigma psp
+SUBDIRS=directfb fb win32 x11-emu sigma psp ucosii
