@@ -82,5 +82,5 @@ size_t ftk_get_relative_time(void);
 #define FTK_PATH_DELIM '/'
 #endif
 
-#endif/*FTK_WIN32_H*/
+#endif/* FTK_UCOS_SIM_H */
 
