@@ -85,6 +85,7 @@ static Ret ftk_source_psp_dispatch(FtkSource* thiz)
 	if(pad.Buttons & PSP_CTRL_SQUARE)
 	{
 		/* mouse left button */
+		new_keypress = FTK_KEY_ENTER;
 	}
 	if(pad.Buttons & PSP_CTRL_CROSS)
 	{
@@ -118,12 +119,24 @@ static Ret ftk_source_psp_dispatch(FtkSource* thiz)
 	{
 		if(priv->psp_keypress == FTK_KEY_ENTER)
 		{
-			priv->event.u.key.code = priv->psp_keypress;
-			priv->event.type = FTK_EVT_KEY_DOWN;
-			ftk_source_psp_event_handler(thiz);
+			if(pad.Buttons & PSP_CTRL_SQUARE)
+			{
+				priv->event.u.mouse.x = x;
+				priv->event.u.mouse.y = y;
+				priv->event.type = FTK_EVT_MOUSE_DOWN;
+				ftk_source_psp_event_handler(thiz);
 
-			priv->event.u.key.code = priv->psp_keypress;
-			priv->event.type = FTK_EVT_KEY_UP;
+				priv->event.type = FTK_EVT_MOUSE_UP;
+			}
+			else
+			{
+				priv->event.u.key.code = priv->psp_keypress;
+				priv->event.type = FTK_EVT_KEY_DOWN;
+				ftk_source_psp_event_handler(thiz);
+
+				priv->event.u.key.code = priv->psp_keypress;
+				priv->event.type = FTK_EVT_KEY_UP;
+			}
 		}
 		else
 		{
