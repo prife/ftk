@@ -63,7 +63,10 @@ char* ftk_get_testdata_dir(void);
 
 #define usleep		sceKernelDelayThread
 #define exit(...)	sceKernelExitGame()
+
+#ifdef FTK_PSP_DEBUG_ON_SCREEN
 #define printf		pspDebugScreenPrintf
+#endif
 
 #define ftk_pipe_pair(fds)				pipe(fds)
 #define ftk_pipe_close(fd)				close(fd)
