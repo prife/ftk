@@ -222,7 +222,7 @@ typedef struct _FtkCommitInfo
 #define FTK_MAIN ftk_main
 #endif
 
-#if 0
+#ifdef USE_STD_MALLOC
 #define FTK_ALLOC(s)       malloc(s)
 #define FTK_REALLOC(p, s)  realloc(p, s)
 #define FTK_ZALLOC(s)      calloc(1, s)

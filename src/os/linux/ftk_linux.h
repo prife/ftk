@@ -52,6 +52,7 @@
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
 #define ftk_getcwd    getcwd
+#define ftk_sscanf    sscanf
 
 #define ftk_pipe_pair(fds)				socketpair(AF_UNIX, SOCK_STREAM, 0, fds)
 #define ftk_pipe_close(fd)				close(fd)

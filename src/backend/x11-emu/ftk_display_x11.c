@@ -140,7 +140,7 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 	Display* display = XOpenDisplay(NULL);
 	return_val_if_fail(display != NULL, NULL);
 	screen = DefaultScreen(display);
-	sscanf(DISPLAY_PARAM, "linux-x11:%dx%d", &width, &height);
+	ftk_sscanf(DISPLAY_PARAM, "linux-x11:%dx%d", &width, &height);
 
 	ftk_logd("%s width=%d height=%d\n", __func__, width, height);
 	win = XCreateSimpleWindow(display, RootWindow(display, screen),

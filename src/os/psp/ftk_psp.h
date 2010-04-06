@@ -60,6 +60,7 @@ char* ftk_get_testdata_dir(void);
 #define ftk_strncpy   strncpy
 #define ftk_snprintf  snprintf
 #define ftk_vsnprintf vsnprintf 
+#define ftk_sscanf    sscanf
 
 #define usleep		sceKernelDelayThread
 #define exit(...)	sceKernelExitGame()

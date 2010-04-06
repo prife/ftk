@@ -174,11 +174,13 @@ static void ftk_deinit(void)
 		ftk_set_config(NULL);
 	}
 	
+#ifndef USE_STD_MALLOC
 	if(ftk_default_allocator() != NULL)
 	{
 		ftk_allocator_destroy(ftk_default_allocator());
 		ftk_set_allocator(NULL);
 	}
+#endif
 
 	ftk_platform_deinit();
 
@@ -216,7 +218,9 @@ Ret ftk_init(int argc, char* argv[])
 	FtkConfig* config = NULL;
 	FtkDisplay* display = NULL;
 
+#ifndef USE_STD_MALLOC
 	ftk_set_allocator(FTK_PROFILE(ftk_allocator_default_create()));
+#endif
 
 	ftk_platform_init(argc, argv);
 	config = ftk_config_create();

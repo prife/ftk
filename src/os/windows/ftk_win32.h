@@ -59,6 +59,7 @@ char* ftk_get_testdata_dir(void);
 
 #define usleep        Sleep
 #define ftk_getcwd    _getcwd
+#define ftk_sscanf    sscanf
 
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);

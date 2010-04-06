@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <assert.h>
+#include "ftk_typedef.h"
 
 typedef enum tagToken
 {
@@ -85,7 +86,7 @@ static void LexGetNumToken(PLex thiz)
 				else
 				{
 					double val = 0;
-					sscanf(thiz->buffer+thiz->read_pos, "%lf", &val);
+					ftk_sscanf(thiz->buffer+thiz->read_pos, "%lf", &val);
 					thiz->val = val;
 					state = STAT_FINISH;
 				}
@@ -100,7 +101,7 @@ static void LexGetNumToken(PLex thiz)
 				else
 				{
 					int val = 0;
-					sscanf(thiz->buffer+thiz->read_pos, "%o", &val);
+					ftk_sscanf(thiz->buffer+thiz->read_pos, "%o", &val);
 					thiz->val = val;
 					state = STAT_FINISH;
 				}
@@ -109,7 +110,7 @@ static void LexGetNumToken(PLex thiz)
 			case STAT_AFTER_X:
 			{
 				int val = 0;
-				sscanf(thiz->buffer+thiz->read_pos, "%x", &val);
+				ftk_sscanf(thiz->buffer+thiz->read_pos, "%x", &val);
 				thiz->val = val;
 				state = STAT_FINISH;
 				break;
