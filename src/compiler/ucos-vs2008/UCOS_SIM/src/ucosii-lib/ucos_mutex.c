@@ -33,9 +33,21 @@
 #include <includes.h>
 #include <ucos_mutex.h>
 
-int mutex_init (mutex_t *mutex)
+struct _mutex_t
 {
+	OS_EVENT *mtx;
+};
+
+mutex_t *mutex_init (void)
+{
+	mutex_t *mutex = NULL;
 	OS_EVENT *local_mutex = NULL;
+
+	mutex = malloc(sizeof(mutex_t));
+	if(mutex == NULL)
+	{
+		return NULL;
+	}
 
 	do{
 		local_mutex = OSSemCreate(1);
@@ -43,26 +55,27 @@ int mutex_init (mutex_t *mutex)
 
 	mutex->mtx = local_mutex;
 	
-    return 0;
+    return mutex;
 }
 
 int mutex_destroy (mutex_t *mutex)
 {
-    INT8U err;	
-    
-	if(!mutex)
+    INT8U err = 0;
+
+	if(mutex == NULL)
 		return -1;
 
 	OSSemDel(mutex->mtx, OS_DEL_ALWAYS, &err);
-	
+	free(mutex);
+
     return 0;
 }
 
 int mutex_lock (mutex_t *mutex)
 {
-    INT8U err;
+    INT8U err = 0;
 
-	if(NULL==mutex)
+	if(mutex == NULL)
 		return -1;
 
 	OSSemPend(mutex->mtx, 0, &err);
@@ -72,21 +85,35 @@ int mutex_lock (mutex_t *mutex)
 
 int mutex_trylock (mutex_t *mutex)
 {
-    INT8U err;
-	if(!mutex)
+    INT8U err = 0;
+
+	if(mutex == NULL)
+	{
 		return -1;
+	}
     
 	OSSemPend(mutex->mtx, 500, &err);
-	if(err==OS_TIMEOUT);
+	if(err == OS_TIMEOUT);
+	{
 	    return -1;
+	}
 	    
     return 0;
 }
 
 int mutex_unlock (mutex_t *mutex)
 {
+	if(mutex == NULL)
+	{
+		return -1;
+	}
+
 	if(OS_NO_ERR==OSSemPost(mutex->mtx))
+	{
         return 0;
+	}
     else
+    {
         return -1;
+	}
 }

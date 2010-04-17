@@ -4,7 +4,7 @@
 * Author:  MinPengli <minpengli@gmail.com>
 * Brief: pipe implement for ucos
 *
-* Copyright (c) 2009 - 2010  Li XianJing <minpengli@gmail.com>
+* Copyright (c) 2009 - 2010  MinPengli <minpengli@gmail.com>
 *
 * Licensed under the Academic Free License version 2.1
 *
@@ -45,7 +45,7 @@
 typedef struct _ByteQueue
 {
 	INT8U *p;
-	mutex_t mtx;
+	mutex_t *mtx;
 	INT32U nbytes;
 	INT32U maxcount;
 	INT32U read_pos;
@@ -94,7 +94,7 @@ int ucos_pipe_deinit(void)
 		bq = &g_mgr.bq[i];
 		if(bq->rd_opened || bq->wr_opened)
 		{
-			mutex_destroy(&bq->mtx);
+			mutex_destroy(bq->mtx);
 			if(bq->p) free(bq->p);
 			memset(bq, 0, sizeof(ByteQueue));
 			return 0;
@@ -105,7 +105,7 @@ int ucos_pipe_deinit(void)
 
 int ucos_pipe_create(int fd[])
 {
-	INT32S i;
+	INT32S i = 0;
 
 	for(i=0; i<NR_PIPE; i++)
 	{
@@ -113,16 +113,23 @@ int ucos_pipe_create(int fd[])
 			break;
 	}
 	if(i == NR_PIPE)
+	{
 		return -1;
+	}
 
 	memset(&g_mgr.bq[i], 0, sizeof(ByteQueue));
 	g_mgr.bq[i].maxcount = 1024 * 4;
 	g_mgr.bq[i].p = malloc(g_mgr.bq[i].maxcount);
 	if(g_mgr.bq[i].p == NULL)
+	{
 		return -1;
-	if(mutex_init(&g_mgr.bq[i].mtx))
+	}
+
+	g_mgr.bq[i].mtx = mutex_init();
+	if(g_mgr.bq[i].mtx == NULL)
 	{
 		free(g_mgr.bq[i].p);
+
 		return -1;
 	}
 
@@ -136,12 +143,12 @@ int ucos_pipe_create(int fd[])
 
 int ucos_pipe_read(int fd, void *buf, int count)
 {
-	INT8U err, opt;
-	INT32S i, j;
+	INT8U err = 0, opt = 0;
+	INT32S i = 0, j = 0;
 	INT32U readbytes = 0;
 	INT8U *p = NULL;
 	ByteQueue *bq = NULL;
-	OS_FLAGS flags;
+	OS_FLAGS flags = 0;
 
 	if((!IS_VALID(fd)) || (!IS_RD_FD(fd)))
 		return 0;
@@ -156,7 +163,7 @@ int ucos_pipe_read(int fd, void *buf, int count)
 		flags = OSFlagPend(g_mgr.fg, BIT_FLAG(fd), OS_FLAG_WAIT_SET_ANY, 500, &err);
 	}while(err != OS_NO_ERR || !(flags & BIT_FLAG(fd)));
 
-	mutex_lock(&bq->mtx);
+	mutex_lock(bq->mtx);
 
 	p = buf;
 	for(i=bq->read_pos, j=0; i<bq->write_pos && j<count; i++, j++)
@@ -172,7 +179,7 @@ int ucos_pipe_read(int fd, void *buf, int count)
 		flags = OSFlagPost(g_mgr.fg, BIT_FLAG(fd), opt, &err);
 	}while(err != OS_NO_ERR);
 
-	mutex_unlock(&bq->mtx);
+	mutex_unlock(bq->mtx);
 
 	return readbytes;
 }
@@ -193,7 +200,7 @@ int ucos_pipe_write(int fd, void *buf, int count)
 	bq = PTROFBYTEQ(fd);
 	if(!bq->wr_opened)
 		return 0;
-	mutex_lock(&bq->mtx);
+	mutex_lock(bq->mtx);
 
 	p = buf;
 	emptys = bq->maxcount - bq->nbytes;
@@ -209,7 +216,7 @@ int ucos_pipe_write(int fd, void *buf, int count)
 		OSFlagPost(g_mgr.fg, BIT_FLAG(fd), OS_FLAG_SET, &err);
 	}while(err != OS_NO_ERR);
 
-	mutex_unlock(&bq->mtx);
+	mutex_unlock(bq->mtx);
 
 	return writebytes;
 }
@@ -243,7 +250,7 @@ int ucos_pipe_close(int fd)
 
 	if((!bq->rd_opened) && (!bq->wr_opened))
 	{
-		mutex_destroy(&bq->mtx);
+		mutex_destroy(bq->mtx);
 		free(bq->p);
 		memset(bq, 0, sizeof(ByteQueue));
 		return 0;

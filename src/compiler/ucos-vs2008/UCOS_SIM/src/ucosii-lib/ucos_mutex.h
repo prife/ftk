@@ -32,7 +32,7 @@
 #ifndef UCOS_MUTEX_H
 #define UCOS_MUTEX_H
 
-#include "includes.h"
+#include    <ucos_ii.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -41,12 +41,7 @@ extern "C" {
 struct _mutex_t;
 typedef struct _mutex_t mutex_t;
 
-struct _mutex_t
-{
-	OS_EVENT *mtx;
-};
-
-int mutex_init (mutex_t *mutex);
+mutex_t *mutex_init (void);
 int mutex_destroy (mutex_t *mutex);
 int mutex_lock (mutex_t *mutex);
 int mutex_trylock (mutex_t *mutex);
