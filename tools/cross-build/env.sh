@@ -37,3 +37,6 @@ export DIST=${BUILD_DIR}/dist
 export PKG_CONFIG_PATH=${STAGING}/${PREFIX}/lib/pkgconfig/
 export LDFLAGS="-L${STAGING}/${PREFIX}/lib -Wl,-rpath -Wl,${PREFIX}/lib"
 export CFLAGS="-I${STAGING}/${PREFIX}/include"
+
+export CAIRO=cairo
+export ENABLE_CAIRO="--enable-cairo"
