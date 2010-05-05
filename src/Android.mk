@@ -37,7 +37,7 @@ LOCAL_SRC_FILES := $(OS_LINUX) $(LINUX_NATIVE) \
 	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c \
 	ftk_main_loop_select.c ftk_config.c \
-	fontdata.c ftk_font_default.c
+	fontdata.c ftk_font_default.c ftk_display_mem.c
 
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_C_INCLUDES := external/jpeg external/libpng external/zlib 
