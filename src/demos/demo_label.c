@@ -20,9 +20,9 @@ static Ret timeout(void* ctx)
 	}
 	else
 	{
-		FTK_QUIT();
+		ftk_widget_unref(ftk_widget_toplevel(info->label));
 		ftk_logd("%s: timeout and quit.\n", __func__);
-	
+		FTK_FREE(info);	
 		return RET_REMOVE;
 	}
 }
@@ -32,10 +32,12 @@ int FTK_MAIN(int argc, char* argv[])
 	int width = 0;
 	int height = 0;
 	FtkGc gc = {.mask = FTK_GC_BG};
-	TimerInfo info = {.times=5, };
+	TimerInfo* info = (TimerInfo*)FTK_ZALLOC(sizeof(TimerInfo));
+	
+	info->times = 5;
 	FTK_INIT(argc, argv);
 		
-	FtkSource* timer = ftk_source_timer_create(1000, timeout, &info);
+	FtkSource* timer = ftk_source_timer_create(1000, timeout, info);
 	FtkWidget* win = ftk_app_window_create();
 
 	width = ftk_widget_width(win);
@@ -58,7 +60,7 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(label, "中英文混合多行文本显示:the linux mobile development.带有背景颜色。");
 	
 	label = ftk_label_create(win, 50, height/2-30, width, 20);
-	info.label = label;
+	info->label = label;
 	
 	ftk_widget_set_text(win, "label demo");
 	ftk_widget_show_all(win, 1);

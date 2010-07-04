@@ -47,7 +47,7 @@ const char* pngs[] =
 
 static Ret button_clicked(void* ctx, void* obj)
 {
-	FTK_QUIT();
+	ftk_widget_unref(ctx);
 
 	return RET_OK;
 }
@@ -94,7 +94,7 @@ int FTK_MAIN(int argc, char* argv[])
 
 			if(i == 0 && j == 0)
 			{
-				ftk_button_set_clicked_listener(button, button_clicked, NULL);
+				ftk_button_set_clicked_listener(button, button_clicked, win);
 				ftk_widget_set_text(button, "Quit");
 			}
 		}

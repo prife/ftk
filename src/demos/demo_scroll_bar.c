@@ -2,7 +2,7 @@
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	FTK_QUIT();
+	ftk_widget_unref(ctx);
 
 	return RET_OK;
 }
@@ -14,7 +14,7 @@ static Ret scroll_bar_on_scroll(void* ctx, void* scroll_bar)
 	return RET_OK;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

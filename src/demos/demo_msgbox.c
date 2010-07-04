@@ -38,8 +38,7 @@ static Ret button_tips(void* ctx, void* obj)
 
 static Ret button_quit(void* ctx, void* obj)
 {
-	FTK_QUIT();
-
+	ftk_widget_unref(ctx);
 	return RET_OK;
 }
 

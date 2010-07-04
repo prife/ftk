@@ -2,8 +2,7 @@
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	FTK_QUIT();
-
+	ftk_widget_unref(ctx);
 	return RET_OK;
 }
 
@@ -69,7 +68,6 @@ int FTK_MAIN(int argc, char* argv[])
 
 	FTK_RUN();
 
-	ftk_sprite_destroy(sprite);
 
 	return 0;
 }

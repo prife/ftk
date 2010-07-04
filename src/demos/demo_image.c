@@ -2,8 +2,7 @@
 
 static Ret timeout(void* ctx)
 {
-	FTK_QUIT();
-
+	ftk_widget_unref(ctx);
 	ftk_logd("%s: timeout and quit.\n", __func__);
 
 	return RET_REMOVE;
@@ -17,8 +16,8 @@ int FTK_MAIN(int argc, char* argv[])
 	char filename[FTK_MAX_PATH+1] = {0};
 	FTK_INIT(argc, argv);
 	
-	timer = ftk_source_timer_create(5000, timeout, NULL);
 	win = ftk_window_create(0, 0, 320, 480);
+	timer = ftk_source_timer_create(5000, timeout, win);
 
 	ftk_snprintf(filename, FTK_MAX_PATH, "%s/earth.png", TESTDATA_DIR);
 	image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);

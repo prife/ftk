@@ -25,7 +25,6 @@
 <application name="txtview" icon="demos/icons/demo.png" exec="libapp-demo_text_view.so" main="ftk_main" />
 <application name="trans" icon="demos/icons/demo.png" exec="libapp-demo_transparent.so" main="ftk_main" />
 <application name="wait_box" icon="demos/icons/demo.png" exec="libapp-demo_wait_box.so" main="ftk_main" />
-<application name="xul" icon="demos/icons/demo.png" exec="libapp-demo_xul.so" main="ftk_main" />
 <application name="zoom" icon="demos/icons/demo.png" exec="libapp-demo_zoom.so" main="ftk_main" />
 </applications>
 

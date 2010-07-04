@@ -305,7 +305,7 @@ static Ret button_next_clicked(void* ctx, void* obj)
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	FTK_QUIT();
+	ftk_widget_unref(ctx);
 
 	return RET_OK;
 }
