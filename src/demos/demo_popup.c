@@ -80,7 +80,7 @@ int FTK_MAIN(int argc, char* argv[])
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 	
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 
 	g_infos[0].text = "Copy";
 	g_infos[1].text = "Paste";
@@ -113,9 +113,9 @@ int FTK_MAIN(int argc, char* argv[])
 	
 	ftk_widget_set_text(win, "pupup");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

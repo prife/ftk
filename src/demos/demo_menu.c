@@ -26,7 +26,7 @@ static void on_window_close(void* user_data)
 	ftk_logd("%s: g_index=%d\n", __func__, g_index);
 	if(g_index == 0)
 	{
-		ftk_quit();
+		FTK_QUIT();
 	}
 
 	return ;
@@ -82,11 +82,11 @@ static void create_app_window(void)
 
 int FTK_MAIN(int argc, char* argv[])
 {
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 	
 	create_app_window();
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

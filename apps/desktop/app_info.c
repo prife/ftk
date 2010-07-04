@@ -218,6 +218,13 @@ Ret  app_info_manager_get(AppInfoManager* thiz, size_t index, AppInfo** info)
 		snprintf(path, sizeof(path), FTK_DATA_ROOT"/%s/%s", thiz->infos[index].name,
 			thiz->infos[index].icon);
 		thiz->infos[index].icon_bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
+
+		if(thiz->infos[index].icon_bitmap == NULL)
+		{
+			snprintf(path, sizeof(path), FTK_DATA_ROOT"/%s",
+				thiz->infos[index].icon);
+			thiz->infos[index].icon_bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
+		}
 		ftk_logd("%s: load %p %s\n", __func__, thiz->infos[index].icon_bitmap, path);
 	}
 	*info = thiz->infos+index;

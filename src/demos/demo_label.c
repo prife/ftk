@@ -20,20 +20,20 @@ static Ret timeout(void* ctx)
 	}
 	else
 	{
-		ftk_quit();
+		FTK_QUIT();
 		ftk_logd("%s: timeout and quit.\n", __func__);
 	
 		return RET_REMOVE;
 	}
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
 	FtkGc gc = {.mask = FTK_GC_BG};
 	TimerInfo info = {.times=5, };
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 		
 	FtkSource* timer = ftk_source_timer_create(1000, timeout, &info);
 	FtkWidget* win = ftk_app_window_create();
@@ -66,7 +66,7 @@ int main(int argc, char* argv[])
 	ftk_widget_set_attr(win, FTK_ATTR_IGNORE_CLOSE);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

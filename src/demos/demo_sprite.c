@@ -2,7 +2,7 @@
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	ftk_quit();
+	FTK_QUIT();
 
 	return RET_OK;
 }
@@ -35,7 +35,7 @@ int FTK_MAIN(int argc, char* argv[])
 	FtkSprite* sprite = NULL;
 	FtkBitmap* icon = NULL;
 
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 	
 	win = ftk_app_window_create();
 	width = ftk_widget_width(win);
@@ -48,7 +48,7 @@ int FTK_MAIN(int argc, char* argv[])
 
 	ftk_widget_set_text(win, "sprite demo");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
 #if 0
 	/*multi sprite still has some problems.*/
@@ -67,7 +67,7 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_sprite_show(sprite, 1);
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), move_cursor, sprite);
 
-	ftk_run();
+	FTK_RUN();
 
 	ftk_sprite_destroy(sprite);
 

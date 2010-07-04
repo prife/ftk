@@ -47,12 +47,12 @@ const char* pngs[] =
 
 static Ret button_clicked(void* ctx, void* obj)
 {
-	ftk_quit();
+	FTK_QUIT();
 
 	return RET_OK;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int i = 0;
 	int j = 0;
@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
 	FtkGc gc = {0};
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 
 	width = ftk_display_width(ftk_default_display());
 	height = ftk_display_height(ftk_default_display()) - FTK_STATUS_PANEL_HEIGHT;
@@ -101,9 +101,9 @@ int main(int argc, char* argv[])
 	}
 	ftk_widget_set_text(win, "image button demo");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

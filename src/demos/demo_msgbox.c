@@ -38,7 +38,7 @@ static Ret button_tips(void* ctx, void* obj)
 
 static Ret button_quit(void* ctx, void* obj)
 {
-	ftk_quit();
+	FTK_QUIT();
 
 	return RET_OK;
 }
@@ -51,7 +51,7 @@ int FTK_MAIN(int argc, char* argv[])
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 		
 	win = ftk_app_window_create();
 	width = ftk_widget_width(win);
@@ -82,9 +82,9 @@ int FTK_MAIN(int argc, char* argv[])
 
 	ftk_widget_set_text(win, "message box demo");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

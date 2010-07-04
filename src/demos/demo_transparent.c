@@ -108,18 +108,18 @@ static void create_app_window(void)
 
 	ftk_widget_set_text(win, "transparent");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
 	return;
 }
 
 int FTK_MAIN(int argc, char* argv[])
 {
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 	
 	create_app_window();
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

@@ -2,7 +2,7 @@
 
 static Ret timeout(void* ctx)
 {
-	ftk_quit();
+	FTK_QUIT();
 
 	ftk_logd("%s: timeout and quit.\n", __func__);
 
@@ -15,7 +15,7 @@ int FTK_MAIN(int argc, char* argv[])
 	FtkWidget* image = NULL;
 	FtkWidget* win = NULL;
 	char filename[FTK_MAX_PATH+1] = {0};
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 	
 	timer = ftk_source_timer_create(5000, timeout, NULL);
 	win = ftk_window_create(0, 0, 320, 480);
@@ -52,10 +52,10 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(win, "image demo");
 	ftk_widget_show_all(win, 1);
 	
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

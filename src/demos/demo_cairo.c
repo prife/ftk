@@ -305,19 +305,19 @@ static Ret button_next_clicked(void* ctx, void* obj)
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	ftk_quit();
+	FTK_QUIT();
 
 	return RET_OK;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* painter = NULL;
-	ftk_init(argc, argv);
+	FTK_INIT(argc, argv);
 
 	win = ftk_app_window_create();
 	width = ftk_widget_width(win);
@@ -341,9 +341,9 @@ int main(int argc, char* argv[])
 
 	ftk_widget_set_text(win, "cairo demo");
 	ftk_widget_show_all(win, 1);
-	ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
-	ftk_run();
+	FTK_RUN();
 
 	return 0;
 }

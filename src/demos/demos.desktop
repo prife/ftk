@@ -1,0 +1,31 @@
+<applications>
+<application name="alpha" icon="flag-32.png" exec="libapp-demo_alpha.so" main="ftk_main" />
+<application name="button" icon="demos/icons/demo.png" exec="libapp-demo_button.so" main="ftk_main" />
+<application name="cairo" icon="demos/icons/demo.png" exec="libapp-demo_cairo.so" main="ftk_main" />
+<application name="checkbtn" icon="demos/icons/demo.png" exec="libapp-demo_check_button.so" main="ftk_main" />
+<application name="combobox" icon="demos/icons/demo.png" exec="libapp-demo_combo_box.so" main="ftk_main" />
+<application name="dialog" icon="demos/icons/demo.png" exec="libapp-demo_dialog.so" main="ftk_main" />
+<application name="entry" icon="demos/icons/demo.png" exec="libapp-demo_entry.so" main="ftk_main" />
+<application name="expand" icon="demos/icons/demo.png" exec="libapp-demo_expand.so" main="ftk_main" />
+<application name="fullscreen" icon="demos/icons/demo.png" exec="libapp-demo_fullscreen.so" main="ftk_main" />
+<application name="hello" icon="demos/icons/demo.png" exec="libapp-demo_hello.so" main="ftk_main" />
+<application name="iconview" icon="demos/icons/demo.png" exec="libapp-demo_icon_view.so" main="ftk_main" />
+<application name="imagbtn" icon="demos/icons/demo.png" exec="libapp-demo_image_button.so" main="ftk_main" />
+<application name="image" icon="demos/icons/demo.png" exec="libapp-demo_image.so" main="ftk_main" />
+<application name="ime" icon="demos/icons/demo.png" exec="libapp-demo_ime.so" main="ftk_main" />
+<application name="label" icon="demos/icons/demo.png" exec="libapp-demo_label.so" main="ftk_main" />
+<application name="listview" icon="demos/icons/demo.png" exec="libapp-demo_listview.so" main="ftk_main" />
+<application name="menu" icon="demos/icons/demo.png" exec="libapp-demo_menu.so" main="ftk_main" />
+<application name="msgbox" icon="demos/icons/demo.png" exec="libapp-demo_msgbox.so" main="ftk_main" />
+<application name="mwin" icon="demos/icons/demo.png" exec="libapp-demo_multi_win.so" main="ftk_main" />
+<application name="popup" icon="demos/icons/demo.png" exec="libapp-demo_popup.so" main="ftk_main" />
+<application name="progbar" icon="demos/icons/demo.png" exec="libapp-demo_progress_bar.so" main="ftk_main" />
+<application name="srcbar" icon="demos/icons/demo.png" exec="libapp-demo_scroll_bar.so" main="ftk_main" />
+<application name="sprite" icon="demos/icons/demo.png" exec="libapp-demo_sprite.so" main="ftk_main" />
+<application name="txtview" icon="demos/icons/demo.png" exec="libapp-demo_text_view.so" main="ftk_main" />
+<application name="trans" icon="demos/icons/demo.png" exec="libapp-demo_transparent.so" main="ftk_main" />
+<application name="wait_box" icon="demos/icons/demo.png" exec="libapp-demo_wait_box.so" main="ftk_main" />
+<application name="xul" icon="demos/icons/demo.png" exec="libapp-demo_xul.so" main="ftk_main" />
+<application name="zoom" icon="demos/icons/demo.png" exec="libapp-demo_zoom.so" main="ftk_main" />
+</applications>
+

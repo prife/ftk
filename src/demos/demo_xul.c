@@ -7,7 +7,7 @@ const char* t1 = "<window> </window>";
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
-	ftk_quit();
+	FTK_QUIT();
 
 	return RET_OK;
 }
@@ -24,17 +24,17 @@ int FTK_MAIN(int argc, char* argv[])
 	{
 		FtkWidget* win = NULL;
 		FtkWidget* quit = NULL;
-		ftk_init(argc, argv);
+		FTK_INIT(argc, argv);
 		
 		g_icon_cache = ftk_icon_cache_create(NULL, "testdata");
 		win = ftk_xul_load_file(argv[1], NULL, my_load_image);
-		ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE);
+		FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
 		quit = ftk_widget_lookup(win, IDC_QUIT);
 		ftk_button_set_clicked_listener(quit, button_quit_clicked, win);
 		ftk_widget_show_all(win, 1);
 
-		ftk_run();
+		FTK_RUN();
 		ftk_icon_cache_destroy(g_icon_cache);
 	}
 	else
