@@ -2,9 +2,10 @@
 2. edit env.sh to set some variables.
 3. source env.sh
 4. make -f cross.mk
-5. run makedist.sh to make distribute package(ftk-dist.tar.gz).
+5. run makedist.sh to make dist package(ftk-dist.tar.gz).
 6. download ftk-dist.tar.gz to target board and extrat it in root directory.
 7. enter /opt/bin(depend on the prefix you set in evn.sh) and run desktop.
 
+Enjoy it!
 
 

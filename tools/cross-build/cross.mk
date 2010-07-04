@@ -51,7 +51,7 @@ tslib-1.0: packages/tslib-1.0.tar.bz2
 tslib: tslib-1.0
 	cd tslib-1.0 && ./autogen.sh; cd -;\
 	mkdir tslib-1.0/$(ARCH); cd tslib-1.0/$(ARCH) && \
-	../configure $(HOST_PARAM) --prefix=$(PREFIX) -sysconfdir=$(PREFIX)/etc  ac_cv_func_malloc_0_nonnull=yes &&\
+	CC=$(TARGET_CC) ../configure $(HOST_PARAM) --prefix=$(PREFIX) -sysconfdir=$(PREFIX)/etc  ac_cv_func_malloc_0_nonnull=yes &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 

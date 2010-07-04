@@ -15,7 +15,7 @@ demo_cairo_LDFLAGS=$(MYLDFLAGS)
 lib_LTLIBRARIES += libapp-demo_cairo.la
 libapp_demo_cairo_la_SOURCES=demo_cairo.c
 libapp_demo_cairo_la_LDFLAGS=$(MYLDFLAGS)
-libapp_demo_cairo_la_CFLAGS=$(LOCAL_CFLAGS)
+libapp_demo_cairo_la_CFLAGS=$(LOCAL_CFLAGS) -DFTK_AS_PLUGIN
 
 endif
 

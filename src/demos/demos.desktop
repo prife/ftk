@@ -1,5 +1,5 @@
 <applications>
-<application name="alpha" icon="flag-32.png" exec="libapp-demo_alpha.so" main="ftk_main" />
+<application name="alpha" icon="demos/icons/demo.png" exec="libapp-demo_alpha.so" main="ftk_main" />
 <application name="button" icon="demos/icons/demo.png" exec="libapp-demo_button.so" main="ftk_main" />
 <application name="cairo" icon="demos/icons/demo.png" exec="libapp-demo_cairo.so" main="ftk_main" />
 <application name="checkbtn" icon="demos/icons/demo.png" exec="libapp-demo_check_button.so" main="ftk_main" />

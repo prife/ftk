@@ -1,9 +1,16 @@
 #broncho 1900
 #######################################################
+#export ARCH=arm
+#export HOST_PARAM=--host=arm-linux
+##export TARGET_CC=arm-linux-gcc
+#export PATH=/usr/local/arm-linux-4.1.1/bin/:$PATH
+
+#openmoko
+#######################################################
 export ARCH=arm
 export HOST_PARAM=--host=arm-linux
 export TARGET_CC=arm-linux-gcc
-export PATH=/usr/local/arm-linux-4.1.1/bin/:$PATH
+export PATH=/usr/local/openmoko/arm/bin/:$PATH
 
 #jz4740
 #######################################################
