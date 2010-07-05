@@ -371,8 +371,8 @@ Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data,
 		for(ox = 0; ox < w; ox++)
 		{
 			dst[ox].a = 0xff;
-            dst[ox].r = (src[ox] >> 8) & 0xf8;
-            dst[ox].g = (src[ox] >> 3) & 0xfc;
+			dst[ox].r = (src[ox] >> 8) & 0xf8;
+			dst[ox].g = (src[ox] >> 3) & 0xfc;
 			dst[ox].b = (src[ox] << 3) & 0xff;
 		}
 		src += dw; 
