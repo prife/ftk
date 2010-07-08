@@ -152,19 +152,29 @@ static const char* s_default_path[FTK_ICON_PATH_NR]=
 {
 	FTK_DATA_ROOT"/desktop",
 	".",
-	NULL,
 	NULL
 };
 
+#define IDC_TIME_ITEM 2000
+
 static Ret update_time(void* ctx)
 {
+	char text[10] = {0};
 	time_t now = time(0);
+	FtkWidget* item = NULL;
+	FtkWidget* panel = NULL;
 	FtkWidget* win = ctx;
 	FtkWidget* image = NULL;
 	FtkBitmap* bitmap = NULL;
 	char filename[FTK_MAX_PATH] = {0};
 	struct tm* t = localtime(&now);
 
+	panel = ftk_default_status_panel();
+	snprintf(text, sizeof(text)-1, "%d:%d", t->tm_hour, t->tm_min);
+	item = ftk_widget_lookup(panel, IDC_TIME_ITEM);
+	ftk_widget_set_text(item, text);
+	ftk_logd("%s\n", __func__);
+	
 	image = ftk_widget_lookup(win, 1);
 	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour/10);
 	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
@@ -202,7 +212,21 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 	ftk_menu_item_set_clicked_listener(item, on_shutdown, ctx);
 	ftk_widget_show(item, 1);
 
-	return  RET_OK;
+	return	RET_OK;
+}
+
+static Ret add_time_item_on_statusbar(void)
+{
+	FtkWidget* item = NULL;
+	FtkWidget* panel = NULL;
+
+	panel = ftk_default_status_panel();
+	item = ftk_status_item_create(panel, -2, 60);
+	ftk_widget_set_id(item, IDC_TIME_ITEM);
+	ftk_widget_show(item, 1);
+
+	ftk_logd("%s\n", __func__);
+	return RET_OK;
 }
 
 int main(int argc, char* argv[])
@@ -212,7 +236,9 @@ int main(int argc, char* argv[])
 	char path[FTK_MAX_PATH] = {0};
 	FtkSource* timer = NULL;
 	ftk_init(argc, argv);
-	
+
+	add_time_item_on_statusbar();
+
 	if(argv[1] != NULL && strncmp(argv[1], "--hor", 5) == 0)
 	{
 		g_desktop_horizonal = 1;

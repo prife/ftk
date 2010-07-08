@@ -2,7 +2,7 @@
 
 # libtool - Provide generalized library-building support services.
 # Generated automatically by config.status (ftk) 0.4
-# Libtool was configured on host linux.lixianjing.com:
+# Libtool was configured on host localhost.localdomain:
 # NOTE: Changes made to this file will be lost: look at ltmain.sh.
 #
 #   Copyright (C) 1996, 1997, 1998, 1999, 2000, 2001, 2003, 2004, 2005,
@@ -234,7 +234,7 @@ finish_eval=""
 hardcode_into_libs=yes
 
 # Compile-time system search path for libraries.
-sys_lib_search_path_spec="/usr/lib/gcc/i686-redhat-linux/3.4.6 /usr/lib /lib"
+sys_lib_search_path_spec="/usr/lib/gcc/i686-redhat-linux/4.4.4 /usr/lib /lib"
 
 # Run-time system search path for libraries.
 sys_lib_dlsearch_path_spec="/lib64 /usr/lib64 /lib /usr/lib /usr/lib/qt-3.3/lib /usr/lib/xulrunner-1.9.1 "
