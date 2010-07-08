@@ -389,7 +389,7 @@ static void ftk_init_panel(void)
 	ftk_widget_set_gc(panel, FTK_WIDGET_FOCUSED, &gc);
 	ftk_gc_reset(&gc);
 	
-	item = ftk_status_item_create(panel, -1, 32);
+	item = ftk_status_item_create(panel, -100, 32);
 	ftk_widget_set_id(item, IDC_CLOSE_ITEM);
 	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "close-32"FTK_STOCK_IMG_SUFFIX);
 	if(gc.bitmap != NULL)

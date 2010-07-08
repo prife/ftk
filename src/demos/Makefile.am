@@ -5,7 +5,7 @@ noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog 
 	demo_menu demo_entry demo_expand demo_zoom demo_progress_bar demo_check_button demo_wait_box \
 	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview demo_hello \
 	demo_fullscreen demo_icon_view demo_text_view demo_msgbox demo_popup demo_alpha \
-	demo_combo_box demo_ime
+	demo_combo_box demo_ime demo_statusbar
 
 if ENABLE_CAIRO
 noinst_PROGRAMS+=demo_cairo
@@ -18,6 +18,9 @@ libapp_demo_cairo_la_LDFLAGS=$(MYLDFLAGS)
 libapp_demo_cairo_la_CFLAGS=$(LOCAL_CFLAGS) -DFTK_AS_PLUGIN
 
 endif
+
+demo_statusbar_SOURCES=demo_statusbar.c
+demo_statusbar_LDFLAGS=$(MYLDFLAGS)
 
 demo_ime_SOURCES=demo_ime.c
 demo_ime_LDFLAGS=$(MYLDFLAGS)
