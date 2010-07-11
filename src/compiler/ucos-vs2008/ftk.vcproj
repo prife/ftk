@@ -312,7 +312,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\backend\ucosii\ftk_backend_fb.c"
+				RelativePath="..\..\backend\ucosii\ftk_backend_ucosii.c"
 				>
 			</File>
 			<File
@@ -516,8 +516,24 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\backend\ucosii\ftk_display_fb.c"
+				RelativePath="..\..\ftk_display_mem.c"
 				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\ftk_display_rotate.c"
@@ -538,6 +554,10 @@
 						UsePrecompiledHeader="0"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\backend\ucosii\ftk_display_ucosii.c"
+				>
 			</File>
 			<File
 				RelativePath="..\..\ftk_entry.c"
@@ -1630,7 +1650,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\backend\ucosii\ftk_display_fb.h"
+				RelativePath="..\..\backend\ucosii\ftk_display_ucosii.h"
 				>
 			</File>
 			<File

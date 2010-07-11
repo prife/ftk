@@ -176,8 +176,6 @@ TIMERPROC RefreshLcd(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	INT x, y;
 	INT mx, my;
-	UCHAR r, g, b;
-	USHORT rgb;
 	HDC hDC, hMemDC;
 	HBITMAP hBmp;
 	BITMAPINFO bi;
