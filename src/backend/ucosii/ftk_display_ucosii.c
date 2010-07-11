@@ -46,7 +46,7 @@ void* GetFrameBufferAddr()
 	return framebuffer;
 }
 
-FtkDisplay* ftk_display_fb_create()
+FtkDisplay* ftk_display_ucosii_create()
 {
 	return ftk_display_mem_create(FTK_PIXEL_BGR24, DISPLAY_WIDTH, DISPLAY_HEIGHT, framebuffer, NULL, NULL); 
 }
