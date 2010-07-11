@@ -81,6 +81,8 @@ size_t ftk_get_relative_time(void);
 #define ftk_delay(t)					OSTimeDly(t>>1)
 
 #define FTK_PATH_DELIM '/'
+#define USE_FTK_MAIN 1
+
 #endif
 
 #endif/* FTK_UCOS_SIM_H */

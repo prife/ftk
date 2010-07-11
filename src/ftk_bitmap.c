@@ -307,6 +307,8 @@ Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data,
 Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
 	FtkColor dcolor;
+	FtkColor* psrc = NULL;
+	FtkColor* pdst = NULL;
 	unsigned short pixel = 0;
 	COPY_TO_DECL(unsigned short);
 
@@ -319,8 +321,8 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 			dcolor.r = (dst[k] & 0xf800) >> 8;
 			dcolor.g = (dst[k] & 0x07e0) >> 3;
 			dcolor.b = (dst[k] & 0x1f) << 3;
-			FtkColor* psrc = src + j;
-			FtkColor* pdst = &dcolor;
+			psrc = src + j;
+			pdst = &dcolor;
 
 			if(psrc->a == 0xff)
 			{

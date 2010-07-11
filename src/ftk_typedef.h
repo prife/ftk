@@ -231,6 +231,12 @@ typedef struct _FtkCommitInfo
 #define FTK_RUN() 
 #define FTK_QUIT()
 #define FTK_QUIT_WHEN_WIDGET_CLOSE(win) 
+#elif defined(USE_FTK_MAIN)
+#define FTK_MAIN ftk_main
+#define FTK_INIT ftk_init
+#define FTK_RUN() ftk_run()
+#define FTK_QUIT() ftk_quit()
+#define FTK_QUIT_WHEN_WIDGET_CLOSE(win) ftk_widget_set_attr(win, FTK_ATTR_QUIT_WHEN_CLOSE)
 #else
 #define FTK_MAIN main
 #define FTK_INIT ftk_init
