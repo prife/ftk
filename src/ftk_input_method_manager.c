@@ -67,7 +67,13 @@ size_t  ftk_input_method_manager_count(FtkInputMethodManager* thiz)
 
 Ret  ftk_input_method_manager_get(FtkInputMethodManager* thiz, size_t index, FtkInputMethod** im)
 {
-	return_val_if_fail(thiz != NULL && index < thiz->nr && im != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && im != NULL, RET_FAIL);
+
+	if(index >= thiz->nr)
+	{
+		*im = NULL;
+		return RET_FAIL;
+	}
 
 	*im = thiz->methods[index];
 

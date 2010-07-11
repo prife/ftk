@@ -227,8 +227,7 @@ static Ret ftk_animator_zoom_step(FtkAnimator* thiz)
 	rect.height = h; 
 	bitmap = ftk_canvas_bitmap(priv->canvas);
 	
-	return ftk_display_update(ftk_default_display(), bitmap, &rect, x, y);
-
+	return ftk_display_update_and_notify(ftk_default_display(), bitmap, &rect, x, y);
 }
 
 

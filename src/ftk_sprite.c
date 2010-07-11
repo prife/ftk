@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_sprite.h"
 #include "ftk_globals.h"
 

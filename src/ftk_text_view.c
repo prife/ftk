@@ -292,10 +292,10 @@ static Ret ftk_text_view_input_str(FtkWidget* thiz, const char* str)
 
 	return RET_OK;
 }
+
 static Ret ftk_text_view_input_char(FtkWidget* thiz, char c)
 {
 	char str[2] = {0};
-	DECL_PRIV0(thiz, priv);
 
 	str[0] = c;
 	return ftk_text_view_input_str(thiz, str);

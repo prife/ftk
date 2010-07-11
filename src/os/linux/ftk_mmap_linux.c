@@ -54,8 +54,10 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	FtkMmap* thiz = NULL;
 	struct stat st = {0};
 	return_val_if_fail(filename != NULL, NULL);
-	
-	return_val_if_fail(stat(filename, &st) == 0, NULL);
+	if(stat(filename, &st) != 0)
+	{
+		return NULL;
+	}
 	return_val_if_fail(offset < st.st_size, NULL);
 
 	size = (offset + size) <= st.st_size ? size : st.st_size - offset;

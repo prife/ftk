@@ -110,7 +110,9 @@ Ret  ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length)
 	size_t i = 0;
 	char* dst = NULL;
 	char* src = NULL;
-	return_val_if_fail(thiz != NULL && thiz->buffer != NULL && offset < thiz->length, RET_FAIL);
+	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, RET_FAIL);
+
+	if(offset >= thiz->length) return RET_OK;
 
 	length = (offset + length) < thiz->length ? length : (thiz->length - offset);
 	
@@ -136,7 +138,10 @@ Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count)
 	return_val_if_fail((offset + count) <= (int)thiz->length && (offset + count) >= 0, RET_FAIL);
 
 	length = ftk_text_buffer_chars_bytes(thiz, offset, count);
-	return_val_if_fail(length != 0, RET_FAIL);
+	if(length == 0)
+	{
+		return RET_FAIL;
+	}
 
 	if(length < 0)
 	{
@@ -159,7 +164,11 @@ int  ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count)
 	const char* offset_p = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, 0);
 	return_val_if_fail(offset <= (int)thiz->length && offset >= 0, 0);
-	return_val_if_fail((offset + count) <= (int)thiz->length && (offset + count) >= 0, 0);
+	
+	if((offset + count) > (int)thiz->length || (offset + count) <0)
+	{
+		return 0;
+	}
 
 	offset_p = thiz->buffer + offset;
 	iter = offset_p;

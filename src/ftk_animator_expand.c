@@ -244,7 +244,7 @@ static Ret  ftk_animator_expand_step(FtkAnimator* thiz)
 	rect.height = priv->h;
 	bitmap = ftk_canvas_bitmap(priv->canvas);
 
-	return ftk_display_update(ftk_default_display(), bitmap, &rect, priv->x, priv->y);
+	return ftk_display_update_and_notify(ftk_default_display(), bitmap, &rect, priv->x, priv->y);
 }
 
 static Ret  ftk_animator_expand_start(FtkAnimator* thiz, FtkWidget* win, int sync)

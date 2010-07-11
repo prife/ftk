@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_display_rotate.h"
 
 typedef struct _PrivInfo
@@ -205,6 +206,7 @@ static Ret ftk_display_rotate_snap_90(FtkDisplay* thiz, FtkRect* rect, FtkBitmap
 {
 	SNAP_DECL();
 
+	(void)display_h;
 	r.y = rect->x;
 	r.x = ftk_display_width(priv->display) - rect->y - h;
 	r.width = h;

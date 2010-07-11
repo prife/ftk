@@ -697,8 +697,8 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int 
 	FtkColor* bits = NULL;
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
-	int tile_w = bw < w ? bw >> 1 : w >> 1;
-	int tile_h = bh < h ? bh >> 1 : h >> 1;
+	int tile_w = FTK_MIN(bw, w) >> 1;
+	int tile_h = FTK_MIN(bh, h) >> 1;
 	
 	gc.mask = FTK_GC_FG;
 	ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, tile_w, tile_h, x, y);

@@ -321,9 +321,12 @@ void ftk_widget_move(FtkWidget* thiz, int x, int y)
 	thiz->priv->left = x;
 	thiz->priv->top  = y;
 
-	event.widget = thiz;
-	event.type = FTK_EVT_MOVE;
-	ftk_widget_event(thiz, &event);
+	if(thiz->on_event != NULL)
+	{
+		event.widget = thiz;
+		event.type = FTK_EVT_MOVE;
+		ftk_widget_event(thiz, &event);
+	}
 
 	return;
 }
@@ -341,9 +344,12 @@ void ftk_widget_resize(FtkWidget* thiz, int width, int height)
 	thiz->priv->width = width;
 	thiz->priv->height = height;
 
-	event.widget = thiz;
-	event.type = FTK_EVT_RESIZE;
-	ftk_widget_event(thiz, &event);
+	if(thiz->on_event != NULL)
+	{
+		event.widget = thiz;
+		event.type = FTK_EVT_RESIZE;
+		ftk_widget_event(thiz, &event);
+	}
 
 	return;
 }
@@ -364,9 +370,12 @@ void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height
 	thiz->priv->width = width;
 	thiz->priv->height = height;
 	
-	event.widget = thiz;
-	event.type = FTK_EVT_MOVE_RESIZE;
-	ftk_widget_event(thiz, &event);
+	if(thiz->on_event != NULL)
+	{
+		event.widget = thiz;
+		event.type = FTK_EVT_MOVE_RESIZE;
+		ftk_widget_event(thiz, &event);
+	}
 
 	return;
 }

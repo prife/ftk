@@ -127,7 +127,7 @@ static Ret  ftk_animator_alpha_step(FtkAnimator* thiz)
 	rect.height = h;
 
 	ftk_logd("%s: x=%d y=%d\n", __func__, x, y);
-	ftk_display_update(ftk_default_display(), bitmap, &rect, x, y);
+	ftk_display_update_and_notify(ftk_default_display(), bitmap, &rect, x, y);
 
 	if(ret != RET_OK)
 	{

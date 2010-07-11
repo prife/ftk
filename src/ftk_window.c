@@ -576,14 +576,14 @@ FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int w
 		gc.mask = FTK_GC_BG | FTK_GC_FG;
 		priv->display = ftk_default_display();
 
-		ftk_widget_init(thiz, type, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-
 		thiz->on_event = ftk_window_on_event;
 		thiz->on_paint = ftk_window_on_paint;
 		thiz->destroy  = ftk_window_destroy;
+
+		ftk_widget_init(thiz, type, 0);
+		ftk_widget_move(thiz, x, y);
 		ftk_widget_set_attr(thiz, attr);
+		ftk_widget_resize(thiz, width, height);
 
 		ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 	}

@@ -15,6 +15,9 @@ Config options:
 5.test_data_dir value=?
  set the test data directory.
 
+6.rotate value=0|90|180|270
+ set the screen rotation angle.
+
 Load Order
 =======================================
 0.Initialize with default values.
@@ -28,4 +31,5 @@ Example:
 <theme         name="default" />
 <data_dir      value="./data" /> 
 <test_data_dir value="./testdata" />
+<rotate        value="90" />
 

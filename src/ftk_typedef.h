@@ -180,9 +180,9 @@ typedef struct _FtkCommitInfo
 #define DECL_PRIV2(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[2] : NULL
 
 #define FTK_HALF(a)    ((a)>>1)
-#define FTK_MIN(a, b) (a) < (b) ? (a) : (b)
-#define FTK_MAX(a, b) (a) < (b) ? (b) : (a)
-#define FTK_ABS(a) (a) < 0 ? -(a) : a
+#define FTK_MIN(a, b) ((a) < (b) ? (a) : (b))
+#define FTK_MAX(a, b) ((a) < (b) ? (b) : (a))
+#define FTK_ABS(a) ((a) < 0 ? -(a) : (a))
 
 #define FTK_MASK_BITS(val32, index) (((val32) << ((index)%32)) & 0x80000000)
 

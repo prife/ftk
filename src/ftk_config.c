@@ -29,6 +29,8 @@
  *
  */
 
+#include "ftk_util.h"
+#include "ftk_log.h"
 #include "ftk_mmap.h"
 #include "ftk_config.h"
 #include "ftk_allocator.h"

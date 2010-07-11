@@ -30,6 +30,7 @@
  */
 
 #include "ftk.h"
+#include "ftk_util.h"
 #include "ftk_backend.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
@@ -175,6 +176,8 @@ static void ftk_deinit(void)
 		ftk_set_config(NULL);
 	}
 	
+	ftk_platform_deinit();
+
 #ifndef USE_STD_MALLOC
 	if(ftk_default_allocator() != NULL)
 	{
@@ -182,8 +185,6 @@ static void ftk_deinit(void)
 		ftk_set_allocator(NULL);
 	}
 #endif
-
-	ftk_platform_deinit();
 
 	ftk_logd("%s: ftk exit.\n", __func__);
 

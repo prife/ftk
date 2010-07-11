@@ -28,6 +28,7 @@
  * 2009-11-04 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "ftk_util.h"
 #include "ftk_globals.h"
 #include "ftk_icon_cache.h"
 #include "ftk_bitmap_factory.h"

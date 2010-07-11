@@ -296,7 +296,10 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	return_val_if_fail(priv->caret >= priv->visible_start && priv->caret <= priv->visible_end, RET_FAIL);
+	if(priv->caret < priv->visible_start || priv->caret > priv->visible_end)
+	{
+		return RET_FAIL;
+	}
 
 	(void)width;
 	gc.mask = FTK_GC_FG;
