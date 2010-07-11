@@ -156,6 +156,7 @@ static Ret  ftk_animator_alpha_start(FtkAnimator* thiz, FtkWidget* win, int sync
 	int width = 0;
 	int height = 0;
 	FtkColor bg = {0};
+	FtkRect rect = {0};
 	int step_duration = 0;
 	DECL_PRIV(thiz, priv);
 	FtkDisplay* display = ftk_default_display();
@@ -166,8 +167,12 @@ static Ret  ftk_animator_alpha_start(FtkAnimator* thiz, FtkWidget* win, int sync
 
 	bg.a = 0xff;
 	priv->sync = sync;
-	priv->snap = ftk_bitmap_create(ftk_display_width(display), ftk_display_height(display), bg);
-	ftk_display_snap(ftk_default_display(), 0, 0, priv->snap);
+	rect.x = 0;
+	rect.y = 0;
+	rect.width = ftk_display_width(display);
+	rect.height = ftk_display_height(display);
+	priv->snap = ftk_bitmap_create(rect.width, rect.height, bg);
+	ftk_display_snap(ftk_default_display(), &rect, priv->snap);
 	return_val_if_fail(priv->snap != NULL, RET_FAIL);
 
 	priv->win = win;

@@ -22,7 +22,8 @@ static Ret timeout(void* ctx)
 	{
 		ftk_widget_unref(ftk_widget_toplevel(info->label));
 		ftk_logd("%s: timeout and quit.\n", __func__);
-		FTK_FREE(info);	
+		FTK_FREE(info);
+		FTK_QUIT();
 		return RET_REMOVE;
 	}
 }
@@ -32,10 +33,11 @@ int FTK_MAIN(int argc, char* argv[])
 	int width = 0;
 	int height = 0;
 	FtkGc gc = {.mask = FTK_GC_BG};
-	TimerInfo* info = (TimerInfo*)FTK_ZALLOC(sizeof(TimerInfo));
-	
-	info->times = 5;
+	TimerInfo* info = NULL;
+
 	FTK_INIT(argc, argv);
+	info = (TimerInfo*)FTK_ZALLOC(sizeof(TimerInfo));
+	info->times = 5;
 		
 	FtkSource* timer = ftk_source_timer_create(1000, timeout, info);
 	FtkWidget* win = ftk_app_window_create();

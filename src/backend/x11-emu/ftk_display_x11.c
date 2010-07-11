@@ -96,7 +96,7 @@ static int ftk_display_x11_height(FtkDisplay* thiz)
 	return priv->height;
 }
 
-static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
+static Ret ftk_display_x11_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 {
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
@@ -105,10 +105,10 @@ static Ret ftk_display_x11_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 	
-	rect.x = x;
-	rect.y = y;
-	rect.width = bw;
-	rect.height = bh;
+	rect.x = r->x;
+	rect.y = r->y;
+	rect.width = FTK_MIN(bw, r->width);
+	rect.height = FTK_MIN(bh, r->height);
 
 	return priv->copy_from_data(bitmap, priv->bits, w, h, &rect);
 }

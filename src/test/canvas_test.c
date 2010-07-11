@@ -524,7 +524,7 @@ int main(int argc, char* argv[])
 	test_alpha(display);
 	test_draw_vline(display);
 	bitmap = ftk_bitmap_create(ftk_display_width(display), ftk_display_height(display), bg);
-	ftk_display_snap(display, 0, 0, bitmap);
+	ftk_display_snap(display, &rect, bitmap);
 	test_draw_hline(display);
 	ftk_display_update(display, bitmap, &rect, 0, 0);
 	test_fill_bg(display);

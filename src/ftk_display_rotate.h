@@ -1,7 +1,7 @@
 /*
- * File: ftk_display_men.h    
+ * File: ftk_display_rotate.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   memory based display.
+ * Brief:   decorate display to support screen rotation.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,16 +25,18 @@
 /*
  * History:
  * ================================================================
- * 2010-03-21 Li XianJing <xianjimli@hotmail.com> from ftk_display_fb.h
+ * 2010-07-10 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_DISPLAY_MEM_H
-#define FTK_DISPLAY_MEM_H
-
+#ifndef FTK_DISPLAY_ROTATE_H
+#define FTK_DISPLAY_ROTATE_H
 #include "ftk_display.h"
 
-FtkDisplay* ftk_display_mem_create(FtkPixelFormat format, 
-	int width, int height, void* bits, FtkDestroy on_destroy, void* ctx);
+FtkDisplay* ftk_display_rotate_create(FtkDisplay* display, FtkRotate rotate);
 
-#endif/*FTK_DISPLAY_MEM_H*/
+FtkRotate ftk_display_get_rotate(FtkDisplay* thiz);
+Ret ftk_display_set_rotate(FtkDisplay* thiz, FtkRotate rotate);
+FtkDisplay* ftk_display_get_real_display(FtkDisplay* thiz);
+
+#endif/*FTK_DISPLAY_ROTATE_H*/
 

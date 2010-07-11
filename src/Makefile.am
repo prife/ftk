@@ -54,7 +54,8 @@ libftk_la_SOURCES=\
 	im/ftk_lookup_table.c ftk_input_method_preeditor.c \
 	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c \
-	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c
+	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
+	ftk_display_rotate.c ftk_wnd_manager.c
 
 if ENABLE_HANDWRITE
 libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \

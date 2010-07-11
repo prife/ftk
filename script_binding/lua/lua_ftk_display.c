@@ -92,18 +92,16 @@ static int lua_ftk_display_snap(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkDisplay* thiz;
-	int x;
-	int y;
+	FtkRect* rect;
 	FtkBitmap* bitmap;
-	int param_ok = tolua_isusertype(L, 1, "FtkDisplay", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err) && tolua_isusertype(L, 4, "FtkBitmap", 0, &err);
+	int param_ok = tolua_isusertype(L, 1, "FtkDisplay", 0, &err) && tolua_isusertype(L, 2, "FtkRect", 0, &err) && tolua_isusertype(L, 3, "FtkBitmap", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	x = tolua_tonumber(L, 2, 0);
-	y = tolua_tonumber(L, 3, 0);
-	bitmap = tolua_tousertype(L, 4, 0);
-	retv = ftk_display_snap(thiz, x, y, bitmap);
+	rect = tolua_tousertype(L, 2, 0);
+	bitmap = tolua_tousertype(L, 3, 0);
+	retv = ftk_display_snap(thiz, rect, bitmap);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;

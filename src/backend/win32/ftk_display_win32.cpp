@@ -177,7 +177,7 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 
 	if(priv->event.type != FTK_EVT_NOP)
 	{
-		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &priv->event);
+		ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &priv->event);
 		priv->event.type = FTK_EVT_NOP;
 	}
     return 0;
@@ -235,7 +235,7 @@ static int ftk_display_win32_height(FtkDisplay* thiz)
 	return DISPLAY_HEIGHT;
 }
 
-static Ret ftk_display_win32_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
+static Ret ftk_display_win32_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 {
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
@@ -244,10 +244,10 @@ static Ret ftk_display_win32_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitma
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 	
-	rect.x = x;
-	rect.y = y;
-	rect.width = bw;
-	rect.height = bh;
+	rect.x = r->x;
+	rect.y = r->y;
+	rect.width = FTK_MIN(bw, r->width);
+	rect.height = FTK_MIN(bh, r->height);
 
 	return ftk_bitmap_copy_from_data_bgra32(bitmap, priv->bits, w, h, &rect);
 }

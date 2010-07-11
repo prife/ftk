@@ -44,7 +44,7 @@ typedef struct _PrivInfo
 	FtkBitmapCopyToData   copy_to_data;
 }PrivInfo;
 
-static Ret ftk_display_men_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
+static Ret ftk_display_mem_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
 	DECL_PRIV(thiz, priv);
 	int display_width  = priv->width;
@@ -57,7 +57,7 @@ static Ret ftk_display_men_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 		priv->bits, xoffset, yoffset, display_width, display_height); 
 }
 
-static int ftk_display_men_width(FtkDisplay* thiz)
+static int ftk_display_mem_width(FtkDisplay* thiz)
 {
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
@@ -65,7 +65,7 @@ static int ftk_display_men_width(FtkDisplay* thiz)
 	return priv->width;
 }
 
-static int ftk_display_men_height(FtkDisplay* thiz)
+static int ftk_display_mem_height(FtkDisplay* thiz)
 {
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
@@ -73,7 +73,7 @@ static int ftk_display_men_height(FtkDisplay* thiz)
 	return priv->height;
 }
 
-static Ret ftk_display_men_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
+static Ret ftk_display_mem_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 {
 	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
@@ -83,15 +83,15 @@ static Ret ftk_display_men_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	int bh = ftk_bitmap_height(bitmap);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 	
-	rect.x = x;
-	rect.y = y;
-	rect.width = bw;
-	rect.height = bh;
+	rect.x = r->x;
+	rect.y = r->y;
+	rect.width = FTK_MIN(bw, r->width);
+	rect.height = FTK_MIN(bh, r->height);
 
 	return priv->copy_from_data(bitmap, priv->bits, w, h, &rect);
 }
 
-static void ftk_display_men_destroy(FtkDisplay* thiz)
+static void ftk_display_mem_destroy(FtkDisplay* thiz)
 {
 	if(thiz != NULL)
 	{
@@ -108,7 +108,7 @@ static void ftk_display_men_destroy(FtkDisplay* thiz)
 	return;
 }
 
-FtkDisplay* ftk_display_men_create(FtkPixelFormat format, 
+FtkDisplay* ftk_display_mem_create(FtkPixelFormat format, 
 	int width, int height, void* bits, FtkDestroy on_destroy, void* ctx)
 {
 	FtkDisplay* thiz = NULL;
@@ -117,11 +117,11 @@ FtkDisplay* ftk_display_men_create(FtkPixelFormat format,
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		thiz->update   = ftk_display_men_update;
-		thiz->width    = ftk_display_men_width;
-		thiz->height   = ftk_display_men_height;
-		thiz->snap     = ftk_display_men_snap;
-		thiz->destroy  = ftk_display_men_destroy;
+		thiz->update   = ftk_display_mem_update;
+		thiz->width    = ftk_display_mem_width;
+		thiz->height   = ftk_display_mem_height;
+		thiz->snap     = ftk_display_mem_snap;
+		thiz->destroy  = ftk_display_mem_destroy;
 
 		priv->bits = bits;
 		priv->width = width;

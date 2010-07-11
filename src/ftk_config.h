@@ -48,6 +48,7 @@ const char* ftk_config_get_theme(FtkConfig* thiz);
 const char* ftk_config_get_data_dir(FtkConfig* thiz);
 const char* ftk_config_get_data_root_dir(FtkConfig* thiz);
 const char* ftk_config_get_test_data_dir(FtkConfig* thiz);
+FtkRotate   ftk_config_get_rotate(FtkConfig* thiz);
 int ftk_config_get_enable_cursor(FtkConfig* thiz);
 int ftk_config_get_enable_status_bar(FtkConfig* thiz);
 

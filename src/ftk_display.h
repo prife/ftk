@@ -42,7 +42,7 @@ typedef Ret (*FtkDisplayUpdate)(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* re
 typedef int (*FtkDisplayWidth)(FtkDisplay* thiz);
 typedef int (*FtkDisplayHeight)(FtkDisplay* thiz);
 typedef int (*FtkDisplayBitsPerPixel)(FtkDisplay* thiz);
-typedef Ret (*FtkDisplaySnap)(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap);
+typedef Ret (*FtkDisplaySnap)(FtkDisplay* thiz, FtkRect* rect, FtkBitmap* bitmap);
 typedef void (*FtkDisplayDestroy)(FtkDisplay* thiz);
 
 #define FTK_DISPLAY_LISTENER_NR 16
@@ -100,11 +100,11 @@ static inline int ftk_display_height(FtkDisplay* thiz)
 	return thiz->height(thiz);
 }
 
-static inline Ret ftk_display_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
+static inline Ret ftk_display_snap(FtkDisplay* thiz, FtkRect* rect, FtkBitmap* bitmap)
 {
-	return_val_if_fail(thiz != NULL && thiz->snap != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && thiz->snap != NULL && rect != NULL, RET_FAIL);
 
-	return thiz->snap(thiz, x, y, bitmap);
+	return thiz->snap(thiz, rect, bitmap);
 }
 
 static inline void ftk_display_destroy(FtkDisplay* thiz)

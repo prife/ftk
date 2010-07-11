@@ -142,7 +142,7 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			assert(!"not supported framebuffer format.");
 		}
 	
-		thiz = ftk_display_men_create(format, fb->vi.xres, fb->vi.yres, 
+		thiz = ftk_display_mem_create(format, fb->vi.xres, fb->vi.yres, 
 			fb->bits, fb_close, fb);
 	}
 		

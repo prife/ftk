@@ -144,6 +144,15 @@ typedef enum _FtkWidgetAttr
 	FTK_ATTR_POPUP           = 1<<10  /*for dialog only*/
 }FtkWidgetAttr;
 
+typedef enum _FtkRotate
+{
+	FTK_ROTATE_0 = 0,
+	FTK_ROTATE_90,
+	FTK_ROTATE_180,
+	FTK_ROTATE_270,
+	FTK_ROTATE_NR
+}FtkRotate;
+
 typedef void (*FtkDestroy)(void* user_data);
 typedef Ret  (*FtkIdle)(void* user_data);
 typedef Ret  (*FtkTimer)(void* user_data);

@@ -157,6 +157,9 @@ static inline void ftk_wnd_manager_destroy(FtkWndManager* thiz)
 	return;
 }
 
+Ret  ftk_wnd_manager_set_rotate(FtkWndManager* thiz, FtkRotate rotate);
+Ret  ftk_wnd_manager_queue_event_auto_rotate(FtkWndManager* thiz, FtkEvent* event);
+
 FTK_END_DECLS
 
 #endif/*FTK_WND_MANAGER_H*/

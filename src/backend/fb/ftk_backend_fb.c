@@ -32,7 +32,7 @@ static Ret ftk_init_input(void)
 #endif
 		{
 			source = ftk_source_input_create(filename, 
-				(FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+				(FtkOnEvent)ftk_wnd_manager_queue_event_auto_rotate, ftk_default_wnd_manager());
 		}
 		if(source != NULL)
 		{
@@ -43,7 +43,7 @@ static Ret ftk_init_input(void)
 
 #ifdef USE_TSLIB
 	source = ftk_source_tslib_create(tsdev, 
-				(FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+				(FtkOnEvent)ftk_wnd_manager_queue_event_auto_rotate, ftk_default_wnd_manager());
 	if(source != NULL)
 	{
 		ftk_sources_manager_add(ftk_default_sources_manager(), source);

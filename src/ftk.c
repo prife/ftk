@@ -44,6 +44,7 @@
 #include "ftk_allocator_default.h"
 #include "ftk_input_method_preeditor_default.h"
 #include "ftk_wnd_manager_default.h"
+#include "ftk_display_rotate.h"
 
 #ifdef FTK_MEMORY_PROFILE
 #include "ftk_allocator_profile.h"
@@ -238,7 +239,9 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_backend_init(argc, argv);
 
 	bg.a = 0xff;
-	display = ftk_default_display();
+	display = ftk_display_rotate_create(ftk_default_display(), ftk_config_get_rotate(ftk_default_config()));
+	ftk_set_display(display);
+
 	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), bg));
 
 	ftk_set_input_method_manager(ftk_input_method_manager_create());

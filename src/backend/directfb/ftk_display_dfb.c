@@ -85,7 +85,7 @@ static int ftk_display_dfb_height(FtkDisplay* thiz)
 	return priv->height;
 }
 
-static Ret ftk_display_dfb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap* bitmap)
+static Ret ftk_display_dfb_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 {
 	int pitch = 0;
 	void *data = NULL;
@@ -99,10 +99,10 @@ static Ret ftk_display_dfb_snap(FtkDisplay* thiz, size_t x, size_t y, FtkBitmap*
 	IDirectFBSurface* surface = priv->surface;
 	surface->Lock(surface, DSLF_READ | DSLF_WRITE, &data, &pitch);
 	
-	rect.x = x;
-	rect.y = y;
-	rect.width = bw;
-	rect.height = bh;
+	rect.x = r->x;
+	rect.y = r->y;
+	rect.width = FTK_MIN(bw, r->width);
+	rect.height = FTK_MIN(bh, r->height);
 	ftk_bitmap_copy_from_data_bgra32(bitmap, data, w, h, &rect);
 
 	surface->Unlock(surface);

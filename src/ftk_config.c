@@ -38,11 +38,14 @@ struct _FtkConfig
 {
 	char theme[32];
 	int enable_cursor;
+	FtkRotate rotate;
 	int enable_status_bar;
 	char data_dir[FTK_MAX_PATH+1];
 	char data_root_dir[FTK_MAX_PATH+1];
 	char test_data_dir[FTK_MAX_PATH+1];
 };
+
+static Ret ftk_config_parse_rotate(FtkConfig* thiz, const char* rotate);
 
 FtkConfig* ftk_config_create()
 {
@@ -62,6 +65,7 @@ FtkConfig* ftk_config_create()
 		strcpy(thiz->data_root_dir, FTK_DATA_ROOT);
 		strcpy(thiz->test_data_dir, TESTDATA_DIR);
 
+		thiz->rotate = FTK_ROTATE_0;
 		thiz->enable_status_bar = 1;
 	}
 
@@ -187,6 +191,11 @@ Ret  ftk_config_init(FtkConfig* thiz, int argc, char* argv[])
 			ftk_config_set_test_data_dir(thiz, argv[i]+16);
 			continue;
 		}
+		else if(strncmp(argv[i], "--rotate=", 9) == 0)
+		{
+			ftk_config_parse_rotate(thiz, argv[i]+9);
+			continue;
+		}
 		else if(strncmp(argv[i], "--help", 6) == 0 || strncmp(argv[i], "-h", 2) == 0)
 		{
 			ftk_config_show_help(thiz);
@@ -240,6 +249,11 @@ static void ftk_config_builder_on_start(FtkXmlBuilder* thiz, const char* tag, co
 	else if(strcmp(tag, "test_data_dir") == 0)
 	{
 		ftk_config_set_test_data_dir(priv->config, attrs[1]);
+		return;
+	}
+	else if(strcmp(tag, "rotate") == 0)
+	{
+		ftk_config_parse_rotate(priv->config, attrs[1]);
 		return;
 	}
 
@@ -319,6 +333,13 @@ const char* ftk_config_get_test_data_dir(FtkConfig* thiz)
 	return thiz->test_data_dir;
 }
 
+FtkRotate   ftk_config_get_rotate(FtkConfig* thiz)
+{
+	return_val_if_fail(thiz != NULL, FTK_ROTATE_0);
+
+	return thiz->rotate;
+}
+
 const char* ftk_config_get_data_root_dir(FtkConfig* thiz)
 {
 	return_val_if_fail(thiz != NULL, NULL);
@@ -338,6 +359,30 @@ int ftk_config_get_enable_status_bar(FtkConfig* thiz)
 	return_val_if_fail(thiz != NULL, 1);
 
 	return thiz->enable_status_bar;
+}
+
+static Ret ftk_config_parse_rotate(FtkConfig* thiz, const char* rotate)
+{
+	int angle = rotate != NULL ? atoi(rotate) : 0;
+
+	if(angle < 90)
+	{
+		thiz->rotate = FTK_ROTATE_0;
+	}
+	else if(angle < 180)
+	{
+		thiz->rotate = FTK_ROTATE_90;
+	}
+	else if(angle < 270)
+	{
+		thiz->rotate = FTK_ROTATE_180;
+	}
+	else
+	{
+		thiz->rotate = FTK_ROTATE_270;
+	}
+
+	return RET_OK;
 }
 
 Ret ftk_config_set_theme(FtkConfig* thiz, const char* theme)

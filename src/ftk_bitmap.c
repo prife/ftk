@@ -111,45 +111,77 @@ void       ftk_bitmap_unref(FtkBitmap* thiz)
 	return;
 }
 
+#define COPY_FROM_DECL(Type) \
+	int x  = 0;\
+	int y  = 0;\
+	int w  = 0;\
+	int h  = 0;\
+	int ox = 0;\
+	int oy = 0;\
+	int bw = ftk_bitmap_width(bitmap);\
+	int bh = ftk_bitmap_height(bitmap);\
+	Type* src = data;\
+	FtkColor* dst = ftk_bitmap_bits(bitmap);\
+	\
+	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);\
+	\
+	x = rect != NULL ? rect->x : 0;\
+	y = rect != NULL ? rect->y : 0;\
+	x = x < 0 ? 0 : x;\
+	y = y < 0 ? 0 : y;\
+	return_val_if_fail(x < dw && y < dh, RET_FAIL);\
+	\
+	w = rect != NULL ? rect->width  : bw;\
+	h = rect != NULL ? rect->height : bh;\
+	\
+	/*width/height must less than bitmap's width/height*/\
+	w = w < bw ? w : bw;\
+	h = w < bh ? h : bh;\
+	\
+	/*width/height must less than data's width/height*/\
+	w = (x + w) < dw ? w : dw - x;\
+	h = (y + h) < dh ? h : dh - y;
+
+#define COPY_TO_DECL(Type) \
+	int i = 0;\
+	int j = 0;\
+	int k = 0;\
+	int bw = ftk_bitmap_width(bitmap);\
+	int bh = ftk_bitmap_height(bitmap);\
+	int x = rect != NULL ? rect->x : 0;\
+	int y = rect != NULL ? rect->y : 0;\
+	int w = rect != NULL ? rect->width : bw;\
+	int h = rect != NULL ? rect->height : bh;\
+	Type* dst = data;\
+	FtkColor* src = ftk_bitmap_bits(bitmap);\
+	\
+	return_val_if_fail(ox < dw, RET_FAIL);\
+	return_val_if_fail(oy < dh, RET_FAIL);\
+	return_val_if_fail(x < bw, RET_FAIL);\
+	return_val_if_fail(y < bh, RET_FAIL);\
+	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);\
+	\
+	x = x < 0 ? 0 : x;\
+	y = y < 0 ? 0 : y;\
+	\
+	w = (x + w) < bw ? w : bw - x;\
+	h = (y + h) < bh ? h : bh - y;\
+	w = (ox + w) < dw ? w : dw - ox;\
+	h = (oy + h) < dh ? h : dh - oy;\
+	\
+	w += x;\
+	h += y;
+
 /*=====================================================================*/
 Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {
-	int x  = 0;
-	int y  = 0;
-	int w  = 0;
-	int h  = 0;
-	int ox = 0;
-	int oy = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	unsigned char* src = data;
-	unsigned char* psrc = NULL;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);
+	COPY_FROM_DECL(unsigned char);
 	
-	x = rect != NULL ? rect->x : 0;
-	y = rect != NULL ? rect->y : 0;
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	return_val_if_fail(x < dw && y < dh, RET_FAIL);
-
-	w = rect != NULL ? rect->width  : bw;
-	h = rect != NULL ? rect->height : bh;
-
-	/*width/height must less than bitmap's width/height*/
-	w = w < bw ? w : bw;
-	h = w < bh ? h : bh;
-	
-	/*width/height must less than data's width/height*/
-	w = (x + w) < dw ? w : dw - x;
-	h = (y + h) < dh ? h : dh - y;
-
 	src += 3*(y * dw + x);
 	for(oy = 0; oy < h; oy++)
 	{
-		psrc = src;
+		unsigned char* psrc = src;
 		for(ox = 0; ox < w; ox++, psrc+=3)
 		{
 			dst[ox].a = 0xff;
@@ -166,41 +198,14 @@ Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, void* data,
 
 Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
-	int i = 0;
-	int j = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	int x = rect != NULL ? rect->x : 0;
-	int y = rect != NULL ? rect->y : 0;
-	int w = rect != NULL ? rect->width : bw;
-	int h = rect != NULL ? rect->height : bh;
-	unsigned char* dst = data;
-	unsigned char* pdst = NULL;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(ox < dw, RET_FAIL);
-	return_val_if_fail(oy < dh, RET_FAIL);
-	return_val_if_fail(x < bw, RET_FAIL);
-	return_val_if_fail(y < bh, RET_FAIL);
-	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
-
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	
-	w = (x + w) < bw ? w : bw - x;
-	h = (y + h) < bh ? h : bh - y;
-	w = (ox + w) < dw ? w : dw - ox;
-	h = (oy + h) < dh ? h : dh - oy;
-	
-	w += x;
-	h += y;
+	COPY_TO_DECL(unsigned char);
+	(void)k;	
 
 	src += y * bw;
 	dst += 3*(oy * dw);
-
 	for(i = y; i < h; i++)
 	{
-		pdst = dst + 3*ox;
+		unsigned char* pdst = dst + 3*ox;
 		for(j = x; j < w; j++, pdst+=3)
 		{
 			FtkColor* psrc = src+j;
@@ -228,35 +233,7 @@ Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, 
 Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {
-	int x  = 0;
-	int y  = 0;
-	int w  = 0;
-	int h  = 0;
-	int ox = 0;
-	int oy = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	FtkColor* src = (FtkColor*)data;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);
-	
-	x = rect != NULL ? rect->x : 0;
-	y = rect != NULL ? rect->y : 0;
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	return_val_if_fail(x < dw && y < dh, RET_FAIL);
-
-	w = rect != NULL ? rect->width  : bw;
-	h = rect != NULL ? rect->height : bh;
-
-	/*width/height must less than bitmap's width/height*/
-	w = w < bw ? w : bw;
-	h = w < bh ? h : bh;
-	
-	/*width/height must less than data's width/height*/
-	w = (x + w) < dw ? w : dw - x;
-	h = (y + h) < dh ? h : dh - y;
+	COPY_FROM_DECL(FtkColor);
 
 	src += y * dw + x;
 	for(oy = 0; oy < h; oy++)
@@ -275,38 +252,10 @@ Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, void* data,
 
 Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	int x = rect != NULL ? rect->x : 0;
-	int y = rect != NULL ? rect->y : 0;
-	int w = rect != NULL ? rect->width : bw;
-	int h = rect != NULL ? rect->height : bh;
-	FtkColor* dst = data;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(ox < dw, RET_FAIL);
-	return_val_if_fail(oy < dh, RET_FAIL);
-	return_val_if_fail(x < bw, RET_FAIL);
-	return_val_if_fail(y < bh, RET_FAIL);
-	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
-
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	
-	w = (x + w) < bw ? w : bw - x;
-	h = (y + h) < bh ? h : bh - y;
-	w = (ox + w) < dw ? w : dw - ox;
-	h = (oy + h) < dh ? h : dh - oy;
-	
-	w += x;
-	h += y;
+	COPY_TO_DECL(FtkColor);
 
 	src += y * bw;
 	dst += oy * dw;
-
 	for(i = y; i < h; i++)
 	{
 		for(j = x, k = ox; j < w; j++, k++)
@@ -330,41 +279,14 @@ Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 
 	return RET_OK;
 }
+
 /*=====================================================================*/
 
 Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {
-	int x  = 0;
-	int y  = 0;
-	int w  = 0;
-	int h  = 0;
-	int ox = 0;
-	int oy = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	unsigned short* src = data;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
 
-	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);
-	
-	x = rect != NULL ? rect->x : 0;
-	y = rect != NULL ? rect->y : 0;
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	return_val_if_fail(x < dw && y < dh, RET_FAIL);
-
-	w = rect != NULL ? rect->width  : bw;
-	h = rect != NULL ? rect->height : bh;
-
-	/*width/height must less than bitmap's width/height*/
-	w = w < bw ? w : bw;
-	h = w < bh ? h : bh;
-	
-	/*width/height must less than data's width/height*/
-	w = (x + w) < dw ? w : dw - x;
-	h = (y + h) < dh ? h : dh - y;
-
+	COPY_FROM_DECL(unsigned short);
 	src += y * dw + x;
 	for(oy = 0; oy < h; oy++)
 	{
@@ -384,42 +306,12 @@ Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data,
 
 Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
 	FtkColor dcolor;
-	FtkColor* pdst = NULL;
-	FtkColor* psrc = NULL;
 	unsigned short pixel = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	int x = rect != NULL ? rect->x : 0;
-	int y = rect != NULL ? rect->y : 0;
-	int w = rect != NULL ? rect->width : bw;
-	int h = rect != NULL ? rect->height : bh;
-	unsigned short* dst = data;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(ox < dw, RET_FAIL);
-	return_val_if_fail(oy < dh, RET_FAIL);
-	return_val_if_fail(x < bw, RET_FAIL);
-	return_val_if_fail(y < bh, RET_FAIL);
-	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
-
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	
-	w = (x + w) < bw ? w : bw - x;
-	h = (y + h) < bh ? h : bh - y;
-	w = (ox + w) < dw ? w : dw - ox;
-	h = (oy + h) < dh ? h : dh - oy;
-	
-	w += x;
-	h += y;
+	COPY_TO_DECL(unsigned short);
 
 	src += y * bw;
 	dst += oy * dw;
-
 	for(i = y; i < h; i++)
 	{
 		for(j = x, k = ox; j < w; j++, k++)
@@ -427,8 +319,8 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 			dcolor.r = (dst[k] & 0xf800) >> 8;
 			dcolor.g = (dst[k] & 0x07e0) >> 3;
 			dcolor.b = (dst[k] & 0x1f) << 3;
-			psrc = src + j;
-			pdst = &dcolor;
+			FtkColor* psrc = src + j;
+			FtkColor* pdst = &dcolor;
 
 			if(psrc->a == 0xff)
 			{
@@ -449,46 +341,18 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 }
 
 /*=====================================================================*/
+
 Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {
-	int x  = 0;
-	int y  = 0;
-	int w  = 0;
-	int h  = 0;
-	int ox = 0;
-	int oy = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	FtkColor* src = (FtkColor*)data;	/* data is RGBA */
-	unsigned char* psrc = NULL;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);
-	
-	x = rect != NULL ? rect->x : 0;
-	y = rect != NULL ? rect->y : 0;
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
-	return_val_if_fail(x < dw && y < dh, RET_FAIL);
-
-	w = rect != NULL ? rect->width  : bw;
-	h = rect != NULL ? rect->height : bh;
-
-	/*width/height must less than bitmap's width/height*/
-	w = w < bw ? w : bw;
-	h = w < bh ? h : bh;
-	
-	/*width/height must less than data's width/height*/
-	w = (x + w) < dw ? w : dw - x;
-	h = (y + h) < dh ? h : dh - y;
+	COPY_FROM_DECL(unsigned char);
 
 	src += y * dw + x;
 	for(oy = 0; oy < h; oy++)
 	{
 		for(ox = 0; ox < w; ox++)
 		{
-			psrc =(unsigned char*) (src + ox);
+			unsigned char* psrc =(unsigned char*) (src + ox);
 			dst[ox].r = psrc[0];
 			dst[ox].g = psrc[1];
 			dst[ox].b = psrc[2]; 
@@ -503,38 +367,10 @@ Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, void* data,
 
 Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
-	int bw = ftk_bitmap_width(bitmap);
-	int bh = ftk_bitmap_height(bitmap);
-	int x = rect != NULL ? rect->x : 0;
-	int y = rect != NULL ? rect->y : 0;
-	int w = rect != NULL ? rect->width : bw;
-	int h = rect != NULL ? rect->height : bh;
-	FtkColor* dst = data;	/* data is RGBA */
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-
-	return_val_if_fail(ox < dw, RET_FAIL);
-	return_val_if_fail(oy < dh, RET_FAIL);
-	return_val_if_fail(x < bw, RET_FAIL);
-	return_val_if_fail(y < bh, RET_FAIL);
-	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
-
-	x = x < 0 ? 0 : x;
-	y = y < 0 ? 0 : y;
+	COPY_TO_DECL(FtkColor);
 	
-	w = (x + w) < bw ? w : bw - x;
-	h = (y + h) < bh ? h : bh - y;
-	w = (ox + w) < dw ? w : dw - ox;
-	h = (oy + h) < dh ? h : dh - oy;
-	
-	w += x;
-	h += y;
-
 	src += y * bw;
 	dst += oy * dw;
-
 	for(i = y; i < h; i++)
 	{
 		for(j = x, k = ox; j < w; j++, k++)
@@ -562,4 +398,6 @@ Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 
 	return RET_OK;
 }
+
 /*=====================================================================*/
+

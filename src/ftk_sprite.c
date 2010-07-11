@@ -52,11 +52,17 @@ FtkSprite* ftk_sprite_create(void)
 
 static Ret  ftk_sprite_backup(FtkSprite* thiz)
 {
+	FtkRect rect = {0};
 	FtkDisplay* display = ftk_default_display();
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	return_val_if_fail(thiz->snap != NULL, RET_FAIL);
 	
-	return ftk_display_snap(display, thiz->x, thiz->y, thiz->snap);
+	rect.x = thiz->x;
+	rect.y = thiz->y;
+	rect.width = ftk_bitmap_width(thiz->snap);
+	rect.height = ftk_bitmap_height(thiz->snap);
+
+	return ftk_display_snap(display, &rect, thiz->snap);
 }
 
 static Ret  ftk_sprite_restore(FtkSprite* thiz)

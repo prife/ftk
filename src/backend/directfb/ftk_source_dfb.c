@@ -199,7 +199,7 @@ static Ret ftk_source_dfb_dispatch_input_event(FtkSource* thiz, DFBInputEvent* e
 
 	if(priv->event.type != FTK_EVT_NOP)
 	{
-		ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &priv->event);
+		ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &priv->event);
 		priv->event.type = FTK_EVT_NOP;
 	}
 

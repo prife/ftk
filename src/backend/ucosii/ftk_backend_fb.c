@@ -9,7 +9,7 @@ static Ret ftk_init_input(void)
 	const char* tsdev = NULL;
 	FtkSource* source = NULL;
 	
-	source = ftk_source_input_create((FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+	source = ftk_source_input_create((FtkOnEvent)ftk_wnd_manager_queue_event_auto_rotate, ftk_default_wnd_manager());
 
 	if(source != NULL)
 	{
