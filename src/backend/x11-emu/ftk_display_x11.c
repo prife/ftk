@@ -66,7 +66,6 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 			priv->bits, xoffset, yoffset, display_width, display_height); 
 		XPutImage(priv->display, priv->win, priv->gc, priv->ximage,
 			xoffset, yoffset, xoffset, yoffset, rect->width, rect->height); 
-	//	ftk_logd("%s: %d %d %d %d\n", __func__, rect->x, rect->y, rect->width, rect->height);
 	}
 	else
 	{
@@ -82,7 +81,7 @@ static Ret ftk_display_x11_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 
 static int ftk_display_x11_width(FtkDisplay* thiz)
 {
-	PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL;
+	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
 
 	return priv->width;
@@ -90,7 +89,7 @@ static int ftk_display_x11_width(FtkDisplay* thiz)
 
 static int ftk_display_x11_height(FtkDisplay* thiz)
 {
-	PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL;
+	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
 
 	return priv->height;
@@ -119,10 +118,8 @@ static void ftk_display_x11_destroy(FtkDisplay* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 
-//		XDestroyImage(priv->ximage);
 		XDestroyWindow(priv->display, priv->win);
 		XFreeGC(priv->display, priv->gc);
-		//XCloseDisplay(priv->display);
 		FTK_FREE(priv->bits);
 		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
 	}
@@ -171,9 +168,18 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 		priv->visual  = DefaultVisualOfScreen(DefaultScreenOfDisplay(display));
 		priv->depth   = DefaultDepth(display, screen);
 		
-		if(priv->depth >= 24) priv->pixelsize = 4;
-		else if(priv->depth > 8) priv->pixelsize = 2;	/* 15, 16 */
-		else priv->pixelsize = 1;			/* 1, 2, 4, 8 */
+		if(priv->depth >= 24) 
+		{
+			priv->pixelsize = 4;
+		}
+		else if(priv->depth > 8)
+		{
+			priv->pixelsize = 2;	/* 15, 16 */
+		}
+		else
+		{
+			priv->pixelsize = 1;			/* 1, 2, 4, 8 */
+		}
 
 		ftk_logd("%s: pixelsize=%d, depth=%d\n", __func__, priv->pixelsize, priv->depth);
 
