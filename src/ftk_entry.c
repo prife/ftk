@@ -96,29 +96,30 @@ static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 {
 	DECL_PRIV0(thiz, priv);
-	int offset = 0;
-	const char* end = NULL;
-	FtkCanvas* canvas = ftk_widget_canvas(thiz);
-	int width = x - ftk_widget_left(thiz) - FTK_ENTRY_LEFT_MARGIN;
+	FtkTextLine line = {0};
+	FtkTextLayout* text_layout = ftk_default_text_layout();
+	int width = x - FTK_PAINT_X(thiz) - FTK_ENTRY_LEFT_MARGIN + 1;
 	return_val_if_fail(width >= 0, RET_FAIL);
 
-	end = ftk_canvas_calc_str_visible_range(canvas, TB_TEXT, priv->visible_start, -1, width);
-	offset = end - TB_TEXT - priv->caret;
+	ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
+			priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
 
-	if(offset == 0)
+	if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 	{
-		return RET_OK;
-	}
-	else if(offset < 0)
-	{
-		offset = - utf8_count_char(end, -offset);
-	}
-	else if(offset > 0)
-	{
-		offset = utf8_count_char(TB_TEXT + priv->caret, offset);
+		if(line.len > 0)
+		{
+			priv->caret = priv->visible_start + line.pos_v2l[line.len-1] + 1;
+		}
+		else
+		{
+			priv->caret = priv->visible_start;
+		}
 	}
 	
-	return ftk_entry_move_caret(thiz, offset);
+	ftk_logd("%s: start=%d caret=%d line.len=%d x=%d width=%d\n",
+		__func__, priv->visible_start, priv->caret, line.len, x, width);
+
+	return ftk_entry_move_caret(thiz, 0);
 }
 
 static Ret ftk_entry_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
@@ -262,7 +263,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_IM_COMMIT:
 		{
 			ftk_entry_input_str(thiz, event->u.extra);
-			ftk_input_method_manager_focus_act_commit(ftk_default_input_method_manager(), priv->input_method);
+			ftk_input_method_manager_focus_ack_commit(ftk_default_input_method_manager(), priv->input_method);
 			break;
 		}
 		case FTK_EVT_MOUSE_LONG_PRESS:
@@ -271,8 +272,8 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 			if(im != NULL)
 			{
 				ftk_input_method_focus_out(im);
+				im = NULL;
 			}
-			im = NULL;
 			priv->input_method = ftk_input_method_chooser();
 			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
 			if(im != NULL)
@@ -290,9 +291,9 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 {
+	FtkGc gc = {0};
 	int extent = 0;
 	DECL_PRIV0(thiz, priv);
-	FtkGc gc = {0};
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
@@ -353,13 +354,22 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(priv->text_buffer != NULL)
 	{
+		FtkTextLine line = {0};
+		FtkTextLayout* text_layout = ftk_default_text_layout();
+		int width = ftk_widget_width(thiz) - 2 * FTK_ENTRY_LEFT_MARGIN;
+
 		ftk_entry_compute_visible_range(thiz);
+		ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
+			priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
+
 		font_height = ftk_canvas_font_height(canvas);
 		x += FTK_ENTRY_LEFT_MARGIN;
 		y += font_height + FTK_ENTRY_TOP_MARGIN;
 
-		ftk_canvas_draw_string(canvas, x, y, TB_TEXT + priv->visible_start,
-			priv->visible_end - priv->visible_start);
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len);
+		}
 	}
 	ftk_entry_on_paint_caret(thiz);
 
@@ -455,6 +465,7 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 
 	ftk_text_buffer_delete(priv->text_buffer, 0, TB_LENGTH);
 	ftk_text_buffer_insert(priv->text_buffer, 0, text);	
+	
 	priv->visible_start = -1;
 	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;

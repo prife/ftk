@@ -55,7 +55,7 @@ libftk_la_SOURCES=\
 	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c \
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
-	ftk_display_rotate.c ftk_wnd_manager.c
+	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c 
 
 if ENABLE_HANDWRITE
 libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
@@ -89,6 +89,11 @@ if FTK_BACKEND_X11
 libftk_la_SOURCES+=$(LINUX_X11) $(OS_LINUX)
 endif
 
+if ENABLE_FRIBIDI
+libftk_la_SOURCES+=ftk_text_layout_normal.c
+else
+libftk_la_SOURCES+=ftk_text_layout_normal.c
+endif
 if FTK_BACKEND_DFB
 libftk_la_SOURCES+=$(LINUX_DFB) $(OS_LINUX)
 endif

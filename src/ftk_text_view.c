@@ -31,13 +31,11 @@
 
 #include "ftk_log.h"
 #include "ftk_util.h"
-#include "ftk_text_view.h"
 #include "ftk_globals.h"
+#include "ftk_text_view.h"
 #include "ftk_text_buffer.h"
 #include "ftk_source_timer.h"
 #include "ftk_input_method_preeditor.h"
-
-#define FTK_TEXT_VIEW_MAX_LINE 512
 
 typedef struct _PrivInfo
 {
@@ -46,6 +44,7 @@ typedef struct _PrivInfo
 	int   caret_y;
 	int   caret_at_line;
 	int   caret_visible;
+	FtkSource* caret_timer;
 	
 	int   visible_start_line;
 	int   visible_end_line;
@@ -57,8 +56,6 @@ typedef struct _PrivInfo
 	int   total_lines;
 	int   visible_lines;
 	int   input_method;
-	FtkPoint caret_pos;
-	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
 	unsigned short line_offset[FTK_TEXT_VIEW_MAX_LINE];
 }PrivInfo;
@@ -67,17 +64,17 @@ typedef struct _PrivInfo
 #define TEXT_VIEW_V_MARGIN    1
 #define TEXT_VIEW_TOP_MARGIN  3
 
-#define TB_TEXT priv->text_buffer->buffer
+#define TB_TEXT        priv->text_buffer->buffer
 #define TB_LENGTH (int)(priv->text_buffer->length)
-#define HAS_TEXT(priv) (priv != NULL && priv->text_buffer != NULL && TB_LENGTH > 0) 
+#define HAS_TEXT(priv) (priv->text_buffer != NULL && TB_LENGTH > 0) 
 
 static Ret ftk_text_view_on_paint_caret(FtkWidget* thiz);
 
-static Ret ftk_text_view_update_caret(FtkWidget* thiz)
+static Ret ftk_text_view_recalc_caret_at_line(FtkWidget* thiz)
 {
 	int i = 0;
 	DECL_PRIV0(thiz, priv);
-	
+
 	priv->caret = priv->caret < 0 ? 0 : priv->caret;
 	priv->caret = priv->caret >  TB_LENGTH ? TB_LENGTH : priv->caret;
 
@@ -90,6 +87,20 @@ static Ret ftk_text_view_update_caret(FtkWidget* thiz)
 		}
 	}
 
+	if(i == priv->total_lines)
+	{
+		priv->caret_at_line = priv->total_lines - 1;
+	}
+
+	return RET_OK;
+}
+
+static Ret ftk_text_view_update_caret(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	
+	ftk_text_view_recalc_caret_at_line(thiz);
+
 	if((priv->caret_at_line) < priv->visible_start_line)
 	{
 		priv->visible_start_line = priv->caret_at_line;
@@ -100,6 +111,8 @@ static Ret ftk_text_view_update_caret(FtkWidget* thiz)
 		priv->visible_end_line = priv->caret_at_line + 1;
 		priv->visible_start_line = FTK_MAX(0, (priv->visible_end_line - priv->visible_lines));
 	}
+
+	priv->visible_start_line = FTK_MAX(0, priv->visible_start_line);
 
 	ftk_widget_invalidate(thiz);
 
@@ -121,8 +134,8 @@ static Ret ftk_text_view_move_caret(FtkWidget* thiz, int offset)
 	priv->caret_visible = 0;
 	ftk_text_view_on_paint_caret(thiz);
 	priv->caret += ftk_text_buffer_chars_bytes(priv->text_buffer, priv->caret, offset);
-
 	ftk_logd("%s: %d->%d\n", __func__, caret, priv->caret);
+	
 	return ftk_text_view_update_caret(thiz);
 }
 
@@ -133,13 +146,6 @@ static Ret ftk_text_view_set_caret(FtkWidget* thiz, int caret)
 	if(!HAS_TEXT(priv))
 	{
 		priv->caret = 0;
-		return RET_OK;
-	}
-
-	if(priv->total_lines <= 0)
-	{
-		priv->caret = caret;
-
 		return RET_OK;
 	}
 
@@ -154,124 +160,100 @@ static Ret ftk_text_view_calc_lines(FtkWidget* thiz)
 {
 	int font_height = 0;
 	DECL_PRIV0(thiz, priv);
-	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
-	font_height = ftk_canvas_font_height(canvas);
+	int height = ftk_widget_height(thiz);
+	font_height = ftk_font_height(ftk_widget_get_gc(thiz)->font);
 
-	(void)x;(void)y;(void)width;
 	priv->visible_lines = (height - 2 * TEXT_VIEW_TOP_MARGIN) / (font_height + TEXT_VIEW_V_MARGIN);
 	priv->v_margin = ((height - 2 * TEXT_VIEW_TOP_MARGIN) % (font_height + TEXT_VIEW_V_MARGIN))/2;
 
 	return RET_OK;
 }
 
-static Ret ftk_text_view_relayout(FtkWidget* thiz, int start)
+
+static Ret ftk_text_view_get_chars_nr_in_line(FtkWidget* thiz, int line)
 {
-	int i = 0;
-	int save_w = 0;
-	int extent = 0;
 	DECL_PRIV0(thiz, priv);
-	const char* iter = NULL;
-	const char* text = TB_TEXT;
-	const char* prev_iter = NULL;
 
-	unsigned short unicode = 0;
-	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	return_val_if_fail(thiz != NULL && canvas != NULL && text != NULL, RET_FAIL);
-
-	(void)x;(void)y;(void)height;
-	start = start < 0 ? 0 : start;
-	start = start > FTK_TEXT_VIEW_MAX_LINE ? FTK_TEXT_VIEW_MAX_LINE : start;
-
-	iter = text + priv->line_offset[start];
-	for(i = start ; i < FTK_TEXT_VIEW_MAX_LINE; i++)
+	if((line + 1 ) < priv->total_lines)
 	{
-		save_w = width;
-		priv->line_offset[i] = iter - text;
-		
-		width -= 2 * TEXT_VIEW_H_MARGIN;
-		while(width > 0)
-		{
-			prev_iter = iter;
-			unicode = utf8_get_char(iter, &iter);
-			if(unicode == 0 || unicode == 0xffff || unicode == '\n') 
-			{
-				break;
-			}
-			extent = ftk_canvas_get_char_extent(canvas, unicode);
-			if(extent > width)
-			{
-				iter = prev_iter;
-				break;
-			}
-			width -= extent;
-		}
-
-		width = save_w;
-		
-		if(unicode == 0 || unicode == 0xffff)
-		{
-			i++;
-			priv->line_offset[i] = iter - text;
-			break;
-		}
+		return priv->line_offset[line + 1] - priv->line_offset[line];
 	}
-
-	priv->total_lines = i;
-	ftk_text_view_calc_lines(thiz);
-	priv->visible_end_line = FTK_MIN(priv->total_lines, priv->visible_start_line + priv->visible_lines);
-	
-	for(i = 0; i < priv->total_lines; i++)
+	else
 	{
-		if(priv->caret >= priv->line_offset[i] && priv->caret <= priv->line_offset[i+1])
-		{
-			priv->caret_at_line = i;
-			break;
-		}
+		return strlen(TB_TEXT + priv->line_offset[line]);
 	}
-
-	ftk_text_view_update_caret(thiz);
-
-	return RET_OK;
 }
 
 static Ret ftk_text_view_get_offset_by_pointer(FtkWidget* thiz, int px, int py)
 {
-	int dh = 0;
+	int len = 0;
 	int caret = 0;
 	int start = 0;
-	int index = 0;
+	int line_no = 0;
+	int delta_h = 0;
 	int font_height = 0;
 	DECL_PRIV0(thiz, priv);
-	const char* other_side = NULL;
+	FtkTextLine line = {0};
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	FtkTextLayout* text_layout = ftk_default_text_layout();
 
-	(void)width;
 	(void)height;
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	font_height = ftk_canvas_font_height(canvas);
 	
-	dh = py - y - TEXT_VIEW_V_MARGIN - TEXT_VIEW_TOP_MARGIN;
-	index = priv->visible_start_line + dh/(font_height + TEXT_VIEW_V_MARGIN);
-	index = index < priv->visible_end_line ? index : priv->visible_end_line - 1;
+	delta_h = py - y - TEXT_VIEW_V_MARGIN - TEXT_VIEW_TOP_MARGIN;
+	line_no = priv->visible_start_line + delta_h/(font_height + TEXT_VIEW_V_MARGIN);
+	line_no = line_no < priv->visible_end_line ? line_no : priv->visible_end_line - 1;
 
-	start = priv->line_offset[index];
-	other_side = ftk_canvas_calc_str_visible_range(canvas, TB_TEXT, start, -1, px - x - TEXT_VIEW_H_MARGIN + 1);
+	start = priv->line_offset[line_no];
 
-	if((index + 1) < priv->total_lines)
-	{
-		caret = FTK_MIN((other_side - TB_TEXT), (priv->line_offset[index+1] - 1));
-	}
-	else
-	{
-		caret = other_side - TB_TEXT;
-	}
+	width = px - x - TEXT_VIEW_H_MARGIN + 1;
+	len = ftk_text_view_get_chars_nr_in_line(thiz, line_no);
+	ftk_text_layout_init(text_layout, TB_TEXT + start, len, ftk_widget_get_gc(thiz)->font, width); 
 	
-	ftk_text_view_set_caret(thiz, caret);
+	if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+	{
+		caret = start + line.len;
+		ftk_text_view_set_caret(thiz, caret);
+	}
 
-	return 0;
+	ftk_logd("%s: line_no=%d priv->total_lines=%d caret=%d priv->caret=%d caret_at_line=%d\n", 
+		__func__, line_no, priv->total_lines, caret, priv->caret, priv->caret_at_line);
+
+	return RET_OK;
 }
 
+static Ret ftk_text_view_relayout(FtkWidget* thiz, int start_line)
+{
+	int i = 0;
+	int start_offset = 0;
+	FtkTextLine line = {0};
+	DECL_PRIV0(thiz, priv);
+	const char* text = TB_TEXT;
+	int width = ftk_widget_width(thiz) - 2 * TEXT_VIEW_H_MARGIN;
+	FtkTextLayout* text_layout = ftk_default_text_layout();
+	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
+
+	start_line = start_line < 0 ? 0 : start_line;
+	return_val_if_fail(start_line < FTK_TEXT_VIEW_MAX_LINE, RET_FAIL);
+
+	start_offset = priv->line_offset[start_line];
+	ftk_text_layout_init(text_layout, text+start_offset, -1, ftk_widget_get_gc(thiz)->font, width);
+
+	for(i = start_line ; i < FTK_TEXT_VIEW_MAX_LINE; i++)
+	{
+		if(ftk_text_layout_get_visual_line(text_layout, &line) != RET_OK) break;
+		priv->line_offset[i] = line.pos_v2l[0] + start_offset;
+	}
+
+	priv->total_lines = i;
+	ftk_text_view_calc_lines(thiz);
+	ftk_text_view_recalc_caret_at_line(thiz);
+	priv->visible_end_line = FTK_MIN(priv->total_lines, priv->visible_start_line + priv->visible_lines);
+	ftk_text_view_update_caret(thiz);
+
+	return RET_OK;
+}
 static Ret ftk_text_view_handle_mouse_evevnt(FtkWidget* thiz, FtkEvent* event)
 {
 	return ftk_text_view_get_offset_by_pointer(thiz, event->u.mouse.x, event->u.mouse.y);
@@ -307,9 +289,10 @@ static Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
 	int start = 0;
 	int width = 0;
 	Ret ret = RET_OK;
+	FtkTextLine line = {0};
 	DECL_PRIV0(thiz, priv);
-	const char* other_side = NULL;
 	FtkCanvas* canvas = ftk_widget_canvas(thiz);
+	FtkTextLayout* text_layout = ftk_default_text_layout();
 
 	if(offset < 0)
 	{
@@ -333,15 +316,20 @@ static Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	width = priv->caret_x - TEXT_VIEW_H_MARGIN - FTK_PAINT_X(thiz) + 1;
-	other_side = ftk_canvas_calc_str_visible_range(canvas, TB_TEXT, start, -1, width);
-	if((priv->caret_at_line + 1) < priv->total_lines)
+	if(width > 0)
 	{
-		caret = FTK_MIN((other_side - TB_TEXT), (priv->line_offset[priv->caret_at_line+1] - 1));
+		ftk_text_layout_init(text_layout, TB_TEXT + start, -1, ftk_widget_get_gc(thiz)->font, width);
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			caret = line.pos_v2l[line.len - 1] + start + 1;	
+		}
 	}
 	else
 	{
-		caret = other_side - TB_TEXT;
+		caret = start;
 	}
+
+	ftk_logd("%s: caret=%d line.len=%d\n", __func__, caret, line.len);
 
 	ftk_text_view_set_caret(thiz, caret);
 
@@ -483,13 +471,16 @@ static Ret ftk_text_view_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_IM_PREEDIT:
 		{
-			ftk_im_show_preeditor(thiz, &(priv->caret_pos), event->u.extra);
+			FtkPoint caret_pos = {0};
+			caret_pos.x = priv->caret_x;
+			caret_pos.y = priv->caret_y;
+			ftk_im_show_preeditor(thiz, &caret_pos, event->u.extra);
 			break;
 		}
 		case FTK_EVT_IM_COMMIT:
 		{
 			ftk_text_view_input_str(thiz, event->u.extra);
-			ftk_input_method_manager_focus_act_commit(ftk_default_input_method_manager(), priv->input_method);
+			ftk_input_method_manager_focus_ack_commit(ftk_default_input_method_manager(), priv->input_method);
 			break;
 		}
 		case FTK_EVT_MOUSE_LONG_PRESS:
@@ -584,43 +575,38 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 		ftk_text_view_relayout(thiz, 0);
 	}
 
+	ftk_text_view_recalc_caret_at_line(thiz);
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
-	if(priv->text_buffer != NULL)
+	if(priv->text_buffer != NULL && TB_LENGTH > 0)
 	{
 		int i = 0;
 		int len = 0;
 		int start = 0;
+		FtkTextLine line = {0};
+		FtkTextLayout* text_layout = ftk_default_text_layout();
 		
 		font_height = ftk_canvas_font_height(canvas);
 		dy = y + priv->v_margin + TEXT_VIEW_TOP_MARGIN;
 		dx = x + TEXT_VIEW_H_MARGIN;
+		width = width - 2 * TEXT_VIEW_H_MARGIN;
+
+		start = priv->line_offset[priv->visible_start_line];
+		ftk_text_layout_init(text_layout, TB_TEXT + start, -1, ftk_widget_get_gc(thiz)->font, width);
 
 		for(i = priv->visible_start_line; i < priv->visible_end_line; i++)
 		{
 			start = priv->line_offset[i];
-			if((i + 1) < priv->total_lines)
+			if(priv->caret_at_line == i)
 			{
-				len = priv->line_offset[i+1] - priv->line_offset[i];
-			}
-			else
-			{
-				len = TB_LENGTH - priv->line_offset[i];
-			}
-
-			if(priv->caret >= priv->line_offset[i] && priv->caret <= priv->line_offset[i+1])
-			{
-				priv->caret_at_line = i;
 				priv->caret_y = dy + TEXT_VIEW_V_MARGIN;
 				priv->caret_x = dx + ftk_canvas_get_extent(canvas, TB_TEXT + start, priv->caret - start) - 1;
 			}
 			
-			if(len <= 0) 
-			{
-				break;
-			}
-
 			dy += TEXT_VIEW_V_MARGIN;
-			ftk_canvas_draw_string_ex(canvas, dx, dy+font_height/2, TB_TEXT + start, len, 1);
+			if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK && line.len > 0)
+			{
+				ftk_canvas_draw_string_ex(canvas, dx, dy+font_height/2, line.text, line.len, 1);
+			}
 			dy += font_height;
 		}
 	}
@@ -629,8 +615,6 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 		priv->caret_x = TEXT_VIEW_H_MARGIN;
 		priv->caret_y = TEXT_VIEW_V_MARGIN;
 	}
-	priv->caret_pos.x = priv->caret_x;
-	priv->caret_pos.y = priv->caret_y;
 
 	ftk_text_view_on_paint_caret(thiz);
 

@@ -102,15 +102,19 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 	if(info->text != NULL)
 	{
 		int text_width = w;
-		const char* end = NULL;
+		FtkTextLine line = {0};
+		FtkTextLayout* text_layout = ftk_default_text_layout();
 		text_width = info->left_icon != NULL  ? text_width - h : text_width;
 		text_width = right_icon != NULL ? text_width - h : text_width;
 		
 		dy = y + FTK_HALF(h);
 		dx = FTK_H_MARGIN + (info->left_icon != NULL  ? x + h : x);
 
-		end = ftk_canvas_calc_str_visible_range(canvas, info->text, 0, -1, text_width);
-		ftk_canvas_draw_string_ex(canvas, dx, dy, info->text, end - info->text, 1);
+		ftk_text_layout_init(text_layout, info->text, -1, ftk_canvas_get_gc(canvas)->font, text_width); 
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			ftk_canvas_draw_string_ex(canvas, dx + line.xoffset, dy, line.text, line.len, 1);
+		}
 	}
 
 	return RET_OK;

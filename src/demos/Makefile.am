@@ -19,6 +19,12 @@ libapp_demo_cairo_la_CFLAGS=$(LOCAL_CFLAGS) -DFTK_AS_PLUGIN
 
 endif
 
+if ENABLE_FRIBIDI
+noinst_PROGRAMS+=demo_bidi
+demo_bidi_SOURCES=demo_bidi.c
+demo_bidi_LDFLAGS=$(MYLDFLAGS)
+endif
+
 demo_statusbar_SOURCES=demo_statusbar.c
 demo_statusbar_LDFLAGS=$(MYLDFLAGS)
 

@@ -51,6 +51,7 @@ FtkCanvas* ftk_canvas_create(int w, int h, FtkColor clear_color);
 
 Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc);
 Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc);
+FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz);
 
 Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h);
 Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w);
@@ -77,9 +78,6 @@ Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
 
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
 void ftk_canvas_destroy(FtkCanvas* thiz);
-
-int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode);
-const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width);
 
 Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, unsigned char alpha);
 

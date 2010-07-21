@@ -68,7 +68,7 @@ static Ret ftk_message_box_size(int has_title, int has_button, const char* text,
 	while(*end != '\0')
 	{
 		height += ftk_font_height(font) + FTK_LABEL_TOP_MARGIN;
-		end = ftk_font_calc_str_visible_range(font, text, start, -1, width);
+		end = ftk_font_calc_str_visible_range(font, text, start, -1, width, NULL);
 		start = end - text;
 	}
 

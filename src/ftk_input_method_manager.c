@@ -154,7 +154,7 @@ Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, size_t inde
 	return RET_OK;
 }
 
-Ret  ftk_input_method_manager_focus_act_commit(FtkInputMethodManager* thiz, size_t index)
+Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz, size_t index)
 {
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 

@@ -17,7 +17,6 @@ interface FtkCanvas
 	int ftk_canvas_font_height(in FtkCanvasPtr thiz);
 	int ftk_canvas_get_extent(in FtkCanvasPtr thiz, in CStrPtr str, in int len);
 	int ftk_canvas_get_char_extent(in FtkCanvasPtr thiz, in unsigned short unicode);
-	CStrPtr ftk_canvas_calc_str_visible_range(in FtkCanvasPtr thiz, in CStrPtr start, in int vstart, in int vend, in int width);
 
 	Ret ftk_canvas_draw_bitmap(in FtkCanvasPtr thiz, in FtkBitmapPtr bitmap, in int x, in int y, in int w, in int h, in int xoffset, in int yoffset);
 	Ret ftk_canvas_draw_bg_image(in FtkCanvasPtr canvas, in FtkBitmapPtr bitmap, in FtkBgStyle style, in int x, in int y, in int w, in int h);
@@ -31,8 +30,5 @@ interface FtkCanvas
 
 	FtkBitmapPtr ftk_canvas_bitmap(in FtkCanvasPtr thiz);
 	void ftk_canvas_destroy(in FtkCanvasPtr thiz);
-
-	int ftk_font_get_char_extent(in FtkFontPtr thiz, in unsigned short unicode);
-	CStrPtr ftk_font_calc_str_visible_range(in FtkFontPtr thiz, in CStrPtr start, in int vstart, in int vend, in int width);
 };
 

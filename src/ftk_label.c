@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_globals.h"
 #include "ftk_label.h"
 
 static Ret ftk_label_on_event(FtkWidget* thiz, FtkEvent* event)
@@ -44,25 +45,22 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 	
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		int start = 0;
+		FtkTextLine line = {0};
 		const char* end = NULL;
 		const char* text = ftk_widget_get_text(thiz);
+		FtkTextLayout* text_layout = ftk_default_text_layout();
 		
-		ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 		x += FTK_LABEL_LEFT_MARGIN;
 		width -= FTK_LABEL_LEFT_MARGIN * 2;
+		ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
-	
+		
+		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
 		for(i = 0; i < rows; i++)
 		{
+			if(ftk_text_layout_get_visual_line(text_layout, &line) != RET_OK) break;
 			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;
-			end = ftk_canvas_calc_str_visible_range(canvas, text, start, -1, width);
-			ftk_canvas_draw_string(canvas, x, y, text + start, end - text - start);
-			if(*end == '\0')
-			{
-				break;
-			}
-			start = end - text;
+			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len);
 		}
 	}
 

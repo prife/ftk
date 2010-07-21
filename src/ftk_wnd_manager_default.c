@@ -530,11 +530,6 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	FtkWidget* target = NULL;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
-	if(event->type == FTK_EVT_KEY_UP)
-	{
-		ftk_logd("%s: FTK_EVT_KEY_UP\n", __func__);
-	}
-
 	if(event->type == FTK_EVT_KEY_DOWN || event->type == FTK_EVT_KEY_UP)
 	{
 		ftk_wnd_manager_default_key_translate(thiz, event);

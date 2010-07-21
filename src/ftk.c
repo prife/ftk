@@ -140,6 +140,12 @@ static void ftk_deinit(void)
 		ftk_set_bitmap_factory(NULL);
 	}
 
+	if(ftk_default_text_layout() != NULL)
+	{
+		ftk_text_layout_destroy(ftk_default_text_layout());
+		ftk_set_text_layout(NULL);
+	}
+
 	if(ftk_default_font() != NULL)
 	{
 		ftk_font_destroy(ftk_default_font());
@@ -229,6 +235,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_config(config);
 	ftk_config_init(config, argc, argv);
 
+	ftk_set_text_layout(ftk_text_layout_create());
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));

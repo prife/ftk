@@ -69,6 +69,7 @@ typedef enum _Ret
 	RET_REMOVE,
 	RET_CONTINUE,
 	RET_FOUND,
+	RET_EOF,
 	RET_NEXT,
 	RET_QUIT,
 	RET_IGNORED,
@@ -209,13 +210,14 @@ typedef struct _FtkCommitInfo
 #define FTK_MENU_ITEM_HEIGHT    48
 #define FTK_MENU_ITEM_WIDTH     100
 #define FTK_POPUP_MENU_ITEM_HEIGHT 40
-#define FTK_STOCK_IMG_SUFFIX    ".png"
-#define FTK_FONT_SIZE 16
-#define FTK_LABEL_LEFT_MARGIN 3
-#define FTK_LABEL_TOP_MARGIN  1
-#define FTK_CLIPBOARD_SIZE    1024
-#define FTK_TITLE_LENGTH      15
-#define FTK_IM_PREEDITOR_MAX_ROW     5
+#define FTK_STOCK_IMG_SUFFIX       ".png"
+#define FTK_FONT_SIZE              16
+#define FTK_LABEL_LEFT_MARGIN      3
+#define FTK_LABEL_TOP_MARGIN       1
+#define FTK_CLIPBOARD_SIZE         1024
+#define FTK_TITLE_LENGTH           15
+#define FTK_IM_PREEDITOR_MAX_ROW   5
+#define FTK_TEXT_VIEW_MAX_LINE     512
 
 #ifdef __cplusplus
 #define FTK_BEGIN_DECLS extern "C" {

@@ -251,8 +251,6 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 			}
 			default:break;
 		}
-
-		ftk_logd("%s: FTK_EVT_KEY_UP\n", __func__);
 	}
 
 	return ret;

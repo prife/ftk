@@ -44,6 +44,7 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* render, int item_height);
 
 int ftk_list_view_get_selected(FtkWidget* thiz);
+Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current);
 FtkListModel* ftk_list_view_get_model(FtkWidget* thiz);
 Ret ftk_list_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 

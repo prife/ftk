@@ -45,7 +45,7 @@ Ret  ftk_input_method_manager_unregister(FtkInputMethodManager* thiz, FtkInputMe
 void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz);
 
 Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, size_t index);
-Ret  ftk_input_method_manager_focus_act_commit(FtkInputMethodManager* thiz, size_t index);
+Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz, size_t index);
 Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, size_t index, FtkWidget* widget);
 
 int ftk_input_method_chooser(void);

@@ -60,7 +60,7 @@ typedef struct _PrivInfo
 	FtkListener listener;
 }PrivInfo;
 
-static Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current)
+Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current)
 {
 	DECL_PRIV0(thiz, priv);
 	int total = ftk_list_model_get_total(priv->model);

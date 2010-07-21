@@ -101,6 +101,18 @@ fi
 
 AM_CONDITIONAL(ENABLE_CAIRO,  test "$enable_cairo" = "yes")
 
+AC_ARG_ENABLE(fribidi,
+  [  --enable-fribidi            build with fribidi support [[default=no]]],,
+  enable_fribidi=no)
+
+if test "$enable_fribidi" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_FRIBIDI `pkg-config --cflags fribidi`"
+  LDFLAGS="$LDFLAGS `pkg-config --libs fribidi`"
+fi
+
+AM_CONDITIONAL(ENABLE_FRIBIDI,  test "$enable_fribidi" = "yes")
+
+
 AC_ARG_ENABLE(handwrite,
   [  --enable-handwrite            build with handwrite support [[default=no]]],,
   enable_handwrite=no)
