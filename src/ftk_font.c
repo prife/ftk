@@ -30,6 +30,7 @@
  *
  */
 #include "ftk_font.h"
+#include "ftk_util.h"
 
 int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode)
 {

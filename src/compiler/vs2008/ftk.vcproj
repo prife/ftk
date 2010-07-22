@@ -613,6 +613,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_font.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_font_default.c"
 				>
 				<FileConfiguration
@@ -1413,6 +1433,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_text_layout_normal.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_text_view.c"
 				>
 				<FileConfiguration
@@ -1494,46 +1534,6 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_widget.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\ftk_font.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\ftk_text_layout_normal.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2003,6 +2003,10 @@
 				</File>
 				<File
 					RelativePath="..\..\ftk_text_buffer.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ftk_text_layout.h"
 					>
 				</File>
 				<File

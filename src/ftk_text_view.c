@@ -194,8 +194,9 @@ static Ret ftk_text_view_get_offset_by_pointer(FtkWidget* thiz, int px, int py)
 	int font_height = 0;
 	DECL_PRIV0(thiz, priv);
 	FtkTextLine line = {0};
+	FtkTextLayout* text_layout = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	FtkTextLayout* text_layout = ftk_default_text_layout();
+	text_layout = ftk_default_text_layout();
 
 	(void)height;
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
