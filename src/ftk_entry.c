@@ -30,6 +30,7 @@
  */
 
 #include "ftk_util.h"
+#include "ftk_log.h"
 #include "ftk_entry.h"
 #include "ftk_globals.h"
 #include "ftk_text_buffer.h"

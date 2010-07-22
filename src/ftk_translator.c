@@ -29,7 +29,7 @@
  *
  */
 
-
+#include "ftk_allocator.h"
 #include "ftk_translator.h"
 
 struct _FtkTranslator

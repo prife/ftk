@@ -31,6 +31,7 @@
 
 #include "ftk_log.h"
 #include "ftk_mmap.h"
+#include "ftk_allocator.h"
 
 struct _FtkMmap
 {

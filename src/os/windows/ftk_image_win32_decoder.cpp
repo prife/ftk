@@ -28,6 +28,11 @@
  * 2010-01-17 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+#ifdef VC6
+#define ULONG_PTR unsigned long*
+#endif 
+
 #include <windows.h>
 #include <gdiplus.h>
 #include "ftk_win32.h"
@@ -72,8 +77,11 @@ static FtkBitmap* load_win32 (const char *filename)
 	bitmap = ftk_bitmap_create(w, h, bg);
 	Rect r(0, 0, w, h);
 	BitmapData bitmapData;
+#ifdef VC6
+	img->LockBits(r, ImageLockModeRead, PixelFormat32bppARGB, &bitmapData);
+#else
 	img->LockBits(&r, ImageLockModeRead, PixelFormat32bppARGB, &bitmapData);
-
+#endif
 	FtkColor* src = (FtkColor*)bitmapData.Scan0;
 	FtkColor* dst = ftk_bitmap_bits(bitmap);
 
