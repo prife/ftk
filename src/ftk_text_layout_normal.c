@@ -127,6 +127,7 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 	end = ftk_font_calc_str_visible_range(thiz->font, thiz->text, thiz->pos, -1, thiz->width, &extent);
 	line->len = end - line->text;
 	line->xoffset = 0;
+	line->extent = extent;
 
 	for(i = 0; i < line->len && i < FTK_LINE_CHAR_NR; i++)
 	{

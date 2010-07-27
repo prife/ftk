@@ -41,6 +41,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 {
 	int i = 0;
 	int rows = 0;
+	FtkAlignment alignment = (FtkAlignment)thiz->priv_subclass[0];
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
 	if(ftk_widget_get_text(thiz) != NULL)
@@ -58,9 +59,24 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
 		for(i = 0; i < rows; i++)
 		{
+			int xoffset = x;
 			if(ftk_text_layout_get_visual_line(text_layout, &line) != RET_OK) break;
 			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;
-			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len);
+			
+			if(alignment == FTK_ALIGN_CENTER)
+			{
+				xoffset = x + ((width - line.extent)>>1);
+			}
+			else if(alignment == FTK_ALIGN_RIGHT)
+			{
+				xoffset = x + width - line.extent;
+			}
+			else
+			{
+				xoffset = x + line.xoffset;
+			}
+
+			ftk_canvas_draw_string(canvas, xoffset, y, line.text, line.len);
 		}
 	}
 
@@ -91,3 +107,11 @@ FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int heig
 	return thiz;
 }
 
+Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	thiz->priv_subclass[0] = (void*)alignment;
+
+	return RET_OK;
+}

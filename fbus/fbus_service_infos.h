@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File:    fbus_service_infos.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   FtkServiceInfo Manager.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,30 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#ifndef FBUS_SERVICE_INFOS_H
+#define FBUS_SERVICE_INFOS_H
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
-
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
+#include "fbus_service_manager_common.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
+struct _FBusServiceInfos;
+typedef struct _FBusServiceInfos FBusServiceInfos;
 
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
+FBusServiceInfos* fbus_service_infos_create(int capacity);
+FBusServiceInfo*  fbus_service_infos_find(FBusServiceInfos* thiz, const char* name);
+Ret fbus_service_infos_get_nr(FBusServiceInfos* thiz);
+Ret fbus_service_infos_add(FBusServiceInfos* thiz, FBusServiceInfo* service);
+FBusServiceInfo* fbus_service_infos_get(FBusServiceInfos* thiz, size_t index);
+Ret  fbus_service_infos_load_dir(FBusServiceInfos* services, const char* path);
+Ret  fbus_service_infos_load_file(FBusServiceInfos* services, const char* filename);
+void fbus_service_infos_destroy(FBusServiceInfos* thiz);
 
 FTK_END_DECLS
 
-#endif/*FTK_LABEL_H*/
+#endif/*FBUS_SERVICE_INFOS_H*/
 

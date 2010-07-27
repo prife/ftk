@@ -50,7 +50,6 @@ typedef Ret  (*FtkWidgetOnEvent)(FtkWidget* thiz, FtkEvent* event);
 typedef Ret  (*FtkWidgetOnPaint)(FtkWidget* thiz);
 typedef void (*FtkWidgetDestroy)(FtkWidget* thiz);
 
-
 struct _FtkWdiget
 {
 	int ref;

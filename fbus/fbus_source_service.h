@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File:    fbus_source_service.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   a source to handle service request.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,21 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
-
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
+#ifndef FBUS_SOURCE_SERVICE_H
+#define FBUS_SOURCE_SERVICE_H
+#include "ftk_source.h"
+#include "fbus_service.h"
+#include "fbus_stream.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
-
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
+FtkSource* fbus_source_service_create(FBusService* thiz, FBusStream* stream);
 
 FTK_END_DECLS
 
-#endif/*FTK_LABEL_H*/
+#endif/*FBUS_SOURCE_SERVICE_H*/
 

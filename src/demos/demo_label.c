@@ -49,9 +49,14 @@ int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(label, "中文文本");
 	
 	label = ftk_label_create(win, 10, 40, width - 20, 20);
-	ftk_widget_set_text(label, "English Text");
-	assert(strcmp(ftk_widget_get_text(label), "English Text") == 0);
+	ftk_widget_set_text(label, "English Text(center)");
+	ftk_label_set_alignment(label, FTK_ALIGN_CENTER);
+	assert(strcmp(ftk_widget_get_text(label), "English Text(center)") == 0);
 	
+	label = ftk_label_create(win, 10, 70, width - 20, 20);
+	ftk_widget_set_text(label, "English Text(right)");
+	ftk_label_set_alignment(label, FTK_ALIGN_RIGHT);
+
 	gc.bg.a = 0xff;
 	gc.bg.r = 0xF0;
 	gc.bg.g = 0xF0;

@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File: fbus_echo_common.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   stuff shared by service and client.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,29 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#ifndef FBUS_ECHO_COMMON_H
+#define FBUS_ECHO_COMMON_H
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
-
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
+#include "ftk_typedef.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
+typedef enum _FBusEchoReqCode
+{
+	FBUS_ECHO_CHAR,
+	FBUS_ECHO_SHORT,
+	FBUS_ECHO_INT,
+	FBUS_ECHO_STRING,
+	FBUS_ECHO_BINARY
+}FBusEchoReqCode;
 
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
+#define FBUS_SERVICE_ECHO "fbus.service.echo"
 
 FTK_END_DECLS
 
-#endif/*FTK_LABEL_H*/
+#endif/*FBUS_ECHO_COMMON_H*/
 

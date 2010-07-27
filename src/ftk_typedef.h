@@ -74,8 +74,16 @@ typedef enum _Ret
 	RET_QUIT,
 	RET_IGNORED,
 	RET_NO_TARGET,
+	RET_NOT_FOUND,
 	RET_OUT_OF_SPACE
 }Ret;
+
+typedef enum _FtkAlignment
+{
+	FTK_ALIGN_LEFT = 0,
+	FTK_ALIGN_RIGHT,
+	FTK_ALIGN_CENTER
+}FtkAlignment;
 
 typedef enum _FtkPixelFormat
 {

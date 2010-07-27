@@ -844,8 +844,8 @@ struct _FtkTextLayout
 	char* bidi_line;
 	unsigned long line_attr;
 	FtkWrapMode wrap_mode;
-	int v2l_l_line[FTK_LINE_CHAR_NR+1];
-	int v2l_v_line[4 * FTK_LINE_CHAR_NR+1];
+	int v2l_v_line[FTK_LINE_CHAR_NR+1];
+	int v2l_l_line[8 * FTK_LINE_CHAR_NR+1];
 };
 
 FtkTextLayout* ftk_text_layout_create(void)
@@ -926,17 +926,18 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 	int i = 0;
 	int extent = 0;
 	unsigned long attr = 0;
-
 	const char* end = NULL;
+	
 	return_val_if_fail(thiz != NULL && line != NULL, RET_FAIL);
 
 	if(thiz->pos >= thiz->len && thiz->line_pos >= thiz->line_len)
 	{
-		return RET_FAIL;
+		return RET_EOF;
 	}
 
-	line->pos_v2l = thiz->v2l_l_line;
+	line->pos_v2l = thiz->v2l_v_line;
 	line->attr = FTK_TEXT_ATTR_NORMAL;
+
 	if(thiz->line_pos >= thiz->line_len)
 	{
 		int line_len = 0;
@@ -957,7 +958,7 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 			free(thiz->bidi_line);
 		}
 
-		thiz->bidi_line = doCharBidi_UTF8(line_start, line_len, thiz->v2l_v_line, NULL, &attr);
+		thiz->bidi_line = doCharBidi_UTF8(line_start, line_len, thiz->v2l_l_line, NULL, &attr);
 		thiz->line_len = strlen(thiz->bidi_line);
 		thiz->line_attr = attr;
 	}
@@ -965,13 +966,15 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 	line->text = thiz->bidi_line + thiz->line_pos;
 	end = ftk_font_calc_str_visible_range(thiz->font, line->text, 0, -1, thiz->width, &extent);
 	line->len = end - line->text;
-	
+	line->extent = extent;
+
+	line->attr = thiz->line_attr;
 	if(thiz->line_attr & FTK_TEXT_ATTR_RTOL)
 	{
 		line->xoffset = thiz->width - extent;
 		for(i = 0; i < line->len && i < FTK_LINE_CHAR_NR; i++)
 		{
-			line->pos_v2l[i] =  thiz->v2l_l_line[thiz->line_pos + i] + thiz->pos - thiz->line_len;
+			line->pos_v2l[i] =  thiz->v2l_v_line[thiz->line_pos + i] + thiz->pos - thiz->line_len;
 		}
 	}
 	else

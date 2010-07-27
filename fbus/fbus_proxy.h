@@ -1,7 +1,8 @@
 /*
- * File: ftk_label.h    
+ * File: fbus_proxy.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   the proxy object in client side, help you to access remote 
+ *          object in server side.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +26,27 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#ifndef FBUS_PROXY_H
+#define FBUS_PROXY_H
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
-
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
+#include "fbus_parcel.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
+struct _FBusProxy;
+typedef struct _FBusProxy FBusProxy;
 
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
+FBusProxy*  fbus_proxy_create(const char* service);
+FBusParcel* fbus_proxy_get_parcel(FBusProxy* thiz);
+Ret  fbus_proxy_request(FBusProxy* thiz, FBusParcel* req_resp);
+Ret  fbus_proxy_set_notify_listener(FBusProxy* thiz, FtkListener listener, void* ctx);
+void fbus_proxy_destroy(FBusProxy* thiz);
 
 FTK_END_DECLS
 
-#endif/*FTK_LABEL_H*/
+#endif/*FBUS_PROXY_H*/
 

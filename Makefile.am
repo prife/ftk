@@ -1,4 +1,4 @@
-SUBDIRS=src data theme tools testdata doc
+SUBDIRS=src data theme tools testdata doc fbus
 if FTK_BACKEND_PSP
 else
 SUBDIRS+=script_binding apps

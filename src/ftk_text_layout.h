@@ -60,6 +60,7 @@ typedef enum _FtkWrapMode
 typedef struct _FtkTextLine
 {
 	int len;
+	int extent;
 	int xoffset;
 	int* pos_v2l;
 	const char* text;

@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File:    fbus_stream.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   stream common used functions.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,43 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#include "fbus_stream.h"
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
+int fbus_stream_read_n(FBusStream* thiz, char* buffer, size_t len)
+{
+	int ret = 0;
+	int remain = len;
+	return_val_if_fail(thiz != NULL && buffer != NULL, -1);
 
-#include "ftk_widget.h"
+	do
+	{
+		if((ret = fbus_stream_read(thiz, buffer + len - remain, remain)) > 0)
+		{
+			remain -= ret;
+		}
+	}while(remain > 0 && ret > 0);
 
-FTK_INHERITE_FROM(Widget)
+	return len - remain;
+}
 
-FTK_BEGIN_DECLS
+int fbus_stream_write_n(FBusStream* thiz, const char* buffer, size_t len)
+{
+	int ret = 0;
+	int remain = len;
+	return_val_if_fail(thiz != NULL && buffer != NULL, -1);
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
+	do
+	{
+		if((ret = fbus_stream_write(thiz, buffer + len - remain, remain)) > 0)
+		{
+			remain -= ret;
+		}
+	}while(remain > 0 && ret > 0);
 
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
-
-FTK_END_DECLS
-
-#endif/*FTK_LABEL_H*/
+	return len - remain;
+}
 

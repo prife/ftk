@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File: 
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,41 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#include "ftk_globals.h"
+#include "ftk_allocator_default.h"
+#include "fbus_service_manager.h"
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
+int main(int argc, char* argv[])
+{
+	int j = 0;
+	int i = 0;
+	int nr = 0;
+	FBusServiceInfo info = {0};
+	FBusServiceManager* thiz = NULL;
+	
+#ifndef USE_STD_MALLOC
+	ftk_set_allocator((ftk_allocator_default_create()));
+#endif
+	
+	for(j = 0; j < 1000; j++)
+	{
+		thiz = fbus_service_manager_create();
+		
+		assert(fbus_service_manager_get_nr(thiz, &nr) == RET_OK);
+		for(i = 0; i < nr; i++)
+		{
+			assert(fbus_service_manager_get(thiz, i, &info) == RET_OK);
+			assert(fbus_service_manager_start(thiz, info.name) == RET_OK);
+			assert(fbus_service_manager_query(thiz,  info.name, &info) == RET_OK);
+			assert(fbus_service_manager_start(thiz, info.name) == RET_OK);
+			assert(fbus_service_manager_stop(thiz, info.name) == RET_OK);
+		}
+		fbus_service_manager_destroy(thiz);
+	}
 
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
-
-FTK_BEGIN_DECLS
-
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
-
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
-
-FTK_END_DECLS
-
-#endif/*FTK_LABEL_H*/
-
+	return 0;
+}

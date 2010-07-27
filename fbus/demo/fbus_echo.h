@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File:    fbus_echo.h 
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   echo client api.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,30 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
+#ifndef FBUS_ECHO_H
+#define FBUS_ECHO_H
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
-
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
+#include "fbus_proxy.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
+typedef struct _FBusProxy FBusEcho;
 
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
+FBusEcho* fbus_echo_create();
+
+Ret fbus_echo_char(FBusEcho* thiz, char in, char* out);
+Ret fbus_echo_short(FBusEcho* thiz, short in, short* out);
+Ret fbus_echo_int(FBusEcho* thiz, int in, int* out);
+Ret fbus_echo_string(FBusEcho* thiz, const char* in, const char** out);
+Ret fbus_echo_data(FBusEcho* thiz, const char* in, size_t in_len, const char** out, size_t* out_len);
+
+void fbus_echo_destroy(FBusEcho* thiz);
 
 FTK_END_DECLS
 
-#endif/*FTK_LABEL_H*/
+#endif/*FBUS_ECHO_H*/
 

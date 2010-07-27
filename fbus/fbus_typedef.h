@@ -1,7 +1,7 @@
 /*
- * File: ftk_label.h    
+ * File:    fbus_typedef.h
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   label
+ * Brief:   common used stuff.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,25 +25,30 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-07-25 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
 
-#ifndef FTK_LABEL_H
-#define FTK_LABEL_H
-
-#include "ftk_widget.h"
-
-FTK_INHERITE_FROM(Widget)
+#ifndef FBUS_TYPEDEF_H
+#define FBUS_TYPEDEF_H
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <signal.h>
+#include "ftk_log.h"
+#include "ftk_globals.h"
+#include "ftk_allocator.h"
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int height);
-
-Ret ftk_label_set_alignment(FtkWidget* thiz, FtkAlignment alignment);
+typedef enum _FBusRespType
+{
+	FBUS_RESP_NORMAL,
+	FBUS_RESP_PUSH
+}FBusRespType;
 
 FTK_END_DECLS
 
-#endif/*FTK_LABEL_H*/
+#endif/*FBUS_TYPEDEF_H*/
 

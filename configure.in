@@ -177,5 +177,8 @@ AC_CONFIG_FILES([ftk.pc
                 tools/imconvert/Makefile
                 tools/codegen/Makefile
                 tools/codegen/idl/Makefile
+                fbus/Makefile
+                fbus/demo/Makefile
+                fbus/demo/echo.service
                 ])
 AC_OUTPUT
