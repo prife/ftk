@@ -112,6 +112,15 @@ fi
 
 AM_CONDITIONAL(ENABLE_FRIBIDI,  test "$enable_fribidi" = "yes")
 
+AC_ARG_ENABLE(vnc,
+  [  --enable-vnc            build with vnc support [[default=yes]]],,
+  enable_vnc=yes)
+
+if test "$enable_vnc" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_VNC"
+fi
+
+AM_CONDITIONAL(ENABLE_VNC,  test "$enable_vnc" = "yes")
 
 AC_ARG_ENABLE(handwrite,
   [  --enable-handwrite            build with handwrite support [[default=no]]],,
@@ -161,6 +170,7 @@ AC_CONFIG_FILES([ftk.pc
                 apps/desktop/Makefile
                 apps/desktop/icons/Makefile
                 apps/desktop/xul/Makefile
+                apps/desktop/libvncserver/Makefile
                 apps/calculator/Makefile
                 apps/calculator/icons/Makefile
                 apps/calculator/xul/Makefile
@@ -177,6 +187,7 @@ AC_CONFIG_FILES([ftk.pc
                 tools/imconvert/Makefile
                 tools/codegen/Makefile
                 tools/codegen/idl/Makefile
+                tools/fbusgen/Makefile
                 fbus/Makefile
                 fbus/demo/Makefile
                 fbus/demo/echo.service

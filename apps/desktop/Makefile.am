@@ -7,9 +7,16 @@ app_info_test_CFLAGS=-DAPP_INFO_TEST
 app_info_test_LDFLAGS=$(MYLDFLAGS)
 
 bin_PROGRAMS=desktop
-desktop_SOURCES=main.c app_info.c
-desktop_LDFLAGS=$(MYLDFLAGS) -ldl
+desktop_SOURCES=main.c app_info.c 
+desktop_LDFLAGS=$(MYLDFLAGS) -ldl 
 desktop_CFLAGS=-DAPP_DATA_DIR="\"$(datadir)/ftk/desktop\"" \
 	-DAPP_LOCAL_DATA_DIR="\"$(srcdir)\""
 
-EXTRA_DIST=app_info.h
+if ENABLE_VNC
+SUBDIRS += libvncserver .
+desktop_SOURCES += vnc_service.c
+desktop_CFLAGS += -I$(srcdir)/libvncserver
+desktop_LDFLAGS += $(builddir)/libvncserver/libvncserver.la -lpthread 
+endif
+
+EXTRA_DIST=app_info.h vnc_service.h

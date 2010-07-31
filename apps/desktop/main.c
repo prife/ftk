@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #include "ftk_xul.h"
 #include "app_info.h"
+#include "vnc_service.h"
 #include "ftk_animator_expand.h"
 
 static int g_desktop_horizonal = 0;
@@ -170,7 +171,7 @@ static Ret update_time(void* ctx)
 	struct tm* t = localtime(&now);
 
 	panel = ftk_default_status_panel();
-	snprintf(text, sizeof(text)-1, "%d:%d", t->tm_hour, t->tm_min);
+	snprintf(text, sizeof(text)-1, "%d:%02d", t->tm_hour, t->tm_min);
 	item = ftk_widget_lookup(panel, IDC_TIME_ITEM);
 	ftk_widget_set_text(item, text);
 	ftk_logd("%s\n", __func__);
@@ -200,10 +201,32 @@ static Ret update_time(void* ctx)
 
 static Ret on_shutdown(void* ctx, void* obj)
 {
+#ifdef USE_VNC
+	if(ftk_display_vnc_is_active())
+	{
+		ftk_display_vnc_quit();
+	}
+#endif
 	ftk_quit();
 
 	return RET_OK;
 }
+
+#ifdef USE_VNC
+static Ret on_vnc(void* ctx, void* obj)
+{
+	if(ftk_display_vnc_is_active())
+	{
+		ftk_display_vnc_stop();
+	}
+	else
+	{
+		ftk_display_vnc_start();
+	}
+	
+	return RET_OK;
+}
+#endif
 
 static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 {
@@ -211,6 +234,20 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 	ftk_widget_set_text(item, "Shutdown");
 	ftk_menu_item_set_clicked_listener(item, on_shutdown, ctx);
 	ftk_widget_show(item, 1);
+
+#ifdef USE_VNC
+	item = ftk_menu_item_create(menu_panel);
+	if(ftk_display_vnc_is_active())
+	{
+		ftk_widget_set_text(item, "Stop VNC");
+	}
+	else
+	{
+		ftk_widget_set_text(item, "Start VNC");
+	}
+	ftk_menu_item_set_clicked_listener(item, on_vnc, ctx);
+	ftk_widget_show(item, 1);
+#endif
 
 	return	RET_OK;
 }

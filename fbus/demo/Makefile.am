@@ -22,3 +22,4 @@ echo_service_LDFLAGS=$(MYLDFLAGS) $(abs_top_builddir)/fbus/libfbus.la
 servicedir=$(datadir)/ftk/base/services
 service_DATA=echo.service
 
+EXTRA_DIST=fbus_echo_common.h  fbus_echo.h
