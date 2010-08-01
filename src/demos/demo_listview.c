@@ -86,7 +86,7 @@ int FTK_MAIN(int argc, char* argv[])
 	g_index = 0;
 	for(g_index = 0; g_index < 4; g_index++)
 	{
-		ftk_snprintf(text, sizeof(text), "滚动文字:Only those who attempt the absurd can achieve the impossible.第%04d项", g_index);
+		ftk_snprintf(text, sizeof(text), "滚动文字:Only those who attempt the absurd can achieve the impossible.", g_index);
 		info.text = (text);
 		info.left_icon = left_icon;
 		info.right_icon = right_icon;
