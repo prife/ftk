@@ -71,7 +71,11 @@ const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, in
 			prev_iter = iter;
 			unicode = utf8_get_char(iter, &iter);
 			if(unicode == '\r') continue;
-			if(unicode == 0 || unicode == 0xffff || unicode == '\n') 
+			if(unicode == 0 || unicode == 0xffff)
+			{
+				break;
+			}
+			else if( unicode == '\n') 
 			{	
 				prev_iter = iter;
 				break;
