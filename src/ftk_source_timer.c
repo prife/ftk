@@ -71,6 +71,17 @@ Ret ftk_source_timer_reset(FtkSource* thiz)
 	return RET_OK;
 }
 
+Ret ftk_source_timer_modify(FtkSource* thiz, int interval)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->interval = interval;
+	ftk_source_timer_calc_timer(priv);
+
+	return RET_OK;
+}
+
 static Ret ftk_source_timer_dispatch(FtkSource* thiz)
 {
 	Ret ret = RET_FAIL;

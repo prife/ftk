@@ -212,6 +212,11 @@ Ret ftk_widget_invalidate(FtkWidget* thiz)
 
 Ret ftk_widget_update(FtkWidget* thiz)
 {
+	return ftk_widget_update_rect(thiz, NULL);
+}
+
+Ret ftk_widget_update_rect(FtkWidget* thiz, FtkRect* rect)
+{
 	FtkEvent event = {0};
 	FtkWidget* window = NULL;
 	FtkWidgetInfo* priv = NULL;
@@ -221,11 +226,19 @@ Ret ftk_widget_update(FtkWidget* thiz)
 
 	priv =  thiz->priv;
 	event.type = FTK_EVT_UPDATE;
-	event.u.rect.x = ftk_widget_left_abs(thiz);
-	event.u.rect.y = ftk_widget_top_abs(thiz);
-	event.u.rect.width = priv->width;
-	event.u.rect.height = priv->height;
-		
+	if(rect == NULL)
+	{
+		event.u.rect.x = ftk_widget_left_abs(thiz);
+		event.u.rect.y = ftk_widget_top_abs(thiz);
+		event.u.rect.width = priv->width;
+		event.u.rect.height = priv->height;
+	}
+	else
+	{
+		//ftk_logd("%s: x=%d y=%d w=%d h=%d\n", __func__, rect->x, rect->y, rect->width, rect->height);
+		event.u.rect = *rect;
+	}
+
 	return ftk_widget_event(window, &event);
 }
 

@@ -82,6 +82,7 @@ int ftk_widget_is_focused(FtkWidget* thiz);
 int ftk_widget_is_active(FtkWidget* thiz);
 int ftk_widget_id(FtkWidget* thiz);
 Ret ftk_widget_update(FtkWidget* thiz);
+Ret ftk_widget_update_rect(FtkWidget* thiz, FtkRect* rect);
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz);
 FtkCanvas* ftk_widget_canvas(FtkWidget* thiz);
 int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr);

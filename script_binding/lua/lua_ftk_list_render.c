@@ -13,13 +13,15 @@ static int lua_ftk_list_render_init(lua_State* L)
 	Ret retv;
 	FtkListRender* thiz;
 	FtkListModel* model;
-	int param_ok = tolua_isusertype(L, 1, "FtkListRender", 0, &err) && tolua_isusertype(L, 2, "FtkListModel", 0, &err);
+	FtkWidget* list_view;
+	int param_ok = tolua_isusertype(L, 1, "FtkListRender", 0, &err) && tolua_isusertype(L, 2, "FtkListModel", 0, &err) && tolua_isusertype(L, 3, "FtkWidget", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
 	model = tolua_tousertype(L, 2, 0);
-	retv = ftk_list_render_init(thiz, model);
+	list_view = tolua_tousertype(L, 3, 0);
+	retv = ftk_list_render_init(thiz, model, list_view);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;

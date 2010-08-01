@@ -37,6 +37,7 @@ FTK_BEGIN_DECLS
 FtkSource* ftk_source_timer_create(int interval, FtkTimer action, void* user_data);
 
 Ret ftk_source_timer_reset(FtkSource* thiz);
+Ret ftk_source_timer_modify(FtkSource* thiz, int interval);
 
 FTK_END_DECLS
 

@@ -202,3 +202,16 @@ const char* ftk_normalize_path(char* path)
 	return path;
 }
 
+const char* utf8_move_forward(const char* str, int nr)
+{
+	int i = 0;
+	const char* next = str;
+
+	for(i = 0; i < nr; i++)
+	{
+		utf8_get_char(next, &next);
+	}
+
+	return next;
+}
+

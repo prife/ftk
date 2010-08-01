@@ -40,7 +40,7 @@ FTK_BEGIN_DECLS
 struct _FtkListRender;
 typedef struct _FtkListRender FtkListRender;
 
-typedef Ret  (*FtkListRenderInit)(FtkListRender* thiz, FtkListModel* model);
+typedef Ret  (*FtkListRenderInit)(FtkListRender* thiz, FtkListModel* model, FtkWidget* list_view);
 typedef Ret  (*FtkListRenderPaint)(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h);
 typedef void (*FtkListRenderDestroy)(FtkListRender* thiz);
 
@@ -53,11 +53,11 @@ struct _FtkListRender
 	char priv[1];
 };
 
-static inline Ret ftk_list_render_init(FtkListRender* thiz, FtkListModel* model)
+static inline Ret ftk_list_render_init(FtkListRender* thiz, FtkListModel* model, FtkWidget* list_view)
 {
 	return_val_if_fail(thiz != NULL && thiz->init != NULL, RET_FAIL);
 
-	return thiz->init(thiz, model);
+	return thiz->init(thiz, model, list_view);
 }
 
 static inline Ret ftk_list_render_paint(FtkListRender* thiz, FtkCanvas* canvas, int pos, int x, int y, int w, int h)

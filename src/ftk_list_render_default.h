@@ -33,10 +33,12 @@
 #define FTK_LIST_RENDER_DEFAULT_H
 
 #include "ftk_list_render.h"
+#include "ftk_list_view.h"
 
 FTK_BEGIN_DECLS
 
 FtkListRender* ftk_list_render_default_create(void);
+Ret ftk_list_render_default_set_marquee_attr(FtkListRender* thiz, FtkMarqueeAttr marquee_attr);
 
 FTK_END_DECLS
 

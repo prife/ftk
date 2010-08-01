@@ -103,14 +103,18 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
+		int xoffset = 0;
+		int yoffset = FTK_HALF(height);
+		FtkTextLine line = {0};
 		const char* text = ftk_widget_get_text(thiz);
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, text, -1);
-		int dx = FTK_HALF(width - fw);
-		int dy = FTK_HALF(height);
+		FtkTextLayout* text_layout = ftk_default_text_layout();
 	
-		assert(fh < height && fw < width);
-		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
+		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			xoffset = FTK_HALF(width - line.extent); 
+			ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, -1, 1);
+		}
 	}
 
 	FTK_END_PAINT();

@@ -59,7 +59,7 @@ int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
-	char text[32] = {0};
+	char text[256] = {0};
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* list = NULL;
@@ -86,7 +86,7 @@ int FTK_MAIN(int argc, char* argv[])
 	g_index = 0;
 	for(g_index = 0; g_index < 4; g_index++)
 	{
-		ftk_snprintf(text, sizeof(text), "item%04d", g_index);
+		ftk_snprintf(text, sizeof(text), "滚动文字:Only those who attempt the absurd can achieve the impossible.第%04d项", g_index);
 		info.text = (text);
 		info.left_icon = left_icon;
 		info.right_icon = right_icon;
@@ -94,6 +94,7 @@ int FTK_MAIN(int argc, char* argv[])
 		ftk_list_model_add(model, &info);
 	}
 
+	ftk_list_render_default_set_marquee_attr(render, FTK_MARQUEE_AUTO | FTK_MARQUEE_RIGHT2LEFT | FTK_MARQUEE_FOREVER);
 	ftk_list_view_init(list, model, render, 40);
 	ftk_list_model_unref(model);
 

@@ -78,6 +78,17 @@ typedef enum _Ret
 	RET_OUT_OF_SPACE
 }Ret;
 
+typedef enum _FtkMarqueeAttr
+{
+	FTK_MARQUEE_NONE = 0,
+	FTK_MARQUEE_AUTO    = 1,    /*determine by the text size automatically.*/
+	FTK_MARQUEE_ALWAYS  = 2,    /*always marquee the text*/
+	FTK_MARQUEE_ONCE    = 4,    /*run once and then stop*/
+	FTK_MARQUEE_FOREVER = 8,    /*run forever*/
+	FTK_MARQUEE_DOWN2UP = 16,   /*scroll down to up*/
+	FTK_MARQUEE_RIGHT2LEFT = 32 /*scroll right to left*/
+}FtkMarqueeAttr;
+
 typedef enum _FtkAlignment
 {
 	FTK_ALIGN_LEFT = 0,
@@ -203,8 +214,8 @@ typedef struct _FtkCommitInfo
 #define FTK_ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
 
 /*for customize*/
-#define FTK_H_MARGIN            2
-#define FTK_V_MARGIN            2
+#define FTK_H_MARGIN            3
+#define FTK_V_MARGIN            3
 #define FTK_MAX_PATH            260
 #define FTK_MAX_WINDOWS         32
 #define FTK_SPACE_WIDTH         5
