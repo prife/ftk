@@ -125,7 +125,9 @@ Ret fbus_service_infos_add(FBusServiceInfos* thiz, FBusServiceInfo* service)
 	service->port = thiz->port + thiz->size;
 	memcpy(thiz->service_infos+thiz->size, service, sizeof(FBusServiceInfo));
 	thiz->size++;
-	
+
+	ftk_logd("add: port=%d name=%s exec=%s\n", service->port, service->name, service->exec);
+
 	return RET_OK;
 }
 

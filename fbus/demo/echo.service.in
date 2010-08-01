@@ -1,2 +1,2 @@
-<service name="echo" exec="@prefix@/bin/echo_service" start_type="on_load" life_cycle="longlive"/>
+<service name="fbus.service.echo" exec="@prefix@/bin/echo_service" start_type="on_load" life_cycle="longlive"/>
 
