@@ -65,6 +65,7 @@ static gboolean coder_client_end_interface(Coder* thiz)
 	fp = fopen(h_filename, "w+");
 	if(fp != NULL)
 	{
+		coder_write_header(fp);
 		fprintf(fp, "#ifndef %s_CLIENT_H\n", priv->interface_upper);
 		fprintf(fp, "#define %s_CLIENT_H\n\n", priv->interface_upper);
 		fprintf(fp, "#include \"fbus_typedef.h\"\n\n");
@@ -81,6 +82,7 @@ static gboolean coder_client_end_interface(Coder* thiz)
 	fp = fopen(c_filename, "w+");
 	if(fp != NULL)
 	{
+		coder_write_header(fp);
 		fprintf(fp, "#include \"fbus_proxy.h\"\n");
 		fprintf(fp, "#include \"%s_share.h\"\n\n", priv->interface_lower);
 		fprintf(fp, "#include \"%s\"\n\n", h_filename);

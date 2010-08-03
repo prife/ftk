@@ -61,6 +61,7 @@ static gboolean coder_share_end_interface(Coder* thiz)
 	fp = fopen(filename, "w+");
 	if(fp != NULL)
 	{
+		coder_write_header(fp);
 		fprintf(fp, "#ifndef %s_SHARE_H\n", priv->interface_upper);
 		fprintf(fp, "#define %s_SHARE_H\n\n", priv->interface_upper);
 		fprintf(fp, "#include \"fbus_typedef.h\"\n\n");

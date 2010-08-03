@@ -4,9 +4,13 @@ SUBDIRS=. im os backend compiler demos test
 
 lib_LTLIBRARIES=libftk.la
 
-LINUX_NATIVE=$(srcdir)/backend/fb/ftk_display_fb.c \
-	$(srcdir)/backend/fb/ftk_source_input.c \
-	$(srcdir)/backend/fb/ftk_backend_fb.c
+LINUX_FB=$(srcdir)/backend/native/ftk_display_fb.c \
+	$(srcdir)/backend/native/ftk_source_input.c \
+	$(srcdir)/backend/native/ftk_backend_fb.c
+
+LINUX_ST7781=$(srcdir)/backend/native/ftk_display_st7781.c \
+	$(srcdir)/backend/native/ftk_source_input.c \
+	$(srcdir)/backend/native/ftk_backend_st7781.c
 
 LINUX_X11=$(srcdir)/backend/x11-emu/ftk_display_x11.c \
 	$(srcdir)/backend/x11-emu/ftk_source_x11.c \
@@ -17,7 +21,7 @@ LINUX_DFB=$(srcdir)/backend/directfb/ftk_display_dfb.c \
 	$(srcdir)/backend/directfb/ftk_backend_dfb.c
 
 LINUX_SIGMA=$(srcdir)/backend/sigma/ftk_backend_sigma.c \
-	$(srcdir)/backend/fb/ftk_source_input.c \
+	$(srcdir)/backend/native/ftk_source_input.c \
 	$(srcdir)/backend/sigma/ftk_display_sigma.c
 
 PSP=$(srcdir)/backend/psp/ftk_backend_psp.c \
@@ -70,7 +74,8 @@ libftk_la_SOURCES += im/ftk_stroke_painter_cairo.c
 endif
 
 if ENABLE_TSLIB
-LINUX_NATIVE+=$(srcdir)/backend/fb/ftk_source_tslib.c 
+LINUX_FB+=$(srcdir)/backend/native/ftk_source_tslib.c 
+LINUX_ST7781+=$(srcdir)/backend/native/ftk_source_tslib.c 
 endif
 
 if FONT_ENGINE_FREETYPE
@@ -82,7 +87,11 @@ libftk_la_SOURCES+=fontdata.c ftk_font_default.c
 endif
 
 if FTK_BACKEND_FB
-libftk_la_SOURCES+=$(LINUX_NATIVE) $(OS_LINUX)
+libftk_la_SOURCES+=$(LINUX_FB) $(OS_LINUX)
+endif
+
+if FTK_BACKEND_ST7781
+libftk_la_SOURCES+=$(LINUX_ST7781) $(OS_LINUX)
 endif
 
 if FTK_BACKEND_X11
@@ -101,7 +110,7 @@ endif
 if FTK_BACKEND_SIGMA
 libftk_la_SOURCES+=$(LINUX_SIGMA) $(OS_LINUX)
 libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/sigma
-libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/fb
+libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/native
 endif
 
 if FTK_BACKEND_PSP

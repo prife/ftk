@@ -241,7 +241,7 @@ FBusService* fconf_service_create(void)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		priv->impl = fconf_xml_create();
+		priv->impl = fconf_xml_create(NULL);
 		thiz->get_name = fconf_service_get_name;
 		thiz->on_client_connect = fconf_service_on_client_connect;
 		thiz->on_client_disconnect = fconf_service_on_client_disconnect;

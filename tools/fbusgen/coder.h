@@ -167,5 +167,6 @@ char* coder_name_to_upper(const char* src, char* dst, int skip);
 char* coder_name_to_lower(const char* src, char* dst);
 const char* coder_to_upper(char* src);
 const char* coder_to_lower(char* src);
+void coder_write_header(FILE* fp);
 
 #endif/*CODER_H*/

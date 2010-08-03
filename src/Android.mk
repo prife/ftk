@@ -2,7 +2,7 @@ LOCAL_PATH:= $(call my-dir)
 FTK_CFLAGS :=	-DHAS_PNG -DHAS_JPEG -DHAS_BMP -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"/data/ftk/base\"" \
 	-DFTK_FB_NAME="\"/dev/graphics/fb0\"" -DUSE_LINUX_NATIVE -DLOCAL_DATA_DIR="\"./ftk/base\""\
 	-DFTK_DATA_ROOT="\"/data/ftk\"" -DTESTDATA_DIR="\"/data/ftk/testdata\"" \
-	-I$(LOCAL_PATH)/os/linux -I$(LOCAL_PATH)/backend/fb -DFTK_SUPPORT_C99 \
+	-I$(LOCAL_PATH)/os/linux -I$(LOCAL_PATH)/backend/native -DFTK_SUPPORT_C99 \
 	-I$(LOCAL_PATH)/im -DLINUX \
 	-DFTK_CNF="\"/data/ftk/ftk.cnf\"" 
 
@@ -10,9 +10,9 @@ include $(CLEAR_VARS)
 OS_LINUX=\
 	$(srcdir)/os/linux/ftk_mmap_linux.c  \
 	$(srcdir)/os/linux/ftk_linux.c 
-LINUX_NATIVE=$(srcdir)/backend/fb/ftk_display_fb.c \
-	$(srcdir)/backend/fb/ftk_source_input.c \
-	$(srcdir)/backend/fb/ftk_backend_fb.c
+LINUX_NATIVE=$(srcdir)/backend/native/ftk_display_fb.c \
+	$(srcdir)/backend/native/ftk_source_input.c \
+	$(srcdir)/backend/native/ftk_backend_fb.c
 LOCAL_SRC_FILES := $(OS_LINUX) $(LINUX_NATIVE) \
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	ftk_label.c           ftk_source_timer.c \

@@ -6,7 +6,12 @@ noinst_PROGRAMS=label_test widget_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
-	lookup_table_test config_test
+	lookup_table_test config_test 
+
+bin_PROGRAMS=display_test
+display_test_SOURCES=display_test.c
+display_test_LDFLAGS=$(MYLDFLAGS)
+display_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/native
 
 if FTK_BACKEND_SIGMA
 noinst_PROGRAMS+=backend_sigma_test
@@ -16,19 +21,16 @@ backend_sigma_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/sigma
 endif
 
 if FTK_BACKEND_FB
-noinst_PROGRAMS +=display_fb_test input_test
-display_fb_test_SOURCES=display_fb_test.c
-display_fb_test_LDFLAGS=$(MYLDFLAGS)
-display_fb_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
+noinst_PROGRAMS +=input_test
 
 input_test_SOURCES=input_test.c
 input_test_LDFLAGS=$(MYLDFLAGS)
-input_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
+input_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/native
 if ENABLE_TSLIB
 noinst_PROGRAMS +=tslib_test
 tslib_test_SOURCES=tslib_test.c
 tslib_test_LDFLAGS=$(MYLDFLAGS)
-tslib_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/fb
+tslib_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/native
 endif
 endif
 

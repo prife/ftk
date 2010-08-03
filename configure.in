@@ -21,7 +21,7 @@ AC_CHECK_LIB([png], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h execinfo.h])
 
-AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-native|linux-vlcd|linux-dfb|linux-sigma|psp],
+AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-fb|linux-vlcd|linux-dfb|linux-st7781|linux-sigma|psp],
                     [use which display/input backend])])
 
 case "$with_backend" in
@@ -31,7 +31,7 @@ case "$with_backend" in
 		LDFLAGS="$LDFLAGS -L/usr/X11R6/lib -lX11 -lXext";;
 	linux-vlcd*)
 		backend="fb"
-		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE -DPC_EMU";;
+		CFLAGS="$CFLAGS -DUSE_LINUX_FB -DUSE_LINUX_NATIVE -DPC_EMU";;
 	linux-dfb*)
 		backend="dfb"
 		DFB_VERSION=1.2.0
@@ -47,15 +47,19 @@ case "$with_backend" in
 		backend="psp"
 		CFLAGS="$CFLAGS $PSP_CFLAGS";
 		LDFLAGS="$LDFLAGS $PSP_OBJS $PSP_LIBS $PSP_LDFLAGS";;
+	linux-st7781)
+		backend="st7781"
+		CFLAGS="$CFLAGS -DUSE_LINUX_ST7781 -DUSE_LINUX_NATIVE ";;
 	*)
 		backend="fb"
-		CFLAGS="$CFLAGS -DUSE_LINUX_NATIVE";;
+		CFLAGS="$CFLAGS -DUSE_LINUX_FB -DUSE_LINUX_NATIVE ";;
 esac
 
 echo with_backend=$with_backend
 
 AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
 AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
+AM_CONDITIONAL(FTK_BACKEND_ST7781, test "$backend" = "st7781")
 AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
 AM_CONDITIONAL(FTK_BACKEND_SIGMA, test "$backend" = "sigma")
 AM_CONDITIONAL(FTK_BACKEND_PSP, test "$backend" = "psp")
@@ -150,7 +154,7 @@ AC_CONFIG_FILES([ftk.pc
                 src/test/Makefile
                 src/backend/Makefile
                 src/backend/directfb/Makefile
-                src/backend/fb/Makefile
+                src/backend/native/Makefile
                 src/backend/ucosii/Makefile
                 src/backend/sigma/Makefile
                 src/backend/psp/Makefile
@@ -191,5 +195,8 @@ AC_CONFIG_FILES([ftk.pc
                 fbus/Makefile
                 fbus/demo/Makefile
                 fbus/demo/echo.service
+                services/Makefile
+                services/fconf/Makefile
+                services/fconf/fconf.service
                 ])
 AC_OUTPUT

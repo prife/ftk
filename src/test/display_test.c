@@ -29,7 +29,7 @@
  *
  */
 
-#include "ftk_display_fb.h"
+#include "ftk.h"
 
 void red_bitmap(FtkBitmap* bitmap)
 {
@@ -119,10 +119,11 @@ void mire_bitmap(FtkBitmap* bitmap)
 
 int main(int argc, char* argv[])
 {
-	ftk_set_allocator(ftk_allocator_default_create());
-	const char* filename = argv[1] != NULL ? argv[1] : FTK_FB_NAME;
-	FtkDisplay* thiz = ftk_display_fb_create(filename);
+	FtkDisplay* thiz = NULL;
 
+	ftk_init(argc, argv);
+
+	thiz = ftk_default_display();
 	if(thiz != NULL)
 	{
 		FtkBitmap* bitmap = NULL;

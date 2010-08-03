@@ -67,6 +67,7 @@ static gboolean coder_xxxx_end_interface(Coder* thiz)
 	fp = fopen(h_filename, "w+");
 	if(fp != NULL)
 	{
+		coder_write_header(fp);
 		fprintf(fp, "#ifndef %s_IMPL_H\n", priv->interface_upper);
 		fprintf(fp, "#define %s_IMPL_H\n\n", priv->interface_upper);
 		fprintf(fp, "#include \"fbus_typedef.h\"\n\n");
@@ -83,6 +84,7 @@ static gboolean coder_xxxx_end_interface(Coder* thiz)
 	fp = fopen(c_filename, "w+");
 	if(fp != NULL)
 	{
+		coder_write_header(fp);
 		fprintf(fp, "#include \"%s\"\n\n", h_filename);
 		fprintf(fp, "typedef struct _PrivInfo\n");
 		fprintf(fp, "{\n");
