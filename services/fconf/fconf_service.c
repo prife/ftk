@@ -3,13 +3,20 @@
  */
 
 #include "fconf.h"
+#include "ftk_globals.h"
+#include "ftk_main_loop.h"
 #include "fconf_xml.h"
+#include "ftk_source_timer.h"
 #include "fconf_share.h"
 #include "fconf_service.h"
 
 typedef struct _PrivInfo
 {
 	FConf* impl;
+	int client_id;
+	int peer_id; /*the port in client side*/
+	FBusParcel* parcel;
+	FtkSource* timer_save;
 }PrivInfo;
 
 static Ret fconf_marshal_lock(FBusService* thiz, FBusParcel* req_resp)
@@ -104,7 +111,6 @@ static Ret fconf_marshal_get(FBusService* thiz, FBusParcel* req_resp)
 		if(ret == RET_OK)
 		{
 			fbus_parcel_write_string(req_resp, value);
-			FTK_FREE(value);
 		}
 	}
 
@@ -155,7 +161,6 @@ static Ret fconf_marshal_get_child(FBusService* thiz, FBusParcel* req_resp)
 		if(ret == RET_OK)
 		{
 			fbus_parcel_write_string(req_resp, child);
-			FTK_FREE(child);
 		}
 	}
 
@@ -180,8 +185,10 @@ static Ret fconf_service_on_client_disconnect(FBusService* thiz, int client_id)
 
 static Ret fconf_service_handle_request(FBusService* thiz, int client_id, FBusParcel* req_resp)
 {
+	DECL_PRIV(thiz, priv);
 	int req_code = fbus_parcel_get_int(req_resp);
-
+	
+	priv->client_id = client_id;
 	switch(req_code)
 	{
 		case FCONF_LOCK:
@@ -221,6 +228,14 @@ static Ret fconf_service_handle_request(FBusService* thiz, int client_id, FBusPa
 		}
 		default:break;
 	}
+
+	if(fconf_xml_is_dirty(priv->impl) && priv->timer_save->ref < 2)
+	{
+		ftk_logd("%s: timer save %d\n", __func__, priv->timer_save->ref);
+		ftk_source_ref(priv->timer_save);
+		ftk_main_loop_add_source(ftk_default_main_loop(), priv->timer_save);	
+	}
+
 	return RET_OK;
 }
 
@@ -229,10 +244,40 @@ static void fconf_service_destroy(FBusService* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
+		fbus_parcel_destroy(priv->parcel);
 		fconf_destroy(priv->impl);
 		FTK_FREE(thiz);
 	}
 	return;
+}
+
+static Ret on_changed(void* ctx, int change_by_self, FConfChangeType type, const char* xpath, const char* value)
+{
+	FBusService* thiz = ctx;
+	DECL_PRIV(thiz, priv);
+
+	fbus_parcel_reset(priv->parcel);
+	fbus_parcel_write_int(priv->parcel, type);
+	fbus_parcel_write_string(priv->parcel, xpath);
+
+	if(value != NULL)
+	{
+		fbus_parcel_write_string(priv->parcel, value);
+	}
+	fbus_service_notify_all(thiz, priv->client_id, priv->parcel);
+	ftk_logd("%s: client_id=%d %d %d %s %s\n", __func__, priv->client_id, change_by_self, type, xpath, value);
+
+	return RET_OK;
+}
+
+static Ret timer_save_func(void* ctx)
+{
+	FBusService* thiz = ctx;
+	DECL_PRIV(thiz, priv);
+
+	fconf_xml_save(priv->impl);
+
+	return RET_REMOVE;
 }
 
 FBusService* fconf_service_create(void)
@@ -241,13 +286,16 @@ FBusService* fconf_service_create(void)
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
-		priv->impl = fconf_xml_create(NULL);
+		priv->parcel = fbus_parcel_create(1024);
+		priv->timer_save = ftk_source_timer_create(10000, timer_save_func, thiz);
+		priv->impl = fconf_xml_create(DATA_DIR"/config");
 		thiz->get_name = fconf_service_get_name;
 		thiz->on_client_connect = fconf_service_on_client_connect;
 		thiz->on_client_disconnect = fconf_service_on_client_disconnect;
 		thiz->handle_request = fconf_service_handle_request;
 		thiz->destroy = fconf_service_destroy;
 		fbus_service_register(thiz);
+		fconf_reg_changed_notify(priv->impl, on_changed, thiz);
 	}
 
 	return thiz;

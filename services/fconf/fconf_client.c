@@ -10,6 +10,8 @@
 typedef struct _PrivInfo
 {
 	FBusProxy* proxy;
+	FConfOnChanged on_changed;
+	void* on_changed_ctx;
 }PrivInfo;
 
 static Ret fconf_client_lock(FConf* thiz)
@@ -147,6 +149,47 @@ static Ret fconf_client_get_child(FConf* thiz, const char* xpath, int index, cha
 	return ret;
 }
 
+static Ret fconf_client_on_server_push(void* ctx, FBusPushTrigger trigger, FBusParcel* parcel)
+{
+	int type = 0;
+	FConf* thiz = ctx;
+	const char* path = NULL;
+	const char* value = NULL;
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && parcel != NULL, RET_FAIL);
+
+	if(priv->on_changed != NULL)
+	{
+		type = fbus_parcel_get_int(parcel);
+		path = fbus_parcel_get_string(parcel);
+		if(type != FCONF_CHANGED_BY_REMOVE)
+		{
+			value = fbus_parcel_get_string(parcel);
+		}
+		priv->on_changed(priv->on_changed_ctx, trigger == FBUS_TRIGGER_BY_SELF, type, path, value);
+	}
+
+	return RET_OK;
+}
+
+static Ret fconf_client_reg_changed_notify(FConf* thiz, FConfOnChanged on_changed, void* ctx)
+{
+	DECL_PRIV(thiz, priv);
+
+	priv->on_changed = on_changed;
+	priv->on_changed_ctx = ctx;
+
+	if(priv->on_changed != NULL)
+	{
+		fbus_proxy_set_notify_listener(priv->proxy, fconf_client_on_server_push, thiz);
+	}
+	else
+	{
+		fbus_proxy_set_notify_listener(priv->proxy, NULL, NULL);
+	}
+	return RET_OK;
+}
+
 
 static void fconf_client_destroy(FConf* thiz)
 {
@@ -174,6 +217,7 @@ FConf* fconf_client_create(void)
 		thiz->get = fconf_client_get;
 		thiz->get_child_count = fconf_client_get_child_count;
 		thiz->get_child = fconf_client_get_child;
+		thiz->reg_changed_notify = fconf_client_reg_changed_notify;
 		thiz->destroy = fconf_client_destroy;
 	}
 

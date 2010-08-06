@@ -12,6 +12,15 @@ FTK_BEGIN_DECLS
 struct _FConf;
 typedef struct _FConf FConf;
 
+typedef enum _FConfChangeType
+{
+	FCONF_CHANGED_BY_SET = 0x74657300,
+	FCONF_CHANGED_BY_ADD,
+	FCONF_CHANGED_BY_REMOVE
+}FConfChangeType;
+
+typedef Ret(*FConfOnChanged)(void* ctx, int changed_by_self, FConfChangeType type, const char* xpath, const char* value);
+
 typedef Ret (*FConfLock)(FConf* thiz);
 typedef Ret (*FConfUnlock)(FConf* thiz);
 typedef Ret (*FConfRemove)(FConf* thiz, const char* xpath);
@@ -19,17 +28,19 @@ typedef Ret (*FConfSet)(FConf* thiz, const char* xpath, const char* value);
 typedef Ret (*FConfGet)(FConf* thiz, const char* xpath, char** value);
 typedef Ret (*FConfGetChildCount)(FConf* thiz, const char* xpath, int* count);
 typedef Ret (*FConfGetChild)(FConf* thiz, const char* xpath, int index, char** child);
+typedef Ret (*FConfRegChangedNotify)(FConf* thiz, FConfOnChanged on_changed, void* ctx);
 typedef void (*FConfDestroy)(FConf* thiz);
 
 struct _FConf
 {
 	FConfLock lock;
 	FConfUnlock unlock;
-	FConfRemove remove;
 	FConfSet set;
 	FConfGet get;
-	FConfGetChildCount get_child_count;
+	FConfRemove remove;
 	FConfGetChild get_child;
+	FConfGetChildCount get_child_count;
+	FConfRegChangedNotify reg_changed_notify;
 	FConfDestroy destroy;
 
 	char priv[1];
@@ -82,6 +93,13 @@ static inline Ret fconf_get_child(FConf* thiz, const char* xpath, int index, cha
 	return_val_if_fail(thiz != NULL && thiz->get_child != NULL, RET_FAIL);
 
 	return thiz->get_child(thiz, xpath, index, child);
+}
+
+static inline Ret fconf_reg_changed_notify(FConf* thiz, FConfOnChanged on_changed, void* ctx)
+{
+	return_val_if_fail(thiz != NULL && thiz->reg_changed_notify != NULL, RET_FAIL);
+
+	return thiz->reg_changed_notify(thiz, on_changed, ctx);
 }
 
 static inline void fconf_destroy(FConf* thiz)

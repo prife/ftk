@@ -7,6 +7,7 @@ FTK_BEGIN_DECLS
 
 FConf* fconf_xml_create(const char* dir);
 Ret fconf_xml_save(FConf* thiz);
+int fconf_xml_is_dirty(FConf* thiz);
 
 FTK_END_DECLS
 

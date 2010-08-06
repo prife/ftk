@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include "ftk_path.h"
 #include "fconf_xml.h"
+#include "ftk_allocator.h"
 
 typedef enum _XmlNodeAttr
 {
@@ -21,7 +23,7 @@ typedef struct _XmlNode
 static XmlNode* xml_node_create(const char* name, const char* value)
 {
 	XmlNode* node = NULL;
-	return_val_if_fail(name != NULL && value != NULL, NULL);
+	return_val_if_fail(name != NULL, NULL);
 
 	node = FTK_ZALLOC(sizeof(XmlNode));
 
@@ -30,7 +32,10 @@ static XmlNode* xml_node_create(const char* name, const char* value)
 		node->name = ftk_strdup(name);
 		if(node->name != NULL)
 		{
-			node->value = ftk_strdup(value);
+			if(value != NULL)
+			{
+				node->value = ftk_strdup(value);
+			}
 		}
 		else
 		{	
@@ -43,10 +48,14 @@ static XmlNode* xml_node_create(const char* name, const char* value)
 
 static Ret xml_node_set_value(XmlNode* node, const char* value)
 {
-	return_val_if_fail(node != NULL && value != NULL, RET_FAIL);
+	return_val_if_fail(node != NULL, RET_FAIL);
+	return_val_if_fail((node->attr & NODE_ATTR_READONLY) == 0, RET_FAIL);
 
 	FTK_FREE(node->value);
-	node->value = ftk_strdup(value);
+	if(value != NULL)
+	{
+		node->value = ftk_strdup(value);
+	}
 
 	return RET_OK;
 }
@@ -83,20 +92,6 @@ static Ret xml_node_set_modified(XmlNode* node, int modified)
 	return RET_OK;
 }
 
-static const char* xpath_next(const char* xpath)
-{
-	const char* next = NULL;
-	return_val_if_fail(xpath != NULL, NULL);
-
-	next = strchr(xpath, '/');
-	if(next != NULL)
-	{
-		next++;
-	}
-
-	return next;
-}
-
 static int xml_node_get_child_count(XmlNode* node)
 {
 	int nr = 0;
@@ -131,47 +126,92 @@ static XmlNode* xml_node_get_child(XmlNode* node, size_t index)
 	return NULL;
 }
 
-static int xpath_match(const char* xpath, const char* name)
+static XmlNode* xml_node_find(XmlNode* node, FtkPath* path)
 {
-	const char* end = NULL;
-	const char* start = xpath;
-	return_val_if_fail(xpath != NULL && name != NULL, 0);
+	return_val_if_fail(node != NULL && node->name != NULL && path != NULL, NULL);
 
-	for(start = xpath; *start == '/'; start++);
-	for(end = start; *end != '/' && *end != '\0'; end++);
-
-	return strncmp(start, name, end - start - 1);
-}
-
-static XmlNode* xml_node_find(XmlNode* node, const char* xpath)
-{
-	return_val_if_fail(node != NULL && xpath != NULL, NULL);
-
-	if(xpath_match(xpath, node->name))
+	for(; node != NULL; node = node->next)
 	{
-		const char* next = xpath_next(xpath);
-		if(next == NULL || *next == '\0')
+		if(strcmp(node->name, ftk_path_current(path)) == 0)
 		{
-			return node;
-		}
-		else
-		{
-			if(node->children != NULL)
+			if(ftk_path_is_leaf(path))
 			{
-				return xml_node_find(node, next);
+				return node;
+			}
+			else if(node->children != NULL)
+			{
+				ftk_path_down(path);
+				return xml_node_find(node->children, path);
+			}
+			else
+			{
+				return NULL;
 			}
 		}
-	}
-	else
-	{
-		return xml_node_find(node->next, xpath);
 	}
 
 	return NULL;
 }
 
-static Ret xml_node_add(XmlNode* node, const char* xpath, const char* value)
+static XmlNode* xml_node_append_sibling(XmlNode* node, const char* name, const char* value)
 {
+	XmlNode* iter = NULL;
+	XmlNode* sibling = NULL;
+	return_val_if_fail(node != NULL && name != NULL, NULL);
+
+	if((sibling = xml_node_create(name, value)) != NULL)
+	{
+		for(iter = node; iter->next != NULL; iter = iter->next)
+		{
+		}
+		
+		iter->next = sibling;
+		sibling->prev = iter;
+		sibling->parent = node->parent;
+	}
+
+	return sibling;
+}
+
+static Ret xml_node_add(XmlNode* node, FtkPath* path, const char* value)
+{
+	XmlNode* iter = node;
+	return_val_if_fail(node != NULL && node->name != NULL && path != NULL, RET_FAIL);
+
+	for(; iter != NULL; iter = iter->next)
+	{
+		if(strcmp(iter->name, ftk_path_current(path)) == 0)
+		{
+			if(ftk_path_is_leaf(path))
+			{
+				xml_node_set_value(iter, value);
+			}
+			else
+			{
+				ftk_path_down(path);
+				if(iter->children == NULL)
+				{
+					iter->children = xml_node_create(ftk_path_current(path), NULL);
+					iter->children->parent = iter;
+				}
+				xml_node_add(iter->children, path, value);
+			}
+			
+			return RET_OK;
+		}
+	}
+
+	/*FIXME*/
+	if(ftk_path_is_leaf(path))
+	{
+		iter = xml_node_append_sibling(node, ftk_path_current(path), value);
+	}
+	else
+	{
+		iter = xml_node_append_sibling(node, ftk_path_current(path), NULL);
+		return xml_node_add(iter, path, value);
+	}
+
 	return RET_OK;
 }
 
@@ -215,33 +255,35 @@ static void xml_node_destroy(XmlNode* node)
 
 static Ret xml_node_save(XmlNode* node, FILE* fp)
 {
-	return RET_OK;
-}
+	return_val_if_fail(node != NULL && fp != NULL, RET_FAIL);
 
-static XmlNode* xml_node_append_sibling(XmlNode* node, const char* name, const char* value)
-{
-	XmlNode* iter = NULL;
-	XmlNode* sibling = NULL;
-	return_val_if_fail(node != NULL && name != NULL && value != NULL, NULL);
-
-	if((sibling = xml_node_create(name, value)) != NULL)
+	if(node->children == NULL)
 	{
-		for(iter = node; iter->next != NULL; iter = iter->next)
+		fprintf(fp, "<%s value=\"%s\" readonly=\"%d\"/>\n", 
+			node->name, node->value, node->attr & NODE_ATTR_READONLY ? 1 : 0);
+	}
+	else
+	{
+		XmlNode* iter = NULL;
+		fprintf(fp, "<%s>\n", node->name);
+		for(iter = node->children; iter != NULL; iter = iter->next)
 		{
+			xml_node_save(iter, fp);
 		}
-		
-		iter->next = sibling;
-		sibling->prev = iter;
-		sibling->parent = node->parent;
+		fprintf(fp, "</%s>\n", node->name);
 	}
 
-	return sibling;
+	return RET_OK;
 }
 
 typedef struct _PrivInfo
 {
+	int modified;
 	XmlNode* root;
 	char* root_path;
+	FtkPath* path;
+	FConfOnChanged on_changed;
+	void* on_changed_ctx;
 }PrivInfo;
 
 Ret fconf_xml_save(FConf* thiz)
@@ -266,6 +308,9 @@ Ret fconf_xml_save(FConf* thiz)
 		}
 	}
 
+	priv->modified = 0;
+	ftk_logd("%s: done\n", __func__);
+
 	return RET_OK;
 }
 
@@ -274,13 +319,50 @@ Ret fconf_xml_load(FConf* thiz, const char* dir)
 	return RET_OK;
 }
 
-Ret fconf_xml_remove(FConf* thiz, const char* xpath)
+static Ret fconf_xml_reg_changed_notify(FConf* thiz, FConfOnChanged on_changed, void* ctx)
 {
+	DECL_PRIV(thiz, priv);
+
+	priv->on_changed = on_changed;
+	priv->on_changed_ctx = ctx;
+
+	return RET_OK;
+}
+
+static Ret fconf_xml_on_changed(FConf* thiz, FConfChangeType change_type, const char* value)
+{
+	XmlNode* iter = NULL;
+	DECL_PRIV(thiz, priv);
+
+	for(iter = priv->root; iter != NULL; iter = iter->next)
+	{
+		if(strcmp(iter->name, ftk_path_current(priv->path)) == 0)
+		{
+			xml_node_set_modified(iter, 1);
+			break;
+		}
+	}
+
+	if(priv->on_changed != NULL)
+	{
+		priv->on_changed(priv->on_changed_ctx, 1, change_type, ftk_path_full(priv->path), value);
+	}
+
+	priv->modified = 1;
+
+	return RET_OK;
+}
+
+
+Ret fconf_xml_remove(FConf* thiz, const char* path)
+{
+	Ret ret = RET_FAIL;
 	XmlNode* node = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->root != NULL && xpath != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && priv->root != NULL && path != NULL, RET_FAIL);
 
-	if((node = xml_node_find(priv->root, xpath)) != NULL)
+	ftk_path_set_path(priv->path, path);
+	if((node = xml_node_find(priv->root, priv->path)) != NULL)
 	{
 		if(priv->root == node)
 		{
@@ -288,18 +370,21 @@ Ret fconf_xml_remove(FConf* thiz, const char* xpath)
 		}
 
 		xml_node_destroy(node);
+		ret = RET_OK;
+		fconf_xml_on_changed(thiz, FCONF_CHANGED_BY_REMOVE, NULL);
 	}
 
-	return RET_OK;
+	return ret;
 }
 
-Ret fconf_xml_get(FConf* thiz, const char* xpath, const char** value)
+Ret fconf_xml_get(FConf* thiz, const char* path, char** value)
 {
 	XmlNode* node = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->root != NULL && xpath != NULL && value != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && priv->root != NULL && path != NULL && value != NULL, RET_FAIL);
 
-	if((node = xml_node_find(priv->root, xpath)) != NULL)
+	ftk_path_set_path(priv->path, path);
+	if((node = xml_node_find(priv->root, priv->path)) != NULL)
 	{
 		*value = node->value;
 	}
@@ -311,33 +396,61 @@ Ret fconf_xml_get(FConf* thiz, const char* xpath, const char** value)
 	return *value != NULL ? RET_OK : RET_FAIL;
 }
 
-Ret fconf_xml_set(FConf* thiz, const char* xpath, const char* value)
+Ret fconf_xml_set(FConf* thiz, const char* path, const char* value)
 {
 	Ret ret = RET_FAIL;
 	XmlNode* node = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->root != NULL && xpath != NULL && value != NULL, RET_FAIL);
+	FConfChangeType type = FCONF_CHANGED_BY_SET;
+	return_val_if_fail(thiz != NULL && path != NULL && value != NULL, RET_FAIL);
 
-	if((node = xml_node_find(priv->root, xpath)) != NULL)
+	ftk_path_set_path(priv->path, path);
+	if(priv->root == NULL)
 	{
-		ret = xml_node_set_value(node, value);
+		type = FCONF_CHANGED_BY_ADD;
+		if(ftk_path_is_leaf(priv->path))
+		{
+			priv->root = xml_node_create(ftk_path_current(priv->path), value);
+		}
+		else
+		{
+			priv->root = xml_node_create(ftk_path_current(priv->path), NULL);
+			ret = xml_node_add(priv->root, priv->path, value);
+		}
 	}
 	else
 	{
-		ret = xml_node_add(priv->root, xpath, value);
+		if((node = xml_node_find(priv->root, priv->path)) != NULL)
+		{
+			ret = xml_node_set_value(node, value);
+		}
+		else
+		{
+			ftk_path_root(priv->path);
+			type = FCONF_CHANGED_BY_ADD;
+			ret = xml_node_add(priv->root, priv->path, value);
+		}
+	}
+
+	ftk_path_root(priv->path);
+
+	if(ret == RET_OK)
+	{
+		fconf_xml_on_changed(thiz, type, value);
 	}
 
 	return ret;
 }
 
-Ret fconf_xml_get_child_count(FConf* thiz, const char* xpath, int* nr)
+Ret fconf_xml_get_child_count(FConf* thiz, const char* path, int* nr)
 {
 	Ret ret = RET_FAIL;
 	XmlNode* node = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->root != NULL && xpath != NULL && nr != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && priv->root != NULL && path != NULL && nr != NULL, RET_FAIL);
 
-	if((node = xml_node_find(priv->root, xpath)) != NULL)
+	ftk_path_set_path(priv->path, path);
+	if((node = xml_node_find(priv->root, priv->path)) != NULL)
 	{
 		ret = RET_OK;
 		*nr = xml_node_get_child_count(node);
@@ -346,14 +459,15 @@ Ret fconf_xml_get_child_count(FConf* thiz, const char* xpath, int* nr)
 	return ret;
 }
 
-Ret fconf_xml_get_child(FConf* thiz, const char* xpath, size_t index, const char** child)
+Ret fconf_xml_get_child(FConf* thiz, const char* path, int index, char** child)
 {
 	Ret ret = RET_FAIL;
 	XmlNode* node = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->root != NULL && child != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && priv->root != NULL && path != NULL && child != NULL, RET_FAIL);
 
-	if((node = xml_node_find(priv->root, xpath)) != NULL)
+	ftk_path_set_path(priv->path, path);
+	if((node = xml_node_find(priv->root, priv->path)) != NULL)
 	{
 		if((node = xml_node_get_child(node, index)) != NULL)
 		{
@@ -367,12 +481,12 @@ Ret fconf_xml_get_child(FConf* thiz, const char* xpath, size_t index, const char
 
 static Ret fconf_xml_lock(FConf* thiz)
 {
-	return RET_OK;
+	return RET_FAIL;
 }
 
 static Ret fconf_xml_unlock(FConf* thiz)
 {
-	return RET_OK;
+	return RET_FAIL;
 }
 
 void fconf_xml_destroy(FConf* thiz)
@@ -390,11 +504,20 @@ void fconf_xml_destroy(FConf* thiz)
 			xml_node_destroy(iter);
 			iter = temp;
 		}
+		ftk_path_destroy(priv->path);
 		FTK_FREE(priv->root_path);
 		FTK_FREE(thiz);
 	}
 
 	return;
+}
+
+int fconf_xml_is_dirty(FConf* thiz)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL, 0);
+
+	return priv->modified;
 }
 
 FConf* fconf_xml_create(const char* dir)
@@ -415,8 +538,10 @@ FConf* fconf_xml_create(const char* dir)
 		thiz->get = fconf_xml_get;
 		thiz->get_child_count = fconf_xml_get_child_count;
 		thiz->get_child = fconf_xml_get_child;
+		thiz->reg_changed_notify = fconf_xml_reg_changed_notify;
 		thiz->destroy = fconf_xml_destroy;
 
+		priv->path = ftk_path_create(NULL);
 		priv->root_path = ftk_strdup(dir);
 		fconf_xml_load(thiz, dir);
 	}
@@ -425,8 +550,21 @@ FConf* fconf_xml_create(const char* dir)
 }
 
 #ifdef FCONF_XML_TEST
+#include <assert.h>
+#include "fconf.c"
+#include "ftk_allocator_default.h"
+
 int main(int argc, char* argv[])
 {
+	FConf* thiz = NULL;
+#ifndef USE_STD_MALLOC
+	ftk_set_allocator((ftk_allocator_default_create()));
+#endif
+	thiz = fconf_xml_create("./config");
+	fconf_test(thiz);
+	fconf_xml_save(thiz);
+	fconf_destroy(thiz);
+
 	return 0;
 }
 #endif

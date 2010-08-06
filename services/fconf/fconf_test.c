@@ -1,16 +1,14 @@
+#include "fconf.c"
 #include "fconf_client.h"
+#include "fbus_service.h"
 
 int main(int argc, char* argv[])
 {
-	Ret ret = RET_OK;
-	char* value = NULL;
-#ifndef USE_STD_MALLOC
-	ftk_set_allocator((ftk_allocator_default_create()));
-#endif
-	FConf* fconf = fconf_client_create();
+	fbus_service_init(argc, argv);
 
-	ret = fconf_set(fconf, "/globals/apps/test", "none");
-	ret = fconf_get(fconf, "/globals/apps/test", &value);
+	FConf* fconf = fconf_client_create();
+	fconf_test(fconf);
+	fbus_service_run();
 
 	fconf_destroy(fconf);
 
