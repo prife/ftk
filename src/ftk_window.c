@@ -486,6 +486,7 @@ int ftk_window_is_fullscreen(FtkWidget* thiz)
 static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 {
 	size_t i = 0;
+	FtkRect rect = {0};
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_REMOVE);
 	
@@ -498,9 +499,20 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 	ftk_widget_paint(thiz);
 	ftk_window_enable_update(thiz);
 
-	for(i = 0; i < priv->dirty_rect_nr; i++)
+	if(priv->dirty_rect_nr < 3)
 	{
-		ftk_window_update(thiz, priv->dirty_rect+i);
+		for(i = 0; i < priv->dirty_rect_nr; i++)
+		{
+			ftk_window_update(thiz, priv->dirty_rect+i);
+		}
+	}
+	else
+	{
+		rect.x = ftk_widget_left_abs(thiz);
+		rect.y = ftk_widget_top_abs(thiz);
+		rect.width = ftk_widget_width(thiz);
+		rect.height = ftk_widget_height(thiz);
+		ftk_window_update(thiz, &rect);
 	}
 	priv->dirty_rect_nr = 0;
 
@@ -513,7 +525,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 	FtkRect* r = NULL;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && rect != NULL, RET_FAIL);
-	
+
 	if(!ftk_widget_is_visible(thiz))
 	{
 		return RET_OK;

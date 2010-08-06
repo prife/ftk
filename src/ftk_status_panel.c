@@ -228,6 +228,7 @@ Ret ftk_status_panel_add(FtkWidget* thiz, FtkWidget* item)
 	}
 
 	ftk_widget_append_child(thiz, item);
+	ftk_status_panel_relayout(thiz);
 
 	return RET_OK;
 }
@@ -242,6 +243,7 @@ Ret        ftk_status_panel_remove(FtkWidget* thiz, FtkWidget* item)
 	priv->last_nr = ftk_status_panel_remove_from(priv->last, priv->last_nr, item);
 
 	ftk_widget_remove_child(thiz, item);
+	ftk_status_panel_relayout(thiz);
 
 	return RET_OK;
 }
