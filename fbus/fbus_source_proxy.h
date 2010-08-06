@@ -38,7 +38,7 @@
 
 FTK_BEGIN_DECLS
 
-FtkSource* fbus_source_proxy_create(FBusProxy* proxy, FBusStream* stream, FtkListener listener, void* ctx);
+FtkSource* fbus_source_proxy_create(FBusProxy* proxy, FBusStream* stream, FBusProxyListener listener, void* ctx);
 
 FTK_END_DECLS
 

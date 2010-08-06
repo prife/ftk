@@ -41,11 +41,12 @@
 
 struct _FBusProxy
 {
+	int busy;
 	FBusParcel* parcel;
 	FBusStream* stream;
 	FtkSource* source;
 	void* listener_ctx;
-	FtkListener listener;
+	FBusProxyListener listener;
 };
 
 FBusProxy*  fbus_proxy_create(const char* service)
@@ -142,6 +143,7 @@ static Ret  fbus_proxy_send_request(FBusProxy* thiz, FBusParcel* parcel)
 static Ret  fbus_proxy_recv_response(FBusProxy* thiz, FBusParcel* parcel)
 {
 	int type = 0;
+	int trigger = 0;
 	int size = 0;
 	int ret = RET_FAIL;
 	return_val_if_fail(thiz != NULL && thiz->stream != NULL && parcel != NULL, RET_FAIL);
@@ -152,6 +154,11 @@ static Ret  fbus_proxy_recv_response(FBusProxy* thiz, FBusParcel* parcel)
 		ret = fbus_stream_read_n(thiz->stream, (char*)&type, sizeof(type));
 		return_val_if_fail(ret == sizeof(type), RET_FAIL);
 		
+		if(type == FBUS_RESP_PUSH)
+		{
+			ret = fbus_stream_read_n(thiz->stream, (char*)&trigger, sizeof(trigger));
+			return_val_if_fail(ret == sizeof(trigger), RET_FAIL);
+		}
 		ret = fbus_stream_read_n(thiz->stream, (char*)&size, sizeof(size));
 		return_val_if_fail(ret == sizeof(size), RET_FAIL);
 		
@@ -164,7 +171,7 @@ static Ret  fbus_proxy_recv_response(FBusProxy* thiz, FBusParcel* parcel)
 		{
 			if(thiz->listener != NULL)
 			{
-				thiz->listener(thiz->listener_ctx, parcel);
+				thiz->listener(thiz->listener_ctx, trigger, parcel);
 			}
 		}
 	}while(type != FBUS_RESP_NORMAL);
@@ -172,7 +179,7 @@ static Ret  fbus_proxy_recv_response(FBusProxy* thiz, FBusParcel* parcel)
 	return RET_OK;
 }
 
-Ret  fbus_proxy_set_notify_listener(FBusProxy* thiz, FtkListener listener, void* ctx)
+Ret  fbus_proxy_set_notify_listener(FBusProxy* thiz, FBusProxyListener listener, void* ctx)
 {
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
@@ -222,11 +229,14 @@ Ret fbus_proxy_request(FBusProxy* thiz, FBusParcel* req_resp)
 {
 	Ret ret = RET_FAIL;
 	return_val_if_fail(thiz != NULL && req_resp != NULL, RET_FAIL);
+	return_val_if_fail(thiz->busy == 0, RET_FAIL);
 
+	thiz->busy = 1;
 	if((ret = fbus_proxy_send_request(thiz, req_resp)) == RET_OK)
 	{
-		return fbus_proxy_recv_response(thiz, req_resp);
+		ret = fbus_proxy_recv_response(thiz, req_resp);
 	}
+	thiz->busy = 0;
 
 	return ret;
 }

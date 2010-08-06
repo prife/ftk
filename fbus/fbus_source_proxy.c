@@ -35,7 +35,7 @@ typedef struct _PrivInfo
 {
 	FBusProxy*   proxy;
 	FBusStream*  stream;
-	FtkListener listener;
+	FBusProxyListener listener;
 	void* listener_ctx;
 }PrivInfo;
 
@@ -55,6 +55,7 @@ static Ret fbus_source_proxy_dispatch(FtkSource* thiz)
 {
 	int type = 0;
 	int size = 0;
+	int trigger = 0;
 	int ret = RET_FAIL;
 	FBusParcel* parcel = NULL;
 	DECL_PRIV(thiz, priv);
@@ -65,8 +66,11 @@ static Ret fbus_source_proxy_dispatch(FtkSource* thiz)
 	ret = fbus_stream_read_n(priv->stream, (char*)&type, sizeof(type));
 	return_val_if_fail(ret == sizeof(type) && type == FBUS_RESP_PUSH, RET_FAIL);
 	
+	ret = fbus_stream_read_n(priv->stream, (char*)&trigger, sizeof(trigger));
+	return_val_if_fail(ret == sizeof(trigger), RET_FAIL);
+	
 	ret = fbus_stream_read_n(priv->stream, (char*)&size, sizeof(size));
-	return_val_if_fail(ret != sizeof(size), RET_REMOVE);
+	return_val_if_fail(ret == sizeof(size), RET_REMOVE);
 
 	ret = fbus_parcel_extend(parcel, size);
 	return_val_if_fail(ret == RET_OK, RET_REMOVE);
@@ -74,7 +78,7 @@ static Ret fbus_source_proxy_dispatch(FtkSource* thiz)
 	fbus_parcel_set_size(parcel, size);
 	ret = fbus_stream_read_n(priv->stream, fbus_parcel_data(parcel), size);
 
-	priv->listener(priv->listener_ctx, parcel);
+	priv->listener(priv->listener_ctx, trigger, parcel);
 
 	return RET_OK;
 }
@@ -91,7 +95,7 @@ static void fbus_source_proxy_destroy(FtkSource* thiz)
 	return;
 }
 
-FtkSource* fbus_source_proxy_create(FBusProxy* proxy, FBusStream* stream, FtkListener listener, void* ctx)
+FtkSource* fbus_source_proxy_create(FBusProxy* proxy, FBusStream* stream, FBusProxyListener listener, void* ctx)
 {
 	FtkSource* thiz = NULL;
 	return_val_if_fail(proxy != NULL && stream != NULL && listener != NULL, NULL);

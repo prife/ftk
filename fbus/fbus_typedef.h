@@ -48,6 +48,13 @@ typedef enum _FBusRespType
 	FBUS_RESP_PUSH
 }FBusRespType;
 
+typedef enum _FBusPushTrigger
+{
+	FBUS_TRIGGER_BY_SELF = 1,
+	FBUS_TRIGGER_BY_OTHER,
+	FBUS_TRIGGER_BY_SERVICE,
+}FBusPushTrigger;
+
 FTK_END_DECLS
 
 #endif/*FBUS_TYPEDEF_H*/

@@ -137,12 +137,13 @@ Ret fbus_service_unregister(FBusService* thiz)
 	return ret;
 }
 
-Ret  fbus_service_notify(FBusService* thiz, int client_id, FBusParcel* notify)
+Ret  fbus_service_notify(FBusService* thiz, int target_id, int trigger_id, FBusParcel* notify)
 {
 	int i = 0;
 	int ret = RET_FAIL;
 	int type = FBUS_RESP_PUSH;
 	ServiceData* data = NULL;
+	int trigger = FBUS_TRIGGER_BY_SELF;
 
 	return_val_if_fail(thiz != NULL && thiz->data != NULL && notify != NULL, RET_FAIL);
 
@@ -150,10 +151,28 @@ Ret  fbus_service_notify(FBusService* thiz, int client_id, FBusParcel* notify)
 	for(i = 0; i < FBUS_SERVICE_MAX_CLIENTS; i++)
 	{
 		FBusStream* stream = data->clients[i];
-		if(stream != NULL && (fbus_stream_get_fd(stream) == client_id || client_id < 0))
+		if(stream != NULL && (fbus_stream_get_fd(stream) == target_id || target_id < 0))
 		{
 			size_t size = fbus_parcel_size(notify);
+	
+			if(trigger_id <= 0)
+			{
+				trigger = FBUS_TRIGGER_BY_SERVICE;
+			}
+			else
+			{
+				if(trigger_id == fbus_stream_get_fd(stream))
+				{
+					trigger = FBUS_TRIGGER_BY_SELF;
+				}
+				else
+				{
+					trigger = FBUS_TRIGGER_BY_OTHER;
+				}
+			}
+
 			ret = fbus_stream_write_n(stream, (char*)&type, sizeof(type));
+			ret = fbus_stream_write_n(stream, (char*)&trigger, sizeof(trigger));
 			ret = fbus_stream_write_n(stream, (char*)&size, sizeof(size));
 			ret = fbus_stream_write_n(stream, fbus_parcel_data(notify), size);
 		}
@@ -162,9 +181,9 @@ Ret  fbus_service_notify(FBusService* thiz, int client_id, FBusParcel* notify)
 	return ret;
 }
 
-Ret  fbus_service_notify_all(FBusService* thiz, FBusParcel* notify)
+Ret  fbus_service_notify_all(FBusService* thiz, int trigger_id, FBusParcel* notify)
 {
-	return fbus_service_notify(thiz, -1, notify);
+	return fbus_service_notify(thiz, -1, trigger_id, notify);
 }
 
 Ret fbus_service_on_client_connect(FBusService* thiz, FBusStream* client)
@@ -220,7 +239,7 @@ Ret fbus_service_on_client_disconnect(FBusService* thiz, FBusStream* client)
 	
 	for(i = 0; i < FBUS_SERVICE_MAX_CLIENTS; i++)
 	{
-		if(fbus_stream_get_fd(data->clients[i]) == client_id)
+		if(data->clients[i] != NULL && fbus_stream_get_fd(data->clients[i]) == client_id)
 		{
 			data->clients[i] = NULL;
 			break;

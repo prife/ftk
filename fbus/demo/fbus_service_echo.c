@@ -100,11 +100,6 @@ static Ret fbus_service_echo_handle_request(FBusService* thiz, int client_id, FB
 			fbus_parcel_write_data(req_resp, data, len);
 			break;
 		}
-		defalut:
-		{
-			ftk_logd("%s: unspported request %d\n", __func__, req_code);
-			break;
-		}
 	}
 	//ftk_logd("%s: client_id=%d\n", __func__, client_id);
 

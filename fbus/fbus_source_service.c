@@ -70,7 +70,6 @@ Ret fbus_source_service_dispatch(FtkSource* thiz)
 	fbus_parcel_set_size(priv->parcel, size);
 	ret = fbus_stream_read_n(priv->stream, fbus_parcel_data(priv->parcel), size);
 
-	ret = fbus_stream_write_n(priv->stream, (const char*)&type, sizeof(type));
 	ret = fbus_service_handle_request(priv->service, fbus_stream_get_fd(priv->stream), priv->parcel);
 	if(ret != RET_OK)
 	{
@@ -78,6 +77,7 @@ Ret fbus_source_service_dispatch(FtkSource* thiz)
 		ret = fbus_parcel_write_int(priv->parcel, ret);
 	}
 	
+	ret = fbus_stream_write_n(priv->stream, (const char*)&type, sizeof(type));
 	size = fbus_parcel_size(priv->parcel);
 	ret = fbus_stream_write_n(priv->stream, (const char*)&size, sizeof(size));
 	ret = fbus_stream_write_n(priv->stream, fbus_parcel_data(priv->parcel), size);

@@ -34,16 +34,19 @@
 #define FBUS_PROXY_H
 
 #include "fbus_parcel.h"
+#include "fbus_typedef.h"
 
 FTK_BEGIN_DECLS
 
 struct _FBusProxy;
 typedef struct _FBusProxy FBusProxy;
 
+typedef Ret (*FBusProxyListener)(void* ctx, FBusPushTrigger trigger, FBusParcel* notify);
+
 FBusProxy*  fbus_proxy_create(const char* service);
 FBusParcel* fbus_proxy_get_parcel(FBusProxy* thiz);
 Ret  fbus_proxy_request(FBusProxy* thiz, FBusParcel* req_resp);
-Ret  fbus_proxy_set_notify_listener(FBusProxy* thiz, FtkListener listener, void* ctx);
+Ret  fbus_proxy_set_notify_listener(FBusProxy* thiz, FBusProxyListener listener, void* ctx);
 void fbus_proxy_destroy(FBusProxy* thiz);
 
 FTK_END_DECLS

@@ -82,8 +82,8 @@ void fbus_service_destroy(FBusService* thiz);
 Ret  fbus_service_register(FBusService* thiz);
 Ret  fbus_service_unregister(FBusService* thiz);
 
-Ret  fbus_service_notify(FBusService* thiz, int client_id, FBusParcel* notify);
-Ret  fbus_service_notify_all(FBusService* thiz, FBusParcel* notify);
+Ret  fbus_service_notify(FBusService* thiz, int target_id, int trigger_id, FBusParcel* notify);
+Ret  fbus_service_notify_all(FBusService* thiz, int trigger_id, FBusParcel* notify);
 
 Ret  fbus_service_init(int argc, char* argv[]);
 Ret  fbus_service_run(void);
