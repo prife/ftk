@@ -1,0 +1,43 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ftk 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-08-07 07:52+0800\n"
+"PO-Revision-Date: 2010-08-07 07:52+0800\n"
+"Last-Translator: Li XianJing <xianjimli@gmail.com>\n"
+"Language-Team: Li XianJing <xianjimli@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: apps/desktop/main.c:234
+msgid "Shutdown"
+msgstr "关机"
+
+#: apps/desktop/main.c:242
+msgid "Stop VNC"
+msgstr "开启远程桌面"
+
+#: apps/desktop/main.c:246
+msgid "Start VNC"
+msgstr "关闭远程桌面"
+
+#: apps/desktop/main.c:281
+msgid "Hello, GetText"
+msgstr "你好, GetText 工作正常"
+
+msgid "filem"
+msgstr "文件管理器"
+
+msgid "calc"
+msgstr "计算器"
+
+msgid "shell"
+msgstr "终端"
+

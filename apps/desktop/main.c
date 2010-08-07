@@ -140,7 +140,7 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 		
 		item.icon = app_info->icon_bitmap;
 		item.user_data = app_info;
-		item.text = app_info->name;
+		item.text = _(app_info->name);
 		ftk_icon_view_add(icon_view, &item);
 	}
 
@@ -231,7 +231,7 @@ static Ret on_vnc(void* ctx, void* obj)
 static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 {
 	FtkWidget* item = ftk_menu_item_create(menu_panel);
-	ftk_widget_set_text(item, "Shutdown");
+	ftk_widget_set_text(item, _("Shutdown"));
 	ftk_menu_item_set_clicked_listener(item, on_shutdown, ctx);
 	ftk_widget_show(item, 1);
 
@@ -239,11 +239,11 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 	item = ftk_menu_item_create(menu_panel);
 	if(ftk_display_vnc_is_active())
 	{
-		ftk_widget_set_text(item, "Stop VNC");
+		ftk_widget_set_text(item, _("Stop VNC"));
 	}
 	else
 	{
-		ftk_widget_set_text(item, "Start VNC");
+		ftk_widget_set_text(item, _("Start VNC"));
 	}
 	ftk_menu_item_set_clicked_listener(item, on_vnc, ctx);
 	ftk_widget_show(item, 1);
@@ -273,6 +273,23 @@ int main(int argc, char* argv[])
 	char path[FTK_MAX_PATH] = {0};
 	FtkSource* timer = NULL;
 	ftk_init(argc, argv);
+
+#ifdef ENABLE_NLS
+	if(getenv("LANG") == NULL)
+	{
+		setenv("LANG", "zh_CN.UTF-8", 1);
+		setlocale (LC_ALL, "zh_CN.UTF-8");
+		ftk_logd("LANG is not set, use zh_CN.UTF-8\n");
+	}
+	else
+	{
+		setlocale (LC_ALL, "");
+	}
+
+	bindtextdomain (PACKAGE, PACKAGE_LOCALE_DIR);
+	textdomain (PACKAGE); 
+	ftk_logd("%s: locale=%s\n", _("Hello, GetText"), setlocale(LC_ALL, NULL));
+#endif
 
 	add_time_item_on_statusbar();
 

@@ -1,0 +1,6 @@
+# List of source files containing translatable strings.
+
+apps/calculator/main.c
+apps/launcher/main.c
+apps/desktop/main.c
+apps/filemanager/main.c

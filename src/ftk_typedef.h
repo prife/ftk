@@ -280,7 +280,32 @@ typedef struct _FtkCommitInfo
 #define FTK_FREE(p)        ftk_allocator_free(ftk_default_allocator(), p); p = NULL
 #define FTK_ZFREE(p, size) ftk_allocator_zfree(ftk_default_allocator(), p, size); p = NULL
 #define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
+#endif
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
+#ifdef ENABLE_NLS
+#  include <locale.h>
+#  include <libintl.h>
+#  undef _
+#  define _(String) dgettext (PACKAGE, String)
+#  define Q_(String) g_strip_context ((String), gettext (String))
+#  ifdef gettext_noop
+#    define N_(String) gettext_noop (String)
+#  else
+#    define N_(String) (String)
+#  endif
+#else
+#  define textdomain(String) (String)
+#  define gettext(String) (String)
+#  define dgettext(Domain,Message) (Message)
+#  define dcgettext(Domain,Message,Type) (Message)
+#  define bindtextdomain(Domain,Directory) (Domain)
+#  define _(String) (String)
+#  define Q_(String) g_strip_context ((String), (String))
+#  define N_(String) (String)
 #endif
 
 #endif/*FTK_TYPEDEF_H*/

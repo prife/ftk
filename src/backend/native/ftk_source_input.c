@@ -127,6 +127,7 @@ static unsigned short s_key_map[0x100] =
 	[KEY_BACKSPACE]   =  FTK_KEY_BACKSPACE,
 	[KEY_TAB]         =  FTK_KEY_TAB,
 	[KEY_ESC]         =  FTK_KEY_ESC,
+	[139]             =  FTK_KEY_F2, /*map menu to f2*/
 //	[KEY_SEND]        =  FTK_KEY_SEND,
 //	[KEY_REPLY]       =  FTK_KEY_REPLY,
 //	[KEY_SAVE]        =  FTK_KEY_SAVE,
@@ -177,6 +178,7 @@ static Ret ftk_source_input_dispatch(FtkSource* thiz)
 					priv->on_event(priv->user_data, &priv->event);
 					priv->event.type = FTK_EVT_NOP;
 				}
+				ftk_logd("%s: %02x --> %02x\n", __func__, ievent.code, priv->event.u.key.code);
 			}
 
 			break;
