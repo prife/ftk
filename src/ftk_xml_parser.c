@@ -85,7 +85,7 @@ void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml, size_t length)
 
 	thiz->read_ptr = xml;
 
-	for(; *thiz->read_ptr != '\0' && i < length; thiz->read_ptr++, i++)
+	for(; *thiz->read_ptr != '\0' && (thiz->read_ptr - xml) < length; thiz->read_ptr++, i++)
 	{
 		char c = thiz->read_ptr[0];
 

@@ -156,7 +156,7 @@ static Ret  app_info_manager_parse(AppInfoManager* thiz, const char* xml, size_t
 		BuilderInfo* info = (BuilderInfo*)builder->priv;
 		info->app_info_manager = thiz;
 		ftk_xml_parser_set_builder(parser, builder);
-		ftk_xml_parser_parse(parser, xml, strlen(xml));
+		ftk_xml_parser_parse(parser, xml, length);
 	}
 	ftk_xml_builder_destroy(builder);
 	ftk_xml_parser_destroy(parser);

@@ -318,22 +318,7 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	{
 		for(j = x, k = ox; j < w; j++, k++)
 		{
-			dcolor.r = (dst[k] & 0xf800) >> 8;
-			dcolor.g = (dst[k] & 0x07e0) >> 3;
-			dcolor.b = (dst[k] & 0x1f) << 3;
-			psrc = src + j;
-			pdst = &dcolor;
-
-			if(psrc->a == 0xff)
-			{
-				*pdst = *psrc;
-			}
-			else
-			{
-				FTK_ALPHA(psrc, pdst, psrc->a);
-			}
-			pixel = ((dcolor.r >> 3) << 11) | ((dcolor.g >> 2) << 5) | (dcolor.b >> 3);
-			dst[k] = pixel;
+			dst[k] = ((src[j].r >> 3) << 11) | ((src[j].g >> 2) << 5) | (src[j].b >> 3);
 		}
 		src += bw;
 		dst += dw;
@@ -379,20 +364,10 @@ Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 		{
 			unsigned char* pdst = (unsigned char*)(dst+k);
 			FtkColor* psrc = src+j;
-			if(psrc->a == 0xff)
-			{
-				pdst[0] = psrc->r;
-				pdst[1] = psrc->g;
-				pdst[2] = psrc->b;
-				pdst[3] = psrc->a;
-			}
-			else
-			{
-				FTK_ALPHA_1(psrc->r, pdst[0], psrc->a);
-				FTK_ALPHA_1(psrc->g, pdst[1], psrc->a);
-				FTK_ALPHA_1(psrc->b, pdst[2], psrc->a);
-				pdst[3] = psrc->a;
-			}
+			pdst[0] = psrc->r;
+			pdst[1] = psrc->g;
+			pdst[2] = psrc->b;
+			pdst[3] = psrc->a;
 		}
 		src += bw;
 		dst += dw;
