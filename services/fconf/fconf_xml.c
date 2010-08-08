@@ -1,6 +1,39 @@
-#include <stdio.h>
+/*
+ * File: fconf_xml.c
+ * Author:  Li XianJing <xianjimli@hotmail.com>
+ * Brief:   xml implementation for interface FConf.
+ *
+ * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ *
+ * Licensed under the Academic Free License version 2.1
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/*
+ * History:
+ * ================================================================
+ * 2010-08-01 Li XianJing <xianjimli@hotmail.com> created
+ *
+ */
+
 #include "ftk_path.h"
 #include "fconf_xml.h"
+#include "ftk_mmap.h"
+#include "ftk_util.h"
+#include "ftk_xml_parser.h"
 #include "ftk_allocator.h"
 
 typedef enum _XmlNodeAttr
@@ -25,9 +58,7 @@ static XmlNode* xml_node_create(const char* name, const char* value)
 	XmlNode* node = NULL;
 	return_val_if_fail(name != NULL, NULL);
 
-	node = FTK_ZALLOC(sizeof(XmlNode));
-
-	if(node != NULL)
+	if((node = FTK_ZALLOC(sizeof(XmlNode))) != NULL)
 	{
 		node->name = ftk_strdup(name);
 		if(node->name != NULL)
@@ -157,17 +188,20 @@ static XmlNode* xml_node_append_sibling(XmlNode* node, const char* name, const c
 {
 	XmlNode* iter = NULL;
 	XmlNode* sibling = NULL;
-	return_val_if_fail(node != NULL && name != NULL, NULL);
+	return_val_if_fail(name != NULL, NULL);
 
 	if((sibling = xml_node_create(name, value)) != NULL)
 	{
-		for(iter = node; iter->next != NULL; iter = iter->next)
+		if(node != NULL)
 		{
+			for(iter = node; iter->next != NULL; iter = iter->next)
+			{
+			}
+			
+			iter->next = sibling;
+			sibling->prev = iter;
+			sibling->parent = node->parent;
 		}
-		
-		iter->next = sibling;
-		sibling->prev = iter;
-		sibling->parent = node->parent;
 	}
 
 	return sibling;
@@ -201,14 +235,9 @@ static Ret xml_node_add(XmlNode* node, FtkPath* path, const char* value)
 		}
 	}
 
-	/*FIXME*/
-	if(ftk_path_is_leaf(path))
+	iter = xml_node_append_sibling(node, ftk_path_current(path), value);
+	if(!ftk_path_is_leaf(path))
 	{
-		iter = xml_node_append_sibling(node, ftk_path_current(path), value);
-	}
-	else
-	{
-		iter = xml_node_append_sibling(node, ftk_path_current(path), NULL);
 		return xml_node_add(iter, path, value);
 	}
 
@@ -219,6 +248,7 @@ static void xml_node_destroy(XmlNode* node)
 {
 	XmlNode* iter = NULL;
 	XmlNode* temp = NULL;
+	
 	if(node != NULL)
 	{
 		iter = node->children;
@@ -298,7 +328,7 @@ Ret fconf_xml_save(FConf* thiz)
 	{
 		if(iter->attr & NODE_ATTR_MODIFIED)
 		{
-			ftk_snprintf(filename, FTK_MAX_PATH, "%s/%s.cnf", priv->root_path, iter->name);
+			ftk_snprintf(filename, FTK_MAX_PATH, "%s%c%s.cnf", priv->root_path, FTK_PATH_DELIM, iter->name);
 			if((fp = fopen(filename, "w+")) != NULL)
 			{
 				xml_node_save(iter, fp);
@@ -314,9 +344,204 @@ Ret fconf_xml_save(FConf* thiz)
 	return RET_OK;
 }
 
+typedef struct _BuilderInfo
+{
+	XmlNode* root;
+	XmlNode* current;
+}BuilderInfo;
+
+static void fconf_xml_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
+{
+	int i = 0;
+	int readonly = 0;
+	XmlNode* node = NULL;
+	const char* data = NULL;
+	BuilderInfo* info = (BuilderInfo*)thiz->priv;
+	return_if_fail(thiz != NULL && tag != NULL && attrs != NULL);
+	
+	for(i = 0; attrs[i] != NULL; i+=2)
+	{
+		const char* name = attrs[i];
+		const char* value = attrs[i+1];
+		if(strcmp(name, "value") == 0)
+		{
+			data = value;
+		}
+		else if(strcmp(name, "readonly") == 0)
+		{
+			readonly = ftk_str2bool(value);
+		}
+	}
+
+	node = xml_node_append_sibling(info->current->children, tag, data);
+	return_if_fail(node != NULL);
+	if(readonly)
+	{
+		xml_node_set_readonly(node, readonly);
+	}
+	
+	if(info->current->children == NULL)
+	{
+		info->current->children = node;
+		node->parent = info->current;
+	}
+	info->current = node;
+
+	return;
+}
+
+static void fconf_xml_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
+{
+	BuilderInfo* info = (BuilderInfo*)thiz->priv;
+	return_if_fail(info->current != NULL);
+
+	if(info->current->parent != NULL)
+	{
+		info->current = info->current->parent;
+	}
+
+	return;
+}
+
+static void fconf_xml_builder_on_text(FtkXmlBuilder* thiz, const char* text, size_t length)
+{
+	return;
+}
+
+static void fconf_xml_builder_destroy(FtkXmlBuilder* thiz)
+{
+	if(thiz != NULL)
+	{
+		FTK_ZFREE(thiz, sizeof(FtkXmlBuilder) + sizeof(BuilderInfo));
+	}
+
+	return;
+}
+
+static FtkXmlBuilder* fconf_xml_builder_create(void)
+{
+	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(BuilderInfo));
+
+	if(thiz != NULL)
+	{
+		thiz->on_start_element = fconf_xml_builder_on_start;
+		thiz->on_end_element   = fconf_xml_builder_on_end;
+		thiz->on_text		   = fconf_xml_builder_on_text;
+		thiz->destroy		   = fconf_xml_builder_destroy;
+	}
+
+	return thiz;
+}
+
+static XmlNode*  fconf_xml_parse(const char* name, const char* xml, size_t length)
+{
+	XmlNode* node = NULL;
+    FtkXmlParser* parser = NULL;
+    FtkXmlBuilder* builder = NULL;
+    return_val_if_fail(xml != NULL, NULL);
+
+	node = xml_node_create(name, NULL);
+	return_val_if_fail(node != NULL, NULL);
+
+    if((parser  = ftk_xml_parser_create()) == NULL)
+    {
+    	xml_node_destroy(node);
+    	return_val_if_fail(parser != NULL, NULL);
+    }
+
+    builder = fconf_xml_builder_create();
+    if(builder != NULL)
+    {
+		BuilderInfo* priv      = (BuilderInfo* )builder->priv;
+		priv->root = priv->current = node;
+        ftk_xml_parser_set_builder(parser, builder);
+        ftk_xml_parser_parse(parser, xml, length);
+    }
+    ftk_xml_builder_destroy(builder);
+    ftk_xml_parser_destroy(parser);
+
+    return node;
+}
+
+Ret  fconf_xml_load_buffer(FConf* thiz, const char* name, const char* xml, size_t length)
+{
+    DECL_PRIV(thiz, priv);
+    XmlNode* node = NULL;
+    XmlNode* iter = NULL;
+    node = fconf_xml_parse(name, xml, length);
+	return_val_if_fail(node != NULL, RET_FAIL);
+	
+	if(priv->root == NULL)
+	{
+		priv->root = node;
+	}
+	else
+	{
+		for(iter = priv->root; iter->next != NULL; iter = iter->next);
+
+		iter->next = node;
+		node->prev = iter;
+	}
+
+	return RET_OK;
+}
+
+Ret  fconf_xml_load_file(FConf* thiz, const char* filename)
+{
+    FtkMmap* m = NULL;
+    char* p = NULL;
+    char root_node_name[FTK_MAX_PATH + 1] = {0};
+    return_val_if_fail(thiz != NULL && filename != NULL, RET_FAIL);
+
+	p = strrchr(filename, FTK_PATH_DELIM);
+	if(p != NULL)
+	{
+		strncpy(root_node_name, p, FTK_MAX_PATH);
+	}
+	else
+	{
+		strncpy(root_node_name, filename, FTK_MAX_PATH);
+	}
+
+    if((p = strrchr(root_node_name, '.')) != NULL)
+    {
+    	*p = '\0';
+    }
+
+    m = ftk_mmap_create(filename, 0, -1);
+    return_val_if_fail(m != NULL, RET_FAIL);
+	fconf_xml_load_buffer(thiz, root_node_name, ftk_mmap_data(m), ftk_mmap_length(m));
+    ftk_mmap_destroy(m);
+
+    return RET_OK;
+}
+
+Ret  fconf_xml_load_dir(FConf* thiz, const char* path)
+{
+    DIR* dir = NULL;
+    struct dirent* iter = NULL;
+    char filename[FTK_MAX_PATH+1] = {0};
+    return_val_if_fail(thiz != NULL && path != NULL, RET_FAIL);
+    
+	dir = opendir(path);
+    return_val_if_fail(dir != NULL, RET_FAIL);
+
+    while((iter = readdir(dir)) != NULL)
+    {
+        if(iter->d_name[0] == '.') continue;
+        if(strstr(iter->d_name, ".cnf") == NULL) continue;
+
+        ftk_snprintf(filename, sizeof(filename)-1, "%s%c%s", path, FTK_PATH_DELIM, iter->d_name);
+        fconf_xml_load_file(thiz, filename);
+    }
+    closedir(dir);
+
+    return RET_OK;
+}
+
 Ret fconf_xml_load(FConf* thiz, const char* dir)
 {
-	return RET_OK;
+	return fconf_xml_load_dir(thiz, dir);
 }
 
 static Ret fconf_xml_reg_changed_notify(FConf* thiz, FConfOnChanged on_changed, void* ctx)
@@ -334,6 +559,7 @@ static Ret fconf_xml_on_changed(FConf* thiz, FConfChangeType change_type, const 
 	XmlNode* iter = NULL;
 	DECL_PRIV(thiz, priv);
 
+	ftk_path_root(priv->path);
 	for(iter = priv->root; iter != NULL; iter = iter->next)
 	{
 		if(strcmp(iter->name, ftk_path_current(priv->path)) == 0)
@@ -369,8 +595,8 @@ Ret fconf_xml_remove(FConf* thiz, const char* path)
 			priv->root = node->next;
 		}
 
-		xml_node_destroy(node);
 		ret = RET_OK;
+		xml_node_destroy(node);
 		fconf_xml_on_changed(thiz, FCONF_CHANGED_BY_REMOVE, NULL);
 	}
 
@@ -432,8 +658,6 @@ Ret fconf_xml_set(FConf* thiz, const char* path, const char* value)
 		}
 	}
 
-	ftk_path_root(priv->path);
-
 	if(ret == RET_OK)
 	{
 		fconf_xml_on_changed(thiz, type, value);
@@ -449,6 +673,7 @@ Ret fconf_xml_get_child_count(FConf* thiz, const char* path, int* nr)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && priv->root != NULL && path != NULL && nr != NULL, RET_FAIL);
 
+	*nr = 0;
 	ftk_path_set_path(priv->path, path);
 	if((node = xml_node_find(priv->root, priv->path)) != NULL)
 	{
@@ -466,6 +691,7 @@ Ret fconf_xml_get_child(FConf* thiz, const char* path, int index, char** child)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && priv->root != NULL && path != NULL && child != NULL, RET_FAIL);
 
+	*child = NULL;
 	ftk_path_set_path(priv->path, path);
 	if((node = xml_node_find(priv->root, priv->path)) != NULL)
 	{
@@ -542,8 +768,11 @@ FConf* fconf_xml_create(const char* dir)
 		thiz->destroy = fconf_xml_destroy;
 
 		priv->path = ftk_path_create(NULL);
-		priv->root_path = ftk_strdup(dir);
-		fconf_xml_load(thiz, dir);
+		if(dir != NULL)
+		{
+			priv->root_path = ftk_strdup(dir);
+			fconf_xml_load(thiz, dir);
+		}
 	}
 
 	return thiz;
@@ -554,16 +783,46 @@ FConf* fconf_xml_create(const char* dir)
 #include "fconf.c"
 #include "ftk_allocator_default.h"
 
-int main(int argc, char* argv[])
+void test_default(void)
 {
 	FConf* thiz = NULL;
-#ifndef USE_STD_MALLOC
-	ftk_set_allocator((ftk_allocator_default_create()));
-#endif
 	thiz = fconf_xml_create("./config");
 	fconf_test(thiz);
 	fconf_xml_save(thiz);
 	fconf_destroy(thiz);
+
+	return;
+}
+
+const char* testcase = "<a1><b1><c1 value=\"data1\"/> <c2 value=\"data2\"/></b1>\
+<b2><c1 value=\"data3\"/> <c2 value=\"data4\"/></b2></a1>";
+
+void test_load(void)
+{
+	FConf* thiz = NULL;
+	char* data = NULL;
+	thiz = fconf_xml_create("./config");
+	fconf_xml_load_buffer(thiz, "test", testcase, strlen(testcase)); 
+	assert(fconf_get(thiz, "/test/a1/b1/c1", &data) == RET_OK);
+	assert(strcmp(data, "data1") == 0);
+	assert(fconf_get(thiz, "/test/a1/b1/c2", &data) == RET_OK);
+	assert(strcmp(data, "data2") == 0);
+	
+	assert(fconf_get(thiz, "/test/a1/b2/c1", &data) == RET_OK);
+	assert(strcmp(data, "data3") == 0);
+	assert(fconf_get(thiz, "/test/a1/b2/c2", &data) == RET_OK);
+	assert(strcmp(data, "data4") == 0);
+	fconf_destroy(thiz);
+
+	return;
+}
+int main(int argc, char* argv[])
+{
+#ifndef USE_STD_MALLOC
+	ftk_set_allocator((ftk_allocator_default_create()));
+#endif
+	test_default();
+	test_load();
 
 	return 0;
 }

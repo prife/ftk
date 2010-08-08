@@ -264,7 +264,7 @@ static Ret  fbus_service_info_parse(FBusServiceInfos* services, const char* xml,
     if(builder != NULL)
     {
         ftk_xml_parser_set_builder(parser, builder);
-        ftk_xml_parser_parse(parser, xml, strlen(xml));
+        ftk_xml_parser_parse(parser, xml, length);
     }
     ftk_xml_builder_destroy(builder);
     ftk_xml_parser_destroy(parser);

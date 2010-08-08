@@ -43,6 +43,7 @@ int utf8_count_char(const char *begin, size_t length);
 FtkColor ftk_parse_color( const char* value);
 const char* ftk_normalize_path(char* path);
 const char* utf8_move_forward(const char* str, int nr);
+int ftk_str2bool(const char* str);
 
 FTK_END_DECLS
 

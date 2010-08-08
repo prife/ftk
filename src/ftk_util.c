@@ -215,3 +215,14 @@ const char* utf8_move_forward(const char* str, int nr)
 	return next;
 }
 
+int ftk_str2bool(const char* str)
+{
+	if(str == NULL || str[0] == '0' || strcmp(str, "false") == 0 || strcmp(str, "no") == 0)
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+

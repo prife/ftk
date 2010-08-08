@@ -213,16 +213,6 @@ typedef struct _PrivInfo
 	FtkConfig* config;
 }PrivInfo;
 
-static int ftk_str2bool(const char* str)
-{
-	if(str == NULL || str[0] == '0' || strcmp(str, "false") == 0 || strcmp(str, "no") == 0)
-	{
-		return 0;
-	}
-
-	return 1;
-}
-
 static void ftk_config_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const char** attrs)
 {
 	DECL_PRIV(thiz, priv);
