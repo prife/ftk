@@ -219,6 +219,7 @@ Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h)
 	int height = 0;
 	int iter_w = 0;
 	int iter_h = 0;
+	FtkColor color;
 	FtkColor* bits = NULL;
 	unsigned char alpha = 0;
 	FtkColor* pdst = NULL;
@@ -240,12 +241,13 @@ Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h)
 	iter_h = h;
 	bits += y * width;
 
+	color = thiz->gc.fg;
 	while(iter_h--)
 	{
 		pdst = bits + x;
 		while(iter_w--)
 		{
-			*pdst = thiz->gc.fg;
+			*pdst = color;
 			pdst++;
 		}
 		iter_w = w;

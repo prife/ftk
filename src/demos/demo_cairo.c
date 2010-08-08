@@ -267,6 +267,7 @@ static Ret on_paint(void* ctx, void* obj)
 		cairo_surface_t* surface = ftk_cairo_surface_create(thiz);
 		cr = cairo_create(surface);
 		cairo_surface_destroy(surface);
+	ftk_logd("%s:%d\n", __func__, __LINE__);
 	}
 	
 	cairo_save (cr);
@@ -276,11 +277,14 @@ static Ret on_paint(void* ctx, void* obj)
 	cairo_rectangle(cr, x, y, width, height);
 	cairo_clip (cr);
 
+	ftk_logd("%s:%d\n", __func__, __LINE__);
 	paints[g_index](x, y, width, height);
+	ftk_logd("%s:%d\n", __func__, __LINE__);
 
 	cairo_restore (cr);
 	
 	FTK_END_PAINT();
+	ftk_logd("%s:%d\n", __func__, __LINE__);
 
 	return RET_OK;
 }

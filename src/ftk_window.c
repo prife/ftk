@@ -488,17 +488,22 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 	size_t i = 0;
 	FtkRect rect = {0};
 	DECL_PRIV0(thiz, priv);
+	//time_t last = 0;
 	return_val_if_fail(priv != NULL, RET_REMOVE);
 	
-	if(priv->dirty_rect_nr == 0)
+	if(priv->dirty_rect_nr == 0 || !priv->mapped || !ftk_widget_is_visible(thiz))
 	{
+		priv->dirty_rect_nr = 0;
 		return RET_REMOVE;
 	}
 
+	//last = ftk_get_relative_time();
 	ftk_window_disable_update(thiz);
 	ftk_widget_paint(thiz);
 	ftk_window_enable_update(thiz);
+	//ftk_logd("%s: paint cost %d dirty_rect_nr=%d \n", __func__, ftk_get_relative_time() - last, priv->dirty_rect_nr);
 
+	//last = ftk_get_relative_time();
 	if(priv->dirty_rect_nr < 3)
 	{
 		for(i = 0; i < priv->dirty_rect_nr; i++)
@@ -514,6 +519,7 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 		rect.height = ftk_widget_height(thiz);
 		ftk_window_update(thiz, &rect);
 	}
+	//ftk_logd("%s: update cost %d\n", __func__, ftk_get_relative_time() - last);
 	priv->dirty_rect_nr = 0;
 
 	return RET_REMOVE;

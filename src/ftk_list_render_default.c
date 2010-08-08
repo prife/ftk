@@ -298,6 +298,7 @@ static void ftk_list_render_default_destroy(FtkListRender* thiz)
 		ftk_bitmap_unref(priv->more);
 		if(priv->marquee_timer != NULL)
 		{
+			ftk_source_disable(priv->marquee_timer);
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->marquee_timer);
 		}
 		FTK_ZFREE(thiz, sizeof(FtkListRender) + sizeof(PrivInfo));

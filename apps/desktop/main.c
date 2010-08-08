@@ -131,6 +131,7 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 	ftk_button_set_clicked_listener(button, button_close_applist_clicked, win);
 
 	icon_view = ftk_widget_lookup(win, 99);
+	ftk_icon_view_set_item_size(icon_view, 100);
 	ftk_icon_view_set_clicked_listener(icon_view, app_item_clicked, win);
 	n = app_info_manager_get_count(g_app_manager);
 	
