@@ -309,20 +309,19 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	unsigned int color;
 	FtkColor* psrc = NULL;
 	unsigned short* pdst = NULL;
-	unsigned short pixel = 0;
 	COPY_TO_DECL(unsigned short);
 	src += y * bw;
 	dst += oy * dw;
 	
-	for(i = y; i < h; i++)
+	for(i = h - y; i; i--)
 	{
 		psrc = src;
 		pdst = dst;
 		
-		for(j = w; j != 0; j--, psrc++, pdst++)
+		/*FIXME: works on little end only.*/
+		for(j = w; j; j--, psrc++, pdst++)
 		{
 			color = *(unsigned int*)psrc;
-			/*FIXME: works on little end only.*/
 			*pdst = (color & 0xf80000) >> 8 | ((color & 0xfc00) >> 5) | ((color & 0xf8) >> 3);
 		}
 		src += bw;

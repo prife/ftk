@@ -84,12 +84,11 @@ FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz)
 	{\
 		if(alpha != 0xff)\
 		{\
-			FtkColor* color = &(thiz->gc.fg);\
 			FTK_ALPHA(color, pdst, alpha);\
 		}\
 		else\
 		{\
-			pdst[0] = thiz->gc.fg;\
+			pdst[0] = *color;\
 		}\
 	}while(0);
 
@@ -132,6 +131,7 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 	FtkColor* bits = NULL;
 	unsigned char alpha = 0;
 	FtkColor* pdst = NULL;
+	FtkColor* color = NULL;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	
 	width  = ftk_bitmap_width(thiz->bitmap);
@@ -143,24 +143,24 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 	x = x < 0 ? 0 : x;
 	y = y < 0 ? 0 : y;
 	h = (y + h) < height ? h : (height - y);
-	
+
+	pdst = bits + width * y + x;
+	color = &(thiz->gc.fg);
 	if(thiz->gc.mask & FTK_GC_LINE_MASK)
 	{
 		unsigned int line_mask = thiz->gc.line_mask;
-		for(i = 0; i < h; i++)
+		for(i = 0; i < h; i++, pdst +=width)
 		{
 			if(FTK_MASK_BITS(line_mask, i))
 			{
-				pdst = bits + width * (y + i) + x;
 				PUT_PIXEL(pdst, alpha);
 			}
 		}
 	}
 	else
 	{
-		for(i = 0; i < h; i++)
+		for(i = h; i; i--, pdst+=width)
 		{
-			pdst = bits + width * (y + i) + x;
 			PUT_PIXEL(pdst, alpha);
 		}
 	}
@@ -176,7 +176,7 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	FtkColor* bits = NULL;
 	unsigned char alpha = 0;
 	FtkColor* pdst = NULL;
-	
+	FtkColor* color = NULL;	
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	width  = ftk_bitmap_width(thiz->bitmap);
 	height = ftk_bitmap_height(thiz->bitmap);
@@ -188,24 +188,23 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	x = x < 0 ? 0 : x;
 	y = y < 0 ? 0 : y;
 	w = (x + w) < width ? w : width - x;
-	bits += y * width;
+	color = &(thiz->gc.fg);
+	pdst = bits + y * width + x;
 	if(thiz->gc.mask & FTK_GC_LINE_MASK)
 	{
 		unsigned int line_mask = thiz->gc.line_mask;
-		for(i = 0; i < w; i++)
+		for(i = 0; i < w; i++, pdst++)
 		{
 			if(FTK_MASK_BITS(line_mask, i))
 			{
-				pdst = bits + x + i;
 				PUT_PIXEL(pdst, alpha);
 			}
 		}
 	}
 	else
 	{
-		for(i = 0; i < w; i++)
+		for(i = w; i; i--, pdst++)
 		{
-			pdst = bits + x + i;
 			PUT_PIXEL(pdst, alpha);
 		}
 	}
