@@ -33,10 +33,10 @@
 
 struct _FtkBitmap
 {
-	int w;
-	int h;
+	size_t w;
+	size_t h;
 	int ref;
-	int length;
+	size_t length;
 	FtkColor bits[1];
 };
 
@@ -62,12 +62,12 @@ FtkBitmap* ftk_bitmap_create(int w, int h, FtkColor color)
 	return thiz;
 }
 
-int       ftk_bitmap_width(FtkBitmap* thiz)
+size_t ftk_bitmap_width(FtkBitmap* thiz)
 {
 	return thiz != NULL ? thiz->w : 0;
 }
 
-int       ftk_bitmap_height(FtkBitmap* thiz)
+size_t ftk_bitmap_height(FtkBitmap* thiz)
 {
 	return thiz != NULL ? thiz->h : 0;
 }
@@ -199,6 +199,7 @@ Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, void* data,
 Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
 	COPY_TO_DECL(unsigned char);
+	unsigned char alpha = 0;
 	(void)k;	
 
 	src += y * bw;
@@ -209,7 +210,7 @@ Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, 
 		for(j = x; j < w; j++, pdst+=3)
 		{
 			FtkColor* psrc = src+j;
-			if(psrc->a == 0xff)
+			if(likely(psrc->a == 0xff))
 			{
 				pdst[0] = psrc->b;
 				pdst[1] = psrc->g;
@@ -217,9 +218,10 @@ Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, 
 			}
 			else
 			{
-				FTK_ALPHA_1(psrc->b, pdst[0], psrc->a);
-				FTK_ALPHA_1(psrc->g, pdst[1], psrc->a);
-				FTK_ALPHA_1(psrc->r, pdst[2], psrc->a);
+				alpha = psrc->a;
+				FTK_ALPHA_1(psrc->b, pdst[0], alpha);
+				FTK_ALPHA_1(psrc->g, pdst[1], alpha);
+				FTK_ALPHA_1(psrc->r, pdst[2], alpha);
 			}
 		}
 		src += bw;
@@ -253,24 +255,26 @@ Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, void* data,
 Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
 	COPY_TO_DECL(FtkColor);
-
+	unsigned char alpha = 0;
 	src += y * bw;
 	dst += oy * dw;
 	for(i = y; i < h; i++)
 	{
 		for(j = x, k = ox; j < w; j++, k++)
 		{
-			FtkColor* pdst = dst+k;
-			FtkColor* psrc = src+j;
-			if(psrc->a == 0xff)
+			if(likely(src[j].a == 0xff))
 			{
-				*pdst = *psrc;
+				dst[k] = src[j];
 			}
 			else
 			{
-				FTK_ALPHA_1(psrc->b, pdst->b, psrc->a);
-				FTK_ALPHA_1(psrc->g, pdst->g, psrc->a);
-				FTK_ALPHA_1(psrc->r, pdst->r, psrc->a);
+				FtkColor* pdst = dst+k;
+				FtkColor* psrc = src+j;
+				
+				alpha = psrc->a;
+				FTK_ALPHA_1(psrc->b, pdst->b, alpha);
+				FTK_ALPHA_1(psrc->g, pdst->g, alpha);
+				FTK_ALPHA_1(psrc->r, pdst->r, alpha);
 			}
 		}
 		src += bw;
@@ -308,21 +312,40 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 {
 	unsigned int color;
 	FtkColor* psrc = NULL;
+	FtkColor dcolor = {0};
+	FtkColor* pcolor = NULL;
+	unsigned char alpha = 0;
+	unsigned short pixel = 0;
 	unsigned short* pdst = NULL;
 	COPY_TO_DECL(unsigned short);
 	src += y * bw;
 	dst += oy * dw;
 	
+	pcolor = &dcolor;
 	for(i = h - y; i; i--)
 	{
 		psrc = src;
 		pdst = dst;
 		
-		/*FIXME: works on little end only.*/
 		for(j = w; j; j--, psrc++, pdst++)
 		{
-			color = *(unsigned int*)psrc;
-			*pdst = (color & 0xf80000) >> 8 | ((color & 0xfc00) >> 5) | ((color & 0xf8) >> 3);
+			if(likely(psrc->a == 0xff))
+			{
+				/*FIXME: works on little end only.*/
+				color = *(unsigned int*)psrc;
+				*pdst = (color & 0xf80000) >> 8 | ((color & 0xfc00) >> 5) | ((color & 0xf8) >> 3);
+			}
+			else
+			{
+				pixel = *pdst;
+				alpha = psrc->a;
+				dcolor.r = (pixel & 0xf800) >> 8;
+				dcolor.g = (pixel & 0x07e0) >> 3;
+				dcolor.b = (pixel & 0x1f) << 3;
+				FTK_ALPHA(psrc, pcolor, alpha);
+				pixel = ((dcolor.r >> 3) << 11) | ((dcolor.g >> 2) << 5) | (dcolor.b >> 3);
+				*pdst = pixel;
+			}
 		}
 		src += bw;
 		dst += dw;
@@ -368,10 +391,21 @@ Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 		{
 			unsigned char* pdst = (unsigned char*)(dst+k);
 			FtkColor* psrc = src+j;
-			pdst[0] = psrc->r;
-			pdst[1] = psrc->g;
-			pdst[2] = psrc->b;
-			pdst[3] = psrc->a;
+
+			if(likely(psrc->a == 0xff))
+			{
+				pdst[0] = psrc->r;
+				pdst[1] = psrc->g;
+				pdst[2] = psrc->b;
+				pdst[3] = 0xff;
+			}
+			else
+			{
+				FTK_ALPHA_1(psrc->r, pdst[0], psrc->a);
+				FTK_ALPHA_1(psrc->g, pdst[1], psrc->a);
+				FTK_ALPHA_1(psrc->b, pdst[2], psrc->a);
+				pdst[3] = psrc->a;
+			}
 		}
 		src += bw;
 		dst += dw;

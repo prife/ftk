@@ -323,11 +323,13 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_MAP:
 		{
 			priv->mapped = 1;
+			PROFILE_TIME("MAP");
 			ftk_logd("%s: MAP %s\n", __func__, ftk_widget_get_text(thiz));
 			break;
 		}
 		case FTK_EVT_UNMAP:
 		{
+			PROFILE_TIME("UNMAP");
 			ftk_logd("%s: UNMAP %s\n", __func__, ftk_widget_get_text(thiz));
 			priv->mapped = 0;
 			break;
@@ -488,7 +490,6 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 	size_t i = 0;
 	FtkRect rect = {0};
 	DECL_PRIV0(thiz, priv);
-	//time_t last = 0;
 	return_val_if_fail(priv != NULL, RET_REMOVE);
 	
 	if(priv->dirty_rect_nr == 0 || !priv->mapped || !ftk_widget_is_visible(thiz))
@@ -497,13 +498,14 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 		return RET_REMOVE;
 	}
 
-	//last = ftk_get_relative_time();
+	PROFILE_TIME("");
+	PROFILE_START();
 	ftk_window_disable_update(thiz);
 	ftk_widget_paint(thiz);
 	ftk_window_enable_update(thiz);
-	//ftk_logd("%s: paint cost %d dirty_rect_nr=%d \n", __func__, ftk_get_relative_time() - last, priv->dirty_rect_nr);
+	PROFILE_END("paint");
 
-	//last = ftk_get_relative_time();
+	PROFILE_START();
 	if(priv->dirty_rect_nr < 3)
 	{
 		for(i = 0; i < priv->dirty_rect_nr; i++)
@@ -519,7 +521,7 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 		rect.height = ftk_widget_height(thiz);
 		ftk_window_update(thiz, &rect);
 	}
-	//ftk_logd("%s: update cost %d\n", __func__, ftk_get_relative_time() - last);
+	PROFILE_END("update");
 	priv->dirty_rect_nr = 0;
 
 	return RET_REMOVE;
@@ -583,6 +585,7 @@ FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int w
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	return_val_if_fail(thiz != NULL, NULL);
 
+	PROFILE_TIME("window create begin");
 	thiz->priv_subclass[0] = FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
@@ -607,6 +610,7 @@ FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int w
 	{
 		FTK_FREE(thiz);
 	}
+	PROFILE_TIME("window create end");
 
 	return thiz;
 }

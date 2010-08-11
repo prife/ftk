@@ -35,6 +35,10 @@
 #include <linux/input.h>
 #include "ftk_source_input.h"
 
+#ifndef EV_SYN
+#define EV_SYN 0x00
+#endif
+
 typedef struct _PrivInfo
 {
 	int fd;

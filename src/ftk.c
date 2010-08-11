@@ -49,9 +49,9 @@
 
 #ifdef FTK_MEMORY_PROFILE
 #include "ftk_allocator_profile.h"
-#define FTK_PROFILE(a) ftk_allocator_profile_create(a)
+#define FTK_ALLOC_PROFILE(a) ftk_allocator_profile_create(a)
 #else
-#define FTK_PROFILE(a) a
+#define FTK_ALLOC_PROFILE(a) a
 #endif
 
 static void ftk_deinit(void);
@@ -226,40 +226,53 @@ Ret ftk_init(int argc, char* argv[])
 	FtkConfig* config = NULL;
 	FtkDisplay* display = NULL;
 
+	PROFILE_START();
 #ifndef USE_STD_MALLOC
-	ftk_set_allocator(FTK_PROFILE(ftk_allocator_default_create()));
+	ftk_set_allocator(FTK_ALLOC_PROFILE(ftk_allocator_default_create()));
 #endif
 
 	ftk_platform_init(argc, argv);
 	config = ftk_config_create();
 	ftk_set_config(config);
 	ftk_config_init(config, argc, argv);
+	PROFILE_END("config init");
 
 	ftk_set_text_layout(ftk_text_layout_create());
+	PROFILE_START();
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
+	PROFILE_END("source main loop wnd manager init");
 
+	PROFILE_START();
 	ftk_init_font();
+	PROFILE_END("font init");
 	ftk_init_bitmap_factory();
 	
+	PROFILE_START();
 	ftk_init_theme(ftk_config_get_theme(config));
 	ftk_backend_init(argc, argv);
+	PROFILE_END("theme and backend init");
 
-	bg.a = 0xff;
 	display = ftk_display_rotate_create(ftk_default_display(), ftk_config_get_rotate(ftk_default_config()));
 	ftk_set_display(display);
 
+	PROFILE_START();
+	bg.a = 0xff;
 	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), bg));
+	PROFILE_END("canvas init");
 
+	PROFILE_START();
 	ftk_set_input_method_manager(ftk_input_method_manager_create());
+	ftk_set_input_method_preeditor(ftk_input_method_preeditor_default_create());
+	PROFILE_END("input method init");
 
+	PROFILE_START();
 	if(ftk_config_get_enable_status_bar(config))
 	{
 		ftk_init_panel();
 	}
-
-	ftk_set_input_method_preeditor(ftk_input_method_preeditor_default_create());
+	PROFILE_END("panel init");
 
 	if(ftk_config_get_enable_cursor(config))
 	{

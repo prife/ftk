@@ -39,8 +39,8 @@ struct _FtkBitmap;
 typedef struct _FtkBitmap FtkBitmap;
 
 FtkBitmap* ftk_bitmap_create(int w, int h, FtkColor clear_color);
-int        ftk_bitmap_width(FtkBitmap* thiz);
-int        ftk_bitmap_height(FtkBitmap* thiz);
+size_t     ftk_bitmap_width(FtkBitmap* thiz);
+size_t     ftk_bitmap_height(FtkBitmap* thiz);
 FtkColor*  ftk_bitmap_bits(FtkBitmap* thiz);
 void       ftk_bitmap_ref(FtkBitmap* thiz);
 void       ftk_bitmap_unref(FtkBitmap* thiz);

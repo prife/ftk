@@ -36,6 +36,9 @@
 struct _FtkCanvas
 {
 	FtkGc gc;
+	size_t width;
+	size_t height;
+	FtkColor* bits;
 	FtkBitmap* bitmap;
 };
 
@@ -51,6 +54,9 @@ FtkCanvas* ftk_canvas_create(int w, int h, FtkColor clear_color)
 		thiz->gc.fg.b = 0xff - clear_color.b;
 
 		thiz->bitmap = ftk_bitmap_create(w, h, clear_color);
+		thiz->bits = ftk_bitmap_bits(thiz->bitmap);
+		thiz->width = ftk_bitmap_width(thiz->bitmap);
+		thiz->height = ftk_bitmap_height(thiz->bitmap);
 	}
 
 	return thiz;
@@ -99,9 +105,9 @@ Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val)
 	FtkColor* bits = NULL;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
+	bits   = thiz->bits;
 	return_val_if_fail(bits != NULL && x < width && y < height, RET_FAIL);
 	bits[y * width + x] = val;
 
@@ -115,9 +121,9 @@ FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y)
 	FtkColor* bits = NULL;
 	return_val_if_fail(thiz != NULL, NULL);
 
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
+	bits   = thiz->bits;
 	return_val_if_fail(bits != NULL && x < width && y < height, NULL);
 
 	return bits + y * width + x;
@@ -134,9 +140,9 @@ Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 	FtkColor* color = NULL;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
+	bits   = thiz->bits;
 	return_val_if_fail(bits != NULL && y < height, RET_FAIL);
 	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
 
@@ -178,9 +184,9 @@ Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 	FtkColor* pdst = NULL;
 	FtkColor* color = NULL;	
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
+	bits   = thiz->bits;
 	return_val_if_fail(bits != NULL && x < width, RET_FAIL);
 	return_val_if_fail(y < height, RET_FAIL);	
 	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
@@ -224,9 +230,9 @@ Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h)
 	FtkColor* pdst = NULL;
 	
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
+	bits   = thiz->bits;
 	return_val_if_fail(bits != NULL && x < width, RET_FAIL);
 	return_val_if_fail(y < height, RET_FAIL);	
 	alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
@@ -262,8 +268,8 @@ Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 	int width  = 0;
 	int height = 0;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
 	return_val_if_fail(x < width && y < height, RET_FAIL);
 
 	if(fill)
@@ -292,8 +298,8 @@ Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int 
 	int width  = 0;
 	int height = 0;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
 	return_val_if_fail(x < width && y < height, RET_FAIL);
 	return_val_if_fail(w > 8 && h > 8, RET_FAIL);
 
@@ -334,9 +340,9 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 	return_val_if_fail(thiz != NULL && str != NULL, RET_FAIL);
 
 	len = len >= 0 ? len : (int)strlen(str);
-	width  = ftk_bitmap_width(thiz->bitmap);
-	height = ftk_bitmap_height(thiz->bitmap);
-	bits   = ftk_bitmap_bits(thiz->bitmap);
+	width  = thiz->width;
+	height = thiz->height;
+	bits   = thiz->bits;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	color.a = 0xff;
@@ -404,8 +410,8 @@ Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int 
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
 
-	int width  = ftk_bitmap_width(thiz->bitmap);
-	int height = ftk_bitmap_height(thiz->bitmap);
+	int width  = thiz->width;
+	int height = thiz->height;
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
@@ -416,7 +422,7 @@ Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int 
 	return_val_if_fail(yoffset < height, RET_FAIL);
 
 	src = ftk_bitmap_bits(bitmap);
-	dst = ftk_bitmap_bits(thiz->bitmap);
+	dst = thiz->bits;
 
 	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
 	w = (xoffset + w) < width  ? w : width  - xoffset;
@@ -449,8 +455,8 @@ Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y
 	int i=0, j=0, m=0, n=0;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
-	int width  = ftk_bitmap_width(thiz->bitmap); //Canvas width
-	int height = ftk_bitmap_height(thiz->bitmap);
+	int width  = thiz->width; //Canvas width
+	int height = thiz->height;
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
@@ -459,10 +465,11 @@ Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y
 	return_val_if_fail(y < height, RET_FAIL);
 
 	src = ftk_bitmap_bits(bitmap);
-	dst = ftk_bitmap_bits(thiz->bitmap);
+	dst = thiz->bits;
         
-        if(w+x>width)
+	if(w+x>width)
 		return RET_FAIL;
+
 	if(h+y>height)
 		return RET_FAIL;
 	
@@ -494,11 +501,12 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	unsigned char alpha = 0;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
-	int width  = ftk_bitmap_width(thiz->bitmap);
-	int height = ftk_bitmap_height(thiz->bitmap);
+	unsigned char alpha = 0;
+	unsigned char dst_alpha = 0;
+	int width  = thiz->width;
+	int height = thiz->height;
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
@@ -509,7 +517,7 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	return_val_if_fail(yoffset < height, RET_FAIL);
 
 	src = ftk_bitmap_bits(bitmap);
-	dst = ftk_bitmap_bits(thiz->bitmap);
+	dst = thiz->bits;
 
 	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
 	w = (xoffset + w) < width  ? w : width  - xoffset;
@@ -529,9 +537,10 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 			for(j = x, k = xoffset; j < w; j++, k++)
 			{
 				alpha = (src[j].a * thiz->gc.alpha) >> 8;
-				dst[k].r = (src[j].r * alpha + dst[k].r * (0xff - alpha)) >> 8;
-				dst[k].g = (src[j].g * alpha + dst[k].g * (0xff - alpha)) >> 8;
-				dst[k].b = (src[j].b * alpha + dst[k].b * (0xff - alpha)) >> 8;
+				dst_alpha = 0xff - alpha;
+				dst[k].r = (src[j].r * alpha + dst[k].r * dst_alpha) >> 8;
+				dst[k].g = (src[j].g * alpha + dst[k].g * dst_alpha) >> 8;
+				dst[k].b = (src[j].b * alpha + dst[k].b * dst_alpha) >> 8;
 			}
 			src += bitmap_width;
 			dst += width;
@@ -549,9 +558,11 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 				}
 				else
 				{
-					dst[k].r = (src[j].r * src[j].a + dst[k].r * (0xff - src[j].a)) >> 8;
-					dst[k].g = (src[j].g * src[j].a + dst[k].g * (0xff - src[j].a)) >> 8;
-					dst[k].b = (src[j].b * src[j].a + dst[k].b * (0xff - src[j].a)) >> 8;
+					alpha = src[j].a; 
+					dst_alpha = 0xff - alpha;
+					dst[k].r = (src[j].r * alpha + dst[k].r * dst_alpha) >> 8;
+					dst[k].g = (src[j].g * alpha + dst[k].g * dst_alpha) >> 8;
+					dst[k].b = (src[j].b * alpha + dst[k].b * dst_alpha) >> 8;
 				}
 			}
 			src += bitmap_width;
