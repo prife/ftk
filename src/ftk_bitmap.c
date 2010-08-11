@@ -198,8 +198,8 @@ Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, void* data,
 
 Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
-	COPY_TO_DECL(unsigned char);
 	unsigned char alpha = 0;
+	COPY_TO_DECL(unsigned char);
 	(void)k;	
 
 	src += y * bw;
@@ -254,8 +254,9 @@ Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, void* data,
 
 Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data, int ox, int oy, size_t dw, size_t dh)
 {
-	COPY_TO_DECL(FtkColor);
 	unsigned char alpha = 0;
+	COPY_TO_DECL(FtkColor);
+
 	src += y * bw;
 	dst += oy * dw;
 	for(i = y; i < h; i++)
@@ -289,7 +290,6 @@ Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data, 
 	size_t dw, size_t dh, FtkRect* rect)
 {
-
 	COPY_FROM_DECL(unsigned short);
 	src += y * dw + x;
 	for(oy = 0; oy < h; oy++)
