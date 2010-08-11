@@ -318,9 +318,9 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	unsigned short pixel = 0;
 	unsigned short* pdst = NULL;
 	COPY_TO_DECL(unsigned short);
-	src += y * bw;
-	dst += oy * dw;
-	
+	src += y * bw + x;
+	dst += oy * dw + ox;
+
 	pcolor = &dcolor;
 	for(i = h - y; i; i--)
 	{
