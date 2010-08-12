@@ -50,7 +50,7 @@ struct _FtkListRender
 	FtkListRenderPaint   paint;
 	FtkListRenderDestroy destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret ftk_list_render_init(FtkListRender* thiz, FtkListModel* model, FtkWidget* list_view)

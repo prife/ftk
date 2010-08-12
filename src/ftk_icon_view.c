@@ -349,10 +349,7 @@ FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int 
 		thiz->on_paint = ftk_icon_view_on_paint;
 		thiz->destroy  = ftk_icon_view_destroy;
 
-		ftk_widget_init(thiz, FTK_ICON_VIEW, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_attr(thiz, FTK_ATTR_BG_FOUR_CORNER);
+		ftk_widget_init(thiz, FTK_ICON_VIEW, 0, x, y, width, height, FTK_ATTR_BG_FOUR_CORNER);
 		priv->item_focus  = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_focus"FTK_STOCK_IMG_SUFFIX);
 		priv->item_active = ftk_theme_load_image(ftk_default_theme(), "menuitem_background_pressed"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_append_child(parent, thiz);

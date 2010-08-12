@@ -655,9 +655,7 @@ FtkWidget* ftk_text_view_create(FtkWidget* parent, int x, int y, int width, int 
 
 		min_height = ftk_font_height(ftk_default_font()) + TEXT_VIEW_V_MARGIN * 2;
 		height = height < min_height ? min_height : height;
-		ftk_widget_init(thiz, FTK_TEXT_VIEW, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
+		ftk_widget_init(thiz, FTK_TEXT_VIEW, 0, x, y, width, height, 0);
 
 		priv->input_method = -1;
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_text_view_on_paint_caret, thiz);

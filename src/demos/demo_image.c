@@ -7,7 +7,7 @@ int FTK_MAIN(int argc, char* argv[])
 	char filename[FTK_MAX_PATH+1] = {0};
 	FTK_INIT(argc, argv);
 	
-	win = ftk_window_create(0, 0, 320, 480);
+	win = ftk_app_window_create();
 
 	ftk_snprintf(filename, FTK_MAX_PATH, "%s/earth.png", TESTDATA_DIR);
 	image = ftk_image_create(win, 0, 0, ftk_widget_width(win)/2, ftk_widget_height(win)/2);

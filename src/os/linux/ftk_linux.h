@@ -54,10 +54,10 @@
 #define ftk_getcwd    getcwd
 #define ftk_sscanf    sscanf
 
-#define ftk_pipe_pair(fds)				socketpair(AF_UNIX, SOCK_STREAM, 0, fds)
+#define ftk_pipe_pair(fds)				pipe(fds)
 #define ftk_pipe_close(fd)				close(fd)
-#define ftk_pipe_recv(fd, buf, length)	recv(fd, buf, length, 0)
-#define ftk_pipe_send(fd, buf, length)	send(fd, buf, length, 0)
+#define ftk_pipe_recv(fd, buf, length)	read(fd, buf, length)
+#define ftk_pipe_send(fd, buf, length)	write(fd, buf, length)
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -66,6 +66,7 @@
 #define FTK_PATH_DELIM '/'
 
 #define FTK_HAS_MAIN 1
+#define LINUX 1
 
 #endif/*FTK_LINUX_H*/
 

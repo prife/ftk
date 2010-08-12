@@ -121,10 +121,7 @@ FtkWidget* ftk_status_item_create(FtkWidget* parent, int pos, int width)
 		thiz->on_paint = ftk_status_item_on_paint;
 		thiz->destroy  = ftk_status_item_destroy;
 
-		ftk_widget_init(thiz, FTK_STATUS_ITEM, 0);
-		ftk_widget_move(thiz, 0, 0);
-		ftk_widget_resize(thiz, width, 0);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_init(thiz, FTK_STATUS_ITEM, 0, 0, 0, width, 0, FTK_ATTR_TRANSPARENT);
 		ftk_status_item_set_position(thiz, pos);
 		ftk_status_panel_add(parent, thiz);
 	}

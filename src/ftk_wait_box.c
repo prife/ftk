@@ -98,11 +98,8 @@ FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
 		assert(priv->bitmap != NULL);
 		
 		w = ftk_bitmap_width(priv->bitmap);
-		ftk_widget_init(thiz, FTK_WAIT_BOX, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, w, w);
+		ftk_widget_init(thiz, FTK_WAIT_BOX, 0, x, y, w, w, FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
-		ftk_widget_append_child(parent, thiz);
 
 		priv->timer = ftk_source_timer_create(500, (FtkTimer)ftk_widget_invalidate, thiz);
 	}

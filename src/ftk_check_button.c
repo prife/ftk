@@ -221,11 +221,7 @@ FtkWidget* ftk_check_button_create_ex(FtkWidget* parent, int x, int y, int width
 		thiz->on_paint = ftk_check_button_on_paint;
 		thiz->destroy  = ftk_check_button_destroy;
 
-		ftk_widget_init(thiz, radio ? FTK_RADIO_BUTTON : FTK_CHECK_BUTTON, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_init(thiz, radio ? FTK_RADIO_BUTTON : FTK_CHECK_BUTTON, 0, x, y, width, height, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}
 	else

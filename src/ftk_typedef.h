@@ -308,7 +308,6 @@ typedef struct _FtkCommitInfo
 #  define N_(String) (String)
 #endif
 
-#define FTK_PROFILE 1
 #ifdef FTK_PROFILE
 static size_t profile_begin;
 #define PROFILE_START() profile_begin = ftk_get_relative_time();
@@ -324,9 +323,11 @@ static size_t profile_begin;
 #if __GNUC__ >= 3
 #define likely(x)   __builtin_expect(!!(x), 1)
 #define unlikely(x) __builtin_expect(!!(x), 0)
+#define ZERO_LEN_ARRAY 0
 #else
 #define likely(x) x
 #define unlikely(x) x
+#define ZERO_LEN_ARRAY 1
 #endif
 
 #endif/*FTK_TYPEDEF_H*/

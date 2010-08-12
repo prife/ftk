@@ -51,7 +51,7 @@ struct _FBusStream
 	FBusStreamGetFd get_fd;
 	FBusStreamDestroy destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 inline static int fbus_stream_read(FBusStream* thiz, char* buffer, size_t len)

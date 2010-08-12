@@ -279,7 +279,7 @@ static void ftk_dialog_destroy(FtkWidget* thiz)
 
 FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height)
 {
-	FtkWidget* thiz = ftk_window_create_ex(FTK_DIALOG, attr, x, y, width, height);
+	FtkWidget* thiz = ftk_window_create(FTK_DIALOG, attr, x, y, width, height);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));

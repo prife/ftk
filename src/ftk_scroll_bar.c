@@ -263,10 +263,8 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 			assert(width > height);
 		}
 
-		ftk_widget_init(thiz, width < height ? FTK_SCROLL_VBAR : FTK_SCROLL_HBAR, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT);
+		ftk_widget_init(thiz, width < height ? FTK_SCROLL_VBAR : FTK_SCROLL_HBAR, 0, 
+			x, y, width, height, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}
 

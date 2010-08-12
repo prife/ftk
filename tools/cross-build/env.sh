@@ -7,10 +7,17 @@
 
 #openmoko
 #######################################################
-export ARCH=arm
-export HOST_PARAM=--host=arm-linux
-export TARGET_CC=arm-linux-gcc
-export PATH=/usr/local/openmoko/arm/bin/:$PATH
+#export ARCH=arm
+#export HOST_PARAM=--host=arm-linux
+#export TARGET_CC=arm-linux-gcc
+#export PATH=/usr/local/openmoko/arm/bin/:$PATH
+
+#mini4020
+#######################################################
+#export ARCH=arm
+#export HOST_PARAM=--host=arm-linux
+#export TARGET_CC=arm-linux-gcc
+#export PATH=/usr/local/arm/3.3.2/bin/:$PATH
 
 #jz4740
 #######################################################
@@ -21,9 +28,10 @@ export PATH=/usr/local/openmoko/arm/bin/:$PATH
 
 #ben
 #######################################################
-#export ARCH=mipsel
-#export HOST_PARAM=--host=mipsel-openwrt-linux
-#export TARGET_CC=mipsel-openwrt-linux-gcc
+export ARCH=mipsel
+export HOST_PARAM=--host=mipsel-openwrt-linux
+export TARGET_CC=mipsel-openwrt-linux-gcc
+export PATH=/work/board/jz/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3+cs_uClibc-0.9.30.1/usr/bin:$PATH
 
 #sigma, 
 # maybe you need change the path.
@@ -44,6 +52,6 @@ export DIST=${BUILD_DIR}/dist
 export PKG_CONFIG_PATH=${STAGING}/${PREFIX}/lib/pkgconfig/
 export LDFLAGS="-L${STAGING}/${PREFIX}/lib -Wl,-rpath -Wl,${PREFIX}/lib"
 export CFLAGS="-I${STAGING}/${PREFIX}/include"
-
+export DIRS="--libdir=${STAGING}/lib --includedir=${STAGING}/include"
 export CAIRO=cairo
 export ENABLE_CAIRO="--enable-cairo"

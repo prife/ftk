@@ -61,7 +61,7 @@ struct _FtkFont
 	FtkFontLookup  lookup;
 	FtkFontDestroy destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline int      ftk_font_height(FtkFont* thiz)

@@ -69,7 +69,7 @@ struct _FtkInputMethod
 	FtkInputMethodHandleEvent handle_event;
 	FtkInputMethodDestroy     destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret  ftk_input_method_focus_in(FtkInputMethod* thiz, FtkWidget* editor)

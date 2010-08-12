@@ -59,7 +59,7 @@ struct _FtkListModel
 	int disable_notify;
 	void* listener_ctx;
 	FtkListener listener;
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret ftk_list_model_enable_notify(FtkListModel* thiz)

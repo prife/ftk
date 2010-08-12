@@ -55,7 +55,7 @@ struct _FtkGestureListener
 	FtkGestureListenerOnLongPressed on_long_pressed;
 	FtkGestureListenerDestroy       destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret ftk_gesture_listener_on_clicked(FtkGestureListener* thiz, FtkEvent* event)

@@ -57,7 +57,7 @@ struct _FBusService
 	FBusServiceDestroy            destroy;
 
 	void* data;
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 inline static const char* fbus_service_get_name(FBusService* thiz)

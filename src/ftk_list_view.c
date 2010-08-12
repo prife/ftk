@@ -360,11 +360,8 @@ FtkWidget* ftk_list_view_create(FtkWidget* parent, int x, int y, int width, int 
 		thiz->on_paint = ftk_list_view_on_paint;
 		thiz->destroy  = ftk_list_view_destroy;
 
-		ftk_widget_init(thiz, FTK_LIST_VIEW, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
+		ftk_widget_init(thiz, FTK_LIST_VIEW, 0, x, y, width, height, FTK_ATTR_BG_FOUR_CORNER);
 		ftk_widget_append_child(parent, thiz);
-		ftk_widget_set_attr(thiz, FTK_ATTR_BG_FOUR_CORNER);
 
 		priv->bg_normal = ftk_theme_load_image(ftk_default_theme(),
 			"list_selector_background_normal"FTK_STOCK_IMG_SUFFIX);

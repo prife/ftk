@@ -128,8 +128,7 @@ FtkWidget* ftk_menu_item_create(FtkWidget* parent)
 		thiz->on_paint = ftk_menu_item_on_paint;
 		thiz->destroy  = ftk_menu_item_destroy;
 
-		ftk_widget_init(thiz, FTK_MENU_ITEM, 0);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
+		ftk_widget_init(thiz, FTK_MENU_ITEM, 0, 0, 0, 0, 0, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
 		ftk_menu_panel_add(parent, thiz);
 	}

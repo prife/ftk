@@ -49,7 +49,7 @@ struct _FtkImageDecoder
 	FtkImageDecoderDecode  decode;
 	FtkImageDecoderDestroy destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret ftk_image_decoder_match(FtkImageDecoder* thiz, const char* filename)

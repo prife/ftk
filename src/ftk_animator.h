@@ -69,7 +69,7 @@ struct _FtkAnimator
 	FtkAnimatorStop     stop;
 	FtkAnimatorSetParam set_param;
 	FtkAnimatorDestroy  destroy;
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret  ftk_animator_stop(FtkAnimator* thiz)

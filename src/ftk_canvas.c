@@ -88,13 +88,13 @@ FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz)
 #define PUT_PIXEL(pdst, alpha) \
 	do\
 	{\
-		if(alpha != 0xff)\
+		if(likely(alpha == 0xff))\
 		{\
-			FTK_ALPHA(color, pdst, alpha);\
+			pdst[0] = *color;\
 		}\
 		else\
 		{\
-			pdst[0] = *color;\
+			FTK_ALPHA(color, pdst, alpha);\
 		}\
 	}while(0);
 

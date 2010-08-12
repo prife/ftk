@@ -235,7 +235,7 @@ FtkImPreeditor* ftk_input_method_preeditor_default_create(void)
 	model = ftk_list_model_default_create(10);
 	return_val_if_fail(model != NULL, NULL);
 
-	popup = ftk_window_create_ex(FTK_WINDOW_ANY, 0, x, y, w, h);
+	popup = ftk_window_create(FTK_WINDOW_ANY, 0, x, y, w, h);
 	ftk_widget_set_text(popup, "im preeditor");
 	render = ftk_list_render_default_create();
 	button = ftk_button_create(popup, 0, 0, w, FTK_IM_PREEDITOR_ITEM_HEIGHT);

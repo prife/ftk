@@ -204,8 +204,8 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_MENU_PANEL, ftk_widget_state(thiz));
 	ftk_canvas_set_gc(canvas, &gc);
-	ftk_canvas_draw_rect(canvas, x, y, width, height+1, 0);
-	ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height, 0);
+	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
+	ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height-2, 0);
 
 	/*draw grid*/
 	gc.fg = ftk_widget_get_gc(thiz)->fg;
@@ -259,7 +259,7 @@ static void ftk_menu_panel_destroy(FtkWidget* thiz)
 
 FtkWidget* ftk_menu_panel_create(void)
 {
-	FtkWidget* thiz = ftk_window_create_ex(FTK_MENU_PANEL, 0, 0, 0, 0, 0);
+	FtkWidget* thiz = ftk_window_create(FTK_MENU_PANEL, 0, 0, 0, 0, 0);
 	return_val_if_fail(thiz != NULL, NULL);
 
 	thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));

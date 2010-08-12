@@ -66,7 +66,8 @@ struct _FtkWdiget
 	void* priv_subclass[5];
 };
 
-void ftk_widget_init(FtkWidget* thiz, int type, int id);
+void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y, 
+	int width, int height, FtkWidgetAttr attr);
 int ftk_widget_type(FtkWidget* thiz);
 int ftk_widget_top(FtkWidget* thiz);
 int ftk_widget_left(FtkWidget* thiz);

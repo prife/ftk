@@ -96,11 +96,7 @@ FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, i
 		thiz->on_paint = ftk_progress_bar_on_paint;
 		thiz->destroy  = ftk_progress_bar_destroy;
 
-		ftk_widget_init(thiz, FTK_PROGRESS_BAR, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
+		ftk_widget_init(thiz, FTK_PROGRESS_BAR, 0, x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
 		ftk_widget_append_child(parent, thiz);
 	}
 	else

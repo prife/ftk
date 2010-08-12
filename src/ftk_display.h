@@ -60,7 +60,7 @@ struct _FtkDisplay
 	FtkDisplayOnUpdate on_update[FTK_DISPLAY_LISTENER_NR];
 	void* on_update_ctx[FTK_DISPLAY_LISTENER_NR];
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 Ret ftk_display_reg_update_listener(FtkDisplay* thiz, FtkDisplayOnUpdate on_update, void* ctx);

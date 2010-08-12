@@ -38,6 +38,7 @@ typedef enum _FtkEventType
 {
 	FTK_EVT_NOP = 0,
 	FTK_EVT_IDLE,
+	FTK_EVT_INIT,
 	FTK_EVT_TIMER,
 	FTK_EVT_QUIT,
 	FTK_EVT_KEY_UP,

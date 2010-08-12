@@ -20,7 +20,7 @@ static int lua_ftk_widget_init(lua_State* L)
 	thiz = tolua_tousertype(L, 1, 0);
 	type = tolua_tonumber(L, 2, 0);
 	id = tolua_tonumber(L, 3, 0);
-	ftk_widget_init(thiz, type, id);
+	ftk_widget_init(thiz, type, id, 0, 0, 0, 0, 0);
 
 	return 1;
 }

@@ -136,6 +136,14 @@ fi
 
 AM_CONDITIONAL(ENABLE_HANDWRITE,  test "$enable_handwrite" = "yes")
 
+AC_ARG_ENABLE(profile,
+  [  --enable-profile build with performance profile support [[default=no]]],,
+  enable_profile=no)
+
+if test "$enable_profile" = "yes"; then
+  CFLAGS="$CFLAGS -DFTK_PROFILE -DFTK_MEMORY_PROFILE"
+fi
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_INLINE
 AC_TYPE_SIZE_T

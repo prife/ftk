@@ -52,7 +52,7 @@ struct _FtkSource
 	
 	int  ref;
 	int  disable;
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret ftk_source_disable(FtkSource* thiz)

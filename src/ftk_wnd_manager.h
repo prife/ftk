@@ -68,7 +68,7 @@ struct _FtkWndManager
 	FtkWndManagerRemoveGlobalListener remove_global_listener;
 	FtkWndManagerDestroy              destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret  ftk_wnd_manager_restack(FtkWndManager* thiz, FtkWidget* window, int offset)

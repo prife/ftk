@@ -17,7 +17,7 @@ libftklua_la_SOURCES=ftk_lua.c tolua_event.c  tolua_is.c  tolua_map.c  tolua_pus
 	lua_ftk_list_render_default.c lua_ftk_list_render.c lua_ftk_sprite.c \
 	lua_ftk_wnd_manager.c lua_ftk_config.c  lua_ftk_structs.c
 
-libftklua_la_LDFLAGS=$(MYLDFLAGS) $(abs_top_builddir)/script_binding/lua/lua/.libs/liblua.a 
+libftklua_la_LDFLAGS=$(MYLDFLAGS) $(abs_top_builddir)/script_binding/lua/lua/liblua.la 
 
 if FTK_BACKEND_PSP
 libftklua_la_CFLAGS=-DLUA_USE_PSP

@@ -37,8 +37,7 @@
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_window_create(int x, int y, int width, int height);
-FtkWidget* ftk_window_create_ex(int type, unsigned int attr, int x, int y, int width, int height);
+FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int width, int height);
 Ret        ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget);
 FtkWidget* ftk_window_get_focus(FtkWidget* thiz);
 Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget);

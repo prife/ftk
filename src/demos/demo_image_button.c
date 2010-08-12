@@ -64,10 +64,10 @@ int FTK_MAIN(int argc, char* argv[])
 	FtkWidget* button = NULL;
 	FTK_INIT(argc, argv);
 
-	width = ftk_display_width(ftk_default_display());
-	height = ftk_display_height(ftk_default_display()) - FTK_STATUS_PANEL_HEIGHT;
 	gc.mask = FTK_GC_BITMAP;
-	win = ftk_window_create(0, 0, width, height);
+	win = ftk_app_window_create();
+	width = ftk_widget_width(win);
+	height = ftk_widget_height(win);
 	for(i = 0; i < height/80; i++)
 	{
 		for(j = 0; j < width/80; j++)

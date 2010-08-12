@@ -77,10 +77,7 @@ FtkWidget* ftk_painter_create(FtkWidget* parent, int x, int y, int width, int he
 		thiz->on_paint = ftk_painter_on_paint;
 		thiz->destroy  = ftk_painter_destroy;
 
-		ftk_widget_init(thiz, FTK_PAINTER, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		
+		ftk_widget_init(thiz, FTK_PAINTER, 0, x, y, width, height, 0);
 		ftk_widget_append_child(parent, thiz);
 	}
 	else

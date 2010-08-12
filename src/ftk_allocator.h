@@ -51,7 +51,7 @@ struct _FtkAllocator
 	FtkAllocatorFree    free;
 	FtkAllocatorDestroy destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 void* ftk_allocator_alloc(FtkAllocator* thiz, size_t size);

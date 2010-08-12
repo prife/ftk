@@ -415,10 +415,7 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		thiz->destroy  = ftk_entry_destroy;
 
 		height = ftk_font_height(ftk_default_font()) + FTK_ENTRY_TOP_MARGIN * 2;
-		ftk_widget_init(thiz, FTK_ENTRY, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
+		ftk_widget_init(thiz, FTK_ENTRY, 0, x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
 		priv->input_method = -1;
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);

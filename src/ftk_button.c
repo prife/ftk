@@ -143,11 +143,7 @@ FtkWidget* ftk_button_create(FtkWidget* parent, int x, int y, int width, int hei
 		thiz->on_paint = ftk_button_on_paint;
 		thiz->destroy  = ftk_button_destroy;
 
-		ftk_widget_init(thiz, FTK_BUTTON, 0);
-		ftk_widget_move(thiz, x, y);
-		ftk_widget_resize(thiz, width, height);
-		
-		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
+		ftk_widget_init(thiz, FTK_BUTTON, 0, x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 		ftk_widget_append_child(parent, thiz);
 	}
 	else

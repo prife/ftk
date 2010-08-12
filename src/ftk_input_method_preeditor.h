@@ -57,7 +57,7 @@ struct _FtkImPreeditor
 	FtkInputMethodPreeditorAddCandidate add_candidate;
 	FtkInputMethodPreeditorDestroy      destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline Ret ftk_input_method_preeditor_reset(FtkImPreeditor* thiz)

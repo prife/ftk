@@ -62,21 +62,27 @@ struct _FtkWidgetInfo
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz);
 
-void ftk_widget_init(FtkWidget* thiz, int type, int id)
+void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y, 
+	int width, int height, FtkWidgetAttr attr)
 {
-	return_if_fail(thiz != NULL);
+	return_if_fail(thiz != NULL && thiz->priv == NULL);
 
 	thiz->ref = 1;
 	thiz->priv = (FtkWidgetInfo*)FTK_ZALLOC(sizeof(FtkWidgetInfo));
 
 	if(thiz->priv != NULL)
 	{
-		FtkWidgetState state = FTK_WIDGET_NORMAL;
 		FtkWidgetInfo* priv =  thiz->priv;
+		FtkWidgetState state = FTK_WIDGET_NORMAL;
 
 		priv->id     = id;
 		priv->type   = type;
-
+		priv->left   = x;
+		priv->top    = y;
+		priv->width  = width;
+		priv->height = height;
+		priv->attr |= attr;
+		
 		for(; state < FTK_WIDGET_STATE_NR; state++)
 		{
 			priv->gc[state].mask   = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
@@ -87,9 +93,19 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id)
 
 			if(priv->gc[state].bitmap != NULL) priv->gc[state].mask |= FTK_GC_BITMAP;
 		}
+	
+		if(attr & FTK_ATTR_INSENSITIVE)
+		{
+			priv->state = FTK_WIDGET_INSENSITIVE;
+		}
+		else if(attr & FTK_ATTR_FOCUSED)
+		{
+			ftk_window_set_focus(ftk_widget_toplevel(thiz), thiz);
+		}
 	}
 
 	return;
+
 }
 
 int ftk_widget_type(FtkWidget* thiz)

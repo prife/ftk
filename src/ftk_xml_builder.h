@@ -57,7 +57,7 @@ struct _FtkXmlBuilder
 	FtkXmlBuilderOnErrorFunc        on_error;
 	FtkXmlBuilderDestroyFunc        destroy;
 
-	char priv[1];
+	char priv[ZERO_LEN_ARRAY];
 };
 
 static inline void ftk_xml_builder_on_start_element(FtkXmlBuilder* thiz, const char* tag, const char** attrs)

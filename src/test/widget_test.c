@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	ftk_set_allocator(ftk_allocator_default_create());
 	FtkWidget* thiz = FTK_ZALLOC(sizeof(FtkWidget));
 	FtkCanvas* canvas = ftk_canvas_create(240, 320, color);
-	ftk_widget_init(thiz, 1, 100);
+	ftk_widget_init(thiz, 1, 100, 0, 0, 0, 0, 0);
 	ftk_widget_set_canvas(thiz, canvas);
 	ftk_widget_resize(thiz, 240, 320);
 	ftk_widget_move(thiz, 200, 100);
@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
 
 	FtkWidget* child1 = calloc(1, sizeof(FtkWidget));
 	FtkWidget* child2 = calloc(1, sizeof(FtkWidget));
-	ftk_widget_init(child1, 1, 200);
-	ftk_widget_init(child2, 1, 300);
+	ftk_widget_init(child1, 1, 200, 0, 0, 0, 0, 0);
+	ftk_widget_init(child2, 1, 300, 0, 0, 0, 0, 0);
 
 	ftk_widget_move(thiz, 0, 0);
 	ftk_widget_move(child1, 0, 0);
