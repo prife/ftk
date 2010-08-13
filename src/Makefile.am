@@ -59,7 +59,7 @@ libftk_la_SOURCES=\
 	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c \
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
-	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c 
+	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c
 
 if ENABLE_HANDWRITE
 libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
@@ -172,7 +172,7 @@ ftk_HEADERS=\
 	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
 	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
 	ftk_animator_zoom.h ftk_display_mem.h ftk_config.h \
-	ftk_text_layout.h ftk_display_rotate.h
+	ftk_text_layout.h ftk_display_rotate.h ftk_path.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
 	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \
