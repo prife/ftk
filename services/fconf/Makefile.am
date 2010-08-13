@@ -6,7 +6,7 @@ libfconf_la_SOURCES=fconf_client.c
 libfconf_la_CFLAGS=-I$(top_srcdir)/fbus
 libfconf_la_LDFLAGS=$(MYLDFLAGS) $(abs_top_builddir)/fbus/libfbus.la
 
-noinst_PROGRAMS=fconf_test path_test fconf_xml_test
+noinst_PROGRAMS=fconf_test fconf_xml_test
 
 fconf_xml_test_SOURCES=fconf_xml.c 
 fconf_xml_test_CFLAGS=-DFCONF_XML_TEST -I$(top_srcdir)/fbus
