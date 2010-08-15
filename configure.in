@@ -188,6 +188,7 @@ AC_CONFIG_FILES([ftk.pc
                 script_binding/lua/Makefile
                 script_binding/lua/lua/Makefile
                 apps/Makefile
+                apps/common/Makefile
                 apps/launcher/Makefile
                 apps/desktop/Makefile
                 apps/desktop/icons/Makefile

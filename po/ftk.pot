@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-07 10:22+0800\n"
+"POT-Creation-Date: 2010-08-15 15:17+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,18 +16,18 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: apps/desktop/main.c:234
+#: apps/desktop/main.c:235
 msgid "Shutdown"
 msgstr ""
 
-#: apps/desktop/main.c:242
+#: apps/desktop/main.c:243
 msgid "Stop VNC"
 msgstr ""
 
-#: apps/desktop/main.c:246
+#: apps/desktop/main.c:247
 msgid "Start VNC"
 msgstr ""
 
-#: apps/desktop/main.c:281
+#: apps/desktop/main.c:292
 msgid "Hello, GetText"
 msgstr ""

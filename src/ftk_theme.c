@@ -423,8 +423,7 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 		thiz->icon_cache = NULL;
 	}
 
-	ftk_snprintf(icon_path, sizeof(icon_path), "theme/%s", thiz->name);
-	ftk_normalize_path(icon_path);
+	ftk_snprintf(icon_path, sizeof(icon_path), "theme%c%s", FTK_PATH_DELIM, thiz->name);
 	thiz->icon_cache = ftk_icon_cache_create(s_default_path, icon_path);
 
 	return RET_OK;

@@ -185,19 +185,111 @@ FtkColor ftk_parse_color( const char* value)
 	return color;
 }
 
-const char* ftk_normalize_path(char* path)
+#define IS_CURRENT(path) (((path)[0] == '.') && \
+	((path)[1] == '/' || ((path)[1] == '\\') || ((path)[1] == '\0')))
+#define IS_HOME(path) (((path)[0] == '~') && \
+	((path)[1] == '/' || ((path)[1] == '\\') || ((path)[1] == '\0')))
+#define IS_PARENT(path) (((path)[0] == '.') && ((path)[1] == '.') && \
+	((path)[2] == '/' || ((path)[2] == '\\') || ((path)[2] == '\0') ))
+
+#define BREAK_IF_LAST(str) if((str)[0] == '\0') break;
+
+char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 {
-	char* p = path;
-	return_val_if_fail(path != NULL, NULL);
+	int in_index = 0;
+	int out_index = 0;
+
+	return_val_if_fail(path_in != NULL && path_out != NULL, NULL);
 	
-	while(*p)
+	path_out[0] = '\0';
+	for(in_index = 0; path_in[in_index] != '\0'; in_index++)
 	{
-		if(*p == '/' || *p == '\\')
+		if(in_index == 0)
 		{
-			*p = FTK_PATH_DELIM;
+			if(IS_CURRENT(path_in)) 
+			{
+				ftk_getcwd(path_out, FTK_MAX_PATH);
+				out_index = strlen(path_out);
+				continue;
+			}
+#ifdef LINUX			
+			else if(IS_HOME(path_in))
+			{
+				const char* home = getenv("HOME");
+				if(home != NULL)
+				{
+					strcpy(path_out, home);
+					out_index = strlen(path_out);
+				}
+				continue;
+			}
+#endif			
+			else if(path_in[0] != '/')
+			{
+				ftk_getcwd(path_out, FTK_MAX_PATH);
+				out_index = strlen(path_out);
+				path_out[out_index++] = '/';
+				path_out[out_index++] = path_in[in_index];
+				continue;
+			}
 		}
-		p++;
+
+		if(path_in[in_index] == '\\' || path_in[in_index] == '/')
+		{
+			if(out_index == 0 || path_out[out_index - 1] != '/')
+			{
+				path_out[out_index++] = '/';
+			}
+		}
+		else if(IS_CURRENT(path_in+in_index) || IS_HOME(path_in+in_index))
+		{
+			in_index++;
+			BREAK_IF_LAST(path_in+in_index);
+		}
+		else if(IS_PARENT(path_in+in_index))
+		{
+			if(out_index > 1)
+			{
+				if(path_out[out_index - 1] == '/')
+				{
+					for(--out_index; path_out[out_index - 1] != '/'; out_index--);
+				}
+				else
+				{
+					ftk_logd("%s:%d %s is invalid path\n", __FILE__, __LINE__, path_in);
+					in_index += 2;
+				}
+			}
+			else
+			{
+				ftk_logd("%s:%d %s is invalid path\n", __FILE__, __LINE__, path_in);
+				in_index += 2;
+			}
+			BREAK_IF_LAST(path_in+in_index);
+		}
+		else 
+		{
+			path_out[out_index++] = path_in[in_index];
+		}
+
+		if(out_index >= FTK_MAX_PATH)
+		{
+			break;
+		}
 	}
+
+	path_out[out_index] = '\0';
+
+	return path_out;
+}
+
+const char* ftk_normalize_path(char path[FTK_MAX_PATH+1])
+{
+	char path_out[FTK_MAX_PATH+1] = {0};
+	return_val_if_fail(path != NULL, NULL);
+
+	normalize_path(path, path_out);
+	strcpy(path, path_out);
 
 	return path;
 }
@@ -225,4 +317,10 @@ int ftk_str2bool(const char* str)
 	return 1;
 }
 
+char* ftk_strs_cat(const char* first, ...)
+{
+	/*TODO*/
+
+	return NULL;
+}
 

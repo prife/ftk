@@ -146,6 +146,43 @@ static Ret ftk_list_view_on_key_event(FtkWidget* thiz, FtkEvent* event)
 			}
 			break;
 		}
+		case FTK_KEY_HOME:
+		{
+			ftk_list_view_set_cursor(thiz, 0);
+			break;
+		}
+		case FTK_KEY_END:
+		{
+			int total = ftk_list_model_get_total(priv->model);
+			if(total > priv->visible_nr)
+			{
+				ftk_list_view_set_cursor(thiz, total-1);
+			}
+			break;
+		}
+		case FTK_KEY_PAGEDOWN:
+		{
+			int total = ftk_list_model_get_total(priv->model);
+			if(total > priv->visible_nr)
+			{
+				int max = total - priv->visible_nr;
+				int index = priv->current + priv->visible_nr;
+
+				ftk_list_view_set_cursor(thiz, FTK_MIN(max, index));
+			}
+			break;
+		}
+		case FTK_KEY_PAGEUP:
+		{
+			int total = ftk_list_model_get_total(priv->model);
+			if(total > priv->visible_nr)
+			{
+				int index = priv->current - priv->visible_nr;
+
+				ftk_list_view_set_cursor(thiz, index > 0 ? index : 0);
+			}
+			break;
+		}
 		default:
 		{
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code))

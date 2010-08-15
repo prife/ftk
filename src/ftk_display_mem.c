@@ -42,10 +42,13 @@ typedef struct _PrivInfo
 	FtkPixelFormat format;
 	FtkBitmapCopyFromData copy_from_data;
 	FtkBitmapCopyToData   copy_to_data;
+	FtkDisplaySync sync;
+	void* sync_ctx;
 }PrivInfo;
 
 static Ret ftk_display_mem_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
+	Ret ret = RET_OK;
 	DECL_PRIV(thiz, priv);
 	int display_width  = priv->width;
 	int display_height = priv->height;
@@ -53,8 +56,20 @@ static Ret ftk_display_mem_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 
 	ftk_logd("%s: ox=%d oy=%d (%d %d %d %d)\n", __func__, xoffset, yoffset, 
 		rect->x, rect->y, rect->width, rect->height);
-	return priv->copy_to_data(bitmap, rect, 
+	ret = priv->copy_to_data(bitmap, rect, 
 		priv->bits, xoffset, yoffset, display_width, display_height); 
+
+	if(priv->sync != NULL && ret == RET_OK)
+	{
+		FtkRect r;
+		r.x = xoffset;
+		r.y = yoffset;
+		r.width = rect->width;
+		r.height = rect->height;
+		priv->sync(priv->sync_ctx, &r);
+	}
+
+	return ret;
 }
 
 static int ftk_display_mem_width(FtkDisplay* thiz)
@@ -167,3 +182,13 @@ FtkDisplay* ftk_display_mem_create(FtkPixelFormat format,
 	return thiz;
 }
 
+Ret ftk_display_mem_set_sync_func(FtkDisplay* thiz, FtkDisplaySync sync, void* ctx)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && thiz->update == ftk_display_mem_update, RET_FAIL);
+
+	priv->sync = sync;
+	priv->sync_ctx = ctx;
+
+	return RET_OK;
+}

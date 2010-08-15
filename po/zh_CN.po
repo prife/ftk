@@ -32,10 +32,10 @@ msgstr "关闭远程桌面"
 msgid "Hello, GetText"
 msgstr "你好, GetText 工作正常"
 
-msgid "filem"
+msgid "File Browser"
 msgstr "文件管理器"
 
-msgid "calc"
+msgid "Calculator"
 msgstr "计算器"
 
 msgid "shell"

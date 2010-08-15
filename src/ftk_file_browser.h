@@ -1,7 +1,7 @@
 /*
- * File: ftk_util.h    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   common used functions.
+ * File: ftk_file_browser.h
+ * Author: Li XianJing <xianjimli@hotmail.com>
+ * Brief:  file browser window for file manager and choose.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,29 +25,33 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-08-15 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_UTIL_H
-#define FTK_UTIL_H
+#ifndef FTK_FILE_BROWSER_H
+#define FTK_FILE_BROWSER_H
 
-#include "ftk_typedef.h"
-#include "ftk_allocator.h"
+#include "ftk_widget.h"
 
 FTK_BEGIN_DECLS
 
-unsigned short utf8_get_char (const char *p, const char** next);
-unsigned short utf8_get_prev_char (const char *p, const char** prev);
-int utf8_count_char(const char *begin, size_t length);
-FtkColor ftk_parse_color( const char* value);
-const char* ftk_normalize_path(char path[FTK_MAX_PATH+1]);
-const char* utf8_move_forward(const char* str, int nr);
-int ftk_str2bool(const char* str);
+typedef enum _FtkFileBrowserType
+{
+	FTK_FILE_BROWER_APP,
+	FTK_FILE_BROWER_SINGLE_CHOOSER,
+	FTK_FILE_BROWER_MULTI_CHOOSER
+}FtkFileBrowserType;
 
-char* ftk_strs_cat(const char* first, ...);
+typedef Ret (*FtkFileBrowserOnChoosed)(void* ctx, int index, const char* path); 
+
+FtkWidget* ftk_file_browser_create(FtkFileBrowserType type);
+Ret        ftk_file_browser_set_path(FtkWidget* thiz, const char* path);
+Ret        ftk_file_browser_set_filter(FtkWidget* thiz, const char* mime_type);
+Ret        ftk_file_browser_set_choosed_handler(FtkWidget* thiz, FtkFileBrowserOnChoosed on_choosed, void* ctx);
+Ret        ftk_file_browser_load(FtkWidget* thiz);
 
 FTK_END_DECLS
 
-#endif/*FTK_UTIL_H*/
+#endif/*FTK_FILE_BROWSER_H*/
 

@@ -62,6 +62,12 @@ typedef struct _FtkColor
 	unsigned char a;
 }FtkColor;
 
+typedef struct _FtkKeyValue
+{
+	const char* key;
+	const char* value;
+}FtkKeyValue;
+
 typedef enum _Ret
 {
 	RET_OK,
@@ -72,6 +78,7 @@ typedef enum _Ret
 	RET_EOF,
 	RET_NEXT,
 	RET_QUIT,
+	RET_EXIST,
 	RET_AGAIN,
 	RET_IGNORED,
 	RET_NO_TARGET,

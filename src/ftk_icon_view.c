@@ -284,7 +284,7 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 				ftk_canvas_draw_bg_image(canvas, bg, FTK_BG_FOUR_CORNER, dx, dy, priv->item_width, priv->item_height);
 			}
 			
-			if(text[0] == '\0')
+			if(text == NULL || text[0] == '\0')
 			{
 				if(item_info->icon != NULL)
 				{

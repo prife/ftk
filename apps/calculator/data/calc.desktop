@@ -1,4 +1,3 @@
 <applications>
-<application name="calc" icon="icons/calc.png" exec="libapp-calc.so" 
-	main="ftk_main" tr_path="ftk_translate_path" tr_text="ftk_translate_text" />
+<application name="calc" exec="libapp-calc.so" init="ftk_app_calc_create" />
 </applications>

@@ -48,6 +48,8 @@ theme_DATA=\
 	scrollbar_handle_vertical.png \
 	status-bg.png \
 	wait_box.png \
-	warning.png theme.xml
+	warning.png theme.xml \
+	folder.png  mime_image.png  mime_text.png \
+	mime_unknown.png mime_audio.png up.png
 
 EXTRA_DIST=$(theme_DATA)

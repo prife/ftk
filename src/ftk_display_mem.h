@@ -33,8 +33,12 @@
 
 #include "ftk_display.h"
 
+typedef void (*FtkDisplaySync)(void* ctx, FtkRect* rect);
+
 FtkDisplay* ftk_display_mem_create(FtkPixelFormat format, 
 	int width, int height, void* bits, FtkDestroy on_destroy, void* ctx);
+
+Ret ftk_display_mem_set_sync_func(FtkDisplay* thiz, FtkDisplaySync sync, void* ctx);
 
 #endif/*FTK_DISPLAY_MEM_H*/
 

@@ -1,5 +1,6 @@
-#include "app_info.h"
+#include <dlfcn.h>
 #include "ftk_mmap.h"
+#include "app_info.h"
 
 struct _AppInfoManager
 {
@@ -46,43 +47,31 @@ static void ftk_app_info_builder_on_start(FtkXmlBuilder* thiz, const char* tag, 
 				strncpy(app_info.name, value, sizeof(app_info.name) - 1);
 				break;
 			}
-			case 'i':/*icon*/
-			{
-				strncpy(app_info.icon, value, sizeof(app_info.icon) - 1);
-				break;
-			}
 			case 'e': /*exec*/
 			{
 				strncpy(app_info.exec, value, sizeof(app_info.exec) - 1);
 				break;
 			}
-			case 'm': /*main*/
+			case 'i':
 			{
-				strncpy(app_info.main, value, sizeof(app_info.main) - 1);
-				break;
-			}
-			case 't':/*tr_text|tr_path*/
-			{
-				if(strcmp(name, "tr_text") == 0)
+				if(strcmp(name, "init") == 0)
 				{
-					strncpy(app_info.tr_text, value, sizeof(app_info.tr_text) - 1);
+					strncpy(app_info.init, value, sizeof(app_info.init) - 1);
 				}
-				else if(strcmp(name, "tr_path") == 0)
-				{
-					strncpy(app_info.tr_path, value, sizeof(app_info.tr_path) - 1);
-				}
-				break;
-			}
-			case 's':
-			{
-				app_info.shortcut = atoi(value);
 				break;
 			}
 			default:break;
 		}
 	}
 
-	app_info_manager_add(app_info_manager, &app_info);
+	if(app_info.init[0] && app_info.exec[0])
+	{
+		app_info_manager_add(app_info_manager, &app_info);
+	}
+	else
+	{
+		ftk_logd("%s: invalid application info.\n", __func__);
+	}
 
 	return;
 }
@@ -208,28 +197,35 @@ int  app_info_manager_get_count(AppInfoManager* thiz)
 	return thiz->nr;
 }
 
+Ret  app_info_manager_init_app(AppInfoManager* thiz, AppInfo* info)
+{
+	FtkLoadApp load = NULL;
+	return_val_if_fail(thiz != NULL && info != NULL, RET_FAIL);
+
+	if(info->app != NULL)
+	{
+		return RET_OK;
+	}
+
+	info->handle = dlopen(info->exec, RTLD_NOW);
+	return_val_if_fail(info->handle != NULL, RET_FAIL);
+	
+	load = (FtkLoadApp)dlsym(info->handle, info->init);
+	return_val_if_fail(load != NULL, RET_FAIL);
+
+	info->app = load();
+	return_val_if_fail(info->app != NULL, RET_FAIL);
+
+	return RET_OK;
+}
+
 Ret  app_info_manager_get(AppInfoManager* thiz, size_t index, AppInfo** info)
 {
 	return_val_if_fail(thiz != NULL && index < thiz->nr && info != NULL, RET_FAIL);
 
-	if(thiz->infos[index].icon_bitmap == NULL)
-	{
-		char path[FTK_MAX_PATH] = {0};
-		snprintf(path, sizeof(path), FTK_DATA_ROOT"/%s/%s", thiz->infos[index].name,
-			thiz->infos[index].icon);
-		thiz->infos[index].icon_bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
-
-		if(thiz->infos[index].icon_bitmap == NULL)
-		{
-			snprintf(path, sizeof(path), FTK_DATA_ROOT"/%s",
-				thiz->infos[index].icon);
-			thiz->infos[index].icon_bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path);
-		}
-		ftk_logd("%s: load %p %s\n", __func__, thiz->infos[index].icon_bitmap, path);
-	}
 	*info = thiz->infos+index;
-	
-	return RET_OK;
+
+	return app_info_manager_init_app(thiz, *info);
 }
 
 static Ret  app_info_manager_extend(AppInfoManager* thiz, size_t delta)
@@ -303,14 +299,13 @@ int main(int argc, char* argv[])
 	app_info_manager_load_dir(thiz, DATA_DIR"/apps");
 	assert(app_info_manager_get(thiz, 0, &info) == RET_OK);
 	assert(strcmp(info->name, "Contacts") == 0);	
-	assert(strcmp(info->icon, "icons/contacts.png") == 0);	
 
 	for(i = 0; i < app_info_manager_get_count(thiz); i++)
 	{
 		assert(app_info_manager_get(thiz, i, &info) == RET_OK);
 		assert(info != NULL);
-		ftk_logd("%s\n%s\n%s\n%s\n%s\n%s\n%d\n", 
-			info->name, info->icon, info->exec, info->main, info->tr_path, info->tr_text, info->shortcut);
+		ftk_logd("%s\n%s\n%s\n\n", 
+			info->name, info->exec, info->init);
 	}
 	app_info_manager_destroy(thiz);
 

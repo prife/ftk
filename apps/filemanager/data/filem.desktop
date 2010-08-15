@@ -1,4 +1,3 @@
 <applications>
-<application name="filem" icon="icons/filem.png" exec="libapp-filem.so" 
-	main="ftk_main" tr_text="ftk_translate_text" />
+<application name="filem" exec="libapp-filem.so" init="ftk_app_file_browser_create" />
 </applications>

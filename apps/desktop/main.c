@@ -1,6 +1,5 @@
 #include "ftk.h"
 #include <time.h>
-#include <dlfcn.h>
 #include "ftk_xul.h"
 #include "app_info.h"
 #include "vnc_service.h"
@@ -78,30 +77,10 @@ static Ret applist_window_show(FtkWidget* widget)
 
 static Ret app_item_clicked(void* ctx, void* obj)
 {
-	FtkMain entry = NULL;
 	FtkIconViewItem* item = obj;
 	AppInfo* info = item->user_data;
-	if(info->handle == NULL)
-	{
-		info->handle = dlopen(info->exec, RTLD_NOW);
-	}
-	else
-	{
-		ftk_loge("%s: dlopen %s failed. %s\n", __func__, info->exec, dlerror());
-	}
-	
-	if(info->handle != NULL)
-	{
-		entry = dlsym(info->handle, info->main);
-		if(entry != NULL)
-		{
-			entry(0, NULL);
-		}
-		else
-		{
-			ftk_loge("%s: dlsync %s failed. %s\n", __func__, info->main, dlerror());
-		}
-	}
+
+	ftk_app_run(info->app, 0, NULL);
 
 	ftk_logd("%s: %s: user_data=%d\n", __func__, item->text, item->user_data);
 
@@ -139,9 +118,9 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 	{
 		app_info_manager_get(g_app_manager, i, &app_info);
 		
-		item.icon = app_info->icon_bitmap;
+		item.icon = ftk_app_get_icon(app_info->app);
 		item.user_data = app_info;
-		item.text = _(app_info->name);
+		item.text = ftk_app_get_name(app_info->app);
 		ftk_icon_view_add(icon_view, &item);
 	}
 

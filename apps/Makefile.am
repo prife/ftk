@@ -1,1 +1,1 @@
-SUBDIRS=launcher desktop calculator shell filemanager
+SUBDIRS=launcher desktop calculator shell filemanager common

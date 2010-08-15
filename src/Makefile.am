@@ -35,6 +35,8 @@ OS_PSP=\
 	$(srcdir)/os/psp/ftk_mmap_psp.c \
 	$(srcdir)/os/psp/ftk_psp.c 
 
+OPTIONAL_FUNCS=ftk_file_system_posix.c ftk_file_system.c ftk_file_browser.c 
+
 libftk_la_SOURCES=\
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	ftk_label.c           ftk_source_timer.c \
@@ -59,7 +61,8 @@ libftk_la_SOURCES=\
 	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c \
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
-	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c
+	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \
+	$(OPTIONAL_FUNCS)
 
 if ENABLE_HANDWRITE
 libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \

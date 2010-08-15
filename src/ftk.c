@@ -67,7 +67,7 @@ static Ret ftk_init_bitmap_factory(void)
 static Ret ftk_init_font(void)
 {
 	FtkFont* font = NULL;
-	char filename[FTK_MAX_PATH] = {0};
+	char filename[FTK_MAX_PATH + 1] = {0};
 	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", 
 		ftk_config_get_data_dir(ftk_default_config()), FTK_FONT);
 	ftk_normalize_path(filename);

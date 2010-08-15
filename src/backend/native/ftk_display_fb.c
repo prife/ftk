@@ -1,7 +1,7 @@
 /*
- * File: ftk_display_fb.c    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   framebuffer implemented display.
+ * File: ftk_display_fb.c	 
+ * Author:	Li XianJing <xianjimli@hotmail.com>
+ * Brief:	framebuffer implemented display.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -47,13 +47,16 @@ struct FbInfo
 {
 	int fd;
 	void* bits;
-	struct fb_fix_screeninfo fi;
-	struct fb_var_screeninfo vi;
+	struct fb_fix_screeninfo fix;
+	struct fb_var_screeninfo var;
 };
 
-#define fb_width(fb) ((fb)->vi.xres)
-#define fb_height(fb) ((fb)->vi.yres)
-#define fb_size(fb) ((fb)->vi.xres * (fb)->vi.yres * fb->vi.bits_per_pixel/8)
+#define fb_width(fb) ((fb)->var.xres)
+#define fb_height(fb) ((fb)->var.yres)
+#define fb_size(fb) ((fb)->var.xres * (fb)->var.yres * fb->var.bits_per_pixel/8)
+#ifndef FBIO_WAITFORVSYNC
+#define FBIO_WAITFORVSYNC   _IOW('F', 0x20, u_int32_t)
+#endif
 
 static int fb_open(struct FbInfo *fb, const char* fbfilename)
 {
@@ -63,22 +66,22 @@ static int fb_open(struct FbInfo *fb, const char* fbfilename)
 		return -1;
 	}
 	
-	if (ioctl(fb->fd, FBIOGET_FSCREENINFO, &fb->fi) < 0)
+	if (ioctl(fb->fd, FBIOGET_FSCREENINFO, &fb->fix) < 0)
 		goto fail;
-	if (ioctl(fb->fd, FBIOGET_VSCREENINFO, &fb->vi) < 0)
+	if (ioctl(fb->fd, FBIOGET_VSCREENINFO, &fb->var) < 0)
 		goto fail;
 
 	ftk_logd("FbInfo: %s\n", fbfilename);
 	ftk_logd("FbInfo: xres=%d yres=%d bits_per_pixel=%d\n", 
-		fb->vi.xres, fb->vi.yres, fb->vi.bits_per_pixel);
+		fb->var.xres, fb->var.yres, fb->var.bits_per_pixel);
 	ftk_logd("FbInfo: red(%d %d) green(%d %d) blue(%d %d)\n", 
-		fb->vi.red.offset, fb->vi.red.length,
-		fb->vi.green.offset, fb->vi.green.length,
-		fb->vi.blue.offset, fb->vi.blue.length);
+		fb->var.red.offset, fb->var.red.length,
+		fb->var.green.offset, fb->var.green.length,
+		fb->var.blue.offset, fb->var.blue.length);
 
 #ifdef FTK_FB_NOMMAP
 	//uclinux doesn't support MAP_SHARED or MAP_PRIVATE with PROT_WRITE, so no mmap at all is simpler
-	fb->bits = fb->fi.smem_start;
+	fb->bits = fb->fix.smem_start;
 #else
 	fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, MAP_SHARED, fb->fd, 0);
 #endif
@@ -90,6 +93,9 @@ static int fb_open(struct FbInfo *fb, const char* fbfilename)
 	}
 
 	memset(fb->bits, 0xff, fb_size(fb));
+	
+	ftk_logd("xres_virtual =%d yres_virtual=%d xpanstep=%d ywrapstep=%d\n",
+		fb->var.xres_virtual, fb->var.yres_virtual, fb->fix.xpanstep, fb->fix.ywrapstep);
 
 	return 0;
 fail:
@@ -111,6 +117,67 @@ static void fb_close(struct FbInfo *fb)
 	return;
 }
 
+static Ret fb_pan(struct FbInfo* info, int xoffset, int yoffset, int onsync)
+{
+	struct fb_var_screeninfo *var = &info->var;
+
+	return_val_if_fail(var->xres_virtual >= (xoffset + var->xres), RET_FAIL);
+	return_val_if_fail(var->yres_virtual >= (yoffset + var->yres), RET_FAIL);
+
+	if (!info->fix.xpanstep && !info->fix.ypanstep && !info->fix.ywrapstep)
+	{
+		return RET_OK;
+	}
+
+	if (info->fix.xpanstep)
+	{
+		var->xoffset = xoffset - (xoffset % info->fix.xpanstep);
+	}
+	else
+	{
+		var->xoffset = 0;
+	}
+
+	if (info->fix.ywrapstep) 
+	{
+		var->yoffset = yoffset - (yoffset % info->fix.ywrapstep);
+		var->vmode |= FB_VMODE_YWRAP;
+	}
+	else if (info->fix.ypanstep) 
+	{
+		var->yoffset = yoffset - (yoffset % info->fix.ypanstep);
+		var->vmode &= ~FB_VMODE_YWRAP;
+	}
+	else 
+	{
+		 var->yoffset = 0;
+	}
+
+	var->activate = onsync ? FB_ACTIVATE_VBL : FB_ACTIVATE_NOW;
+
+	ftk_logd("%s: xoffset=%d yoffset=%d ywrapstep=%d\n", __func__,
+		var->xoffset, var->yoffset, info->fix.ywrapstep);
+	if (ioctl( info->fd, FBIOPAN_DISPLAY, var ) < 0)
+	{
+		return RET_FAIL;
+	}
+
+	return RET_OK;
+}
+
+static void fb_sync(void* ctx, FtkRect* rect)
+{
+	int zero = 0;
+	int ret = 0;
+	struct FbInfo* info = ctx;
+
+	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
+	//ret = fb_pan(info, 0, 0, 1);
+	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
+
+	return;
+}
+
 FtkDisplay* ftk_display_fb_create(const char* filename)
 {
 	FtkDisplay* thiz = NULL;
@@ -123,7 +190,7 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 	if(fb_open(fb, filename) == 0)
 	{
 		FtkPixelFormat format = 0;
-		int bits_per_pixel = fb->vi.bits_per_pixel;
+		int bits_per_pixel = fb->var.bits_per_pixel;
 		
 		if(bits_per_pixel == 16)
 		{
@@ -142,8 +209,9 @@ FtkDisplay* ftk_display_fb_create(const char* filename)
 			assert(!"not supported framebuffer format.");
 		}
 	
-		thiz = ftk_display_mem_create(format, fb->vi.xres, fb->vi.yres, 
+		thiz = ftk_display_mem_create(format, fb->var.xres, fb->var.yres, 
 			fb->bits, fb_close, fb);
+		ftk_display_mem_set_sync_func(thiz, fb_sync, fb);
 	}
 		
 	return thiz;
