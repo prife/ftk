@@ -31,19 +31,20 @@ const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
 	return out_path;
 }
 
-FtkIconCache* g_icon_cache = NULL;
-static FtkBitmap* my_load_image(const char* filename)
-{
-	return ftk_icon_cache_load(g_icon_cache, filename);
-}
+static FtkIconCache* g_icon_cache = NULL;
 
 static FtkWidget* desktop_load_xul(const char* filename)
 {
+	FtkXulCallbacks callbacks = {0};
 	char path[FTK_MAX_PATH+1] = {0};
 	
+	callbacks.ctx = g_icon_cache;
+	callbacks.translate_text = NULL;
+	callbacks.load_image = (FtkXulLoadImage)ftk_icon_cache_load;
+
 	tr_path(filename, path);
 
-	return ftk_xul_load_file(path, NULL, my_load_image);
+	return ftk_xul_load_file(path, &callbacks);
 }
 
 static Ret applist_window_show(FtkWidget* widget)
