@@ -11,22 +11,21 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static FtkIconCache* g_icon_cache = NULL;
-static FtkBitmap* my_load_image(const char* filename)
-{
-	return ftk_icon_cache_load(g_icon_cache, filename);
-}
-
 int FTK_MAIN(int argc, char* argv[])
 {
 	if(argc > 1)
 	{
 		FtkWidget* win = NULL;
 		FtkWidget* quit = NULL;
+		FtkXulCallbacks callbacks;
+		
 		FTK_INIT(argc, argv);
 		
-		g_icon_cache = ftk_icon_cache_create(NULL, "testdata");
-		win = ftk_xul_load_file(argv[1], NULL, my_load_image);
+		callbacks.translate_text = NULL;
+		callbacks.load_image = (FtkXulLoadImage)ftk_icon_cache_load;
+		callbacks.ctx = ftk_icon_cache_create(NULL, "testdata");
+		win = ftk_xul_load_file(argv[1], &callbacks);
+		ftk_icon_cache_destroy(callbacks.ctx);
 		FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 
 		quit = ftk_widget_lookup(win, IDC_QUIT);
@@ -34,7 +33,6 @@ int FTK_MAIN(int argc, char* argv[])
 		ftk_widget_show_all(win, 1);
 
 		FTK_RUN();
-		ftk_icon_cache_destroy(g_icon_cache);
 	}
 	else
 	{

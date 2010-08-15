@@ -45,9 +45,8 @@ typedef struct _PrivInfo
 	int  meet_start_tag;
 	char processed_value[128];
 	char translated_path[FTK_MAX_PATH+1];
-	FtkTranslateText tr_text;
-	FtkLoadImage load_image;
 	FtkAnimator* animator;
+	FtkXulCallbacks* callbacks;
 }PrivInfo;
 
 typedef struct _FtkWidgetCreateInfo
@@ -81,6 +80,26 @@ typedef struct _WidgetCreator
 	FtkXulWidgetCreate create;
 }WidgetCreator;
 
+static inline const char*  ftk_xul_translate_text(FtkXulCallbacks* thiz, const char* text)
+{
+	if(thiz == NULL || thiz->translate_text == NULL)
+	{
+		return text;
+	}
+	else
+	{
+		return thiz->translate_text(thiz->ctx, text);
+	}
+}
+
+static inline  FtkBitmap*  ftk_xul_load_image(FtkXulCallbacks* thiz, const char* filename)
+{
+	return_val_if_fail(thiz != NULL && thiz->load_image != NULL, NULL);
+
+	return thiz->load_image(thiz->ctx, filename);
+}
+
+
 static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
@@ -88,7 +107,7 @@ static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 	widget = ftk_label_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
+		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
 	return widget;
@@ -101,7 +120,7 @@ static FtkWidget* ftk_xul_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
+		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
 	return widget;
@@ -114,7 +133,7 @@ static FtkWidget* ftk_xul_entry_create(FtkWidgetCreateInfo* info)
 	widget = ftk_entry_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_entry_set_text(widget, info->priv->tr_text(info->value));
+		ftk_entry_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
 	return widget;
@@ -162,7 +181,7 @@ static FtkWidget* ftk_xul_radio_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_check_button_create_radio(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
+		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 	
 	if(info->checked)
@@ -180,7 +199,7 @@ static FtkWidget* ftk_xul_check_button_create(FtkWidgetCreateInfo* info)
 	widget = ftk_check_button_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
+		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 	
 	if(info->checked)
@@ -198,7 +217,7 @@ static FtkWidget* ftk_xul_image_create(FtkWidgetCreateInfo* info)
 	widget = ftk_image_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_image_set_image(widget, info->priv->load_image(info->value));
+		ftk_image_set_image(widget, ftk_xul_load_image(info->priv->callbacks,info->value));
 	}
 
 	return widget;
@@ -246,7 +265,7 @@ static FtkWidget* ftk_xul_window_create(FtkWidgetCreateInfo* info)
 	widget = ftk_app_window_create();
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
+		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
 	return widget;
@@ -259,7 +278,7 @@ static FtkWidget* ftk_xul_dialog_create(FtkWidgetCreateInfo* info)
 	widget = ftk_dialog_create(info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_widget_set_text(widget, info->priv->tr_text(info->value));
+		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
 	return widget;
@@ -576,22 +595,22 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 				else if(strcmp(name, "bg_image[normal]") == 0)
 				{
 					info->gc[FTK_WIDGET_NORMAL].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_NORMAL].bitmap = priv->load_image(value);
+					info->gc[FTK_WIDGET_NORMAL].bitmap = ftk_xul_load_image(info->priv->callbacks,value);
 				}
 				else if(strcmp(name, "bg_image[disable]") == 0)
 				{
 					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_INSENSITIVE].bitmap = priv->load_image(value);
+					info->gc[FTK_WIDGET_INSENSITIVE].bitmap = ftk_xul_load_image(info->priv->callbacks,value);
 				}
 				else if(strcmp(name, "bg_image[active]") == 0)
 				{
 					info->gc[FTK_WIDGET_ACTIVE].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_ACTIVE].bitmap = priv->load_image(value);
+					info->gc[FTK_WIDGET_ACTIVE].bitmap = ftk_xul_load_image(info->priv->callbacks,value);
 				}
 				else if(strcmp(name, "bg_image[focused]") == 0)
 				{
 					info->gc[FTK_WIDGET_FOCUSED].mask |= FTK_GC_BITMAP;
-					info->gc[FTK_WIDGET_FOCUSED].bitmap = priv->load_image(value);
+					info->gc[FTK_WIDGET_FOCUSED].bitmap = ftk_xul_load_image(info->priv->callbacks,value);
 				}
 				else
 				{
@@ -761,17 +780,24 @@ static FtkXmlBuilder* ftk_xul_builder_create(void)
 	return thiz;
 }
 
-static const char* ftk_text_no_translate(const char* text)
+static const char* ftk_text_no_translate(void* ctx, const char* text)
 {
 	return text;
 }
 
-static FtkBitmap* ftk_default_load_image(const char* filename)
+static FtkBitmap* ftk_default_load_image(void* ctx, const char* filename)
 {
 	return ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 }
 
-FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text, FtkLoadImage load_image)
+static const FtkXulCallbacks default_callbacks = 
+{
+	NULL,
+	ftk_text_no_translate,
+	ftk_default_load_image
+};
+
+FtkWidget* ftk_xul_load_ex(const char* xml, int length, const FtkXulCallbacks* callbacks)
 {
 	FtkWidget* widget = NULL;
 	FtkXmlParser* parser = NULL;
@@ -785,8 +811,7 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text
 	if(builder != NULL)
 	{
 		PrivInfo* priv = (PrivInfo*)builder->priv;
-		priv->tr_text = tr_text != NULL ? tr_text : ftk_text_no_translate;
-		priv->load_image = load_image != NULL ? load_image : ftk_default_load_image;
+		priv->callbacks = callbacks;
 		ftk_xml_parser_set_builder(parser, builder);
 		ftk_xml_parser_parse(parser, xml, strlen(xml));
 		widget = priv->root;
@@ -803,10 +828,10 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkTranslateText tr_text
 
 FtkWidget* ftk_xul_load(const char* xml, int length)
 {
-	return ftk_xul_load_ex(xml, length, ftk_text_no_translate, ftk_default_load_image);	
+	return ftk_xul_load_ex(xml, length, &default_callbacks);	
 }
 
-FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, FtkLoadImage load_image)
+FtkWidget* ftk_xul_load_file(const char* filename, const FtkXulCallbacks* callbacks)
 {
 	FtkMmap* m = NULL;
 	FtkWidget* widget = NULL;
@@ -814,11 +839,12 @@ FtkWidget* ftk_xul_load_file(const char* filename, FtkTranslateText tr_text, Ftk
 
 	if((m = ftk_mmap_create(filename, 0, -1)) != NULL)
 	{
-		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), tr_text, load_image);
+		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), callbacks);
 		ftk_mmap_destroy(m);
 	}
 
 	ftk_logd("%s: %p %s\n", __func__, widget, filename);
+
 	return widget;
 }
 

@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 
 		for(; i < 100; i++)
 		{
-			win[i] = ftk_xul_load_file(argv[1], NULL, NULL);
+			win[i] = ftk_xul_load_file(argv[1], NULL);
 			ftk_widget_show_all(win[i], 1);
 		}
 
