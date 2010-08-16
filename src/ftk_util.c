@@ -222,8 +222,7 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 					out_index = strlen(path_out);
 				}
 				continue;
-			}
-#endif			
+			}	
 			else if(path_in[0] != '/')
 			{
 				ftk_getcwd(path_out, FTK_MAX_PATH);
@@ -232,6 +231,7 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 				path_out[out_index++] = path_in[in_index];
 				continue;
 			}
+#endif		
 		}
 
 		if(path_in[in_index] == '\\' || path_in[in_index] == '/')
