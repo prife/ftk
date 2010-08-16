@@ -63,7 +63,18 @@ static void create_app_window(void)
 	return;
 }
 
-int FTK_MAIN(int argc, char* argv[])
+#ifdef FTK_AS_PLUGIN
+#include "ftk_app_demo.h"
+FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
+FtkApp* ftk_app_demo_multi_win_create()
+{
+	return ftk_app_demo_create(_("multi_win"), ftk_main);
+}
+#else
+#define FTK_HIDE extern
+#endif /*FTK_AS_PLUGIN*/
+
+FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	FTK_INIT(argc, argv);
 	

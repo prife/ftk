@@ -20,7 +20,18 @@ static Ret button_stop_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-int FTK_MAIN(int argc, char* argv[])
+#ifdef FTK_AS_PLUGIN
+#include "ftk_app_demo.h"
+FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
+FtkApp* ftk_app_demo_wait_box_create()
+{
+	return ftk_app_demo_create(_("wait_box"), ftk_main);
+}
+#else
+#define FTK_HIDE extern
+#endif /*FTK_AS_PLUGIN*/
+
+FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

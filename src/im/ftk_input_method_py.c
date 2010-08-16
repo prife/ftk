@@ -260,11 +260,11 @@ static int wb_compare(const void* obj1, const void* obj2)
 
 FtkInputMethod* ftk_input_method_py_create(void)
 {
-	return ftk_input_method_py_wb_create("Pin Yin", "py.bin", py_compare);
+	return ftk_input_method_py_wb_create(_("Pin Yin"), "py.bin", py_compare);
 }
 
 FtkInputMethod* ftk_input_method_wb_create(void)
 {
-	return ftk_input_method_py_wb_create("Wu Bi", "wbx.bin", wb_compare);
+	return ftk_input_method_py_wb_create(_("Wu Bi"), "wbx.bin", wb_compare);
 }
 

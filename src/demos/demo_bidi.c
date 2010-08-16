@@ -28,7 +28,7 @@ static Ret timeout(void* ctx)
 	}
 }
 
-int FTK_MAIN(int argc, char* argv[])
+FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

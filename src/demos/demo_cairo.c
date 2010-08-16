@@ -243,7 +243,8 @@ static void paint_car(int x, int y, int width, int height)
 
 typedef void (*PaintFunc)(int x, int y, int width, int height);
 
-size_t g_index = 0;
+static size_t g_index = 0;
+
 static const PaintFunc paints[] = 
 {
 	paint_car,
@@ -314,7 +315,18 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-int FTK_MAIN(int argc, char* argv[])
+#ifdef FTK_AS_PLUGIN
+#include "ftk_app_demo.h"
+FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
+FtkApp* ftk_app_demo_cairo_create()
+{
+	return ftk_app_demo_create(_("cairo"), ftk_main);
+}
+#else
+#define FTK_HIDE extern
+#endif /*FTK_AS_PLUGIN*/
+
+FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

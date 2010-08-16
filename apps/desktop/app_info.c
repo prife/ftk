@@ -207,10 +207,17 @@ Ret  app_info_manager_init_app(AppInfoManager* thiz, AppInfo* info)
 		return RET_OK;
 	}
 
-	info->handle = dlopen(info->exec, RTLD_NOW);
+	if((info->handle = dlopen(info->exec, RTLD_NOW)) == NULL)
+	{
+		ftk_logd("dlopen %s failed(%s)\n", info->exec, dlerror());
+	}
 	return_val_if_fail(info->handle != NULL, RET_FAIL);
 	
 	load = (FtkLoadApp)dlsym(info->handle, info->init);
+	if(load == NULL)
+	{
+		ftk_logd("dlsym %s failed(%s)\n", info->init, dlerror());
+	}
 	return_val_if_fail(load != NULL, RET_FAIL);
 
 	info->app = load();

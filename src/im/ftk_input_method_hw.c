@@ -443,7 +443,7 @@ FtkInputMethod* ftk_input_method_hw_create(void)
 		DECL_PRIV(thiz, priv);
 
 		thiz->ref  = 1;
-		thiz->name = "Hand Write";	
+		thiz->name = _("Hand Write");	
 		thiz->set_type     = ftk_input_method_hw_set_type;
 		thiz->focus_in     = ftk_input_method_hw_focus_in;
 		thiz->focus_out    = ftk_input_method_hw_focus_out;

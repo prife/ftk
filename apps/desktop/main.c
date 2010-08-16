@@ -6,18 +6,24 @@
 #include "ftk_animator_expand.h"
 
 static int g_desktop_horizonal = 0;
-static FtkAnimator* g_animator = NULL;
-static FtkWidget* g_applist_win = NULL;
+static FtkAnimator*    g_animator = NULL;
+static FtkWidget*      g_applist_win = NULL;
 static AppInfoManager* g_app_manager = NULL;
+static FtkIconCache*   g_icon_cache = NULL;
 
-static Ret button_close_applist_clicked(void* ctx, void* obj)
+static Ret desktop_on_button_close_applist_clicked(void* ctx, void* obj)
 {
 	ftk_widget_show(ctx, 0);
 
 	return RET_OK;
 }
 
-const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
+static const char* desktop_translate_text(void* ctx, const char* text)
+{
+	return _(text);
+}
+
+static const char* desktop_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
 	struct stat st = {0};
 	snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_DATA_DIR, path);
@@ -31,18 +37,16 @@ const char* tr_path(const char* path, char out_path[FTK_MAX_PATH+1])
 	return out_path;
 }
 
-static FtkIconCache* g_icon_cache = NULL;
-
 static FtkWidget* desktop_load_xul(const char* filename)
 {
 	FtkXulCallbacks callbacks = {0};
 	char path[FTK_MAX_PATH+1] = {0};
 	
 	callbacks.ctx = g_icon_cache;
-	callbacks.translate_text = NULL;
+	callbacks.translate_text = desktop_translate_text;
 	callbacks.load_image = (FtkXulLoadImage)ftk_icon_cache_load;
 
-	tr_path(filename, path);
+	desktop_translate_path(filename, path);
 
 	return ftk_xul_load_file(path, &callbacks);
 }
@@ -76,7 +80,7 @@ static Ret applist_window_show(FtkWidget* widget)
 	return RET_OK;
 }
 
-static Ret app_item_clicked(void* ctx, void* obj)
+static Ret applist_on_item_clicked(void* ctx, void* obj)
 {
 	FtkIconViewItem* item = obj;
 	AppInfo* info = item->user_data;
@@ -88,7 +92,7 @@ static Ret app_item_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static Ret button_open_applist_clicked(void* ctx, void* obj)
+static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 {
 	size_t i = 0;
 	size_t n = 0;
@@ -108,11 +112,11 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 	win = desktop_load_xul(g_desktop_horizonal ? "xul/appview-h.xul" : "xul/appview-v.xul"); 
 	
 	button = ftk_widget_lookup(win, 100);
-	ftk_button_set_clicked_listener(button, button_close_applist_clicked, win);
+	ftk_button_set_clicked_listener(button, desktop_on_button_close_applist_clicked, win);
 
 	icon_view = ftk_widget_lookup(win, 99);
 	ftk_icon_view_set_item_size(icon_view, 100);
-	ftk_icon_view_set_clicked_listener(icon_view, app_item_clicked, win);
+	ftk_icon_view_set_clicked_listener(icon_view, applist_on_item_clicked, win);
 	n = app_info_manager_get_count(g_app_manager);
 	
 	for(i = 0; i < n; i++)
@@ -121,7 +125,11 @@ static Ret button_open_applist_clicked(void* ctx, void* obj)
 		
 		item.icon = ftk_app_get_icon(app_info->app);
 		item.user_data = app_info;
-		item.text = ftk_app_get_name(app_info->app);
+		item.text = (char*)ftk_app_get_name(app_info->app);
+		if(item.text == NULL)
+		{
+			item.text = app_info->name;
+		}
 		ftk_icon_view_add(icon_view, &item);
 	}
 
@@ -139,7 +147,7 @@ static const char* s_default_path[FTK_ICON_PATH_NR]=
 
 #define IDC_TIME_ITEM 2000
 
-static Ret update_time(void* ctx)
+static Ret desktop_update_time(void* ctx)
 {
 	char text[10] = {0};
 	time_t now = time(0);
@@ -180,7 +188,7 @@ static Ret update_time(void* ctx)
 	return RET_OK;
 }
 
-static Ret on_shutdown(void* ctx, void* obj)
+static Ret desktop_on_shutdown(void* ctx, void* obj)
 {
 #ifdef USE_VNC
 	if(ftk_display_vnc_is_active())
@@ -194,7 +202,7 @@ static Ret on_shutdown(void* ctx, void* obj)
 }
 
 #ifdef USE_VNC
-static Ret on_vnc(void* ctx, void* obj)
+static Ret desktop_on_vnc(void* ctx, void* obj)
 {
 	if(ftk_display_vnc_is_active())
 	{
@@ -209,11 +217,11 @@ static Ret on_vnc(void* ctx, void* obj)
 }
 #endif
 
-static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
+static Ret desktop_on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 {
 	FtkWidget* item = ftk_menu_item_create(menu_panel);
 	ftk_widget_set_text(item, _("Shutdown"));
-	ftk_menu_item_set_clicked_listener(item, on_shutdown, ctx);
+	ftk_menu_item_set_clicked_listener(item, desktop_on_shutdown, ctx);
 	ftk_widget_show(item, 1);
 
 #ifdef USE_VNC
@@ -226,14 +234,14 @@ static Ret on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 	{
 		ftk_widget_set_text(item, _("Start VNC"));
 	}
-	ftk_menu_item_set_clicked_listener(item, on_vnc, ctx);
+	ftk_menu_item_set_clicked_listener(item, desktop_on_vnc, ctx);
 	ftk_widget_show(item, 1);
 #endif
 
 	return	RET_OK;
 }
 
-static Ret add_time_item_on_statusbar(void)
+static Ret desktop_add_time_item_on_statusbar(void)
 {
 	FtkWidget* item = NULL;
 	FtkWidget* panel = NULL;
@@ -272,7 +280,7 @@ int main(int argc, char* argv[])
 	ftk_logd("%s: locale=%s\n", _("Hello, GetText"), setlocale(LC_ALL, NULL));
 #endif
 
-	add_time_item_on_statusbar();
+	desktop_add_time_item_on_statusbar();
 
 	if(argv[1] != NULL && strncmp(argv[1], "--hor", 5) == 0)
 	{
@@ -291,13 +299,13 @@ int main(int argc, char* argv[])
 
 	g_icon_cache = ftk_icon_cache_create(s_default_path, NULL);
 	win = desktop_load_xul(g_desktop_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
-	ftk_app_window_set_on_prepare_options_menu(win, on_prepare_options_menu, win);
+	ftk_app_window_set_on_prepare_options_menu(win, desktop_on_prepare_options_menu, win);
 	button = ftk_widget_lookup(win, 100);
-	ftk_button_set_clicked_listener(button, button_open_applist_clicked, win);
+	ftk_button_set_clicked_listener(button, desktop_on_button_open_applist_clicked, win);
 	ftk_widget_show_all(win, 1);
 
-	update_time(win);
-	timer = ftk_source_timer_create(60000, update_time, win);
+	desktop_update_time(win);
+	timer = ftk_source_timer_create(60000, desktop_update_time, win);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	ftk_run();
 

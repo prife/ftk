@@ -5,9 +5,9 @@
 #include "ftk_list_model_default.h"
 
 #define IDC_TEST_BUTTON 1000
-int g_index = 0;
-FtkBitmap*  left_icon = NULL;
-FtkBitmap* right_icon = NULL;
+static int g_index = 0;
+static FtkBitmap*  left_icon = NULL;
+static FtkBitmap* right_icon = NULL;
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
@@ -55,7 +55,18 @@ Ret on_item_clicked(void* ctx, void* list)
 	return RET_OK;
 }
 
-int FTK_MAIN(int argc, char* argv[])
+#ifdef FTK_AS_PLUGIN
+#include "ftk_app_demo.h"
+FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
+FtkApp* ftk_app_demo_listview_create()
+{
+	return ftk_app_demo_create(_("listview"), ftk_main);
+}
+#else
+#define FTK_HIDE extern
+#endif /*FTK_AS_PLUGIN*/
+
+FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;

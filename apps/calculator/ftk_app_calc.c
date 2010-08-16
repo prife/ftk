@@ -44,6 +44,23 @@ static FtkWidget* load_xul(const char* filename)
 	return win;
 }
 
+static Ret ftk_calc_on_shutdown(void* ctx, void* obj)
+{
+	ftk_widget_unref(ctx);
+
+	return RET_OK;
+}
+
+static Ret ftk_calc_on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
+{
+	FtkWidget* item = ftk_menu_item_create(menu_panel);
+	ftk_widget_set_text(item, _("Quit"));
+	ftk_menu_item_set_clicked_listener(item, ftk_calc_on_shutdown, ctx);
+	ftk_widget_show(item, 1);
+
+	return RET_OK;
+}
+
 static Ret ftk_calc_on_button_clicked(void* ctx, void* obj)
 {
 	FtkWidget* entry = ftk_widget_lookup(ctx, 100);
@@ -109,6 +126,7 @@ static Ret ftk_app_calc_run(FtkApp* thiz, int argc, char* argv[])
 			ftk_button_set_clicked_listener(button, ftk_calc_on_button_clicked, win);
 		}
 	}
+	ftk_app_window_set_on_prepare_options_menu(win, ftk_calc_on_prepare_options_menu, win);
 	ftk_widget_show_all(win, 1);
 #ifdef HAS_MAIN
 	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
