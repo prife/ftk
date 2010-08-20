@@ -106,6 +106,7 @@ typedef enum _FtkAlignment
 
 typedef enum _FtkPixelFormat
 {
+	FTK_PIXEL_NONE   = 0,
 	FTK_PIXEL_BGR24  = 1,
 	FTK_PIXEL_BGRA32 = 2,
 	FTK_PIXEL_RGB565 = 3,

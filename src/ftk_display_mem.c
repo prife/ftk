@@ -34,6 +34,7 @@
 
 typedef struct _PrivInfo
 {
+	int bpp;
 	int width;
 	int height;
 	void* bits;
@@ -149,24 +150,28 @@ FtkDisplay* ftk_display_mem_create(FtkPixelFormat format,
 		{
 			case FTK_PIXEL_RGB565:
 			{
+				priv->bpp = 2;
 				priv->copy_to_data   = ftk_bitmap_copy_to_data_rgb565;
 				priv->copy_from_data = ftk_bitmap_copy_from_data_rgb565;
 				break;
 			}
 			case FTK_PIXEL_BGR24:
 			{
+				priv->bpp = 3;
 				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgr24;
 				priv->copy_from_data = ftk_bitmap_copy_from_data_bgr24;
 				break;
 			}
 			case FTK_PIXEL_BGRA32:
 			{
+				priv->bpp = 4;
 				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgra32;
 				priv->copy_from_data = ftk_bitmap_copy_from_data_bgra32;
 				break;
 			}
 			case FTK_PIXEL_RGBA32:
 			{
+				priv->bpp = 4;
 				priv->copy_to_data   = ftk_bitmap_copy_to_data_rgba32;
 				priv->copy_from_data = ftk_bitmap_copy_from_data_rgba32;
 				break;
@@ -189,6 +194,53 @@ Ret ftk_display_mem_set_sync_func(FtkDisplay* thiz, FtkDisplaySync sync, void* c
 
 	priv->sync = sync;
 	priv->sync_ctx = ctx;
+
+	return RET_OK;
+}
+
+int ftk_display_mem_is_active(FtkDisplay* thiz)
+{
+	return (thiz != NULL && thiz->update == ftk_display_mem_update);
+}
+
+FtkPixelFormat ftk_display_mem_get_pixel_format(FtkDisplay* thiz)
+{
+	DECL_PRIV(thiz, priv);
+
+	return priv != NULL ? priv->format : FTK_PIXEL_NONE;
+}
+
+Ret ftk_display_mem_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
+	void* bits, size_t width, size_t height, size_t xoffset, size_t yoffset)
+{
+	size_t w = 0;
+	size_t h = 0;
+	char* src = NULL;
+	char* dst = NULL;
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(bits != NULL, RET_FAIL);
+	return_val_if_fail(ftk_display_mem_is_active(thiz), RET_FAIL);
+	return_val_if_fail(xoffset < priv->width && yoffset < priv->height, RET_FAIL);
+
+	w = (xoffset + width) < priv->width ? width : priv->width - xoffset;
+	h = (yoffset + height) < priv->height ? height : priv->height - yoffset;
+
+	if(format == priv->format)
+	{
+		src = bits;
+		dst = (size_t)(priv->bits) + priv->width * priv->bpp + xoffset;
+		for(; h; h--)
+		{
+			memcpy(dst, src, priv->bpp * w);
+			dst += priv->width * priv->bpp;
+			src += width * priv->bpp;
+		}
+	}
+	else
+	{
+		/*TODO*/
+		assert(!"not supprted yet");
+	}
 
 	return RET_OK;
 }
