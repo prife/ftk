@@ -111,6 +111,28 @@ void       ftk_bitmap_unref(FtkBitmap* thiz)
 	return;
 }
 
+Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
+{
+	size_t i = 0;
+	size_t width = 0;
+	size_t height = 0;
+	FtkColor* dst = ftk_bitmap_bits(thiz);
+	FtkColor* src = ftk_bitmap_bits(other);
+	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
+
+	width = FTK_MIN(thiz->w, other->w);
+	height = FTK_MIN(thiz->h, other->h);
+
+	for(; height; height--)
+	{
+		memcpy(dst, src, sizeof(FtkColor) * width);
+		dst += thiz->w;
+		src += other->w;
+	}
+
+	return RET_OK;
+}
+
 #define COPY_FROM_DECL(Type) \
 	int x  = 0;\
 	int y  = 0;\

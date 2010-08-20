@@ -289,8 +289,8 @@ typedef struct _FtkCommitInfo
 #define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
 #endif
 
-#ifdef HAVE_CONFIG_H
-#include "config.h"
+#ifdef HAVE_CONFIG_FTK_H
+#include "config_ftk.h"
 #endif
 
 #ifdef ENABLE_NLS

@@ -12,3 +12,6 @@ cnfdir=$(datadir)/ftk/
 cnf_DATA=ftk.cnf
 
 EXTRA_DIST=autogen.sh ftk.cnf ftk.pc.in
+
+ftkdir=$(includedir)/ftk
+ftk_HEADERS=config_ftk.h

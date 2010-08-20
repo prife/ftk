@@ -4,7 +4,7 @@
 AC_PREREQ([2.60])
 AC_INIT(ftk, 0.1, xianjimli@hotmail.com)
 AC_CONFIG_SRCDIR([src/ftk_canvas.h])
-AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([config_ftk.h])
 AM_INIT_AUTOMAKE(ftk, 0.4)
 AC_CONFIG_MACRO_DIR([m4])
 # Checks for programs.
@@ -24,6 +24,7 @@ AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h exec
 AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-fb|linux-vlcd|linux-dfb|linux-st7781|linux-sigma|psp],
                     [use which display/input backend])])
 
+CFLAGS="$CFLAGS -DHAVE_CONFIG_FTK_H"
 case "$with_backend" in
 	linux-x11*) 
 		backend="x11"

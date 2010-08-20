@@ -60,7 +60,7 @@
 #define ftk_pipe_send(fd, buf, length)	write(fd, buf, length)
 
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "config_ftk.h"
 #endif
 
 #define FTK_PATH_DELIM '/'
