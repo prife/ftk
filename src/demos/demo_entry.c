@@ -61,9 +61,9 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	entry = ftk_entry_create(win, 10, 30, ftk_widget_width(win) - 20, 30);
-	ftk_entry_set_text(entry, "1234(digit only)");
+	ftk_entry_set_text(entry, "1234");
 	ftk_widget_set_event_listener(entry, ftk_digit_only_filter, NULL);
-
+	ftk_entry_set_tips(entry, "Please input some digits.");
 	entry = ftk_entry_create(win, 10, 80, ftk_widget_width(win) - 20, 30);
 	ftk_entry_set_text(entry, "Single line editor, that means you can input a one line only.");
 	

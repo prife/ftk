@@ -49,6 +49,8 @@ typedef struct _PrivInfo
 	FtkPoint caret_pos;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
+
+	char* tips;
 }PrivInfo;
 
 #define FTK_ENTRY_LEFT_MARGIN 4
@@ -353,16 +355,32 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_draw_hline(canvas, x + 2, y + height - 2, width-4);
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->text_buffer != NULL)
+	if(priv->text_buffer != NULL || priv->tips != NULL)
 	{
 		FtkTextLine line = {0};
 		FtkTextLayout* text_layout = ftk_default_text_layout();
 		int width = ftk_widget_width(thiz) - 2 * FTK_ENTRY_LEFT_MARGIN;
 
 		ftk_entry_compute_visible_range(thiz);
-		ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
-			priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
 
+		if(HAS_TEXT(priv))
+		{
+			ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
+				priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
+		}
+		else
+		{
+			FtkColor fg = ftk_theme_get_fg_color(ftk_default_theme(), FTK_ENTRY, ftk_widget_state(thiz));
+			FtkColor bg = ftk_theme_get_bg_color(ftk_default_theme(), FTK_ENTRY, ftk_widget_state(thiz));
+
+			gc.fg.r = (fg.r + bg.r) >> 1;
+			gc.fg.g = (fg.r + bg.g) >> 1;
+			gc.fg.b = (fg.r + bg.b) >> 1;
+			ftk_canvas_set_gc(canvas, &gc);
+
+			ftk_text_layout_init(text_layout, priv->tips, 
+				priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
+		}
 		font_height = ftk_canvas_font_height(canvas);
 		x += FTK_ENTRY_LEFT_MARGIN;
 		y += font_height + FTK_ENTRY_TOP_MARGIN;
@@ -372,6 +390,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len);
 		}
 	}
+
 	ftk_entry_on_paint_caret(thiz);
 
 	FTK_END_PAINT();
@@ -390,6 +409,7 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 			ftk_input_method_focus_out(im);
 		}
 
+		FTK_FREE(priv->tips);
 		ftk_source_disable(priv->caret_timer);
 		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 		ftk_source_unref(priv->caret_timer);
@@ -468,6 +488,17 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;
 	ftk_widget_invalidate(thiz);
+
+	return RET_OK;
+}
+
+Ret ftk_entry_set_tips(FtkWidget* thiz, const char* tips)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	FTK_FREE(priv->tips);
+	priv->tips = FTK_STRDUP(tips);
 
 	return RET_OK;
 }

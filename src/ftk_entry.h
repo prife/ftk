@@ -42,6 +42,9 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 
 const char* ftk_entry_get_text(FtkWidget* thiz);
 Ret ftk_entry_set_text(FtkWidget* thiz, const char* text);
+
+/*tips is shown when there is no text in the entry.*/
+Ret ftk_entry_set_tips(FtkWidget* thiz, const char* tips);
 Ret ftk_entry_set_input_method(FtkWidget* thiz, int index);
 Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text);
 
