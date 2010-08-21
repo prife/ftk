@@ -38,7 +38,12 @@ FTK_BEGIN_DECLS
 struct _FtkDisplay;
 typedef struct _FtkDisplay FtkDisplay;
 
-typedef Ret (*FtkDisplayUpdate)(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset);
+typedef Ret (*FtkDisplayUpdate)(FtkDisplay* thiz, FtkBitmap* bitmap, 
+	FtkRect* rect, int xoffset, int yoffset);
+/*Optional update function used to fast update diplay, maybe used mediaplayer and opengles.*/
+typedef Ret (*FtkDisplayUpdateDirectly)(FtkDisplay* thiz, FtkPixelFormat format,
+	void* bits, size_t width, size_t height, size_t xoffset, size_t yoffset);
+
 typedef int (*FtkDisplayWidth)(FtkDisplay* thiz);
 typedef int (*FtkDisplayHeight)(FtkDisplay* thiz);
 typedef int (*FtkDisplayBitsPerPixel)(FtkDisplay* thiz);
@@ -51,10 +56,11 @@ typedef Ret (*FtkDisplayOnUpdate)(void* ctx, FtkDisplay* display, int before,
 
 struct _FtkDisplay
 {
-	FtkDisplayUpdate       update;
 	FtkDisplayWidth        width;
 	FtkDisplayHeight       height;
 	FtkDisplaySnap         snap;
+	FtkDisplayUpdate       update;
+	FtkDisplayUpdateDirectly update_directly;
 	FtkDisplayDestroy      destroy;
 
 	FtkDisplayOnUpdate on_update[FTK_DISPLAY_LISTENER_NR];
@@ -72,6 +78,17 @@ static inline Ret ftk_display_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRec
 	return_val_if_fail(thiz != NULL && thiz->update != NULL, RET_FAIL);
 
 	return thiz->update(thiz, bitmap, rect, xoffset, yoffset);
+}
+
+static inline Ret ftk_display_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
+	void* bits, size_t width, size_t height, size_t xoffset, size_t yoffset)
+{
+	if(thiz != NULL && thiz->update_directly != NULL)
+	{
+		return thiz->update_directly(thiz, format, bits, width, height, xoffset, yoffset);
+	}
+
+	return RET_FAIL;
 }
 
 static inline Ret ftk_display_update_and_notify(FtkDisplay* thiz, 

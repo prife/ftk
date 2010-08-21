@@ -39,6 +39,15 @@ typedef struct _PrivInfo
 	FtkBitmap*  bitmap;
 }PrivInfo;
 
+static Ret ftk_display_rotate_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
+	void* bits, size_t width, size_t height, size_t xoffset, size_t yoffset)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	return ftk_display_update_directly(priv->display, format, bits, width, height, xoffset, yoffset);
+}
+
 static Ret ftk_display_rotate_update_0(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
 	DECL_PRIV(thiz, priv);
@@ -350,6 +359,10 @@ FtkDisplay* ftk_display_rotate_create(FtkDisplay* display, FtkRotate rotate)
 		thiz->width   = ftk_display_rotate_width;
 		thiz->height  = ftk_display_rotate_height;
 		thiz->destroy = ftk_display_rotate_destroy;
+		if(display->update_directly != NULL)
+		{
+			thiz->update_directly = ftk_display_rotate_update_directly;
+		}
 
 		ftk_display_set_rotate(thiz, rotate);
 	}

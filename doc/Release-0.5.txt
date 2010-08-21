@@ -4,3 +4,6 @@
 4.fconf
 5.listview support marquee
 6.opengles supported.
+7.VNC supported
+8.add filebrowser and filechooser
+9.gettext supported.
