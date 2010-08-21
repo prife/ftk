@@ -1,0 +1,6 @@
+1.label support alignment.
+2.entry support tips.
+3.fbus
+4.fconf
+5.listview support marquee
+6.opengles supported.
