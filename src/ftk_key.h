@@ -160,6 +160,7 @@ typedef enum _FtkKey
 	FTK_KEY_F1          =  0xFFBE,
 	FTK_KEY_F2          =  0xFFBF,
 	FTK_KEY_F3          =  0xFFC0,
+	FTK_KEY_RETURN      = FTK_KEY_F3,
 	FTK_KEY_F4          =  0xFFC1,
 	FTK_KEY_F5          =  0xFFC2,
 	FTK_KEY_F6          =  0xFFC3,

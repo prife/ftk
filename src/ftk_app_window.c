@@ -67,6 +67,15 @@ static Ret  ftk_app_window_on_event(FtkWidget* thiz, FtkEvent* event)
 
 		return RET_REMOVE;
 	}
+	else if(event->type == FTK_EVT_KEY_UP && event->u.key.code == FTK_KEY_RETURN)
+	{
+		if(!ftk_widget_has_attr(thiz, FTK_ATTR_IGNORE_CLOSE))
+		{
+			ftk_widget_unref(thiz);
+		}
+
+		return RET_REMOVE;
+	}
 
 	return priv->parent_on_event(thiz, event);
 }

@@ -225,6 +225,16 @@ Ret ftk_init(int argc, char* argv[])
 	FtkColor bg = {0};
 	FtkConfig* config = NULL;
 	FtkDisplay* display = NULL;
+	static int ftk_inited = 0;
+
+	if(ftk_inited)
+	{
+		return RET_OK;
+	}
+	else
+	{
+		ftk_inited = 1;
+	}
 
 	PROFILE_START();
 #ifndef USE_STD_MALLOC
