@@ -5,11 +5,16 @@
 #include "vnc_service.h"
 #include "ftk_animator_expand.h"
 
-static int g_desktop_horizonal = 0;
-static FtkAnimator*    g_animator = NULL;
-static FtkWidget*      g_applist_win = NULL;
-static AppInfoManager* g_app_manager = NULL;
-static FtkIconCache*   g_icon_cache = NULL;
+typedef struct _FtkDesktop
+{
+	int is_horizonal;
+	FtkAnimator*    animator;
+	FtkWidget*      applist_win;
+	AppInfoManager* app_manager;
+	FtkIconCache*   icon_cache;
+}FtkDesktop;
+
+static FtkDesktop g_desktop;
 
 static Ret desktop_on_button_close_applist_clicked(void* ctx, void* obj)
 {
@@ -42,7 +47,7 @@ static FtkWidget* desktop_load_xul(const char* filename)
 	FtkXulCallbacks callbacks = {0};
 	char path[FTK_MAX_PATH+1] = {0};
 	
-	callbacks.ctx = g_icon_cache;
+	callbacks.ctx = g_desktop.icon_cache;
 	callbacks.translate_text = desktop_translate_text;
 	callbacks.load_image = (FtkXulLoadImage)ftk_icon_cache_load;
 
@@ -56,26 +61,26 @@ static Ret applist_window_show(FtkWidget* widget)
 	int delta = 0;
 	int width = ftk_widget_width(widget);
 	int height = ftk_widget_height(widget);
-	int type = g_desktop_horizonal ? FTK_ANI_TO_RIGHT : FTK_ANI_TO_UP;
+	int type = g_desktop.is_horizonal ? FTK_ANI_TO_RIGHT : FTK_ANI_TO_UP;
 	
 	switch(type)
 	{
 		case FTK_ANI_TO_RIGHT:
 		{
 			delta = width/8;
-			ftk_animator_set_param(g_animator, type, delta, width, delta, 200);
+			ftk_animator_set_param(g_desktop.animator, type, delta, width, delta, 200);
 			break;
 		}
 		default:
 		case FTK_ANI_TO_UP:
 		{
 			delta = height/8;
-			ftk_animator_set_param(g_animator, type, height - delta, ftk_widget_top(widget), delta, 200);
+			ftk_animator_set_param(g_desktop.animator, type, height - delta, ftk_widget_top(widget), delta, 200);
 			break;
 		}
 	}
 
-	ftk_animator_start(g_animator, widget, 0);
+	ftk_animator_start(g_desktop.animator, widget, 0);
 
 	return RET_OK;
 }
@@ -102,14 +107,14 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 	FtkIconViewItem item;
 	FtkWidget* icon_view = NULL;
 	
-	if(g_applist_win != NULL)
+	if(g_desktop.applist_win != NULL)
 	{
-		applist_window_show(g_applist_win);
+		applist_window_show(g_desktop.applist_win);
 
 		return RET_OK;
 	}
 
-	win = desktop_load_xul(g_desktop_horizonal ? "xul/appview-h.xul" : "xul/appview-v.xul"); 
+	win = desktop_load_xul(g_desktop.is_horizonal ? "xul/appview-h.xul" : "xul/appview-v.xul"); 
 	
 	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, desktop_on_button_close_applist_clicked, win);
@@ -117,11 +122,11 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 	icon_view = ftk_widget_lookup(win, 99);
 	ftk_icon_view_set_item_size(icon_view, 100);
 	ftk_icon_view_set_clicked_listener(icon_view, applist_on_item_clicked, win);
-	n = app_info_manager_get_count(g_app_manager);
+	n = app_info_manager_get_count(g_desktop.app_manager);
 	
 	for(i = 0; i < n; i++)
 	{
-		app_info_manager_get(g_app_manager, i, &app_info);
+		app_info_manager_get(g_desktop.app_manager, i, &app_info);
 		
 		item.icon = ftk_app_get_icon(app_info->app);
 		item.user_data = app_info;
@@ -133,7 +138,7 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 		ftk_icon_view_add(icon_view, &item);
 	}
 
-	g_applist_win = win;
+	g_desktop.applist_win = win;
 
 	return RET_OK;
 }
@@ -167,22 +172,22 @@ static Ret desktop_update_time(void* ctx)
 	
 	image = ftk_widget_lookup(win, 1);
 	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour/10);
-	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 	
 	image = ftk_widget_lookup(win, 2);
 	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour%10);
-	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 
 	image = ftk_widget_lookup(win, 4);
 	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min/10);
-	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 	
 	image = ftk_widget_lookup(win, 5);
 	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min%10);
-	bitmap = ftk_icon_cache_load(g_icon_cache, filename);
+	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 
 	return RET_OK;
@@ -255,6 +260,15 @@ static Ret desktop_add_time_item_on_statusbar(void)
 	return RET_OK;
 }
 
+static void desktop_destroy(void* data)
+{
+	ftk_icon_cache_destroy(g_desktop.icon_cache);
+	app_info_manager_destroy(g_desktop.app_manager);
+	ftk_animator_destroy(g_desktop.animator);
+
+	return;
+}
+
 int main(int argc, char* argv[])
 {
 	FtkWidget* win = NULL;
@@ -284,21 +298,21 @@ int main(int argc, char* argv[])
 
 	if(argv[1] != NULL && strncmp(argv[1], "--hor", 5) == 0)
 	{
-		g_desktop_horizonal = 1;
+		g_desktop.is_horizonal = 1;
 	}
 
-	g_app_manager = app_info_manager_create();
-	g_animator = ftk_animator_expand_create(0);
+	g_desktop.app_manager = app_info_manager_create();
+	g_desktop.animator = ftk_animator_expand_create(0);
 
 	snprintf(path, sizeof(path), DATA_DIR"/apps");
-	if(app_info_manager_load_dir(g_app_manager, path) != RET_OK)
+	if(app_info_manager_load_dir(g_desktop.app_manager, path) != RET_OK)
 	{
 		snprintf(path, sizeof(path), LOCAL_DATA_DIR"/apps");
-		app_info_manager_load_dir(g_app_manager, path);
+		app_info_manager_load_dir(g_desktop.app_manager, path);
 	}
 
-	g_icon_cache = ftk_icon_cache_create(s_default_path, NULL);
-	win = desktop_load_xul(g_desktop_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
+	g_desktop.icon_cache = ftk_icon_cache_create(s_default_path, NULL);
+	win = desktop_load_xul(g_desktop.is_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
 	ftk_app_window_set_on_prepare_options_menu(win, desktop_on_prepare_options_menu, win);
 	button = ftk_widget_lookup(win, 100);
 	ftk_button_set_clicked_listener(button, desktop_on_button_open_applist_clicked, win);
@@ -307,11 +321,9 @@ int main(int argc, char* argv[])
 	desktop_update_time(win);
 	timer = ftk_source_timer_create(60000, desktop_update_time, win);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
-	ftk_run();
+	ftk_widget_set_user_data(win, desktop_destroy, &g_desktop);
 
-	ftk_icon_cache_destroy(g_icon_cache);
-	app_info_manager_destroy(g_app_manager);
-	ftk_animator_destroy(g_animator);
+	ftk_run();
 
 	return 0;
 }
