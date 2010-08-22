@@ -69,12 +69,21 @@ typedef struct ugwindow {
 } UGWindow_t;
 
 static int argc = 1;
+static int ug_user_ref = 0;
 static char* argv[] = {"gles", NULL};
 static PFNSAVESURFACE pfnSaveSurface;	 // function pointer used to save images 
 
 UGCtx APIENTRY ugInit(void) 
 {
-	UGCtx_t* ug = calloc(1, sizeof *ug);
+	UGCtx_t* ug = NULL;
+	
+	ug_user_ref++;
+	if(ug_user_ref > 1)
+	{
+		return context;
+	}
+
+	ug = calloc(1, sizeof *ug);
 	return_val_if_fail(ug != NULL, 0);
 
 	ftk_init(argc, argv);
@@ -90,11 +99,15 @@ UGCtx APIENTRY ugInit(void)
 
 void APIENTRY
 ugFini(UGCtx ug) {
-	/*XXXblythe open windows?*/
 	UGCtx_t* _ug = (UGCtx_t*)ug;
-	eglTerminate(_ug->egldpy);
-	free(_ug);
-	context = NULL;
+
+	ug_user_ref--;
+	if(ug_user_ref == 0)
+	{
+		eglTerminate(_ug->egldpy);
+		free(_ug);
+		context = NULL;
+	}
 }
 
 UGCtx APIENTRY ugCtxFromWin(UGWindow uwin) {
