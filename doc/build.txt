@@ -1,6 +1,17 @@
 REAMDE has described the general steps of building, here are some special
 configure options for FTK:
 
+--enable-cairo
+
+build with cairo support.
+
+--enable-bidi
+
+build with bidi support.
+
+--enable-opengles
+build with opengles support.
+
 --enable-tslib  
 
 build with tslib support, tslib is a library to handle touchscreen event, 

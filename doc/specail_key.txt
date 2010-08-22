@@ -1,0 +1,6 @@
+FTK_KEY_MENU: 
+  Active the optional menu. default map to F2.
+
+FTK_KEY_RETURN: 
+  Close current app window if it has no FTK_ATTR_IGNORE_CLOSE attr. default map to F3.
+
