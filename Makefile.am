@@ -1,4 +1,9 @@
 SUBDIRS=po src data theme tools testdata doc fbus services
+
+if ENABLE_OPENGLES
+SUBDIRS += opengles
+endif
+
 if FTK_BACKEND_PSP
 else
 SUBDIRS+=script_binding apps

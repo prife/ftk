@@ -9,6 +9,7 @@ AM_INIT_AUTOMAKE(ftk, 0.4)
 AC_CONFIG_MACRO_DIR([m4])
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 
@@ -117,6 +118,17 @@ fi
 
 AM_CONDITIONAL(ENABLE_FRIBIDI,  test "$enable_fribidi" = "yes")
 
+AC_ARG_ENABLE(opengles,
+  [  --enable-opengles            build with opengles support [[default=yes]]],,
+  enable_opengles=yes)
+
+if test "$enable_opengles" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_OPENGLES `pkg-config --cflags opengles`"
+  LDFLAGS="$LDFLAGS `pkg-config --libs opengles`"
+fi
+
+AM_CONDITIONAL(ENABLE_OPENGLES,  test "$enable_opengles" = "yes")
+
 AC_ARG_ENABLE(vnc,
   [  --enable-vnc            build with vnc support [[default=yes]]],,
   enable_vnc=yes)
@@ -218,5 +230,12 @@ AC_CONFIG_FILES([ftk.pc
                 services/Makefile
                 services/fconf/Makefile
                 services/fconf/fconf.service
+		opengles/ug/Makefile
+		opengles/include/Makefile
+		opengles/include/GLES/Makefile
+		opengles/src/Makefile
+		opengles/Makefile
+		opengles/opengles.pc
+		opengles/redbook/Makefile
                 ])
 AC_OUTPUT
