@@ -623,13 +623,57 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	return RET_OK;
 }
 
+static int  ftk_wnd_manager_default_has_fullscreen_win(FtkWndManager* thiz)
+{
+	int i = 0;
+	FtkWidget* win = NULL;
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && priv->top > 0, 0);
+	
+	for(i = 0; i < priv->top; i++)
+	{
+		win = priv->windows[i];
+
+		if(ftk_widget_is_visible(win) && ftk_window_is_fullscreen(win))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
+{
+	int i = 0;
+	FtkEvent event = {0};
+	FtkWidget* win = NULL;
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && priv->top > 0, RET_FAIL);
+	
+	for(i = 0; i < priv->top; i++)
+	{
+		win = priv->windows[i];
+		if(ftk_widget_type(win) == FTK_STATUS_PANEL && ftk_widget_is_visible(win))
+		{
+			event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
+			event.widget = win;
+			ftk_wnd_manager_dispatch_event(thiz, &event);
+		}
+	}
+
+	return 0;
+}
+
 static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 {
 	int i = 0;
 	FtkWidget* win = NULL;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && priv->top > 0, RET_FAIL);
-	
+
+	ftk_wnd_manager_default_map_panels(thiz, !ftk_wnd_manager_default_has_fullscreen_win(thiz));
+
 	for(i = priv->top; i > 0; i--)
 	{
 		win = priv->windows[i - 1];
