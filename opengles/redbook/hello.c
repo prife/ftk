@@ -83,12 +83,25 @@ void init (void)
  * Register callback function to display graphics.
  * Enter main loop and process events.
  */
-int main(int argc, char** argv)
+#ifdef FTK_AS_PLUGIN
+#include "ftk_app_demo.h"
+FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
+FtkApp* ftk_app_demo_hellogles_create()
+{
+	return ftk_app_demo_create(_("helloGLES"), ftk_main);
+}
+#else
+#define FTK_HIDE extern
+#endif /*FTK_AS_PLUGIN*/
+
+FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
    UGCtx ug = ugInit();
    UGWindow uwin = ugCreateWindow (ug, "", "hello", 250, 250, 100, 100);
    init();
    ugDisplayFunc(uwin, display); 
+#ifndef FTK_AS_PLUGIN
    ugMainLoop(ug);
+#endif   
    return 0;   /* ANSI C requires main to return int. */
 }

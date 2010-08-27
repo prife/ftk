@@ -1,9 +1,11 @@
-1.label support alignment.
-2.entry support tips.
-3.fbus
-4.fconf
-5.listview support marquee
-6.opengles supported.
-7.VNC supported
-8.add filebrowser and filechooser
-9.gettext supported.
+fbus
+fconf
+VNC supported
+st7781 supported.
+gettext supported.
+opengles supported.
+entry support tips.
+label support alignment.
+listview support marquee
+Bug fix and optimization.
+add filebrowser and filechooser

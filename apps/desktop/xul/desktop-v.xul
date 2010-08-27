@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<window value="Desktop" attr="$FTK_ATTR_IGNORE_CLOSE" bg_image[normal]="icons/paper.jpg">
+<window value="Desktop" attr="$FTK_ATTR_IGNORE_CLOSE|$FTK_ATTR_NO_FULLSCREEN" bg_image[normal]="icons/paper.jpg">
 	<image id="1" x="($ww-220)/2" y="$wh/6" w="50" h="112" value="icons/1.png" attr="$FTK_ATTR_TRANSPARENT" />
 	<image id="2" x="($ww-220)/2+50" y="$wh/6" w="50" h="112" value="icons/2.png" attr="$FTK_ATTR_TRANSPARENT" />
 	<image id="3" x="($ww-220)/2+100" y="$wh/6" w="20" h="112" value="icons/colon.png" attr="$FTK_ATTR_TRANSPARENT" />

@@ -8,12 +8,9 @@ typedef struct _PrivInfo
 	FtkBitmap* icon;
 }PrivInfo;
 
-static const char* s_default_path[FTK_ICON_PATH_NR]=
-{
-	FTK_DATA_ROOT"/calc",
-	".",
-	""
-};
+#define IDC_ENTRY 100
+
+static Ret ftk_calc_on_button_clicked(void* ctx, void* obj);
 
 const char* ftk_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
@@ -27,19 +24,124 @@ const char* ftk_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 	return out_path;
 }
 
-static FtkWidget* load_xul(const char* filename)
+const char* buttons[] =
 {
-	FtkWidget* win = NULL;
-	FtkXulCallbacks callbacks = {0};
-	char path[FTK_MAX_PATH+1] = {0};
+	"0",
+	"1",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+	".",
+	"+",
+	"-",
+	"*",
+	"/",
+	"(",
+	")",
+	"=",
+	"<--",
+	"Quit"
+};
 
-	ftk_translate_path(filename, path);
+static FtkWidget* ftk_calc_create_window(void)
+{
+	int i = 0;
+	int j = 0;
+	int x = 0;
+	int y = 0;
+	int row = 0;
+	int col = 0;
+	int small = 0;
+	int xoffset = 0;
+	int yoffset = 0;
+	int width   = 0;
+	int height  = 0;
+	int v_margin  = 5;
+	int h_margin  = 5;
+	int item_width = 0;
+	int item_height = 0;
+	FtkGc gc = {0};
+	FtkWidget* entry = NULL;
+	FtkWidget* button = NULL;
+	FtkBitmap* bitmap_normal = NULL;
+	FtkBitmap* bitmap_active = NULL;
+	FtkBitmap* bitmap_focus = NULL;
+	char path[FTK_MAX_PATH+1] = {0};
+	FtkWidget* win =  ftk_app_window_create();
+	width = ftk_widget_width(win);
+	height = ftk_widget_height(win);
+	entry = ftk_entry_create(win, 0, 0, width, 30);
+	ftk_widget_set_id(entry, IDC_ENTRY);
+	height -= ftk_widget_height(entry);
+
+	row = width > height ? 4 : 5;
+	col = width > height ? 5 : 4;
+
+	item_width = width / col;
+	item_height = height /row;
+	small = (item_width < 60 || item_height < 60) ? 1 : 0;
+
+	item_width = item_height = small ? 36 : 60;
 	
-	callbacks.translate_text = NULL;
-	callbacks.ctx = ftk_icon_cache_create(s_default_path, NULL);
-	callbacks.load_image = (FtkXulLoadImage)ftk_icon_cache_load;
-	win = ftk_xul_load_file(path, &callbacks);
-	ftk_icon_cache_destroy(callbacks.ctx);
+	h_margin = width/col - item_width;
+	h_margin = h_margin > 5 ? 5 : h_margin;
+
+	v_margin = height/row - item_height;
+	v_margin = v_margin > 5 ? 5 : v_margin;
+
+	xoffset = (width - (h_margin + item_width) * col) >> 1;
+	yoffset = (height - (v_margin + item_height) * row) >> 1;
+
+	xoffset = xoffset < 0 ? 0 : xoffset;
+	yoffset = yoffset < 0 ? 0 : yoffset;
+
+	yoffset += ftk_widget_height(entry);
+	gc.mask = FTK_GC_BITMAP;
+	if(small)
+	{
+		bitmap_normal =  ftk_bitmap_factory_load(ftk_default_bitmap_factory(), ftk_translate_path("icons/button-small.png", path));
+		bitmap_active =  ftk_bitmap_factory_load(ftk_default_bitmap_factory(), ftk_translate_path("icons/button-pressed-small.png", path));
+		bitmap_focus =  ftk_bitmap_factory_load(ftk_default_bitmap_factory(), ftk_translate_path("icons/button-selected-small.png", path));
+	}
+	else
+	{
+		bitmap_normal =  ftk_bitmap_factory_load(ftk_default_bitmap_factory(), ftk_translate_path("icons/button.png", path));
+		bitmap_active =  ftk_bitmap_factory_load(ftk_default_bitmap_factory(), ftk_translate_path("icons/button-pressed.png", path));
+		bitmap_focus =  ftk_bitmap_factory_load(ftk_default_bitmap_factory(), ftk_translate_path("icons/button-selected.png", path));
+	}
+
+	for(i = 0; i < row; i++)
+	{
+		y = yoffset + i * (item_height + v_margin);
+		for(j = 0; j < col; j++)
+		{
+			const char* text = buttons[i * col + j];
+			if(text != NULL)
+			{
+				x = xoffset + j * (item_width + h_margin);
+				button = ftk_button_create(win, x, y, item_width, item_height);
+				ftk_widget_set_text(button, text);
+				ftk_button_set_clicked_listener(button, ftk_calc_on_button_clicked, win);
+				gc.bitmap = bitmap_normal;
+				ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
+				
+				gc.bitmap = bitmap_focus;
+				ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
+				
+				gc.bitmap = bitmap_active;
+				ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
+			}
+		}
+	}
+
+	ftk_bitmap_unref(bitmap_normal);
+	ftk_bitmap_unref(bitmap_active);
+	ftk_bitmap_unref(bitmap_focus);
 
 	return win;
 }
@@ -63,7 +165,7 @@ static Ret ftk_calc_on_prepare_options_menu(void* ctx, FtkWidget* menu_panel)
 
 static Ret ftk_calc_on_button_clicked(void* ctx, void* obj)
 {
-	FtkWidget* entry = ftk_widget_lookup(ctx, 100);
+	FtkWidget* entry = ftk_widget_lookup(ctx, IDC_ENTRY);
 	const char* text = ftk_widget_get_text(obj);
 	return_val_if_fail(text != NULL && entry != NULL, RET_FAIL);
 	
@@ -77,6 +179,10 @@ static Ret ftk_calc_on_button_clicked(void* ctx, void* obj)
 	else if(text[0] == '<')
 	{
 		ftk_entry_set_text(entry, "");
+	}
+	else if(text[0] == 'Q' || strcmp(text, _("Quit")) == 0)
+	{
+		ftk_widget_unref(ctx);
 	}
 	else
 	{
@@ -112,22 +218,14 @@ static const char* ftk_app_calc_get_name(FtkApp* thiz)
 
 static Ret ftk_app_calc_run(FtkApp* thiz, int argc, char* argv[])
 {
-	int i = 0;
 	DECL_PRIV(thiz, priv);
 	FtkWidget* win = NULL;
-	FtkWidget* button = NULL;
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
-	win = load_xul("xul/calc.xul"); 
-	for(i = 1; i <= 20; i++)
-	{
-		if((button = ftk_widget_lookup(win, i)) != NULL)
-		{
-			ftk_button_set_clicked_listener(button, ftk_calc_on_button_clicked, win);
-		}
-	}
+	win = ftk_calc_create_window();
 	ftk_app_window_set_on_prepare_options_menu(win, ftk_calc_on_prepare_options_menu, win);
 	ftk_widget_show_all(win, 1);
+
 #ifdef HAS_MAIN
 	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 #endif	

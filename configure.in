@@ -209,7 +209,6 @@ AC_CONFIG_FILES([ftk.pc
                 apps/desktop/libvncserver/Makefile
                 apps/calculator/Makefile
                 apps/calculator/icons/Makefile
-                apps/calculator/xul/Makefile
                 apps/calculator/data/Makefile
                 apps/filemanager/Makefile
                 apps/filemanager/icons/Makefile
