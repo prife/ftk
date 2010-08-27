@@ -1,5 +1,4 @@
 <application name="alpha" exec="libftk_demos.so" init="ftk_app_demo_alpha_create" />
-<application name="bidi" exec="libftk_demos.so" init="ftk_app_demo_bidi_create" />
 <application name="button" exec="libftk_demos.so" init="ftk_app_demo_button_create" />
 <application name="cairo" exec="libftk_demos.so" init="ftk_app_demo_cairo_create" />
 <application name="check_button" exec="libftk_demos.so" init="ftk_app_demo_check_button_create" />

@@ -74,6 +74,7 @@ Ret ftk_fs_create_dir(const char* dir);
 Ret ftk_fs_change_dir(const char* dir);
 Ret ftk_fs_move(const char* dir_from, const char* dir_to);
 Ret ftk_fs_copy(const char* dir_from, const char* dir_to);
+int ftk_fs_is_root(const char* path);
 
 FTK_END_DECLS
 

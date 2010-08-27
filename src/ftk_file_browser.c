@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_util.h"
 #include "ftk_theme.h"
 #include "ftk_entry.h"
@@ -370,9 +371,16 @@ static Ret ftk_file_browser_on_item_clicked(void* ctx, void* list)
 		if(strcmp(file_name, _("..")) == 0)
 		{
 			strcpy(path, priv->path);
-			if((p = strrchr(path, '/')) != NULL)
+			if((p = strrchr(path, FTK_PATH_DELIM)) != NULL)
 			{
-				*p = '\0';
+				if(p == path)
+				{
+					p[1] = '\0';
+				}
+				else
+				{
+					*p = '\0';
+				}
 			}
 			ftk_file_browser_set_path(win, path);
 			ftk_file_browser_load(win);
@@ -521,16 +529,23 @@ Ret		   ftk_file_browser_load(FtkWidget* thiz)
 	return_val_if_fail(priv != NULL && priv->path != NULL, RET_FAIL);	
 
 	handle = ftk_dir_open(priv->path);
+	if(handle == NULL)
+	{
+		ftk_logd("%s: open %s\n", __func__, priv->path);
+	}
 	return_val_if_fail(handle != NULL, RET_FAIL);
 
 	ftk_list_model_reset(priv->model);
 	ftk_list_model_disable_notify(priv->model);
 
-	item.value = 1;
-	item.text = _("..");
-	item.type = FTK_LIST_ITEM_NORMAL;
-	item.left_icon = ftk_theme_load_image(ftk_default_theme(), "up"FTK_STOCK_IMG_SUFFIX);
-	ftk_list_model_add(priv->model, &item);
+	if(!ftk_fs_is_root(priv->path))
+	{
+		item.value = 1;
+		item.text = _("..");
+		item.type = FTK_LIST_ITEM_NORMAL;
+		item.left_icon = ftk_theme_load_image(ftk_default_theme(), "up"FTK_STOCK_IMG_SUFFIX);
+		ftk_list_model_add(priv->model, &item);
+	}
 
 	/*directory go first.*/
 	while(ftk_dir_read(handle, &info) == RET_OK)

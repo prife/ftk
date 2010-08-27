@@ -141,7 +141,6 @@ Ret ftk_fs_delete_file(const char* file_name)
 
 Ret ftk_fs_create_dir(const char* dir)
 {
-	int i = 0;
 	char* p = NULL;
 	FtkFileInfo info = {0};
 	char name[FTK_MAX_PATH+1] = {0};
@@ -198,3 +197,9 @@ Ret ftk_fs_move(const char* dir_from, const char* dir_to)
 }
 
 
+int ftk_fs_is_root(const char* path)
+{
+	return_val_if_fail(path != NULL, 0);
+
+	return path[0] == FTK_PATH_DELIM && path[1] == '\0';
+}
