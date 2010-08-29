@@ -253,3 +253,6 @@ msgstr "桌面"
 msgid "Programs"
 msgstr "应用程序"
 
+#: apps/shell/ftk_app_shell.c:71 apps/shell/ftk_app_shell.c:190
+msgid "Shell"
+msgstr "终端"

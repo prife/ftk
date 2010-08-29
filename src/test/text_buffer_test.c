@@ -5,15 +5,15 @@ void english_test(void)
 {
 	int i = 0;
 	FtkTextBuffer* thiz = ftk_text_buffer_create(6);
-	assert(ftk_text_buffer_insert(thiz, 0, "b") == RET_OK);
+	assert(ftk_text_buffer_insert(thiz, 0, "b", -1) == RET_OK);
 	assert(strcmp(thiz->buffer, "b") == 0);
-	assert(ftk_text_buffer_insert(thiz, 1, "c") == RET_OK);
+	assert(ftk_text_buffer_insert(thiz, 1, "c", -1) == RET_OK);
 	assert(strcmp(thiz->buffer, "bc") == 0);
-	assert(ftk_text_buffer_insert(thiz, 0, "a") == RET_OK);
+	assert(ftk_text_buffer_insert(thiz, 0, "a", -1) == RET_OK);
 	assert(strcmp(thiz->buffer, "abc") == 0);
-	assert(ftk_text_buffer_insert(thiz, 4, "a") != RET_OK);
+	assert(ftk_text_buffer_insert(thiz, 4, "a", -1) != RET_OK);
 	assert(strcmp(thiz->buffer, "abc") == 0);
-	assert(ftk_text_buffer_insert(thiz, 3, "defg") == RET_OK);
+	assert(ftk_text_buffer_insert(thiz, 3, "defg", -1) == RET_OK);
 	assert(strcmp(thiz->buffer, "abcdefg") == 0);
 
 	assert(ftk_text_buffer_delete_chars(thiz, 0, 1) == RET_OK);
@@ -47,7 +47,7 @@ void chinese_test(void)
 {
 	int offset = 0;
 	FtkTextBuffer* thiz = ftk_text_buffer_create(6);
-	assert(ftk_text_buffer_insert(thiz, 0, "中文汉字测试") == RET_OK);
+	assert(ftk_text_buffer_insert(thiz, 0, "中文汉字测试", -1) == RET_OK);
 	offset  = ftk_text_buffer_chars_bytes(thiz, 0, 2);
 	assert(ftk_text_buffer_delete_chars(thiz, offset, -2) == RET_OK);
 	assert(strcmp(thiz->buffer, "汉字测试") == 0);

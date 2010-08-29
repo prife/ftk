@@ -70,14 +70,14 @@ static Ret ftk_text_buffer_extend(FtkTextBuffer* thiz, size_t length)
 	return RET_FAIL;
 }
 
-Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text)
+Ret  ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text, int len)
 {
-	int str_len = 0;
+	int str_len = len;
 	size_t length = 0;
 	char* dst = NULL;
 	const char* src = NULL;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL && text != NULL, RET_FAIL);	
-	str_len = (int)strlen(text);
+	str_len = len < 0 ? (int)strlen(text) : len;
 	return_val_if_fail(ftk_text_buffer_extend(thiz, str_len) == RET_OK, RET_FAIL);
 	return_val_if_fail(offset <= thiz->length, RET_FAIL);
 

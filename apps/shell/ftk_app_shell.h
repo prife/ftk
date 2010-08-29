@@ -1,7 +1,7 @@
 /*
- * File: ftk_text_buffer.h    
+ * File: ftk_all_shell.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   text buffer
+ * Brief:   shell
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,37 +25,20 @@
 /*
  * History:
  * ================================================================
- * 2009-11-06 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-08-29 Li XianJing <xianjimli@hotmail.com> created
  *
  */
 
-#ifndef FTK_TEXT_BUFFER_H
-#define FTK_TEXT_BUFFER_H
+#ifndef FTK_APP_SHELL_H
+#define FTK_APP_SHELL_H
 
-#include "ftk_typedef.h"
+#include "ftk_app.h"
 
 FTK_BEGIN_DECLS
 
-typedef struct _FtkTextBuffer
-{
-	char* buffer;
-	size_t length;
-	size_t buffer_length;
-}FtkTextBuffer;
-
-FtkTextBuffer* ftk_text_buffer_create(size_t init_buffer_length);
-
-Ret   ftk_text_buffer_insert(FtkTextBuffer* thiz, size_t offset, const char* text, int len);
-Ret   ftk_text_buffer_delete(FtkTextBuffer* thiz, size_t offset, size_t length);
-Ret   ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count);
-int   ftk_text_buffer_chars_bytes(FtkTextBuffer* thiz, int offset, int count);
-
-Ret   ftk_text_buffer_reset(FtkTextBuffer* thiz);
-char* ftk_text_buffer_append_string(FtkTextBuffer* thiz, const char* str);
-
-void ftk_text_buffer_destroy(FtkTextBuffer* thiz);
+FtkApp* ftk_app_shell_create(void);
 
 FTK_END_DECLS
 
-#endif/*FTK_TEXT_BUFFER_H*/
+#endif/*FTK_APP_SHELL_H*/
 

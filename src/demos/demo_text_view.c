@@ -36,10 +36,10 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	
 	text_view = ftk_text_view_create(win, 10, 10, ftk_widget_width(win) - 20, height/3);
-	ftk_text_view_set_text(text_view, TEXT1_STR);
+	ftk_text_view_set_text(text_view, TEXT1_STR, -1);
 	
 	text_view = ftk_text_view_create(win, 10, 15 + height/3, ftk_widget_width(win) - 20, height/3);
-	ftk_text_view_set_text(text_view, TEXT_STR);
+	ftk_text_view_set_text(text_view, TEXT_STR, -1);
 	ftk_text_view_set_readonly(text_view, 1);
 
 	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);

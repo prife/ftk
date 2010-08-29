@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-16 23:08+0800\n"
+"POT-Creation-Date: 2010-08-29 22:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,32 +16,41 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: apps/calculator/ftk_app_calc.c:57 src/ftk_file_browser.c:341
+#: apps/calculator/ftk_app_calc.c:159 apps/calculator/ftk_app_calc.c:183
+#: src/ftk_file_browser.c:342
 msgid "Quit"
 msgstr ""
 
-#: apps/calculator/ftk_app_calc.c:110
+#: apps/calculator/ftk_app_calc.c:216
 msgid "Calculator"
 msgstr ""
 
-#: apps/desktop/main.c:223
+#: apps/desktop/main.c:228
 msgid "Shutdown"
 msgstr ""
 
-#: apps/desktop/main.c:231
+#: apps/desktop/main.c:236
 msgid "Stop VNC"
 msgstr ""
 
-#: apps/desktop/main.c:235
+#: apps/desktop/main.c:240
 msgid "Start VNC"
 msgstr ""
 
-#: apps/desktop/main.c:280
+#: apps/desktop/main.c:294
 msgid "Hello, GetText"
 msgstr ""
 
-#: apps/filemanager/ftk_app_file_browser.c:30 src/ftk_file_browser.c:430
+#: apps/filemanager/ftk_app_file_browser.c:30 src/ftk_file_browser.c:438
 msgid "File Browser"
+msgstr ""
+
+#: apps/shell/ftk_app_shell.c:71 apps/shell/ftk_app_shell.c:190
+msgid "Shell"
+msgstr ""
+
+#: apps/shell/ftk_app_shell.c:194
+msgid "Input command at here."
 msgstr ""
 
 #: src/demos/demo_xul.c:19
@@ -164,74 +173,74 @@ msgstr ""
 msgid "ime"
 msgstr ""
 
-#: src/ftk_file_browser.c:126 src/ftk_file_browser.c:206
+#: src/ftk_file_browser.c:127 src/ftk_file_browser.c:207
 msgid "OK"
 msgstr ""
 
-#: src/ftk_file_browser.c:131 src/ftk_file_browser.c:211
+#: src/ftk_file_browser.c:132 src/ftk_file_browser.c:212
 msgid "Cancel"
 msgstr ""
 
-#: src/ftk_file_browser.c:147
+#: src/ftk_file_browser.c:148
 msgid "Yes"
 msgstr ""
 
-#: src/ftk_file_browser.c:148
+#: src/ftk_file_browser.c:149
 msgid "No"
 msgstr ""
 
-#: src/ftk_file_browser.c:155 src/ftk_file_browser.c:235
-#: src/ftk_file_browser.c:370 src/ftk_file_browser.c:530
+#: src/ftk_file_browser.c:156 src/ftk_file_browser.c:236
+#: src/ftk_file_browser.c:371 src/ftk_file_browser.c:544
 msgid ".."
 msgstr ""
 
-#: src/ftk_file_browser.c:160
+#: src/ftk_file_browser.c:161
 #, c-format
 msgid ""
 "Are you sure to remove:\n"
 " %s"
 msgstr ""
 
-#: src/ftk_file_browser.c:162 src/ftk_file_browser.c:321
+#: src/ftk_file_browser.c:163 src/ftk_file_browser.c:322
 msgid "Remove"
 msgstr ""
 
-#: src/ftk_file_browser.c:172
+#: src/ftk_file_browser.c:173
 #, c-format
 msgid ""
 "Remove failed:\n"
 " %s"
 msgstr ""
 
-#: src/ftk_file_browser.c:240
+#: src/ftk_file_browser.c:241
 msgid "Please input new name:"
 msgstr ""
 
-#: src/ftk_file_browser.c:258
+#: src/ftk_file_browser.c:259
 msgid "Rename failed."
 msgstr ""
 
-#: src/ftk_file_browser.c:278
+#: src/ftk_file_browser.c:279
 msgid "Please input folder name:"
 msgstr ""
 
-#: src/ftk_file_browser.c:294
+#: src/ftk_file_browser.c:295
 msgid "Create folder failed."
 msgstr ""
 
-#: src/ftk_file_browser.c:326
+#: src/ftk_file_browser.c:327
 msgid "Rename"
 msgstr ""
 
-#: src/ftk_file_browser.c:331
+#: src/ftk_file_browser.c:332
 msgid "Create Folder"
 msgstr ""
 
-#: src/ftk_file_browser.c:336
+#: src/ftk_file_browser.c:337
 msgid "Detail"
 msgstr ""
 
-#: src/ftk_file_browser.c:346
+#: src/ftk_file_browser.c:347
 msgid "More"
 msgstr ""
 

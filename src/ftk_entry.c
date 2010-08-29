@@ -137,7 +137,7 @@ static Ret ftk_entry_input_str(FtkWidget* thiz, const char* str)
 	return_val_if_fail(thiz != NULL && str != NULL, RET_FAIL);
 
 	count = utf8_count_char(str, strlen(str));
-	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str, -1);
 	ftk_entry_move_caret(thiz, count);	
 
 	if(priv->visible_start >= 0)
@@ -482,7 +482,7 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	ftk_text_buffer_delete(priv->text_buffer, 0, TB_LENGTH);
-	ftk_text_buffer_insert(priv->text_buffer, 0, text);	
+	ftk_text_buffer_insert(priv->text_buffer, 0, text, -1);	
 	
 	priv->visible_start = -1;
 	priv->visible_end = TB_LENGTH;
@@ -519,7 +519,7 @@ Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text)
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	pos = pos < TB_LENGTH ? pos : TB_LENGTH;
-	ftk_text_buffer_insert(priv->text_buffer, pos, text);
+	ftk_text_buffer_insert(priv->text_buffer, pos, text, -1);
 	priv->visible_start = -1;
 	priv->visible_end = TB_LENGTH;
 	priv->caret = priv->visible_end;

@@ -269,7 +269,7 @@ static Ret ftk_text_view_input_str(FtkWidget* thiz, const char* str)
 	if(priv->readonly) return RET_FAIL;
 
 	count = utf8_count_char(str, strlen(str));
-	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str);
+	ftk_text_buffer_insert(priv->text_buffer, priv->caret, str, -1);
 	ftk_text_view_relayout(thiz, priv->caret_at_line);
 	ftk_text_view_move_caret(thiz, count);	
 
@@ -670,23 +670,23 @@ FtkWidget* ftk_text_view_create(FtkWidget* parent, int x, int y, int width, int 
 	return thiz;
 }
 
-Ret ftk_text_view_set_text(FtkWidget* thiz, const char* text)
+Ret ftk_text_view_set_text(FtkWidget* thiz, const char* text, int len)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	ftk_text_buffer_delete(priv->text_buffer, 0, TB_LENGTH);
 	
-	return ftk_text_view_insert_text(thiz, 0, text);
+	return ftk_text_view_insert_text(thiz, 0, text, len);
 }
 
-Ret ftk_text_view_insert_text(FtkWidget* thiz, size_t pos, const char* text)
+Ret ftk_text_view_insert_text(FtkWidget* thiz, size_t pos, const char* text, int len)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
 	pos = pos < TB_LENGTH ? pos : TB_LENGTH;
-	ftk_text_buffer_insert(priv->text_buffer, pos, text);
+	ftk_text_buffer_insert(priv->text_buffer, pos, text, len);
 	
 	ftk_text_view_relayout(thiz, 0);
 	ftk_text_view_set_caret(thiz, pos + strlen(text));
