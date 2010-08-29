@@ -361,10 +361,9 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 		FtkTextLayout* text_layout = ftk_default_text_layout();
 		int width = ftk_widget_width(thiz) - 2 * FTK_ENTRY_LEFT_MARGIN;
 
-		ftk_entry_compute_visible_range(thiz);
-
 		if(HAS_TEXT(priv))
 		{
+			ftk_entry_compute_visible_range(thiz);
 			ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
 				priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
 		}
@@ -378,8 +377,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 			gc.fg.b = (fg.r + bg.b) >> 1;
 			ftk_canvas_set_gc(canvas, &gc);
 
-			ftk_text_layout_init(text_layout, priv->tips, 
-				priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
+			ftk_text_layout_init(text_layout, priv->tips, -1, ftk_widget_get_gc(thiz)->font, width);
 		}
 		font_height = ftk_canvas_font_height(canvas);
 		x += FTK_ENTRY_LEFT_MARGIN;
