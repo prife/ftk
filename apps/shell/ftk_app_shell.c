@@ -98,11 +98,11 @@ static void ftk_app_shell_reset(FtkApp* thiz)
 	priv->input_entry = NULL;
 	priv->output_text_view = NULL;
 	
-	close(priv->read_fd);
 	close(priv->write_fd);
 	priv->read_fd = 0;
 	priv->write_fd = 0;
-	
+
+	ftk_source_disable(priv->shell_source);
 	ftk_main_loop_remove_source(ftk_default_main_loop(), priv->shell_source);
 	priv->shell_source = NULL;
 
@@ -188,6 +188,7 @@ static Ret ftk_app_shell_run(FtkApp* thiz, int argc, char* argv[])
 	entry = ftk_entry_create(win, 0, height - 30, width, 30);
 	ftk_entry_set_tips(entry, _("Input command at here."));
 	ftk_widget_set_event_listener(entry, (FtkListener)ftk_app_shell_exec, thiz);
+	ftk_window_set_focus(win, entry);
 
 	priv->input_entry = entry;
 	priv->output_text_view = text_view;

@@ -56,6 +56,12 @@ static Ret ftk_source_shell_dispatch(FtkSource* thiz)
 	DECL_PRIV(thiz, priv);
 	char buffer[4096] = {0};
 	return_val_if_fail(priv->fd > 0, RET_FAIL);	
+
+	if(thiz->disable > 0)
+	{
+		return RET_REMOVE;
+	}
+
 	ret = read(priv->fd, buffer, sizeof(buffer)-1);
 
 	if(ret > 0 && priv->text_view != NULL)
@@ -73,7 +79,7 @@ static void ftk_source_shell_destroy(FtkSource* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 		priv->text_view = NULL;
-
+		close(priv->fd);
 		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
 	}
 
