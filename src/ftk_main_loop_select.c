@@ -39,6 +39,7 @@ struct _FtkMainLoop
 {
 	int running;
 	fd_set fdset;
+	fd_set err_fdset;
 	FtkSourcesManager* sources_manager;
 };
 
@@ -74,8 +75,10 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 	{
 		n = 0;
 		mfd = 0;
-		wait_time = 3000;
+		wait_time = 3600 * 1000;
+		
 		FD_ZERO(&thiz->fdset);
+		FD_ZERO(&thiz->err_fdset);
 
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager); i++)
 		{
@@ -83,6 +86,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 			if((fd = ftk_source_get_fd(source)) >= 0)
 			{
 				FD_SET(fd, &thiz->fdset);
+				FD_SET(fd, &thiz->err_fdset);
 				if(mfd < fd) mfd = fd;
 				n++;
 			}
@@ -96,7 +100,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 		tv.tv_sec = wait_time/1000;
 		tv.tv_usec = (wait_time%1000) * 1000;
-		ret = select(mfd + 1, &thiz->fdset, NULL, NULL, &tv);
+		ret = select(mfd + 1, &thiz->fdset, NULL, &thiz->err_fdset, &tv);
 		
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
 		{
@@ -107,19 +111,36 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 			source = ftk_sources_manager_get(thiz->sources_manager, i);
 
-			if( (ret > 0) && (fd = ftk_source_get_fd(source)) >= 0 && FD_ISSET(fd, &thiz->fdset))
+			if(source->disable > 0)
 			{
-				if(ftk_source_dispatch(source) != RET_OK)
-				{
-					/*as current is removed, the next will be move to current, so dont call i++*/
-					ftk_sources_manager_remove(thiz->sources_manager, source);
-					ftk_logd("%s:%d remove %p\n", __func__, __LINE__, source);
-				}
-				else
-				{
-					i++;
-				}
+				ftk_sources_manager_remove(thiz->sources_manager, source);
+				ftk_logd("%s:%d remove %p(disable)\n", __func__, __LINE__, source);
+
 				continue;
+			}
+
+			if((fd = ftk_source_get_fd(source)) >= 0 && ret != 0)
+			{
+				if(ret > 0 && FD_ISSET(fd, &thiz->fdset))
+				{
+					if(ftk_source_dispatch(source) != RET_OK)
+					{
+						/*as current is removed, the next will be move to current, so dont call i++*/
+						ftk_sources_manager_remove(thiz->sources_manager, source);
+						ftk_logd("%s:%d remove %p\n", __func__, __LINE__, source);
+					}
+					else
+					{
+						i++;
+					}
+					continue;
+				}
+				else if(FD_ISSET(fd, &thiz->err_fdset))
+				{
+					ftk_sources_manager_remove(thiz->sources_manager, source);
+					ftk_logd("%s:%d remove %p(error).\n", __func__, __LINE__, source);
+					continue;
+				}
 			}
 
 			if((source_wait_time = ftk_source_check(source)) == 0)
