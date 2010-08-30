@@ -83,11 +83,18 @@ static Ret ftk_app_shell_exec(FtkApp* thiz, FtkEvent* event)
 
 	cmd = ftk_entry_get_text(priv->input_entry);
 
-	ftk_snprintf(buffer, sizeof(buffer), "%s\n", cmd);
-	write(priv->write_fd, buffer, strlen(buffer));
+	if(strncmp(cmd, "exit", 4) == 0 || strncmp(cmd, "quit", 4) == 0)
+	{
+		ftk_widget_unref(ftk_widget_toplevel(priv->input_entry));
+	}
+	else
+	{
+		ftk_snprintf(buffer, sizeof(buffer), "%s\n", cmd);
+		write(priv->write_fd, buffer, strlen(buffer));
 
-	ftk_entry_set_text(priv->input_entry, "");
-	ftk_text_view_set_text(priv->output_text_view, buffer, -1);
+		ftk_entry_set_text(priv->input_entry, "");
+		ftk_text_view_set_text(priv->output_text_view, buffer, -1);
+	}
 
 	return RET_REMOVE;
 }
