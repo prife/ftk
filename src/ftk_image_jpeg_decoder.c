@@ -60,7 +60,7 @@ static Ret ftk_image_jpeg_decoder_match(FtkImageDecoder* thiz, const char* filen
 	} 
 	else
 	{
-		fprintf(stderr, "%s: JPEG EOI is incorrect: 0x%02X%02X\n", __func__, data[length-2], data[length-1]);
+		ftk_logd("%s: JPEG EOI is incorrect: 0x%02X%02X\n", __func__, data[length-2], data[length-1]);
 		goto fail;	/* JPEG image has no end */
 	}
 fail:
@@ -119,7 +119,7 @@ static FtkBitmap* load_jpeg (const char *filename)
 	bg.a = 0xff;
 	if ((infile = fopen (filename, "rb")) == NULL)
 	{
-		fprintf (stderr, "can't open %s\n", filename);
+		ftk_logd("can't open %s\n", filename);
 		return 0;
 	}
 
@@ -205,7 +205,7 @@ int main(int argc, char* argv[])
 	
 	assert(ftk_image_decoder_match(thiz, filename) == RET_OK);
 	assert((bitmap = ftk_image_decoder_decode(thiz, filename)) != NULL);
-	printf("w=%d h=%d\n", ftk_bitmap_width(bitmap), ftk_bitmap_height(bitmap));
+	ftk_logd("w=%d h=%d\n", ftk_bitmap_width(bitmap), ftk_bitmap_height(bitmap));
 	ftk_bitmap_unref(bitmap);
 	ftk_image_decoder_destroy(thiz);
 

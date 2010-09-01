@@ -215,21 +215,6 @@ int utf8_nchar ( const char *str )
 	return (n < al) ? n : al;
 }
 
-static void	dumpUtf8 ( const char *str, int sz )
-{
-	int i, n;
-	unsigned short uc16;
-	const char *last = str+sz;
-
-	printf ( "UTF-8 dump:\n" );
-	while ( str < last ) {
-		for ( i=0, n=utf8_len_map[(unsigned char)str[0]]; i < n; i++ )
-			printf ( "%02X", (unsigned char)str[i] );
-		utf8_to_utf16 ( str, n, &uc16 );
-		printf ( ": %04X\n", uc16 );
-		str += n;
-	}
-}
 #endif	
 
 #define HAVE_SHAPEJOINING_SUPPORT 1
@@ -621,8 +606,6 @@ arabicJoin_UTF8(const char *text, int len, int *pNewLen,
 	if (pAttrib)
 		*pAttrib = attrib;
 #ifdef DEBUG_TEXT_SHAPING
-	if (strcmp(new_str, text))
-		dumpUtf8(new_str, sz);
 #endif
 	return new_str;
 }

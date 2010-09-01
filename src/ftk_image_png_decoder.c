@@ -59,7 +59,7 @@ static FtkBitmap* load_png (const char *filename)
 	bg.a = 0xff;
 	if ((fp = fopen (filename, "rb")) == NULL)
 	{
-//		printf("%s: open %s failed.\n", __func__, filename);
+		ftk_logd("%s: open %s failed.\n", __func__, filename);
 		return NULL;
 	}
 

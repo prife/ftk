@@ -68,8 +68,8 @@ static Ret ftk_init_font(void)
 {
 	FtkFont* font = NULL;
 	char filename[FTK_MAX_PATH + 1] = {0};
-	ftk_snprintf(filename, sizeof(filename), "%s/data/%s", 
-		ftk_config_get_data_dir(ftk_default_config()), FTK_FONT);
+	ftk_strs_cat(filename, FTK_MAX_PATH, 
+		ftk_config_get_data_dir(ftk_default_config()), "/data/", FTK_FONT, NULL);
 	ftk_normalize_path(filename);
 #ifdef USE_FREETYPE
 	font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE);
@@ -93,14 +93,14 @@ static Ret ftk_init_font(void)
 
 static Ret ftk_init_theme(const char* theme)
 {
-	char filename[FTK_MAX_PATH] = {0};
+	char filename[FTK_MAX_PATH + 1] = {0};
 
 	ftk_set_theme(ftk_theme_create(theme == NULL));
 
 	if(theme != NULL)
 	{
-		ftk_snprintf(filename, sizeof(filename)-1, "%s/theme/%s/theme.xml", 
-			ftk_config_get_data_dir(ftk_default_config()), theme);
+		ftk_strs_cat(filename, FTK_MAX_PATH, 
+			ftk_config_get_data_dir(ftk_default_config()), "/theme/", theme, "/theme.xml", NULL);
 		ftk_normalize_path(filename);
 		ftk_theme_parse_file(ftk_default_theme(), filename);
 	}

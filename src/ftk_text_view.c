@@ -581,7 +581,6 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 	if(priv->text_buffer != NULL && TB_LENGTH > 0)
 	{
 		int i = 0;
-		int len = 0;
 		int start = 0;
 		FtkTextLine line = {0};
 		FtkTextLayout* text_layout = ftk_default_text_layout();

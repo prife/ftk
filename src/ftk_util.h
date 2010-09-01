@@ -40,12 +40,19 @@ FTK_BEGIN_DECLS
 unsigned short utf8_get_char (const char *p, const char** next);
 unsigned short utf8_get_prev_char (const char *p, const char** prev);
 int utf8_count_char(const char *begin, size_t length);
+const char* utf8_move_forward(const char* str, int nr);
+
+int ftk_str2bool(const char* str);
 FtkColor ftk_parse_color( const char* value);
 const char* ftk_normalize_path(char path[FTK_MAX_PATH+1]);
-const char* utf8_move_forward(const char* str, int nr);
-int ftk_str2bool(const char* str);
 
-char* ftk_strs_cat(const char* first, ...);
+int    ftk_atoi(const char* str);
+double ftk_atof(const char* str);
+const char* ftk_itoa(char* str, size_t len, int n);
+const char* ftk_ftoa(char* str, size_t len, double f);
+long  ftk_strtol(const char* str, const char **end, int base);
+char* ftk_strs_cat(char* str, size_t len, const char* first, ...);
+
 
 FTK_END_DECLS
 

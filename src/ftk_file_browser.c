@@ -88,7 +88,7 @@ static Ret ftk_file_browser_on_ok(void* ctx, void* obj)
 		ftk_list_model_get_data(priv->model, i, (void**)&info);
 		if(info != NULL)
 		{
-			ftk_snprintf(path, FTK_MAX_PATH, "%s/%s", priv->path, info->text);
+			ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", info->text, NULL);
 			priv->on_choosed(priv->on_choosed_ctx, 0, path);
 		}
 	}
@@ -101,7 +101,7 @@ static Ret ftk_file_browser_on_ok(void* ctx, void* obj)
 			ftk_list_model_get_data(priv->model, i, (void**)&info);
 			if(info != NULL && info->state)
 			{
-				ftk_snprintf(path, FTK_MAX_PATH, "%s/%s", priv->path, info->text);
+				ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", info->text, NULL);
 				priv->on_choosed(priv->on_choosed_ctx, index++, path);
 			}
 		}
@@ -158,19 +158,19 @@ static Ret ftk_file_browser_on_remove(void* ctx, void* obj)
 		return RET_FAIL;
 	}
 
-	ftk_snprintf(message, sizeof(message)-1, _("Are you sure to remove:\n %s"), info->text);
+	ftk_strs_cat(message, sizeof(message), _("Are you sure to remove:\n "), info->text, NULL);
 
 	if((ret = ftk_question(_("Remove"), message, buttons)) == 1)
 	{
 		char path[FTK_MAX_PATH+1] = {0};
-		ftk_snprintf(path, FTK_MAX_PATH, "%s/%s", priv->path, info->text);
+		ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", info->text, NULL);
 		if(ftk_fs_delete(path) == RET_OK)
 		{
 			ftk_list_model_remove(priv->model, i);
 		}
 		else
 		{
-			ftk_snprintf(message, sizeof(message)-1, _("Remove failed:\n %s"), info->text);
+			ftk_strs_cat(message, sizeof(message), _("Remove failed:\n"), info->text, NULL);
 			ftk_tips(message);
 		}
 	}
@@ -247,9 +247,9 @@ static Ret ftk_file_browser_on_rename(void* ctx, void* obj)
 		{
 			char new_name[FTK_MAX_PATH+1] = {0};
 			char old_name[FTK_MAX_PATH+1] = {0};
-			ftk_snprintf(old_name, FTK_MAX_PATH, "%s/%s", priv->path, info->text);
-			ftk_snprintf(new_name, FTK_MAX_PATH, "%s/%s", priv->path, name);
-			
+			ftk_strs_cat(old_name, FTK_MAX_PATH, priv->path, "/", info->text, NULL);
+			ftk_strs_cat(new_name, FTK_MAX_PATH, priv->path, "/", name, NULL);
+
 			if(ftk_fs_move(old_name, new_name) == RET_OK)
 			{
 				ftk_file_browser_load(win);
@@ -284,7 +284,7 @@ static Ret ftk_file_browser_on_create_folder(void* ctx, void* obj)
 		if(name != NULL)
 		{
 			char folder_name[FTK_MAX_PATH+1] = {0};
-			ftk_snprintf(folder_name, FTK_MAX_PATH, "%s/%s", priv->path, name);
+			ftk_strs_cat(folder_name, FTK_MAX_PATH, priv->path, "/", name, NULL);
 			
 			if(ftk_fs_create_dir(folder_name) == RET_OK)
 			{
@@ -387,7 +387,7 @@ static Ret ftk_file_browser_on_item_clicked(void* ctx, void* list)
 		}
 		else if(info->value) /*enter selected folder*/
 		{
-			ftk_snprintf(path, FTK_MAX_PATH, "%s/%s", priv->path, file_name);
+			ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", file_name, NULL);
 			ftk_file_browser_set_path(win, path);
 			ftk_file_browser_load(win);
 		}
@@ -395,7 +395,7 @@ static Ret ftk_file_browser_on_item_clicked(void* ctx, void* list)
 		{
 			if(priv->on_choosed != NULL)
 			{
-				ftk_snprintf(path, FTK_MAX_PATH, "%s/%s", priv->path, file_name);
+				ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", file_name, NULL);
 				priv->on_choosed(priv->on_choosed_ctx, 0, path);
 				ftk_widget_unref(win);
 			}
@@ -489,7 +489,7 @@ static FtkBitmap* ftk_file_browser_load_mime_icon(const char* file_name)
 	return_val_if_fail(p != NULL, NULL);
 
 	*p = '\0';
-	ftk_snprintf(icon_name, FTK_MAX_PATH, "mime_%s%s", mime_type, FTK_STOCK_IMG_SUFFIX);
+	ftk_strs_cat(icon_name, FTK_MAX_PATH, "mime_", mime_type, FTK_STOCK_IMG_SUFFIX, NULL);
 
 	return ftk_theme_load_image(ftk_default_theme(), icon_name);
 }
@@ -573,7 +573,7 @@ Ret		   ftk_file_browser_load(FtkWidget* thiz)
 
 			if(priv->filter_mime_type != NULL)
 			{
-				ftk_snprintf(path, FTK_MAX_PATH, "%s/%s", priv->path, info.name);
+				ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", info.name, NULL);
 				ftk_file_get_mime_type(path, mime_type);
 				if(strstr(priv->filter_mime_type, mime_type) != NULL)
 				{

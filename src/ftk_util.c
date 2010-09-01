@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_typedef.h"
 
 /*UTF8-related functions are copied from glib.*/
@@ -168,19 +169,38 @@ int utf8_count_char(const char *str, size_t length)
 	return nr;
 }
 
+static int ftk_hex_to_int(char c)
+{
+	if(c >= '0' && c <= '9')
+	{
+		return c - '0';
+	}
+	else if(c >= 'A' && c <= 'F')
+	{
+		return c - 'A' + 0x0A;
+	}
+	else if(c >= 'a' && c <= 'f')
+	{
+		return c - 'a' + 0x0a;
+	}
+
+	return 0;
+}
+
+static int ftk_parse_color_1(const char* value)
+{
+	return ftk_hex_to_int(value[0]) * 16 + ftk_hex_to_int(value[1]);	
+}
+
 FtkColor ftk_parse_color( const char* value)
 {
-	int a = 0xff;
-	int r = 0;
-	int g = 0;
-	int b = 0;
 	FtkColor color = {0};
-	
-	ftk_sscanf(value, "%02x%02x%02x%02x", &a, &r, &g, &b);
-	color.a = a;
-	color.r = r;
-	color.g = g;
-	color.b = b;
+	return_val_if_fail(value != NULL && strlen(value) >= 8, color);
+
+	color.a = ftk_parse_color_1(value);
+	color.r = ftk_parse_color_1(value + 2);
+	color.g = ftk_parse_color_1(value + 4);
+	color.b = ftk_parse_color_1(value + 6);
 
 	return color;
 }
@@ -317,10 +337,255 @@ int ftk_str2bool(const char* str)
 	return 1;
 }
 
-char* ftk_strs_cat(const char* first, ...)
+char* ftk_strs_cat(char* str, size_t len, const char* first, ...)
 {
-	/*TODO*/
+	size_t dst = 0;
+	va_list arg = NULL;
+	const char* iter = first;
+	return_val_if_fail(str != NULL && len > 0, NULL);
 
-	return NULL;
+	va_start(arg, first); 
+	while(iter != NULL && dst < len)
+	{
+		for(; dst < len && *iter; iter++, dst++)
+		{
+			str[dst] = *iter;
+		}
+
+		iter = va_arg(arg, char*);
+	}
+	va_end(arg); 
+
+	if(dst < len)
+	{	
+		str[dst] = '\0';
+	}
+	else
+	{
+		str[len-1] = '\0';
+	}
+
+	return str;
+}
+
+static long  ftk_strtol_internal(const char* str, const char **end, int base)
+{
+	int i = 0;
+	long n = 0;
+	char c  = 0;
+	return_val_if_fail(str != NULL && (base == 10 || base == 8 || base == 16), 0);
+
+	if(base == 10)
+	{
+		for(i = 0; str[i] && i < 10; i++)
+		{
+			c = str[i];
+
+			if(c < '0' || c > '9')
+			{
+				break;
+			}
+
+			n = n * base + c - '0';
+		}
+	}
+	else if(base == 8)
+	{
+		for(i = 0; str[i] && i < 10; i++)
+		{
+			c = str[i];
+
+			if(c < '0' || c > '7')
+			{
+				break;
+			}
+
+			n = n * base + c - '0';
+		}
+	}
+	else if(base == 16)
+	{
+		for(i = 0; str[i] && i < 10; i++)
+		{
+			c = str[i];
+
+			if((c >= '0' && c <= '9'))
+			{
+				c -= '0';
+			}
+			else if(c >= 'a' && c <= 'f')
+			{
+				c = c - 'a' + 10;
+			}
+			else if(c >= 'A' && c <= 'F')
+			{
+				c = c - 'A' + 10;
+			}
+			else
+			{
+				break;
+			}
+
+			n = n * base + c;
+		}
+	}
+
+	if(end != NULL)
+	{
+		*end = str+i;
+	}
+
+	return n;
+}
+
+long  ftk_strtol(const char* str, const char **end, int base)
+{
+	long n = 0;
+	int neg = 0;
+	return_val_if_fail(str != NULL, 0);
+
+	while(*str == ' ' || *str == '\t') str++;
+
+	if(*str == '+' || *str == '-')
+	{
+		neg = *str == '-';
+		str++;
+	}
+
+	n = ftk_strtol_internal(str, end, base);
+
+	return neg ? -n : n;
+}
+
+int   ftk_atoi(const char* str)
+{
+	return  ftk_strtol(str, NULL, 10);
+}
+
+double ftk_atof(const char* str)
+{
+	int n = 0;
+	int f = 0;
+	int neg = 0;
+	double result = 0;
+	const char* p = NULL;
+	return_val_if_fail(str != NULL, 0);
+
+	if(str[0] == '+' || str[0] == '-')
+	{
+		neg = str[0] == '-';
+		str++;
+	}
+
+	n = ftk_strtol_internal(str, &p, 10);
+
+	if(p != NULL && *p == '.')
+	{
+		f = ftk_strtol_internal(p+1, NULL, 10);
+	}
+
+	result = f;
+	while(result >= 1)
+	{
+		result = result / 10;
+	}
+
+	result = n + result;
+
+	return neg ? -result : result;
+}
+
+static const char* ftk_itoa_simple(char* str, size_t len, int n, const char** end)
+{
+	int i = 0;
+	int value = n;
+	int need_len = 0;
+
+	return_val_if_fail(str != NULL && len > 2, NULL);
+
+	if(n == 0)
+	{
+		str[0] = '0';
+		str[1] = '\0';
+		
+		if(end != NULL)
+		{
+			*end = str + 1;
+		}
+
+		return str;
+	}
+	
+	if(n < 0)
+	{
+		n = -n;
+		str[0] = '-';
+		need_len++;
+	}
+
+	value = n;
+	while(value > 0)
+	{
+		value = value / 10;
+		need_len++;
+	}
+
+	need_len++; /*for null char*/
+	return_val_if_fail(len > (need_len), NULL);
+	
+	i = need_len - 2;
+	while(n > 0)
+	{
+		str[i--] = (n % 10) + '0';
+		n = n / 10;
+	}
+	str[need_len - 1] = '\0';
+
+	if(end != NULL)
+	{
+		*end = str + need_len - 1;
+	}
+
+	return str;
+}
+
+const char* ftk_itoa(char* str, size_t len, int n)
+{
+	return ftk_itoa_simple(str, len, n, NULL);
+}
+
+const char* ftk_ftoa(char* str, size_t len, double value)
+{
+	int i = 0;
+	char str_n[32] = {0};
+	char str_f[32] = {0};
+	int n = (int)value;
+	int f = (int)((value - n) * 1000000000);
+
+	ftk_itoa(str_n, sizeof(str_n), n);
+	ftk_itoa(str_f, sizeof(str_f), f > 0 ? f : -f);
+
+	if(f == 0)
+	{
+		strncpy(str, str_n, len);
+
+		return str;
+	}
+
+	i = strlen(str_f) - 1;
+	i = i > 6 ? 6 : i;
+	str_f[i] = '\0';
+
+	while(i > 0)
+	{
+		if(str_f[i] == '0') 
+		{
+			str_f[i] = '\0';
+		}
+		i--;
+	}
+	return_val_if_fail(len > (strlen(str_n) + 1 + i), NULL);
+	
+	return ftk_strs_cat(str, len, str_n, ".", str_f, NULL);
 }
 

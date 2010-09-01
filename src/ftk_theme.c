@@ -100,9 +100,9 @@ static const char* const s_default_theme = "\
 static Ret ftk_theme_init_default(FtkTheme* thiz)
 {
 #if defined(LINUX) || defined(WIN32)
-	char filename[FTK_MAX_PATH] = {0};
-	ftk_snprintf(filename, sizeof(filename), "%s/theme/default/theme.xml", 
-		ftk_config_get_data_dir(ftk_default_config()));
+	char filename[FTK_MAX_PATH + 1] = {0};
+	ftk_strs_cat(filename, FTK_MAX_PATH, ftk_config_get_data_dir(ftk_default_config()),
+		"/theme/default/theme.xml", NULL);
 	ftk_normalize_path(filename);	
 	return ftk_theme_parse_file(thiz, filename);
 #else
@@ -423,7 +423,7 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 		thiz->icon_cache = NULL;
 	}
 
-	ftk_snprintf(icon_path, sizeof(icon_path), "theme%c%s", FTK_PATH_DELIM, thiz->name);
+	ftk_strs_cat(icon_path, FTK_MAX_PATH, "theme/", thiz->name, NULL);
 	thiz->icon_cache = ftk_icon_cache_create(s_default_path, icon_path);
 
 	return RET_OK;

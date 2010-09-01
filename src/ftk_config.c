@@ -138,12 +138,12 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 
 	if(ftk_path_is_abs(progname))
 	{
-		ftk_snprintf(filename, sizeof(filename), "%s/ftk.cnf", path);
+		ftk_strs_cat(filename, sizeof(filename), path, "/ftk.cnf", NULL);
 	}
 	else
 	{
 		ftk_getcwd(cwd, sizeof(cwd));
-		ftk_snprintf(filename, sizeof(filename), "%s/%s/ftk.cnf", cwd, path);
+		ftk_strs_cat(filename, sizeof(filename), cwd, "/", path, "/ftk.cnf", NULL);
 	}
 	ftk_normalize_path(filename);
 	if(!ftk_mmap_exist(filename))

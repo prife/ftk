@@ -47,8 +47,8 @@ typedef struct _FtkXulCallbacks
 }FtkXulCallbacks;
 
 FtkWidget* ftk_xul_load(const char* xml, int length);
-FtkWidget* ftk_xul_load_file(const char* filename, const FtkXulCallbacks* callbacks);
-FtkWidget* ftk_xul_load_ex(const char* xml, int length, const FtkXulCallbacks* callbacks);
+FtkWidget* ftk_xul_load_file(const char* filename, FtkXulCallbacks* callbacks);
+FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkXulCallbacks* callbacks);
 
 FTK_END_DECLS
 

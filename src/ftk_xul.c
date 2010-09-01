@@ -450,17 +450,21 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 	{
 		if(*iter == '$')
 		{
+			char value[32] = {0};
+			int len = sizeof(priv->processed_value)-dst;
 			if((i = ftk_xul_find_getter(iter+1)) >= 0)
 			{
-				dst += ftk_snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
-					"%d", s_var_getters[i].get(thiz));
+				ftk_itoa(value, sizeof(value), s_var_getters[i].get(thiz));
+				strncpy(priv->processed_value+dst, value, len);
+				dst += strlen(priv->processed_value+dst);
 				iter += strlen(s_var_getters[i].name);
 				continue;
 			}
 			else if((i = ftk_xul_find_const(iter+1)) >= 0)
 			{
-				dst += ftk_snprintf(priv->processed_value+dst, sizeof(priv->processed_value)-dst,
-					"%d", s_var_conts[i].value);
+				ftk_itoa(value, sizeof(value), s_var_conts[i].value);
+				strncpy(priv->processed_value+dst, value, len);
+				dst += strlen(priv->processed_value+dst);
 				iter += strlen(s_var_getters[i].name);
 				continue;
 			}
@@ -797,7 +801,7 @@ static const FtkXulCallbacks default_callbacks =
 	ftk_default_load_image
 };
 
-FtkWidget* ftk_xul_load_ex(const char* xml, int length, const FtkXulCallbacks* callbacks)
+FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkXulCallbacks* callbacks)
 {
 	FtkWidget* widget = NULL;
 	FtkXmlParser* parser = NULL;
@@ -828,10 +832,10 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, const FtkXulCallbacks* c
 
 FtkWidget* ftk_xul_load(const char* xml, int length)
 {
-	return ftk_xul_load_ex(xml, length, &default_callbacks);	
+	return ftk_xul_load_ex(xml, length, (FtkXulCallbacks*)&default_callbacks);	
 }
 
-FtkWidget* ftk_xul_load_file(const char* filename, const FtkXulCallbacks* callbacks)
+FtkWidget* ftk_xul_load_file(const char* filename, FtkXulCallbacks* callbacks)
 {
 	FtkMmap* m = NULL;
 	FtkWidget* widget = NULL;

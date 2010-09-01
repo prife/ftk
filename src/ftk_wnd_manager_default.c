@@ -377,7 +377,6 @@ static Ret  ftk_wnd_manager_dispatch_globals(FtkWndManager* thiz, FtkEvent* even
 			ret = priv->global_listeners[i](priv->global_listeners_ctx[i], event);
 			if(ret == RET_REMOVE)
 			{
-				//printf("%s: event is filtered by global listeners\n", __func__);
 				return ret;
 			}
 		}

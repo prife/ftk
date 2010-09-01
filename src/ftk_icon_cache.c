@@ -68,12 +68,13 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 {
 	size_t i = 0;
 	FtkBitmap* bitmap = NULL;
-	char path[FTK_MAX_PATH] = {0};
+	char path[FTK_MAX_PATH+1] = {0};
 	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
 
 	for(i = 0; i < FTK_ICON_PATH_NR; i++)
 	{
-		ftk_snprintf(path, sizeof(path), "%s/%s/%s", thiz->path[i], thiz->rel_path, filename);
+
+		ftk_strs_cat(path, FTK_MAX_PATH, thiz->path[i], "/", thiz->rel_path, "/", filename, NULL);
 		ftk_normalize_path(path);
 		if((bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), path)) != NULL)
 		{
