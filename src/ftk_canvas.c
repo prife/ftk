@@ -355,9 +355,15 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 		int offset = 0;
 		code = utf8_get_char(iter, &iter);
 
-		if(code == 0x20)
+		if(code == ' ' )
 		{
 			x += FTK_SPACE_WIDTH;
+			ox = x;
+			continue;
+		}
+		else if(code == '\t')
+		{
+			x += 4 * FTK_SPACE_WIDTH;
 			ox = x;
 			continue;
 		}
@@ -555,6 +561,11 @@ int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 		{
 			glyph.x = 0;
 			glyph.w = FTK_SPACE_WIDTH - 1;
+		}
+		else if(code == '\t')
+		{
+			glyph.x = 0;
+			glyph.w = 4*FTK_SPACE_WIDTH - 1;
 		}
 		else if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
 		{

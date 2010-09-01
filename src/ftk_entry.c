@@ -104,6 +104,11 @@ static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 	int width = x - FTK_PAINT_X(thiz) - FTK_ENTRY_H_MARGIN + 1;
 	return_val_if_fail(width >= 0, RET_FAIL);
 
+	if(!HAS_TEXT(priv))
+	{
+		return RET_OK;
+	}
+
 	ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
 			priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
 
@@ -295,12 +300,12 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 {
 	FtkGc gc = {0};
-	int extent = 0;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	if(priv->caret < priv->visible_start || priv->caret > priv->visible_end)
+	if(priv->caret < priv->visible_start || priv->caret > priv->visible_end 
+		|| priv->visible_start < 0 || priv->visible_end < 0)
 	{
 		return RET_FAIL;
 	}
@@ -309,11 +314,15 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 	gc.mask = FTK_GC_FG;
 	if(ftk_widget_is_focused(thiz))
 	{
+		int extent = 0;
 		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
 		priv->caret_visible = !priv->caret_visible;
 
-		extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, 
-			priv->caret - priv->visible_start);
+		if(HAS_TEXT(priv))
+		{
+			extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, 
+				priv->caret - priv->visible_start);
+		}
 
 		ftk_canvas_reset_gc(canvas, &gc);
 		x += extent + FTK_ENTRY_H_MARGIN - 1;
