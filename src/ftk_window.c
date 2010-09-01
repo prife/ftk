@@ -362,31 +362,8 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_window_realize(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	int w = ftk_widget_width(thiz);
-	int h = ftk_widget_height(thiz);
-	FtkGc* gc = ftk_widget_get_gc(thiz);	
 
 	priv->canvas = ftk_shared_canvas();
-	if(priv->canvas != NULL)
-	{
-		if(gc->bitmap != NULL)
-		{
-			FtkBitmap* bitmap = gc->bitmap;
-			if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_CENTER))
-			{
-				ftk_canvas_set_bg_image(priv->canvas, bitmap, FTK_BG_CENTER, 0, 0, w, h);
-			}
-			else if(ftk_widget_has_attr(thiz, FTK_ATTR_BG_TILE))
-			{
-				ftk_canvas_set_bg_image(priv->canvas, bitmap, FTK_BG_TILE, 0, 0, w, h);
-			}
-			else
-			{
-				ftk_canvas_set_bg_image(priv->canvas, bitmap, FTK_BG_NORMAL, 0, 0, w, h);
-			}
-		}
-	}
-
 	ftk_widget_set_canvas(thiz, priv->canvas);
 
 	return RET_OK;

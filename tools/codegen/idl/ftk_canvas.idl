@@ -21,10 +21,6 @@ interface FtkCanvas
 	Ret ftk_canvas_draw_bitmap(in FtkCanvasPtr thiz, in FtkBitmapPtr bitmap, in int x, in int y, in int w, in int h, in int xoffset, in int yoffset);
 	Ret ftk_canvas_draw_bg_image(in FtkCanvasPtr canvas, in FtkBitmapPtr bitmap, in FtkBgStyle style, in int x, in int y, in int w, in int h);
 
-	/*the difference between draw and set is: set operation ignore the alpha channel.*/
-	Ret ftk_canvas_set_bitmap(in FtkCanvasPtr thiz, in FtkBitmapPtr bitmap, in int x, in int y, in int w, in int h, in int xoffset, in int yoffset);
-	Ret ftk_canvas_set_bg_image(in FtkCanvasPtr canvas, in FtkBitmapPtr bitmap, in FtkBgStyle style, in int x, in int y, in int w, in int h);
-
 	FtkColorPtr ftk_canvas_get_pixel(in FtkCanvasPtr thiz, in int x, in int y);
 	Ret ftk_canvas_put_pixel(in FtkCanvasPtr thiz, in int x, in int y, in FtkColor val);
 

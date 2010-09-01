@@ -69,10 +69,6 @@ Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h);
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
 Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h);
 
-/*the difference between draw and set is: set operation ignore the alpha channel.*/
-Ret ftk_canvas_set_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
-Ret ftk_canvas_set_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h);
-
 FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);
 Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
 

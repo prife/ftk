@@ -225,6 +225,26 @@ static int lua_ftk_canvas_font_height(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_canvas_get_extent(lua_State* L)
+{
+	tolua_Error err = {0};
+	int retv;
+	FtkCanvas* thiz;
+	char* str;
+	int len;
+	int param_ok = tolua_isusertype(L, 1, "FtkCanvas", 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	str = (char*)tolua_tostring(L, 2, 0);
+	len = tolua_tonumber(L, 3, 0);
+	retv = ftk_canvas_get_extent(thiz, str, len);
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
 static int lua_ftk_canvas_get_char_extent(lua_State* L)
 {
 	tolua_Error err = {0};
@@ -296,64 +316,6 @@ static int lua_ftk_canvas_draw_bg_image(lua_State* L)
 	w = tolua_tonumber(L, 6, 0);
 	h = tolua_tonumber(L, 7, 0);
 	retv = ftk_canvas_draw_bg_image(canvas, bitmap, style, x, y, w, h);
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int lua_ftk_canvas_set_bitmap(lua_State* L)
-{
-	tolua_Error err = {0};
-	Ret retv;
-	FtkCanvas* thiz;
-	FtkBitmap* bitmap;
-	int x;
-	int y;
-	int w;
-	int h;
-	int xoffset;
-	int yoffset;
-	int param_ok = tolua_isusertype(L, 1, "FtkCanvas", 0, &err) && tolua_isusertype(L, 2, "FtkBitmap", 0, &err) && tolua_isnumber(L, 3, 0, &err) && tolua_isnumber(L, 4, 0, &err) && tolua_isnumber(L, 5, 0, &err) && tolua_isnumber(L, 6, 0, &err) && tolua_isnumber(L, 7, 0, &err) && tolua_isnumber(L, 8, 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	thiz = tolua_tousertype(L, 1, 0);
-	bitmap = tolua_tousertype(L, 2, 0);
-	x = tolua_tonumber(L, 3, 0);
-	y = tolua_tonumber(L, 4, 0);
-	w = tolua_tonumber(L, 5, 0);
-	h = tolua_tonumber(L, 6, 0);
-	xoffset = tolua_tonumber(L, 7, 0);
-	yoffset = tolua_tonumber(L, 8, 0);
-	retv = ftk_canvas_set_bitmap(thiz, bitmap, x, y, w, h, xoffset, yoffset);
-	tolua_pushnumber(L, (lua_Number)retv);
-
-	return 1;
-}
-
-static int lua_ftk_canvas_set_bg_image(lua_State* L)
-{
-	tolua_Error err = {0};
-	Ret retv;
-	FtkCanvas* canvas;
-	FtkBitmap* bitmap;
-	FtkBgStyle style;
-	int x;
-	int y;
-	int w;
-	int h;
-	int param_ok = tolua_isusertype(L, 1, "FtkCanvas", 0, &err) && tolua_isusertype(L, 2, "FtkBitmap", 0, &err) && tolua_isusertype(L, 3, "FtkBgStyle", 0, &err) && tolua_isnumber(L, 4, 0, &err) && tolua_isnumber(L, 5, 0, &err) && tolua_isnumber(L, 6, 0, &err) && tolua_isnumber(L, 7, 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	canvas = tolua_tousertype(L, 1, 0);
-	bitmap = tolua_tousertype(L, 2, 0);
-	style = *(FtkBgStyle*)tolua_tousertype(L, 3, 0);
-	x = tolua_tonumber(L, 4, 0);
-	y = tolua_tonumber(L, 5, 0);
-	w = tolua_tonumber(L, 6, 0);
-	h = tolua_tonumber(L, 7, 0);
-	retv = ftk_canvas_set_bg_image(canvas, bitmap, style, x, y, w, h);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;
@@ -449,11 +411,10 @@ int tolua_ftk_canvas_init(lua_State* L)
 	tolua_function(L, "DrawString", lua_ftk_canvas_draw_string);
 	tolua_function(L, "DrawStringEx", lua_ftk_canvas_draw_string_ex);
 	tolua_function(L, "FontHeight", lua_ftk_canvas_font_height);
+	tolua_function(L, "GetExtent", lua_ftk_canvas_get_extent);
 	tolua_function(L, "GetCharExtent", lua_ftk_canvas_get_char_extent);
 	tolua_function(L, "DrawBitmap", lua_ftk_canvas_draw_bitmap);
 	tolua_function(L, "DrawBgImage", lua_ftk_canvas_draw_bg_image);
-	tolua_function(L, "SetBitmap", lua_ftk_canvas_set_bitmap);
-	tolua_function(L, "SetBgImage", lua_ftk_canvas_set_bg_image);
 	tolua_function(L, "GetPixel", lua_ftk_canvas_get_pixel);
 	tolua_function(L, "PutPixel", lua_ftk_canvas_put_pixel);
 	tolua_function(L, "Bitmap", lua_ftk_canvas_bitmap);
