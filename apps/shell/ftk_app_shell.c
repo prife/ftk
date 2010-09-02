@@ -155,6 +155,7 @@ static Ret ftk_app_shell_create_shell_process(FtkApp* thiz)
 
 		dup2(parent_to_child[0], STDIN_FILENO);
 		dup2(child_to_parent[1], STDOUT_FILENO);
+		dup2(child_to_parent[1], STDERR_FILENO);
 
 		execl(shell, shell, NULL);
 		_exit(0);

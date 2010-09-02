@@ -42,14 +42,27 @@ int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode)
 	{
 		return FTK_SPACE_WIDTH;
 	}
-
-	if(unicode == '\r' || unicode == '\n' || ftk_font_lookup(thiz, unicode, &glyph) != RET_OK)
+	else if(unicode == '\t')
 	{
-
+		return FTK_SPACE_WIDTH * FTK_TAB_WIDTH;
+	}
+	else if(unicode == '\r' || unicode == '\n')
+	{
 		return 0;
 	}
 
-	extent = glyph.x + glyph.w + 1;
+	if(unicode < 0x80 && thiz->char_extent_cache[unicode] > 0)
+	{
+		extent = thiz->char_extent_cache[unicode];
+	}
+	else if(ftk_font_lookup(thiz, unicode, &glyph) == RET_OK)
+	{
+		extent = glyph.x + glyph.w + 1;
+		if(unicode < 0x80)
+		{
+			thiz->char_extent_cache[unicode] = extent;
+		}
+	}
 
 	return extent;
 }

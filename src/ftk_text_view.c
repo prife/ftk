@@ -218,7 +218,8 @@ static Ret ftk_text_view_get_offset_by_pointer(FtkWidget* thiz, int px, int py)
 	width = px - x - TEXT_VIEW_H_MARGIN + 1;
 	len = ftk_text_view_get_chars_nr_in_line(thiz, line_no);
 	ftk_text_layout_init(text_layout, TB_TEXT + start, len, ftk_widget_get_gc(thiz)->font, width); 
-	
+
+	ftk_text_layout_set_wrap_mode(text_layout, FTK_WRAP_WORD);
 	if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 	{
 		caret = start + line.len;
@@ -275,6 +276,7 @@ static Ret ftk_text_view_relayout(FtkWidget* thiz, int start_line)
 	start_offset = priv->lines_offset[start_line];
 	ftk_text_layout_init(text_layout, text+start_offset, -1, ftk_widget_get_gc(thiz)->font, width);
 
+	ftk_logd("%s: start_line=%d\n", __func__, start_line);
 	for(i = start_line ; ftk_text_view_extend_lines_offset(thiz, i + 1) == RET_OK; i++)
 	{
 		if(ftk_text_layout_get_visual_line(text_layout, &line) != RET_OK) break;
@@ -715,6 +717,22 @@ Ret ftk_text_view_set_text(FtkWidget* thiz, const char* text, int len)
 	return ftk_text_view_insert_text(thiz, 0, text, len);
 }
 
+static int ftk_text_view_pos_to_line(FtkWidget* thiz, size_t pos)
+{
+	int i = 0;
+	DECL_PRIV0(thiz, priv);
+
+	for(i = 0; i < priv->total_lines; i++)
+	{
+		if(priv->lines_offset[i] >= pos)
+		{
+			break;
+		}
+	}
+
+	return i;
+}
+
 Ret ftk_text_view_insert_text(FtkWidget* thiz, size_t pos, const char* text, int len)
 {
 	DECL_PRIV0(thiz, priv);
@@ -722,8 +740,7 @@ Ret ftk_text_view_insert_text(FtkWidget* thiz, size_t pos, const char* text, int
 
 	pos = pos < TB_LENGTH ? pos : TB_LENGTH;
 	ftk_text_buffer_insert(priv->text_buffer, pos, text, len);
-	
-	ftk_text_view_relayout(thiz, 0);
+	ftk_text_view_relayout(thiz, ftk_text_view_pos_to_line(thiz, pos));
 	ftk_text_view_set_caret(thiz, pos + strlen(text));
 
 	return RET_OK;

@@ -61,6 +61,8 @@ struct _FtkFont
 	FtkFontLookup  lookup;
 	FtkFontDestroy destroy;
 
+	/*now cache ascii chars only.*/
+	char char_extent_cache[0x80];
 	char priv[ZERO_LEN_ARRAY];
 };
 
