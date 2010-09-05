@@ -1,7 +1,39 @@
+/*
+ * File: main.c    
+ * Author:  Li XianJing <xianjimli@hotmail.com>
+ * Brief:   desktop main
+ *
+ * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ *
+ * Licensed under the Academic Free License version 2.1
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+/*
+ * History:
+ * ================================================================
+ * 2009-11-29 Li XianJing <xianjimli@hotmail.com> created
+ *
+ */
+
 #include "ftk.h"
 #include <time.h>
 #include "ftk_xul.h"
 #include "app_info.h"
+#include "ftk_tester.h"
 #include "vnc_service.h"
 #include "ftk_animator_expand.h"
 
@@ -271,11 +303,29 @@ static void desktop_destroy(void* data)
 
 int main(int argc, char* argv[])
 {
+	int i = 0;
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
-	char path[FTK_MAX_PATH] = {0};
 	FtkSource* timer = NULL;
+	char path[FTK_MAX_PATH] = {0};
+
 	ftk_init(argc, argv);
+
+	for(i = 0; i < argc; i++)
+	{
+		const char* key_play="--event-play=";
+		const char* key_record="--event-record=";
+
+		if(strncmp(argv[i], key_play, strlen(key_play)) == 0)
+		{
+			ftk_tester_start_play(argv[i] + strlen(key_play));	
+		}
+		
+		if(strncmp(argv[i], key_record, strlen(key_record)) == 0)
+		{
+			ftk_tester_start_record(argv[i] + strlen(key_record));	
+		}
+	}
 
 #ifdef ENABLE_NLS
 	if(getenv("LANG") == NULL)

@@ -4,6 +4,4 @@ FTK_KEY_MENU:
 FTK_KEY_RETURN: 
   Close current app window if it has no FTK_ATTR_IGNORE_CLOSE attr. default map to F3.
 
-FTK_KEY_FULLSCREE:
-  toggle app window fullscreen mode. default map to F4.
 

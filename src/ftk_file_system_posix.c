@@ -61,12 +61,12 @@ FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 	return fopen(file_name, mode);
 }
 
-int  ftk_file_read(FtkFsHandle file, char* buffer, size_t length)
+int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length)
 {
 	return fread(buffer, 1, length, file);
 }
 
-int  ftk_file_write(FtkFsHandle file, const char* buffer, size_t length)
+int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length)
 {
 	return fwrite(buffer, 1, length, file);
 }

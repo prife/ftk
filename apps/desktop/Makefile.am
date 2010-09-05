@@ -9,7 +9,7 @@ app_info_test_CFLAGS=-DAPP_INFO_TEST $(LOCAL_CFLAGS)
 app_info_test_LDFLAGS=$(MYLDFLAGS)
 
 bin_PROGRAMS=desktop
-desktop_SOURCES=main.c app_info.c 
+desktop_SOURCES=main.c app_info.c ftk_tester.c
 desktop_LDFLAGS=$(MYLDFLAGS) -ldl 
 desktop_CFLAGS=$(LOCAL_CFLAGS) 
 

@@ -9,3 +9,8 @@ label support alignment.
 listview support marquee
 Bug fix and optimization.
 add filebrowser and filechooser
+unicode linebreak
+screen rotate.
+shell
+autotest tool
+
