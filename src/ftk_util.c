@@ -353,8 +353,10 @@ const char* ftk_line_break(const char* start, const char* end)
 		size_t len = end - start + 1;
 		assert(len < sizeof(brks));
 	
-		set_linebreaks_utf8((const utf8_t*)start, len, "en", brks);
-		for(i = (len - 2); i > 0; i--)
+		set_linebreaks_utf8((const utf8_t*)start, len, "zh", brks);
+		
+		i = len - 2;
+		for(; i > 0; i--)
 		{
 			if(brks[i] == LINEBREAK_ALLOWBREAK || brks[i] == LINEBREAK_MUSTBREAK)
 			{
@@ -362,6 +364,8 @@ const char* ftk_line_break(const char* start, const char* end)
 				break;
 			}
 		}
+
+		while((unsigned char)(*end) >= 0x80) end--;
 	}
 
 	return end;
