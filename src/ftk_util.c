@@ -360,12 +360,12 @@ const char* ftk_line_break(const char* start, const char* end)
 		{
 			if(brks[i] == LINEBREAK_ALLOWBREAK || brks[i] == LINEBREAK_MUSTBREAK)
 			{
-				end = start + i;
+				end = start + i + 1;
 				break;
 			}
 		}
 
-		while((unsigned char)(*end) >= 0x80) end--;
+//		while((unsigned char)(*end) >= 0x80) end--;
 	}
 
 	return end;
