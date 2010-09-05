@@ -174,6 +174,7 @@ static const WidgetNameType s_widget_name_types[] =
 	{"status_panel", FTK_STATUS_PANEL},
 	{"menu_panel",   FTK_MENU_PANEL},
 	{"icon_view",    FTK_ICON_VIEW},
+	{"combo_box",    FTK_COMBO_BOX},
 	{NULL, FTK_WIDGET_NONE},
 };
 

@@ -67,7 +67,29 @@ int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode)
 	return extent;
 }
 
-const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width, int* ret_extent)
+int ftk_font_get_extent(FtkFont* thiz, const char* str, int len)
+{
+	int extent = 0;
+	unsigned short code = 0;
+	const char* iter = str;
+	return_val_if_fail(thiz != NULL && str != NULL, 0);
+	
+	len = len >= 0 ? len : (int)strlen(str);
+	while(*iter && (iter - str) < len)
+	{
+		code = utf8_get_char(iter, &iter);
+		if(code == 0 || code == 0xffff)
+		{
+			break;
+		}
+		extent += ftk_font_get_char_extent(thiz, code);
+	}
+
+	return extent;
+}
+
+const char* ftk_font_calc_str_visible_range(FtkFont* thiz, 
+	const char* start, int vstart, int vend, int width, int* ret_extent)
 {
 	int extent = 0;
 	int line_extent = 0;

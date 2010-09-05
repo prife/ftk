@@ -35,6 +35,11 @@ OS_PSP=\
 	$(srcdir)/os/psp/ftk_mmap_psp.c \
 	$(srcdir)/os/psp/ftk_psp.c 
 
+LINEBREAK= \
+	$(srcdir)/linebreak/linebreak.c  \
+	$(srcdir)/linebreak/linebreakdata.c  \
+	$(srcdir)/linebreak/linebreakdef.c
+
 OPTIONAL_FUNCS=ftk_file_system_posix.c ftk_file_system.c ftk_file_browser.c 
 
 libftk_la_SOURCES=\
@@ -63,6 +68,10 @@ libftk_la_SOURCES=\
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
 	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \
 	$(OPTIONAL_FUNCS)
+
+if ENABLE_LINEBREAK
+libftk_la_SOURCES += $(LINEBREAK)
+endif
 
 if ENABLE_HANDWRITE
 libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \

@@ -89,6 +89,7 @@ static inline void     ftk_font_destroy(FtkFont* thiz)
 	return;
 }
 
+int ftk_font_get_extent(FtkFont* thiz, const char* str, int len);
 int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode);
 const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width, int* extent);
 

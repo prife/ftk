@@ -29,6 +29,7 @@
  * 2010-07-18 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "ftk_util.h"
 #include "ftk_text_layout.h"
 
 struct _FtkTextLayout
@@ -95,6 +96,7 @@ Ret ftk_text_layout_init(FtkTextLayout* thiz, const char* text, int len, FtkFont
 	thiz->text  = text;
 	thiz->font  = font;
 	thiz->width = width;
+	thiz->wrap_mode = FTK_WRAP_NONE;
 	thiz->len   = len < 0 ? strlen(text) : len;
 
 	return RET_OK;
@@ -108,6 +110,7 @@ Ret ftk_text_layout_skip_to(FtkTextLayout* thiz, int pos)
 
 	return RET_OK;
 }
+
 
 Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 {
@@ -125,6 +128,19 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 	line->attr = FTK_TEXT_ATTR_NORMAL;
 	line->text = thiz->text + thiz->pos;
 	end = ftk_font_calc_str_visible_range(thiz->font, thiz->text, thiz->pos, -1, thiz->width, &extent);
+
+	if(thiz->wrap_mode == FTK_WRAP_WORD)
+	{
+		const char* start = thiz->text + thiz->pos;
+		const char* new_end = ftk_line_break(start, end);
+
+		if(end != new_end && new_end > (start + 2))
+		{
+			end = new_end;
+			extent = ftk_font_get_extent(thiz->font, start, end - start);
+		}
+	}
+
 	line->len = end - line->text;
 	line->xoffset = 0;
 	line->extent = extent;

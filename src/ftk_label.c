@@ -57,6 +57,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
 		
 		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
 		for(i = 0; i < rows; i++)
 		{
 			int xoffset = x;
@@ -99,6 +100,7 @@ FtkWidget* ftk_label_create(FtkWidget* parent, int x, int y, int width, int heig
 
 	ftk_widget_init(thiz, FTK_LABEL, 0, x, y, width, height, FTK_ATTR_INSENSITIVE|FTK_ATTR_TRANSPARENT);
 	ftk_widget_append_child(parent, thiz);
+	ftk_widget_set_wrap_mode(thiz, FTK_WRAP_WORD);
 
 	return thiz;
 }

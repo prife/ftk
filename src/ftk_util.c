@@ -327,6 +327,91 @@ const char* utf8_move_forward(const char* str, int nr)
 	return next;
 }
 
+#ifdef USE_LINEBREAK
+#include "linebreak/linebreak.h"
+const char* ftk_line_break(const char* start, const char* end)
+{
+	const char* p = end;
+	const char* next = NULL;
+	unsigned short c1 = 0;
+	unsigned short c2 = 0;
+	static int linebreak_inited = 0;
+
+	if(linebreak_inited == 0)
+	{
+		init_linebreak();
+		linebreak_inited = 1;
+	}
+
+	c2 = utf8_get_char(p, &next);
+	c1 = utf8_get_prev_char(p, NULL);
+
+	if(c1 != '\n' && c1 != '\r' && c2 != '\0' && c2 != '\n' && c2 != '\r')
+	{
+		size_t i = 0;
+		char brks[256] = {0};
+		size_t len = end - start + 1;
+		assert(len < sizeof(brks));
+	
+		set_linebreaks_utf8((const utf8_t*)start, len, "en", brks);
+		for(i = (len - 2); i > 0; i--)
+		{
+			if(brks[i] == LINEBREAK_ALLOWBREAK || brks[i] == LINEBREAK_MUSTBREAK)
+			{
+				end = start + i;
+				break;
+			}
+		}
+	}
+
+	return end;
+}
+#else
+int ftk_can_break(unsigned short c1, unsigned short c2)
+{
+	if(c1 > 0x80 || c2 > 0x80)
+	{
+		return 1;
+	}
+
+	if(isdigit(c1) && isdigit(c2))
+	{
+		return 0;
+	}
+	
+	if(isalpha(c1) && isalpha(c2))
+	{
+		return 0;
+	}
+
+	return 1;
+}
+
+const char* ftk_line_break(const char* start, const char* end)
+{
+	const char* p = end;
+	const char* next = NULL;
+	unsigned short c1 = 0;
+	unsigned short c2 = 0;
+	c2 = utf8_get_char(p, &next);
+	c1 = utf8_get_prev_char(p, NULL);
+
+	if(c1 != '\n' && c1 != '\r' && c2 != '\0' && c2 != '\n' && c2 != '\r')
+	{
+		while(!ftk_can_break(c1, c2) && p > start)
+		{
+			next = p;
+			c2 = c1;
+			c1 = utf8_get_prev_char(next, &p);
+		}
+	
+		end = p;
+	}
+
+	return end;
+}
+#endif
+
 int ftk_str2bool(const char* str)
 {
 	if(str == NULL || str[0] == '0' || strcmp(str, "false") == 0 || strcmp(str, "no") == 0)

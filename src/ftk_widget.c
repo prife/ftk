@@ -45,6 +45,7 @@ struct _FtkWidgetInfo
 	int width;
 	int height;
 	int visible;
+	FtkWrapMode wrap_mode;
 
 	int painting;
 	FtkCanvas* canvas;
@@ -224,6 +225,13 @@ Ret ftk_widget_invalidate(FtkWidget* thiz)
 	rect.height = ftk_widget_height(thiz);
 
 	return ftk_window_invalidate(ftk_widget_toplevel(thiz), &rect);
+}
+
+FtkWrapMode ftk_widget_get_wrap_mode(FtkWidget* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, FTK_WRAP_NONE);
+
+	return thiz->priv->wrap_mode;
 }
 
 Ret ftk_widget_update(FtkWidget* thiz)
@@ -823,6 +831,14 @@ void ftk_widget_set_event_listener(FtkWidget* thiz, FtkListener listener, void* 
 	return;
 }
 
+void ftk_widget_set_wrap_mode(FtkWidget* thiz, FtkWrapMode mode)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+
+	thiz->priv->wrap_mode = mode;
+
+	return;
+}
 
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz)
 {

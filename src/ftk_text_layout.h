@@ -49,14 +49,6 @@ typedef enum _FtkTextAttr
 	FTK_TEXT_ATTR_RTOL = 8
 }FtkTextAttr;
 
-typedef enum _FtkWrapMode
-{
-	FTK_WRAP_NONE,
-	FTK_WRAP_CHAR,
-	FTK_WRAP_WORD,
-	FTK_WRAP_NR
-}FtkWrapMode;
-
 typedef struct _FtkTextLine
 {
 	int len;

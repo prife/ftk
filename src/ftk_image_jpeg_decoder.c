@@ -28,10 +28,11 @@
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#include "ftk_image_jpeg_decoder.h"
 #include <setjmp.h>
-#include <jpeglib.h>
 #include "ftk_mmap.h"
+#include "ftk_log.h"
+#include <jpeglib.h>
+#include "ftk_image_jpeg_decoder.h"
 
 static Ret ftk_image_jpeg_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {

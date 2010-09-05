@@ -91,6 +91,7 @@ FtkWidgetState ftk_widget_state(FtkWidget* thiz);
 void* ftk_widget_user_data(FtkWidget* thiz);
 const char* ftk_widget_get_text(FtkWidget* thiz);
 Ret ftk_widget_invalidate(FtkWidget* thiz);
+FtkWrapMode ftk_widget_get_wrap_mode(FtkWidget* thiz);
 
 void ftk_widget_show(FtkWidget* thiz, int visible);
 void ftk_widget_show_all(FtkWidget* thiz, int visible);
@@ -115,6 +116,7 @@ void ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
 void ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
 void ftk_widget_set_text(FtkWidget* thiz, const char* text);
 void ftk_widget_set_event_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+void ftk_widget_set_wrap_mode(FtkWidget* thiz, FtkWrapMode mode);
 
 FtkWidget* ftk_widget_toplevel(FtkWidget* thiz);
 FtkWidget* ftk_widget_parent(FtkWidget* thiz);

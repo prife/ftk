@@ -41,6 +41,7 @@ unsigned short utf8_get_char (const char *p, const char** next);
 unsigned short utf8_get_prev_char (const char *p, const char** prev);
 int utf8_count_char(const char *begin, size_t length);
 const char* utf8_move_forward(const char* str, int nr);
+const char* ftk_line_break(const char* start, const char* end);
 
 int ftk_str2bool(const char* str);
 FtkColor ftk_parse_color( const char* value);

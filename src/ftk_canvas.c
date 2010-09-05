@@ -547,34 +547,9 @@ int ftk_canvas_font_height(FtkCanvas* thiz)
 
 int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
 {
-	int extent = 0;
-	FtkGlyph glyph = {0};
-	unsigned short code = 0;
-	const char* iter = str;
 	return_val_if_fail(thiz != NULL && str != NULL && thiz->gc.font != NULL, 0);
 	
-	len = len >= 0 ? len : (int)strlen(str);
-	while(*iter && (iter - str) < len)
-	{
-		code = utf8_get_char(iter, &iter);
-		if(code == ' ')
-		{
-			glyph.x = 0;
-			glyph.w = FTK_SPACE_WIDTH;
-		}
-		else if(code == '\t')
-		{
-			glyph.x = 0;
-			glyph.w = FTK_TAB_WIDTH * FTK_SPACE_WIDTH;
-		}
-		else if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
-		{
-			continue;
-		}
-
-		extent += glyph.x + glyph.w + 1;
-	}
-	return extent;
+	return ftk_font_get_extent(thiz->gc.font, str, len);
 }
 
 int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode)

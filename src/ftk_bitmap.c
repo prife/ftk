@@ -113,7 +113,6 @@ void       ftk_bitmap_unref(FtkBitmap* thiz)
 
 Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 {
-	size_t i = 0;
 	size_t width = 0;
 	size_t height = 0;
 	FtkColor* dst = ftk_bitmap_bits(thiz);

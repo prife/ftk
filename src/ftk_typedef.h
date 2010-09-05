@@ -182,6 +182,15 @@ typedef enum _FtkRotate
 	FTK_ROTATE_NR
 }FtkRotate;
 
+typedef enum _FtkWrapMode
+{
+	FTK_WRAP_NONE,
+	FTK_WRAP_CHAR,
+	FTK_WRAP_WORD,
+	FTK_WRAP_NR
+}FtkWrapMode;
+
+
 typedef void (*FtkDestroy)(void* user_data);
 typedef Ret  (*FtkIdle)(void* user_data);
 typedef Ret  (*FtkTimer)(void* user_data);

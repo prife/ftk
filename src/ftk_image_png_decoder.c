@@ -29,9 +29,10 @@
  *
  */
 
-#include "ftk_image_png_decoder.h"
 #define PNG_SKIP_SETJMP_CHECK
 #include <png.h>
+#include "ftk_log.h"
+#include "ftk_image_png_decoder.h"
 
 static Ret ftk_image_png_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {

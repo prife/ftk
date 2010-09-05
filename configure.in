@@ -96,6 +96,16 @@ fi
 
 AM_CONDITIONAL(ENABLE_TSLIB,  test "$enable_tslib" = "yes")
 
+AC_ARG_ENABLE(linebreak,
+  [  --enable-linebreak            build with linebreak support [[default=yes]]],,
+  enable_linebreak=yes)
+
+if test "$enable_linebreak" = "yes"; then
+  CFLAGS="$CFLAGS -DUSE_LINEBREAK "
+fi
+
+AM_CONDITIONAL(ENABLE_LINEBREAK,  test "$enable_linebreak" = "yes")
+
 AC_ARG_ENABLE(cairo,
   [  --enable-cairo            build with cairo support [[default=no]]],,
   enable_cairo=no)
