@@ -387,9 +387,9 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 				bg = bits[offset];
 				if(data)
 				{
-					color.r = ((fg.r * data) + (bg.r * (0xff - data)))/0xff;
-					color.g = ((fg.g * data) + (bg.g * (0xff - data)))/0xff;
-					color.b = ((fg.b * data) + (bg.b * (0xff - data)))/0xff;
+					color.r = FTK_ALPHA_1(fg.r, bg.r, data);
+					color.g = FTK_ALPHA_1(fg.g, bg.g, data);
+					color.b = FTK_ALPHA_1(fg.b, bg.b, data);
 					bits[offset] = color;
 				}
 			}
@@ -415,6 +415,8 @@ Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y
 	int i=0, j=0, m=0, n=0;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
+	FtkColor* psrc = NULL;
+	FtkColor* pdst = NULL;
 	int width  = thiz->width; //Canvas width
 	int height = thiz->height;
 	int bitmap_width   = ftk_bitmap_width(bitmap);
@@ -436,26 +438,27 @@ Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y
 	for(j=0 ; j<h ; j++)
 	{
 		n=j*bitmap_height/h;
-			for(i=0 ; i<w ; i++)
-			{
-				m=i*bitmap_width/w;
-				if(src[n*bitmap_width+m].a == 0xff)
-				{
-					dst[(j+y)*width+x+i]=src[n*bitmap_width+m];
-				}	
-				else
-				{
-					dst[(j+y)*width+x+i].r = (src[n*bitmap_width+m].r * src[n*bitmap_width+m].a + dst[(j+y)*width+x+i].r * (0xff - src[n*bitmap_width+m].a)) >> 8;
-					dst[(j+y)*width+x+i].g = (src[n*bitmap_width+m].g * src[n*bitmap_width+m].a + dst[(j+y)*width+x+i].g * (0xff - src[n*bitmap_width+m].a)) >> 8;
-					dst[(j+y)*width+x+i].b = (src[n*bitmap_width+m].b * src[n*bitmap_width+m].a + dst[(j+y)*width+x+i].b * (0xff - src[n*bitmap_width+m].a)) >> 8;
-				}
-			}	
+		for(i=0 ; i<w ; i++)
+		{
+			m=i*bitmap_width/w;
+			pdst = dst + (j+y)*width+x+i;
+			psrc = src + n*bitmap_width+m;
 
+			if(psrc->a == 0xff)
+			{
+				*pdst = *psrc;
+			}	
+			else
+			{
+				FTK_ALPHA(psrc, pdst, psrc->a);
+			}
+		}	
 	}
 	
 	return 	RET_OK;
 
 }
+
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)
 {
 	int i = 0;
@@ -463,6 +466,8 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	int k = 0;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
+	FtkColor* psrc = NULL;
+	FtkColor* pdst = NULL;
 	unsigned char alpha = 0;
 	unsigned char dst_alpha = 0;
 	int width  = thiz->width;
@@ -496,11 +501,12 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 		{
 			for(j = x, k = xoffset; j < w; j++, k++)
 			{
-				alpha = (src[j].a * thiz->gc.alpha) >> 8;
-				dst_alpha = 0xff - alpha;
-				dst[k].r = (src[j].r * alpha + dst[k].r * dst_alpha) >> 8;
-				dst[k].g = (src[j].g * alpha + dst[k].g * dst_alpha) >> 8;
-				dst[k].b = (src[j].b * alpha + dst[k].b * dst_alpha) >> 8;
+				pdst = dst+k;
+				psrc = src+j;
+				alpha = (psrc->a * thiz->gc.alpha) >> 8;
+				pdst->r = FTK_ALPHA_1(psrc->r, pdst->r, alpha);
+				pdst->g = FTK_ALPHA_1(psrc->g, pdst->g, alpha);
+				pdst->b = FTK_ALPHA_1(psrc->b, pdst->b, alpha);
 			}
 			src += bitmap_width;
 			dst += width;
@@ -512,17 +518,18 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 		{
 			for(j = x, k = xoffset; j < w; j++, k++)
 			{
+				pdst = dst+k;
+				psrc = src+j;
 				if(src[j].a == 0xff)
 				{
 					dst[k] = src[j];
 				}
 				else
 				{
-					alpha = src[j].a; 
-					dst_alpha = 0xff - alpha;
-					dst[k].r = (src[j].r * alpha + dst[k].r * dst_alpha) >> 8;
-					dst[k].g = (src[j].g * alpha + dst[k].g * dst_alpha) >> 8;
-					dst[k].b = (src[j].b * alpha + dst[k].b * dst_alpha) >> 8;
+					alpha = psrc->a; 
+					pdst->r = FTK_ALPHA_1(psrc->r, pdst->r, alpha);
+					pdst->g = FTK_ALPHA_1(psrc->g, pdst->g, alpha);
+					pdst->b = FTK_ALPHA_1(psrc->b, pdst->b, alpha);
 				}
 			}
 			src += bitmap_width;
