@@ -4,6 +4,7 @@ INCLUDES = -I$(abs_top_srcdir)/opengles/include -I$(abs_top_srcdir)/opengles/src
 	-DUSE_FTK
 
 lib_LTLIBRARIES = libopengles.la
+libopengles_la_LDFLAGS=-lpthread
 libopengles_la_SOURCES =  \
         $(srcdir)/Arrays.h \
         $(srcdir)/Buffer.h \
