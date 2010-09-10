@@ -428,8 +428,8 @@ int ftk_str2bool(const char* str)
 
 char* ftk_strs_cat(char* str, size_t len, const char* first, ...)
 {
+	va_list arg;
 	size_t dst = 0;
-	va_list arg = NULL;
 	const char* iter = first;
 	return_val_if_fail(str != NULL && len > 0, NULL);
 

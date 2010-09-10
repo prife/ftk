@@ -35,11 +35,11 @@
 
 #zoran
 #######################################################
-export ARCH=mipsisa32
-export HOST_PARAM=--host=mipsisa32-linux
-export TARGET_CC=mipsisa32-linux-gcc
-export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
-export WITH_BACKEND="--with-backend=linux-dfb"
+#export ARCH=mipsisa32
+#export HOST_PARAM=--host=mipsisa32-linux
+#export TARGET_CC=mipsisa32-linux-gcc
+#export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
+#export WITH_BACKEND="--with-backend=linux-dfb"
 
 #codesourery
 #######################################################
