@@ -5,7 +5,7 @@ STRIP=${TARGET_CC/gcc/strip}
 echo "Copy files to dist directory..."
 rm -rf ${DIST}
 mkdir -p ${DIST}
-cp -rf ${STAGING}${PREFIX} ${DIST}
+cp -rf ${STAGING}/* ${DIST}/.
 
 cd ${DIST}
 #####################################################

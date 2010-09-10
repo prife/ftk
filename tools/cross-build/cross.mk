@@ -1,8 +1,8 @@
-all: check zlib png jpeg tslib freetype libftk
-all_clean:  zlib_clean png_clean jpeg_clean  libftk_clean tslib_clean freetype_clean 
+all: check zlib png jpeg $(TSLIB) freetype $(CAIRO) libftk
+all_clean:  zlib_clean png_clean jpeg_clean  tslib_clean freetype_clean libftk_clean
 
-all_dfb: check zlib png jpeg tslib freetype directfb libftk
-all_dfb_clean:  zlib_clean png_clean jpeg_clean  libftk_clean tslib_clean freetype_clean directfb_clean
+all_dfb: check zlib png jpeg $(TSLIB) freetype directfb directfb_examples $(CAIRO) libftk
+all_dfb_clean:  zlib_clean png_clean jpeg_clean tslib_clean freetype_clean directfb_clean directfb_examples_clean libftk_clean
 
 check:
 	if [ ! -e packages ]; then mkdir packages;fi
@@ -79,10 +79,21 @@ DirectFB-1.2.9: packages/DirectFB-1.2.9.tar.gz
 directfb: DirectFB-1.2.9
 	mkdir DirectFB-1.2.9/$(ARCH); cd DirectFB-1.2.9/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique &&\
-	make clean; make && make install DESTDIR=${STAGING} &&
-	make install DESTDIR=/ 
+	make clean; make && make install DESTDIR=${STAGING} && make install DESTDIR=/ 
 directfb_clean:
 	rm -rf DirectFB-1.2.9/$(ARCH)
+
+packages/DirectFB-examples-1.2.0.tar.gz:
+	cd packages && wget http://www.directfb.org/downloads/Extras/DirectFB-examples-1.2.0.tar.gz
+
+DirectFB-examples-1.2.0: packages/DirectFB-examples-1.2.0.tar.gz
+	tar xf packages/DirectFB-examples-1.2.0.tar.gz
+directfb_examples:DirectFB-examples-1.2.0
+	mkdir DirectFB-examples-1.2.0/$(ARCH); cd DirectFB-examples-1.2.0/$(ARCH) && \
+	../configure $(HOST_PARAM) --prefix=$(PREFIX) && \
+	make clean; make && make install DESTDIR=${STAGING} && make install DESTDIR=/
+directfb_examples_clean:
+	rm -rf DirectFB-examples-1.2.0/$(ARCH)
 
 packages/expat-2.0.1.tar.gz:
 	cd packages && wget http://downloads.sourceforge.net/project/expat/expat/2.0.1/expat-2.0.1.tar.gz?use_mirror=nchc
@@ -134,10 +145,10 @@ cairo: cairo-1.8.10 fontconfig pixman
 cairo_clean:
 	cd cairo* && rm -fr $(ARCH)
 
-libftk: $(CAIRO)
+libftk:
 	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
-	../configure $(ENABLE_CAIRO) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
+	../configure $(ENABLE_CAIRO) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 libftk_clean:

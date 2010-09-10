@@ -28,10 +28,18 @@
 
 #ben
 #######################################################
-export ARCH=mipsel
-export HOST_PARAM=--host=mipsel-openwrt-linux
-export TARGET_CC=mipsel-openwrt-linux-gcc
-export PATH=/work/board/jz/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3+cs_uClibc-0.9.30.1/usr/bin:$PATH
+#export ARCH=mipsel
+#export HOST_PARAM=--host=mipsel-openwrt-linux
+#export TARGET_CC=mipsel-openwrt-linux-gcc
+#export PATH=/work/board/jz/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3+cs_uClibc-0.9.30.1/usr/bin:$PATH
+
+#zoran
+#######################################################
+export ARCH=mipsisa32
+export HOST_PARAM=--host=mipsisa32-linux
+export TARGET_CC=mipsisa32-linux-gcc
+export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
+export WITH_BACKEND="--with-backend=linux-dfb"
 
 #sigma, 
 # maybe you need change the path.
@@ -46,7 +54,7 @@ export PATH=/work/board/jz/openwrt-xburst/staging_dir/toolchain-mipsel_gcc-4.3.3
 #export SIGMA_LIBS="-L$RUA_DIR/lib -Xlinker --start-group -ldcc -lrmmonitoring -lrmvdemux -lrmjpeg -lrmungif -lrmpng -lrmzlib -lrmhttp -lrmscc -lrmavicore -lrmmp4api -lrmmp4 -lrmmp4core -lrmdescriptordecoder -lrmmpeg4framework -lrmrtk86 -lrmwmaprodecoder -lrmwmaprodecodercore -lrmasfdemux -lrmasfdemuxcore -lrmstreamingprotocols -lrmcpputils -lrmcapture -lrmcw -lrmcore -lrmcdfs -lrua -lllad -lrmdtcpinterface -lrmdemuxwritekeyapi -lrmsoftmixer -lrmwmdrmndstub -lgbus -lrmdrm -Xlinker --end-group  -ldl -rdynamic"
 
 export BUILD_DIR=$PWD/$ARCH
-export PREFIX=/opt
+export PREFIX=/opt/ftk
 export STAGING=${BUILD_DIR}/staging
 export DIST=${BUILD_DIR}/dist
 export PKG_CONFIG_PATH=${STAGING}/${PREFIX}/lib/pkgconfig/
@@ -54,4 +62,6 @@ export LDFLAGS="-L${STAGING}/${PREFIX}/lib -Wl,-rpath -Wl,${PREFIX}/lib"
 export CFLAGS="-I${STAGING}/${PREFIX}/include"
 export DIRS="--libdir=${STAGING}/lib --includedir=${STAGING}/include"
 export CAIRO=cairo
+export TSLIB=tslib
 export ENABLE_CAIRO="--enable-cairo"
+
