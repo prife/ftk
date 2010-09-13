@@ -388,10 +388,17 @@ Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, void* data,
 		for(ox = 0; ox < w; ox++)
 		{
 			unsigned char* psrc =(unsigned char*) (src + ox);
+#ifdef BIG_ENDIAN
+			dst[ox].r = psrc[3];
+			dst[ox].g = psrc[2];
+			dst[ox].b = psrc[1]; 
+			dst[ox].a = psrc[0];
+#else
 			dst[ox].r = psrc[0];
 			dst[ox].g = psrc[1];
 			dst[ox].b = psrc[2]; 
 			dst[ox].a = psrc[3];
+#endif			
 		}
 		src += dw; 
 		dst += bw;
@@ -413,6 +420,22 @@ Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 			unsigned char* pdst = (unsigned char*)(dst+k);
 			FtkColor* psrc = src+j;
 
+#ifdef BIG_ENDIAN
+			if(likely(psrc->a == 0xff))
+			{
+				pdst[3] = psrc->r;
+				pdst[2] = psrc->g;
+				pdst[1] = psrc->b;
+				pdst[0] = 0xff;
+			}
+			else
+			{
+				FTK_ALPHA_1(psrc->r, pdst[3], psrc->a);
+				FTK_ALPHA_1(psrc->g, pdst[2], psrc->a);
+				FTK_ALPHA_1(psrc->b, pdst[1], psrc->a);
+				pdst[0] = psrc->a;
+			}
+#else
 			if(likely(psrc->a == 0xff))
 			{
 				pdst[0] = psrc->r;
@@ -427,6 +450,7 @@ Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 				FTK_ALPHA_1(psrc->b, pdst[2], psrc->a);
 				pdst[3] = psrc->a;
 			}
+#endif			
 		}
 		src += bw;
 		dst += dw;

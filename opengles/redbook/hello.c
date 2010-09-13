@@ -49,6 +49,18 @@ void display(UGWindow uwin)
  */
    glColor4f (1.0, 1.0, 1.0, 1.0);
    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+   glRotatef(10., 0.5, 0.5, 1.0);
+//   glTranslatef(-0.25, -0.25, 0);
+#if 0   
+   glTranslatef(0.25, 0.25, 0);
+   glScalef(0.5, 0.5, 1);
+   glTranslatef(-0.5, -0.5, 0);
+   glScalef(2, 2, 1);
+//   glScalef(0.5, 0.5, 1);
+   glColor4f (1.0, 1.0, 0, 1.0);
+#endif   
+   //glRotatef(10, 0, 0, 1.0);
+   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 /* don't wait!  
  * start processing buffered OpenGL routines 

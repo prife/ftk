@@ -70,10 +70,14 @@ static int fb_open(struct FbInfo *fb, const char* fbfilename)
 		goto fail;
 	if (ioctl(fb->fd, FBIOGET_VSCREENINFO, &fb->var) < 0)
 		goto fail;
+	
+	fb->var.xoffset = 0; 
+	fb->var.yoffset = 0; 
+	ioctl (fb->fd, FBIOPAN_DISPLAY, &(fb->var)); 
 
 	ftk_logd("FbInfo: %s\n", fbfilename);
-	ftk_logd("FbInfo: xres=%d yres=%d bits_per_pixel=%d\n", 
-		fb->var.xres, fb->var.yres, fb->var.bits_per_pixel);
+	ftk_logd("FbInfo: xres=%d yres=%d bits_per_pixel=%d mem_size=%d\n", 
+		fb->var.xres, fb->var.yres, fb->var.bits_per_pixel, fb_size(fb));
 	ftk_logd("FbInfo: red(%d %d) green(%d %d) blue(%d %d)\n", 
 		fb->var.red.offset, fb->var.red.length,
 		fb->var.green.offset, fb->var.green.length,
@@ -174,7 +178,10 @@ static void fb_sync(void* ctx, FtkRect* rect)
 	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
 	//ret = fb_pan(info, 0, 0, 1);
 	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
-
+#ifdef ZORAN
+	ret = ioctl(info->fd, FB_ACTIVATE_ALL, NULL);
+#endif	
+	ftk_logd("%s: ret = %d\n", __func__, ret);
 	return;
 }
 

@@ -35,18 +35,19 @@
 
 #zoran
 #######################################################
-#export ARCH=mipsisa32
-#export HOST_PARAM=--host=mipsisa32-linux
-#export TARGET_CC=mipsisa32-linux-gcc
-#export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
+export ARCH=mipsisa32
+export TARGET_CFLAGS="-DBIG_ENDIAN -DZORAN"
+export HOST_PARAM=--host=mipsisa32-linux
+export TARGET_CC=mipsisa32-linux-gcc
+export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
 #export WITH_BACKEND="--with-backend=linux-dfb"
 
 #codesourery
 #######################################################
-export ARCH=arm
-export HOST_PARAM=--host=arm-none-linux-gnueabi
-export TARGET_CC=arm-none-linux-gnueabi-gcc
-export PATH=/root/CodeSourcery/Sourcery_G++_Lite/bin/:$PATH
+#export ARCH=arm
+#export HOST_PARAM=--host=arm-none-linux-gnueabi
+#export TARGET_CC=arm-none-linux-gnueabi-gcc
+#export PATH=/root/CodeSourcery/Sourcery_G++_Lite/bin/:$PATH
 
 #sigma, 
 # maybe you need change the path.
@@ -66,8 +67,8 @@ export STAGING=${BUILD_DIR}/staging
 export DIST=${BUILD_DIR}/dist
 export PKG_CONFIG_PATH=${STAGING}/${PREFIX}/lib/pkgconfig/
 export LDFLAGS="-L${STAGING}/${PREFIX}/lib -Wl,-rpath -Wl,${PREFIX}/lib"
-export CPPFLAGS="-I${STAGING}/${PREFIX}/include"
-export CFLAGS=$CPPFLAGS
+export CPPFLAGS="-I${STAGING}/${PREFIX}/include $TARGET_CFLAGS"
+export CFLAGS=$CPPFLAGS 
 export CXXFLAGS=$CPPFLAGS
 export DIRS="--libdir=${STAGING}/lib --includedir=${STAGING}/include"
 export CAIRO=cairo

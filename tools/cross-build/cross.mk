@@ -78,7 +78,7 @@ DirectFB-1.2.9: packages/DirectFB-1.2.9.tar.gz
 	tar xf packages/DirectFB-1.2.9.tar.gz
 directfb: DirectFB-1.2.9
 	mkdir DirectFB-1.2.9/$(ARCH); cd DirectFB-1.2.9/$(ARCH) && \
-	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique &&\
+	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique --enable-freetype --enable-png --enable-jpeg --enable-zlib --enable-fbdev --enable-debug-support &&\
 	make clean; make && make install DESTDIR=${STAGING} && make install DESTDIR=/ 
 directfb_clean:
 	rm -rf DirectFB-1.2.9/$(ARCH)
@@ -148,7 +148,7 @@ cairo_clean:
 libftk:
 	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
-	../configure $(ENABLE_CAIRO) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
+	../configure --with-fontengine=freetype --enable-profile $(ENABLE_CAIRO) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 libftk_clean:
