@@ -28,8 +28,96 @@
  * 2010-09-04 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+#include <byteswap.h>
 #include "ftk_tester.h"
 #include "ftk_file_system.h"
+
+static int ftk_host_is_le(void)
+{
+	int val = 0x11223344;
+	unsigned char* p = (unsigned char*)&val;
+
+	return (*p == 0x44);
+}
+
+static inline int ftk_htole32(int val)
+{
+	if(!ftk_host_is_le())
+	{
+		val = bswap_32(val);
+	}
+
+	return val;
+}
+
+static inline short ftk_htole16(short val)
+{
+	if(!ftk_host_is_le())
+	{
+		val = bswap_16(val);
+	}
+
+	return val;
+}
+
+static inline int ftk_le32toh(int val)
+{
+	if(!ftk_host_is_le())
+	{
+		val = bswap_32(val);
+	}
+
+	return val;
+}
+
+static inline short ftk_le16toh(short val)
+{
+	if(!ftk_host_is_le())
+	{
+		val = bswap_16(val);
+	}
+
+	return val;
+}
+
+static Ret ftk_event_tole(FtkEvent* event)
+{
+	event->time = ftk_htole32(event->time);
+	event->type = ftk_htole32(event->type);
+	if(event->type == FTK_EVT_KEY_DOWN || event->type == FTK_EVT_KEY_UP)
+	{
+		event->u.key.code = ftk_htole32(event->u.key.code);
+	}
+
+	if(event->type == FTK_EVT_MOUSE_MOVE || event->type == FTK_EVT_MOUSE_DOWN 
+		|| event->type == FTK_EVT_MOUSE_UP)
+	{
+		event->u.mouse.x = ftk_htole16(event->u.mouse.x);
+		event->u.mouse.y = ftk_htole16(event->u.mouse.y);
+	}
+
+	return RET_OK;
+}
+
+static Ret ftk_event_fromle(FtkEvent* event)
+{
+	event->time = ftk_le32toh(event->time);
+	event->type = ftk_le32toh(event->type);
+	if(event->type == FTK_EVT_KEY_DOWN || event->type == FTK_EVT_KEY_UP)
+	{
+		event->u.key.code = ftk_le32toh(event->u.key.code);
+	}
+
+	if(event->type == FTK_EVT_MOUSE_MOVE || event->type == FTK_EVT_MOUSE_DOWN 
+		|| event->type == FTK_EVT_MOUSE_UP)
+	{
+		event->u.mouse.x = ftk_le16toh(event->u.mouse.x);
+		event->u.mouse.y = ftk_le16toh(event->u.mouse.y);
+	}
+
+	return RET_OK;
+}
 
 static Ret ftk_event_record(void* ctx, FtkEvent* event)
 {
@@ -49,6 +137,7 @@ static Ret ftk_event_record(void* ctx, FtkEvent* event)
 		FtkEvent evt = *event;
 		evt.time = ftk_get_relative_time();
 		ftk_logd("%s: type=%d\n", __func__, event->type);
+		ftk_event_tole(&evt);
 		ftk_file_write(handle, &evt, sizeof(FtkEvent));
 	}
 
@@ -98,6 +187,7 @@ static Ret ftk_event_inject(void* ctx)
 		ftk_logd("%s: type=%d\n", __func__, injector->event.type);
 
 		len = ftk_file_read(injector->handle, &injector->event, sizeof(FtkEvent));
+		ftk_event_fromle(&injector->event);
 		if(len == sizeof(FtkEvent))
 		{
 			time_t interval = injector->event.time - last_time;
@@ -121,6 +211,7 @@ Ret ftk_tester_start_play(const char* filename)
 	FtkEventInjector* injector = NULL;
 	FtkFsHandle handle = ftk_file_open(filename, "r");
 
+	ftk_logd("%s: is litteend=%d\n", __func__, ftk_host_is_le());
 	return_val_if_fail(handle != NULL, RET_FAIL);
 
 	if((injector =  FTK_ZALLOC(sizeof(FtkEventInjector))) != NULL)
@@ -128,6 +219,7 @@ Ret ftk_tester_start_play(const char* filename)
 		injector->handle = handle;
 		injector->timer = ftk_source_timer_create(3000, ftk_event_inject, injector);
 		ftk_file_read(handle, &injector->event, sizeof(FtkEvent));
+		ftk_event_fromle(&injector->event);
 		ftk_main_loop_add_source(ftk_default_main_loop(), injector->timer);
 		ret = RET_OK;
 	}
