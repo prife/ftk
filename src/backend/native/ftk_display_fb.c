@@ -178,10 +178,10 @@ static void fb_sync(void* ctx, FtkRect* rect)
 	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
 	//ret = fb_pan(info, 0, 0, 1);
 	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
-#ifdef ZORAN
+#ifdef USE_FB_ACTIVATE_ALL
 	ret = ioctl(info->fd, FB_ACTIVATE_ALL, NULL);
+	ftk_logd("%s: FB_ACTIVATE_ALL ret = %d\n", __func__, ret);
 #endif	
-	ftk_logd("%s: ret = %d\n", __func__, ret);
 	return;
 }
 

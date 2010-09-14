@@ -165,8 +165,13 @@ FtkDisplay* ftk_display_mem_create(FtkPixelFormat format,
 			case FTK_PIXEL_BGRA32:
 			{
 				priv->bpp = 4;
+#ifdef WORDS_BIGENDIAN				
+				priv->copy_to_data   = ftk_bitmap_copy_to_data_argb32;
+				priv->copy_from_data = ftk_bitmap_copy_from_data_argb32;
+#else
 				priv->copy_to_data   = ftk_bitmap_copy_to_data_bgra32;
 				priv->copy_from_data = ftk_bitmap_copy_from_data_bgra32;
+#endif
 				break;
 			}
 			case FTK_PIXEL_RGBA32:
