@@ -29,6 +29,8 @@
  *
  */
 
+#include "ftk_globals.h"
+#include "ftk_text_layout.h"
 #include "ftk_progress_bar.h"
 
 typedef struct _PrivInfo
@@ -64,6 +66,28 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 		if(fg_width < width && fg_width > 2)
 		{
 			ftk_canvas_fast_fill_rect(canvas, x + fg_width - 2, y+1, 2, height-2);
+		}
+	}
+	
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
+	if(ftk_widget_get_text(thiz) != NULL)
+	{
+		int xoffset = 0;
+		int yoffset = FTK_HALF(height);
+		FtkTextLine line = {0};
+		const char* text = ftk_widget_get_text(thiz);
+		FtkTextLayout* text_layout = ftk_default_text_layout();
+	
+		gc.fg.a = 0xff;
+		gc.fg.r = 0x00;
+		gc.fg.g = 0x00;
+		gc.fg.b = 0x00;
+		ftk_canvas_set_gc(canvas, &gc);
+		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			xoffset = FTK_HALF(width - line.extent); 
+			ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, -1, 1);
 		}
 	}
 

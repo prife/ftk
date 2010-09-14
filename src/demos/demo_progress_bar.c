@@ -1,4 +1,5 @@
 #include "ftk.h"
+#include "ftk_util.h"
 
 static void on_window_destroy(void* user_data)
 {
@@ -13,6 +14,7 @@ static void on_window_destroy(void* user_data)
 static Ret update_progress(void* ctx)
 {
 	int percent = 0;
+	char text[32] = {0};
 	FtkWidget* progress_bar = ctx;
 
 	percent = ftk_progress_bar_get_percent(progress_bar);
@@ -21,6 +23,10 @@ static Ret update_progress(void* ctx)
 		return RET_REMOVE;
 	}
 	ftk_progress_bar_set_percent(progress_bar, percent + 10);
+
+	ftk_itoa(text, sizeof(text), ftk_progress_bar_get_percent(progress_bar));
+	strcat(text, "%");
+	ftk_widget_set_text(progress_bar, text);
 
 	return RET_OK;
 }
