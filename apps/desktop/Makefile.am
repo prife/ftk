@@ -6,7 +6,7 @@ LOCAL_CFLAGS=-I$(abs_top_srcdir)/apps/common -DAPP_DATA_DIR="\"$(datadir)/ftk/de
 noinst_PROGRAMS=app_info_test
 app_info_test_SOURCES=app_info.c
 app_info_test_CFLAGS=-DAPP_INFO_TEST $(LOCAL_CFLAGS)
-app_info_test_LDFLAGS=$(MYLDFLAGS)
+app_info_test_LDFLAGS=$(MYLDFLAGS) -ldl
 
 bin_PROGRAMS=desktop
 desktop_SOURCES=main.c app_info.c ftk_tester.c
@@ -20,4 +20,4 @@ desktop_CFLAGS += -I$(srcdir)/libvncserver
 desktop_LDFLAGS += $(builddir)/libvncserver/libvncserver.la -lpthread 
 endif
 
-EXTRA_DIST=app_info.h vnc_service.h
+EXTRA_DIST=app_info.h vnc_service.h ftk_tester.h

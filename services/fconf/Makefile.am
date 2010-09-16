@@ -32,5 +32,5 @@ service_DATA=fconf.service
 fconfincludedir=$(includedir)/fconf
 fconfinclude_HEADERS=fconf_client.h  fconf.h fconf_share.h
 
-EXTRA_DIST=fconf_xml.h fconf_service.h gen.sh
+EXTRA_DIST=fconf_xml.h fconf_service.h gen.sh fconf.c
 

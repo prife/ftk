@@ -8,7 +8,7 @@ noinst_PROGRAMS=aargb  alpha3D  alpha  checker  colormat  cube  double  fog  hel
 LIBS=$(abs_top_builddir)/src/libftk.la $(abs_top_builddir)/opengles/src/libopengles.la -lpthread
 
 lib_LTLIBRARIES=libftk_opengles_demos.la
-libftk_opengles_demos_la_SOURCES=$(abs_top_srcdir)/src/demos/ftk_app_demo.c alpha3D.c material.c fog.c hello.c
+libftk_opengles_demos_la_SOURCES=$(top_srcdir)/src/demos/ftk_app_demo.c alpha3D.c material.c fog.c hello.c
 
 libftk_opengles_demos_la_LDFLAGS=$(LIBS)
 libftk_opengles_demos_la_CFLAGS=-DFTK_AS_PLUGIN
@@ -90,3 +90,5 @@ wrap_LDFLAGS=$(LIBS)
 
 desktopdir=$(datadir)/ftk/base/apps
 desktop_DATA=opengles_demos.desktop
+
+EXTRA_DIST=opengles_demos.desktop

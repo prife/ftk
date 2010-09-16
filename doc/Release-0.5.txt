@@ -1,16 +1,22 @@
-fbus
-fconf
-VNC supported
-st7781 supported.
-gettext supported.
-opengles supported.
-entry support tips.
-label support alignment.
-listview support marquee
-Bug fix and optimization.
-add filebrowser and filechooser
-unicode linebreak
-screen rotate.
-shell
-autotest tool
+1.Bug fix and optimization.
+2.Widgets improvements:
+  o entry supports tips.
+  o label supports alignment.
+  o listview supports marquee.
+  o progressbar support text information.
+3.VNC supported.
+4.screen rotate.
+5.gettext supported.
+6.opengles supported.
+7.unicode linebreak.
+8.gui autotest tool.
+9.IPC supported(fbus).
+10.config service(fconf).
+11.filebrowser and filechooser.
+12.new applications(shell/filebrowser).
+13.more hardware support.
+  o st7781 supported.
+  o zoran TVBOX.
+  o qi-hardware ben.
+14.psp supported.
 

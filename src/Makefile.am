@@ -184,10 +184,12 @@ ftk_HEADERS=\
 	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
 	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
 	ftk_animator_zoom.h ftk_display_mem.h ftk_config.h \
-	ftk_text_layout.h ftk_display_rotate.h ftk_path.h
+	ftk_text_layout.h ftk_display_rotate.h ftk_path.h \
+	ftk_file_system.h ftk_file_browser.h
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
 	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \
-	Android-build.sh Android.mk
+	Android-build.sh Android.mk linebreak/linebreakdef.h linebreak/linebreak.h \
+	ftk_translator.c  ftk_translator.h
 
 

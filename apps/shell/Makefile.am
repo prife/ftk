@@ -14,4 +14,4 @@ shell_SOURCES=main.c ftk_app_shell.c ftk_source_shell.c
 shell_LDFLAGS=$(MYLDFLAGS) -lpthread
 shell_CFLAGS=$(LOCAL_CFLAGS) -DHAS_MAIN
 
-EXTRA_DIST=ftk_app_shell.h
+EXTRA_DIST=ftk_app_shell.h  ftk_source_shell.h
