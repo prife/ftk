@@ -36,11 +36,11 @@
 #zoran
 #######################################################
 export ARCH=mipsisa32
-export TARGET_CFLAGS="-DBIG_ENDIAN -DZORAN"
+export TARGET_CFLAGS="-DUSE_FB_ACTIVATE_ALL"
 export HOST_PARAM=--host=mipsisa32-linux
 export TARGET_CC=mipsisa32-linux-gcc
 export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
-#export WITH_BACKEND="--with-backend=linux-dfb"
+export WITH_BACKEND="--with-backend=linux-dfb"
 
 #codesourery
 #######################################################
@@ -72,6 +72,6 @@ export CFLAGS=$CPPFLAGS
 export CXXFLAGS=$CPPFLAGS
 export DIRS="--libdir=${STAGING}/lib --includedir=${STAGING}/include"
 export CAIRO=cairo
-export TSLIB=tslib
+#export TSLIB=tslib
 export ENABLE_CAIRO="--enable-cairo"
 

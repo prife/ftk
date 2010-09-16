@@ -8,6 +8,7 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 
 static Ret button_start_clicked(void* ctx, void* obj)
 {
+	ftk_widget_show(ctx, 1);
 	ftk_wait_box_start_waiting(ctx);
 
 	return RET_OK;

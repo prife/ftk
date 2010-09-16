@@ -102,6 +102,7 @@ FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
 		ftk_widget_set_attr(thiz, FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
 
 		priv->timer = ftk_source_timer_create(500, (FtkTimer)ftk_widget_invalidate, thiz);
+		ftk_widget_append_child(parent, thiz);
 	}
 	else
 	{

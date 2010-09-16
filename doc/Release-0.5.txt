@@ -5,18 +5,19 @@
   o listview supports marquee.
   o progressbar support text information.
 3.VNC supported.
-4.screen rotate.
-5.gettext supported.
-6.opengles supported.
-7.unicode linebreak.
-8.gui autotest tool.
+4.Screen rotate.
+5.Gettext supported.
+6.Opengles supported.
+7.Unicode linebreak.
+8.Gui autotest tool.
 9.IPC supported(fbus).
-10.config service(fconf).
-11.filebrowser and filechooser.
-12.new applications(shell/filebrowser).
-13.more hardware support.
-  o st7781 supported.
+10.Config service(fconf).
+11.Filebrowser and filechooser.
+12.New applications(shell/filebrowser).
+13.More hardware supported.
+  o st7781.
   o zoran TVBOX.
   o qi-hardware ben.
-14.psp supported.
-
+  o mini4020
+14.PSP supported.
+15.Documents
