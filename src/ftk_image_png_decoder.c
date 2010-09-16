@@ -1,7 +1,7 @@
 /*
- * File: ftk_image_png_decoder.c    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   png format image decoder.
+ * File: ftk_image_png_decoder.c	
+ * Author:	Li XianJing <xianjimli@hotmail.com>
+ * Brief:	png format image decoder.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -137,10 +137,15 @@ static FtkBitmap* load_png (const char *filename)
 		}
 		else 
 		{
-			/* According to PNG_EXPAND_tRNS to build in an alpha channel using trans_value. */
+#if PNG_LIBPNG_VER_MINOR < 4
 			png_byte red = png_ptr->trans_values.red & 0xff;
 			png_byte green = png_ptr->trans_values.green & 0xff;
 			png_byte blue = png_ptr->trans_values.blue & 0xff;
+#else
+			png_byte red = png_ptr->trans_color.red & 0xff;
+			png_byte green = png_ptr->trans_color.green & 0xff;
+			png_byte blue = png_ptr->trans_color.blue & 0xff;
+#endif
 			for(y = 0; y < h; y++)
 			{
 				src = row_pointers[y];

@@ -80,6 +80,7 @@ FTK_BEGIN_DECLS
 Ret  ftk_init(int argc, char* argv[]);
 Ret  ftk_run(void);
 void ftk_quit(void);
+void ftk_deinit(void);
 
 FTK_END_DECLS
 

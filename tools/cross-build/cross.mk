@@ -1,5 +1,5 @@
-all: check zlib png jpeg $(TSLIB) freetype $(CAIRO) libftk
-all_clean:  zlib_clean png_clean jpeg_clean  tslib_clean freetype_clean libftk_clean
+all: check zlib png_new jpeg $(TSLIB) freetype $(CAIRO) libftk
+all_clean:  zlib_clean png_new_clean jpeg_clean  tslib_clean freetype_clean libftk_clean
 
 all_dfb: check zlib png jpeg $(TSLIB) freetype directfb directfb_examples $(CAIRO) libftk
 all_dfb_clean:  zlib_clean png_clean jpeg_clean tslib_clean freetype_clean directfb_clean directfb_examples_clean libftk_clean
@@ -31,6 +31,18 @@ png: libpng-1.2.35
 	make install DESTDIR=/ 
 png_clean:
 	rm -rf libpng-1.2.35/$(ARCH)
+
+packages/libpng-1.4.3.tar.gz:
+	cd packages && wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.4.3.tar.gz
+libpng-1.4.3: packages/libpng-1.4.3.tar.gz
+	tar xf packages/libpng-1.4.3.tar.gz
+png_new: libpng-1.4.3
+	mkdir libpng-1.4.3/$(ARCH); cd libpng-1.4.3/$(ARCH) && \
+	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
+	make clean; make && make install DESTDIR=${STAGING} && \
+	make install DESTDIR=/ 
+png_new_clean:
+	rm -rf libpng-1.4.3/$(ARCH)
 
 packages/jpegsrc.v7.tar.gz:
 	cd packages && wget ftp://ftp.carnet.hr/misc/imagemagick/delegates/jpegsrc.v7.tar.gz
@@ -148,7 +160,7 @@ cairo_clean:
 libftk:
 	cd ftk* && . ./autogen.sh;
 	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
-	../configure --with-fontengine=freetype --enable-profile $(ENABLE_CAIRO) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes --enable-tslib $(HOST_PARAM) --prefix=$(PREFIX)  &&\
+	../configure $(FTK_CONF_OPTION) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 libftk_clean:

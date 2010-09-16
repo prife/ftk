@@ -36,11 +36,11 @@
 #zoran
 #######################################################
 export ARCH=mipsisa32
-export TARGET_CFLAGS="-DUSE_FB_ACTIVATE_ALL"
+export TARGET_CFLAGS="-DUSE_FB_ACTIVATE_ALL -DFTK_FONT_SIZE=20"
 export HOST_PARAM=--host=mipsisa32-linux
 export TARGET_CC=mipsisa32-linux-gcc
 export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
-export WITH_BACKEND="--with-backend=linux-dfb"
+#export WITH_BACKEND="--with-backend=linux-dfb"
 
 #codesourery
 #######################################################
@@ -73,5 +73,5 @@ export CXXFLAGS=$CPPFLAGS
 export DIRS="--libdir=${STAGING}/lib --includedir=${STAGING}/include"
 export CAIRO=cairo
 #export TSLIB=tslib
-export ENABLE_CAIRO="--enable-cairo"
+export FTK_CONF_OPTION="--enable-cairo --disable-tslib --enable-profile --with-fontengine=freetype"
 

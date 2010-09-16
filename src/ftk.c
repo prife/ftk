@@ -54,7 +54,6 @@
 #define FTK_ALLOC_PROFILE(a) a
 #endif
 
-static void ftk_deinit(void);
 static void ftk_init_panel(void);
 
 static Ret ftk_init_bitmap_factory(void)
@@ -108,7 +107,7 @@ static Ret ftk_init_theme(const char* theme)
 	return RET_OK;
 }
 
-static void ftk_deinit(void)
+void ftk_deinit(void)
 {
 	if(ftk_default_input_method_preeditor() != NULL)
 	{
