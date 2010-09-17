@@ -147,7 +147,7 @@ packages/cairo-1.10.0.tar.gz:
 	cd packages && wget http://cairographics.org/releases/cairo-1.10.0.tar.gz
 cairo-1.10.0:packages/cairo-1.10.0.tar.gz
 	tar xf packages/cairo-1.10.0.tar.gz
-cairo: cairo-1.10.0 
+cairo: cairo-1.10.0 pixman fontconfig
 	cd cairo* && mkdir $(ARCH); cd $(ARCH) && \
 	../configure  --enable-ft   --disable-svg  --disable-pdf  --disable-ps \
 	--disable-directfb  --disable-xlib  --disable-xlib-xrender --disable-gobject \

@@ -71,7 +71,7 @@ export CPPFLAGS="-I${STAGING}/${PREFIX}/include $TARGET_CFLAGS"
 export CFLAGS=$CPPFLAGS 
 export CXXFLAGS=$CPPFLAGS
 export DIRS="--libdir=${STAGING}/lib --includedir=${STAGING}/include"
-export CAIRO=cairo
+#export CAIRO=cairo
 #export TSLIB=tslib
-export FTK_CONF_OPTION="--enable-cairo --disable-tslib --enable-profile --with-fontengine=freetype"
+export FTK_CONF_OPTION="--disable-cairo --disable-tslib --disable-profile --with-fontengine=freetype"
 
