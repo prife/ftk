@@ -307,7 +307,7 @@ bool Surface::Save(const char *filename)
 {
 	struct InfoHeader info;
 	BITMAPFILEHEADER header;
-	int fd= open(filename, O_RDWR|O_CREAT|O_TRUNC);
+	int fd= open(filename, O_RDWR|O_CREAT|O_TRUNC, 0666);
 	U16 *pixels;
 	U8 data;
 	int h;
