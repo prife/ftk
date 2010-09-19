@@ -67,8 +67,8 @@ static void create_app_window(void)
 	ftk_widget_set_text(button, "关闭窗口");
 	ftk_button_set_clicked_listener(button, button_close_clicked, win);
 
-	label = ftk_label_create(win, 10, height/2, width-20, 30);
-	ftk_widget_set_text(label, "press F2 to open menu");
+	label = ftk_label_create(win, 10, height/2, width-20, 60);
+	ftk_widget_set_text(label, "Press F2 to open menu, Presss F3 close window.");
 	
 	ftk_snprintf(title, sizeof(title), "window%02d", g_index++);
 	ftk_widget_set_text(win, title);

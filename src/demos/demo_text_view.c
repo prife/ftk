@@ -7,9 +7,9 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-#define TEXT_STR "Multi line editor:\nfirst\nsecond\nthird\nforth\n012345667890qwertyuiopasdfghjklkzxcbnmcutukakdfasiwerksjdfaksdjfaksdjifiwjkaldfkjkalsdfjieirnlkkafjiierklaaa\n1\n2\n3\n\n4\n5\n6\n7\n8\nlast line"
+#define TEXT_STR "libpng is the official PNG reference library. It supports almost all PNG features, is extensible, and has been extensively tested for over 15 years. The home site for development versions (i.e., may be buggy or subject to change or include experimental features) is http://libpng.sourceforge.net/, and the place to go for questions about the library is the png-mng-implement mailing list.\n\nlibpng is available as ANSI C (C89) source code and requires zlib 1.0.4 or later (1.2.3 or later recommended for performance and security reasons). The current public release, libpng 1.4.3, contains fixes for two potential security issues: "
 
-#define TEXT1_STR "a\n\n4\n5\n6\n7\n8\nlast line"
+#define TEXT1_STR "Several versions of libpng through 1.4.2 (and through 1.2.43 in the older series) contain a bug whereby progressive applications such as web browsers (or the rpng2 demo app included in libpng) could receive an extra row of image data beyond the height reported in the header, potentially leading to an out-of-bounds write to memory (depending on how the application is written) and the possibility of execution of an attacker's code with the privileges of the libpng user (including remote compromise in the case of a libpng-based browser visiting a hostile web site). This vulnerability has been assigned ID CVE-2010-1205 (via Mozilla). \n\n4\n5\n6\n7\n8\nlast line"
 
 #ifdef FTK_AS_PLUGIN
 #include "ftk_app_demo.h"

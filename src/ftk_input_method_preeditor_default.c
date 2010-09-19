@@ -242,7 +242,8 @@ FtkImPreeditor* ftk_input_method_preeditor_default_create(void)
 	ftk_widget_set_id(button, IDC_RAW_TEXT);
 	ftk_widget_unset_attr(button, FTK_ATTR_TRANSPARENT);
 
-	gc.mask = FTK_GC_BG | FTK_GC_FG;
+	gc.mask = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
+	gc.font = ftk_default_font();
 	gc.bg = ftk_theme_get_bg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_NORMAL);
 	gc.fg = ftk_theme_get_fg_color(ftk_default_theme(), FTK_BUTTON, FTK_WIDGET_NORMAL);
 	ftk_widget_reset_gc(button, FTK_WIDGET_NORMAL, &gc);
