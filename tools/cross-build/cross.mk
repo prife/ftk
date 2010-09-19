@@ -90,7 +90,7 @@ DirectFB-1.2.9: packages/DirectFB-1.2.9.tar.gz
 	tar xf packages/DirectFB-1.2.9.tar.gz
 directfb: DirectFB-1.2.9
 	mkdir DirectFB-1.2.9/$(ARCH); cd DirectFB-1.2.9/$(ARCH) && \
-	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --enable-unique --enable-freetype --enable-png --enable-jpeg --enable-zlib --enable-fbdev --enable-debug-support &&\
+	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --enable-unique --enable-freetype --enable-png --enable-jpeg --enable-zlib --enable-fbdev --enable-debug-support --with-gfxdrivers= &&\
 	make clean; make && make install DESTDIR=${STAGING} && make install DESTDIR=/ 
 directfb_clean:
 	rm -rf DirectFB-1.2.9/$(ARCH)
@@ -123,7 +123,7 @@ packages/fontconfig-2.8.0.tar.gz:
 	cd packages && wget http://www.fontconfig.org/release/fontconfig-2.8.0.tar.gz
 fontconfig-2.8.0:packages/fontconfig-2.8.0.tar.gz
 	tar xf packages/fontconfig-2.8.0.tar.gz
-fontconfig: fontconfig-2.8.0 expat freetype
+fontconfig: fontconfig-2.8.0 expat 
 	cd fontconfig* && mkdir $(ARCH); cd $(ARCH) && \
 	../configure --disable-libxml2 --with-arch=$(ARCH)-linux $(HOST_PARAM) --prefix=$(PREFIX) && \
 	make clean; make && make install DESTDIR=${STAGING} && \
