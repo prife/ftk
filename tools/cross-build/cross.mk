@@ -90,7 +90,7 @@ DirectFB-1.2.9: packages/DirectFB-1.2.9.tar.gz
 	tar xf packages/DirectFB-1.2.9.tar.gz
 directfb: DirectFB-1.2.9
 	mkdir DirectFB-1.2.9/$(ARCH); cd DirectFB-1.2.9/$(ARCH) && \
-	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --with-gfxdrivers= $(HOST_PARAM) --prefix=$(PREFIX) --enable-unique --enable-freetype --enable-png --enable-jpeg --enable-zlib --enable-fbdev --enable-debug-support &&\
+	../configure $(HOST_PARAM) --prefix=$(PREFIX) --with-inputdrivers="keyboard,linuxinput,tslib" --enable-unique --enable-freetype --enable-png --enable-jpeg --enable-zlib --enable-fbdev --enable-debug-support &&\
 	make clean; make && make install DESTDIR=${STAGING} && make install DESTDIR=/ 
 directfb_clean:
 	rm -rf DirectFB-1.2.9/$(ARCH)
