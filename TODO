@@ -1,5 +1,10 @@
+o tab widget
+o layout widget
+o animator widget
+o label marquee
+o ui builder
+o macro to settings.
 o fribidi
-o screen rotate
 o document
 o port webkit
 o port j2me
