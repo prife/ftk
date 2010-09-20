@@ -126,7 +126,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 			if(p_x < x || p_y < y || (p_x > (x + w)) || (p_y > (y + h)))
 			{
-				if(ftk_widget_has_attr(thiz, FTK_ATTR_POPUP))
+				if(thiz->ref > 1 && ftk_widget_has_attr(thiz, FTK_ATTR_POPUP))
 				{
 					if(ftk_dialog_is_modal(thiz))
 					{
