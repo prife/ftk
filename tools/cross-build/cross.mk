@@ -158,8 +158,8 @@ cairo_clean:
 	cd cairo* && rm -fr $(ARCH)
 
 libftk:
-	cd ftk* && . ./autogen.sh;
-	mkdir ftk/$(ARCH);  cd ftk/$(ARCH) && \
+	cd ftk* && . ./autogen.sh; \
+	mkdir $(ARCH);  cd $(ARCH) && \
 	../configure $(FTK_CONF_OPTION) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
