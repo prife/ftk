@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-29 22:44+0800\n"
+"POT-Creation-Date: 2010-09-20 07:12-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,19 +25,19 @@ msgstr ""
 msgid "Calculator"
 msgstr ""
 
-#: apps/desktop/main.c:228
+#: apps/desktop/main.c:260
 msgid "Shutdown"
 msgstr ""
 
-#: apps/desktop/main.c:236
+#: apps/desktop/main.c:268
 msgid "Stop VNC"
 msgstr ""
 
-#: apps/desktop/main.c:240
+#: apps/desktop/main.c:272
 msgid "Start VNC"
 msgstr ""
 
-#: apps/desktop/main.c:294
+#: apps/desktop/main.c:344
 msgid "Hello, GetText"
 msgstr ""
 
@@ -45,11 +45,11 @@ msgstr ""
 msgid "File Browser"
 msgstr ""
 
-#: apps/shell/ftk_app_shell.c:71 apps/shell/ftk_app_shell.c:190
+#: apps/shell/ftk_app_shell.c:69 apps/shell/ftk_app_shell.c:193
 msgid "Shell"
 msgstr ""
 
-#: apps/shell/ftk_app_shell.c:194
+#: apps/shell/ftk_app_shell.c:197
 msgid "Input command at here."
 msgstr ""
 
@@ -81,7 +81,7 @@ msgstr ""
 msgid "dialog"
 msgstr ""
 
-#: src/demos/demo_progress_bar.c:33
+#: src/demos/demo_progress_bar.c:39
 msgid "progress_bar"
 msgstr ""
 
@@ -161,7 +161,7 @@ msgstr ""
 msgid "entry"
 msgstr ""
 
-#: src/demos/demo_wait_box.c:28
+#: src/demos/demo_wait_box.c:29
 msgid "wait_box"
 msgstr ""
 
@@ -195,10 +195,9 @@ msgid ".."
 msgstr ""
 
 #: src/ftk_file_browser.c:161
-#, c-format
 msgid ""
 "Are you sure to remove:\n"
-" %s"
+" "
 msgstr ""
 
 #: src/ftk_file_browser.c:163 src/ftk_file_browser.c:322
@@ -206,10 +205,7 @@ msgid "Remove"
 msgstr ""
 
 #: src/ftk_file_browser.c:173
-#, c-format
-msgid ""
-"Remove failed:\n"
-" %s"
+msgid "Remove failed:\n"
 msgstr ""
 
 #: src/ftk_file_browser.c:241

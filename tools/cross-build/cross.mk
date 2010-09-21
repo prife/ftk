@@ -164,5 +164,6 @@ libftk:
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 libftk_clean:
-	rm -rf ftk/$(ARCH)
+	cd ftk* && rm -rf $(ARCH)
+
 
