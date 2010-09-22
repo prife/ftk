@@ -405,12 +405,14 @@ GLAPI EGLBoolean APIENTRY eglSwapBuffers (EGLDisplay dpy, EGLSurface draw)
 	if(ftk_default_display()->update_directly == NULL)
 	{
 		ftk_bitmap_copy_from_data_rgb565(bitmap, colors, rect.width, rect.height, &rect);
-		ftk_display_update(display, bitmap, &rect, xoffset, yoffset);
+		ftk_display_update_and_notify(display, bitmap, &rect, xoffset, yoffset);
 	}
 	else
 	{
+		ftk_display_notify(display, 1, NULL, &rect, xoffset, yoffset);
 		ftk_display_update_directly(display, FTK_PIXEL_RGB565, 
 			colors, rect.width, rect.height, xoffset, yoffset);
+		ftk_display_notify(display, 0, NULL, &rect, xoffset, yoffset);
 	}
 
 	eglRecordError(EGL_SUCCESS);
