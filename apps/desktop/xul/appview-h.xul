@@ -6,4 +6,5 @@
 		bg_image[active]="icons/tray_handle_pressed-h.png" 
 		bg_image[disable]="icons/tray_handle_normal-h.png" 
 		/>
+	<icon_view id="99" x="0" y="0" w="$ww-56" h="$wh" visible="1" value="72"/>
 </window>
