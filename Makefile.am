@@ -1,4 +1,4 @@
-SUBDIRS=po src data theme tools testdata doc 
+SUBDIRS=po src data theme tools testdata docs
 
 if ENABLE_OPENGLES
 SUBDIRS += opengles
