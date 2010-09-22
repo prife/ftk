@@ -13,6 +13,7 @@ AC_PROG_CXX
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 AC_C_BIGENDIAN
+PKG_PROG_PKG_CONFIG
 
 # Checks for libraries.
 # FIXME: Replace `main' with a function in `-ljpeg':
@@ -171,6 +172,8 @@ fi
 AC_C_INLINE
 AC_TYPE_SIZE_T
 
+# check for gtk-doc
+GTK_DOC_CHECK([1.10],[--flavour no-tmpl])
 
 GETTEXT_PACKAGE=ftk
 AC_SUBST(GETTEXT_PACKAGE)
@@ -184,6 +187,7 @@ AM_GLIB_GNU_GETTEXT
 AC_CONFIG_FILES([ftk.pc
 				Makefile
                 docs/Makefile
+                docs/reference/Makefile
                 po/Makefile.in
                 theme/Makefile
                 theme/default/Makefile

@@ -14,3 +14,5 @@ automake --force --add-missing	|| exit 1
 echo "autoconf.."
 autoconf --force		|| exit 1
 
+gtkdocize || exit 1
+
