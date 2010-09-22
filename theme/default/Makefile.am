@@ -50,6 +50,7 @@ theme_DATA=\
 	wait_box.png \
 	warning.png theme.xml \
 	folder.png  mime_image.png  mime_text.png \
-	mime_unknown.png mime_audio.png up.png
+	mime_unknown.png mime_audio.png up.png \
+	progressbar_i_bg.png progressbar_i_cursor.png
 
 EXTRA_DIST=$(theme_DATA)

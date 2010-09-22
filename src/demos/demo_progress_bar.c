@@ -68,7 +68,8 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	timer = ftk_source_timer_create(1000, update_progress, progress_bar);
 	ftk_main_loop_add_source(ftk_default_main_loop(), timer);
 	ftk_widget_set_user_data(progress_bar, on_window_destroy, timer);
-	
+	ftk_progress_bar_set_interactive(progress_bar, 1);
+
 	progress_bar = ftk_progress_bar_create(win, 10, height/2, width, 20);
 	ftk_progress_bar_set_percent(progress_bar, 20);
 	timer = ftk_source_timer_create(1000, update_progress, progress_bar);

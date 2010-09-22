@@ -76,6 +76,8 @@ typedef Ret (*FtkBitmapCopyFromData)(FtkBitmap* bitmap,
 typedef Ret (*FtkBitmapCopyToData)(FtkBitmap* bitmap, FtkRect* rect, 
 	void* data, int ox, int oy, size_t dw, size_t dh);
 
+#define FTK_BITMAP_UNREF(bitmap) if(bitmap != NULL) { ftk_bitmap_unref(bitmap); bitmap = NULL;}
+
 FTK_END_DECLS
 
 #endif/*FTK_BITMAP_H*/

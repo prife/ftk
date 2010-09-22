@@ -26,9 +26,11 @@
  * History:
  * ================================================================
  * 2009-11-15 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-09-22 Li XianJing <xianjimli@hotmail.com> add interactive feature.
  *
  */
 
+#include "ftk_window.h"
 #include "ftk_globals.h"
 #include "ftk_text_layout.h"
 #include "ftk_progress_bar.h"
@@ -36,6 +38,10 @@
 typedef struct _PrivInfo
 {
 	int percent;
+	int interactive; 
+	int mouse_pressed;
+	FtkBitmap* bg;
+	FtkBitmap* cursor;
 }PrivInfo;
 
 static Ret ftk_progress_bar_on_event(FtkWidget* thiz, FtkEvent* event)
@@ -65,7 +71,7 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 		ftk_canvas_draw_round_rect(canvas, x+1, y+1, fg_width-2, height-2, 1);
 		if(fg_width < width && fg_width > 2)
 		{
-			ftk_canvas_fast_fill_rect(canvas, x + fg_width - 2, y+1, 2, height-2);
+			ftk_canvas_fast_fill_rect(canvas, x + fg_width - 3, y+1, 3, height-2);
 		}
 	}
 	
@@ -94,11 +100,122 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 	FTK_END_PAINT();
 }
 
+static Ret ftk_progress_bar_on_event_interactive(FtkWidget* thiz, FtkEvent* event)
+{
+	DECL_PRIV0(thiz, priv);
+	int percent = priv->percent;
+	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
+	
+	if(event->type == FTK_EVT_KEY_UP)
+	{
+		switch(event->u.key.code)
+		{
+			case FTK_KEY_HOME:
+			{
+				percent  = 0;
+				break;
+			}
+			case FTK_KEY_END:
+			{
+				percent  = 100;
+				break;
+			}
+			case FTK_KEY_PAGEUP:
+			{
+				percent += 10;
+				break;
+			}
+			case FTK_KEY_PAGEDOWN:
+			{
+				percent -= 10;
+				break;
+			}
+			case FTK_KEY_LEFT:
+			case FTK_KEY_DOWN:
+			{
+				percent--;
+				break;
+			}
+			case FTK_KEY_UP:
+			case FTK_KEY_RIGHT:
+			{
+				percent++;
+				break;
+			}
+			default:break;
+		}
+	}
+	else if(event->type == FTK_EVT_MOUSE_DOWN)
+	{
+		priv->mouse_pressed = 1;
+		ftk_window_grab(ftk_widget_toplevel(thiz), thiz);
+	}
+	else if(event->type == FTK_EVT_MOUSE_MOVE && priv->mouse_pressed)
+	{
+		int width = ftk_widget_width(thiz);
+		int offset = event->u.mouse.x - ftk_widget_left_abs(thiz);
+		
+		percent = 100 * offset / width;
+	}
+	else if(event->type == FTK_EVT_MOUSE_UP)
+	{
+		int width = ftk_widget_width(thiz);
+		int offset = event->u.mouse.x - ftk_widget_left_abs(thiz);
+		
+		priv->mouse_pressed = 0;
+		percent = 100 * offset / width;
+		ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
+	}
+	else
+	{
+		return RET_OK;
+	}
+
+	ftk_progress_bar_set_percent(thiz, percent);
+
+	return RET_OK;
+}
+
+static Ret ftk_progress_bar_on_paint_interactive(FtkWidget* thiz)
+{
+	int ox = 0;
+	int oy = 0;
+	DECL_PRIV0(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	oy = y + FTK_HALF(height - ftk_bitmap_height(priv->bg));
+	ftk_canvas_draw_bg_image(canvas, priv->bg, FTK_BG_FOUR_CORNER, x, oy, width,
+		ftk_bitmap_height(priv->bg));
+
+	ox = x + width * priv->percent / 100 - FTK_HALF(ftk_bitmap_width(priv->cursor));
+	oy = y + FTK_HALF(height) - FTK_HALF(ftk_bitmap_height(priv->cursor));
+
+	if(ox < x)
+	{
+		ox = x;
+	}
+
+	if(ox > (x + width - ftk_bitmap_width(priv->cursor)))
+	{
+		ox = x + width - ftk_bitmap_width(priv->cursor);
+	}
+
+	ftk_canvas_draw_bitmap(canvas, priv->cursor, 0, 0, ftk_bitmap_width(priv->cursor), 
+		ftk_bitmap_height(priv->cursor), ox, oy);
+	
+	FTK_END_PAINT();
+}
+
 static void ftk_progress_bar_destroy(FtkWidget* thiz)
 {
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
+
+		FTK_BITMAP_UNREF(priv->bg);
+		FTK_BITMAP_UNREF(priv->cursor);
+
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
@@ -113,14 +230,12 @@ FtkWidget* ftk_progress_bar_create(FtkWidget* parent, int x, int y, int width, i
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {0};
-		gc.mask = FTK_GC_FG | FTK_GC_BG;
-
 		thiz->on_event = ftk_progress_bar_on_event;
 		thiz->on_paint = ftk_progress_bar_on_paint;
 		thiz->destroy  = ftk_progress_bar_destroy;
 
-		ftk_widget_init(thiz, FTK_PROGRESS_BAR, 0, x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
+		ftk_widget_init(thiz, FTK_PROGRESS_BAR, 0, x, y, width, height, 
+			FTK_ATTR_TRANSPARENT|FTK_ATTR_INSENSITIVE);
 		ftk_widget_append_child(parent, thiz);
 	}
 	else
@@ -135,8 +250,8 @@ Ret ftk_progress_bar_set_percent(FtkWidget* thiz, int percent)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
-	return_val_if_fail(percent >=0, RET_FAIL);
 
+	percent = percent < 0 ? 0 : percent;
 	percent = percent > 100 ? 100 : percent;
 	if(percent != priv->percent)
 	{
@@ -155,4 +270,36 @@ int ftk_progress_bar_get_percent(FtkWidget* thiz)
 	return priv->percent;
 }
 
+Ret ftk_progress_bar_set_interactive(FtkWidget* thiz, int interactive)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->interactive = interactive;
+	if(interactive)
+	{
+		if(priv->bg == NULL)
+		{
+			priv->bg = ftk_theme_load_image(ftk_default_theme(), 
+				"progressbar_i_bg"FTK_STOCK_IMG_SUFFIX); 
+		}
+
+		if(priv->cursor == NULL)
+		{
+			priv->cursor = ftk_theme_load_image(ftk_default_theme(), 
+				"progressbar_i_cursor"FTK_STOCK_IMG_SUFFIX); 
+		}
+
+		thiz->on_event = ftk_progress_bar_on_event_interactive;
+		thiz->on_paint = ftk_progress_bar_on_paint_interactive;
+	}
+	else
+	{
+		thiz->on_event = ftk_progress_bar_on_event;
+		thiz->on_paint = ftk_progress_bar_on_paint;
+	}
+	ftk_widget_set_insensitive(thiz, !interactive);
+
+	return RET_OK;
+}
 
