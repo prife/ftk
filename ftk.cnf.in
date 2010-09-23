@@ -2,6 +2,6 @@
 <cursor        enable="0" />
 <theme         name="default" />
 
-<data_dir      value="@prefix@/share/ftk/base/data" /> 
+<data_dir      value="@prefix@/share/ftk/base" /> 
 <test_data_dir value="@prefix@/share/ftk/testdata" />
 
