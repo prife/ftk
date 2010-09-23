@@ -7,10 +7,10 @@
 
 #openmoko
 #######################################################
-#export ARCH=arm
-#export HOST_PARAM=--host=arm-linux
-#export TARGET_CC=arm-linux-gcc
-#export PATH=/usr/local/openmoko/arm/bin/:$PATH
+export ARCH=arm
+export HOST_PARAM=--host=arm-linux
+export TARGET_CC=arm-linux-gcc
+export PATH=/usr/local/openmoko/arm/bin/:$PATH
 
 #mini4020
 #######################################################
@@ -35,11 +35,11 @@
 
 #zoran
 #######################################################
-export ARCH=mipsisa32
-export TARGET_CFLAGS="-DUSE_FB_ACTIVATE_ALL -DFTK_FONT_SIZE=20"
-export HOST_PARAM=--host=mipsisa32-linux
-export TARGET_CC=mipsisa32-linux-gcc
-export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
+#export ARCH=mipsisa32
+#export TARGET_CFLAGS="-DUSE_FB_ACTIVATE_ALL -DFTK_FONT_SIZE=20"
+#export HOST_PARAM=--host=mipsisa32-linux
+#export TARGET_CC=mipsisa32-linux-gcc
+#export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
 #export WITH_BACKEND="--with-backend=linux-dfb"
 
 #codesourery
@@ -62,7 +62,7 @@ export PATH=/opt/timesys/toolchains/mipsisa32-linux/bin:$PATH
 #export SIGMA_LIBS="-L$RUA_DIR/lib -Xlinker --start-group -ldcc -lrmmonitoring -lrmvdemux -lrmjpeg -lrmungif -lrmpng -lrmzlib -lrmhttp -lrmscc -lrmavicore -lrmmp4api -lrmmp4 -lrmmp4core -lrmdescriptordecoder -lrmmpeg4framework -lrmrtk86 -lrmwmaprodecoder -lrmwmaprodecodercore -lrmasfdemux -lrmasfdemuxcore -lrmstreamingprotocols -lrmcpputils -lrmcapture -lrmcw -lrmcore -lrmcdfs -lrua -lllad -lrmdtcpinterface -lrmdemuxwritekeyapi -lrmsoftmixer -lrmwmdrmndstub -lgbus -lrmdrm -Xlinker --end-group  -ldl -rdynamic"
 
 export BUILD_DIR=$PWD/$ARCH
-export PREFIX=/opt/ftk
+export PREFIX=/opt/ftk-$ARCH
 export STAGING=${BUILD_DIR}/staging
 export DIST=${BUILD_DIR}/dist
 export PKG_CONFIG_PATH=${STAGING}/${PREFIX}/lib/pkgconfig/
