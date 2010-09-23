@@ -186,6 +186,7 @@ AM_GLIB_GNU_GETTEXT
 # Checks for library functions.
 AC_CONFIG_FILES([ftk.pc
 				Makefile
+				ftk.cnf
                 docs/Makefile
                 docs/reference/Makefile
                 po/Makefile.in

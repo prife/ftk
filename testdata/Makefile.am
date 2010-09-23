@@ -10,3 +10,6 @@ EXTRA_DIST=\
 	Clock.png       IP.png         Photos.png     Stock.png\
 	Customize.png   iradio.png     png1.png       Twitter.png\
 	jpeg1.jpg       t1.bmp  t24.bmp  t4.bmp  t8.bmp
+
+testdatadir=$(datadir)/ftk/testdata
+testdata_DATA=$(EXTRA_DIST)
