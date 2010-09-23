@@ -84,7 +84,8 @@ static void create_ani_window(int type, int sync)
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_close_clicked, win);
 	
-	ftk_snprintf(filename, FTK_MAX_PATH, "%s/jpeg1.jpg", TESTDATA_DIR);
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/jpeg1.jpg", 
+		ftk_config_get_test_data_dir(ftk_default_config()));
 	gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 	ftk_widget_set_gc(win, FTK_WIDGET_NORMAL, &gc);
 	ftk_gc_reset(&gc);

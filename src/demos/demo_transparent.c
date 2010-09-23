@@ -11,7 +11,8 @@ static Ret button_open_image_dialog(void* ctx, void* obj)
 	bg.r = 0xff;
 	bg.g = 0xff;
 	bg.b = 0xff;
-	ftk_snprintf(filename, FTK_MAX_PATH, "%s/earth.png", TESTDATA_DIR);
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/earth.png", 
+		ftk_config_get_test_data_dir(ftk_default_config()));
 	bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 	bg.a = 0x0;
 	create_dialog(bitmap, bg);

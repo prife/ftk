@@ -83,7 +83,8 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	{
 		for(j = 0; j < width/80; j++)
 		{
-			ftk_snprintf(filename, sizeof(filename), "%s%s", TESTDATA_DIR, pngs[i + 2]);
+			ftk_snprintf(filename, sizeof(filename), "%s%s", 
+				ftk_config_get_test_data_dir(ftk_default_config()), pngs[i + 2]);
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 			button = ftk_button_create(win, j * 80, i * 80, ftk_bitmap_width(gc.bitmap), ftk_bitmap_height(gc.bitmap));
 			if(i == 0)
@@ -93,12 +94,14 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 			ftk_widget_set_gc(button, FTK_WIDGET_NORMAL, &gc);
 			ftk_bitmap_unref(gc.bitmap);
 
-			ftk_snprintf(filename, sizeof(filename), "%s%s", TESTDATA_DIR, pngs[1]);
+			ftk_snprintf(filename, sizeof(filename), "%s%s", 
+				ftk_config_get_test_data_dir(ftk_default_config()), pngs[1]);
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 			ftk_widget_set_gc(button, FTK_WIDGET_FOCUSED, &gc);
 			ftk_bitmap_unref(gc.bitmap);
 
-			ftk_snprintf(filename, sizeof(filename), "%s%s", TESTDATA_DIR, pngs[0]);
+			ftk_snprintf(filename, sizeof(filename), "%s%s", 
+				ftk_config_get_test_data_dir(ftk_default_config()), pngs[0]);
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 			ftk_widget_set_gc(button, FTK_WIDGET_ACTIVE, &gc);
 			ftk_bitmap_unref(gc.bitmap);

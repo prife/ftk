@@ -7,6 +7,7 @@ static void paint_clip_image(int x, int y, int width, int height)
 {
 	int              w, h;
 	cairo_surface_t *image;
+	char filename[FTK_MAX_PATH+1] = {0};
 
 	cairo_translate (cr, x, y);
 	
@@ -14,7 +15,10 @@ static void paint_clip_image(int x, int y, int width, int height)
 	cairo_clip (cr);
 	cairo_new_path (cr); /* path not consumed by clip()*/
 
-	image = cairo_image_surface_create_from_png (TESTDATA_DIR"/png1.png");
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/png1.png", 
+		ftk_config_get_test_data_dir(ftk_default_config()));
+	image = cairo_image_surface_create_from_png (filename);
+
 	w = cairo_image_surface_get_width (image);
 	h = cairo_image_surface_get_height (image);
 
@@ -96,9 +100,13 @@ static void paint_pic(int x, int y, int width, int height)
 	cairo_surface_t *image;
 	cairo_pattern_t *pattern;
 	cairo_matrix_t   matrix;
+	char filename[FTK_MAX_PATH+1] = {0};
 
 	cairo_translate (cr, x, y);
-	image = cairo_image_surface_create_from_png (TESTDATA_DIR"/png1.png");
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/png1.png", 
+		ftk_config_get_test_data_dir(ftk_default_config()));
+	image = cairo_image_surface_create_from_png (filename);
+
 	w = cairo_image_surface_get_width (image);
 	h = cairo_image_surface_get_height (image);
 

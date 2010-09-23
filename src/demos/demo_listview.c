@@ -88,9 +88,11 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 
 	model = ftk_list_model_default_create(10);
 	render = ftk_list_render_default_create();
-	ftk_snprintf(filename, FTK_MAX_PATH, "%s/alarm/%s",TESTDATA_DIR, FTK_STOCK_IMG_SUFFIX);
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/alarm/%s",
+		ftk_config_get_test_data_dir(ftk_default_config()), FTK_STOCK_IMG_SUFFIX);
 	left_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
-	ftk_snprintf(filename, FTK_MAX_PATH, "%s/search/%s",  TESTDATA_DIR, FTK_STOCK_IMG_SUFFIX);
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/search/%s",  
+	ftk_config_get_test_data_dir(ftk_default_config()), FTK_STOCK_IMG_SUFFIX);
 	right_icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
 
 	g_index = 0;
