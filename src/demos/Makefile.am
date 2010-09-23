@@ -6,7 +6,7 @@ noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog 
 	demo_menu demo_entry demo_expand demo_zoom demo_progress_bar demo_check_button demo_wait_box \
 	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview demo_hello \
 	demo_fullscreen demo_icon_view demo_text_view demo_msgbox demo_popup demo_alpha \
-	demo_combo_box demo_ime demo_statusbar demo_file_browser
+	demo_combo_box demo_ime demo_statusbar demo_file_browser demo_tab
 
 LOCAL_CFLAGS=-I$(abs_top_srcdir)/apps/common
 libftk_demos_la_SOURCES=demo_button.c demo_alpha.c demo_label.c demo_image.c \
@@ -15,7 +15,7 @@ libftk_demos_la_SOURCES=demo_button.c demo_alpha.c demo_label.c demo_image.c \
 	demo_scroll_bar.c demo_sprite.c demo_xul.c demo_transparent.c demo_listview.c \
 	demo_fullscreen.c demo_icon_view.c demo_text_view.c demo_msgbox.c demo_popup.c \
 	demo_combo_box.c demo_ime.c demo_statusbar.c demo_file_browser.c ftk_app_demo.c \
-	demo_hello.c
+	demo_hello.c demo_tab.c
 
 libftk_demos_la_LDFLAGS=$(MYLDFLAGS)
 libftk_demos_la_CFLAGS=$(LOCAL_CFLAGS) -DFTK_AS_PLUGIN
@@ -36,6 +36,9 @@ demo_bidi_LDFLAGS=$(MYLDFLAGS)
 
 libftk_demos_la_SOURCES += demo_bidi.c
 endif
+
+demo_tab_SOURCES=demo_tab.c
+demo_tab_LDFLAGS=$(MYLDFLAGS)
 
 demo_file_browser_SOURCES=demo_file_browser.c
 demo_file_browser_LDFLAGS=$(MYLDFLAGS)

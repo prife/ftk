@@ -855,6 +855,11 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y)
 	int w    = ftk_widget_width(thiz);
 	int h    = ftk_widget_height(thiz);
 
+	if(!ftk_widget_is_visible(thiz))
+	{
+		return NULL;
+	}
+
 	if(x < left || y < top || (x > (left + w)) || (y > (top + h)))
 	{
 		return NULL;

@@ -2,6 +2,7 @@ o tab widget
 o layout widget
 o animator widget
 o label marquee
+o opengles backend.
 o ui builder
 o macro to settings.
 o fribidi

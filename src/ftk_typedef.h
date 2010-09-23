@@ -139,6 +139,7 @@ typedef enum _FtkWidgetType
 	FTK_ICON_VIEW,
 	FTK_TEXT_VIEW,
 	FTK_COMBO_BOX,
+	FTK_TAB,
 	FTK_WIDGET_TYPE_NR
 }FtkWidgetType;
 

@@ -33,7 +33,7 @@
 int main(int argc, char* argv[])
 {
 	FtkColor color = {0};
-	ftk_set_allocator(ftk_allocator_default_create());
+	ftk_init(argc, argv);
 	FtkWidget* thiz = FTK_ZALLOC(sizeof(FtkWidget));
 	FtkCanvas* canvas = ftk_canvas_create(240, 320, color);
 	ftk_widget_init(thiz, 1, 100, 0, 0, 0, 0, 0);

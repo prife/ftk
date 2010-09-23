@@ -52,6 +52,7 @@ theme_DATA=\
 	folder.png  mime_image.png  mime_text.png \
 	mime_unknown.png mime_audio.png up.png \
 	progressbar_i_bg.png progressbar_i_cursor.png \
-	more.png
+	more.png tab-bar-pressed.png   tab-normal.png \
+	tab-selected.png tab-bar-selected.png  tab-pressed.png
 
 EXTRA_DIST=$(theme_DATA)

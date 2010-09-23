@@ -6,10 +6,13 @@ noinst_PROGRAMS=label_test widget_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
-	lookup_table_test config_test fs_test
+	lookup_table_test config_test fs_test tab_test
 
 fs_test_SOURCES=fs_test.c
 fs_test_LDFLAGS=$(MYLDFLAGS)
+
+tab_test_SOURCES=tab_test.c
+tab_test_LDFLAGS=$(MYLDFLAGS)
 
 bin_PROGRAMS=display_test
 display_test_SOURCES=display_test.c
