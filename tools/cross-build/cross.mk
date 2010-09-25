@@ -32,17 +32,17 @@ png: libpng-1.2.35
 png_clean:
 	rm -rf libpng-1.2.35/$(ARCH)
 
-packages/libpng-1.4.3.tar.gz:
-	cd packages && wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.4.3.tar.gz
-libpng-1.4.3: packages/libpng-1.4.3.tar.gz
-	tar xf packages/libpng-1.4.3.tar.gz
-png_new: libpng-1.4.3
-	mkdir libpng-1.4.3/$(ARCH); cd libpng-1.4.3/$(ARCH) && \
+packages/libpng-1.4.4.tar.gz:
+	cd packages && wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.4.4.tar.gz
+libpng-1.4.4: packages/libpng-1.4.4.tar.gz
+	tar xf packages/libpng-1.4.4.tar.gz
+png_new: libpng-1.4.4
+	mkdir libpng-1.4.4/$(ARCH); cd libpng-1.4.4/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 png_new_clean:
-	rm -rf libpng-1.4.3/$(ARCH)
+	rm -rf libpng-1.4.4/$(ARCH)
 
 packages/jpegsrc.v7.tar.gz:
 	cd packages && wget ftp://ftp.carnet.hr/misc/imagemagick/delegates/jpegsrc.v7.tar.gz
