@@ -1,1 +1,1 @@
-SUBDIRS=linux windows psp ucos-ii
+SUBDIRS=linux windows psp ucos-ii iphone

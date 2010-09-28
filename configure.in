@@ -203,11 +203,13 @@ AC_CONFIG_FILES([ftk.pc
                 src/backend/native/Makefile
                 src/backend/ucosii/Makefile
                 src/backend/sigma/Makefile
+                src/backend/iphone/Makefile
                 src/backend/psp/Makefile
                 src/backend/x11-emu/Makefile
                 src/backend/win32/Makefile
                 src/os/Makefile
                 src/os/linux/Makefile
+                src/os/iphone/Makefile
                 src/os/windows/Makefile
                 src/os/psp/Makefile
                 src/os/ucos-ii/Makefile

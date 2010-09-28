@@ -32,12 +32,28 @@
 #include "ftk_log.h"
 #include "ftk_globals.h"
 
+static FILE* log_file = NULL;
+
 Ret ftk_log(const char* format, va_list ap)
 {
 	char buffer[1024] = {0};
 	ftk_vsnprintf(buffer, sizeof(buffer), format, ap);
 
 	printf(buffer);
+
+#ifdef IPHONE 
+	if (log_file == NULL)
+	{
+		log_file = fopen("log_file.txt", "a+");
+		if (log_file == NULL)
+		{
+			return RET_OK;
+		}
+	}
+
+	fprintf(log_file, "%s", buffer);
+	fflush(log_file);
+#endif
 
 	return RET_OK;
 }

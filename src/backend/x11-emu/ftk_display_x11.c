@@ -140,6 +140,12 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 	ftk_sscanf(DISPLAY_PARAM, "linux-x11:%dx%d", &width, &height);
 
 	ftk_logd("%s width=%d height=%d\n", __func__, width, height);
+	if(width <= 0 || height <= 0)
+	{
+		width = 320;
+		height = 480;
+	}
+
 	win = XCreateSimpleWindow(display, RootWindow(display, screen),
 		0, 0, width, height, 3, BlackPixel(display, screen), WhitePixel(display, screen));
 	XSelectInput(display, win, ExposureMask|KeyPressMask |KeyReleaseMask| ButtonPressMask 

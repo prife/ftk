@@ -48,6 +48,10 @@
 #include "ftk_image_win32_decoder.h"
 #endif
 
+#ifdef IPHONE
+#include "ftk_image_iphone_decoder.h"
+#endif
+
 struct _FtkBitmapFactory
 {
 	int nr;
@@ -74,6 +78,10 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void)
 
 #ifdef WIN32
 		ftk_bitmap_factory_add_decoder(thiz, ftk_image_win32_decoder_create());
+#endif
+
+#ifdef IPHONE
+		ftk_bitmap_factory_add_decoder(thiz, ftk_image_iphone_decoder_create());
 #endif
 	}
 

@@ -1,9 +1,9 @@
 /*
- * File: ftk_platform.h    
- * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   
+ * File: ftk_image_iphone_decoder.h
+ * Author:  ngwsx2008 <ngwsx2008@126.com>
+ * Brief:  image decoder implementation for iphone. 
  *
- * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ * Copyright (c) 2009 - 2010  ngwsx2008 <ngwsx2008@126.com>
  *
  * Licensed under the Academic Free License version 2.1
  *
@@ -25,45 +25,19 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-09-28 ngwsx2008 <ngwsx2008@126.com> created.
  *
  */
-#ifndef FTK_PLATFORM_H
-#define FTK_PLATFORM_H
 
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+#ifndef FTK_IMAGE_IPHONE_DECODER_H
+#define FTK_IMAGE_IPHONE_DECODER_H
 
-#ifdef LINUX
-#include "ftk_linux.h"
-#endif
+#include "ftk_image_decoder.h"
 
-#ifdef WIN32
-#ifdef UCOS_SIM
-#include "ftk_ucos_sim.h"
-#else
-#include "ftk_win32.h"
-#endif
-#endif
+FTK_BEGIN_DECLS
 
-#ifdef ARM_ADS
-#include "ftk_ads.h"
-#endif
+FtkImageDecoder* ftk_image_iphone_decoder_create(void);
 
-#ifdef PSP
-#include "ftk_psp.h"
-#endif
+FTK_END_DECLS
 
-#ifdef IPHONE
-#include "ftk_iphone.h"
-#endif
-
-int  ftk_platform_init(int argc, char** argv);
-void ftk_platform_deinit(void);
-size_t ftk_get_relative_time(void);
-
-#endif/*FTK_PLATFORM_H*/
-
+#endif/*FTK_IMAGE_IPHONE_DECODER_H*/
