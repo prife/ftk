@@ -33,7 +33,11 @@
 #define FTK_DISPLAY_FB_H
 #include "ftk_display.h"
 
+FTK_BEGIN_DECLS
+
 FtkDisplay* ftk_display_gles_create(void);
+
+FTK_END_DECLS
 
 #endif/*FTK_DISPLAY_FB_H*/
 

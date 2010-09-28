@@ -1,21 +1,29 @@
 LOCAL_PATH:= $(call my-dir)
 FTK_CFLAGS :=	-DHAS_PNG -DHAS_JPEG -DHAS_BMP -DFTK_FONT="\"unicode.fnt\"" -DDATA_DIR="\"/data/ftk/base\"" \
-	-DFTK_FB_NAME="\"/dev/graphics/fb0\"" -DUSE_LINUX_NATIVE -DLOCAL_DATA_DIR="\"./ftk/base\""\
-	-DFTK_DATA_ROOT="\"/data/ftk\"" -DTESTDATA_DIR="\"/data/ftk/testdata\"" \
+	-DUSE_LINUX_NATIVE -DLOCAL_DATA_DIR="\"./ftk/base\""\
+	-DFTK_DATA_ROOT="\"/data/ftk\"" -DTESTDATA_DIR="\"/data/ftk/base/testdata\"" \
 	-I$(LOCAL_PATH)/os/linux -I$(LOCAL_PATH)/backend/native -DFTK_SUPPORT_C99 \
-	-I$(LOCAL_PATH)/im -DLINUX \
+	-I$(LOCAL_PATH)/im -DLINUX -DANDROID -DGL_GLEXT_PROTOTYPES\
 	-DFTK_CNF="\"/data/ftk/ftk.cnf\"" 
 
 include $(CLEAR_VARS)
+
 OS_LINUX=\
 	$(srcdir)/os/linux/ftk_mmap_linux.c  \
 	$(srcdir)/os/linux/ftk_linux.c 
-LINUX_NATIVE=$(srcdir)/backend/native/ftk_display_fb.c \
+LINUX_NATIVE=$(srcdir)/backend/native/ftk_display_gles.cpp \
 	$(srcdir)/backend/native/ftk_source_input.c \
-	$(srcdir)/backend/native/ftk_backend_fb.c
-LOCAL_SRC_FILES := $(OS_LINUX) $(LINUX_NATIVE) \
+	$(srcdir)/backend/native/ftk_backend_gles.c
+
+LINEBREAK= \
+	$(srcdir)/linebreak/linebreak.c  \
+	$(srcdir)/linebreak/linebreakdata.c  \
+	$(srcdir)/linebreak/linebreakdef.c
+OPTIONAL_FUNCS=ftk_file_system_posix.c ftk_file_system.c ftk_file_browser.c 
+
+LOCAL_SRC_FILES := $(OS_LINUX) $(LINUX_NATIVE) $(LINEBREAK) \
 	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
-	ftk_label.c           ftk_source_timer.c \
+	ftk_label.c           ftk_source_timer.c ftk_font_default.c fontdata.c \
 	ftk_bitmap.c          ftk_main_loop.c     ftk_util.c \
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
 	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
@@ -36,8 +44,10 @@ LOCAL_SRC_FILES := $(OS_LINUX) $(LINUX_NATIVE) \
 	im/ftk_lookup_table.c ftk_input_method_preeditor.c \
 	ftk_input_method_preeditor_default.c \
 	im/ftk_input_method_py.c im/ftk_input_method_util.c \
-	ftk_main_loop_select.c ftk_config.c \
-	fontdata.c ftk_font_default.c ftk_display_mem.c
+	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
+	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \
+	ftk_tab.c ftk_text_layout_normal.c \
+	$(OPTIONAL_FUNCS)
 
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_C_INCLUDES := external/jpeg external/libpng external/zlib 
@@ -45,107 +55,130 @@ LOCAL_MODULE:=libftk
 include $(BUILD_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_CFLAGS += $(FTK_CFLAGS) -DFTK_DISPLAY_GLES_TEST
+LOCAL_SRC_FILES:= backend/native/ftk_display_gles.cpp
+LOCAL_MODULE := display_test
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES:= demos/demo_xul.c
 LOCAL_MODULE := demo_xul
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES:= demos/demo_button.c
 LOCAL_MODULE := demo_button
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES:= demos/demo_label.c
 LOCAL_MODULE := demo_label
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES:= demos/demo_entry.c
 LOCAL_MODULE := demo_entry
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES:= demos/demo_dialog.c
 LOCAL_MODULE := demo_dialog
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES:= demos/demo_menu.c
 LOCAL_MODULE := demo_menu
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_listview.c
 LOCAL_MODULE := demo_listview
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_progress_bar.c
 LOCAL_MODULE := demo_progress_bar
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_transparent.c
 LOCAL_MODULE := demo_transparent
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_sprite.c
 LOCAL_MODULE := demo_sprite
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_combo_box.c
 LOCAL_MODULE := demo_combo_box
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_zoom.c
 LOCAL_MODULE := demo_zoom
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_alpha.c
 LOCAL_MODULE := demo_alpha
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_popup.c
 LOCAL_MODULE := demo_popup
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 
 include $(CLEAR_VARS)
 LOCAL_CFLAGS += $(FTK_CFLAGS)
 LOCAL_SRC_FILES := demos/demo_msgbox.c
 LOCAL_MODULE := demo_msgbox
-LOCAL_STATIC_LIBRARIES := libcutils libc libftk libjpeg libpng libz
+LOCAL_STATIC_LIBRARIES := libcutils libc libftk libpng libz
+LOCAL_SHARED_LIBRARIES := libjpeg libEGL libGLESv1_CM libui
 include $(BUILD_EXECUTABLE)
 

@@ -29,9 +29,20 @@
  *
  */
 
+#ifdef ANDROID
+#include <EGL/egl.h>
+#include <GLES/gl.h>
+#include <GLES/glext.h>
+
+#include <ui/FramebufferNativeWindow.h>
+#include <ui/EGLUtils.h>
+using namespace android;
+#define GLES_CREATE_WINDOW android_createDisplaySurface
+#else
 #include <egl.h>
 #include <gl.h>
 #include <glext.h>
+#endif
 
 #include "ftk_log.h"
 #include "ftk_display_gles.h"
@@ -105,7 +116,7 @@ int opengles_display_bitmap(PrivInfo* priv, FtkBitmap* bitmap,
 	crop[2] = width;
 	crop[3] = height;
 
-	glFtkColor4f(1,1,1,1);
+	glColor4f(1,1,1,1);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, crop);
 	glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -148,12 +159,19 @@ static Ret ftk_display_gles_update(FtkDisplay* thiz, FtkBitmap* bitmap,
 {
 	Ret ret = RET_OK;
 	DECL_PRIV(thiz, priv);
+
+	opengles_display_bitmap(priv, bitmap, rect->x, rect->y, rect->width, rect->height, xoffset, yoffset);
+
+	return ret;
 }
 
 static Ret ftk_display_gles_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 {
-	FtkRect rect = {0};
 	DECL_PRIV(thiz, priv);
+	
+	opengles_snap_bitmap(priv, bitmap, r->x, r->y, r->width, r->height);
+
+	return RET_OK;
 }
 
 static void ftk_display_gles_destroy(FtkDisplay* thiz)
@@ -162,14 +180,14 @@ static void ftk_display_gles_destroy(FtkDisplay* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 		
-
+		eglTerminate(priv->dpy);
 		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
 	}
 
 	return;
 }
 
-FtkDisplay* ftk_display_gles_create(void)
+extern "C" FtkDisplay* ftk_display_gles_create(void)
 {
 	FtkDisplay* thiz = NULL;
 
@@ -190,6 +208,7 @@ FtkDisplay* ftk_display_gles_create(void)
 }
 
 #ifdef FTK_DISPLAY_GLES_TEST
+#include "ftk.h"
 
 void red_bitmap(FtkBitmap* bitmap)
 {
@@ -287,8 +306,10 @@ int main(int argc, char* argv[])
 	if(thiz != NULL)
 	{
 		FtkBitmap* bitmap = NULL;
-		FtkColor color = {.a=0xff};
-		FtkRect rect = {0};
+		FtkColor color;
+		FtkRect rect = {0, 0, 0, 0};
+		color.a = 0xff;
+
 		rect.width = ftk_display_width(thiz);
 		rect.height = ftk_display_height(thiz);
 
