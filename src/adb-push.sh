@@ -19,7 +19,7 @@ do
 done
 
 DIR=/data/ftk/base/data/
-for f in ../data/unicode.fnt ../data/py.bin;
+for f in ../data/unicode.fnt 
 do
 	echo adb push $f $DIR 
 	adb push $f $DIR

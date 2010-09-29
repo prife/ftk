@@ -58,6 +58,7 @@ typedef struct _PrivInfo
 	EGLDisplay dpy;
 	EGLContext context;
 	EGLSurface surface;
+	FtkBitmap* bitmap;
 }PrivInfo;
 
 int opengles_init(PrivInfo* priv)
@@ -157,18 +158,53 @@ static int ftk_display_gles_height(FtkDisplay* thiz)
 static Ret ftk_display_gles_update(FtkDisplay* thiz, FtkBitmap* bitmap, 
 	FtkRect* rect, int xoffset, int yoffset)
 {
+	int i = 0;
 	Ret ret = RET_OK;
 	DECL_PRIV(thiz, priv);
+	int width = rect->width;
+	int height = rect->height;
+	int src_width = ftk_bitmap_width(bitmap);
+	int src_height = ftk_bitmap_height(bitmap);
+	int dst_width = ftk_bitmap_width(priv->bitmap);
+	int dst_height = ftk_bitmap_height(priv->bitmap);
+	FtkColor* src = ftk_bitmap_bits(bitmap);
+	FtkColor* dst = ftk_bitmap_bits(priv->bitmap);
+	
+	return_val_if_fail(rect->x < src_width && rect->y < src_height
+		&& xoffset < dst_width && yoffset < dst_height, RET_FAIL);
 
-	opengles_display_bitmap(priv, bitmap, rect->x, rect->y, rect->width, rect->height, xoffset, yoffset);
+	width = (xoffset + width) >= dst_width ? dst_width - xoffset : width;
+	height = (yoffset + height) >= dst_height ? dst_height - yoffset : height;
 
+	yoffset = dst_height  - yoffset - height - 1;
+	src += rect->y * src_width + rect->x;
+	dst += (yoffset + height) * dst_width + xoffset;
+
+	for(i = 0; i < height; i++)
+	{
+		memcpy(dst, src, sizeof(FtkColor) * width);
+		dst -= dst_width;
+		src += src_width;
+	}
+
+	opengles_display_bitmap(priv, priv->bitmap, xoffset, yoffset, 
+		width, height, xoffset, yoffset);
+	
 	return ret;
 }
 
 static Ret ftk_display_gles_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 {
+	int i = 0;
+	int xoffset = r->x;
+	int yoffset = r->y;
+	int width = r->width;
+	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	
+	FtkColor* dst = ftk_bitmap_bits(bitmap);
+	FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+
+	/*TODO*/
 	opengles_snap_bitmap(priv, bitmap, r->x, r->y, r->width, r->height);
 
 	return RET_OK;
@@ -194,6 +230,7 @@ extern "C" FtkDisplay* ftk_display_gles_create(void)
 	thiz = (FtkDisplay*)FTK_ZALLOC(sizeof(FtkDisplay) + sizeof(PrivInfo));
 	if(thiz != NULL)
 	{
+		FtkColor bg;
 		DECL_PRIV(thiz, priv);
 		thiz->update   = ftk_display_gles_update;
 		thiz->width    = ftk_display_gles_width;
@@ -201,7 +238,12 @@ extern "C" FtkDisplay* ftk_display_gles_create(void)
 		thiz->snap     = ftk_display_gles_snap;
 		thiz->destroy  = ftk_display_gles_destroy;
 
+		bg.a = 0xff;
+		bg.r = 0xff;
+		bg.g = 0xff;
+		bg.b = 0xff;
 		opengles_init(priv);
+		priv->bitmap = ftk_bitmap_create(priv->width, priv->height, bg);
 	}
 		
 	return thiz;
