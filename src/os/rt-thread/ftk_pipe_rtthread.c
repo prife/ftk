@@ -6,7 +6,7 @@
 struct _FtkPipe
 {
     int  fd;
-    char pipe[2048];
+    char pipe[1024];
     struct rt_messagequeue mq;
 };
 

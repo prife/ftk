@@ -42,7 +42,6 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	if (thiz->fd < 0)
 	{
 		FTK_ZFREE(thiz, sizeof(*thiz));
-		ftk_logd("%s open file %s failed.\n", __func__, filename);
 		return NULL;
 	}
 
@@ -52,7 +51,6 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	{
 		close(thiz->fd);
 		FTK_ZFREE(thiz, sizeof(*thiz));
-		ftk_logd("%s alloc mem %s failed.\n", __func__, filename);
 		return NULL;
 	}
 
@@ -60,13 +58,10 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	close(thiz->fd);
 	if (ret != size)
 	{
-		ftk_logd("%s read file %s failed.\n", __func__, filename);
 		FTK_ZFREE(thiz->data, size);
 		FTK_ZFREE(thiz, sizeof(*thiz));
 		return NULL;
 	}
-
-	ftk_logd("%s mmap file %s ok.\n", __func__, filename);
 
 	return thiz;
 }

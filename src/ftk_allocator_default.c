@@ -34,17 +34,29 @@
 
 void* ftk_allocator_default_alloc(FtkAllocator* thiz, size_t size)
 {
-	return malloc(size);	
+#ifndef RT_THREAD
+	return malloc(size);
+#else
+	return rt_malloc(size);
+#endif	
 }
 
 void* ftk_allocator_default_realloc(FtkAllocator* thiz, void* ptr, size_t new_size)
 {
+#ifndef RT_THREAD
 	return realloc(ptr, new_size);
+#else
+	return rt_realloc(ptr, new_size);
+#endif
 }
 
 void  ftk_allocator_default_free(FtkAllocator* thiz, void* ptr)
 {
+#ifndef RT_THREAD
 	free(ptr);
+#else
+	rt_free(ptr);
+#endif
 
 	return;
 }

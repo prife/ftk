@@ -45,6 +45,7 @@ int   ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length);
 int   ftk_pipe_get_read_handle(FtkPipe* thiz);
 int   ftk_pipe_get_write_handle(FtkPipe* thiz);
 void  ftk_pipe_destroy(FtkPipe* thiz);
+int   ftk_pipe_check(FtkPipe* thiz);
 
 FTK_END_DECLS
 

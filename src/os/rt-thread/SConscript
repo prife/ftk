@@ -35,7 +35,6 @@ ftk_src = Split("""
 ../../ftk_icon_view.c
 ../../ftk_image.c
 ../../ftk_image_bmp_decoder.c
-../../ftk_image_png_decoder.c
 ../../ftk_input_method_manager.c
 ../../ftk_input_method_preeditor.c
 ../../ftk_input_method_preeditor_default.c
@@ -98,6 +97,7 @@ rtthread_port_src = Split("""
 ./ftk_pipe_rtthread.c
 ./ftk_rtthread.c
 ./ftk_select_rtthread.c
+./ftk_image_png_decoder.c
 """)
 
 zlib_src = Split("""
