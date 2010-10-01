@@ -32,6 +32,7 @@
 #include "ftk_tab.h"
 #include "ftk_theme.h"
 #include "ftk_globals.h"
+#include "ftk_window.h"
 
 typedef struct _TabPage
 {
@@ -79,7 +80,8 @@ static void ftk_tab_page_destroy(FtkWidget* thiz)
 static FtkWidget* ftk_tab_page_create(FtkWidget* parent)
 {
 	int x = 0;
-	int y = FTK_TAB_HANDLE_HEIGHT;
+	DECL_PRIV0(parent, priv);
+	int y = FTK_TAB_HANDLE_HEIGHT + ftk_bitmap_height(priv->bar_pressed);
 	int width = ftk_widget_width(parent);
 	int height = ftk_widget_height(parent) - y;
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
@@ -89,8 +91,8 @@ static FtkWidget* ftk_tab_page_create(FtkWidget* parent)
 	thiz->on_paint = ftk_tab_page_on_paint;
 	thiz->destroy = ftk_tab_page_destroy;
 
-	ftk_widget_init(thiz, FTK_TAB, 0, x, y, width, height, 
-		FTK_ATTR_TRANSPARENT|FTK_ATTR_NO_FOCUS);
+	ftk_widget_init(thiz, FTK_TAB_PAGE, 0, x, y, width, height, 
+		FTK_ATTR_NO_FOCUS);
 	ftk_widget_append_child(parent, thiz);
 
 	return thiz;
@@ -114,13 +116,28 @@ static Ret ftk_tab_page_tab_calc_width(FtkWidget* thiz)
 
 static Ret ftk_tab_on_event(FtkWidget* thiz, FtkEvent* event)
 {
+	int i = 0;
 	Ret ret = RET_OK;
-	DECL_PRIV0(thiz, priv);
 	int active_page = 0;
+	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && event != NULL, RET_OK);
 
+	if(event->type == FTK_EVT_SHOW)
+	{
+		for(i = 0; i < priv->page_use_nr; i++)
+		{
+			ftk_widget_show_all(priv->pages[i].page, i == priv->active_page);
+		}
+
+		return RET_OK;
+	}
+
 	active_page = priv->active_page;
-	if(event->type == FTK_EVT_KEY_UP)
+	if(event->type == FTK_EVT_KEY_DOWN)
+	{
+		return RET_REMOVE;
+	}
+	else if(event->type == FTK_EVT_KEY_UP)
 	{
 		if(event->u.key.code == FTK_KEY_LEFT)
 		{
@@ -129,6 +146,15 @@ static Ret ftk_tab_on_event(FtkWidget* thiz, FtkEvent* event)
 		else if(event->u.key.code == FTK_KEY_RIGHT)
 		{
 			active_page++;
+		}
+		else if(event->u.key.code == FTK_KEY_TAB || event->u.key.code == FTK_KEY_DOWN)
+		{
+			TabPage* page = priv->pages+active_page;
+			if(page != NULL && page->page->children != NULL)
+			{
+				ftk_window_set_focus(ftk_widget_toplevel(thiz), page->page->children);
+			}
+			return RET_REMOVE;
 		}
 		active_page = (active_page + priv->page_use_nr)%priv->page_use_nr;
 	}
@@ -171,6 +197,8 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	FtkTextLayout* text_layout = ftk_default_text_layout();
 
+	(void)height;
+	(void)width;
 	if(index != priv->active_page)
 	{
 		bitmap = priv->normal;
@@ -220,6 +248,7 @@ static Ret ftk_tab_on_paint(FtkWidget* thiz)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
+	(void)height;
 	for(i = 0; i < priv->page_use_nr; i++)
 	{
 		if(i == priv->active_page) continue;

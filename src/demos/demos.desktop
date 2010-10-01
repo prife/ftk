@@ -27,3 +27,4 @@
 <application name="transparent" exec="libftk_demos.so" init="ftk_app_demo_transparent_create" />
 <application name="wait_box" exec="libftk_demos.so" init="ftk_app_demo_wait_box_create" />
 <application name="zoom" exec="libftk_demos.so" init="ftk_app_demo_zoom_create" />
+<application name="tab" exec="libftk_demos.so" init="ftk_app_demo_tab_create" />
