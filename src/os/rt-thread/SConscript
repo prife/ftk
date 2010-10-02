@@ -89,7 +89,6 @@ linebreak_src = Split("""
 """)
 
 rtthread_port_src = Split("""
-./ftk_test.c
 ./ftk_main_loop_rtthread.c
 ./ftk_mmap_rtthread.c
 ./ftk_pipe_rtthread.c
