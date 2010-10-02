@@ -144,7 +144,7 @@ path = [RTT_ROOT + '/components/ftk/src',
 	RTT_ROOT + '/components/ftk/src/linebreak',
 	RTT_ROOT + '/components/ftk/src/os/rt-thread/libz', 
 	RTT_ROOT + '/components/ftk/src/os/rt-thread/libpng',
-	RTT_ROOT + '/components/ftk/src/backend/rt-thread]
+	RTT_ROOT + '/components/ftk/src/backend/rt-thread' ]
 
 # group definitions
 group = {}
