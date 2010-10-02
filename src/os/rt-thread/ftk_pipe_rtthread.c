@@ -70,17 +70,7 @@ void ftk_pipe_destroy(FtkPipe* thiz)
 
 int ftk_pipe_get_read_handle(FtkPipe* thiz)
 {
-	if (thiz == NULL)
-	{
-		return -1;
-	}
-
-	if (thiz->mq.entry > 0)
-	{
-		ftk_rtthread_set_file_readble(thiz->fd);
-	}
-
-    return thiz->fd;
+    return thiz != NULL ? thiz->fd : -1;
 }
 
 int ftk_pipe_get_write_handle(FtkPipe* thiz)
@@ -106,4 +96,15 @@ int ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length)
     ftk_rtthread_set_file_readble(thiz->fd);
 
     return length;
+}
+
+int ftk_pipe_check(FtkPipe* thiz)
+{
+	if (thiz->mq.entry > 0)
+	{
+		ftk_rtthread_set_file_readble(thiz->fd);
+		return 0;
+	}
+
+    return -1;
 }

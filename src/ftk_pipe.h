@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2010-01-20 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add ftk_pipe_check.
  *
  */
 
@@ -45,6 +46,7 @@ int   ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length);
 int   ftk_pipe_get_read_handle(FtkPipe* thiz);
 int   ftk_pipe_get_write_handle(FtkPipe* thiz);
 void  ftk_pipe_destroy(FtkPipe* thiz);
+int   ftk_pipe_check(FtkPipe* thiz);
 
 FTK_END_DECLS
 
