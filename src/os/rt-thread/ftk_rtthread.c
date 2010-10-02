@@ -89,7 +89,7 @@ double coef(int n)
 
  	t = 1.0/n;
 
- 	if (n%2==0) 
+ 	if (n%2 == 0) 
 	{
 		t = -t;
 	}
@@ -131,7 +131,7 @@ double ln(double x)
  	{
   		for(i=0; x>1.25; i++)
 		{
-   			x=sqrt(x);
+   			x = sqrt(x);
 		}
   		return (1<<i)*horner(x-1);
  	}
@@ -139,7 +139,7 @@ double ln(double x)
  	{
   		for(i=0; x<0.7; i++)
 		{
-   			x=sqrt(x);
+   			x = sqrt(x);
 		}
   		return (1<<i)*horner(x-1);
  	}
