@@ -66,6 +66,8 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv)
 	flags = read_fdset->fds_bits[0];
 	FD_ZERO(read_fdset);
 
+	ftk_logd("now sellfd\n");
+
 	rt_event_recv(&ftk_event, flags, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, (rt_uint32_t)tick, &read_fdset->fds_bits[0]);
 
 	for (i=0; i<32; i++)

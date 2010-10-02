@@ -101,6 +101,7 @@ rtthread_port_src = Split("""
 ./ftk_select_rtthread.c
 ../../backend/rt-thread/ftk_backend_rtthread.c
 ../../backend/rt-thread/ftk_display_rtthread.c
+../../backend/rt-thread/ftk_source_touch.c
 """)
 
 zlib_src = Split("""
