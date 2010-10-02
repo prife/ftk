@@ -8,6 +8,7 @@ ftk_app_src	= Split("""
 """)
 
 ftk_src = Split("""
+../../ftk_main_loop_select.c
 ../../fontdata.c
 ../../ftk.c
 ../../ftk_allocator.c
@@ -94,7 +95,6 @@ linebreak_src = Split("""
 """)
 
 rtthread_port_src = Split("""
-./ftk_main_loop_rtthread.c
 ./ftk_mmap_rtthread.c
 ./ftk_pipe_rtthread.c
 ./ftk_rtthread.c
