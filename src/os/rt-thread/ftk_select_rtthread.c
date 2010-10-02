@@ -56,7 +56,7 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv)
 
 	if (tv != NULL)
 	{
-		tick = (rt_uint32_t)(tv->tv_sec + tv->tv_usec/1000000)/RT_TICK_PER_SECOND;
+		tick = (rt_uint32_t)(tv->tv_sec + tv->tv_usec/1000000)*RT_TICK_PER_SECOND;
 	}
 	else
 	{
