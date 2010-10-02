@@ -37,7 +37,7 @@
 #include "ftk_source_primary.h"
 
 #ifdef RT_THREAD
-int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv);
+int ftk_rtthread_select(int mfd, fd_set *read_fdset, fd_set *write_fdset, fd_set *err_fdset, struct timeval *tv);
 #endif
 
 struct _FtkMainLoop
@@ -109,7 +109,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 #ifndef RT_THREAD
 		ret = select(mfd + 1, &thiz->fdset, NULL, &thiz->err_fdset, &tv);
 #else
-		ret = ftk_rtthread_select(mfd + 1, &thiz->fdset, &tv);
+		ret = ftk_rtthread_select(mfd + 1, &thiz->fdset, NULL, &thiz->err_fdset, &tv);
 #endif
 
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
