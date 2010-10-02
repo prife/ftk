@@ -32,7 +32,7 @@
 #ifndef __FTK_SELECT_RTTHREAD_H__
 #define __FTK_SELECT_RTTHREAD_H__
 
-int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv);
+int ftk_rtthread_select(int mfd, fd_set *read_fdset, fd_set *write_fdset, fd_set *err_fdset, struct timeval *tv);
 
 int ftk_rtthread_select_fd_alloc(void);
 

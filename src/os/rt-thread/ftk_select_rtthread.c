@@ -48,7 +48,7 @@ void ftk_rtthread_select_deinit(void)
 	rt_event_detach(&ftk_event);
 }
 
-int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv)
+int ftk_rtthread_select(int mfd, fd_set *read_fdset, fd_set *write_fdset, fd_set *err_fdset, struct timeval *tv)
 {
 	rt_uint32_t tick = 0;
     rt_uint32_t flags = 0;
@@ -65,6 +65,12 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv)
 
 	flags = read_fdset->fds_bits[0];
 	FD_ZERO(read_fdset);
+
+	if (write_fdset)
+		FD_ZERO(write_fdset);
+
+	if (err_fdset)
+		FD_ZERO(err_fdset);
 
 	rt_event_recv(&ftk_event, flags, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, (rt_uint32_t)tick, &read_fdset->fds_bits[0]);
 
