@@ -18,8 +18,9 @@ typedef struct _PrivInfo
     FtkEvent   event;
     FtkOnEvent on_event;
     void*      user_data;
-	struct rt_touch_event touchevent;
 	rt_device_t	device;
+    char pipe[256];
+    struct rt_messagequeue mq;
 } PrivInfo;
 
 static int ftk_source_touch_get_fd(FtkSource* thiz)
@@ -31,21 +32,31 @@ static int ftk_source_touch_get_fd(FtkSource* thiz)
 
 static int ftk_source_touch_check(FtkSource* thiz)
 {
-    return -1;
+    DECL_PRIV(thiz, priv);
+
+	if (priv->mq.entry > 0)
+	{
+		ftk_rtthread_set_file_readble(priv->fd);
+		return 0;
+	}
+	return -1;
 }
 
 static Ret ftk_source_touch_dispatch(FtkSource* thiz)
 {
     DECL_PRIV(thiz, priv);
+	struct rt_touch_event touchevent;
+
+	rt_mq_recv(&priv->mq, &touchevent, sizeof(touchevent), RT_WAITING_FOREVER);
 
     priv->event.type = FTK_EVT_NOP;
-    priv->event.u.mouse.x = priv->touchevent.x;
-    priv->event.u.mouse.y = priv->touchevent.y;
+    priv->event.u.mouse.x = touchevent.x;
+    priv->event.u.mouse.y = touchevent.y;
 
     ftk_logd("%s: sample.pressure=%d x=%d y=%d\n", __func__,
-            priv->touchevent.pressed, priv->touchevent.x, priv->touchevent.y);
+            touchevent.pressed, touchevent.x, touchevent.y);
 
-    if (priv->touchevent.pressed)
+    if (touchevent.pressed)
     {
         if (priv->pressed)
         {
@@ -83,7 +94,7 @@ static Ret ftk_source_touch_eventpost(FtkSource* thiz, struct rt_touch_event *ev
 {
     DECL_PRIV(thiz, priv);
 
-	priv->touchevent = *event;
+	rt_mq_send(&priv->mq, event, sizeof(*event));
 
 	ftk_rtthread_set_file_readble(priv->fd);
 
@@ -99,6 +110,8 @@ static void ftk_source_touch_destroy(FtkSource* thiz)
         ftk_rtthread_select_fd_free(priv->fd);
 
 		rt_device_close(priv->device);
+
+		rt_mq_detach(&priv->mq);
 
         FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
     }
@@ -131,6 +144,12 @@ FtkSource* ftk_source_touch_create(const char* filename, FtkOnEvent on_event, vo
 		rt_device_control(priv->device, RT_TOUCH_EVENTPOST, ftk_source_touch_eventpost); 
 
 		rt_device_control(priv->device, RT_TOUCH_EVENTPOST_PARAM, thiz); 
+
+        rt_mq_init(&priv->mq, "tspipe", 
+		           &priv->pipe[0], 
+		           32, 
+		           sizeof(priv->pipe), 
+		           RT_IPC_FLAG_FIFO); 
 
 		priv->fd = ftk_rtthread_select_fd_alloc();
 
