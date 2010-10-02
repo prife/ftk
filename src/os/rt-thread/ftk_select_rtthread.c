@@ -34,7 +34,7 @@ int ftk_select(int mfd, fd_set *fdset, struct timeval *tv)
 	}
 
 	flags = fdset->fds_bits[0];
-	FD_ZERO(fdset);;
+	FD_ZERO(fdset);
 
 	rt_event_recv(&ftk_event, flags, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, (rt_uint32_t)tick, &fdset->fds_bits[0]);
 

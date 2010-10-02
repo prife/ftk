@@ -57,16 +57,6 @@ int ftk_pipe_read(FtkPipe* thiz, void* buff, size_t length)
     return length;
 }
 
-int ftk_pipe_check(FtkPipe* thiz)
-{
-	if (thiz->mq.entry > 0)
-	{
-		ftk_set_file_readble(thiz->fd);
-	}
-
-	return -1;
-}
-
 int ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length)
 {
     return_val_if_fail(thiz != NULL && buff != NULL, -1);
@@ -76,4 +66,14 @@ int ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length)
     ftk_set_file_readble(thiz->fd);
 
     return length;
+}
+
+int ftk_pipe_check(FtkPipe* thiz)
+{
+	if (thiz->mq.entry > 0)
+	{
+		ftk_set_file_readble(thiz->fd);
+	}
+
+	return -1;
 }
