@@ -66,13 +66,11 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv)
 	flags = read_fdset->fds_bits[0];
 	FD_ZERO(read_fdset);
 
-	ftk_logd("now sellfd\n");
-
 	rt_event_recv(&ftk_event, flags, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, (rt_uint32_t)tick, &read_fdset->fds_bits[0]);
 
 	for (i=0; i<32; i++)
 	{
-		if (read_fdset->fds_bits[0] & (0x01<<i))
+		if (read_fdset->fds_bits[0] & (0x01ul<<i))
 		{
 			n++;
 		}
@@ -83,7 +81,7 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv)
 
 int ftk_rtthread_set_file_readble(int fd)
 {
-    rt_event_send(&ftk_event, (0x01<<fd));
+    rt_event_send(&ftk_event, (0x01ul<<fd));
 }
 
 int ftk_rtthread_select_fd_alloc(void)
@@ -92,9 +90,9 @@ int ftk_rtthread_select_fd_alloc(void)
 
 	for (i=0; i<32; i++)
 	{
-		if (!(ftk_select_fd_pool & (0x01<<i)))
+		if (!(ftk_select_fd_pool & (0x01ul<<i)))
 		{
-			ftk_select_fd_pool |= (0x01<<i);
+			ftk_select_fd_pool |= (0x01ul<<i);
 			return i;	
 		}
 	}
@@ -103,5 +101,5 @@ int ftk_rtthread_select_fd_alloc(void)
 
 void ftk_rtthread_select_fd_free(int fd)
 {
-    ftk_select_fd_pool &= ~(0x01<<fd);
+    ftk_select_fd_pool &= ~(0x01ul<<fd);
 }
