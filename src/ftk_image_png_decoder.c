@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
@@ -35,11 +36,9 @@
 #include "ftk_image_png_decoder.h"
 
 #ifdef RT_THREAD
-
 #undef SEEK_CUR
 #undef SEEK_END
 #undef SEEK_SET
-
 #include <dfs_posix.h>
 
 static void ftk_image_png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
@@ -58,7 +57,6 @@ static void rt_png_free(png_structp png_ptr, png_voidp ptr)
 {
 	rt_free(ptr);
 }
-
 #endif
 
 static Ret ftk_image_png_decoder_match(FtkImageDecoder* thiz, const char* filename)
@@ -76,11 +74,13 @@ static FtkBitmap* load_png (const char *filename)
 	int w = 0;
 	int h = 0;
 	int passes_nr = 0;
+
 #ifndef RT_THREAD
 	FILE *fp = NULL;
 #else
 	int fd = -1;
 #endif	
+
 	FtkColor* dst = NULL;
 	unsigned char* src = NULL;
 	FtkBitmap* bitmap = NULL;

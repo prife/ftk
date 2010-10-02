@@ -53,14 +53,7 @@ static int ftk_source_primary_get_fd(FtkSource* thiz)
 
 static int ftk_source_primary_check(FtkSource* thiz)
 {
-#ifndef RT_THREAD
 	return -1;
-#else
-	DECL_PRIV(thiz, priv);
-	return_val_if_fail(priv != NULL, -1);
-
-	return ftk_pipe_check(priv->pipe);
-#endif
 }
 
 static Ret ftk_source_primary_dispatch(FtkSource* thiz)
