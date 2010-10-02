@@ -1,7 +1,7 @@
 
 #include "ftk_log.h"
 #include "ftk_globals.h"
-#include "ftk_display_lcd.h"
+#include "ftk_display_rtthread.h"
 
 Ret ftk_backend_init(int argc, char* argv[])
 {

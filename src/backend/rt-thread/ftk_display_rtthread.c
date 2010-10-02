@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "ftk_log.h"
 #include "ftk_display_mem.h"
-#include "ftk_display_lcd.h"
+#include "ftk_display_rtthread.h"
 
 #define LCD_WIDTH 			240
 #define LCD_HEIGHT 			320
