@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2010-01-31 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
