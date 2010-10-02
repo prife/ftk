@@ -34,12 +34,40 @@
 #include "ftk_log.h"
 #include "ftk_image_png_decoder.h"
 
+#ifdef RT_THREAD
+
+#undef SEEK_CUR
+#undef SEEK_END
+#undef SEEK_SET
+
+#include <dfs_posix.h>
+
+static void ftk_image_png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
+{
+	int fd = (int)png_ptr->io_ptr;
+
+	read(fd, data, length);
+}
+
+static png_voidp rt_png_malloc(png_structp png_ptr, png_size_t size)
+{
+	return rt_malloc(size);
+}
+
+static void rt_png_free(png_structp png_ptr, png_voidp ptr)
+{
+	rt_free(ptr);
+}
+
+#endif
+
 static Ret ftk_image_png_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {
 	return_val_if_fail(filename != NULL, RET_FAIL);
 
 	return (strstr(filename, ".png") != NULL) ? RET_OK : RET_FAIL;
 }
+
 
 static FtkBitmap* load_png (const char *filename)
 {
@@ -48,7 +76,11 @@ static FtkBitmap* load_png (const char *filename)
 	int w = 0;
 	int h = 0;
 	int passes_nr = 0;
-	FILE *fp = NULL;	
+#ifndef RT_THREAD
+	FILE *fp = NULL;
+#else
+	int fd = -1;
+#endif	
 	FtkColor* dst = NULL;
 	unsigned char* src = NULL;
 	FtkBitmap* bitmap = NULL;
@@ -58,6 +90,8 @@ static FtkBitmap* load_png (const char *filename)
 	png_bytep * row_pointers = NULL;
 
 	bg.a = 0xff;
+
+#ifndef RT_THREAD
 	if ((fp = fopen (filename, "rb")) == NULL)
 	{
 		ftk_logd("%s: open %s failed.\n", __func__, filename);
@@ -75,9 +109,36 @@ static FtkBitmap* load_png (const char *filename)
 		fclose(fp);
 		return NULL;
 	}
+#else
+	if ((fd = open (filename, O_RDONLY, 0)) < 0)
+	{
+		ftk_logd("%s: open %s failed.\n", __func__, filename);
+		return NULL;
+	}
 
+	if((png_ptr = png_create_read_struct_2(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL, NULL, rt_png_malloc, rt_png_free)) == NULL)
+	{
+		close(fd);
+		return NULL;
+	}
+
+	if((info_ptr = png_create_info_struct(png_ptr)) == NULL)
+	{
+		close(fd);
+		return NULL;
+	}
+#endif
+
+#ifdef PNG_SETJMP_SUPPORTED
 	setjmp(png_jmpbuf(png_ptr));
+#endif
+
+#ifndef RT_THREAD
 	png_init_io(png_ptr, fp);
+#else
+	png_set_read_fn(png_ptr, (void *)fd, ftk_image_png_read_data);
+#endif
+
 	memset(info_ptr, 0x00, sizeof(*info_ptr));
 	png_read_info(png_ptr, info_ptr);
 
@@ -87,7 +148,9 @@ static FtkBitmap* load_png (const char *filename)
 	passes_nr = png_set_interlace_handling(png_ptr);
 	png_read_update_info(png_ptr, info_ptr);
 
+#ifdef PNG_SETJMP_SUPPORTED
 	setjmp(png_jmpbuf(png_ptr));
+#endif
 
 	row_pointers = (png_bytep*) FTK_ZALLOC(h * sizeof(png_bytep));
 	for (y=0; y< h; y++)
@@ -179,7 +242,12 @@ static FtkBitmap* load_png (const char *filename)
 	}
 	FTK_FREE(row_pointers);
 	png_destroy_read_struct(&png_ptr, &info_ptr, NULL); 
+
+#ifndef RT_THREAD
 	fclose(fp);
+#else
+	close(fd);
+#endif	
 
 	return bitmap;
 }
