@@ -137,14 +137,14 @@ static FtkBitmap* load_png (const char *filename)
 		}
 		else 
 		{
-#if PNG_LIBPNG_VER_MINOR < 4
-			png_byte red = png_ptr->trans_values.red & 0xff;
-			png_byte green = png_ptr->trans_values.green & 0xff;
-			png_byte blue = png_ptr->trans_values.blue & 0xff;
-#else
+#if PNG_LIBPNG_VER > 10399
 			png_byte red = png_ptr->trans_color.red & 0xff;
 			png_byte green = png_ptr->trans_color.green & 0xff;
 			png_byte blue = png_ptr->trans_color.blue & 0xff;
+#else
+			png_byte red = png_ptr->trans_values.red & 0xff;
+			png_byte green = png_ptr->trans_values.green & 0xff;
+			png_byte blue = png_ptr->trans_values.blue & 0xff;
 #endif
 			for(y = 0; y < h; y++)
 			{

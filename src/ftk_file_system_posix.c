@@ -100,14 +100,17 @@ Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
 	}
 
 #ifdef DT_DIR
-	info->is_dir = ent->d_type & DT_DIR;
-#else
-{
-	struct stat st = {0};
-	stat(ent->d_name, &st);
-	info->is_dir = S_ISDIR(st.st_mode);
-}
+	if (ent->d_type != DT_UNKNOWN)
+	{
+		info->is_dir = ent->d_type & DT_DIR;
+	}
+	else
 #endif
+	{
+		struct stat st = {0};
+		stat(ent->d_name, &st);
+		info->is_dir = S_ISDIR(st.st_mode);
+	}
 
 	ftk_strncpy(info->name, ent->d_name, FTK_MAX_PATH);
 
