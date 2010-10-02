@@ -3,6 +3,10 @@ Import('rtconfig')
 Import('RTT_ROOT')
 Import('projects')
 
+ftk_app_src	= Split("""
+../../demos/demo_check_button.c
+""")
+
 ftk_src = Split("""
 ../../fontdata.c
 ../../ftk.c
@@ -135,7 +139,7 @@ pnglib_src = Split("""
 """)
 
 # The set of source files associated with this SConscript file.
-src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + zlib_src	+ pnglib_src
+src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + zlib_src	+ pnglib_src + ftk_app_src
 
 path = [RTT_ROOT + '/components/ftk/src',
 	RTT_ROOT + '/components/ftk/src/im', 
