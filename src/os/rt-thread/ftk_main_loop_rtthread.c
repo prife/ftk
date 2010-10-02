@@ -102,7 +102,7 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 		tv.tv_sec = wait_time/1000;
 		tv.tv_usec = (wait_time%1000) * 1000;
 
-		ret = ftk_select(mfd + 1, &thiz->fdset, &tv);
+		ret = ftk_rtthread_select(mfd + 1, &thiz->fdset, &tv);
 
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
 		{

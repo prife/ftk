@@ -32,14 +32,12 @@
 #ifndef __FTK_SELECT_RTTHREAD_H__
 #define __FTK_SELECT_RTTHREAD_H__
 
-int ftk_fd_isset(int fd, fd_set *fdset);
+int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv);
 
-int ftk_select(int mfd, fd_set *fdset, struct timeval *tv);
+int ftk_rtthread_select_fd_alloc(void);
 
-int ftk_select_fd_alloc(void);
+void ftk_rtthread_select_fd_free(int fd);
 
-void ftk_select_fd_free(int fd);
-
-int ftk_set_file_readble(int fd);
+int ftk_rtthread_set_file_readble(int fd);
 
 #endif // __FTK_SELECT_RTTHREAD_H__

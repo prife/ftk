@@ -55,20 +55,20 @@ static void ftk_cleanup(void)
 
 int  ftk_platform_init(int argc, char** argv)
 {
-	void ftk_select_init(void);
+	void ftk_rtthread_select_init(void);
 
-	ftk_select_init();
+	ftk_rtthread_select_init();
 
     return RET_OK;
 }
 
 void ftk_platform_deinit(void)
 {
-	void ftk_select_deinit(void);
+	void ftk_rtthread_select_deinit(void);
 
     ftk_deinited = 1;
 
-	ftk_select_deinit();
+	ftk_rtthread_select_deinit();
 }
 
 void _exit(int exit_code)
@@ -76,7 +76,7 @@ void _exit(int exit_code)
 	rt_thread_detach(rt_thread_self());
 }
 
-static const int N=100;
+static const int N = 100;
 
 double coef(int n)
 {
