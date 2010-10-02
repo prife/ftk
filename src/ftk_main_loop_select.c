@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2010-03-15 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
@@ -34,6 +35,10 @@
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
 #include "ftk_source_primary.h"
+
+#ifdef RT_THREAD
+int ftk_rtthread_select(int mfd, fd_set *read_fdset, struct timeval *tv);
+#endif
 
 struct _FtkMainLoop
 {
@@ -100,8 +105,13 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 		tv.tv_sec = wait_time/1000;
 		tv.tv_usec = (wait_time%1000) * 1000;
+
+#ifndef RT_THREAD
 		ret = select(mfd + 1, &thiz->fdset, NULL, &thiz->err_fdset, &tv);
-		
+#else
+		ret = ftk_rtthread_select(mfd + 1, &thiz->fdset, &tv);
+#endif
+
 		for(i = 0; i < ftk_sources_manager_get_count(thiz->sources_manager);)
 		{
 			if(ftk_sources_manager_need_refresh(thiz->sources_manager))
