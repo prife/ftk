@@ -101,7 +101,6 @@ rtthread_port_src = Split("""
 ./ftk_select_rtthread.c
 ../../backend/rt-thread/ftk_backend_rtthread.c
 ../../backend/rt-thread/ftk_display_rtthread.c
-../../backend/rt-thread/ftk_source_touch.c
 """)
 
 zlib_src = Split("""
@@ -142,13 +141,13 @@ pnglib_src = Split("""
 # The set of source files associated with this SConscript file.
 src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + zlib_src	+ pnglib_src + ftk_app_src
 
-path = [RTT_ROOT + '/components/ftk/src',
-	RTT_ROOT + '/components/ftk/src/im', 
-	RTT_ROOT + '/components/ftk/src/os/rt-thread',
-	RTT_ROOT + '/components/ftk/src/linebreak',
-	RTT_ROOT + '/components/ftk/src/os/rt-thread/libz', 
-	RTT_ROOT + '/components/ftk/src/os/rt-thread/libpng',
-	RTT_ROOT + '/components/ftk/src/backend/rt-thread' ]
+path = [RTT_ROOT + '/components/external/ftk/src',
+	RTT_ROOT + '/components/external/ftk/src/im', 
+	RTT_ROOT + '/components/external/ftk/src/os/rt-thread',
+	RTT_ROOT + '/components/external/ftk/src/linebreak',
+	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/libz', 
+	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/libpng',
+	RTT_ROOT + '/components/external/ftk/src/backend/rt-thread' ]
 
 # group definitions
 group = {}
