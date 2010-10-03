@@ -32,20 +32,43 @@
 #include "ftk_util.h"
 #include "ftk_file_system.h"
 
+#ifdef RT_THREAD
+#undef SEEK_CUR
+#undef SEEK_END
+#undef SEEK_SET
+#include <dfs_posix.h>
+#define DT_UNKNOWN	DFS_DT_UNKNOWN
+#define DT_REG		DFS_DT_REG
+#define DT_DIR		DFS_DT_DIR
+#endif
+
 Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 {
 	int ret = 0;
+#ifndef RT_THREAD
 	struct stat st;
+#else
+	struct _stat st;
+#endif
 	return_val_if_fail(file_name != NULL && info != NULL, RET_FAIL);
 
 	if((ret = stat(file_name, &st)) == 0)
 	{
+#ifndef RT_THREAD
 		info->uid  = st.st_uid;
 		info->gid  = st.st_gid;
+#else
+		info->uid  = 0;
+		info->gid  = 0;
+#endif
 		info->mode = st.st_mode;
 		info->size = st.st_size; 
 		info->is_dir = S_ISDIR(st.st_mode);
+#ifndef RT_THREAD
 		info->last_access = st.st_atime;
+#else
+		info->last_access = st.st_mtime;
+#endif
 		info->last_modify = st.st_mtime;
 
 		return RET_OK;
@@ -58,24 +81,40 @@ FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 {
 	return_val_if_fail(file_name != NULL && mode != NULL, NULL);
 
+#ifndef RT_THREAD
 	return fopen(file_name, mode);
+#else
+	return (FtkFsHandle)(open(file_name, O_RDWR, 0777)+1);
+#endif
 }
 
 int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length)
 {
+#ifndef RT_THREAD
 	return fread(buffer, 1, length, file);
+#else
+	return read((int)(file-1), buffer, length);
+#endif
 }
 
 int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length)
 {
+#ifndef RT_THREAD
 	return fwrite(buffer, 1, length, file);
+#else
+	return write((int)(file-1), buffer, length);
+#endif
 }
 
 void ftk_file_close(FtkFsHandle file)
 {
 	return_if_fail(file != NULL);
 
+#ifndef RT_THREAD
 	fclose(file);
+#else
+	close((int)(file-1));
+#endif
 
 	return;
 }
@@ -107,7 +146,11 @@ Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
 	else
 #endif
 	{
+#ifndef RT_THREAD
 		struct stat st = {0};
+#else
+		struct _stat st = {0};
+#endif
 		stat(ent->d_name, &st);
 		info->is_dir = S_ISDIR(st.st_mode);
 	}

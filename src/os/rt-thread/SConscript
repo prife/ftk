@@ -4,10 +4,13 @@ Import('RTT_ROOT')
 Import('projects')
 
 ftk_app_src	= Split("""
-../../demos/demo_check_button.c
+../../demos/demo_file_browser.c
 """)
 
 ftk_src = Split("""
+../../ftk_file_browser.c
+../../ftk_file_system.c
+../../ftk_file_system_posix.c
 ../../ftk_main_loop_select.c
 ../../fontdata.c
 ../../ftk.c
