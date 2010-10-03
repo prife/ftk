@@ -77,6 +77,26 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 	return RET_FAIL;
 }
 
+static int ftk_file_parse_mode(const char *mode)
+{
+	int f=0;
+ 
+  	for (;;)
+	{
+    	switch (*mode)
+		{
+		    case 0: return f;
+		    case 'b': break;
+		    case 'r': f=O_RDONLY; break;
+		    case 'w': f=O_WRONLY|O_CREAT|O_TRUNC; break;
+		    case 'a': f=O_WRONLY|O_CREAT|O_APPEND; break;
+		    case '+': f=(f&(~O_WRONLY))|O_RDWR; break;
+    	}
+
+    	++mode;
+  	}
+}
+
 FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 {
 	return_val_if_fail(file_name != NULL && mode != NULL, NULL);
@@ -84,7 +104,7 @@ FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 #ifndef RT_THREAD
 	return fopen(file_name, mode);
 #else
-	return (FtkFsHandle)(open(file_name, O_RDWR, 0777)+1);
+	return (FtkFsHandle)(open(file_name, ftk_file_parse_mode(mode), 0777)+1);
 #endif
 }
 
