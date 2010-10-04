@@ -32,7 +32,9 @@
 #ifndef FTK_PLATFORM_H
 #define FTK_PLATFORM_H
 
+#ifndef RT_THREAD
 #include <stdio.h>
+#endif
 #include <assert.h>
 #include <stdlib.h>
 #include <stdarg.h>

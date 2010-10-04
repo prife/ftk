@@ -26,25 +26,22 @@
  * History:
  * ================================================================
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
- * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
 #include "ftk_log.h"
 #include "ftk_globals.h"
 
+#ifdef IPHONE
 static FILE* log_file = NULL;
+#endif
 
 Ret ftk_log(const char* format, va_list ap)
 {
 	char buffer[1024] = {0};
 	ftk_vsnprintf(buffer, sizeof(buffer), format, ap);
 
-#ifndef RT_THREAD
 	printf(buffer);
-#else
-	rt_kprintf(buffer);
-#endif
 
 #ifdef IPHONE 
 	if (log_file == NULL)

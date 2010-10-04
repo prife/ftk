@@ -26,46 +26,29 @@
  * History:
  * ================================================================
  * 2010-01-31 Li XianJing <xianjimli@hotmail.com> created
- * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
 #include "ftk_allocator_default.h"
 
-
 void* ftk_allocator_default_alloc(FtkAllocator* thiz, size_t size)
 {
-#ifndef RT_THREAD
 	return malloc(size);
-#else
-	return rt_malloc(size);
-#endif	
 }
 
 void* ftk_allocator_default_realloc(FtkAllocator* thiz, void* ptr, size_t new_size)
 {
-#ifndef RT_THREAD
 	return realloc(ptr, new_size);
-#else
-	return rt_realloc(ptr, new_size);
-#endif
 }
 
 void  ftk_allocator_default_free(FtkAllocator* thiz, void* ptr)
 {
-#ifndef RT_THREAD
 	free(ptr);
-#else
-	rt_free(ptr);
-#endif
-
-	return;
 }
 
 void  ftk_allocator_default_destroy(FtkAllocator* thiz)
 {
 
-	return;
 }
 
 static const FtkAllocator g_default_allocator =

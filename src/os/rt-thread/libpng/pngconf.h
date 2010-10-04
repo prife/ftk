@@ -22,6 +22,7 @@
 #define PNG_NO_SETJMP_SUPPORTED
 #define PNG_NO_STDIO
 #define PNG_USER_MEM_SUPPORTED
+#define PNG_MAX_MALLOC_64K
 #endif
 
 #define PNG_1_2_X

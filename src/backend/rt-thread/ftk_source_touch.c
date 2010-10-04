@@ -11,15 +11,15 @@
 
 typedef struct _PrivInfo
 {
-    int        fd;
-    int        x;
-    int        y;
-    int        pressed;
-    FtkEvent   event;
-    FtkOnEvent on_event;
-    void*      user_data;
+    int         fd;
+    int         x;
+    int         y;
+    int         pressed;
+    FtkEvent    event;
+    FtkOnEvent  on_event;
+    void*       user_data;
 	rt_device_t	device;
-    char pipe[256];
+    char        pipe[256];
     struct rt_messagequeue mq;
 } PrivInfo;
 
@@ -53,9 +53,6 @@ static Ret ftk_source_touch_dispatch(FtkSource* thiz)
     priv->event.u.mouse.x = touchevent.x;
     priv->event.u.mouse.y = touchevent.y;
 
-    ftk_logd("%s: sample.pressure=%d x=%d y=%d\n", __func__,
-            touchevent.pressed, touchevent.x, touchevent.y);
-
     if (touchevent.pressed)
     {
         if (priv->pressed)
@@ -80,10 +77,6 @@ static Ret ftk_source_touch_dispatch(FtkSource* thiz)
     if (priv->on_event != NULL && priv->event.type != FTK_EVT_NOP)
     {
         priv->on_event(priv->user_data, &priv->event);
-
-        ftk_logd("%s: type=%d x=%d y=%d\n", __func__,
-                priv->event.type, priv->event.u.mouse.x, priv->event.u.mouse.y);
-
         priv->event.type = FTK_EVT_NOP;
     }
 
@@ -109,9 +102,11 @@ static void ftk_source_touch_destroy(FtkSource* thiz)
 
         ftk_rtthread_select_fd_free(priv->fd);
 
-		rt_device_close(priv->device);
-
 		rt_mq_detach(&priv->mq);
+
+		rt_device_control(priv->device, RT_TOUCH_EVENTPOST, NULL); 
+
+		rt_device_close(priv->device);
 
         FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
     }
@@ -147,7 +142,7 @@ FtkSource* ftk_source_touch_create(const char* filename, FtkOnEvent on_event, vo
 
         rt_mq_init(&priv->mq, "tspipe", 
 		           &priv->pipe[0], 
-		           32, 
+		           64, 
 		           sizeof(priv->pipe), 
 		           RT_IPC_FLAG_FIFO); 
 

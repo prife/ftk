@@ -66,11 +66,9 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, fd_set *write_fdset, fd_set
 	flags = read_fdset->fds_bits[0];
 	FD_ZERO(read_fdset);
 
-	if (write_fdset)
-		FD_ZERO(write_fdset);
+	if (write_fdset) FD_ZERO(write_fdset);
 
-	if (err_fdset)
-		FD_ZERO(err_fdset);
+	if (err_fdset) FD_ZERO(err_fdset);
 
 	rt_event_recv(&ftk_event, flags, RT_EVENT_FLAG_OR | RT_EVENT_FLAG_CLEAR, (rt_uint32_t)tick, &read_fdset->fds_bits[0]);
 

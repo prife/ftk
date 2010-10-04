@@ -31,16 +31,11 @@
  */
 
 #define PNG_SKIP_SETJMP_CHECK
-#include <png.h>
 #include "ftk_log.h"
 #include "ftk_image_png_decoder.h"
+#include <png.h>
 
 #ifdef RT_THREAD
-#undef SEEK_CUR
-#undef SEEK_END
-#undef SEEK_SET
-#include <dfs_posix.h>
-
 static void ftk_image_png_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
 	int fd = (int)png_ptr->io_ptr;
@@ -50,12 +45,12 @@ static void ftk_image_png_read_data(png_structp png_ptr, png_bytep data, png_siz
 
 static png_voidp rt_png_malloc(png_structp png_ptr, png_size_t size)
 {
-	return rt_malloc(size);
+	return malloc(size);
 }
 
 static void rt_png_free(png_structp png_ptr, png_voidp ptr)
 {
-	rt_free(ptr);
+	free(ptr);
 }
 #endif
 
@@ -65,7 +60,6 @@ static Ret ftk_image_png_decoder_match(FtkImageDecoder* thiz, const char* filena
 
 	return (strstr(filename, ".png") != NULL) ? RET_OK : RET_FAIL;
 }
-
 
 static FtkBitmap* load_png (const char *filename)
 {
@@ -265,8 +259,6 @@ static void ftk_image_png_decoder_destroy(FtkImageDecoder* thiz)
 	{
 		FTK_ZFREE(thiz, sizeof(thiz));
 	}
-
-	return;
 }
 
 FtkImageDecoder* ftk_image_png_decoder_create(void)

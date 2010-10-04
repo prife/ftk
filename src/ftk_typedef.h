@@ -26,7 +26,6 @@
  * History:
  * ================================================================
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
- * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
@@ -214,15 +213,10 @@ typedef struct _FtkCommitInfo
 
 #define FTK_CALL_LISTENER(listener, u, o) listener != NULL ? listener(u, o) : RET_OK
 
-#ifndef RT_THREAD
-#define return_if_fail(p) if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
+#define return_if_fail(p)          if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
 #define return_val_if_fail(p, val) if(!(p)) { printf("%s:%d "#p" failed.\n", __func__, __LINE__); return (val);}
-#else
-#define return_if_fail(p) if(!(p)) { rt_kprintf("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
-#define return_val_if_fail(p, val) if(!(p)) { rt_kprintf("%s:%d "#p" failed.\n", __func__, __LINE__); return (val);}
-#endif
 
-#define DECL_PRIV(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
+#define DECL_PRIV(thiz, priv)  PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
 #define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL
 #define DECL_PRIV2(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[2] : NULL

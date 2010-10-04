@@ -91,7 +91,7 @@ int ftk_pipe_write(FtkPipe* thiz, const void* buff, size_t length)
 {
     return_val_if_fail(thiz != NULL && buff != NULL, -1);
 
-    rt_mq_send(&thiz->mq, buff, length);
+    rt_mq_send(&thiz->mq, (void *)buff, length);
     
     ftk_rtthread_set_file_readble(thiz->fd);
 

@@ -26,21 +26,12 @@
  * History:
  * ================================================================
  * 2010-08-14 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 
 #include "ftk_util.h"
 #include "ftk_file_system.h"
-
-#ifdef RT_THREAD
-#undef SEEK_CUR
-#undef SEEK_END
-#undef SEEK_SET
-#include <dfs_posix.h>
-#define DT_UNKNOWN	DFS_DT_UNKNOWN
-#define DT_REG		DFS_DT_REG
-#define DT_DIR		DFS_DT_DIR
-#endif
 
 Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 {
@@ -79,20 +70,19 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 
 static int ftk_file_parse_mode(const char *mode)
 {
-	int f=0;
+	int f = 0;
  
-  	for (;;)
+  	for(;;)
 	{
-    	switch (*mode)
+    	switch(*mode)
 		{
-		    case 0: return f;
+		    case  0 : return f;
 		    case 'b': break;
-		    case 'r': f=O_RDONLY; break;
-		    case 'w': f=O_WRONLY|O_CREAT|O_TRUNC; break;
-		    case 'a': f=O_WRONLY|O_CREAT|O_APPEND; break;
-		    case '+': f=(f&(~O_WRONLY))|O_RDWR; break;
+		    case 'r': f = O_RDONLY; break;
+		    case 'w': f = O_WRONLY|O_CREAT|O_TRUNC; break;
+		    case 'a': f = O_WRONLY|O_CREAT|O_APPEND; break;
+		    case '+': f = (f&(~O_WRONLY))|O_RDWR; break;
     	}
-
     	++mode;
   	}
 }
@@ -122,7 +112,7 @@ int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length)
 #ifndef RT_THREAD
 	return fwrite(buffer, 1, length, file);
 #else
-	return write((int)(file-1), buffer, length);
+	return write((int)(file-1), (char *)buffer, length);
 #endif
 }
 
@@ -135,8 +125,6 @@ void ftk_file_close(FtkFsHandle file)
 #else
 	close((int)(file-1));
 #endif
-
-	return;
 }
 
 FtkFsHandle ftk_dir_open(const char* dir_name)
@@ -186,8 +174,6 @@ void ftk_dir_close(FtkFsHandle dir)
 	{
 		closedir(dir);
 	}
-
-	return;
 }
 
 Ret ftk_fs_get_cwd(char cwd[FTK_MAX_PATH+1])
@@ -270,7 +256,6 @@ Ret ftk_fs_move(const char* dir_from, const char* dir_to)
 
 	return rename(dir_from, dir_to) == 0 ? RET_OK : RET_FAIL;
 }
-
 
 int ftk_fs_is_root(const char* path)
 {

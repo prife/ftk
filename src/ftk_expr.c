@@ -26,10 +26,14 @@
  * History:
  * ================================================================
  * 2009-07-17 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
+
 #include <stdlib.h>
+#ifndef RT_THREAD
 #include <stdio.h>
+#endif
 #include <ctype.h>
 #include <assert.h>
 #include "ftk_util.h"

@@ -33,12 +33,6 @@
 #include "ftk_mmap.h"
 #include "ftk_allocator.h"
 
-#undef SEEK_CUR
-#undef SEEK_END
-#undef SEEK_SET
-
-#include <dfs_posix.h>
-
 struct _FtkMmap
 {
 	int fd;
@@ -76,7 +70,7 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	}
 
 	thiz->length = size;
-	thiz->data = FTK_ALLOC(size);
+	thiz->data = FTK_ZALLOC(size);
 	if(thiz->data == NULL)
 	{
 		close(thiz->fd);
@@ -118,5 +112,4 @@ void     ftk_mmap_destroy(FtkMmap* thiz)
 		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
 }
-
 
