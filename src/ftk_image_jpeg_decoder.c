@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2010-10-02 Jiao JinXing <jiaojinxing1987@gmail.com> add rt-thread support.
  *
  */
 #include <setjmp.h>
@@ -33,6 +34,126 @@
 #include "ftk_log.h"
 #include <jpeglib.h>
 #include "ftk_image_jpeg_decoder.h"
+
+#ifdef RT_THREAD
+#define INPUT_BUFFER_SIZE	4096
+typedef struct {
+	struct jpeg_source_mgr pub;
+	int fd;
+	rt_uint8_t buffer[INPUT_BUFFER_SIZE];
+} ftk_jpeg_source_mgr;
+
+/*
+* Initialize source --- called by jpeg_read_header
+* before any data is actually read.
+*/
+static void ftk_jpeg_init_source (j_decompress_ptr cinfo)
+{
+	/* We don't actually need to do anything */
+	return;
+}
+
+/*
+* Fill the input buffer --- called whenever buffer is emptied.
+*/
+static boolean ftk_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
+{
+	ftk_jpeg_source_mgr * src = (ftk_jpeg_source_mgr *) cinfo->src;
+	int nbytes;
+
+	nbytes = read(src->fd, src->buffer, INPUT_BUFFER_SIZE);
+	if (nbytes <= 0)
+	{
+		/* Insert a fake EOI marker */
+		src->buffer[0] = (rt_uint8_t) 0xFF;
+		src->buffer[1] = (rt_uint8_t) JPEG_EOI;
+		nbytes = 2;
+	}
+
+	src->pub.next_input_byte = src->buffer;
+	src->pub.bytes_in_buffer = nbytes;
+
+	return TRUE;
+}
+
+/*
+* Skip data --- used to skip over a potentially large amount of
+* uninteresting data (such as an APPn marker).
+*
+* Writers of suspendable-input applications must note that skip_input_data
+* is not granted the right to give a suspension return.  If the skip extends
+* beyond the data currently in the buffer, the buffer can be marked empty so
+* that the next read will cause a fill_input_buffer call that can suspend.
+* Arranging for additional bytes to be discarded before reloading the input
+* buffer is the application writer's problem.
+*/
+static void ftk_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+{
+	ftk_jpeg_source_mgr * src = (ftk_jpeg_source_mgr *) cinfo->src;
+
+	/* Just a dumb implementation for now.	Could use fseek() except
+	* it doesn't work on pipes.  Not clear that being smart is worth
+	* any trouble anyway --- large skips are infrequent.
+	*/
+	if (num_bytes > 0)
+	{
+		while (num_bytes > (long) src->pub.bytes_in_buffer)
+		{
+			num_bytes -= (long) src->pub.bytes_in_buffer;
+			(void) src->pub.fill_input_buffer(cinfo);
+			/* note we assume that fill_input_buffer will never
+			* return FALSE, so suspension need not be handled.
+			*/
+		}
+		src->pub.next_input_byte += (size_t) num_bytes;
+		src->pub.bytes_in_buffer -= (size_t) num_bytes;
+	}
+}
+
+/*
+* Terminate source --- called by jpeg_finish_decompress
+* after all data has been read.
+*/
+static void ftk_jpeg_term_source (j_decompress_ptr cinfo)
+{
+	/* We don't actually need to do anything */
+	return;
+}
+
+/*
+* Prepare for input from a stdio stream.
+* The caller must have already opened the stream, and is responsible
+* for closing it after finishing decompression.
+*/
+static void ftk_jpeg_filerw_src_init(j_decompress_ptr cinfo, int fd)
+{
+	ftk_jpeg_source_mgr *src;
+
+	/* The source object and input buffer are made permanent so that a series
+	* of JPEG images can be read from the same file by calling jpeg_stdio_src
+	* only before the first one.  (If we discarded the buffer at the end of
+	* one image, we'd likely lose the start of the next one.)
+	* This makes it unsafe to use this manager and a different source
+	* manager serially with the same JPEG object.  Caveat programmer.
+	*/
+	if (cinfo->src == NULL) {	/* first time for this JPEG object? */
+		cinfo->src = (struct jpeg_source_mgr *)
+			(*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+			sizeof(ftk_jpeg_source_mgr));
+		src = (ftk_jpeg_source_mgr *) cinfo->src;
+	}
+
+	src = (ftk_jpeg_source_mgr *) cinfo->src;
+	src->pub.init_source = ftk_jpeg_init_source;
+	src->pub.fill_input_buffer = ftk_jpeg_fill_input_buffer;
+	src->pub.skip_input_data = ftk_jpeg_skip_input_data;
+	src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
+	src->pub.term_source = ftk_jpeg_term_source;
+	src->fd = fd;
+	src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+	src->pub.next_input_byte = NULL; /* until buffer loaded */
+}
+#endif
 
 static Ret ftk_image_jpeg_decoder_match(FtkImageDecoder* thiz, const char* filename)
 {
@@ -109,7 +230,11 @@ my_error_exit (j_common_ptr cinfo)
 static FtkBitmap* load_jpeg (const char *filename)
 {
 	int i = 0;
-	FILE *infile;	
+#ifndef RT_THREAD
+	FILE *infile;
+#else
+	int fd;
+#endif
 	JSAMPARRAY buffer;	
 	int row_stride;	
 	FtkColor bg = {0};
@@ -118,7 +243,12 @@ static FtkBitmap* load_jpeg (const char *filename)
 	struct jpeg_decompress_struct cinfo;
 	
 	bg.a = 0xff;
+
+#ifndef RT_THREAD
 	if ((infile = fopen (filename, "rb")) == NULL)
+#else
+	if ((fd = open (filename, O_RDONLY, 0)) < 0)
+#endif
 	{
 		ftk_logd("can't open %s\n", filename);
 		return 0;
@@ -130,11 +260,20 @@ static FtkBitmap* load_jpeg (const char *filename)
 	if (setjmp (jerr.setjmp_buffer))
 	{
 		jpeg_destroy_decompress (&cinfo);
+#ifndef RT_THREAD
 		fclose (infile);
+#else
+		close(fd);
+#endif
 		return NULL;
 	}
 	jpeg_create_decompress (&cinfo);
+
+#ifndef RT_THREAD
 	jpeg_stdio_src (&cinfo, infile);
+#else
+	ftk_jpeg_filerw_src_init(&cinfo, fd);
+#endif
 
 	(void) jpeg_read_header (&cinfo, TRUE);
 
@@ -146,7 +285,11 @@ static FtkBitmap* load_jpeg (const char *filename)
 	if((bitmap = ftk_bitmap_create(cinfo.output_width, cinfo.output_height, bg)) == NULL)
 	{
 		jpeg_destroy_decompress (&cinfo);
+#ifndef RT_THREAD
 		fclose (infile);
+#else
+		close(fd);
+#endif
 
 		return NULL;
 	}
@@ -162,7 +305,11 @@ static FtkBitmap* load_jpeg (const char *filename)
 	(void) jpeg_finish_decompress (&cinfo);
 	jpeg_destroy_decompress (&cinfo);
 
+#ifndef RT_THREAD
 	fclose (infile);
+#else
+	close(fd);
+#endif
 
 	return bitmap;
 }

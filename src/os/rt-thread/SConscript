@@ -4,7 +4,7 @@ Import('RTT_ROOT')
 Import('projects')
 
 ftk_app_src	= Split("""
-../../demos/demo_file_browser.c
+../../demos/demo_alpha.c
 """)
 
 ftk_src = Split("""
@@ -44,6 +44,7 @@ ftk_src = Split("""
 ../../ftk_image.c
 ../../ftk_image_bmp_decoder.c
 ../../ftk_image_png_decoder.c
+../../ftk_image_jpeg_decoder.c
 ../../ftk_input_method_manager.c
 ../../ftk_input_method_preeditor.c
 ../../ftk_input_method_preeditor_default.c
@@ -142,8 +143,70 @@ pnglib_src = Split("""
 ./libpng/pngwutil.c
 """)
 
+jpeg_src = Split("""
+./jpeg/jaricom.c
+./jpeg/jcapimin.c
+./jpeg/jcapistd.c
+./jpeg/jcarith.c
+./jpeg/jccoefct.c
+./jpeg/jccolor.c
+./jpeg/jcdctmgr.c
+./jpeg/jchuff.c
+./jpeg/jcinit.c
+./jpeg/jcmainct.c
+./jpeg/jcmarker.c
+./jpeg/jcmaster.c
+./jpeg/jcomapi.c
+./jpeg/jcparam.c
+./jpeg/jcprepct.c
+./jpeg/jcsample.c
+./jpeg/jctrans.c
+./jpeg/jdapimin.c
+./jpeg/jdapistd.c
+./jpeg/jdarith.c
+./jpeg/jdatadst.c
+./jpeg/jdatasrc.c
+./jpeg/jdcoefct.c
+./jpeg/jdcolor.c
+./jpeg/jddctmgr.c
+./jpeg/jdhuff.c
+./jpeg/jdinput.c
+./jpeg/jdmainct.c
+./jpeg/jdmarker.c
+./jpeg/jdmaster.c
+./jpeg/jdmerge.c
+./jpeg/jdpostct.c
+./jpeg/jdsample.c
+./jpeg/jdtrans.c
+./jpeg/jerror.c
+./jpeg/jfdctflt.c
+./jpeg/jfdctfst.c
+./jpeg/jfdctint.c
+./jpeg/jidctflt.c
+./jpeg/jidctfst.c
+./jpeg/jidctint.c
+./jpeg/jmemansi.c
+./jpeg/jmemmgr.c
+./jpeg/jquant1.c
+./jpeg/jquant2.c
+./jpeg/jutils.c
+./jpeg/rdbmp.c
+./jpeg/rdcolmap.c
+./jpeg/rdgif.c
+./jpeg/rdppm.c
+./jpeg/rdrle.c
+./jpeg/rdswitch.c
+./jpeg/rdtarga.c
+./jpeg/transupp.c
+./jpeg/wrbmp.c
+./jpeg/wrgif.c
+./jpeg/wrppm.c
+./jpeg/wrrle.c
+./jpeg/wrtarga.c
+""")
+
 # The set of source files associated with this SConscript file.
-src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + zlib_src	+ pnglib_src + ftk_app_src
+src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + zlib_src	+ pnglib_src + ftk_app_src + jpeg_src
 
 path = [RTT_ROOT + '/components/external/ftk/src',
 	RTT_ROOT + '/components/external/ftk/src/im', 
@@ -151,6 +214,7 @@ path = [RTT_ROOT + '/components/external/ftk/src',
 	RTT_ROOT + '/components/external/ftk/src/linebreak',
 	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/libz', 
 	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/libpng',
+	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/jpeg',
 	RTT_ROOT + '/components/external/ftk/src/backend/rt-thread' ]
 
 # group definitions

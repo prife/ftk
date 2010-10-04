@@ -43,12 +43,12 @@ static void ftk_image_png_read_data(png_structp png_ptr, png_bytep data, png_siz
 	read(fd, data, length);
 }
 
-static png_voidp rt_png_malloc(png_structp png_ptr, png_size_t size)
+static png_voidp ftk_png_malloc(png_structp png_ptr, png_size_t size)
 {
 	return malloc(size);
 }
 
-static void rt_png_free(png_structp png_ptr, png_voidp ptr)
+static void ftk_png_free(png_structp png_ptr, png_voidp ptr)
 {
 	free(ptr);
 }
@@ -110,7 +110,7 @@ static FtkBitmap* load_png (const char *filename)
 		return NULL;
 	}
 
-	if((png_ptr = png_create_read_struct_2(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL, NULL, rt_png_malloc, rt_png_free)) == NULL)
+	if((png_ptr = png_create_read_struct_2(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL, NULL, ftk_png_malloc, ftk_png_free)) == NULL)
 	{
 		close(fd);
 		return NULL;

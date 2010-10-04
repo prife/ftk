@@ -68,5 +68,6 @@
 
 #define HAS_BMP
 #define HAS_PNG
+#define HAS_JPEG
 
 #endif // __FTK_RTTHREAD_H__
