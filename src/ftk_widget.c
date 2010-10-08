@@ -299,7 +299,14 @@ void* ftk_widget_user_data(FtkWidget* thiz)
 
 const char* ftk_widget_get_text(FtkWidget* thiz)
 {
+	FtkEvent event = {0};
 	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
+	
+	event.type = FTK_EVT_GET_TEXT;
+	if(ftk_widget_event(thiz, &event) == RET_REMOVE)
+	{
+		return event.u.extra;
+	}
 
 	return thiz->priv->text != NULL ? thiz->priv->text : "";
 }
@@ -793,7 +800,16 @@ void    ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 
 void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 {
+	FtkEvent event = {0};
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
+	
+	event.type = FTK_EVT_SET_TEXT;
+	event.u.extra = text;
+
+	if(ftk_widget_event(thiz, &event) == RET_REMOVE)
+	{
+		return;
+	}
 
 	if(thiz->priv->text != NULL 
 		&& text != NULL 

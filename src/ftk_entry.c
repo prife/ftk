@@ -291,6 +291,20 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 
 			break;
 		}
+		case FTK_EVT_SET_TEXT:
+		{
+			ftk_entry_set_text(thiz, event->u.extra);
+			ret = RET_REMOVE;
+
+			break;
+		}
+		case FTK_EVT_GET_TEXT:
+		{
+			event->u.extra = ftk_entry_get_text(thiz);
+			ret = RET_REMOVE;
+
+			break;
+		}
 		default:break;
 	}
 

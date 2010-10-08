@@ -2,6 +2,7 @@
 
 static Ret button_quit_clicked(void* ctx, void* obj)
 {
+	ftk_logd("%s: %s\n", __func__, ftk_widget_get_text(ftk_widget_lookup(ctx, 100)));
 	ftk_widget_unref(ctx);
 
 	return RET_OK;
@@ -47,6 +48,9 @@ FtkApp* ftk_app_demo_entry_create()
 #define FTK_HIDE extern
 #endif /*FTK_AS_PLUGIN*/
 
+#define STR_TEXT1 "Single line editor, that means you can input a one line only."
+#define STR_TEXT2 "Single line editor, 也就是说你只能输入一行文字."
+
 FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
@@ -61,14 +65,17 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	entry = ftk_entry_create(win, 10, 30, ftk_widget_width(win) - 20, 30);
-	ftk_entry_set_text(entry, "1234");
+	ftk_widget_set_id(entry, 100);
+	ftk_widget_set_text(entry, "1234");
 	ftk_widget_set_event_listener(entry, ftk_digit_only_filter, NULL);
 	ftk_entry_set_tips(entry, "Please input some digits.");
 	entry = ftk_entry_create(win, 10, 80, ftk_widget_width(win) - 20, 30);
-	ftk_entry_set_text(entry, "Single line editor, that means you can input a one line only.");
-	
+	ftk_widget_set_text(entry, STR_TEXT1);
+	assert(strcmp(STR_TEXT1, ftk_widget_get_text(entry)) == 0);
+
 	entry = ftk_entry_create(win, 10, 130, ftk_widget_width(win) - 20, 30);
-	ftk_entry_set_text(entry, "Single line editor, 也就是说你只能输入一行文字.");
+	ftk_widget_set_text(entry, STR_TEXT2);
+	assert(strcmp(STR_TEXT2, ftk_widget_get_text(entry)) == 0);
 	
 	button = ftk_button_create(win, width/4, 3*height/4, width/2, 60);
 	ftk_widget_set_text(button, "quit");
