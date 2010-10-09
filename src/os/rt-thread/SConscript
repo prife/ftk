@@ -208,14 +208,14 @@ jpeg_src = Split("""
 # The set of source files associated with this SConscript file.
 src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + zlib_src	+ pnglib_src + ftk_app_src + jpeg_src
 
-path = [RTT_ROOT + '/components/external/ftk/src',
-	RTT_ROOT + '/components/external/ftk/src/im', 
-	RTT_ROOT + '/components/external/ftk/src/os/rt-thread',
-	RTT_ROOT + '/components/external/ftk/src/linebreak',
-	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/libz', 
-	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/libpng',
-	RTT_ROOT + '/components/external/ftk/src/os/rt-thread/jpeg',
-	RTT_ROOT + '/components/external/ftk/src/backend/rt-thread' ]
+path = [RTT_ROOT + '/components/external/ftk/ftk/src',
+	RTT_ROOT + '/components/external/ftk/ftk/src/im', 
+	RTT_ROOT + '/components/external/ftk/ftk/src/os/rt-thread',
+	RTT_ROOT + '/components/external/ftk/ftk/src/linebreak',
+	RTT_ROOT + '/components/external/ftk/ftk/src/os/rt-thread/libz', 
+	RTT_ROOT + '/components/external/ftk/ftk/src/os/rt-thread/libpng',
+	RTT_ROOT + '/components/external/ftk/ftk/src/os/rt-thread/jpeg',
+	RTT_ROOT + '/components/external/ftk/ftk/src/backend/rt-thread' ]
 
 # group definitions
 group = {}
