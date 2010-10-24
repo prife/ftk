@@ -32,10 +32,14 @@
 #include "ftk_allocator.h"
 #include "ftk_input_method_manager.h"
 
+#ifdef WIN32
+#include "ftk_input_method_win32.h"
+#else
 #include "ftk_input_method_py.h"
 
 #ifdef USE_HANDWRITE
 #include "ftk_input_method_hw.h"
+#endif
 #endif
 
 #define FTK_INPUT_METHOD_MAX_NR 6
@@ -51,10 +55,14 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	FtkInputMethodManager* thiz = FTK_ZALLOC(sizeof(FtkInputMethodManager));
 	if(thiz != NULL)
 	{
+#ifdef WIN32
+		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
+#else
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
 #ifdef USE_HANDWRITE
 		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());
+#endif
 #endif
 	}
 	return thiz;

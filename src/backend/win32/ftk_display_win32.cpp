@@ -30,11 +30,15 @@
  */
 
 #include <windows.h>
+
+#include "ftk_log.h"
 #include "ftk_bitmap.h"
 #include "ftk_event.h"
 #include "ftk_globals.h"
 #include "ftk_wnd_manager.h"
 #include "ftk_display_win32.h"
+#include "ftk_input_method_manager.h"
+#include "ftk_input_method_win32.h"
 
 #define DISPLAY_WIDTH  320
 #define DISPLAY_HEIGHT 480
@@ -131,9 +135,97 @@ static Ret ftk_on_key_event(PrivInfo* priv, int down, unsigned char vkey)
 	return RET_OK;
 }
 
+static char* ftk_on_ime_event(HWND hwnd, LPARAM lParam)
+{
+	LONG n;
+	char* gb2312;
+	wchar_t* unicode;
+	char* utf8;
+	HIMC himc;
+
+	himc = ImmGetContext(hwnd);
+	if(himc == NULL)
+	{
+		return NULL;
+	}
+	n = ImmGetCompositionString(himc, GCS_RESULTSTR, NULL, 0);
+	if(n <= 0)
+	{
+		ImmReleaseContext(hwnd, himc);
+		return NULL;
+	}
+	gb2312 = (char*) FTK_ALLOC(n + 1);
+	if(gb2312 == NULL)
+	{
+		ImmReleaseContext(hwnd, himc);
+		return NULL;
+	}
+	if(ImmGetCompositionString(himc, GCS_RESULTSTR, gb2312, n) != n)
+	{
+		FTK_FREE(gb2312);
+		ImmReleaseContext(hwnd, himc);
+		return NULL;
+	}
+	ImmReleaseContext(hwnd, himc);
+
+	gb2312[n] = '\0';
+	ftk_logd("%s:%d WM_IME_COMPOSITION:%s\n", __FILE__, __LINE__, gb2312);
+	n = MultiByteToWideChar(CP_ACP, 0, gb2312, -1, NULL, 0);
+	if(n < 1)
+	{
+		FTK_FREE(gb2312);
+		return NULL;
+	}
+	unicode = (wchar_t*) FTK_ALLOC(n * 2);
+	if(unicode == NULL)
+	{
+		FTK_FREE(gb2312);
+		return NULL;
+	}
+	n = MultiByteToWideChar(CP_ACP, 0, gb2312, -1, unicode, n);
+	if(n < 1)
+	{
+		FTK_FREE(gb2312);
+		FTK_FREE(unicode);
+		return NULL;
+	}
+
+	FTK_FREE(gb2312);
+
+	n = WideCharToMultiByte(CP_UTF8, 0, unicode, -1, NULL, 0, NULL, NULL);
+	if(n < 1)
+	{
+		FTK_FREE(unicode);
+		return NULL;
+	}
+	utf8 = (char*) FTK_ALLOC(n);
+	if(utf8 == NULL)
+	{
+		FTK_FREE(unicode);
+		return NULL;
+	}
+	n = WideCharToMultiByte(CP_UTF8, 0, unicode, -1, utf8, n, NULL, NULL);
+	if(n < 1)
+	{
+		FTK_FREE(unicode);
+		FTK_FREE(utf8);
+		return NULL;
+	}
+
+	FTK_FREE(unicode);
+
+	return utf8;
+}
+
 static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	PrivInfo* priv = (PrivInfo*)GetWindowLong(hwnd, GWL_USERDATA);
+
+	if(priv != NULL)
+	{
+		memset(&priv->event, 0, sizeof(FtkEvent));
+	}
+
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
@@ -169,6 +261,33 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				priv->event.u.mouse.y = yPos;
 				priv->event.type = FTK_EVT_MOUSE_MOVE;
 
+				break;
+			}
+		case WM_IME_COMPOSITION:
+			{
+				char* buf;
+				FtkInputMethod* im = NULL;
+
+				if(!(lParam & GCS_RESULTSTR))
+				{
+					return DefWindowProc(hwnd, message, wParam, lParam);
+				}
+				if(ftk_input_method_manager_get(ftk_default_input_method_manager(), 0, &im) == RET_FAIL || im == NULL)
+				{
+					return DefWindowProc(hwnd, message, wParam, lParam);
+				}
+				if(ftk_input_method_win32_get_editor(im) == NULL)
+				{
+					return DefWindowProc(hwnd, message, wParam, lParam);
+				}
+
+				buf = ftk_on_ime_event(hwnd, lParam);
+				if(buf == NULL)
+				{
+					return DefWindowProc(hwnd, message, wParam, lParam);
+				}
+				priv->event.u.extra = buf;
+				priv->event.type = FTK_EVT_OS_IM_COMMIT;
 				break;
 			}
         default:                      /* for messages that we don't deal with */
