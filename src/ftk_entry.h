@@ -33,6 +33,7 @@
 #define FTK_ENTRY_H
 
 #include "ftk_widget.h"
+#include "ftk_input_method.h"
 
 FTK_INHERITE_FROM(Widget)
 
@@ -45,7 +46,7 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text);
 
 /*tips is shown when there is no text in the entry.*/
 Ret ftk_entry_set_tips(FtkWidget* thiz, const char* tips);
-Ret ftk_entry_set_input_method(FtkWidget* thiz, int index);
+Ret ftk_entry_set_input_type(FtkWidget* thiz, FtkInputType type);
 Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text);
 
 FTK_END_DECLS

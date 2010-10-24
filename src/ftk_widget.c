@@ -29,6 +29,15 @@
  *
  */
 
+/**
+ * SECTION:ftk_widget
+ * @Short_description: Base class for all widgets
+ * @Title: FtkWidget
+ *
+ * FtkWidget is the base class all widgets in FTK derive from. It manages the
+ * widget lifecycle, states and style.
+ */
+
 #include "ftk_theme.h"
 #include "ftk_bitmap.h"
 #include "ftk_widget.h"
@@ -63,6 +72,20 @@ struct _FtkWidgetInfo
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz);
 
+/**
+ * ftk_widget_init:
+ * @thiz: a #FtkWidget
+ * @type: a #FtkWidgetType 
+ * @id: id of the widget.
+ * @x: X position
+ * @y: Y position
+ * @width: width of the widget
+ * @height: height of the widget
+ * @attr: a #FtkWidgetAttr, attribute of the widget
+ *
+ * This function called by widget implementation to initialize a widget.
+ *
+ */
 void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y, 
 	int width, int height, FtkWidgetAttr attr)
 {
@@ -109,21 +132,50 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y,
 
 }
 
+/**
+ * ftk_widget_type:
+ * @thiz: a #FtkWidget
+ *
+ * Get the type of the widget.
+ * 
+ * Return value: #FtkWidgetType
+ */
 int ftk_widget_type(FtkWidget* thiz)
 {
 	return thiz != NULL && thiz->priv != NULL ? thiz->priv->type : 0;
 }
 
+/**
+ * ftk_widget_top:
+ * @thiz: a #FtkWidget
+ *
+ * Get the Y position of the widget relative to its parent.
+ * 
+ */
 int ftk_widget_top(FtkWidget* thiz)
 {
 	return thiz != NULL && thiz->priv != NULL ? thiz->priv->top : 0;
 }
 
+/**
+ * ftk_widget_left:
+ * @thiz: a #FtkWidget
+ *
+ * Get the X position of the widget relative to its parent.
+ * 
+ */
 int ftk_widget_left(FtkWidget* thiz)
 {
 	return thiz != NULL && thiz->priv != NULL ? thiz->priv->left : 0;
 }
 
+/**
+ * ftk_widget_top_abs:
+ * @thiz: a #FtkWidget
+ *
+ * Get the absolute Y position of the widget.
+ * 
+ */
 int ftk_widget_top_abs(FtkWidget* thiz)
 {
 	int top = 0;
@@ -137,6 +189,13 @@ int ftk_widget_top_abs(FtkWidget* thiz)
 	return top;
 }
 
+/**
+ * ftk_widget_left_abs:
+ * @thiz: a #FtkWidget
+ *
+ * Get the absolute X position of the widget.
+ * 
+ */
 int ftk_widget_left_abs(FtkWidget* thiz)
 {
 	int left = 0;
@@ -150,6 +209,13 @@ int ftk_widget_left_abs(FtkWidget* thiz)
 	return left;
 }
 
+/**
+ * ftk_widget_top_in_window:
+ * @thiz: a #FtkWidget
+ *
+ * Get the absolute Y position of the widget in the window.
+ * 
+ */
 int ftk_widget_top_in_window(FtkWidget* thiz)
 {
 	int top = 0;
@@ -163,6 +229,13 @@ int ftk_widget_top_in_window(FtkWidget* thiz)
 	return top;
 }
 
+/**
+ * ftk_widget_left_in_window:
+ * @thiz: a #FtkWidget
+ *
+ * Get the absolute X position of the widget in the window.
+ * 
+ */
 int ftk_widget_left_in_window(FtkWidget* thiz)
 {
 	int left = 0;

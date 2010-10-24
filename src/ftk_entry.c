@@ -45,7 +45,7 @@ typedef struct _PrivInfo
 	int   visible_end;
 	int   selected_end;
 	int   selected_start;
-	int   input_method;
+	int   input_type;
 	FtkPoint caret_pos;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
@@ -232,7 +232,8 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
-			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), priv->input_method, thiz);
+			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
+			ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), priv->input_type);
 			ftk_source_ref(priv->caret_timer);
 			ftk_source_timer_reset(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
@@ -240,7 +241,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_FOCUS_OUT:
 		{
-			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), priv->input_method);
+			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
@@ -271,23 +272,14 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_IM_COMMIT:
 		{
 			ftk_entry_input_str(thiz, event->u.extra);
-			ftk_input_method_manager_focus_ack_commit(ftk_default_input_method_manager(), priv->input_method);
+			ftk_input_method_manager_focus_ack_commit(ftk_default_input_method_manager());
 			break;
 		}
 		case FTK_EVT_MOUSE_LONG_PRESS:
 		{
-			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
-			if(im != NULL)
-			{
-				ftk_input_method_focus_out(im);
-				im = NULL;
-			}
-			priv->input_method = ftk_input_method_chooser();
-			ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
-			if(im != NULL)
-			{
-				ftk_input_method_focus_in(im, thiz);
-			}
+			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
+			ftk_input_method_chooser();
+			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
 
 			break;
 		}
@@ -422,12 +414,10 @@ static void ftk_entry_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
-		FtkInputMethod* im = NULL;
 
-		ftk_input_method_manager_get(ftk_default_input_method_manager(), priv->input_method, &im);
-		if(im != NULL)
+		if(ftk_widget_is_focused(thiz))
 		{
-			ftk_input_method_focus_out(im);
+			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
 		}
 
 		FTK_FREE(priv->tips);
@@ -458,7 +448,7 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		height = ftk_font_height(ftk_default_font()) + FTK_ENTRY_V_MARGIN * 2;
 		ftk_widget_init(thiz, FTK_ENTRY, 0, x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
-		priv->input_method = -1;
+		priv->input_type = FTK_INPUT_NORMAL;
 		priv->caret_timer = ftk_source_timer_create(500, (FtkTimer)ftk_entry_on_paint_caret, thiz);
 		priv->text_buffer = ftk_text_buffer_create(128);
 		ftk_widget_append_child(parent, thiz);
@@ -524,12 +514,12 @@ Ret ftk_entry_set_tips(FtkWidget* thiz, const char* tips)
 	return RET_OK;
 }
 
-Ret ftk_entry_set_input_method(FtkWidget* thiz, int index)
+Ret ftk_entry_set_input_type(FtkWidget* thiz, FtkInputType type)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	priv->input_method = index;
+	priv->input_type = type;
 
 	return RET_OK;
 }

@@ -532,6 +532,12 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_constant(L, "FTK_ANI_TO_EAST_NORTH", FTK_ANI_TO_EAST_NORTH);
 	tolua_constant(L, "FTK_ANI_TO_BRINK", FTK_ANI_TO_BRINK);
 	tolua_constant(L, "FTK_ANI_ALPHA", FTK_ANI_ALPHA);
+	tolua_constant(L, "FTK_INPUT_NORMAL", FTK_INPUT_NORMAL);
+	tolua_constant(L, "FTK_INPUT_DIGIT", FTK_INPUT_DIGIT);
+	tolua_constant(L, "FTK_INPUT_ALPHA", FTK_INPUT_ALPHA);
+	tolua_constant(L, "FTK_INPUT_URL", FTK_INPUT_URL);
+	tolua_constant(L, "FTK_INPUT_EMAIL", FTK_INPUT_EMAIL);
+	tolua_constant(L, "FTK_INPUT_ALL", FTK_INPUT_ALL);
 	tolua_constant(L, "FTK_GC_BG", FTK_GC_BG);
 	tolua_constant(L, "FTK_GC_FG", FTK_GC_FG);
 	tolua_constant(L, "FTK_GC_FONT", FTK_GC_FONT);

@@ -42,13 +42,17 @@ typedef struct _FtkInputMethodManager FtkInputMethodManager;
 FtkInputMethodManager* ftk_input_method_manager_create(void);
 size_t  ftk_input_method_manager_count(FtkInputMethodManager* thiz);
 Ret  ftk_input_method_manager_get(FtkInputMethodManager* thiz, size_t index, FtkInputMethod** im);
+Ret  ftk_input_method_manager_get_current(FtkInputMethodManager* thiz, FtkInputMethod** im);
+Ret  ftk_input_method_manager_set_current(FtkInputMethodManager* thiz, size_t index);
+Ret  ftk_input_method_manager_set_current_type(FtkInputMethodManager* thiz, FtkInputType type);
+
 Ret  ftk_input_method_manager_register(FtkInputMethodManager* thiz, FtkInputMethod* im);
 Ret  ftk_input_method_manager_unregister(FtkInputMethodManager* thiz, FtkInputMethod* im);
 void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz);
 
-Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, size_t index);
-Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz, size_t index);
-Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, size_t index, FtkWidget* widget);
+Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, FtkWidget* widget);
+Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz);
+Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, FtkWidget* widget);
 
 int ftk_input_method_chooser(void);
 

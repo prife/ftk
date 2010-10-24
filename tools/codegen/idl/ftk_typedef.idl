@@ -81,6 +81,16 @@ enum FtkExpandType
     FTK_ANI_ALPHA
 };
 
+enum FtkInputType
+{
+	FTK_INPUT_NORMAL,
+	FTK_INPUT_DIGIT,
+	FTK_INPUT_ALPHA,
+	FTK_INPUT_URL,
+	FTK_INPUT_EMAIL,
+	FTK_INPUT_ALL
+};
+
 enum FtkGcMask
 {
 	FTK_GC_BG        ,

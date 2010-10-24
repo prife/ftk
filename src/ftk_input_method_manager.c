@@ -47,6 +47,8 @@
 struct _FtkInputMethodManager
 {
 	size_t nr;
+	size_t current;
+	FtkWidget* widget;
 	FtkInputMethod* methods[FTK_INPUT_METHOD_MAX_NR+1];
 };
 
@@ -55,6 +57,7 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	FtkInputMethodManager* thiz = FTK_ZALLOC(sizeof(FtkInputMethodManager));
 	if(thiz != NULL)
 	{
+		thiz->current = -1;
 #ifdef WIN32
 		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
 #else
@@ -84,6 +87,32 @@ Ret  ftk_input_method_manager_get(FtkInputMethodManager* thiz, size_t index, Ftk
 	}
 
 	*im = thiz->methods[index];
+
+	return RET_OK;
+}
+
+Ret  ftk_input_method_manager_get_current(FtkInputMethodManager* thiz, FtkInputMethod** im)
+{
+	return ftk_input_method_manager_get(thiz, thiz->current, im);
+}
+
+Ret  ftk_input_method_manager_set_current(FtkInputMethodManager* thiz, size_t index)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	thiz->current = index;
+
+	return RET_OK;
+}
+
+Ret  ftk_input_method_manager_set_current_type(FtkInputMethodManager* thiz, FtkInputType type)
+{
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(thiz->current < thiz->nr)
+	{
+		ftk_input_method_set_type(thiz->methods[thiz->current], type);
+	}
 
 	return RET_OK;
 }
@@ -138,39 +167,43 @@ void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz)
 	return;
 }
 
-Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, size_t index, FtkWidget* widget)
+Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, FtkWidget* widget)
 {
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	if(index < thiz->nr)
+	if(thiz->current < thiz->nr)
 	{
-		ftk_input_method_focus_in(thiz->methods[index], widget);
+		if(ftk_input_method_focus_in(thiz->methods[thiz->current], widget) == RET_OK)
+		{
+			thiz->widget = widget;
+		}
 	}
 
 	return RET_OK;
 }
 
-Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, size_t index)
+Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, FtkWidget* widget)
 {
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	if(index < thiz->nr)
+	if(thiz->current < thiz->nr && thiz->widget == widget)
 	{
-		ftk_input_method_focus_out(thiz->methods[index]);
+		thiz->widget = NULL;
+		ftk_input_method_focus_out(thiz->methods[thiz->current]);
 	}
 
 	return RET_OK;
 }
 
-Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz, size_t index)
+Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz)
 {
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	if(index < thiz->nr)
+	if(thiz->current < thiz->nr)
 	{
 		FtkEvent event = {0};
 		event.type = FTK_EVT_IM_ACT_COMMIT;
-		ftk_input_method_handle_event(thiz->methods[index], &event);
+		ftk_input_method_handle_event(thiz->methods[thiz->current], &event);
 	}
 
 	return RET_OK;
@@ -225,6 +258,8 @@ int ftk_input_method_chooser(void)
 	ftk_dialog_run(im_chooser);
 	i = ftk_popup_menu_get_selected(im_chooser);
 	ftk_widget_unref(im_chooser);
+
+	ftk_input_method_manager_set_current(im_mgr, i);
 
 	return i;
 }
