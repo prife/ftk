@@ -68,6 +68,10 @@
 #include "ftk_rtthread.h"
 #endif
 
+#if defined(ANDROID) && defined(ANDROID_NDK)
+#include "ftk_android.h"
+#endif
+
 int  ftk_platform_init(int argc, char** argv);
 void ftk_platform_deinit(void);
 size_t ftk_get_relative_time(void);
