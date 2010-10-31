@@ -233,7 +233,7 @@ Ret ftk_display_mem_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
 	if(format == priv->format)
 	{
 		src = bits;
-		dst = (size_t)(priv->bits) + priv->width * priv->bpp + xoffset;
+		dst = priv->bits + priv->width * priv->bpp + xoffset;
 		for(; h; h--)
 		{
 			memcpy(dst, src, priv->bpp * w);

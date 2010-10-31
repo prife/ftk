@@ -877,7 +877,7 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	
 	event.type = FTK_EVT_SET_TEXT;
-	event.u.extra = text;
+	event.u.extra = (void*)text;
 
 	if(ftk_widget_event(thiz, &event) == RET_REMOVE)
 	{
