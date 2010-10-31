@@ -32,11 +32,15 @@
 #define FTK_DISPLAY_ROTATE_H
 #include "ftk_display.h"
 
+FTK_BEGIN_DECLS
+
 FtkDisplay* ftk_display_rotate_create(FtkDisplay* display, FtkRotate rotate);
 
 FtkRotate ftk_display_get_rotate(FtkDisplay* thiz);
 Ret ftk_display_set_rotate(FtkDisplay* thiz, FtkRotate rotate);
 FtkDisplay* ftk_display_get_real_display(FtkDisplay* thiz);
+
+FTK_END_DECLS
 
 #endif/*FTK_DISPLAY_ROTATE_H*/
 
