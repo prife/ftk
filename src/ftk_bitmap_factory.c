@@ -52,6 +52,10 @@
 #include "ftk_image_iphone_decoder.h"
 #endif
 
+#if defined(ANDROID) && defined(ANDROID_NDK)
+#include "ftk_image_android_png_decoder.h"
+#endif
+
 struct _FtkBitmapFactory
 {
 	int nr;
@@ -82,6 +86,10 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void)
 
 #ifdef IPHONE
 		ftk_bitmap_factory_add_decoder(thiz, ftk_image_iphone_decoder_create());
+#endif
+
+#if defined(ANDROID) && defined(ANDROID_NDK)
+		ftk_bitmap_factory_add_decoder(thiz, ftk_image_android_png_decoder_create());
 #endif
 	}
 

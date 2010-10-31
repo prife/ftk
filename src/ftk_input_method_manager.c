@@ -34,6 +34,8 @@
 
 #ifdef WIN32
 #include "ftk_input_method_win32.h"
+#elif defined(ANDROID) && defined(ANDROID_NDK)
+#include "ftk_input_method_android.h"
 #else
 #include "ftk_input_method_py.h"
 
@@ -60,6 +62,8 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 		thiz->current = -1;
 #ifdef WIN32
 		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
+#elif defined(ANDROID) && defined(ANDROID_NDK)
+		ftk_input_method_manager_register(thiz, ftk_input_method_android_create());
 #else
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());

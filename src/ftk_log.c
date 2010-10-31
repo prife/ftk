@@ -34,6 +34,8 @@
 
 #ifdef IPHONE
 static FILE* log_file = NULL;
+#elif defined(ANDROID) && defined(ANDROID_NDK)
+extern void Android_Log(const char* fmt, ...);
 #endif
 
 Ret ftk_log(const char* format, va_list ap)
@@ -43,18 +45,20 @@ Ret ftk_log(const char* format, va_list ap)
 
 	printf(buffer);
 
-#ifdef IPHONE 
-	if (log_file == NULL)
+#ifdef IPHONE
+	if(log_file == NULL)
 	{
-		log_file = fopen("log_file.txt", "a+");
-		if (log_file == NULL)
+		char* filename = "log_file.txt";
+		log_file = fopen(filename, "a+");
+		if(log_file == NULL)
 		{
 			return RET_OK;
 		}
 	}
-
-	fprintf(log_file, "%s", buffer);
+	fprintf(log_file, buffer);
 	fflush(log_file);
+#elif defined(ANDROID) && defined(ANDROID_NDK)
+	Android_Log(buffer);
 #endif
 
 	return RET_OK;

@@ -66,6 +66,9 @@ static Ret ftk_init_bitmap_factory(void)
 static Ret ftk_init_font(void)
 {
 	FtkFont* font = NULL;
+#if defined(USE_FREETYPE) && defined(ANDROID) && defined(ANDROID_NDK)
+	font = ftk_font_freetype_create(FTK_FONT, 0, 0, FTK_FONT_SIZE);
+#else
 	char filename[FTK_MAX_PATH + 1] = {0};
 	ftk_strs_cat(filename, FTK_MAX_PATH, 
 		ftk_config_get_data_dir(ftk_default_config()), "/data/", FTK_FONT, NULL);
@@ -74,6 +77,7 @@ static Ret ftk_init_font(void)
 	font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE);
 #else
 	font = ftk_font_default_create(filename, 0, 0, 0);
+#endif
 #endif
 	
 	if(font != NULL)
