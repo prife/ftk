@@ -272,7 +272,7 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
 				{
 					return DefWindowProc(hwnd, message, wParam, lParam);
 				}
-				if(ftk_input_method_manager_get(ftk_default_input_method_manager(), 0, &im) == RET_FAIL || im == NULL)
+				if(ftk_input_method_manager_get(ftk_default_input_method_manager(), 2, &im) == RET_FAIL || im == NULL)
 				{
 					return DefWindowProc(hwnd, message, wParam, lParam);
 				}

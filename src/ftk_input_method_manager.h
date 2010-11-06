@@ -33,6 +33,7 @@
 #define FTK_INPUT_METHOD_MANAGER_H 
 
 #include "ftk_input_method.h"
+#include "ftk_input_method_chooser.h"
 
 FTK_BEGIN_DECLS
 
@@ -53,8 +54,6 @@ void ftk_input_method_manager_destroy(FtkInputMethodManager* thiz);
 Ret  ftk_input_method_manager_focus_out(FtkInputMethodManager* thiz, FtkWidget* widget);
 Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz);
 Ret  ftk_input_method_manager_focus_in(FtkInputMethodManager* thiz, FtkWidget* widget);
-
-int ftk_input_method_chooser(void);
 
 FTK_END_DECLS
 

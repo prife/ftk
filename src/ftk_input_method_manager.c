@@ -32,16 +32,18 @@
 #include "ftk_allocator.h"
 #include "ftk_input_method_manager.h"
 
-#ifdef WIN32
-#include "ftk_input_method_win32.h"
-#elif defined(ANDROID) && defined(ANDROID_NDK)
-#include "ftk_input_method_android.h"
-#else
 #include "ftk_input_method_py.h"
 
 #ifdef USE_HANDWRITE
 #include "ftk_input_method_hw.h"
 #endif
+
+#ifdef WIN32
+#include "ftk_input_method_win32.h"
+#endif
+
+#if defined(ANDROID) && defined(ANDROID_NDK)
+#include "ftk_input_method_android.h"
 #endif
 
 #define FTK_INPUT_METHOD_MAX_NR 6
@@ -60,16 +62,20 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	if(thiz != NULL)
 	{
 		thiz->current = -1;
-#ifdef WIN32
-		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
-#elif defined(ANDROID) && defined(ANDROID_NDK)
-		ftk_input_method_manager_register(thiz, ftk_input_method_android_create());
-#else
+
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
+
 #ifdef USE_HANDWRITE
 		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());
 #endif
+
+#ifdef WIN32
+		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
+#endif
+
+#if defined(ANDROID) && defined(ANDROID_NDK)
+		ftk_input_method_manager_register(thiz, ftk_input_method_android_create());
 #endif
 	}
 	return thiz;
@@ -212,59 +218,3 @@ Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz)
 
 	return RET_OK;
 }
-
-#include "ftk_dialog.h"
-#include "ftk_globals.h"
-#include "ftk_popup_menu.h"
-
-static Ret on_im_selected(void* ctx, void* item)
-{
-	ftk_dialog_quit(ctx);
-
-	return RET_QUIT;
-}
-
-int ftk_input_method_chooser(void)
-{
-	int i = 0;
-	int h = 150;
-	int nr = 0;
-	FtkInputMethod* im = NULL;
-	FtkWidget* im_chooser = NULL;
-	FtkListItemInfo im_infos[FTK_INPUT_METHOD_MAX_NR+1];
-	FtkInputMethodManager* im_mgr = ftk_default_input_method_manager();
-
-	memset(im_infos, 0x00, sizeof(im_infos));
-	nr = ftk_input_method_manager_count(im_mgr);
-
-	h = ftk_popup_menu_calc_height(FTK_TRUE, nr + 1);
-	im_chooser = ftk_popup_menu_create(0, 0, 0, h, NULL, "Input Method");
-
-	for(i = 0; i < nr; i++)
-	{
-		ftk_input_method_manager_get(im_mgr, i, &im);
-		im_infos[i].text = (char*)im->name;
-		im_infos[i].type = FTK_LIST_ITEM_NORMAL;
-		im_infos[i].user_data = im_chooser;
-	}
-	
-	im_infos[i].text = "None";
-	im_infos[i].type = FTK_LIST_ITEM_NORMAL;
-	im_infos[i].user_data = im_chooser;
-	
-	for(i = 0; i < (nr + 1); i++)
-	{
-		ftk_popup_menu_add(im_chooser, im_infos+i);
-	}
-
-	ftk_popup_menu_set_clicked_listener(im_chooser, on_im_selected, im_chooser);	
-	ftk_widget_ref(im_chooser);
-	ftk_dialog_run(im_chooser);
-	i = ftk_popup_menu_get_selected(im_chooser);
-	ftk_widget_unref(im_chooser);
-
-	ftk_input_method_manager_set_current(im_mgr, i);
-
-	return i;
-}
-
