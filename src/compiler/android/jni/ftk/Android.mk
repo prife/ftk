@@ -6,7 +6,6 @@ LOCAL_MODULE := libftk
 
 LOCAL_CPP_EXTENSION := .cpp
 
-#-DANDROID
 #-DUSE_LINEBREAK
 
 LOCAL_CFLAGS :=	\
@@ -110,6 +109,7 @@ LOCAL_SRC_FILES := \
 	../../../../../src/os/android/ftk_android.c \
 	../../../../../src/os/android/ftk_image_android_png_decoder.c \
 	../../../../../src/os/android/ftk_input_method_android.c \
+	../../../../../src/os/android/ftk_input_method_chooser_android.c \
 	ftk_mmap_android.cpp
 
 include $(BUILD_STATIC_LIBRARY)

@@ -14,14 +14,11 @@
 #include <png.h>
 #include <zip.h>
 
-/*******************************************************************************
-                               Globals
-*******************************************************************************/
+/******************************************************************************/
+
 #define TAG "FTK"
 
 JNIEnv* mEnv = NULL;
-JNIEnv* mAudioThreadEnv = NULL; //See the note below for why this is necessary
-JavaVM* mVM = NULL;
 
 jclass mActivity;
 
@@ -31,6 +28,7 @@ jmethodID midDestroyEGLSurface;
 jmethodID midFlipEGL;
 jmethodID midShowKeyboard;
 jmethodID midHideKeyboard;
+jmethodID midShowInputMethodPicker;
 jmethodID midEnableFeature;
 jmethodID midUpdateAudio;
 
@@ -38,16 +36,8 @@ extern "C" int FTK_MAIN(int argc, char* argv[]);
 extern "C" void FTK_QUIT();
 extern "C" void Android_SetScreenResolution(int width, int height);
 
-//If we're not the active app, don't try to render
 static int render_enabled = 0;
 static int surface_valid = 0;
-
-//Feature IDs
-static const int FEATURE_AUDIO = 1;
-static const int FEATURE_ACCEL = 2;
-
-//Accelerometer data storage
-float fLastAccelerometer[3];
 
 static FtkEvent event;
 static FtkEvent event1;
@@ -375,9 +365,7 @@ extern "C" FtkBitmap* Android_LoadPng(const char* filename)
 	return bitmap;
 }
 
-/*******************************************************************************
-                 Functions called by JNI
-*******************************************************************************/
+/******************************************************************************/
 
 extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
@@ -393,18 +381,17 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 	mEnv = env;
 	jclass cls = mEnv->FindClass("org/libftk/app/FtkActivity");
 	mActivity = cls;
+
 	midInitEGL = mEnv->GetStaticMethodID(cls, "initEGL", "()V");
 	midCreateEGLSurface = mEnv->GetStaticMethodID(cls, "createEGLSurface", "()V");
 	midDestroyEGLSurface = mEnv->GetStaticMethodID(cls, "destroyEGLSurface", "()V");
 	midFlipEGL = mEnv->GetStaticMethodID(cls, "flipEGL", "()V");
 	midShowKeyboard = mEnv->GetStaticMethodID(cls, "showKeyboard", "()V");
 	midHideKeyboard = mEnv->GetStaticMethodID(cls, "hideKeyboard", "()V");
-	midEnableFeature = mEnv->GetStaticMethodID(cls, "enableFeature", "(II)V");
-	midUpdateAudio = mEnv->GetStaticMethodID(cls, "updateAudio", "([B)V");
+	midShowInputMethodPicker = mEnv->GetStaticMethodID(cls, "showInputMethodPicker", "()V");
 
 	if(!midInitEGL || !midCreateEGLSurface || !midDestroyEGLSurface || !midFlipEGL
-		|| !midShowKeyboard || !midHideKeyboard
-		|| !midEnableFeature || !midUpdateAudio)
+		|| !midShowKeyboard || !midHideKeyboard || !midShowInputMethodPicker)
 	{
 		ftk_logd("Bad mids");
 	}
@@ -425,8 +412,6 @@ extern "C" void Java_org_libftk_app_FtkActivity_nativeInit(JNIEnv* env, jobject 
 
 	mEnv = env;
 
-	//Android_EnableFeature(FEATURE_ACCEL, 1);
-
 	argv[0] = (char *) "ftk";
 	argv[1] = NULL;
 	argc = 1;
@@ -435,7 +420,6 @@ extern "C" void Java_org_libftk_app_FtkActivity_nativeInit(JNIEnv* env, jobject 
 
 extern "C" void Java_org_libftk_app_FtkActivity_nativeQuit(JNIEnv* env, jobject obj)
 {
-	//render_enabled = 0;
 	FTK_QUIT();
 	ftk_logd("native quit");
 }
@@ -510,7 +494,6 @@ extern "C" void Java_org_libftk_app_FtkActivity_onNativeTouch(JNIEnv* env, jobje
 
 extern "C" void Java_org_libftk_app_FtkActivity_nativeSetApkFilePath(JNIEnv*  env, jobject obj, jstring apkFilePath)
 {
-	//struct zip_stat st = {0};
 	const char* str = env->GetStringUTFChars(apkFilePath, NULL);
 
 	ftk_logd("loading apk: %s", str);
@@ -522,9 +505,6 @@ extern "C" void Java_org_libftk_app_FtkActivity_nativeSetApkFilePath(JNIEnv*  en
 		env->ReleaseStringUTFChars(apkFilePath, str);
 		return;
 	}
-
-	//zip_stat_init(&st);
-	//zip_stat(apk, str, 0, &st);
 
 	env->ReleaseStringUTFChars(apkFilePath, str);
 }
@@ -560,7 +540,7 @@ extern "C" void Java_org_libftk_app_FtkActivity_onNativeResize(JNIEnv* env, jobj
 			event.u.extra = (void*)FTK_ROTATE_0;
 		}
 		event.type = FTK_EVT_OS_SCREEN_ROTATED;
-		ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
+		//ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
 	}
 
 	memset(&event1, 0, sizeof(event1));
@@ -568,17 +548,7 @@ extern "C" void Java_org_libftk_app_FtkActivity_onNativeResize(JNIEnv* env, jobj
 	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event1);
 }
 
-extern "C" void Java_org_libftk_app_FtkActivity_onNativeAccel(JNIEnv* env, jobject obj, jfloat x, jfloat y, jfloat z)
-{
-    fLastAccelerometer[0] = x;
-    fLastAccelerometer[1] = y;
-    fLastAccelerometer[2] = z;
-}
-
-
-/*******************************************************************************
-             Functions called by FTK into Java
-*******************************************************************************/
+/******************************************************************************/
 
 extern "C" void Android_InitEGL()
 {
@@ -625,36 +595,8 @@ extern "C" void Android_HideKeyboard()
 	mEnv->CallStaticVoidMethod(mActivity, midHideKeyboard);
 }
 
-extern "C" void Android_EnableFeature(int featureid, int enabled)
+extern "C" void Android_ShowInputMethodChooser()
 {
-	mEnv->CallStaticVoidMethod(mActivity, midEnableFeature, featureid, enabled);
+	ftk_logd("Android_ShowInputMethodChooser()");
+	mEnv->CallStaticVoidMethod(mActivity, midShowInputMethodPicker);
 }
-
-#if 0
-extern void Android_UpdateAudioBuffer(unsigned char *buf, int len)
-{
-    //Annoyingly we can't just call into Java from any thread. Because the audio
-    //callback is dispatched from the SDL audio thread (that wasn't made from
-    //java, we have to do some magic here to let the JVM know about the thread.
-    //Because everything it touches on the Java side is static anyway, it's 
-    //not a big deal, just annoying.
-    if(!mAudioThreadEnv){
-        ftk_logd("SDL: Need to set up audio thread env\n");
-
-        mVM->AttachCurrentThread(&mAudioThreadEnv, NULL);
-
-        ftk_logd("SDL: ok\n");
-    }
- 
-    jbyteArray arr = mAudioThreadEnv->NewByteArray(len);
-
-    //blah. We probably should rework this so we avoid the copy.
-    mAudioThreadEnv->SetByteArrayRegion(arr, 0, len, (jbyte *)buf);
-  
-    ftk_logd("SDL: copied\n");
-
-    mAudioThreadEnv->CallStaticVoidMethod(mActivity, midUpdateAudio, arr);
-
-    ftk_logd("SDL: invoked\n");
-}
-#endif

@@ -16,8 +16,6 @@ import android.os.*;
 import android.util.Log;
 import android.text.method.*;
 import android.text.*;
-import android.media.*;
-import android.hardware.*;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -30,17 +28,6 @@ public class FtkActivity extends Activity {
 	private static FtkActivity mActivity;
     private static FtkView mView;
     public static Thread mThread;
-
-    //Audio
-    private static AudioTrack mAudioTrack;
-    private static boolean bAudioIsEnabled;
-
-    //Sensors
-    private static boolean bAccelIsEnabled;
-
-    //feature IDs. Must match up on the C side as well.
-    private static int FEATURE_AUDIO = 1;
-    private static int FEATURE_ACCEL = 2;
 
     static {
         System.loadLibrary("ftkapp");
@@ -67,37 +54,6 @@ public class FtkActivity extends Activity {
         //	Log.d("FtkActivity", "InputMethod: " + info.getPackageName()
         //			+ ", " + info.loadLabel(getPackageManager()));
         //}
-        //showInputMethodPicker
-    }
-
-    //Audio
-    public static boolean initAudio()
-    {        
-        //blah. Hardcoded things are bad. when we have more sound stuff
-        //working properly. 
-        mAudioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                    11025,
-                    AudioFormat.CHANNEL_CONFIGURATION_MONO,
-                    AudioFormat.ENCODING_PCM_8BIT,
-                    2048,
-                    AudioTrack.MODE_STREAM);   
-        bAudioIsEnabled = true;     
-        return true;
-    }
-
-    //Accel
-    public static boolean initAccel()
-    {
-        mView.enableSensor(Sensor.TYPE_ACCELEROMETER, true);
-        bAccelIsEnabled = true;
-        return true;
-    }
-
-    public static boolean closeAccel()
-    {
-        mView.enableSensor(Sensor.TYPE_ACCELEROMETER, false);
-        bAccelIsEnabled = false;
-        return true;
     }
 
     //Events
@@ -145,7 +101,6 @@ public class FtkActivity extends Activity {
     }
 
 
-    //C functions we call
     public static native void nativeInit();
     public static native void nativeQuit();
     public static native void nativeSetScreenSize(int width, int height);
@@ -156,10 +111,9 @@ public class FtkActivity extends Activity {
     public static native void onNativeCommitText(String text, int newCursorPosition);
     public static native void onNativeTouch(int action, float x, float y, float p);
     public static native void onNativeResize(int x, int y, int format);
-    public static native void onNativeAccel(float x, float y, float z);
 
 
-    //Java functions called from C
+    // Java functions called from C
     public static void initEGL() {
         mView.initEGL();
     }
@@ -176,51 +130,20 @@ public class FtkActivity extends Activity {
         mView.flipEGL();
     }
 
-    public static void showKeyboard()
-    {
-    	InputMethodManager mImm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
-    	mImm.showSoftInput(mView, 0);
+    public static void showKeyboard() {
+    	InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
+    	imm.showSoftInput(mView, 0);
     }
     
-    public static void hideKeyboard()
-    {
-    	InputMethodManager mImm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
-    	mImm.hideSoftInputFromWindow(mView.getWindowToken(), 0);
+    public static void hideKeyboard() {
+    	InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
+    	imm.hideSoftInputFromWindow(mView.getWindowToken(), 0);
     }
-
-    public static void updateAudio(byte [] buf)
-    {
-        if(mAudioTrack == null){
-            return;
-        }
-
-        mAudioTrack.write(buf, 0, buf.length);
-        mAudioTrack.play();
-        
-        Log.v("FTK","Played some audio");
-    }
-
-    public static void enableFeature(int featureid, int enabled)
-    {
-         Log.v("FTK","Feature " + featureid + " = " + enabled);
-
-        //Yuck. This is all horribly inelegent. If it gets to more than a few
-        //'features' I'll rip this out and make something nicer, I promise :)
-        if(featureid == FEATURE_AUDIO){
-            if(enabled == 1){
-                initAudio();
-            }else{
-                //We don't have one of these yet...
-                //closeAudio(); 
-            }
-        }
-        else if(featureid == FEATURE_ACCEL){
-            if(enabled == 1){
-                initAccel();
-            }else{
-                closeAccel();
-            }
-        }
+    
+    public static void showInputMethodPicker() {
+    	InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
+    	//imm.hideSoftInputFromWindow(mView.getWindowToken(), 0);
+    	imm.showInputMethodPicker();
     }
 }
 
@@ -237,8 +160,6 @@ class FtkRunner implements Runnable {
 
 	public void run() {
 		if (DEBUG) { Log.d(TAG, "thread run"); }
-
-		// FtkActivity.initAudio();
 
         FtkActivity.nativeInit();
 
@@ -346,8 +267,7 @@ class FtkInputConnection extends BaseInputConnection {
     }
 }
 
-class FtkView extends SurfaceView implements SurfaceHolder.Callback,
-    View.OnKeyListener, View.OnTouchListener, SensorEventListener {
+class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyListener, View.OnTouchListener {
 
 	private static final boolean DEBUG = true;
 	private static final String TAG = "FtkView";
@@ -361,9 +281,6 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback,
     private EGLContext mEGLContext;
     private EGLSurface mEGLSurface;
 
-    //Sensors
-    private static SensorManager mSensorManager;
-
     public FtkView(FtkActivity activity, Context context) {
         super(context);
         mActivity = activity;
@@ -374,8 +291,6 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback,
         requestFocus();
         setOnKeyListener(this);
         setOnTouchListener(this);
-
-        mSensorManager = (SensorManager)context.getSystemService("sensor");
         
         mText = "";
     }
@@ -393,10 +308,6 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback,
         int height = getHeight();
         FtkActivity.nativeSetScreenSize(width, height);
         
-        Display dpy = mActivity.getWindowManager().getDefaultDisplay();
-        dpy.getOrientation();//dpy.getRotation();
-        //FtkActivity.nativiSetRotation();
-        
         PackageManager pm = getContext().getPackageManager();
         ApplicationInfo appInfo = null;
         try {
@@ -405,8 +316,7 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback,
         	e.printStackTrace();
     	    throw new RuntimeException("Unable to locate assets, aborting...");
         }
-        String apkFilePath = appInfo.sourceDir;
-        FtkActivity.nativeSetApkFilePath(apkFilePath);
+        FtkActivity.nativeSetApkFilePath(appInfo.sourceDir);
 
         FtkActivity.mThread = new Thread(new FtkRunner(mActivity), "ftk thread");
         FtkActivity.mThread.start();
@@ -528,31 +438,6 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback,
     }
 
 
-    //Sensor events
-    public void enableSensor(int sensortype, boolean enabled){
-        // This uses getDefaultSensor - what if we have >1 accels?
-        if(enabled){
-            mSensorManager.registerListener(this, 
-                            mSensorManager.getDefaultSensor(sensortype), 
-                            SensorManager.SENSOR_DELAY_GAME, null);
-        }else{
-            mSensorManager.unregisterListener(this, 
-                            mSensorManager.getDefaultSensor(sensortype));
-        }
-    }
-    
-    public void onAccuracyChanged(Sensor sensor, int accuracy){
-    }
-
-    public void onSensorChanged(SensorEvent event){
-        if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
-            FtkActivity.onNativeAccel(  event.values[0],
-                                        event.values[1],
-                                        event.values[2] );
-        }
-    }
-    
-    
     // inputmethod
     
     /**
