@@ -31,6 +31,8 @@
 
 #include <windows.h>
 
+#include "ftk.h"
+#include "ftk_typedef.h"
 #include "ftk_log.h"
 #include "ftk_bitmap.h"
 #include "ftk_event.h"
@@ -229,6 +231,7 @@ static LRESULT CALLBACK WinProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM 
     switch (message)                  /* handle the messages */
     {
         case WM_DESTROY:
+            FTK_QUIT();
             PostQuitMessage (0);       /* send a WM_QUIT to the message queue */
             break;
 		case WM_PAINT:
