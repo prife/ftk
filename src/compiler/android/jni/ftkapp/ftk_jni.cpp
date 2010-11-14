@@ -1,369 +1,193 @@
 
-#define PNG_SKIP_SETJMP_CHECK
-
 #include <jni.h>
 #include <android/log.h>
-#include "ftk_typedef.h"
-#include "ftk_event.h"
+#include <unistd.h>
+#include "ftk.h"
+#include "ftk_jni.h"
 #include "ftk_log.h"
 #include "ftk_key.h"
+#include "ftk_event.h"
 #include "ftk_globals.h"
 #include "ftk_display.h"
 #include "ftk_display_rotate.h"
-#include "ftk_bitmap.h"
-#include <png.h>
-#include <zip.h>
 
-/******************************************************************************/
+typedef struct _FtkJni
+{
+	JNIEnv* env;
 
-#define TAG "FTK"
+	jclass activity;
+	jmethodID get_asset_file_descriptor;
+	jmethodID decode_image;
+	jmethodID init_egl;
+	jmethodID create_egl_surface;
+	jmethodID destroy_egl_surface;
+	jmethodID flip_egl;
+	jmethodID draw_bitmap;
+	jmethodID show_keyboard;
+	jmethodID hide_keyboard;
+	jmethodID show_input_method_picker;
 
-JNIEnv* mEnv = NULL;
+	jmethodID get_file_descriptor;
+	jmethodID get_start_offset;
+	jmethodID get_length;
+	jmethodID close_file_descriptor;
 
-jclass mActivity;
+	jfieldID descriptor;
 
-jmethodID midInitEGL;
-jmethodID midCreateEGLSurface;
-jmethodID midDestroyEGLSurface;
-jmethodID midFlipEGL;
-jmethodID midShowKeyboard;
-jmethodID midHideKeyboard;
-jmethodID midShowInputMethodPicker;
-jmethodID midEnableFeature;
-jmethodID midUpdateAudio;
+	jmethodID get_pixels;
+	jmethodID get_width;
+	jmethodID get_height;
 
-extern "C" int FTK_MAIN(int argc, char* argv[]);
-extern "C" void FTK_QUIT();
-extern "C" void Android_SetScreenResolution(int width, int height);
+	jintArray pixels;
 
-static int render_enabled = 0;
-static int surface_valid = 0;
+	int render_enabled;
+	int surface_valid;
+	FtkEvent event;
+}FtkJni;
 
-static FtkEvent event;
-static FtkEvent event1;
+FtkJni jni;
 
 #if 0
-	FTK_KEY_EXCLAM        =  0x021,
-	FTK_KEY_QUOTEDBL      =  0x022,
-	FTK_KEY_NUMBERSIGN    =  0x023,
-	FTK_KEY_DOLLAR        =  0x024,
-	FTK_KEY_PERCENT       =  0x025,
-	FTK_KEY_AMPERSAND     =  0x026,
-	FTK_KEY_QUOTERIGHT    =  0x027,
-	FTK_KEY_PARENLEFT     =  0x028,
-	FTK_KEY_PARENRIGHT    =  0x029,
-	FTK_KEY_ASTERISK      =  0x02a,
-	FTK_KEY_COLON         =  0x03a,
-	FTK_KEY_LESS          =  0x03c,
-	FTK_KEY_GREATER       =  0x03e,
-	FTK_KEY_QUESTION      =  0x03f,
-	FTK_KEY_ASCIICIRCUM   =  0x05e,
-	FTK_KEY_UNDERSCORE    =  0x05f,
-	FTK_KEY_QUOTELEFT     =  0x060,
-	FTK_KEY_LEFTBRACE     =  0x07B,
-	FTK_KEY_OR            =  0x07C,
-	FTK_KEY_RIGHTBRACE    =  0x07D,
-	FTK_KEY_NOT           =  0x07E,
-	FTK_KEY_DOT           =  '.',
-	FTK_KEY_HOME          =  0xFF50,
-	FTK_KEY_PRIOR         =  0xFF55,
-	FTK_KEY_NEXT          =  0xFF56,
-	FTK_KEY_END           =  0xFF57,
-	FTK_KEY_BEGIN         =  0xFF58,
-	FTK_KEY_INSERT        =  0xFF63,
-	FTK_KEY_ESC           =  0xFF1B,
-	FTK_KEY_RIGHTCTRL   =  0xFFE4,
-	FTK_KEY_LEFTCTRL    =  0xFFE3,
-	FTK_KEY_RETURN      = FTK_KEY_F3,
-	FTK_KEY_CAPSLOCK    =  0xFFE5,
-	FTK_KEY_SEND        =  0xFFA1,
-	FTK_KEY_REPLY       =  0xFFA2,
-	FTK_KEY_SAVE        =  0xFFA3,
-	FTK_KEY_BATTERY     =  0xFFA4,
-	FTK_KEY_BLUETOOTH   =  0xFFA5,
-	FTK_KEY_WLAN        =  0xFFA6,
+FTK_KEY_EXCLAM
+FTK_KEY_QUOTEDBL
+FTK_KEY_NUMBERSIGN
+FTK_KEY_DOLLAR
+FTK_KEY_PERCENT
+FTK_KEY_AMPERSAND
+FTK_KEY_QUOTERIGHT
+FTK_KEY_PARENLEFT
+FTK_KEY_PARENRIGHT
+FTK_KEY_ASTERISK
+FTK_KEY_COLON
+FTK_KEY_LESS
+FTK_KEY_GREATER
+FTK_KEY_QUESTION
+FTK_KEY_ASCIICIRCUM
+FTK_KEY_UNDERSCORE
+FTK_KEY_QUOTELEFT
+FTK_KEY_LEFTBRACE
+FTK_KEY_OR
+FTK_KEY_RIGHTBRACE
+FTK_KEY_NOT
+FTK_KEY_DOT
+FTK_KEY_HOME
+FTK_KEY_PRIOR
+FTK_KEY_NEXT
+FTK_KEY_END
+FTK_KEY_BEGIN
+FTK_KEY_INSERT
+FTK_KEY_ESC
+FTK_KEY_RIGHTCTRL
+FTK_KEY_LEFTCTRL
+FTK_KEY_CAPSLOCK
+FTK_KEY_SEND
+FTK_KEY_REPLY
+FTK_KEY_SAVE
+FTK_KEY_BATTERY
+FTK_KEY_BLUETOOTH
+FTK_KEY_WLAN
+FTK_KEY_DELETE
 #endif
 
-#if 0
-static const int s_key_map[] =
+static const int key_maps[] =
 {
-    /*KeyCodeUnknown*/[0] = 0,
-
-    /*KeyCodeSoftLeft*/[1] = 0,
-    /*KeyCodeSoftRight*/[2] = 0,
-    /*KeyCodeHome*/[3] = 0,
-    /*KeyCodeBack*/[4] = FTK_KEY_BACKSPACE,
-    /*KeyCodeCall*/[5] = 0,
-    /*KeyCodeEndCall*/[6] = 0,
-    /*KeyCode0*/[7] = FTK_KEY_0,
-    /*KeyCode1*/[8] = FTK_KEY_1,
-    /*KeyCode2*/[9] = FTK_KEY_2,
-    /*KeyCode3*/[10] = FTK_KEY_3,
-    /*KeyCode4*/[11] = FTK_KEY_4,
-    /*KeyCode5*/[12] = FTK_KEY_5,
-    /*KeyCode6*/[13] = FTK_KEY_6,
-    /*KeyCode7*/[14] = FTK_KEY_7,
-    /*KeyCode8*/[15] = FTK_KEY_8,
-    /*KeyCode9*/[16] = FTK_KEY_9,
-    /*KeyCodeStar*/[17] = 0,
-    /*KeyCodePound*/[18] = 0,
-    /*KeyCodeDpadUp*/[19] = FTK_KEY_UP,
-    /*KeyCodeDpadDown*/[20] = FTK_KEY_DOWN,
-    /*KeyCodeDpadLeft*/[21] = FTK_KEY_LEFT,
-    /*KeyCodeDpadRight*/[22] = FTK_KEY_RIGHT,
-    /*KeyCodeDpadCenter*/[23] = 0,
-    /*KeyCodeVolumeUp*/[24] = 0,
-    /*KeyCodeVolumeDown*/[25] = 0,
-    /*KeyCodePower*/[26] = FTK_KEY_POWER,
-    /*KeyCodeCamera*/[27] = 0,
-    /*KeyCodeClear*/[28] = 0,
-    /*KeyCodeA*/[29] = FTK_KEY_A,
-    /*KeyCodeB*/[30] = FTK_KEY_B,
-    /*KeyCodeC*/[31] = FTK_KEY_C,
-    /*KeyCodeD*/[32] = FTK_KEY_D,
-    /*KeyCodeE*/[33] = FTK_KEY_E,
-    /*KeyCodeF*/[34] = FTK_KEY_F,
-    /*KeyCodeG*/[35] = FTK_KEY_G,
-    /*KeyCodeH*/[36] = FTK_KEY_H,
-    /*KeyCodeI*/[37] = FTK_KEY_I,
-    /*KeyCodeJ*/[38] = FTK_KEY_J,
-    /*KeyCodeK*/[39] = FTK_KEY_K,
-    /*KeyCodeL*/[40] = FTK_KEY_L,
-    /*KeyCodeM*/[41] = FTK_KEY_M,
-    /*KeyCodeN*/[42] = FTK_KEY_N,
-    /*KeyCodeO*/[43] = FTK_KEY_O,
-    /*KeyCodeP*/[44] = FTK_KEY_P,
-    /*KeyCodeQ*/[45] = FTK_KEY_Q,
-    /*KeyCodeR*/[46] = FTK_KEY_R,
-    /*KeyCodeS*/[47] = FTK_KEY_S,
-    /*KeyCodeT*/[48] = FTK_KEY_T,
-    /*KeyCodeU*/[49] = FTK_KEY_U,
-    /*KeyCodeV*/[50] = FTK_KEY_V,
-    /*KeyCodeW*/[51] = FTK_KEY_W,
-    /*KeyCodeX*/[52] = FTK_KEY_X,
-    /*KeyCodeY*/[53] = FTK_KEY_Y,
-    /*KeyCodeZ*/[54] = FTK_KEY_Z,
-    /*KeyCodeComma*/[55] = FTK_KEY_COMMA,
-    /*KeyCodePeriod*/[56] = FTK_KEY_PERIOD,
-    /*KeyCodeAltLeft*/[57] = FTK_KEY_LEFTALT,
-    /*KeyCodeAltRight*/[58] = FTK_KEY_RIGHTALT,
-    /*KeyCodeShiftLeft*/[59] = FTK_KEY_LEFTSHIFT,
-    /*KeyCodeShiftRight*/[60] = FTK_KEY_RIGHTSHIFT,
-    /*KeyCodeTab*/[61] = FTK_KEY_TAB,
-    /*KeyCodeSpace*/[62] = FTK_KEY_SPACE,
-    /*KeyCodeSym*/[63] = 0,
-    /*KeyCodeExplorer*/[64] = 0,
-    /*KeyCodeEnvelope*/[65] = 0,
-    /*KeyCodeNewline*/[66] = 0,
-    /*KeyCodeDel*/[67] = FTK_KEY_DELETE,
-    /*KeyCodeGrave*/[68] = FTK_KEY_GRAVE,
-    /*KeyCodeMinus*/[69] = FTK_KEY_MINUS,
-    /*KeyCodeEquals*/[70] = FTK_KEY_EQUAL,
-    /*KeyCodeLeftBracket*/[71] = FTK_KEY_BRACKETLEFT,
-    /*KeyCodeRightBracket*/[72] = FTK_KEY_BRACKETRIGHT,
-    /*KeyCodeBackslash*/[73] = FTK_KEY_BACKSLASH,
-    /*KeyCodeSemicolon*/[74] = FTK_KEY_SEMICOLON,
-    /*KeyCodeApostrophe*/[75] = FTK_KEY_APOSTROPHE,
-    /*KeyCodeSlash*/[76] = FTK_KEY_SLASH,
-    /*KeyCodeAt*/[77] = FTK_KEY_AT,
-    /*KeyCodeNum*/[78] = 0,
-    /*KeyCodeHeadSetHook*/[79] = 0,
-    /*KeyCodeFocus*/[80] = 0,
-    /*KeyCodePlus*/[81] = FTK_KEY_PLUS,
-    /*KeyCodeMenu*/[82] = FTK_KEY_MENU,
-    /*KeyCodeNotification*/[83] = 0,
-    /*KeyCodeSearch*/[84] = 0,
-    /*KeyCodePlayPause*/[85] = 0,
-    /*KeyCodeStop*/[86] = 0,
-    /*KeyCodeNextSong*/[87] = 0,
-    /*KeyCodePreviousSong*/[88] = 0,
-    /*KeyCodeRewind*/[89] = 0,
-    /*KeyCodeForward*/[90] = 0,
-    /*KeyCodeMute*/[91] = 0,
-    /*KeyCodePageUp*/[92] = FTK_KEY_PAGEUP,
-    /*KeyCodePageDown*/[93] = FTK_KEY_PAGEDOWN,
-    /*KeyCodePictSymbols*/[94] = 0,
-    /*KeyCodeSwitchCharset*/[95] = 0
+    /*KeyCodeUnknown[0] = */0,
+    /*KeyCodeSoftLeft[1] = */0,
+    /*KeyCodeSoftRight[2] = */0,
+    /*KeyCodeHome[3] = */0,
+    /*KeyCodeBack[4] = */FTK_KEY_RETURN,
+    /*KeyCodeCall[5] = */0,
+    /*KeyCodeEndCall[6] = */0,
+    /*KeyCode0[7] = */FTK_KEY_0,
+    /*KeyCode1[8] = */FTK_KEY_1,
+    /*KeyCode2[9] = */FTK_KEY_2,
+    /*KeyCode3[10] = */FTK_KEY_3,
+    /*KeyCode4[11] = */FTK_KEY_4,
+    /*KeyCode5[12] = */FTK_KEY_5,
+    /*KeyCode6[13] = */FTK_KEY_6,
+    /*KeyCode7[14] = */FTK_KEY_7,
+    /*KeyCode8[15] = */FTK_KEY_8,
+    /*KeyCode9[16] = */FTK_KEY_9,
+    /*KeyCodeStar[17] = */0,
+    /*KeyCodePound[18] = */0,
+    /*KeyCodeDpadUp[19] = */FTK_KEY_UP,
+    /*KeyCodeDpadDown[20] = */FTK_KEY_DOWN,
+    /*KeyCodeDpadLeft[21] = */FTK_KEY_LEFT,
+    /*KeyCodeDpadRight[22] = */FTK_KEY_RIGHT,
+    /*KeyCodeDpadCenter[23] = */0,
+    /*KeyCodeVolumeUp[24] = */0,
+    /*KeyCodeVolumeDown[25] = */0,
+    /*KeyCodePower[26] = */FTK_KEY_POWER,
+    /*KeyCodeCamera[27] = */0,
+    /*KeyCodeClear[28] = */0,
+    /*KeyCodeA[29] = */FTK_KEY_A,
+    /*KeyCodeB[30] = */FTK_KEY_B,
+    /*KeyCodeC[31] = */FTK_KEY_C,
+    /*KeyCodeD[32] = */FTK_KEY_D,
+    /*KeyCodeE[33] = */FTK_KEY_E,
+    /*KeyCodeF[34] = */FTK_KEY_F,
+    /*KeyCodeG[35] = */FTK_KEY_G,
+    /*KeyCodeH[36] = */FTK_KEY_H,
+    /*KeyCodeI[37] = */FTK_KEY_I,
+    /*KeyCodeJ[38] = */FTK_KEY_J,
+    /*KeyCodeK[39] = */FTK_KEY_K,
+    /*KeyCodeL[40] = */FTK_KEY_L,
+    /*KeyCodeM[41] = */FTK_KEY_M,
+    /*KeyCodeN[42] = */FTK_KEY_N,
+    /*KeyCodeO[43] = */FTK_KEY_O,
+    /*KeyCodeP[44] = */FTK_KEY_P,
+    /*KeyCodeQ[45] = */FTK_KEY_Q,
+    /*KeyCodeR[46] = */FTK_KEY_R,
+    /*KeyCodeS[47] = */FTK_KEY_S,
+    /*KeyCodeT[48] = */FTK_KEY_T,
+    /*KeyCodeU[49] = */FTK_KEY_U,
+    /*KeyCodeV[50] = */FTK_KEY_V,
+    /*KeyCodeW[51] = */FTK_KEY_W,
+    /*KeyCodeX[52] = */FTK_KEY_X,
+    /*KeyCodeY[53] = */FTK_KEY_Y,
+    /*KeyCodeZ[54] = */FTK_KEY_Z,
+    /*KeyCodeComma[55] = */FTK_KEY_COMMA,
+    /*KeyCodePeriod[56] = */FTK_KEY_PERIOD,
+    /*KeyCodeAltLeft[57] = */FTK_KEY_LEFTALT,
+    /*KeyCodeAltRight[58] = */FTK_KEY_RIGHTALT,
+    /*KeyCodeShiftLeft[59] = */FTK_KEY_LEFTSHIFT,
+    /*KeyCodeShiftRight[60] = */FTK_KEY_RIGHTSHIFT,
+    /*KeyCodeTab[61] = */FTK_KEY_TAB,
+    /*KeyCodeSpace[62] = */FTK_KEY_SPACE,
+    /*KeyCodeSym[63] = */0,
+    /*KeyCodeExplorer[64] = */0,
+    /*KeyCodeEnvelope[65] = */0,
+    /*KeyCodeNewline[66] = */0,
+    /*KeyCodeDel[67] = */FTK_KEY_BACKSPACE,
+    /*KeyCodeGrave[68] = */FTK_KEY_GRAVE,
+    /*KeyCodeMinus[69] = */FTK_KEY_MINUS,
+    /*KeyCodeEquals[70] = */FTK_KEY_EQUAL,
+    /*KeyCodeLeftBracket[71] = */FTK_KEY_BRACKETLEFT,
+    /*KeyCodeRightBracket[72] = */FTK_KEY_BRACKETRIGHT,
+    /*KeyCodeBackslash[73] = */FTK_KEY_BACKSLASH,
+    /*KeyCodeSemicolon[74] = */FTK_KEY_SEMICOLON,
+    /*KeyCodeApostrophe[75] = */FTK_KEY_APOSTROPHE,
+    /*KeyCodeSlash[76] = */FTK_KEY_SLASH,
+    /*KeyCodeAt[77] = */FTK_KEY_AT,
+    /*KeyCodeNum[78] = */0,
+    /*KeyCodeHeadSetHook[79] = */0,
+    /*KeyCodeFocus[80] = */0,
+    /*KeyCodePlus[81] = */FTK_KEY_PLUS,
+    /*KeyCodeMenu[82] = */FTK_KEY_MENU,
+    /*KeyCodeNotification[83] = */0,
+    /*KeyCodeSearch[84] = */0,
+    /*KeyCodePlayPause[85] = */0,
+    /*KeyCodeStop[86] = */0,
+    /*KeyCodeNextSong[87] = */0,
+    /*KeyCodePreviousSong[88] = */0,
+    /*KeyCodeRewind[89] = */0,
+    /*KeyCodeForward[90] = */0,
+    /*KeyCodeMute[91] = */0,
+    /*KeyCodePageUp[92] = */FTK_KEY_PAGEUP,
+    /*KeyCodePageDown[93] = */FTK_KEY_PAGEDOWN,
+    /*KeyCodePictSymbols[94] = */0,
+    /*KeyCodeSwitchCharset[95] = */0
 };
-#endif
-
-extern "C" void Android_Log(const char* fmt, ...)
-{
-	va_list ap;
-	va_start(ap, fmt);
-	__android_log_vprint(ANDROID_LOG_INFO, TAG, fmt, ap);
-	va_end(ap);
-}
-
-
-zip* apk;
-zip_file* file;
-
-static void png_read(png_structp png_ptr, png_bytep data, png_size_t length)
-{
-	zip_fread(file, data, length);
-}
-
-extern "C" FtkBitmap* Android_LoadPng(const char* filename)
-{
-	int x = 0;
-	int y = 0;
-	int w = 0;
-	int h = 0;
-	int passes_nr = 0;
-	FtkColor* dst = NULL;
-	unsigned char* src = NULL;
-	FtkBitmap* bitmap = NULL;
-	FtkColor  bg = {0};
-	png_structp png_ptr = NULL;
-	png_infop info_ptr = NULL;
-	png_bytep * row_pointers = NULL;
-
-	bg.a = 0xff;
-
-	filename++;
-	ftk_logd("android_load_png: %s\n", filename);
-
-	if ((file = zip_fopen(apk, filename, 0)) == NULL)
-	{
-		ftk_logd("%s: zip_fopen %s failed.\n", __func__, filename);
-		return NULL;
-	}
-
-	if((png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL)) == NULL)
-	{
-		zip_fclose(file);
-		return NULL;
-	}
-	
-	if((info_ptr = png_create_info_struct(png_ptr)) == NULL)
-	{
-		png_destroy_read_struct(&png_ptr, (png_infopp) NULL, (png_infopp) NULL);
-		zip_fclose(file);
-		return NULL;
-	}
-
-#ifdef PNG_SETJMP_SUPPORTED
-	setjmp(png_jmpbuf(png_ptr));
-#endif
- 
-	// png_init_io(png_ptr, fp);
-	png_set_read_fn(png_ptr, NULL, png_read);
-
-	memset(info_ptr, 0x00, sizeof(*info_ptr));
-	png_read_info(png_ptr, info_ptr);
-
-	int bit_depth, color_type;
-	png_get_IHDR(png_ptr, info_ptr, (png_uint_32 *) &w, (png_uint_32 *) &h, &bit_depth, &color_type,
-		NULL, NULL, NULL);
-
-	passes_nr = png_set_interlace_handling(png_ptr);
-	png_read_update_info(png_ptr, info_ptr);
-
-#ifdef PNG_SETJMP_SUPPORTED
-	setjmp(png_jmpbuf(png_ptr));
-#endif
-
-	int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-
-	row_pointers = (png_bytep*) FTK_ZALLOC(h * sizeof(png_bytep));
-	for (y=0; y< h; y++)
-	{
-		row_pointers[y] = (png_byte*) FTK_ZALLOC(rowbytes);
-	}
-	png_read_image(png_ptr, row_pointers);
-
-	int num_trans;
-	png_color_16p trans_color;
-	png_get_tRNS(png_ptr, info_ptr, NULL, &num_trans, &trans_color);
-
-	bitmap = ftk_bitmap_create(w, h, bg);
-	dst = ftk_bitmap_bits(bitmap);
-	if (color_type == PNG_COLOR_TYPE_RGBA)
-	{
-		ftk_logd("PNG_COLOR_TYPE_RGBA\n");
-
-		for(y = 0; y < h; y++)
-		{
-			src = row_pointers[y];
-			for(x = 0; x < w; x++)
-			{
-				if(src[3])
-				{
-					dst->r = src[2];//src[0];
-					dst->g = src[1];
-					dst->b = src[0];//src[2];
-				}
-				dst->a = src[3];
-				src +=4;
-				dst++;
-			}
-		}
-	}
-	else if(color_type == PNG_COLOR_TYPE_RGB)
-	{
-		ftk_logd("PNG_COLOR_TYPE_RGB\n");
-
-		if(0 == num_trans)
-		{
-			for(y = 0; y < h; y++)
-			{
-				src = row_pointers[y];
-				for(x = 0; x < w; x++)
-				{
-					dst->r = src[2];//src[0];
-					dst->g = src[1];
-					dst->b = src[0];//src[2];
-					dst->a = 0xff;
-					src += 3;
-					dst++;
-				}
-			}
-		}
-		else 
-		{
-			png_byte red = trans_color->red & 0xff;
-			png_byte green = trans_color->green & 0xff;
-			png_byte blue = trans_color->blue & 0xff;
-
-			for(y = 0; y < h; y++)
-			{
-				src = row_pointers[y];
-				for(x = 0; x < w; x++)
-				{
-					if(src[0] == red && src[1] == green && src[2] == blue)
-					{
-						dst->a = 0;
-					}
-					else
-					{
-						dst->a = 0xff;
-					}
-					dst->r = src[0];
-					dst->g = src[1];
-					dst->b = src[2];
-					src += 3;
-					dst++;
-				}
-			}
-		}
-	}
-	else
-	{
-		assert(!"not supported.");
-	}
-
-	for(y = 0; y < h; y++)
-	{
-		FTK_FREE(row_pointers[y]);
-	}
-	FTK_FREE(row_pointers);
-	png_destroy_read_struct(&png_ptr, &info_ptr, NULL); 
-
-	zip_fclose(file);
-
-	return bitmap;
-}
 
 /******************************************************************************/
 
@@ -371,33 +195,55 @@ extern "C" jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
 	JNIEnv* env = NULL;
 
+	ftk_logd("JNI: OnLoad()");
+
 	if(vm->GetEnv((void**)&env, JNI_VERSION_1_4) != JNI_OK)
 	{
 		return -1;
 	}
 
-	ftk_logd("JNI: OnLoad()");
+	jni.env = env;
 
-	mEnv = env;
-	jclass cls = mEnv->FindClass("org/libftk/app/FtkActivity");
-	mActivity = cls;
+	jclass cls = jni.env->FindClass("org/libftk/app/FtkActivity");
+	jni.activity = (jclass)jni.env->NewGlobalRef(cls);
 
-	midInitEGL = mEnv->GetStaticMethodID(cls, "initEGL", "()V");
-	midCreateEGLSurface = mEnv->GetStaticMethodID(cls, "createEGLSurface", "()V");
-	midDestroyEGLSurface = mEnv->GetStaticMethodID(cls, "destroyEGLSurface", "()V");
-	midFlipEGL = mEnv->GetStaticMethodID(cls, "flipEGL", "()V");
-	midShowKeyboard = mEnv->GetStaticMethodID(cls, "showKeyboard", "()V");
-	midHideKeyboard = mEnv->GetStaticMethodID(cls, "hideKeyboard", "()V");
-	midShowInputMethodPicker = mEnv->GetStaticMethodID(cls, "showInputMethodPicker", "()V");
+	jni.get_asset_file_descriptor = jni.env->GetStaticMethodID(cls, "getAssetFileDescriptor",
+		"(Ljava/lang/String;)Landroid/content/res/AssetFileDescriptor;");
+	jni.decode_image = jni.env->GetStaticMethodID(cls, "decodeImage", "(Ljava/lang/String;)Landroid/graphics/Bitmap;");
 
-	if(!midInitEGL || !midCreateEGLSurface || !midDestroyEGLSurface || !midFlipEGL
-		|| !midShowKeyboard || !midHideKeyboard || !midShowInputMethodPicker)
+	jni.init_egl = jni.env->GetStaticMethodID(cls, "initEGL", "()V");
+	jni.create_egl_surface = jni.env->GetStaticMethodID(cls, "createEGLSurface", "()V");
+	jni.destroy_egl_surface = jni.env->GetStaticMethodID(cls, "destroyEGLSurface", "()V");
+	jni.flip_egl = jni.env->GetStaticMethodID(cls, "flipEGL", "()V");
+	jni.draw_bitmap = jni.env->GetStaticMethodID(cls, "drawBitmap", "([IIIIIII)V");
+
+	jni.show_keyboard = jni.env->GetStaticMethodID(cls, "showKeyboard", "()V");
+	jni.hide_keyboard = jni.env->GetStaticMethodID(cls, "hideKeyboard", "()V");
+	jni.show_input_method_picker = jni.env->GetStaticMethodID(cls, "showInputMethodPicker", "()V");
+
+	cls = jni.env->FindClass("android/content/res/AssetFileDescriptor");
+	jni.get_file_descriptor = jni.env->GetMethodID(cls, "getFileDescriptor", "()Ljava/io/FileDescriptor;");
+	jni.get_start_offset = jni.env->GetMethodID(cls, "getStartOffset", "()J");
+	jni.get_length = jni.env->GetMethodID(cls, "getLength", "()J");
+	jni.close_file_descriptor = jni.env->GetMethodID(cls, "close", "()V");
+
+	cls = jni.env->FindClass("java/io/FileDescriptor");
+	jni.descriptor = jni.env->GetFieldID(cls, "descriptor", "I");
+
+	cls = jni.env->FindClass("android/graphics/Bitmap");
+	jni.get_pixels = jni.env->GetMethodID(cls, "getPixels", "([IIIIIII)V");
+	jni.get_width = jni.env->GetMethodID(cls, "getWidth", "()I");
+	jni.get_height = jni.env->GetMethodID(cls, "getHeight", "()I");
+
+	if(!jni.get_asset_file_descriptor || !jni.decode_image
+		|| !jni.init_egl || !jni.create_egl_surface || !jni.destroy_egl_surface || !jni.flip_egl || !jni.draw_bitmap
+		|| !jni.show_keyboard || !jni.hide_keyboard || !jni.show_input_method_picker
+		|| !jni.get_file_descriptor || !jni.get_start_offset || !jni.get_length || !jni.close_file_descriptor
+		|| !jni.descriptor
+		|| !jni.get_pixels || !jni.get_width || !jni.get_height)
 	{
-		ftk_logd("Bad mids");
-	}
-	else
-	{
-		ftk_logd("Good mids");
+		ftk_logd("null method or field id");
+		return -1;
 	}
 
 	return JNI_VERSION_1_4;
@@ -410,12 +256,15 @@ extern "C" void Java_org_libftk_app_FtkActivity_nativeInit(JNIEnv* env, jobject 
 
 	ftk_logd("native init");
 
-	mEnv = env;
+	jni.env = env;
 
 	argv[0] = (char *) "ftk";
 	argv[1] = NULL;
 	argc = 1;
 	rv = FTK_MAIN(argc, argv);
+
+	env->DeleteGlobalRef(jni.pixels);
+	env->DeleteGlobalRef(jni.activity);
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_nativeQuit(JNIEnv* env, jobject obj)
@@ -426,13 +275,13 @@ extern "C" void Java_org_libftk_app_FtkActivity_nativeQuit(JNIEnv* env, jobject 
 
 extern "C" void Java_org_libftk_app_FtkActivity_nativeEnableRender(JNIEnv* env, jobject obj)
 {
-	render_enabled = 1;
+	jni.render_enabled = 1;
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_nativeDisableRender(JNIEnv* env, jobject obj)
 {
-	render_enabled = 0;
-	surface_valid = 0;
+	jni.render_enabled = 0;
+	jni.surface_valid = 0;
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_onNativeKey(JNIEnv* env, jobject obj, jint action, jint keyCode)
@@ -443,9 +292,9 @@ extern "C" void Java_org_libftk_app_FtkActivity_onNativeKey(JNIEnv* env, jobject
 	{
 		return;
 	}
-	//event.type = action == 0 ? FTK_EVT_KEY_DOWN : FTK_EVT_KEY_UP;
-	//event.u.key.code = s_key_map[keyCode];
-	//ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
+	jni.event.type = action == 0 ? FTK_EVT_KEY_DOWN : FTK_EVT_KEY_UP;
+	jni.event.u.key.code = key_maps[keyCode];
+	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &jni.event);
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_onNativeCommitText(JNIEnv* env, jobject obj, jstring text, jint newCursorPosition)
@@ -461,58 +310,45 @@ extern "C" void Java_org_libftk_app_FtkActivity_onNativeCommitText(JNIEnv* env, 
 	buf[len] = '\0';
 	env->ReleaseStringUTFChars(text, str);
 
-	memset(&event, 0, sizeof(event));
-	event.u.extra = buf;
-	event.type = FTK_EVT_OS_IM_COMMIT;
-	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
+	memset(&jni.event, 0, sizeof(FtkEvent));
+	jni.event.u.extra = buf;
+	jni.event.type = FTK_EVT_OS_IM_COMMIT;
+	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &jni.event);
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_onNativeTouch(JNIEnv* env, jobject obj, jint action, jfloat x, jfloat y, jfloat p)
 {
 	ftk_logd("native touch event %d @ %f/%f, pressure %f", action, x, y, p);
-	memset(&event, 0, sizeof(event));
+	memset(&jni.event, 0, sizeof(FtkEvent));
 	if(action==0)
 	{
-		event.type = FTK_EVT_MOUSE_DOWN;
+		jni.event.type = FTK_EVT_MOUSE_DOWN;
 	}
 	else if(action == 1 || action == 3)
 	{
-		event.type = FTK_EVT_MOUSE_UP;
+		jni.event.type = FTK_EVT_MOUSE_UP;
 	}
 	else if(action == 2)
 	{
-		event.type = FTK_EVT_MOUSE_MOVE;
+		jni.event.type = FTK_EVT_MOUSE_MOVE;
 	}
 	else
 	{
 		return;
 	}
-	event.u.mouse.x = x;
-	event.u.mouse.y = y;
-	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
-}
-
-extern "C" void Java_org_libftk_app_FtkActivity_nativeSetApkFilePath(JNIEnv*  env, jobject obj, jstring apkFilePath)
-{
-	const char* str = env->GetStringUTFChars(apkFilePath, NULL);
-
-	ftk_logd("loading apk: %s", str);
-
-	apk = zip_open(str, 0, NULL);
-	if(apk == NULL)
-	{
-		ftk_loge("loading apk failed");
-		env->ReleaseStringUTFChars(apkFilePath, str);
-		return;
-	}
-
-	env->ReleaseStringUTFChars(apkFilePath, str);
+	jni.event.u.mouse.x = x;
+	jni.event.u.mouse.y = y;
+	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &jni.event);
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_nativeSetScreenSize(JNIEnv* env, jobject obj, jint width, jint height)
 {
 	ftk_logd("nativeSetScreenSize() %dX%d", width, height);
 	Android_SetScreenResolution(width, height);
+
+	jintArray temp = (jintArray)env->NewIntArray(width * height);
+	jni.pixels = (jintArray)env->NewGlobalRef(temp);
+	env->DeleteLocalRef(temp);
 }
 
 extern "C" void Java_org_libftk_app_FtkActivity_onNativeResize(JNIEnv* env, jobject obj, jint width, jint height, jint format)
@@ -530,73 +366,179 @@ extern "C" void Java_org_libftk_app_FtkActivity_onNativeResize(JNIEnv* env, jobj
 
 	if(width != w && height != h)
 	{
-		memset(&event, 0, sizeof(event));
+		memset(&jni.event, 0, sizeof(FtkEvent));
 		if(r == FTK_ROTATE_0)
 		{
-			event.u.extra = (void*)FTK_ROTATE_90;
+			jni.event.u.extra = (void*)FTK_ROTATE_90;
 		}
 		else
 		{
-			event.u.extra = (void*)FTK_ROTATE_0;
+			jni.event.u.extra = (void*)FTK_ROTATE_0;
 		}
-		event.type = FTK_EVT_OS_SCREEN_ROTATED;
-		//ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
+		jni.event.type = FTK_EVT_OS_SCREEN_ROTATED;
+		//ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &jni.event);
 	}
 
-	memset(&event1, 0, sizeof(event1));
-	event1.type = FTK_EVT_RELAYOUT_WND;
-	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event1);
+	memset(&jni.event, 0, sizeof(FtkEvent));
+	jni.event.type = FTK_EVT_RELAYOUT_WND;
+	ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &jni.event);
 }
 
 /******************************************************************************/
 
-extern "C" void Android_InitEGL()
+void Android_Log(const char* fmt, ...)
 {
-	ftk_logd("Android_InitEGL()");
-	mEnv->CallStaticVoidMethod(mActivity, midInitEGL);
+	va_list ap;
+	va_start(ap, fmt);
+	__android_log_vprint(ANDROID_LOG_INFO, "FTK", fmt, ap);
+	va_end(ap);
 }
 
-extern "C" Ret Android_PreRender()
+int Android_OpenAsset(const char* filename, size_t* size)
 {
-	if(!render_enabled)
+	int fd;
+	jlong asset_offset, asset_size;
+	jstring file;
+	jobject asset_fd, descriptor;
+
+	//ftk_logd("%s", filename);
+
+	file = jni.env->NewStringUTF(filename);
+	asset_fd = jni.env->CallStaticObjectMethod(jni.activity, jni.get_asset_file_descriptor);
+	jni.env->DeleteLocalRef(file);
+
+	descriptor = jni.env->CallObjectMethod(asset_fd, jni.get_file_descriptor);
+	asset_offset = jni.env->CallLongMethod(asset_fd, jni.get_start_offset);
+	asset_size = jni.env->CallLongMethod(asset_fd, jni.get_length);
+
+	ftk_logd("%s %d", filename, (int)asset_size);
+
+	fd = dup(jni.env->GetIntField(descriptor, jni.descriptor));
+
+	jni.env->CallVoidMethod(asset_fd, jni.close_file_descriptor);
+	jni.env->DeleteLocalRef(descriptor);
+	jni.env->DeleteLocalRef(asset_fd);
+
+	lseek(fd, (int)asset_offset, SEEK_SET);
+
+	*size = asset_size;
+
+	return fd;
+}
+
+FtkBitmap* Android_LoadImage(const char* filename)
+{
+	jint width, height;
+	jint* pixels;
+	jstring file;
+	jobject image;
+	jintArray temp;
+	FtkBitmap* bitmap;
+	FtkColor bg = {0};
+	FtkColor* dst;
+
+	//ftk_logd("%s", filename);
+
+	file = jni.env->NewStringUTF(filename);
+	image = jni.env->CallStaticObjectMethod(jni.activity, jni.decode_image, file);
+	jni.env->DeleteLocalRef(file);
+
+	if(image == NULL)
 	{
-		if(surface_valid)
+		return NULL;
+	}
+
+	width = jni.env->CallIntMethod(image, jni.get_width);
+	height = jni.env->CallIntMethod(image, jni.get_height);
+
+	ftk_logd("%s: %dX%d", filename, width, height);
+
+	temp = jni.env->NewIntArray(width * height);
+	jni.env->CallVoidMethod(image, jni.get_pixels, temp, 0, width, 0, 0, width, height);
+	pixels = jni.env->GetIntArrayElements(temp, NULL);
+
+	bg.a = 0xff;
+	bitmap = ftk_bitmap_create(width, height, bg);
+	dst = ftk_bitmap_bits(bitmap);
+
+	memcpy(dst, pixels, sizeof(FtkColor) * width * height);
+
+	jni.env->ReleaseIntArrayElements(temp, pixels, 0);
+	jni.env->DeleteLocalRef(temp);
+	jni.env->DeleteLocalRef(image);
+
+	return bitmap;
+}
+
+void Android_InitEGL()
+{
+	ftk_logd("Android_InitEGL()");
+	jni.env->CallStaticVoidMethod(jni.activity, jni.init_egl);
+}
+
+Ret Android_PreRender()
+{
+	if(!jni.render_enabled)
+	{
+		if(jni.surface_valid)
 		{
-			mEnv->CallStaticVoidMethod(mActivity, midDestroyEGLSurface);
+			jni.env->CallStaticVoidMethod(jni.activity, jni.destroy_egl_surface);
 		}
 		return RET_FAIL;
 	}
-	if(!surface_valid)
+	if(!jni.surface_valid)
 	{
-		mEnv->CallStaticVoidMethod(mActivity, midCreateEGLSurface);
-		surface_valid = 1;
+		jni.env->CallStaticVoidMethod(jni.activity, jni.create_egl_surface);
+		jni.surface_valid = 1;
 	}
 	return RET_OK;
 }
 
-extern "C" void Android_Render()
+void Android_Render()
 {
-	if(!render_enabled || !surface_valid)
+	if(!jni.render_enabled || !jni.surface_valid)
 	{
 		return;
 	}
-	mEnv->CallStaticVoidMethod(mActivity, midFlipEGL);
+	jni.env->CallStaticVoidMethod(jni.activity, jni.flip_egl);
 }
 
-extern "C" void Android_ShowKeyboard()
+int* Android_GetBitmapPixels()
+{
+	return (int*)jni.env->GetIntArrayElements(jni.pixels, NULL);
+}
+
+void Android_ReleaseBitmapPixels(int* pixels)
+{
+	jni.env->ReleaseIntArrayElements(jni.pixels, pixels, 0);
+}
+
+void Android_DrawBitmap(int offset, int stride, int x, int y, int width, int height)
+{
+	if(!jni.render_enabled)
+	{
+		return;
+	}
+
+	jintArray temp = (jintArray)jni.env->NewLocalRef(jni.pixels);
+	jni.env->CallStaticVoidMethod(jni.activity, jni.draw_bitmap, temp, offset, stride, x, y, width, height);
+	jni.env->DeleteLocalRef(temp); // TODO: xxx
+}
+
+void Android_ShowKeyboard()
 {
 	ftk_logd("Android_ShowKeyboard()");
-	mEnv->CallStaticVoidMethod(mActivity, midShowKeyboard);
+	jni.env->CallStaticVoidMethod(jni.activity, jni.show_keyboard);
 }
 
-extern "C" void Android_HideKeyboard()
+void Android_HideKeyboard()
 {
 	ftk_logd("Android_HideKeyboard()");
-	mEnv->CallStaticVoidMethod(mActivity, midHideKeyboard);
+	jni.env->CallStaticVoidMethod(jni.activity, jni.hide_keyboard);
 }
 
-extern "C" void Android_ShowInputMethodChooser()
+void Android_ShowInputMethodChooser()
 {
 	ftk_logd("Android_ShowInputMethodChooser()");
-	mEnv->CallStaticVoidMethod(mActivity, midShowInputMethodPicker);
+	jni.env->CallStaticVoidMethod(jni.activity, jni.show_input_method_picker);
 }

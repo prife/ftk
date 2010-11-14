@@ -4,8 +4,6 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := libftk
 
-LOCAL_CPP_EXTENSION := .cpp
-
 #-DUSE_LINEBREAK
 
 LOCAL_CFLAGS :=	\
@@ -13,7 +11,6 @@ LOCAL_CFLAGS :=	\
 	-DANDROID_NDK \
 	-DUSE_FREETYPE \
 	-DFTK_PROFILE \
-	-DHAS_BMP \
 	-DFTK_FONT=\"/system/fonts/DroidSansFallback.ttf\" \
 	-DDATA_DIR=\"/assets\" \
 	-DLOCAL_DATA_DIR=\"./local_data\" \
@@ -25,8 +22,8 @@ LOCAL_CFLAGS :=	\
 	-I$(LOCAL_PATH)/../../../../../src/os/android
 
 LOCAL_C_INCLUDES := \
-	$(LOCAL_PATH)/../freetype/include \
-	$(LOCAL_PATH)/../libzip
+	$(LOCAL_PATH)/../ftkapp \
+	$(LOCAL_PATH)/../freetype/include
 
 LOCAL_SRC_FILES := \
 	../../../../../src/ftk_allocator.c \
@@ -61,7 +58,6 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_icon_cache.c \
 	../../../../../src/ftk_icon_view.c \
 	../../../../../src/ftk_image.c \
-	../../../../../src/ftk_image_bmp_decoder.c \
 	../../../../../src/ftk_input_method_manager.c \
 	../../../../../src/ftk_input_method_preeditor.c \
 	../../../../../src/ftk_input_method_preeditor_default.c \
@@ -104,12 +100,12 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_xml_parser.c \
 	../../../../../src/ftk_xul.c \
 	../../../../../src/backend/android/ftk_backend_android.c \
-	../../../../../src/backend/android/ftk_display_android.c \
+	../../../../../src/backend/android/ftk_display_android_skia.c \
 	../../../../../src/backend/android/ftk_source_android.c \
 	../../../../../src/os/android/ftk_android.c \
-	../../../../../src/os/android/ftk_image_android_png_decoder.c \
+	../../../../../src/os/android/ftk_image_android_decoder.c \
 	../../../../../src/os/android/ftk_input_method_android.c \
 	../../../../../src/os/android/ftk_input_method_chooser_android.c \
-	ftk_mmap_android.cpp
+	../../../../../src/os/android/ftk_mmap_android.c
 
 include $(BUILD_STATIC_LIBRARY)

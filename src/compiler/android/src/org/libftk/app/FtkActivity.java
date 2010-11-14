@@ -1,5 +1,7 @@
 package org.libftk.app;
 
+import java.io.InputStream;
+
 import javax.microedition.khronos.egl.*;
 
 import android.app.*;
@@ -16,17 +18,21 @@ import android.os.*;
 import android.util.Log;
 import android.text.method.*;
 import android.text.*;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
 
 public class FtkActivity extends Activity {
-	private static final boolean DEBUG = true;
-	private static final String TAG = "FtkActivity";
+    private static final boolean DEBUG = true;
+    private static final String TAG = "FtkActivity";
 
-	private static FtkActivity mActivity;
+    private static FtkActivity mActivity;
     private static FtkView mView;
+    private static AssetManager mAssetManager;
     public static Thread mThread;
 
     static {
@@ -40,12 +46,20 @@ public class FtkActivity extends Activity {
 
         Window window = getWindow();
         window.requestFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        mAssetManager = getAssets();
 
         mView = new FtkView(this, getApplication());
         setContentView(mView);
         SurfaceHolder holder = mView.getHolder();
         holder.setType(SurfaceHolder.SURFACE_TYPE_GPU);
+
+        //ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        //ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+        //getRequestedOrientation();
+        //setRequestedOrientation();
 
         //List<InputMethodInfo> imInfos = imm.getEnabledInputMethodList();
         //Iterator<InputMethodInfo> it = imInfos.iterator();
@@ -83,7 +97,9 @@ public class FtkActivity extends Activity {
         } catch (Exception e) {
             Log.e(TAG, "stopping ftk thread: " + e);
         }
-        
+
+        mAssetManager.close();
+
         ActivityManager am = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         am.restartPackage(getPackageName());
     }
@@ -106,7 +122,6 @@ public class FtkActivity extends Activity {
     public static native void nativeSetScreenSize(int width, int height);
     public static native void nativeEnableRender();
     public static native void nativeDisableRender();
-    public static native void nativeSetApkFilePath(String apkFilePath);
     public static native void onNativeKey(int action, int keyCode);
     public static native void onNativeCommitText(String text, int newCursorPosition);
     public static native void onNativeTouch(int action, float x, float y, float p);
@@ -114,33 +129,66 @@ public class FtkActivity extends Activity {
 
 
     // Java functions called from C
-    public static void initEGL() {
+    
+    public static final AssetFileDescriptor getAssetFileDescriptor(String file) {
+    	try {
+    	    return mAssetManager.openFd(file);
+    	} catch (Exception ex) {
+    		Log.e(TAG, ex.getMessage());
+    	}
+    	return null;
+    }
+    
+    public static final Bitmap decodeImage(String file) {
+    	//if (DEBUG) { Log.d(TAG, "decodeImage: " + file); }
+    	InputStream is = null;
+    	try {
+    		is = mAssetManager.open(file);
+    	} catch (Exception ex) {
+    		Log.e(TAG, ex.getMessage());
+    		return null;
+    	}
+    	Bitmap bitmap = BitmapFactory.decodeStream(is);
+    	try {
+    		is.close();
+    	} catch (Exception ex) {
+    		Log.e(TAG, ex.getMessage());
+    	}
+    	is = null;
+    	return bitmap;
+    }
+
+    public static final void initEGL() {
         mView.initEGL();
     }
     
-    public static void createEGLSurface() {
+    public static final void createEGLSurface() {
     	mView.createEGLSurface();
     }
     
-    public static void destroyEGLSurface() {
+    public static final void destroyEGLSurface() {
     	mView.destroyEGLSurface();
     }
 
-    public static void flipEGL() {
+    public static final void flipEGL() {
         mView.flipEGL();
     }
+    
+    public static final void drawBitmap(int[] colors, int offset, int stride, int x, int y, int width, int height) {
+    	mView.drawBitmap(colors, offset, stride, x, y, width, height);
+    }
 
-    public static void showKeyboard() {
+    public static final void showKeyboard() {
     	InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
     	imm.showSoftInput(mView, 0);
     }
-    
-    public static void hideKeyboard() {
+
+    public static final void hideKeyboard() {
     	InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
     	imm.hideSoftInputFromWindow(mView.getWindowToken(), 0);
     }
-    
-    public static void showInputMethodPicker() {
+
+    public static final void showInputMethodPicker() {
     	InputMethodManager imm = (InputMethodManager) mActivity.getSystemService(INPUT_METHOD_SERVICE);
     	//imm.hideSoftInputFromWindow(mView.getWindowToken(), 0);
     	imm.showInputMethodPicker();
@@ -148,18 +196,18 @@ public class FtkActivity extends Activity {
 }
 
 class FtkRunner implements Runnable {
-	private static final boolean DEBUG = true;
-	private static final String TAG = "FtkRunner";
+    private static final boolean DEBUG = true;
+    private static final String TAG = "FtkRunner";
 
-	private FtkActivity mActivity;
+    private FtkActivity mActivity;
 
     public FtkRunner(FtkActivity activity) {
     	super();
     	mActivity = activity;
-	}
+    }
 
-	public void run() {
-		if (DEBUG) { Log.d(TAG, "thread run"); }
+    public void run() {
+        if (DEBUG) { Log.d(TAG, "thread run"); }
 
         FtkActivity.nativeInit();
 
@@ -170,18 +218,18 @@ class FtkRunner implements Runnable {
 }
 
 class FtkInputConnection extends BaseInputConnection {
-	private static final boolean DEBUG = true;
-	private static final String TAG = "FtkInputConnection";
-	
-	private final FtkView mView;
+    private static final boolean DEBUG = true;
+    private static final String TAG = "FtkInputConnection";
 
-	public FtkInputConnection(FtkView view) {
-		super(view, true);
-		mView = view;
-	}
+    private final FtkView mView;
+
+    public FtkInputConnection(FtkView view) {
+        super(view, true);
+        mView = view;
+    }
 	
-	public Editable getEditable() {
-		FtkView v = mView;
+    public Editable getEditable() {
+        FtkView v = mView;
         if (v != null) {
             return v.getEditableText();
         }
@@ -269,12 +317,12 @@ class FtkInputConnection extends BaseInputConnection {
 
 class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyListener, View.OnTouchListener {
 
-	private static final boolean DEBUG = true;
-	private static final String TAG = "FtkView";
+    private static final boolean DEBUG = true;
+    private static final String TAG = "FtkView";
 
-	private FtkActivity mActivity;
+    private FtkActivity mActivity;
 	
-	private boolean mSurfaceValid = false;
+    private boolean mSurfaceValid = false;
 
     private EGLDisplay mEGLDisplay;
     private EGLConfig mEGLConfig;
@@ -285,13 +333,15 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
         super(context);
         mActivity = activity;
 
-        getHolder().addCallback(this);
+        SurfaceHolder holder = getHolder();
+        holder.addCallback(this);
+
         setFocusable(true);
         setFocusableInTouchMode(true);
         requestFocus();
         setOnKeyListener(this);
         setOnTouchListener(this);
-        
+
         mText = "";
     }
 
@@ -299,28 +349,18 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
         if (DEBUG) { Log.v(TAG, "surfaceCreated"); }
 
         if (FtkActivity.mThread != null) {
-        	mSurfaceValid = true;
-        	FtkActivity.nativeEnableRender();
-        	return;
+            mSurfaceValid = true;
+            FtkActivity.nativeEnableRender();
+            return;
         }
 
         int width = getWidth();
         int height = getHeight();
         FtkActivity.nativeSetScreenSize(width, height);
-        
-        PackageManager pm = getContext().getPackageManager();
-        ApplicationInfo appInfo = null;
-        try {
-            appInfo = pm.getApplicationInfo("org.libftk.app", 0);
-        } catch (NameNotFoundException e) {
-        	e.printStackTrace();
-    	    throw new RuntimeException("Unable to locate assets, aborting...");
-        }
-        FtkActivity.nativeSetApkFilePath(appInfo.sourceDir);
 
         FtkActivity.mThread = new Thread(new FtkRunner(mActivity), "ftk thread");
         FtkActivity.mThread.start();
-        
+
         mSurfaceValid = true;
         FtkActivity.nativeEnableRender();
     }
@@ -337,7 +377,7 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
     }
 
 
-    //EGL functions
+    // EGL functions
     public boolean initEGL() {
         if (DEBUG) { Log.d(TAG, "initEGL"); }
 
@@ -402,19 +442,14 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
     	}
     }
 
-    //EGL buffer flip
     public void flipEGL() {
     	if (!mSurfaceValid) {
         	return;
         }
-        try{
-        
+        try {
             EGL10 egl = (EGL10)EGLContext.getEGL();
 
             egl.eglWaitNative(EGL10.EGL_NATIVE_RENDERABLE, null);
-
-            //drawing here
-
             egl.eglWaitGL();
             egl.eglSwapBuffers(mEGLDisplay, mEGLSurface);
             
@@ -425,6 +460,21 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
                 Log.v("FTK", s.toString());
             }
         }
+    }
+    
+    public void drawBitmap(int[] colors, int offset, int stride, int x, int y, int width, int height) {
+    	//if (DEBUG) { Log.d(TAG, "drawBitmap: " + x + "-" + y + " " + width + "-" + height); }
+    	SurfaceHolder holder = getHolder();
+    	if (holder == null) {
+    		return;
+    	}
+    	Rect rect = new Rect(x, y, x + width, y + height);
+    	Canvas canvas = holder.lockCanvas(rect);
+    	if (canvas == null) {
+    		return;
+    	}
+    	canvas.drawBitmap(colors, offset, stride, x, y, width, height, true, null);
+    	holder.unlockCanvasAndPost(canvas);
     }
 
     public boolean onKey(View  v, int keyCode, KeyEvent event){
@@ -438,7 +488,7 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
     }
 
 
-    // inputmethod
+    // input method
     
     /**
      * Interface definition for a callback to be invoked when an action is

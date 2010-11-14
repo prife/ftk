@@ -10,16 +10,12 @@ LOCAL_CFLAGS :=	\
 	-I$(LOCAL_PATH)/../../../../../src/backend/android \
 	-I$(LOCAL_PATH)/../../../../../src/os/android
 
-LOCAL_C_INCLUDES := \
-	$(LOCAL_PATH)/../libzip \
-	$(LOCAL_PATH)/../libpng
-
 LOCAL_SRC_FILES := \
 	ftk_jni.cpp \
 	../../../../../src/demos/demo_entry.c
 
-LOCAL_STATIC_LIBRARIES := libftk libft2 libpng libzip
+LOCAL_STATIC_LIBRARIES := libftk libft2
 
-LOCAL_LDLIBS := -lGLESv1_CM -llog -lgcc -lz
+LOCAL_LDLIBS := -lGLESv1_CM -llog -lgcc
 
 include $(BUILD_SHARED_LIBRARY)
