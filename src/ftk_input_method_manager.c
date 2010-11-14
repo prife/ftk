@@ -61,10 +61,12 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	FtkInputMethodManager* thiz = FTK_ZALLOC(sizeof(FtkInputMethodManager));
 	if(thiz != NULL)
 	{
-		thiz->current = -1;
+		thiz->current = 0;
 
+#if !defined(ANDROID) && !defined(ANDROID_NDK)
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
+#endif
 
 #ifdef USE_HANDWRITE
 		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());

@@ -102,8 +102,13 @@ static Ret ftk_init_theme(const char* theme)
 
 	if(theme != NULL)
 	{
+#if !defined(ANDROID) && !defined(ANDROID_NDK)
 		ftk_strs_cat(filename, FTK_MAX_PATH, 
 			ftk_config_get_data_dir(ftk_default_config()), "/theme/", theme, "/theme.xml", NULL);
+#else
+		ftk_strs_cat(filename, FTK_MAX_PATH, 
+			ftk_config_get_data_dir(ftk_default_config()), "/theme/", theme, "/theme.wav", NULL);
+#endif
 		ftk_normalize_path(filename);
 		ftk_theme_parse_file(ftk_default_theme(), filename);
 	}

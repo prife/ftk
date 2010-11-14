@@ -53,7 +53,7 @@
 #endif
 
 #if defined(ANDROID) && defined(ANDROID_NDK)
-#include "ftk_image_android_png_decoder.h"
+#include "ftk_image_android_decoder.h"
 #endif
 
 struct _FtkBitmapFactory
@@ -89,7 +89,7 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void)
 #endif
 
 #if defined(ANDROID) && defined(ANDROID_NDK)
-		ftk_bitmap_factory_add_decoder(thiz, ftk_image_android_png_decoder_create());
+		ftk_bitmap_factory_add_decoder(thiz, ftk_image_android_decoder_create());
 #endif
 	}
 
