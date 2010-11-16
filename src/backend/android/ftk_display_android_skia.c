@@ -1,15 +1,12 @@
 
+#include "ftk_jni.h"
 #include "ftk_event.h"
 #include "ftk_globals.h"
 #include "ftk_display_android.h"
 
-extern int* Android_GetBitmapPixels();
-extern void Android_ReleaseBitmapPixels(int* pixels);
-extern void Android_DrawBitmap(int offset, int stride, int x, int y, int width, int height);
-
 typedef struct _PrivInfo
 {
-	int stub;
+	int unused;
 }PrivInfo;
 
 static int screen_width = 320;

@@ -35,7 +35,7 @@
 #ifdef IPHONE
 static FILE* log_file = NULL;
 #elif defined(ANDROID) && defined(ANDROID_NDK)
-extern void Android_Log(const char* fmt, ...);
+#include "ftk_jni.h"
 #endif
 
 Ret ftk_log(const char* format, va_list ap)

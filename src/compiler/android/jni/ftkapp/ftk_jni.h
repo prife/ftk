@@ -17,7 +17,7 @@ FtkBitmap* Android_LoadImage(const char* filename);
 
 void Android_InitEGL(void);
 Ret Android_PreRender(void);
-void Android_Rendervoid();
+void Android_Render(void);
 
 int* Android_GetBitmapPixels(void);
 void Android_ReleaseBitmapPixels(int* pixels);

@@ -95,7 +95,7 @@ static const int key_maps[] =
     /*KeyCodeSoftLeft[1] = */0,
     /*KeyCodeSoftRight[2] = */0,
     /*KeyCodeHome[3] = */0,
-    /*KeyCodeBack[4] = */FTK_KEY_RETURN,
+    /*KeyCodeBack[4] = */0,//FTK_KEY_RETURN,
     /*KeyCodeCall[5] = */0,
     /*KeyCodeEndCall[6] = */0,
     /*KeyCode0[7] = */FTK_KEY_0,
@@ -404,7 +404,7 @@ int Android_OpenAsset(const char* filename, size_t* size)
 	//ftk_logd("%s", filename);
 
 	file = jni.env->NewStringUTF(filename);
-	asset_fd = jni.env->CallStaticObjectMethod(jni.activity, jni.get_asset_file_descriptor);
+	asset_fd = jni.env->CallStaticObjectMethod(jni.activity, jni.get_asset_file_descriptor, file);
 	jni.env->DeleteLocalRef(file);
 
 	descriptor = jni.env->CallObjectMethod(asset_fd, jni.get_file_descriptor);

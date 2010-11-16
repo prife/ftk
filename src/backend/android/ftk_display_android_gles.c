@@ -1,13 +1,10 @@
 
-#include <GLES/gl.h>
-#include <GLES/glext.h>
+#include "ftk_jni.h"
 #include "ftk_event.h"
 #include "ftk_globals.h"
 #include "ftk_display_android.h"
-
-extern void Android_InitEGL();
-extern Ret Android_PreRender();
-extern void Android_Render();
+#include <GLES/gl.h>
+#include <GLES/glext.h>
 
 typedef struct _PrivInfo
 {
@@ -107,8 +104,7 @@ static Ret ftk_display_android_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRe
 	}
 
 #if 0
-	display_bitmap(priv, priv->bitmap, xoffset, yoffset, 
-		width, height, xoffset, yoffset);
+	display_bitmap(priv, priv->bitmap, xoffset, yoffset, width, height, xoffset, yoffset);
 #else
 	display_bitmap(priv, priv->bitmap, 0, 0, screen_width, screen_height, 0, 0);
 #endif

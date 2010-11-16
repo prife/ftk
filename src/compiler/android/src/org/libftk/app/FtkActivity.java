@@ -131,6 +131,7 @@ public class FtkActivity extends Activity {
     // Java functions called from C
     
     public static final AssetFileDescriptor getAssetFileDescriptor(String file) {
+    	if (DEBUG) { Log.d(TAG, "getAssetFileDescriptor: " + file); }
     	try {
     	    return mAssetManager.openFd(file);
     	} catch (Exception ex) {
@@ -431,7 +432,7 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
 
         mEGLSurface = surface;
     }
-    
+
     public void destroyEGLSurface() {
     	if (DEBUG) { Log.d(TAG, "destroyEGLSurface"); }
     	//EGL10 egl = (EGL10)EGLContext.getEGL();
@@ -453,7 +454,7 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
             egl.eglWaitGL();
             egl.eglSwapBuffers(mEGLDisplay, mEGLSurface);
             
-        }catch(Exception e){
+        } catch(Exception e) {
             Log.v("FTK", "flipEGL(): " + e);
 
             for(StackTraceElement s : e.getStackTrace()){
@@ -489,7 +490,7 @@ class FtkView extends SurfaceView implements SurfaceHolder.Callback, View.OnKeyL
 
 
     // input method
-    
+
     /**
      * Interface definition for a callback to be invoked when an action is
      * performed on the editor.

@@ -1,4 +1,5 @@
 
+#include "ftk_jni.h"
 #include "ftk_log.h"
 #include "ftk_event.h"
 #include "ftk_globals.h"
@@ -9,9 +10,6 @@ typedef struct _PrivInfo
 	FtkWidget* editor;
 	FtkInputType input_type;
 }PrivInfo;
-
-extern void Android_ShowKeyboard();
-extern void Android_HideKeyboard();
 
 static Ret  ftk_input_method_android_handle_event(FtkInputMethod* thiz, FtkEvent* event);
 
