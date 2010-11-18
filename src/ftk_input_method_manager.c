@@ -42,6 +42,10 @@
 #include "ftk_input_method_win32.h"
 #endif
 
+#ifdef IPHONE
+#include "ftk_input_method_iphone.h"
+#endif
+
 #if defined(ANDROID) && defined(ANDROID_NDK)
 #include "ftk_input_method_android.h"
 #endif
@@ -63,7 +67,7 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	{
 		thiz->current = 0;
 
-#if !defined(ANDROID) && !defined(ANDROID_NDK)
+#if !defined(ANDROID) && !defined(ANDROID_NDK) && !defined(IPHONE)
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
 #endif
@@ -74,6 +78,10 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 
 #ifdef WIN32
 		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
+#endif
+
+#ifdef IPHONE
+		ftk_input_method_manager_register(thiz, ftk_input_method_iphone_create());
 #endif
 
 #if defined(ANDROID) && defined(ANDROID_NDK)
