@@ -1,33 +1,4 @@
-/*
- * File: ftk_iphone.m
- * Author:  ngwsx2008 <ngwsx2008@126.com>
- * Brief: iphone relative functions. 
- *
- * Copyright (c) 2009 - 2010  ngwsx2008 <ngwsx2008@126.com>
- *
- * Licensed under the Academic Free License version 2.1
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
 
-/*
- * History:
- * ================================================================
- * 2010-09-28 ngwsx2008 <ngwsx2008@126.com> created.
- *
- */
 #import <signal.h>
 #import "ftk_typedef.h"
 #import "ftk_iphone_view.h"
@@ -79,16 +50,18 @@ static void ftk_install_crash_signal(void)
 
 static int ftk_set_tty_mode(int graphics)
 {
-    int r = 0;
+	int r = 0;
 #if !defined(PC_EMU) && defined(USE_LINUX_NATIVE)
 	int fd = 0;
-    fd = open("/dev/tty0", O_RDWR | O_SYNC);
-    if (fd < 0)
-        return -1;
-    r = ioctl(fd, KDSETMODE, (void*) (graphics ? KD_GRAPHICS : KD_TEXT));
-    close(fd);
+	fd = open("/dev/tty0", O_RDWR | O_SYNC);
+	if(fd < 0)
+	{
+		return -1;
+	}
+	r = ioctl(fd, KDSETMODE, (void*) (graphics ? KD_GRAPHICS : KD_TEXT));
+	close(fd);
 #endif
-    return r;
+	return r;
 }
 
 size_t ftk_get_relative_time(void)
@@ -115,16 +88,14 @@ void ftk_platform_deinit(void)
 }
 
 
+static int os_argc;
+static char** os_argv;
 static jmp_buf jmp_env;
 
-jmp_buf *jump_env(void)
+jmp_buf* jump_env(void)
 {
-    return &jmp_env;
+	return &jmp_env;
 }
-
-
-static int os_argc;
-static char **os_argv;
 
 @interface FtkAppDelegate : NSObject<UIApplicationDelegate>
 {
@@ -135,50 +106,48 @@ static char **os_argv;
 
 -(id)init
 {
-    self = [super init];
-    return self;
+	self = [super init];
+	return self;
 }
 
 -(void)dealloc
 {
-    [super dealloc];
+	[super dealloc];
 }
 
 -(void)postFinishLaunch
 {
-    int rc, i;
+	int rc, i;
 
-    rc = FTK_MAIN(os_argc, os_argv);
+	rc = FTK_MAIN(os_argc, os_argv);
 
-    for (i = 0; i < os_argc; i++) {
-        free(os_argv[i]);
-    }
+	for(i = 0; i < os_argc; i++)
+	{
+		free(os_argv[i]);
+	}
 
-    free(os_argv);
+	free(os_argv);
 
-    ftk_iphone_view_destroy_win();
+	ftk_iphone_view_destroy_win();
 
-    ftk_logd("%s: exit\n", __func__);
+	ftk_logd("%s: exit\n", __func__);
 
-    exit(rc);
+	exit(rc);
 }
 
 -(void)applicationDidFinishLaunching:(UIApplication *)application
 {
-    [[NSFileManager defaultManager] changeCurrentDirectoryPath:
-        [[NSBundle mainBundle] resourcePath]];
+	[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[NSBundle mainBundle] resourcePath]];
 
-    ftk_iphone_view_create_win();
+	ftk_iphone_view_create_win();
 
-    [self performSelector:@selector(postFinishLaunch) withObject:nil
-        afterDelay:0.0];
+	[self performSelector:@selector(postFinishLaunch) withObject:nil afterDelay:0.0];
 }
 
 -(void)applicationWillTerminate:(UIApplication *)application
 {
-    FTK_QUIT();
-
-    longjmp(*(jump_env()), 1);
+	FTK_QUIT();
+	longjmp(*(jump_env()), 1);
 }
 
 -(void)applicationWillResignActive:(UIApplication *)application
@@ -191,33 +160,35 @@ static char **os_argv;
 
 @end
 
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    int rc, i;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	int rc, i;
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-    os_argc = argc;
+	os_argc = argc;
 
-    os_argv = (char **) malloc((argc + 1) * sizeof(char *));
-    if (os_argv == NULL) {
-        return 1;
-    }
+	os_argv = (char **) malloc((argc + 1) * sizeof(char *));
+	if(os_argv == NULL)
+	{
+		return 1;
+	}
 
-    for (i = 0; i < argc; i++) {
-        os_argv[i] = malloc(strlen(argv[i]) + 1);
-        if (os_argv[i] == NULL) {
-            return 1;
-        }
+	for(i = 0; i < argc; i++)
+	{
+		os_argv[i] = malloc(strlen(argv[i]) + 1);
+		if(os_argv[i] == NULL)
+		{
+			return 1;
+		}
 
-        strcpy(os_argv[i], argv[i]);
-    }
+		strcpy(os_argv[i], argv[i]);
+	}
 
-    os_argv[i] = NULL;
+	os_argv[i] = NULL;
 
-    rc = UIApplicationMain(argc, argv, NULL, @"FtkAppDelegate");
+	rc = UIApplicationMain(argc, argv, NULL, @"FtkAppDelegate");
 
-    [pool release];
+	[pool release];
 
-    return rc;
+	return rc;
 }
