@@ -107,5 +107,3 @@ void     ftk_mmap_destroy(FtkMmap* thiz)
 
 	return;
 }
-
-

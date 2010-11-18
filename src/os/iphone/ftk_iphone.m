@@ -28,9 +28,9 @@
  * 2010-09-28 ngwsx2008 <ngwsx2008@126.com> created.
  *
  */
-#import <UIKit/UIKit.h>
 #import <signal.h>
 #import "ftk_typedef.h"
+#import "ftk_iphone_view.h"
 
 #ifdef HAVE_EXECINFO_H
 #import <execinfo.h>
@@ -136,7 +136,6 @@ static char **os_argv;
 -(id)init
 {
     self = [super init];
-
     return self;
 }
 
@@ -157,6 +156,8 @@ static char **os_argv;
 
     free(os_argv);
 
+    ftk_iphone_view_destroy_win();
+
     ftk_logd("%s: exit\n", __func__);
 
     exit(rc);
@@ -166,6 +167,8 @@ static char **os_argv;
 {
     [[NSFileManager defaultManager] changeCurrentDirectoryPath:
         [[NSBundle mainBundle] resourcePath]];
+
+    ftk_iphone_view_create_win();
 
     [self performSelector:@selector(postFinishLaunch) withObject:nil
         afterDelay:0.0];
