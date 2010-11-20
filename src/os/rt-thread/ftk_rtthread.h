@@ -35,12 +35,9 @@
 #include <rtthread.h>
 #include <sys/time.h>
 #include <sys/types.h>
+#include <sys/dirent.h>
 #include <dfs_posix.h>
 #include "ftk_select_rtthread.h"
-
-#define DT_UNKNOWN	DFS_DT_UNKNOWN
-#define DT_REG		DFS_DT_REG
-#define DT_DIR		DFS_DT_DIR
 
 #define FTK_ROOT_DIR                    "/ftk"
 #define DATA_DIR                        FTK_ROOT_DIR

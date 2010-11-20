@@ -1,7 +1,6 @@
-Import('env')
-Import('rtconfig')
+import rtconfig
 Import('RTT_ROOT')
-Import('projects')
+from building import *
 
 ftk_app_src	= Split("""
 ../../demos/demo_alpha.c
@@ -217,23 +216,10 @@ path = [RTT_ROOT + '/components/external/ftk/ftk/src',
 	RTT_ROOT + '/components/external/ftk/ftk/src/os/rt-thread/jpeg',
 	RTT_ROOT + '/components/external/ftk/ftk/src/backend/rt-thread' ]
 
-# group definitions
-group = {}
-group['name'] = 'FTK'
-group['src'] = File(src_local)
-group['CCFLAGS'] = ' -DRT_THREAD'
-group['CPPPATH'] = path
-group['CPPDEFINES'] = ''
-group['LINKFLAGS'] = ''
+group = DefineGroup('FTK', 
+    File(src_local), 
+    depend = ['RT_USING_FTK'], 
+    CCFLAGS = ' -DRT_THREAD', 
+    CPPPATH = path)
 
-# add group to project list
-projects.append(group)
-
-env.Append(CCFLAGS = group['CCFLAGS'])
-env.Append(CPPPATH = group['CPPPATH'])
-env.Append(CPPDEFINES = group['CPPDEFINES'])
-env.Append(LINKFLAGS = group['LINKFLAGS'])
-
-objs = env.Object(group['src'])
-
-Return('objs')
+Return('group')

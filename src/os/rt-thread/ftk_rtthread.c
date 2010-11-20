@@ -71,11 +71,6 @@ void ftk_platform_deinit(void)
 	ftk_rtthread_select_deinit();
 }
 
-void _exit(int exit_code)
-{
-	rt_thread_detach(rt_thread_self());
-}
-
 static const int N = 100;
 
 double coef(int n)
