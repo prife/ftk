@@ -139,7 +139,8 @@ static Ret ftk_animator_zoom_calc_step(FtkAnimator* thiz)
 	{
 		case FTK_ANI_ZOOM_IN:
 		{
-			ret = priv->h < h ? RET_OK : RET_FAIL;
+			ret = priv->x > 0 ? RET_OK : RET_FAIL;
+			ret = priv->w < w ? RET_OK : RET_FAIL;
 			priv->h += h/ANI_ZOOM_STEPS;
 			priv->w += w/ANI_ZOOM_STEPS;
 			priv->x -= (w/ANI_ZOOM_STEPS)/2;
@@ -149,7 +150,8 @@ static Ret ftk_animator_zoom_calc_step(FtkAnimator* thiz)
 		}
 		case FTK_ANI_ZOOM_OUT:
 		{
-			ret = priv->h > (h/ANI_ZOOM_STEPS) ? RET_OK : RET_FAIL;
+			ret = priv->x < (w/2) ? RET_OK : RET_FAIL;
+			ret = priv->w > (w/ANI_ZOOM_STEPS) ? RET_OK : RET_FAIL;
 			priv->h -= h/ANI_ZOOM_STEPS;
 			priv->w -= w/ANI_ZOOM_STEPS;
 			priv->x += (w/ANI_ZOOM_STEPS)/2;
