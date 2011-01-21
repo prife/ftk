@@ -196,7 +196,7 @@ static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_n
 	}
 
 	parent = ftk_widget_parent(focus_widget);
-	if(parent != NULL&& parent->prev != NULL)
+	if(parent != NULL&& parent->next != NULL)
 	{
 		if(ftk_widget_is_insensitive(parent) || !ftk_widget_is_visible(parent)
 			|| ftk_widget_has_attr(parent, FTK_ATTR_NO_FOCUS))
