@@ -154,7 +154,7 @@ static FtkWidget* ftk_window_find_prev_focus(FtkWidget* focus_widget, int move_p
 		if(ftk_widget_is_insensitive(parent) || !ftk_widget_is_visible(parent)
 			|| ftk_widget_has_attr(parent, FTK_ATTR_NO_FOCUS))
 		{		
-			temp = ftk_window_find_prev_focus(parent->next, 0);
+			temp = ftk_window_find_prev_focus(parent->prev, 0);
 			if(temp != NULL)
 			{
 				return temp;
