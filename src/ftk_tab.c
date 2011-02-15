@@ -194,8 +194,8 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 	FtkTextLine line = {0};
 	FtkBitmap* bitmap = NULL;
 	TabPage* page = priv->pages+index;
-	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	FtkTextLayout* text_layout = ftk_default_text_layout();
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	(void)height;
 	(void)width;
