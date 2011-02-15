@@ -47,6 +47,8 @@
 #ifdef WIN32
 #ifdef UCOS_SIM
 #include "ftk_ucos_sim.h"
+#elif defined(WINCE)
+#include "ftk_wince.h"
 #else
 #include "ftk_win32.h"
 #endif

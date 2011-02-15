@@ -44,7 +44,7 @@
 #include "ftk_image_png_decoder.h"
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(WINCE)
 #include "ftk_image_win32_decoder.h"
 #endif
 
@@ -80,7 +80,7 @@ FtkBitmapFactory* ftk_bitmap_factory_create(void)
 		ftk_bitmap_factory_add_decoder(thiz, ftk_image_png_decoder_create());
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(WINCE)
 		ftk_bitmap_factory_add_decoder(thiz, ftk_image_win32_decoder_create());
 #endif
 

@@ -39,7 +39,11 @@
 #endif
 
 #ifdef WIN32
+#ifndef WINCE
 #include "ftk_input_method_win32.h"
+#else
+#include "ftk_input_method_wince.h"
+#endif
 #endif
 
 #ifdef IPHONE
@@ -67,7 +71,7 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	{
 		thiz->current = 0;
 
-#if !defined(ANDROID) && !defined(ANDROID_NDK) && !defined(IPHONE)
+#if !defined(WINCE) && !defined(ANDROID) && !defined(ANDROID_NDK) && !defined(IPHONE)
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
 #endif
@@ -77,7 +81,11 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 #endif
 
 #ifdef WIN32
+#ifndef WINCE
 		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
+#else
+		ftk_input_method_manager_register(thiz, ftk_input_method_wince_create());
+#endif
 #endif
 
 #ifdef IPHONE
