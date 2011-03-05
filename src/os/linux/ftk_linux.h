@@ -38,6 +38,7 @@
 #include <sys/types.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <linux/fb.h>

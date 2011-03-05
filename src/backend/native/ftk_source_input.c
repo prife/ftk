@@ -47,6 +47,7 @@ typedef struct _PrivInfo
 	FtkEvent event;
 	FtkOnEvent on_event;
 	void* user_data;
+	char filename[32];
 }PrivInfo;
 
 #include <linux/input.h>
@@ -162,6 +163,12 @@ static Ret ftk_source_input_dispatch(FtkSource* thiz)
 	struct input_event ievent;
 	return_val_if_fail(priv->fd > 0, RET_FAIL);	
 	ret = read(priv->fd, &ievent, sizeof(ievent));
+
+	if(ret != sizeof(ievent))
+	{
+		ftk_logd("%s:%d read from %s failed(ret=%d, errno=%d)\n", __func__, __LINE__, priv->filename, ret, errno);
+	}
+
 	return_val_if_fail(ret == sizeof(ievent), RET_FAIL);
 
 	switch(ievent.type)
@@ -298,6 +305,8 @@ FtkSource* ftk_source_input_create(const char* filename, FtkOnEvent on_event, vo
 
 		thiz->ref = 1;
 		priv->fd = open(filename, O_RDONLY);
+		ftk_strncpy(priv->filename, filename, sizeof(priv->filename));
+
 		if(priv->fd < 0)
 		{
 			FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
