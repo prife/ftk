@@ -35,7 +35,7 @@
 
 FTK_BEGIN_DECLS
 
-FtkFont* ftk_font_default_create (const char* filename, int bold, int italic, size_t size);
+FtkFont* ftk_font_default_create (const char* filename, FtkFontDesc* font_desc);
 
 FTK_END_DECLS
 

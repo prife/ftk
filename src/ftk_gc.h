@@ -75,7 +75,13 @@ static inline Ret ftk_gc_copy(FtkGc* dst, FtkGc* src)
 
 	if(src->mask & FTK_GC_FONT)
 	{
+		if(dst->font != NULL)
+		{
+			ftk_font_unref(dst->font);
+		}
+
 		dst->font = src->font;
+		ftk_font_ref(dst->font);
 	}
 
 	if(src->mask & FTK_GC_BITMAP)
@@ -112,6 +118,12 @@ static inline Ret ftk_gc_reset(FtkGc* gc)
 		{
 			ftk_bitmap_unref(gc->bitmap);
 		}
+
+		if(gc->mask & FTK_GC_FONT)
+		{
+			ftk_font_unref(gc->font);
+		}
+
 		memset(gc, 0x00, sizeof(*gc));
 	}
 

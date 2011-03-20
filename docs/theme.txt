@@ -25,6 +25,8 @@ disable: when the widget is insensitive.
 
 the color format is: AARRGGBB, for example: ff9d9e9a means a=0xff r=0x9d g=0x9e b=0x9a
 
+5.Font attr is supported after release 0.5.
+
 here is a sample theme.xml:
 
 <theme name="default">
@@ -32,7 +34,8 @@ here is a sample theme.xml:
 <button bg_image[normal]="btn_default_normal.png" 
 	bg_image[focused]="btn_default_selected.png" 
 	bg_image[active]="btn_default_pressed.png" 
-	bg_image[disable]="btn_default_normal_disable.png"/> 
+	bg_image[disable]="btn_default_normal_disable.png"
+	font="size:20" /> 
 
 <progress_bar  
 	bg[normal]="ff9d9e9d" fg[normal]="ffffd300"

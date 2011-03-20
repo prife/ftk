@@ -1,1 +1,1 @@
-SUBDIRS=cross-build fontextract imconvert codegen fbusgen
+SUBDIRS=cross-build fontextract imconvert luagen fbusgen

@@ -91,7 +91,7 @@ void      ftk_font_default_destroy(FtkFont* thiz)
 	return;
 }
 
-FtkFont* ftk_font_default_create (const char* filename, int bold, int italic, size_t size)
+FtkFont* ftk_font_default_create (const char* filename, FtkFontDesc* font_desc)
 {
 	FtkFont* thiz = NULL;
 	return_val_if_fail(filename != NULL, NULL);
@@ -100,11 +100,13 @@ FtkFont* ftk_font_default_create (const char* filename, int bold, int italic, si
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);
+		
+		thiz->ref = 1;
 		thiz->height = ftk_font_default_height;
 		thiz->lookup = ftk_font_default_lookup;
 		thiz->destroy= ftk_font_default_destroy;
 
-		priv->size = size;
+		priv->size = ftk_font_desc_get_size(font_desc);
 		if(ftk_font_default_load(thiz, filename) != RET_OK)
 		{
 			FTK_ZFREE(thiz, sizeof(FtkFont) + sizeof(PrivInfo));

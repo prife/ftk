@@ -6,7 +6,8 @@ noinst_PROGRAMS=label_test widget_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
-	lookup_table_test config_test fs_test tab_test
+	lookup_table_test config_test fs_test tab_test font_desc_test \
+	font_manager_test
 
 fs_test_SOURCES=fs_test.c
 fs_test_LDFLAGS=$(MYLDFLAGS)
@@ -117,5 +118,11 @@ main_loop_test_LDFLAGS=$(MYLDFLAGS)
 
 primary_source_test_SOURCES=primary_source_test.c
 primary_source_test_LDFLAGS=$(MYLDFLAGS)
+
+font_desc_test_SOURCES=font_desc_test.c
+font_desc_test_LDFLAGS=$(MYLDFLAGS)
+
+font_manager_test_SOURCES=font_manager_test.c
+font_manager_test_LDFLAGS=$(MYLDFLAGS)
 
 EXTRA_DIST=test_util.c xml_builder_dump.h

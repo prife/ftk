@@ -110,7 +110,7 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y,
 		for(; state < FTK_WIDGET_STATE_NR; state++)
 		{
 			priv->gc[state].mask   = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-			priv->gc[state].font   = ftk_default_font();
+			priv->gc[state].font   = ftk_theme_get_font(ftk_default_theme(), type);
 			priv->gc[state].fg     = ftk_theme_get_fg_color(ftk_default_theme(), type, state);
 			priv->gc[state].bg     = ftk_theme_get_bg_color(ftk_default_theme(), type, state);
 			priv->gc[state].bitmap = ftk_theme_get_bg(ftk_default_theme(), type, state);
@@ -848,6 +848,29 @@ void ftk_widget_paint(FtkWidget* thiz)
 		ftk_window_enable_update(thiz);
 		ftk_window_update(thiz, &rect);
 	}
+
+	return;
+}
+
+void ftk_widget_set_font_size(FtkWidget* thiz, int font_size)
+{
+	FtkGc gc = {0};
+	FtkFontDesc* font_desc = ftk_font_desc_create(NULL);
+
+	gc.mask = FTK_GC_FONT;
+	ftk_font_desc_set_size(font_desc, font_size);
+	gc.font = ftk_font_manager_load(ftk_default_font_manager(), font_desc);
+	ftk_font_desc_unref(font_desc);
+
+	if(gc.font != NULL)
+	{
+		int i = 0;
+		for(i = 0; i < FTK_WIDGET_STATE_NR; i++)
+		{
+			ftk_widget_set_gc(thiz, i, &gc);
+		}
+	}
+	ftk_gc_reset(&gc);
 
 	return;
 }

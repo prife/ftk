@@ -1,9 +1,9 @@
 /*
- * File: ftk_font_freetype.h    
+ * File: ftk_font_manager.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   freetype font.  
+ * Brief:   font manager.
  *
- * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ * Copyright (c) 2009 - 2011  Li XianJing <xianjimli@hotmail.com>
  *
  * Licensed under the Academic Free License version 2.1
  *
@@ -25,19 +25,29 @@
 /*
  * History:
  * ================================================================
- * 2009-11-18 Li XianJing <xianjimli@hotmail.com> created
+ * 2011-03-20 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#ifndef FTK_FONT_FREETYPE_H
-#define FTK_FONT_FREETYPE_H
+
+#ifndef FTK_FONT_MANAGER_H
+#define FTK_FONT_MANAGER_H
 
 #include "ftk_font.h"
+#include "ftk_font_desc.h"
 
 FTK_BEGIN_DECLS
 
-FtkFont* ftk_font_freetype_create (const char* filename, FtkFontDesc* font_desc);
+struct _FtkFontManager;
+typedef struct _FtkFontManager FtkFontManager;
+
+FtkFontManager* ftk_font_manager_create(int max_font_nr);
+
+FtkFont* ftk_font_manager_get_default_font(FtkFontManager* thiz);
+FtkFont* ftk_font_manager_load(FtkFontManager* thiz, FtkFontDesc* font_desc);
+
+void ftk_font_manager_destroy(FtkFontManager* thiz);
 
 FTK_END_DECLS
 
-#endif/*FTK_FONT_FREETYPE_H*/
+#endif/*FTK_FONT_MANAGER_H*/
 

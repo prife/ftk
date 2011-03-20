@@ -32,7 +32,6 @@
 #ifndef FTK_GLOBALS_H
 #define FTK_GLOBALS_H
 
-#include "ftk_font.h"
 #include "ftk_theme.h"
 #include "ftk_config.h"
 #include "ftk_source.h"
@@ -40,6 +39,7 @@
 #include "ftk_allocator.h"
 #include "ftk_text_layout.h"
 #include "ftk_wnd_manager.h"
+#include "ftk_font_manager.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_sources_manager.h"
 #include "ftk_input_method_manager.h"
@@ -47,7 +47,6 @@
 
 FTK_BEGIN_DECLS
 
-FtkFont*          ftk_default_font(void);
 FtkDisplay*       ftk_default_display(void);
 FtkMainLoop*      ftk_default_main_loop(void);
 FtkLogLevel       ftk_default_log_level(void);
@@ -63,8 +62,8 @@ FtkAllocator*      ftk_default_allocator(void);
 FtkTextLayout*     ftk_default_text_layout(void);
 FtkInputMethodManager* ftk_default_input_method_manager(void);
 FtkImPreeditor*        ftk_default_input_method_preeditor(void);
+FtkFontManager*        ftk_default_font_manager(void);
 
-void ftk_set_font(FtkFont* font);
 void ftk_set_display(FtkDisplay* display);
 void ftk_set_main_loop(FtkMainLoop* main_loop);
 void ftk_set_log_level(FtkLogLevel level);
@@ -80,7 +79,11 @@ void ftk_set_text_layout(FtkTextLayout* text_layout);
 void ftk_set_allocator(FtkAllocator* allocator);
 void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager);
 void ftk_set_input_method_preeditor(FtkImPreeditor* input_method_preeditor);
+void ftk_set_font_manager(FtkFontManager* font_manager);
 
+void ftk_clear_globals(void);
+
+#define ftk_default_font() ftk_font_manager_get_default_font(ftk_default_font_manager())
 FTK_END_DECLS
 
 #endif/*FTK_GLOBALS_H*/

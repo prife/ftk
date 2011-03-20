@@ -111,6 +111,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 
 	button = ftk_button_create(win, width/4, 3 * height/4 + 5, width/4, 60);
 	ftk_widget_set_text(button, "more");
+	ftk_widget_set_font_size(button, 20);
 	ftk_button_set_clicked_listener(button, button_more_clicked, model);
 
 	button = ftk_button_create(win, width/2, 3 * height/4 + 5, width/4, 60);

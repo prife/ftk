@@ -2,7 +2,6 @@
 
 interface FtkWidget
 {
-	void ftk_widget_init(in FtkWidgetPtr thiz, in int type, in int id);
 	int ftk_widget_type(in FtkWidgetPtr thiz);
 	int ftk_widget_top(in FtkWidgetPtr thiz);
 	int ftk_widget_left(in FtkWidgetPtr thiz);
@@ -39,6 +38,7 @@ interface FtkWidget
 	void ftk_widget_set_id(in FtkWidgetPtr thiz, in int id);
 	void ftk_widget_set_canvas(in FtkWidgetPtr thiz, in FtkCanvasPtr canvas);
 	void ftk_widget_set_parent(in FtkWidgetPtr thiz, in FtkWidgetPtr parent);
+	void ftk_widget_set_font_size(in FtkWidgetPtr thiz, in int font_size);
 	void ftk_widget_append_child(in FtkWidgetPtr thiz, in FtkWidgetPtr child);
 	void ftk_widget_append_sibling(in FtkWidgetPtr thiz, in FtkWidgetPtr next);
 	void ftk_widget_remove_child(in FtkWidgetPtr thiz, in FtkWidgetPtr child);

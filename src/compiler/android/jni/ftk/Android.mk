@@ -52,6 +52,8 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_file_system.c \
 	../../../../../src/ftk_file_system_posix.c \
 	../../../../../src/ftk_font.c \
+	../../../../../src/ftk_font_desc.c \
+	../../../../../src/ftk_font_manager.c \
 	../../../../../src/ftk_font_freetype.c \
 	../../../../../src/ftk_gesture.c \
 	../../../../../src/ftk_globals.c \

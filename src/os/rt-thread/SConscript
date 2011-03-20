@@ -35,6 +35,8 @@ ftk_src = Split("""
 ../../ftk_entry.c
 ../../ftk_expr.c
 ../../ftk_font.c
+../../ftk_font_desc.c
+../../ftk_font_manager.c
 ../../ftk_font_default.c
 ../../ftk_gesture.c
 ../../ftk_globals.c

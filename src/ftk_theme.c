@@ -46,6 +46,7 @@ typedef struct _FtkWidgetTheme
 	FtkColor   border[FTK_WIDGET_STATE_NR];
 	FtkBitmap* bg_image[FTK_WIDGET_STATE_NR];
 	char bg_image_name[FTK_WIDGET_STATE_NR][32];
+	FtkFontDesc* font_desc;
 }FtkWidgetTheme;
 
 struct _FtkTheme
@@ -318,7 +319,7 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 		name = attrs[i];
 		value = attrs[i+1];
 
-		if(strlen(name) < 9)
+		if(strlen(name) < 4)
 		{
 			ftk_logd("%s: unknow %s=%s\n", __func__, name, value);
 			continue;		
@@ -329,7 +330,14 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 			case 'f':
 			{
 				/*fg:forground color*/
-				ftk_theme_parse_fg_color(theme, type, name, value);
+				if(strcmp(name, "fg") == 0)
+				{
+					ftk_theme_parse_fg_color(theme, type, name, value);
+				}
+				else if(strcmp(name, "font") == 0)
+				{
+					theme->widget_themes[type].font_desc = ftk_font_desc_create(value);
+				}
 				break;
 			}
 			case 'b':
@@ -496,6 +504,26 @@ FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWid
 	return thiz->widget_themes[type].border[state];
 }
 
+FtkFont*   ftk_theme_get_font(FtkTheme* thiz, FtkWidgetType type)
+{
+	FtkFont* font = NULL;
+	assert(type < FTK_WIDGET_TYPE_NR);
+	return_val_if_fail(thiz != NULL, NULL);
+	
+	if(thiz->widget_themes[type].font_desc != NULL)
+	{
+		font = ftk_font_manager_load(ftk_default_font_manager(), 
+			thiz->widget_themes[type].font_desc);
+	}
+
+	if(font == NULL)
+	{
+		font = ftk_default_font();
+	}
+
+	return font;
+}
+
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
 {
 	FtkColor c = {0};
@@ -521,6 +549,11 @@ void       ftk_theme_destroy(FtkTheme* thiz)
 					ftk_bitmap_unref(thiz->widget_themes[i].bg_image[j]);
 					thiz->widget_themes[i].bg_image[j] = NULL;
 				}
+			}
+
+			if(thiz->widget_themes[i].font_desc != NULL)
+			{
+				ftk_font_desc_unref(thiz->widget_themes[i].font_desc);
 			}
 		}
 		ftk_icon_cache_destroy(thiz->icon_cache);

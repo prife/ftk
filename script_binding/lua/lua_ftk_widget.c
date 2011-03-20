@@ -4,25 +4,6 @@
 
 static void tolua_reg_types (lua_State* L)
 {
-	tolua_usertype(L, "FtkWidget");
-}
-
-static int lua_ftk_widget_init(lua_State* L)
-{
-	tolua_Error err = {0};
-	FtkWidget* thiz;
-	int type;
-	int id;
-	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	thiz = tolua_tousertype(L, 1, 0);
-	type = tolua_tonumber(L, 2, 0);
-	id = tolua_tonumber(L, 3, 0);
-	ftk_widget_init(thiz, type, id, 0, 0, 0, 0, 0);
-
-	return 1;
 }
 
 static int lua_ftk_widget_type(lua_State* L)
@@ -597,6 +578,22 @@ static int lua_ftk_widget_set_parent(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_widget_set_font_size(lua_State* L)
+{
+	tolua_Error err = {0};
+	FtkWidget* thiz;
+	int font_size;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	font_size = tolua_tonumber(L, 2, 0);
+	ftk_widget_set_font_size(thiz, font_size);
+
+	return 1;
+}
+
 static int lua_ftk_widget_append_child(lua_State* L)
 {
 	tolua_Error err = {0};
@@ -1019,9 +1016,6 @@ int tolua_ftk_widget_init(lua_State* L)
 	tolua_reg_types(L);
 	tolua_module(L, NULL, 0);
 	tolua_beginmodule(L, NULL);
-	tolua_cclass(L,"FtkWidget", "FtkWidget", "", NULL);
-	tolua_beginmodule(L, "FtkWidget");
-	tolua_function(L, "Init", lua_ftk_widget_init);
 	tolua_function(L, "Type", lua_ftk_widget_type);
 	tolua_function(L, "Top", lua_ftk_widget_top);
 	tolua_function(L, "Left", lua_ftk_widget_left);
@@ -1057,6 +1051,7 @@ int tolua_ftk_widget_init(lua_State* L)
 	tolua_function(L, "SetId", lua_ftk_widget_set_id);
 	tolua_function(L, "SetCanvas", lua_ftk_widget_set_canvas);
 	tolua_function(L, "SetParent", lua_ftk_widget_set_parent);
+	tolua_function(L, "SetFontSize", lua_ftk_widget_set_font_size);
 	tolua_function(L, "AppendChild", lua_ftk_widget_append_child);
 	tolua_function(L, "AppendSibling", lua_ftk_widget_append_sibling);
 	tolua_function(L, "RemoveChild", lua_ftk_widget_remove_child);
@@ -1083,7 +1078,6 @@ int tolua_ftk_widget_init(lua_State* L)
 	tolua_function(L, "RefSelf", lua_ftk_widget_ref_self);
 	tolua_function(L, "UnrefSelf", lua_ftk_widget_unref_self);
 	tolua_function(L, "Event", lua_ftk_widget_event);
-	tolua_endmodule(L);
 	tolua_endmodule(L);
 
 

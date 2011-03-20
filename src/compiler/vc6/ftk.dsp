@@ -193,6 +193,14 @@ SOURCE=..\..\ftk_font_default.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\ftk_font_desc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\ftk_font_manager.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\ftk_gesture.c
 # End Source File
 # Begin Source File

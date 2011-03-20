@@ -4,7 +4,6 @@
 
 static void tolua_reg_types (lua_State* L)
 {
-	tolua_usertype(L, "Ftk");
 }
 
 static int lua_ftk_default_font(lua_State* L)
@@ -138,20 +137,6 @@ static int lua_ftk_default_input_method_preeditor(lua_State* L)
 	FtkImPreeditor* retv;
 	retv = ftk_default_input_method_preeditor();
 	tolua_pushusertype(L, (FtkImPreeditor*)retv, "FtkImPreeditor");
-
-	return 1;
-}
-
-static int lua_ftk_set_font(lua_State* L)
-{
-	tolua_Error err = {0};
-	FtkFont* font;
-	int param_ok = tolua_isusertype(L, 1, "FtkFont", 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	font = tolua_tousertype(L, 1, 0);
-	ftk_set_font(font);
 
 	return 1;
 }
@@ -472,8 +457,6 @@ int tolua_ftk_init(lua_State* L)
 	tolua_reg_types(L);
 	tolua_module(L, NULL, 0);
 	tolua_beginmodule(L, NULL);
-	tolua_cclass(L,"Ftk", "Ftk", "", NULL);
-	tolua_beginmodule(L, "Ftk");
 	tolua_function(L, "DefaultFont", lua_ftk_default_font);
 	tolua_function(L, "DefaultDisplay", lua_ftk_default_display);
 	tolua_function(L, "DefaultMainLoop", lua_ftk_default_main_loop);
@@ -489,7 +472,6 @@ int tolua_ftk_init(lua_State* L)
 	tolua_function(L, "DefaultConfig", lua_ftk_default_config);
 	tolua_function(L, "DefaultInputMethodManager", lua_ftk_default_input_method_manager);
 	tolua_function(L, "DefaultInputMethodPreeditor", lua_ftk_default_input_method_preeditor);
-	tolua_function(L, "SetFont", lua_ftk_set_font);
 	tolua_function(L, "SetDisplay", lua_ftk_set_display);
 	tolua_function(L, "SetMainLoop", lua_ftk_set_main_loop);
 	tolua_function(L, "SetLogLevel", lua_ftk_set_log_level);
@@ -511,7 +493,6 @@ int tolua_ftk_init(lua_State* L)
 	tolua_function(L, "Warning", lua_ftk_warning);
 	tolua_function(L, "Question", lua_ftk_question);
 	tolua_function(L, "Infomation", lua_ftk_infomation);
-	tolua_endmodule(L);
 	tolua_endmodule(L);
 
 

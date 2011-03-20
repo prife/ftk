@@ -65,29 +65,16 @@ static Ret ftk_init_bitmap_factory(void)
 
 static Ret ftk_init_font(void)
 {
-	FtkFont* font = NULL;
-#if defined(USE_FREETYPE) && defined(ANDROID) && defined(ANDROID_NDK)
-	font = ftk_font_freetype_create(FTK_FONT, 0, 0, FTK_FONT_SIZE);
-#else
-	char filename[FTK_MAX_PATH + 1] = {0};
-	ftk_strs_cat(filename, FTK_MAX_PATH, 
-		ftk_config_get_data_dir(ftk_default_config()), "/data/", FTK_FONT, NULL);
-	ftk_normalize_path(filename);
-#ifdef USE_FREETYPE
-	font = ftk_font_freetype_create(filename, 0, 0, FTK_FONT_SIZE);
-#else
-	font = ftk_font_default_create(filename, 0, 0, 0);
-#endif
-#endif
-	
-	if(font != NULL)
+	FtkFontManager* font_manager = ftk_font_manager_create(16);
+
+	if(font_manager != NULL)
 	{
-		ftk_set_font(font);
+		ftk_set_font_manager(font_manager);
 	}
 	else
 	{
 		ftk_deinit();
-		ftk_loge("load font failed.\n");
+		ftk_loge("create font_manager failed.\n");
 		exit(0);
 	}
 
@@ -121,75 +108,64 @@ void ftk_deinit(void)
 	if(ftk_default_input_method_preeditor() != NULL)
 	{
 		ftk_input_method_preeditor_destroy(ftk_default_input_method_preeditor());
-		ftk_set_input_method_preeditor(NULL);
 	}
 
 	if(ftk_default_wnd_manager() != NULL)
 	{
 		ftk_wnd_manager_destroy(ftk_default_wnd_manager());
-		ftk_set_wnd_manager(NULL);
 	}
 	
 	if(ftk_default_main_loop() != NULL)
 	{
 		ftk_main_loop_destroy(ftk_default_main_loop());
-		ftk_set_main_loop(NULL);
 	}
 
 	if(ftk_default_sources_manager() != NULL)
 	{
 		ftk_sources_manager_destroy(ftk_default_sources_manager());
-		ftk_set_sources_manager(NULL);
 	}
 
 	if(ftk_default_bitmap_factory() != NULL)
 	{
 		ftk_bitmap_factory_destroy(ftk_default_bitmap_factory());
-		ftk_set_bitmap_factory(NULL);
 	}
 
 	if(ftk_default_text_layout() != NULL)
 	{
 		ftk_text_layout_destroy(ftk_default_text_layout());
-		ftk_set_text_layout(NULL);
 	}
 
-	if(ftk_default_font() != NULL)
+	if(ftk_default_font_manager() != NULL)
 	{
-		ftk_font_destroy(ftk_default_font());
-		ftk_set_font(NULL);
+		ftk_font_manager_destroy(ftk_default_font_manager());
 	}
 
 	if(ftk_default_display() != NULL)
 	{
 		ftk_display_destroy(ftk_default_display());
-		ftk_set_display(NULL);
 	}
 
 	if(ftk_default_theme() != NULL)
 	{
 		ftk_theme_destroy(ftk_default_theme());
-		ftk_set_theme(NULL);
 	}
 
 	if(ftk_shared_canvas() != NULL)
 	{
 		ftk_canvas_destroy(ftk_shared_canvas());
-		ftk_set_shared_canvas(NULL);
 	}
 
 	if(ftk_default_input_method_manager() != NULL)
 	{
 		ftk_input_method_manager_destroy(ftk_default_input_method_manager());
-		ftk_set_input_method_manager(NULL);
 	}
 
 	if(ftk_default_config() != NULL)
 	{
 		ftk_config_destroy(ftk_default_config());
-		ftk_set_config(NULL);
 	}
-	
+
+	ftk_clear_globals();
 	ftk_platform_deinit();
 
 #ifndef USE_STD_MALLOC

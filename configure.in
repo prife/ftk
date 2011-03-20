@@ -237,8 +237,8 @@ AC_CONFIG_FILES([ftk.pc
                 tools/cross-build/Makefile
                 tools/fontextract/Makefile
                 tools/imconvert/Makefile
-                tools/codegen/Makefile
-                tools/codegen/idl/Makefile
+                tools/luagen/Makefile
+                tools/luagen/idl/Makefile
                 tools/fbusgen/Makefile
                 fbus/Makefile
                 fbus/demo/Makefile

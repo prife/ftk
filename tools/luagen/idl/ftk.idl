@@ -18,7 +18,6 @@ interface Ftk
 	FtkInputMethodManagerPtr ftk_default_input_method_manager();
 	FtkImPreeditorPtr        ftk_default_input_method_preeditor();
 
-	void ftk_set_font(in FtkFontPtr font);
 	void ftk_set_display(in FtkDisplayPtr display);
 	void ftk_set_main_loop(in FtkMainLoopPtr main_loop);
 	void ftk_set_log_level(in FtkLogLevel level);

@@ -3,7 +3,7 @@
 <button bg_image[normal]="btn_default_normal.png" bg[normal]="ffd0d0d0"
 	bg_image[focused]="btn_default_selected.png" bg[focused]="ffffbb00"
 	bg_image[active]="btn_default_pressed.png" bg[active]="ffe2ceee"
-	bg_image[disable]="btn_default_normal_disable.png"/> 
+	bg_image[disable]="btn_default_normal_disable.png" />
 
 <progress_bar  
 	bg[normal]="ff9d9e9d" fg[normal]="ffffd300"
@@ -53,4 +53,7 @@
 
 <menu_panel bg[normal]="ffffffff" fg[normal]="ffccc9b8" bd[normal]="ffb0a080"/>
 <menu_item bg_image[focused]="menuitem_background_focus.png" bg_image[active]="menuitem_background_pressed.png" />
+
+<status_item font="size:20" />
+
 </theme>

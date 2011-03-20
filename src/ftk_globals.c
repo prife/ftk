@@ -33,7 +33,6 @@
 
 struct _FtkGlobals
 {
-	FtkFont* font;
 	FtkCanvas* canvas;
 	FtkTheme* theme;
 	FtkDisplay* display;
@@ -45,15 +44,16 @@ struct _FtkGlobals
 	FtkAllocator* allocator;
 	FtkWndManager* wnd_manager;
 	FtkTextLayout* text_layout;
+	FtkFontManager* font_manager;
 	FtkImPreeditor* input_method_preeditor;
 	FtkBitmapFactory* bitmap_factory;
 	FtkSourcesManager* sources_manager;
 	FtkInputMethodManager* input_manager_manager;
 }g_globals;
 
-FtkFont*          ftk_default_font(void)
+FtkFontManager*          ftk_default_font_manager(void)
 {
-	return g_globals.font;
+	return g_globals.font_manager;
 }
 
 FtkDisplay*       ftk_default_display(void)
@@ -131,9 +131,9 @@ FtkSourcesManager* ftk_default_sources_manager(void)
 	return g_globals.sources_manager;
 }
 
-void ftk_set_font(FtkFont* font)
+void ftk_set_font_manager(FtkFontManager* font_manager)
 {
-	g_globals.font = font;
+	g_globals.font_manager = font_manager;
 
 	return;
 }
@@ -243,3 +243,9 @@ void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager)
 	return;
 }
 
+void ftk_clear_globals(void)
+{
+	memset(&g_globals, 0, sizeof(g_globals));
+
+	return;
+}

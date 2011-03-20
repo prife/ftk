@@ -1,3 +1,7 @@
 o tab widget
 o opengles backend
-o iphone backend
+o port to iphone
+o port to android
+o port to rt-thread
+o port to wince
+o multi font size supported.

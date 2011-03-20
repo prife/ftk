@@ -32,7 +32,7 @@
 #ifndef FTK_FONT_H
 #define FTK_FONT_H
 
-#include "ftk_typedef.h"
+#include "ftk_font_desc.h"
 #include "ftk_allocator.h"
 
 FTK_BEGIN_DECLS
@@ -61,6 +61,7 @@ struct _FtkFont
 	FtkFontLookup  lookup;
 	FtkFontDestroy destroy;
 
+	int ref;
 	/*now cache ascii chars only.*/
 	char char_extent_cache[0x80];
 	char priv[ZERO_LEN_ARRAY];
@@ -75,9 +76,22 @@ static inline int      ftk_font_height(FtkFont* thiz)
 
 static inline Ret ftk_font_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* glyph)
 {
+	if(thiz == NULL || thiz->lookup == NULL)
+	{
+		return RET_FAIL;
+	}
 	return_val_if_fail(thiz != NULL && thiz->lookup != NULL, RET_FAIL);
 
 	return thiz->lookup(thiz, code, glyph);
+}
+
+static inline int     ftk_font_ref(FtkFont* thiz)
+{
+	return_val_if_fail(thiz != NULL, 0);
+
+	thiz->ref++;
+
+	return thiz->ref;
 }
 
 static inline void     ftk_font_destroy(FtkFont* thiz)
@@ -87,6 +101,21 @@ static inline void     ftk_font_destroy(FtkFont* thiz)
 	thiz->destroy(thiz);
 
 	return;
+}
+
+static inline int     ftk_font_unref(FtkFont* thiz)
+{
+	int ret = 0;
+	return_val_if_fail(thiz != NULL, 0);
+
+	ret = --thiz->ref;
+
+	if(ret == 0)
+	{
+		ftk_font_destroy(thiz);
+	}
+
+	return ret;
 }
 
 int ftk_font_get_extent(FtkFont* thiz, const char* str, int len);
