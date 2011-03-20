@@ -854,11 +854,20 @@ void ftk_widget_paint(FtkWidget* thiz)
 
 void ftk_widget_set_font_size(FtkWidget* thiz, int font_size)
 {
+	char font_desc[64] = {0};
+	ftk_snprintf(font_desc, sizeof(font_desc)-1, FONT_DESC_FMT, font_size, 0, 0);
+
+	ftk_widget_set_font(thiz, font_desc);
+
+	return;
+}
+
+void ftk_widget_set_font(FtkWidget* thiz, const char* font_desc_str)
+{
 	FtkGc gc = {0};
-	FtkFontDesc* font_desc = ftk_font_desc_create(NULL);
+	FtkFontDesc* font_desc = ftk_font_desc_create(font_desc_str);
 
 	gc.mask = FTK_GC_FONT;
-	ftk_font_desc_set_size(font_desc, font_size);
 	gc.font = ftk_font_manager_load(ftk_default_font_manager(), font_desc);
 	ftk_font_desc_unref(font_desc);
 

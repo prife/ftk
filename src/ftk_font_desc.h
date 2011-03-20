@@ -38,6 +38,8 @@
 FTK_BEGIN_DECLS
 
 #define FTK_DEFAULT_FONT "size:16 bold:0 italic:0"
+#define FONT_DESC_FMT "size:%d bold:%d italic:%d"
+
 
 struct _FtkFontDesc;
 typedef struct _FtkFontDesc FtkFontDesc;

@@ -41,8 +41,6 @@ struct _FtkFontDesc
 	int is_italic;
 };
 
-#define FONT_DESC_FMT "size:%d bold:%d italic:%d"
-
 static Ret ftk_font_desc_parse(FtkFontDesc* thiz, const char* font_desc)
 {
 	const char* p = NULL;
