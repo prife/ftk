@@ -32,6 +32,11 @@
 #include "ftk_util.h"
 #include "ftk_globals.h"
 #include "ftk_font_manager.h"
+#ifdef USE_FREETYPE
+#include "ftk_font_freetype.h"
+#else
+#include "ftk_font_default.h"
+#endif
 
 typedef struct _FtkFontEntry
 {
@@ -76,6 +81,8 @@ FtkFont* ftk_font_manager_load(FtkFontManager* thiz, FtkFontDesc* font_desc)
 {
 	int i = 0;
 	FtkFont* font = NULL;
+	char filename[FTK_MAX_PATH + 1] = {0};
+
 	return_val_if_fail(thiz != NULL && font_desc != NULL, NULL);
 
 #ifndef USE_FREETYPE
@@ -97,7 +104,6 @@ FtkFont* ftk_font_manager_load(FtkFontManager* thiz, FtkFontDesc* font_desc)
 #if defined(USE_FREETYPE) && defined(ANDROID) && defined(ANDROID_NDK)
 	font = ftk_font_freetype_create(FTK_FONT, font_desc);
 #else
-	char filename[FTK_MAX_PATH + 1] = {0};
 	ftk_strs_cat(filename, FTK_MAX_PATH, 
 		ftk_config_get_data_dir(ftk_default_config()), "/data/", FTK_FONT, NULL);
 	ftk_normalize_path(filename);
