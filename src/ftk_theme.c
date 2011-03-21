@@ -330,7 +330,7 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 			case 'f':
 			{
 				/*fg:forground color*/
-				if(strcmp(name, "fg") == 0)
+				if(strstr(name, "fg[") != NULL)
 				{
 					ftk_theme_parse_fg_color(theme, type, name, value);
 				}
