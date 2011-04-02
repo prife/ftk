@@ -1,9 +1,0 @@
-#include "ftk_typedef.idl"
-
-interface FtkAnimator
-{
-	Ret  ftk_animator_stop(in FtkAnimatorPtr thiz);
-	Ret  ftk_animator_start(in FtkAnimatorPtr thiz, in FtkWidgetPtr win, in int sync);
-	Ret  ftk_animator_set_param(in FtkAnimatorPtr thiz, in int type, in int start, in int end, in int step, in int duration);
-	void ftk_animator_destroy(in FtkAnimatorPtr thiz);
-};

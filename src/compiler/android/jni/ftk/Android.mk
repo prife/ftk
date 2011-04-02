@@ -29,14 +29,25 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_allocator.c \
 	../../../../../src/ftk_allocator_default.c \
 	../../../../../src/ftk_allocator_profile.c \
-	../../../../../src/ftk_animator_alpha.c \
-	../../../../../src/ftk_animator_expand.c \
-	../../../../../src/ftk_animator_zoom.c \
 	../../../../../src/ftk_app_window.c \
 	../../../../../src/ftk_bitmap.c \
 	../../../../../src/ftk_bitmap_factory.c \
 	../../../../../src/ftk_button.c \
 	../../../../../src/ftk.c \
+	../../../../../src/ftk_animation_alpha.c \
+	../../../../../src/ftk_animation.c \
+	../../../../../src/ftk_animation_expand.c \
+	../../../../../src/ftk_animation_scale.c \
+	../../../../../src/ftk_animation_translate.c \
+	../../../../../src/ftk_animation_trigger_default.c \
+	../../../../../src/ftk_animation_trigger_silence.c \
+	../../../../../src/ftk_interpolator_acc_decelerate.c \
+	../../../../../src/ftk_interpolator_accelerate.c \
+	../../../../../src/ftk_interpolator_bounce.c \
+	../../../../../src/ftk_interpolator_decelerate.c \
+	../../../../../src/ftk_interpolator_linear.c \
+	../../../../../src/ftk_pairs.c \
+	../../../../../src/ftk_params.c \
 	../../../../../src/ftk_canvas.c \
 	../../../../../src/ftk_check_button.c \
 	../../../../../src/ftk_clipboard.c \

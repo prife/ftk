@@ -1,8 +1,0 @@
-#include "ftk_animator.idl"
-
-typedef voidPtr FtkAnimatorAlphaPtr;
-
-interface FtkAnimatorAlpha : FtkAnimator
-{
-	FtkAnimatorAlphaPtr ftk_animator_alpha_create(in int destroy_when_stop);
-};

@@ -45,13 +45,11 @@ EXTRA_DIST=\
 	demo2.lua\
 	demo3.lua\
 	demo4.lua\
-	demo_alpha.lua\
 	demo_button.lua\
 	demo_check_button.lua\
 	demo_combo_box.lua\
 	demo_dialog.lua\
 	demo_entry.lua\
-	demo_expand.lua\
 	demo_fullscreen.lua\
 	demo_icon_view.lua\
 	demo_label.lua\

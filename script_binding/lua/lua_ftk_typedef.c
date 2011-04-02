@@ -524,14 +524,6 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_constant(L, "FTK_LIST_ITEM_RADIO", FTK_LIST_ITEM_RADIO);
 	tolua_constant(L, "FTK_LIST_ITEM_CHECK", FTK_LIST_ITEM_CHECK);
 	tolua_constant(L, "FTK_LIST_ITEM_MORE", FTK_LIST_ITEM_MORE);
-	tolua_constant(L, "FTK_ANI_NONE", FTK_ANI_NONE);
-	tolua_constant(L, "FTK_ANI_TO_RIGHT", FTK_ANI_TO_RIGHT);
-	tolua_constant(L, "FTK_ANI_TO_DOWN", FTK_ANI_TO_DOWN);
-	tolua_constant(L, "FTK_ANI_TO_UP", FTK_ANI_TO_UP);
-	tolua_constant(L, "FTK_ANI_TO_EAST_SOUTH", FTK_ANI_TO_EAST_SOUTH);
-	tolua_constant(L, "FTK_ANI_TO_EAST_NORTH", FTK_ANI_TO_EAST_NORTH);
-	tolua_constant(L, "FTK_ANI_TO_BRINK", FTK_ANI_TO_BRINK);
-	tolua_constant(L, "FTK_ANI_ALPHA", FTK_ANI_ALPHA);
 	tolua_constant(L, "FTK_INPUT_NORMAL", FTK_INPUT_NORMAL);
 	tolua_constant(L, "FTK_INPUT_DIGIT", FTK_INPUT_DIGIT);
 	tolua_constant(L, "FTK_INPUT_ALPHA", FTK_INPUT_ALPHA);

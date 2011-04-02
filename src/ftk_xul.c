@@ -34,9 +34,7 @@
 #include "ftk_expr.h"
 #include "ftk_util.h"
 #include "ftk_mmap.h"
-#include "ftk_animator.h"
 #include "ftk_xml_parser.h"
-#include "ftk_animator_expand.h"
 
 typedef struct _PrivInfo
 {
@@ -414,12 +412,6 @@ static const VarConst s_var_conts[] =
 	{"FTK_ATTR_INSENSITIVE",     FTK_ATTR_INSENSITIVE},
 	{"FTK_ATTR_FOCUSED",         FTK_ATTR_FOCUSED},
 	{"FTK_ATTR_QUIT_WHEN_CLOSE", FTK_ATTR_QUIT_WHEN_CLOSE},
-	{"FTK_ANI_TO_RIGHT",         FTK_ANI_TO_RIGHT},
-	{"FTK_ANI_TO_DOWN",          FTK_ANI_TO_DOWN},
-	{"FTK_ANI_TO_UP",            FTK_ANI_TO_UP},
-	{"FTK_ANI_TO_EAST_SOUTH",    FTK_ANI_TO_EAST_SOUTH},
-	{"FTK_ANI_TO_EAST_NORTH",    FTK_ANI_TO_EAST_NORTH},
-	{"FTK_ANI_ALPHA",            FTK_ANI_ALPHA},
 	{NULL, 0},
 };
 
