@@ -33,6 +33,7 @@
 #define FTK_THEME_H
 
 #include "ftk_bitmap.h"
+#include "ftk_animation_trigger.h"
 
 FTK_BEGIN_DECLS
 
@@ -48,6 +49,7 @@ FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetS
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 FtkFont*   ftk_theme_get_font(FtkTheme* thiz, FtkWidgetType type);
+FtkAnimationTrigger* ftk_theme_get_animation_trigger(FtkTheme* thiz);
 
 void       ftk_theme_destroy(FtkTheme* thiz);
 

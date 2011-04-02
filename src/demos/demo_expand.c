@@ -74,6 +74,7 @@ static void create_ani_window(int type, int sync)
 	FtkWidget* win = ftk_app_window_create();
 	FtkAnimator* ani = ftk_animator_expand_create(1);
 	
+	ftk_window_set_animation_hint(win, "app_main_window");
 	gc.mask = FTK_GC_BITMAP;
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);

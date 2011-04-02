@@ -539,6 +539,11 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	return RET_OK;
 }
 
+Ret ftk_canvas_draw_bitmap_normal(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* src_r, int xoffset, int yoffset)
+{
+	return ftk_canvas_draw_bitmap(thiz, bitmap, src_r->x, src_r->y, src_r->width, src_r->height, xoffset, yoffset);
+}
+
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz)
 {
 	return_val_if_fail(thiz != NULL, NULL);
@@ -739,6 +744,121 @@ Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle st
 			ret = ftk_canvas_fill_background_four_corner(canvas, x, y, w, h, bitmap);break;
 		default:
 			ret = ftk_canvas_fill_background_normal(canvas, x, y, w, h, bitmap);break;
+	}
+
+	return ret;
+}
+
+static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkRect* src_r, FtkRect* dst_r)
+{
+	FtkColor* s = NULL;
+	FtkColor* d = NULL;
+	FtkColor* src = NULL;
+	FtkColor* dst = NULL;
+	FtkColor* psrc = NULL;
+	FtkColor* pdst = NULL;
+	FtkBitmap* dst_i = thiz->bitmap;	
+	return_val_if_fail(dst_i != NULL && ftk_bitmap_bits(dst_i) != NULL && dst_r != NULL, RET_FAIL);
+	return_val_if_fail(src_i != NULL && ftk_bitmap_bits(src_i) != NULL && src_r != NULL, RET_FAIL);
+
+	int i=0, j=0, m=0, n=0;
+	int dst_i_w = ftk_bitmap_width(dst_i); 
+	int dst_i_h = ftk_bitmap_height(dst_i);
+	int src_i_w = ftk_bitmap_width(src_i);
+	int src_i_h = ftk_bitmap_height(src_i);
+
+	int dst_x = dst_r->x;
+	int dst_y = dst_r->y;
+	int dst_w = dst_r->width;
+	int dst_h = dst_r->height;
+
+	int src_x = src_r->x;
+	int src_y = src_r->y;
+	int src_w = src_r->width;
+	int src_h = src_r->height;
+
+	int scale_w = (src_w << 8)/dst_w;
+	int scale_h = (src_h << 8)/dst_h;
+	
+	return_val_if_fail(dst_x >= 0 && dst_w > 0 && (dst_x + dst_w) <= dst_i_w, RET_FAIL);
+	return_val_if_fail(dst_y >= 0 && dst_h > 0 && (dst_y + dst_h) <= dst_i_h, RET_FAIL);
+	
+	return_val_if_fail(src_x >= 0 && src_w > 0 && (src_x + src_w) <= src_i_w, RET_FAIL);
+	return_val_if_fail(src_y >= 0 && src_h > 0 && (src_y + src_h) <= src_i_h, RET_FAIL);
+	
+	src = ftk_bitmap_bits(src_i) + src_y * src_i_w + src_x;
+	dst = ftk_bitmap_bits(dst_i) + dst_y * dst_i_w + dst_x;
+        
+	if(thiz->gc.mask & FTK_GC_ALPHA)
+	{
+		int alpha = thiz->gc.alpha; 
+		for(j=0; j<dst_h; j++)
+		{
+			n = (j*scale_h) >> 8;
+			pdst = dst + j * dst_i_w;
+			psrc = src + n * src_i_w;
+
+			for(i=0 ; i<dst_w ; i++)
+			{
+				m = (i*scale_w) >> 8;
+				d = pdst+i;
+				s = psrc+m;
+				
+				d->r = FTK_ALPHA_1(s->r, d->r, alpha);
+				d->g = FTK_ALPHA_1(s->g, d->g, alpha);
+				d->b = FTK_ALPHA_1(s->b, d->b, alpha);
+			}	
+		}
+	}
+	else
+	{
+		for(j=0; j<dst_h; j++)
+		{
+			n = (j*scale_h) >> 8;
+			pdst = dst + j * dst_i_w;
+			psrc = src + n * src_i_w;
+
+			for(i=0 ; i<dst_w ; i++)
+			{
+				m = (i*scale_w) >> 8;
+
+				pdst[i] = psrc[m];
+			}	
+		}
+	}
+
+	return 	RET_OK;
+}
+
+Ret ftk_canvas_draw_bitmap_ex(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* src_r, FtkRect* dst_r, int alpha)
+{
+	Ret ret = RET_FAIL;
+	return_val_if_fail(thiz != NULL && bitmap != NULL && dst_r != NULL && src_r != NULL, RET_FAIL);
+
+	if(alpha == 0)
+	{
+		return RET_OK;
+	}
+	else if(alpha == 0xff)
+	{
+		thiz->gc.alpha = 0xff;
+		thiz->gc.mask = thiz->gc.mask & (~FTK_GC_ALPHA);
+	}
+	else
+	{
+		FtkGc gc;
+		gc.mask = FTK_GC_ALPHA;
+		gc.alpha = alpha;
+		ftk_canvas_set_gc(thiz, &gc);
+	}
+
+	if(dst_r->width == src_r->width && dst_r->height == src_r->height)
+	{
+		ret = ftk_canvas_draw_bitmap_normal(thiz, bitmap, src_r, dst_r->x, dst_r->y);
+	}
+	else
+	{
+		ret = ftk_canvas_draw_bitmap_resize(thiz, bitmap, src_r, dst_r);
 	}
 
 	return ret;

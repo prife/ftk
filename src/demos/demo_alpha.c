@@ -31,6 +31,7 @@ static void create_ani_window(int type, int sync)
 	FtkGc gc = {0};
 	char filename[FTK_MAX_PATH+1] = {0};
 	FtkWidget* win = ftk_app_window_create();
+	ftk_window_set_animation_hint(win, "app_main_window");
 	FtkAnimator* ani = ftk_animator_alpha_create(1);
 	
 	gc.mask = FTK_GC_BITMAP;

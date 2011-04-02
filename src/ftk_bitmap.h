@@ -44,6 +44,7 @@ size_t     ftk_bitmap_height(FtkBitmap* thiz);
 FtkColor*  ftk_bitmap_bits(FtkBitmap* thiz);
 void       ftk_bitmap_ref(FtkBitmap* thiz);
 void       ftk_bitmap_unref(FtkBitmap* thiz);
+void       ftk_bitmap_clear(FtkBitmap* thiz, FtkColor c);
 Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other);
 
 Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, 

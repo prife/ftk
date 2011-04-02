@@ -28,6 +28,9 @@
  * 2009-07-17 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+
+#include "ftk_typedef.h"
+
 #ifndef FTK_EXPR_H
 #define FTK_EXPR_H
 

@@ -71,9 +71,6 @@
 #include "lua_ftk_wait_box.h"
 #include "lua_ftk_image.h"
 #include "lua_ftk_popup_menu.h"
-#include "lua_ftk_animator.h"
-#include "lua_ftk_animator_alpha.h"
-#include "lua_ftk_animator_expand.h"
 #include "lua_ftk_mmap.h"
 #include "lua_ftk_canvas.h"
 #include "lua_ftk_clipboard.h"
@@ -124,9 +121,6 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_text_view_init(L);
 	tolua_ftk_wait_box_init(L);
 	tolua_ftk_popup_menu_init(L);
-	tolua_ftk_animator_init(L);
-	tolua_ftk_animator_alpha_init(L);
-	tolua_ftk_animator_expand_init(L);
 	tolua_ftk_canvas_init(L);
 	tolua_ftk_clipboard_init(L);
 	tolua_ftk_display_init(L);

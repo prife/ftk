@@ -100,6 +100,8 @@ static Ret ftk_init_theme(const char* theme)
 		ftk_theme_parse_file(ftk_default_theme(), filename);
 	}
 
+	ftk_set_animation_trigger(ftk_theme_get_animation_trigger(ftk_default_theme()));
+
 	return RET_OK;
 }
 

@@ -1,11 +1,8 @@
-<application name="alpha" exec="libftk_demos.so" init="ftk_app_demo_alpha_create" />
 <application name="button" exec="libftk_demos.so" init="ftk_app_demo_button_create" />
-<application name="cairo" exec="libftk_demos.so" init="ftk_app_demo_cairo_create" />
 <application name="check_button" exec="libftk_demos.so" init="ftk_app_demo_check_button_create" />
 <application name="combo_box" exec="libftk_demos.so" init="ftk_app_demo_combo_box_create" />
 <application name="dialog" exec="libftk_demos.so" init="ftk_app_demo_dialog_create" />
 <application name="entry" exec="libftk_demos.so" init="ftk_app_demo_entry_create" />
-<application name="expand" exec="libftk_demos.so" init="ftk_app_demo_expand_create" />
 <application name="file_browser" exec="libftk_demos.so" init="ftk_app_demo_file_browser_create" />
 <application name="fullscreen" exec="libftk_demos.so" init="ftk_app_demo_fullscreen_create" />
 <application name="hello" exec="libftk_demos.so" init="ftk_app_demo_hello_create" />
@@ -26,5 +23,4 @@
 <application name="text_view" exec="libftk_demos.so" init="ftk_app_demo_text_view_create" />
 <application name="transparent" exec="libftk_demos.so" init="ftk_app_demo_transparent_create" />
 <application name="wait_box" exec="libftk_demos.so" init="ftk_app_demo_wait_box_create" />
-<application name="zoom" exec="libftk_demos.so" init="ftk_app_demo_zoom_create" />
 <application name="tab" exec="libftk_demos.so" init="ftk_app_demo_tab_create" />

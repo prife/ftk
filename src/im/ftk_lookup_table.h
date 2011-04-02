@@ -36,8 +36,6 @@
 
 FTK_BEGIN_DECLS
 
-#define FTK_VALUE_LENGTH 32
-
 typedef struct _FtkLookupTableHeader
 {
 	unsigned int nr;

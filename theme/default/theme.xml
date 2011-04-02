@@ -56,4 +56,6 @@
 
 <status_item font="size:20" />
 
+<animation_trigger name="animations.xml" />
+
 </theme>

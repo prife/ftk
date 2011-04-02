@@ -111,6 +111,24 @@ void       ftk_bitmap_unref(FtkBitmap* thiz)
 	return;
 }
 
+void       ftk_bitmap_clear(FtkBitmap* thiz, FtkColor c)
+{
+	int i = 0;
+	int j = 0;
+	FtkColor* p = NULL;
+
+	return_if_fail(thiz != NULL);
+
+	p = thiz->bits;
+	for(i = 0; i < thiz->h; i++)
+	{
+		for(j = 0; j < thiz->w; j++, p++)
+		{
+			*p = c;
+		}
+	}
+}
+
 Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 {
 	size_t width = 0;

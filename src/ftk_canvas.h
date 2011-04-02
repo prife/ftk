@@ -67,6 +67,8 @@ const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start
 
 Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h);
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset);
+Ret ftk_canvas_draw_bitmap_ex(FtkCanvas* thiz, FtkBitmap* bitmap, 
+	FtkRect* src_r, FtkRect* dst_r, int alpha);
 Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h);
 
 FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);

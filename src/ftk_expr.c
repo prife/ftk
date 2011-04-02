@@ -100,7 +100,12 @@ static void LexGetNumToken(PLex thiz)
 				{
 					state = STAT_AFTER_X;
 				}
-				else
+				else if(c == '.')
+				{
+					thiz->val = ftk_atof(thiz->buffer+thiz->read_pos);
+					state = STAT_FINISH;
+				}
+				else 
 				{
 					thiz->val = ftk_strtol(thiz->buffer+thiz->read_pos, NULL, 8);
 					state = STAT_FINISH;

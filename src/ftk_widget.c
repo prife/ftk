@@ -547,6 +547,9 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 		return;
 	}
 
+	//if(ftk_widget_parent(thiz) != NULL)
+	//{
+	//}
 	ftk_widget_invalidate(thiz);
 
 	return;
@@ -840,12 +843,12 @@ void ftk_widget_paint(FtkWidget* thiz)
 	if(ftk_widget_parent(thiz) == NULL)
 	{
 		FtkRect rect = {0};
-	
+		ftk_window_enable_update(thiz);
+		
 		rect.x = ftk_widget_left_abs(thiz);
 		rect.y = ftk_widget_top_abs(thiz);
 		rect.width  = ftk_widget_width(thiz);
 		rect.height = ftk_widget_height(thiz);
-		ftk_window_enable_update(thiz);
 		ftk_window_update(thiz, &rect);
 	}
 
@@ -1055,6 +1058,13 @@ void ftk_widget_unref(FtkWidget* thiz)
 {
 	if(thiz != NULL)
 	{
+		if(ftk_widget_parent(thiz) == NULL)
+		{
+			if(thiz->ref == 1 && ftk_widget_is_visible(thiz))
+			{
+				ftk_widget_show(thiz, 0);
+			}
+		}
 		if(thiz->children != NULL)
 		{
 			ftk_widget_unref(thiz->children);
@@ -1081,6 +1091,11 @@ static int ftk_widget_paint_called_by_parent(FtkWidget* thiz)
 Ret ftk_widget_paint_self(FtkWidget* thiz)
 {
 	return_val_if_fail(thiz != NULL && thiz->on_paint != NULL, RET_FAIL);
+
+	if(thiz->priv->width == 0 || thiz->priv->height == 0)
+	{
+		return RET_OK;
+	}
 
 	if(ftk_widget_is_visible(thiz) && ftk_widget_is_parent_visible(thiz))
 	{

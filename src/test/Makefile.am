@@ -7,7 +7,8 @@ noinst_PROGRAMS=label_test widget_test \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
 	lookup_table_test config_test fs_test tab_test font_desc_test \
-	font_manager_test
+	font_manager_test pairs_test params_test animation_trigger_default_test \
+	interpolator_test
 
 fs_test_SOURCES=fs_test.c
 fs_test_LDFLAGS=$(MYLDFLAGS)
@@ -124,5 +125,17 @@ font_desc_test_LDFLAGS=$(MYLDFLAGS)
 
 font_manager_test_SOURCES=font_manager_test.c
 font_manager_test_LDFLAGS=$(MYLDFLAGS)
+
+pairs_test_SOURCES=pairs_test.c
+pairs_test_LDFLAGS=$(MYLDFLAGS)
+
+params_test_SOURCES=params_test.c
+params_test_LDFLAGS=$(MYLDFLAGS)
+
+animation_trigger_default_test_SOURCES=animation_trigger_default_test.c
+animation_trigger_default_test_LDFLAGS=$(MYLDFLAGS)
+
+interpolator_test_SOURCES=interpolator_test.c
+interpolator_test_LDFLAGS=$(MYLDFLAGS)
 
 EXTRA_DIST=test_util.c xml_builder_dump.h

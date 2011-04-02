@@ -62,12 +62,6 @@ typedef struct _FtkColor
 	unsigned char a;
 }FtkColor;
 
-typedef struct _FtkKeyValue
-{
-	const char* key;
-	const char* value;
-}FtkKeyValue;
-
 typedef enum _Ret
 {
 	RET_OK,
@@ -118,7 +112,7 @@ typedef enum _FtkWidgetType
 	FTK_WIDGET_NONE   = 0,
 	FTK_WINDOW = 1,
 	FTK_DIALOG,
-	FTK_WINDOW_ANY,
+	FTK_WINDOW_MISC,
 	FTK_STATUS_PANEL,
 	FTK_MENU_PANEL,
 	FTK_MENU_ITEM,
@@ -198,6 +192,9 @@ typedef Ret  (*FtkIdle)(void* user_data);
 typedef Ret  (*FtkTimer)(void* user_data);
 typedef int  (*FtkCompare)(const void* obj1, const void* obj2);
 typedef Ret  (*FtkListener)(void* user_data, void* obj);
+
+#define FTK_KEY_LEN 31
+#define FTK_VALUE_LEN 63
 
 #define FTK_IM_RAW_TEXT_LENGTH 31
 #define FTK_IM_CANDIDATE_BUFF_LENGTH 1023

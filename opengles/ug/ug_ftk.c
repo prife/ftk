@@ -220,6 +220,7 @@ UGWindow APIENTRY ugCreateWindow(UGCtx ug,	const char* config,
 	eglGetConfigAttrib(_ug->egldpy, configs[0], EGL_NATIVE_VISUAL_ID, &vid);
 	
 	w->win = ftk_app_window_create();
+	ftk_window_set_animation_hint(w->win, "app_main_window");
 	return_val_if_fail(w->win != NULL, 0);
 
 	ftk_widget_set_text(w->win, title);

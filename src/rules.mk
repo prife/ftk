@@ -16,5 +16,5 @@ INCLUDES+=-DLINUX \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-I$(abs_top_srcdir)/src/os/linux
 
-MYLDFLAGS=$(abs_top_builddir)/src/libftk.la -lpng -ljpeg -lz
+MYLDFLAGS=$(abs_top_builddir)/src/libftk.la -lpng -ljpeg -lz -lm
 

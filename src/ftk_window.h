@@ -33,7 +33,9 @@
 #define FTK_WINDOW_H
 
 #include "ftk_widget.h"
+#include "ftk_animation.h"
 #include "ftk_wnd_manager.h"
+#include "ftk_animation_trigger.h"
 
 FTK_BEGIN_DECLS
 
@@ -44,12 +46,15 @@ Ret        ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget);
 Ret        ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget);
 Ret        ftk_window_paint_forcely(FtkWidget* thiz);
 Ret        ftk_window_update(FtkWidget* thiz, FtkRect* rect);
+int        ftk_window_is_mapped(FtkWidget* thiz);
 int        ftk_window_is_fullscreen(FtkWidget* thiz);
 Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
 Ret        ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect);
 Ret        ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg);
 Ret        ftk_window_enable_update(FtkWidget* thiz);
 Ret        ftk_window_disable_update(FtkWidget* thiz);
+const char* ftk_window_get_animation_hint(FtkWidget* thiz);
+Ret        ftk_window_set_animation_hint(FtkWidget* thiz, const char* hint);
 
 FTK_END_DECLS
 

@@ -140,6 +140,12 @@ void ftk_widget_ref_self(FtkWidget* thiz);
 void ftk_widget_unref_self(FtkWidget* thiz);
 Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);
 
+#define FTK_GET_PAINT_RECT(widget, r) \
+	r.x = ftk_widget_left_abs(widget);\
+	r.y = ftk_widget_top_abs(widget);\
+	r.width  = ftk_widget_width(widget);\
+	r.height = ftk_widget_height(widget);
+
 #define FTK_BEGIN_PAINT(x, y, width, height, canvas) \
 	int x = ftk_widget_left_abs(thiz);\
 	int y = ftk_widget_top_abs(thiz);\

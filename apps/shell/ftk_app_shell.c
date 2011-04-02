@@ -190,6 +190,7 @@ static Ret ftk_app_shell_run(FtkApp* thiz, int argc, char* argv[])
 	int width = ftk_widget_width(win);
 	int height = ftk_widget_height(win);
 
+	ftk_window_set_animation_hint(win, "app_main_window");
 	ftk_widget_set_text(win, _("Shell"));
 	text_view = ftk_text_view_create(win, 0, 0, width, height - 30);
 	ftk_text_view_set_readonly(text_view, 1);

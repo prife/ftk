@@ -51,9 +51,11 @@ typedef struct _PrivInfo
 	FtkSource* update_idle;
 	size_t dirty_rect_nr;
 	FtkRect dirty_rect[FTK_MAX_DIRTY_RECT];
+	char  animation_hint[32];
 }PrivInfo;
 
 static Ret ftk_window_realize(FtkWidget* thiz);
+static Ret ftk_window_idle_invalidate(FtkWidget* thiz);
 
 Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 {
@@ -321,7 +323,8 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			event.widget = thiz;
 			event.type = FTK_EVT_SHOW;
 			ftk_window_realize(thiz);
-			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
+			ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
+			
 			break;
 		}
 		case FTK_EVT_HIDE:
@@ -329,7 +332,8 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			FtkEvent event = {0};
 			event.widget = thiz;
 			event.type = FTK_EVT_HIDE;
-			ftk_wnd_manager_queue_event(ftk_default_wnd_manager(), &event);
+			ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
+
 			break;
 		}
 		case FTK_EVT_MAP:
@@ -337,6 +341,13 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			priv->mapped = 1;
 			PROFILE_TIME("MAP");
 			ftk_logd("%s: MAP %s\n", __func__, ftk_widget_get_text(thiz));
+#if 0			
+			ftk_window_disable_update(thiz);
+			ftk_window_paint_forcely(thiz);
+			ftk_window_enable_update(thiz);
+			ftk_window_update(thiz, priv->dirty_rect);
+			priv->dirty_rect_nr = 0;
+#endif
 			break;
 		}
 		case FTK_EVT_UNMAP:
@@ -383,6 +394,7 @@ static Ret ftk_window_realize(FtkWidget* thiz)
 
 static Ret ftk_window_on_paint(FtkWidget* thiz)
 {
+	ftk_logd("%s: %s\n", __func__, ftk_widget_get_text(thiz));
 	return RET_OK;
 }
 
@@ -437,14 +449,18 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 Ret        ftk_window_paint_forcely(FtkWidget* thiz)
 {
 	int mapped = 0;
+	int visible = 0;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	mapped = priv->mapped;
+	visible = ftk_widget_is_visible(thiz);
 	
 	priv->mapped = 1;
+	ftk_widget_set_visible(thiz, 1);
 	ftk_widget_paint(thiz);
 	priv->mapped = mapped;
+	ftk_widget_set_visible(thiz, visible);
 
 	return RET_OK;
 }
@@ -464,6 +480,14 @@ Ret ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 	}
 
 	return RET_OK;
+}
+
+int        ftk_window_is_mapped(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, 0);
+
+	return priv->mapped;
 }
 
 int ftk_window_is_fullscreen(FtkWidget* thiz)
@@ -576,6 +600,7 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 	{
 		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);	
+		const char* anim_hint = "";
 		
 		gc.mask = FTK_GC_BG | FTK_GC_FG;
 		priv->display = ftk_default_display();
@@ -584,6 +609,18 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 		thiz->on_paint = ftk_window_on_paint;
 		thiz->destroy  = ftk_window_destroy;
 
+		switch(type)
+		{
+			case FTK_DIALOG: anim_hint = "dialog"; break;
+			case FTK_WINDOW: anim_hint = "app_window";break;
+			case FTK_WINDOW_MISC: anim_hint = "misc_window";break;
+			case FTK_MENU_PANEL: anim_hint = "menu";break;
+			default:break;
+			{
+				break;
+			}
+		}
+		ftk_window_set_animation_hint(thiz, anim_hint);
 		ftk_widget_init(thiz, type, 0, x, y, width, height, attr);
 
 		ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
@@ -603,6 +640,8 @@ Ret ftk_window_disable_update(FtkWidget* thiz)
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
 	priv->update_disabled++;
+	ftk_window_realize(thiz);
+	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
 
 	return RET_OK;
 }
@@ -614,7 +653,9 @@ Ret ftk_window_enable_update(FtkWidget* thiz)
 	return_val_if_fail(priv->update_disabled > 0, RET_FAIL);
 
 	priv->update_disabled--;
+	ftk_window_realize(thiz);
 
+	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
 	assert(priv->update_disabled >= 0);
 
 	return RET_OK;
@@ -640,6 +681,24 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 	ftk_widget_set_gc(thiz, FTK_WIDGET_FOCUSED,     &gc);
 	ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 	ftk_gc_reset(&gc);
+
+	return RET_OK;
+}
+
+const char* ftk_window_get_animation_hint(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, NULL);
+
+	return priv->animation_hint;
+}
+
+Ret        ftk_window_set_animation_hint(FtkWidget* thiz, const char* hint)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL && hint != NULL, RET_FAIL);
+
+	ftk_strncpy(priv->animation_hint, hint, sizeof(priv->animation_hint)-1);
 
 	return RET_OK;
 }

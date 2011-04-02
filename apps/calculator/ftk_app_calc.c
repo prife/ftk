@@ -73,6 +73,7 @@ static FtkWidget* ftk_calc_create_window(void)
 	FtkBitmap* bitmap_focus = NULL;
 	char path[FTK_MAX_PATH+1] = {0};
 	FtkWidget* win =  ftk_app_window_create();
+	ftk_window_set_animation_hint(win, "app_main_window");
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	entry = ftk_entry_create(win, 0, 0, width, 30);

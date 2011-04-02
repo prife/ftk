@@ -51,14 +51,14 @@ libftk_la_SOURCES=\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
-	ftk_text_buffer.c     ftk_icon_cache.c          ftk_animator_expand.c ftk_animator_zoom.c \
+	ftk_text_buffer.c     ftk_icon_cache.c          \
 	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c  \
 	ftk_gesture.c         ftk_wait_box.c  ftk_scroll_bar.c \
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
 	ftk_list_render_default.c ftk_icon_view.c ftk_theme.c ftk_painter.c \
 	ftk_text_view.c       ftk_pipe_socket.c        ftk_message_box.c \
-	ftk_popup_menu.c      ftk_animator_alpha.c     ftk_combo_box.c \
+	ftk_popup_menu.c      ftk_combo_box.c \
 	ftk_clipboard.c       ftk_input_method_chooser_default.c ftk_input_method_manager.c \
 	ftk_allocator.c            ftk_allocator_default.c \
 	ftk_allocator_profile.c  ftk_image_bmp_decoder.c \
@@ -68,6 +68,11 @@ libftk_la_SOURCES=\
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
 	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \
 	ftk_tab.c ftk_font_desc.c ftk_font_manager.c \
+	ftk_animation_alpha.c   ftk_animation_scale.c      ftk_animation_trigger_default.c \
+	ftk_animation_expand.c  ftk_animation_translate.c  ftk_animation_trigger_silence.c \
+	ftk_animation.c ftk_pairs.c ftk_params.c ftk_interpolator_linear.c \
+	ftk_interpolator_acc_decelerate.c  ftk_interpolator_bounce.c   \
+	ftk_interpolator_accelerate.c      ftk_interpolator_decelerate.c \
 	$(OPTIONAL_FUNCS)
 
 if ENABLE_LINEBREAK
@@ -142,8 +147,7 @@ endif
 ftkdir=$(includedir)/ftk
 ftk_HEADERS=\
 	fontdata.h                ftk_list_render_default.h\
-	ftk_animator_expand.h     ftk_list_render.h\
-	ftk_animator.h            ftk_list_view.h\
+	ftk_list_render.h         ftk_list_view.h\
 	ftk_app_window.h          ftk_log.h\
 	ftk_backend.h             ftk_main_loop.h\
 	ftk_bitmap_factory.h      ftk_menu_item.h\
@@ -178,14 +182,14 @@ ftk_HEADERS=\
 	ftk_theme.h               ftk_painter.h \
 	ftk_text_view.h           ftk_cairo.h \
 	ftk_pipe.h                ftk_message_box.h \
-	ftk_popup_menu.h          ftk_animator_alpha.h \
+	ftk_popup_menu.h          \
 	ftk_combo_box.h           ftk_clipboard.h \
 	ftk_input_method_chooser.h \
 	ftk_input_method_manager.h ftk_input_method.h \
 	ftk_allocator.h            ftk_allocator_default.h \
 	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
 	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
-	ftk_animator_zoom.h ftk_display_mem.h ftk_config.h \
+	ftk_display_mem.h ftk_config.h \
 	ftk_text_layout.h ftk_display_rotate.h ftk_path.h \
 	ftk_file_system.h ftk_file_browser.h ftk_tab.h \
 	ftk_font_desc.h ftk_font_manager.h

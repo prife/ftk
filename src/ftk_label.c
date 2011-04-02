@@ -47,7 +47,6 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		FtkTextLine line = {0};
-		const char* end = NULL;
 		const char* text = ftk_widget_get_text(thiz);
 		FtkTextLayout* text_layout = ftk_default_text_layout();
 		

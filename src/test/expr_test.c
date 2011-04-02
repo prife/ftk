@@ -9,6 +9,7 @@ typedef struct tagTESTCASE_T
 
 TESTCASE_T g_aTestcase[] =
 {
+	{0.5, "0.5"},
 	{8, "010"},
 	{9, "011"},
 	{1, "0x1"},

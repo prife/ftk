@@ -45,7 +45,6 @@ typedef struct _PrivInfo
 	int  meet_start_tag;
 	char processed_value[128];
 	char translated_path[FTK_MAX_PATH+1];
-	FtkAnimator* animator;
 	FtkXulCallbacks* callbacks;
 }PrivInfo;
 
@@ -58,7 +57,7 @@ typedef struct _FtkWidgetCreateInfo
 	int h;
 	int attr;
 	int visible;
-	int animator;
+	char anim_hint[32];
 	const char* value;
 	FtkWidget* parent;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
@@ -536,9 +535,9 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 				}
 				else if(name[1] == 'n')
 				{
-					/*animator*/
+					/*anim_hint*/
 					value = ftk_xul_builder_preprocess_value(thiz, value);
-					info->animator = (int)ftk_expr_eval(value);
+					ftk_strncpy(info->anim_hint, value, sizeof(info->anim_hint)-1);
 				}
 				break;
 			}
@@ -692,47 +691,11 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 		ftk_widget_set_gc(widget, FTK_WIDGET_ACTIVE, info.gc+FTK_WIDGET_ACTIVE);
 		ftk_widget_set_gc(widget, FTK_WIDGET_INSENSITIVE, info.gc+FTK_WIDGET_INSENSITIVE);
 
-		if(info.visible)
+		if(info.anim_hint[0])
 		{
-			if(info.animator >= FTK_ANI_TO_RIGHT && info.animator <= FTK_ANI_TO_EAST_NORTH 
-				&& ftk_widget_type(widget) == FTK_WINDOW)
-			{
-				int delta = 0;
-				int type = info.animator;
-				int width = ftk_widget_width(widget);
-				int height = ftk_widget_height(widget);
-				FtkAnimator* ani = ftk_animator_expand_create(1);
-				switch(info.animator)
-				{
-					case FTK_ANI_TO_RIGHT:
-					case FTK_ANI_TO_EAST_SOUTH:
-					case FTK_ANI_TO_EAST_NORTH:
-					{
-						delta = width/8;
-						ftk_animator_set_param(ani, type, delta, width, delta, 200);
-						break;
-					}
-					case FTK_ANI_TO_DOWN:
-					{
-						delta = height/8;
-						ftk_animator_set_param(ani, type, delta, height, delta, 200);
-						break;
-					}
-					case FTK_ANI_TO_UP:
-					{
-						delta = height/8;
-						ftk_animator_set_param(ani, type, height - delta, ftk_widget_top(widget), delta, 200);
-						break;
-					}
-					default:break;
-				}
-				priv->animator = ani;
-			}
-			else
-			{
-				ftk_widget_show(widget, info.visible);
-			}
+			ftk_window_set_animation_hint(widget, info.anim_hint);
 		}
+		ftk_widget_show(widget, info.visible);
 	}
 	ftk_xul_builder_reset_widget_info(thiz, &info);
 	return_if_fail(widget != NULL);
@@ -819,10 +782,7 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkXulCallbacks* callbac
 		ftk_xml_parser_set_builder(parser, builder);
 		ftk_xml_parser_parse(parser, xml, strlen(xml));
 		widget = priv->root;
-		if(priv->animator != NULL)
-		{
-			ftk_animator_start(priv->animator, widget, 0);
-		}
+		
 	}
 	ftk_xml_builder_destroy(builder);
 	ftk_xml_parser_destroy(parser);

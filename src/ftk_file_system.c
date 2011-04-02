@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_pairs.h"
 #include "ftk_util.h"
 #include "ftk_file_system.h"
 
@@ -48,7 +49,7 @@ static const FtkKeyValue g_ext_type_map[] =
 	{".wav",  "audio/wav"},
 	{".amr",  "audio/amr"},
 	{".ogg",  "audio/ogg"},
-	{NULL, NULL}
+	{"", ""}
 };
 
 Ret ftk_file_get_mime_type(const char* file_name, char mime_type[FTK_MIME_TYPE_LEN+1])
@@ -59,7 +60,7 @@ Ret ftk_file_get_mime_type(const char* file_name, char mime_type[FTK_MIME_TYPE_L
 
 	if((ext_name = strrchr(file_name, '.')) != NULL)
 	{
-		for(i = 0; g_ext_type_map[i].key != NULL; i++)
+		for(i = 0; g_ext_type_map[i].key[0]; i++)
 		{
 			if(strcasecmp(g_ext_type_map[i].key, ext_name) == 0)
 			{

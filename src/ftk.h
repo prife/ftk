@@ -40,6 +40,7 @@ extern "C" {
 #include "ftk_mmap.h"
 #include "ftk_bitmap.h"
 #include "ftk_dialog.h"
+#include "ftk_display.h"
 #include "ftk_allocator.h"
 #include "ftk_app_window.h"
 #include  "ftk_icon_cache.h"

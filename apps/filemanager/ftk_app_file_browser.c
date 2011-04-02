@@ -33,6 +33,7 @@ static const char* ftk_app_file_browser_get_name(FtkApp* thiz)
 static Ret ftk_app_file_browser_run(FtkApp* thiz, int argc, char* argv[])
 {
 	FtkWidget* win = ftk_file_browser_create(FTK_FILE_BROWER_APP);
+	ftk_window_set_animation_hint(win, "app_main_window");
 	ftk_file_browser_set_path(win, "./");
 	ftk_file_browser_load(win);
 #ifdef HAS_MAIN

@@ -98,6 +98,9 @@ static inline Ret ftk_display_update_and_notify(FtkDisplay* thiz,
 	return_val_if_fail(thiz != NULL && thiz->update != NULL, RET_FAIL);
 	ftk_display_notify(thiz, 1, bitmap, rect, xoffset, yoffset);
 	ret = thiz->update(thiz, bitmap, rect, xoffset, yoffset);
+//	ftk_logd("%s: %d %d (%d %d %d %d)\n", __func__, xoffset, yoffset,
+//		rect->x, rect->y, rect->width, rect->height);
+
 	ftk_display_notify(thiz, 0, bitmap, rect, xoffset, yoffset);
 
 	return ret;

@@ -44,6 +44,7 @@
 #include "ftk_sources_manager.h"
 #include "ftk_input_method_manager.h"
 #include "ftk_input_method_preeditor.h"
+#include "ftk_animation_trigger.h"
 
 FTK_BEGIN_DECLS
 
@@ -63,6 +64,7 @@ FtkTextLayout*     ftk_default_text_layout(void);
 FtkInputMethodManager* ftk_default_input_method_manager(void);
 FtkImPreeditor*        ftk_default_input_method_preeditor(void);
 FtkFontManager*        ftk_default_font_manager(void);
+FtkAnimationTrigger*   ftk_default_animation_trigger(void);
 
 void ftk_set_display(FtkDisplay* display);
 void ftk_set_main_loop(FtkMainLoop* main_loop);
@@ -80,6 +82,7 @@ void ftk_set_allocator(FtkAllocator* allocator);
 void ftk_set_input_method_manager(FtkInputMethodManager* input_manager_manager);
 void ftk_set_input_method_preeditor(FtkImPreeditor* input_method_preeditor);
 void ftk_set_font_manager(FtkFontManager* font_manager);
+void ftk_set_animation_trigger(FtkAnimationTrigger* animation_trigger);
 
 void ftk_clear_globals(void);
 

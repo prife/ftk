@@ -36,6 +36,8 @@
 #include "ftk_globals.h"
 #include "ftk_icon_cache.h"
 #include "ftk_xml_parser.h"
+#include "ftk_animation_trigger_default.h"
+#include "ftk_animation_trigger_silence.h"
 
 static void ftk_init_default_path();
 
@@ -53,6 +55,7 @@ struct _FtkTheme
 {
 	char name[32];
 	FtkIconCache* icon_cache;
+	FtkAnimationTrigger* animation_trigger;
 	FtkWidgetTheme widget_themes[FTK_WIDGET_TYPE_NR];
 };
 
@@ -310,6 +313,26 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 		
 		return;
 	}
+	else if(strcmp(tag, "animation_trigger") == 0)
+	{
+		const char* name = attrs[1];
+		if(name != NULL && theme->animation_trigger == NULL)
+		{
+			if(strcmp(name, "silence") == 0)
+			{
+				theme->animation_trigger = ftk_animation_trigger_silence_create();
+			}
+			else
+			{
+				theme->animation_trigger = ftk_animation_trigger_default_create(theme->name, name);
+				if(theme->animation_trigger == NULL)
+				{
+					ftk_logd("load animation %s failed.\n", name);
+					theme->animation_trigger = ftk_animation_trigger_silence_create();
+				}
+			}
+		}
+	}
 
 	type = ftk_theme_get_widget_type(theme, tag);
 	return_if_fail(type != FTK_WIDGET_NONE);
@@ -436,6 +459,11 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 	ftk_strs_cat(icon_path, FTK_MAX_PATH, "theme/", thiz->name, NULL);
 	thiz->icon_cache = ftk_icon_cache_create(s_default_path, icon_path);
 
+	if(thiz->animation_trigger == NULL)
+	{
+		thiz->animation_trigger = ftk_animation_trigger_silence_create();
+	}
+
 	return RET_OK;
 }
 
@@ -531,6 +559,13 @@ FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetS
 	return_val_if_fail(thiz != NULL, c);
 
 	return thiz->widget_themes[type].fg[state];
+}
+
+FtkAnimationTrigger* ftk_theme_get_animation_trigger(FtkTheme* thiz)
+{
+	return_val_if_fail(thiz != NULL, NULL);
+
+	return thiz->animation_trigger;
 }
 
 void       ftk_theme_destroy(FtkTheme* thiz)

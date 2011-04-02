@@ -35,12 +35,10 @@
 #include "app_info.h"
 #include "ftk_tester.h"
 #include "vnc_service.h"
-#include "ftk_animator_expand.h"
 
 typedef struct _FtkDesktop
 {
 	int is_horizonal;
-	FtkAnimator*    animator;
 	FtkWidget*      applist_win;
 	AppInfoManager* app_manager;
 	FtkIconCache*   icon_cache;
@@ -88,35 +86,6 @@ static FtkWidget* desktop_load_xul(const char* filename)
 	return ftk_xul_load_file(path, &callbacks);
 }
 
-static Ret applist_window_show(FtkWidget* widget)
-{
-	int delta = 0;
-	int width = ftk_widget_width(widget);
-	int height = ftk_widget_height(widget);
-	int type = g_desktop.is_horizonal ? FTK_ANI_TO_RIGHT : FTK_ANI_TO_UP;
-	
-	switch(type)
-	{
-		case FTK_ANI_TO_RIGHT:
-		{
-			delta = width/8;
-			ftk_animator_set_param(g_desktop.animator, type, delta, width, delta, 200);
-			break;
-		}
-		default:
-		case FTK_ANI_TO_UP:
-		{
-			delta = height/8;
-			ftk_animator_set_param(g_desktop.animator, type, height - delta, ftk_widget_top(widget), delta, 200);
-			break;
-		}
-	}
-
-	ftk_animator_start(g_desktop.animator, widget, 0);
-
-	return RET_OK;
-}
-
 static Ret applist_on_item_clicked(void* ctx, void* obj)
 {
 	FtkIconViewItem* item = obj;
@@ -141,7 +110,7 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 	
 	if(g_desktop.applist_win != NULL)
 	{
-		applist_window_show(g_desktop.applist_win);
+		ftk_widget_show_all(g_desktop.applist_win, 1);
 
 		return RET_OK;
 	}
@@ -296,7 +265,6 @@ static void desktop_destroy(void* data)
 {
 	ftk_icon_cache_destroy(g_desktop.icon_cache);
 	app_info_manager_destroy(g_desktop.app_manager);
-	ftk_animator_destroy(g_desktop.animator);
 
 	return;
 }
@@ -352,7 +320,6 @@ int main(int argc, char* argv[])
 	}
 
 	g_desktop.app_manager = app_info_manager_create();
-	g_desktop.animator = ftk_animator_expand_create(0);
 
 	snprintf(path, sizeof(path), DATA_DIR"/apps");
 	if(app_info_manager_load_dir(g_desktop.app_manager, path) != RET_OK)

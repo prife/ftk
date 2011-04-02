@@ -592,7 +592,7 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_constant(L, "FTK_WIDGET_NONE", FTK_WIDGET_NONE);
 	tolua_constant(L, "FTK_WINDOW", FTK_WINDOW);
 	tolua_constant(L, "FTK_DIALOG", FTK_DIALOG);
-	tolua_constant(L, "FTK_WINDOW_ANY", FTK_WINDOW_ANY);
+	tolua_constant(L, "FTK_WINDOW_MISC", FTK_WINDOW_MISC);
 	tolua_constant(L, "FTK_STATUS_PANEL", FTK_STATUS_PANEL);
 	tolua_constant(L, "FTK_MENU_PANEL", FTK_MENU_PANEL);
 	tolua_constant(L, "FTK_MENU_ITEM", FTK_MENU_ITEM);

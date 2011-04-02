@@ -55,6 +55,8 @@ typedef struct _PrivInfo
 	FtkSource* long_press_timer;
 	void* global_listeners_ctx[FTK_MAX_GLOBAL_LISTENER];
 	FtkListener global_listeners[FTK_MAX_GLOBAL_LISTENER];
+
+	int disable_anim;
 }PrivInfo;
 
 static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz);
@@ -145,7 +147,7 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 		win = priv->windows[i];
 		if((ftk_widget_type(win) == FTK_WINDOW 
 			|| ftk_widget_type(win) == FTK_DIALOG
-			|| ftk_widget_type(win) == FTK_WINDOW_ANY)
+			|| ftk_widget_type(win) == FTK_WINDOW_MISC)
 			&& ftk_widget_is_visible(win))
 		{
 			priv->focus_widget = win;
@@ -304,13 +306,18 @@ static Ret  ftk_wnd_manager_default_relayout(FtkWndManager* thiz)
 
 static Ret  ftk_wnd_manager_default_add(FtkWndManager* thiz, FtkWidget* window)
 {
+	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 	return_val_if_fail((priv->top+1) < FTK_MAX_WINDOWS, RET_FAIL);
 
 	priv->windows[priv->top++] = window;
 
-	return ftk_wnd_manager_default_relayout_one(thiz, window);
+	priv->disable_anim++;
+	ret = ftk_wnd_manager_default_relayout_one(thiz, window);
+	priv->disable_anim--;
+
+	return ret;
 }
 
 static Ret  ftk_wnd_manager_default_remove(FtkWndManager* thiz, FtkWidget* window)
@@ -523,6 +530,58 @@ static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent*
 	return RET_OK;
 }
 
+static Ret  ftk_wnd_manager_default_do_animation(FtkWndManager* thiz, FtkEvent* event)
+{
+	DECL_PRIV(thiz, priv);
+	if(event->type == FTK_EVT_SHOW || event->type == FTK_EVT_HIDE)
+	{
+		int i = 0;
+		FtkWidget* peer_win = NULL;
+		FtkAnimationEvent anim_event = {0};
+		
+		anim_event.type = event->type;
+		for(i = (priv->top - 1); i >= 0; i--)
+		{
+			FtkWidget* win = priv->windows[i];
+			if(!ftk_widget_is_visible(win))
+			{
+				continue;
+			}
+
+			if(ftk_widget_type(win) != FTK_WINDOW)
+			{
+				continue;
+			}
+
+			if(win == event->widget)
+			{
+				continue;
+			}
+
+			peer_win = win;
+			break;
+		}
+
+		if(event->type == FTK_EVT_SHOW)
+		{
+			anim_event.old_window = peer_win;
+			anim_event.new_window = event->widget;
+		}
+		else
+		{
+			anim_event.new_window = peer_win;
+			anim_event.old_window = event->widget;
+		}
+
+		if(anim_event.new_window != NULL && anim_event.old_window != NULL)
+		{
+			ftk_animation_trigger_on_event(ftk_default_animation_trigger(), &anim_event);
+		}
+	}
+
+	return RET_OK;
+}
+
 static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent* event)
 {
 	DECL_PRIV(thiz, priv);
@@ -547,18 +606,27 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 			{
 				priv->top_window = NULL;
 			}
+
+			priv->disable_anim++;
 			ftk_wnd_manager_default_remove(thiz, event->widget);	
+			priv->disable_anim--;
 			return RET_OK;
 		}
 		case FTK_EVT_HIDE:
 		{
+			priv->disable_anim++;
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+			priv->disable_anim--;
+			ftk_wnd_manager_default_do_animation(thiz, event);
 			ftk_wnd_manager_update(thiz);
 			return RET_OK;
 		}
 		case FTK_EVT_SHOW:
 		{
+			priv->disable_anim++;
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
+			priv->disable_anim--;
+			ftk_wnd_manager_default_do_animation(thiz, event);
 			return RET_OK;
 		}
 		case FTK_EVT_RELAYOUT_WND:
@@ -655,9 +723,12 @@ static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 		win = priv->windows[i];
 		if(ftk_widget_type(win) == FTK_STATUS_PANEL && ftk_widget_is_visible(win))
 		{
-			event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
-			event.widget = win;
-			ftk_wnd_manager_dispatch_event(thiz, &event);
+			if(map && !ftk_window_is_mapped(win))
+			{
+				event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
+				event.widget = win;
+				ftk_wnd_manager_dispatch_event(thiz, &event);
+			}
 		}
 	}
 
@@ -669,7 +740,12 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 	int i = 0;
 	FtkWidget* win = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL && priv->top > 0, RET_FAIL);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(priv->top == 0)
+	{
+		return RET_OK;
+	}
 
 	ftk_wnd_manager_default_map_panels(thiz, !ftk_wnd_manager_default_has_fullscreen_win(thiz));
 

@@ -45,15 +45,21 @@ struct _FtkGlobals
 	FtkWndManager* wnd_manager;
 	FtkTextLayout* text_layout;
 	FtkFontManager* font_manager;
-	FtkImPreeditor* input_method_preeditor;
 	FtkBitmapFactory* bitmap_factory;
 	FtkSourcesManager* sources_manager;
+	FtkImPreeditor* input_method_preeditor;
+	FtkAnimationTrigger* animation_trigger;
 	FtkInputMethodManager* input_manager_manager;
 }g_globals;
 
 FtkFontManager*          ftk_default_font_manager(void)
 {
 	return g_globals.font_manager;
+}
+
+FtkAnimationTrigger* ftk_default_animation_trigger(void)
+{
+	return g_globals.animation_trigger;
 }
 
 FtkDisplay*       ftk_default_display(void)
@@ -134,6 +140,13 @@ FtkSourcesManager* ftk_default_sources_manager(void)
 void ftk_set_font_manager(FtkFontManager* font_manager)
 {
 	g_globals.font_manager = font_manager;
+
+	return;
+}
+
+void ftk_set_animation_trigger(FtkAnimationTrigger* animation_trigger)
+{
+	g_globals.animation_trigger = animation_trigger;
 
 	return;
 }
