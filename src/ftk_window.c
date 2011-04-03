@@ -317,6 +317,14 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			ret = ftk_window_update(thiz, &event->u.rect);
 			break;
 		}
+		case FTK_EVT_MOVE_RESIZE:
+		{
+			if(ftk_widget_is_visible(thiz))
+			{
+				ftk_wnd_manager_update(ftk_default_wnd_manager());
+			}
+			break;
+		}
 		case FTK_EVT_SHOW:
 		{
 			FtkEvent event = {0};

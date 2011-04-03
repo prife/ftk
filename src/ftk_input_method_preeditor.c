@@ -46,10 +46,10 @@ Ret ftk_im_show_preeditor(FtkWidget* editor, FtkPoint* caret_pos, FtkCommitInfo*
 
 	return_val_if_fail(info != NULL && preeditor != NULL, RET_FAIL);
 
-	ftk_input_method_preeditor_hide(preeditor);
 
 	if(info->raw_text[0] == '\0' && info->candidate_nr == 0)
 	{
+		ftk_input_method_preeditor_hide(preeditor);
 		return RET_OK;
 	}
 

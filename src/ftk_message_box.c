@@ -120,6 +120,7 @@ int ftk_message_box(FtkBitmap* icon, const char* title, const char* text, const 
 
 	ftk_message_box_size(has_title, buttons_nr, text, &width, &height);
 	dialog = ftk_dialog_create(0, 0, width, height);
+	ftk_window_set_animation_hint(dialog, "msgbox");
 	if(has_title) 
 	{
 		ftk_dialog_set_icon(dialog, icon);
