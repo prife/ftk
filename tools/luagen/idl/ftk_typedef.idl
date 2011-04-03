@@ -10,7 +10,6 @@ typedef voidPtr FtkListItemInfoPtr;
 typedef voidPtr FtkMmapPtr;
 typedef voidPtr FtkRectPtr;
 typedef voidPtr FtkGlyphPtr;
-typedef voidPtr FtkFontPtr;
 typedef voidPtr FtkColorPtr;
 typedef voidPtr FtkBitmapPtr;
 typedef voidPtr FtkGcPtr;

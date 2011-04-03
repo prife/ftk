@@ -7,15 +7,6 @@ static void tolua_reg_types (lua_State* L)
 	tolua_usertype(L, "Ftk");
 }
 
-static int lua_ftk_default_font(lua_State* L)
-{
-	FtkFont* retv;
-	retv = ftk_default_font();
-	tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
-
-	return 1;
-}
-
 static int lua_ftk_default_display(lua_State* L)
 {
 	FtkDisplay* retv;
@@ -460,7 +451,6 @@ int tolua_ftk_init(lua_State* L)
 	tolua_beginmodule(L, NULL);
 	tolua_cclass(L,"Ftk", "Ftk", "", NULL);
 	tolua_beginmodule(L, "Ftk");
-	tolua_function(L, "DefaultFont", lua_ftk_default_font);
 	tolua_function(L, "DefaultDisplay", lua_ftk_default_display);
 	tolua_function(L, "DefaultMainLoop", lua_ftk_default_main_loop);
 	tolua_function(L, "DefaultLogLevel", lua_ftk_default_log_level);

@@ -12,7 +12,7 @@ libftklua_la_SOURCES=ftk_lua.c tolua_event.c  tolua_is.c  tolua_map.c  tolua_pus
 	lua_ftk_progress_bar.c lua_ftk_radio_group.c lua_ftk_scroll_bar.c\
 	lua_ftk_status_item.c lua_ftk_status_panel.c lua_ftk_text_view.c lua_ftk_wait_box.c \
 	lua_ftk_popup_menu.c \
-	lua_ftk_mmap.c lua_ftk_canvas.c lua_ftk_clipboard.c lua_ftk_display.c lua_ftk_font.c \
+	lua_ftk_mmap.c lua_ftk_canvas.c lua_ftk_clipboard.c lua_ftk_display.c \
 	lua_ftk_icon_cache.c lua_ftk_list_view.c lua_ftk_list_model_default.c lua_ftk_list_model.c\
 	lua_ftk_list_render_default.c lua_ftk_list_render.c lua_ftk_sprite.c \
 	lua_ftk_wnd_manager.c lua_ftk_config.c  lua_ftk_structs.c

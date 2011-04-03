@@ -2,7 +2,6 @@
 
 interface Ftk
 {
-	FtkFontPtr          ftk_default_font();
 	FtkDisplayPtr       ftk_default_display();
 	FtkMainLoopPtr      ftk_default_main_loop();
 	FtkLogLevel       ftk_default_log_level();

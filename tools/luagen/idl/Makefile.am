@@ -1,7 +1,7 @@
 EXTRA_DIST=\
-	ftk_animator_alpha.idl       ftk_list_view.idl\
-	ftk_animator_expand.idl      ftk_main_loop.idl\
-	ftk_animator.idl             ftk_menu_item.idl\
+	ftk_list_view.idl\
+	ftk_main_loop.idl\
+	ftk_menu_item.idl\
 	ftk_app_window.idl           ftk_menu_panel.idl\
 	ftk_bitmap_factory.idl       ftk_mmap.idl\
 	ftk_bitmap.idl               ftk_painter.idl\
@@ -13,9 +13,9 @@ EXTRA_DIST=\
 	ftk_dialog.idl               ftk_source_idle.idl\
 	ftk_display.idl              ftk_source_timer.idl\
 	ftk_entry.idl                ftk_sprite.idl\
-	ftk_font_default.idl         ftk_status_item.idl\
-	ftk_font_freetype.idl        ftk_status_panel.idl\
-	ftk_font.idl                 ftk_text_view.idl\
+	ftk_status_item.idl\
+	ftk_status_panel.idl\
+	ftk_text_view.idl\
 	ftk_icon_cache.idl           ftk_theme.idl\
 	ftk_icon_view.idl            ftk_translator.idl\
 	ftk.idl                      ftk_typedef.idl\

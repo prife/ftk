@@ -1,6 +1,0 @@
-#include "ftk_font.idl"
-
-interface FtkFontFreeType : FtkFont
-{
-	FtkFontPtr ftk_font_freetype_create (in CStrPtr filename, in int bold, in int italic, in size_t size);
-};
