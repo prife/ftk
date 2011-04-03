@@ -690,6 +690,8 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 	ftk_widget_set_gc(thiz, FTK_WIDGET_INSENSITIVE, &gc);
 	ftk_gc_reset(&gc);
 
+	ftk_window_set_animation_hint(thiz, "");
+
 	return RET_OK;
 }
 
