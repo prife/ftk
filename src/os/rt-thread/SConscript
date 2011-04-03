@@ -3,7 +3,7 @@ Import('RTT_ROOT')
 from building import *
 
 ftk_app_src	= Split("""
-../../demos/demo_alpha.c
+../../demos/demo_button.c
 """)
 
 ftk_src = Split("""
@@ -16,9 +16,20 @@ ftk_src = Split("""
 ../../ftk_allocator.c
 ../../ftk_allocator_default.c
 ../../ftk_allocator_profile.c
-../../ftk_animator_alpha.c
-../../ftk_animator_expand.c
-../../ftk_animator_zoom.c
+../../ftk_animation_alpha.c
+../../ftk_animation.c
+../../ftk_animation_expand.c
+../../ftk_animation_scale.c
+../../ftk_animation_translate.c
+../../ftk_animation_trigger_default.c
+../../ftk_animation_trigger_silence.c
+../../ftk_interpolator_acc_decelerate.c
+../../ftk_interpolator_accelerate.c
+../../ftk_interpolator_bounce.c
+../../ftk_interpolator_decelerate.c
+../../ftk_interpolator_linear.c
+../../ftk_pairs.c
+../../ftk_params.c
 ../../ftk_app_window.c
 ../../ftk_bitmap.c
 ../../ftk_bitmap_factory.c
