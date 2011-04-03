@@ -1,7 +1,6 @@
 #include "ftk_xul.h"
 #include "ftk_expr.h"
 #include "ftk_app_calc.h"
-#include "ftk_animator_expand.h"
 
 typedef struct _PrivInfo
 {
