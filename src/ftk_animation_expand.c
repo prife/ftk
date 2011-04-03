@@ -56,7 +56,15 @@ static Ret   ftk_animation_expand_step_base_left(FtkAnimation* thiz, float perce
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		dst_r = r;
+		if(priv->push)
+		{
+			int offset = priv->front_win_rect.width * percent;
+			dst_r.x = dst_r.x + offset;
+			dst_r.width = r.width = r.width - offset;
+		}
+
+		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -80,7 +88,15 @@ static Ret   ftk_animation_expand_step_base_top(FtkAnimation* thiz, float percen
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		dst_r = r;
+		if(priv->push)
+		{
+			int offset = priv->front_win_rect.height * percent;
+			dst_r.y = dst_r.y + offset;
+			dst_r.height = r.height = r.height - offset;
+		}
+
+		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -104,7 +120,15 @@ static Ret   ftk_animation_expand_step_base_right(FtkAnimation* thiz, float perc
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		dst_r = r;
+		if(priv->push)
+		{
+			int offset = priv->front_win_rect.width * percent;
+			r.x = r.x + offset;
+			dst_r.width = r.width = r.width - offset;
+		}
+
+		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -129,7 +153,15 @@ static Ret   ftk_animation_expand_step_base_bottom(FtkAnimation* thiz, float per
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		dst_r = r;
+		if(priv->push)
+		{
+			int offset = priv->front_win_rect.height * percent;
+			r.y = r.y + offset;
+			dst_r.height = r.height = r.height - offset;
+		}
+
+		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
