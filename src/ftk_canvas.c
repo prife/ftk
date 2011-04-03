@@ -758,9 +758,6 @@ static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkR
 	FtkColor* psrc = NULL;
 	FtkColor* pdst = NULL;
 	FtkBitmap* dst_i = thiz->bitmap;	
-	return_val_if_fail(dst_i != NULL && ftk_bitmap_bits(dst_i) != NULL && dst_r != NULL, RET_FAIL);
-	return_val_if_fail(src_i != NULL && ftk_bitmap_bits(src_i) != NULL && src_r != NULL, RET_FAIL);
-
 	int i=0, j=0, m=0, n=0;
 	int dst_i_w = ftk_bitmap_width(dst_i); 
 	int dst_i_h = ftk_bitmap_height(dst_i);
@@ -779,6 +776,9 @@ static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkR
 
 	int scale_w = (src_w << 8)/dst_w;
 	int scale_h = (src_h << 8)/dst_h;
+
+	return_val_if_fail(dst_i != NULL && ftk_bitmap_bits(dst_i) != NULL && dst_r != NULL, RET_FAIL);
+	return_val_if_fail(src_i != NULL && ftk_bitmap_bits(src_i) != NULL && src_r != NULL, RET_FAIL);
 	
 	return_val_if_fail(dst_x >= 0 && dst_w > 0 && (dst_x + dst_w) <= dst_i_w, RET_FAIL);
 	return_val_if_fail(dst_y >= 0 && dst_h > 0 && (dst_y + dst_h) <= dst_i_h, RET_FAIL);

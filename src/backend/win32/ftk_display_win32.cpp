@@ -309,6 +309,7 @@ static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect
 {
 	int i = 0;
 	int j = 0;
+	MSG msg;
 	DECL_PRIV(thiz, priv);
 	BITMAPINFO bmi;
 	int display_width  = DISPLAY_WIDTH;
@@ -343,6 +344,13 @@ static Ret ftk_display_win32_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect
 	::SetDIBits(GetDC(priv->wnd), priv->hBitmap, 0, DISPLAY_HEIGHT, priv->revert_bits, &bmi, DIB_RGB_COLORS);
 
 	InvalidateRect(priv->wnd, NULL, FALSE);
+
+	while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	{
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+		if(msg.message == WM_PAINT) break;
+	}
 
 	return RET_OK;
 }

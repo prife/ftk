@@ -155,7 +155,7 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
 		return RET_OK;
 	}
 
-	snprintf(event_name, FTK_ANIM_EVENT_NAME_LEN, "%s_%s", hint, evt->type == FTK_EVT_SHOW ? "show" : "hide");
+	ftk_snprintf(event_name, FTK_ANIM_EVENT_NAME_LEN, "%s_%s", hint, evt->type == FTK_EVT_SHOW ? "show" : "hide");
 	type_and_animation = ftk_animation_trigger_default_find_by_event(thiz, event_name);
 	if(type_and_animation == NULL)
 	{

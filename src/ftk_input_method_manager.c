@@ -38,11 +38,13 @@
 #include "ftk_input_method_hw.h"
 #endif
 
+#ifndef UCOS_SIM
 #ifdef WIN32
 #ifndef WINCE
 #include "ftk_input_method_win32.h"
 #else
 #include "ftk_input_method_wince.h"
+#endif
 #endif
 #endif
 
@@ -80,11 +82,13 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());
 #endif
 
+#ifndef UCOS_SIM
 #ifdef WIN32
 #ifndef WINCE
 		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
 #else
 		ftk_input_method_manager_register(thiz, ftk_input_method_wince_create());
+#endif
 #endif
 #endif
 
