@@ -16,6 +16,7 @@ end
 
 function CreateDialog(modal)
 	dialog=FtkDialog.Create(0, 40, 320, 240)
+	dialog:SetAnimationHint("dialog")
 	width=dialog:Width()
 	height=dialog:Height()
 

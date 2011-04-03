@@ -111,6 +111,22 @@ static int lua_ftk_window_update(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_window_is_mapped(lua_State* L)
+{
+	tolua_Error err = {0};
+	int retv;
+	FtkWidget* thiz;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	retv = ftk_window_is_mapped(thiz);
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
 static int lua_ftk_window_is_fullscreen(lua_State* L)
 {
 	tolua_Error err = {0};
@@ -215,6 +231,40 @@ static int lua_ftk_window_disable_update(lua_State* L)
 	return 1;
 }
 
+static int lua_ftk_window_get_animation_hint(lua_State* L)
+{
+	tolua_Error err = {0};
+	char* retv;
+	FtkWidget* thiz;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	retv = ftk_window_get_animation_hint(thiz);
+	tolua_pushstring(L, (char*)retv);
+
+	return 1;
+}
+
+static int lua_ftk_window_set_animation_hint(lua_State* L)
+{
+	tolua_Error err = {0};
+	Ret retv;
+	FtkWidget* thiz;
+	char* hint;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	hint = (char*)tolua_tostring(L, 2, 0);
+	retv = ftk_window_set_animation_hint(thiz, hint);
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
 int tolua_ftk_window_init(lua_State* L)
 {
 	tolua_open(L);
@@ -229,12 +279,15 @@ int tolua_ftk_window_init(lua_State* L)
 	tolua_function(L, "Ungrab", lua_ftk_window_ungrab);
 	tolua_function(L, "PaintForcely", lua_ftk_window_paint_forcely);
 	tolua_function(L, "Update", lua_ftk_window_update);
+	tolua_function(L, "IsMapped", lua_ftk_window_is_mapped);
 	tolua_function(L, "IsFullscreen", lua_ftk_window_is_fullscreen);
 	tolua_function(L, "SetFullscreen", lua_ftk_window_set_fullscreen);
 	tolua_function(L, "Invalidate", lua_ftk_window_invalidate);
 	tolua_function(L, "SetBackgroundWithAlpha", lua_ftk_window_set_background_with_alpha);
 	tolua_function(L, "EnableUpdate", lua_ftk_window_enable_update);
 	tolua_function(L, "DisableUpdate", lua_ftk_window_disable_update);
+	tolua_function(L, "GetAnimationHint", lua_ftk_window_get_animation_hint);
+	tolua_function(L, "SetAnimationHint", lua_ftk_window_set_animation_hint);
 	tolua_endmodule(L);
 	tolua_endmodule(L);
 
