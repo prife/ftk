@@ -81,6 +81,11 @@ FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 	return fopen(file_name, mode);
 }
 
+int  ftk_file_seek(FtkFsHandle file, size_t pos)
+{
+	return fseek(file, SEEK_SET, pos);
+}
+
 int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length)
 {
 	return fread(buffer, 1, length, file);

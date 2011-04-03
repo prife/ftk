@@ -58,6 +58,7 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info);
 Ret ftk_file_get_mime_type(const char* file_name, char mime_type[FTK_MIME_TYPE_LEN+1]);
 
 FtkFsHandle ftk_file_open(const char* file_name, const char* mode);
+int  ftk_file_seek(FtkFsHandle file, size_t pos);
 int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length);
 int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length);
 void ftk_file_close(FtkFsHandle file);
