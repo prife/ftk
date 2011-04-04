@@ -588,6 +588,18 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_file_browser.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_file_system.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_file_system_posix.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\ftk_font.c"
 				>
 				<FileConfiguration
@@ -1783,6 +1795,14 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_expr.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_file_browser.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\ftk_file_system.h"
 				>
 			</File>
 			<File

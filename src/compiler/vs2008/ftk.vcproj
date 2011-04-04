@@ -691,6 +691,58 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_file_browser.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_file_system.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\ftk_file_system_posix.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_font.c"
 				>
 				<FileConfiguration
@@ -2053,6 +2105,14 @@
 				</File>
 				<File
 					RelativePath="..\..\ftk_expr.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ftk_file_browser.h"
+					>
+				</File>
+				<File
+					RelativePath="..\..\ftk_file_system.h"
 					>
 				</File>
 				<File

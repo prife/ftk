@@ -58,25 +58,6 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 	return RET_FAIL;
 }
 
-static int ftk_file_parse_mode(const char *mode)
-{
-	int f = 0;
- 
-  	for(;;)
-	{
-    	switch(*mode)
-		{
-		    case  0 : return f;
-		    case 'b': break;
-		    case 'r': f = O_RDONLY; break;
-		    case 'w': f = O_WRONLY|O_CREAT|O_TRUNC; break;
-		    case 'a': f = O_WRONLY|O_CREAT|O_APPEND; break;
-		    case '+': f = (f&(~O_WRONLY))|O_RDWR; break;
-    	}
-    	++mode;
-  	}
-}
-
 FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 {
 	return_val_if_fail(file_name != NULL && mode != NULL, NULL);
@@ -106,6 +87,23 @@ void ftk_file_close(FtkFsHandle file)
 	fclose(file);
 }
 
+#ifdef WIN32
+/*TODO:*/
+FtkFsHandle ftk_dir_open(const char* dir_name)
+{
+	return 0;
+}
+
+Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
+{
+	return RET_FAIL;
+}
+
+void ftk_dir_close(FtkFsHandle dir)
+{
+	return;
+}
+#else
 FtkFsHandle ftk_dir_open(const char* dir_name)
 {
 	return_val_if_fail(dir_name != NULL, NULL);
@@ -150,6 +148,7 @@ void ftk_dir_close(FtkFsHandle dir)
 		closedir(dir);
 	}
 }
+#endif
 
 Ret ftk_fs_get_cwd(char cwd[FTK_MAX_PATH+1])
 {

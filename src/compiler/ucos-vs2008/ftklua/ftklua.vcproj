@@ -955,6 +955,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_dir.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_display.c"
 				>
 				<FileConfiguration
@@ -995,7 +1015,47 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_file.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_file_browser.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_fs.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2001,6 +2061,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_dir.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_display.h"
 				>
 			</File>
@@ -2009,11 +2073,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_file.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_file_browser.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_font_default.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_fs.h"
 				>
 			</File>
 			<File
