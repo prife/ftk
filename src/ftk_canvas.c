@@ -90,7 +90,7 @@ FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz)
 	{\
 		if(likely(alpha == 0xff))\
 		{\
-			pdst[0] = *color;\
+			*(unsigned int*)(pdst) = *(unsigned int*)(color);\
 		}\
 		else\
 		{\
@@ -224,7 +224,7 @@ Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h)
 	int height = 0;
 	int iter_w = 0;
 	int iter_h = 0;
-	FtkColor color;
+	FtkColor* color = NULL;
 	FtkColor* bits = NULL;
 	unsigned char alpha = 0;
 	FtkColor* pdst = NULL;
@@ -246,13 +246,13 @@ Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h)
 	iter_h = h;
 	bits += y * width;
 
-	color = thiz->gc.fg;
+	color = &(thiz->gc.fg);
 	while(iter_h--)
 	{
 		pdst = bits + x;
 		while(iter_w--)
 		{
-			*pdst = color;
+			*(unsigned int*)pdst = *(unsigned int*)color;
 			pdst++;
 		}
 		iter_w = w;
@@ -408,57 +408,6 @@ Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int l
 	return ftk_canvas_draw_string_ex(thiz, x, y, str, len, 0);
 }
 
-/* add by woodysu*/
-/* the bitmap is Src , the FtkCanvas.bitmap is Dst*/
-Ret ftk_canvas_draw_bitmap_zoom(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, unsigned char alpha)
-{
-	int i=0, j=0, m=0, n=0;
-	FtkColor* src = NULL;
-	FtkColor* dst = NULL;
-	FtkColor* psrc = NULL;
-	FtkColor* pdst = NULL;
-	int width  = thiz->width; //Canvas width
-	int height = thiz->height;
-	int bitmap_width   = ftk_bitmap_width(bitmap);
-	int bitmap_height  = ftk_bitmap_height(bitmap);
-
-	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
-	return_val_if_fail(x < width, RET_FAIL);
-	return_val_if_fail(y < height, RET_FAIL);
-
-	src = ftk_bitmap_bits(bitmap);
-	dst = thiz->bits;
-        
-	if(w+x>width)
-		return RET_FAIL;
-
-	if(h+y>height)
-		return RET_FAIL;
-	
-	for(j=0 ; j<h ; j++)
-	{
-		n=j*bitmap_height/h;
-		for(i=0 ; i<w ; i++)
-		{
-			m=i*bitmap_width/w;
-			pdst = dst + (j+y)*width+x+i;
-			psrc = src + n*bitmap_width+m;
-
-			if(psrc->a == 0xff)
-			{
-				*pdst = *psrc;
-			}	
-			else
-			{
-				FTK_ALPHA(psrc, pdst, psrc->a);
-			}
-		}	
-	}
-	
-	return 	RET_OK;
-
-}
-
 Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)
 {
 	int i = 0;
@@ -503,9 +452,7 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 				pdst = dst+k;
 				psrc = src+j;
 				alpha = (psrc->a * thiz->gc.alpha) >> 8;
-				pdst->r = FTK_ALPHA_1(psrc->r, pdst->r, alpha);
-				pdst->g = FTK_ALPHA_1(psrc->g, pdst->g, alpha);
-				pdst->b = FTK_ALPHA_1(psrc->b, pdst->b, alpha);
+				PUT_PIXEL(pdst, psrc, alpha);
 			}
 			src += bitmap_width;
 			dst += width;
@@ -519,17 +466,9 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 			{
 				pdst = dst+k;
 				psrc = src+j;
-				if(src[j].a == 0xff)
-				{
-					dst[k] = src[j];
-				}
-				else
-				{
-					alpha = psrc->a; 
-					pdst->r = FTK_ALPHA_1(psrc->r, pdst->r, alpha);
-					pdst->g = FTK_ALPHA_1(psrc->g, pdst->g, alpha);
-					pdst->b = FTK_ALPHA_1(psrc->b, pdst->b, alpha);
-				}
+				alpha = psrc->a;
+
+				PUT_PIXEL(pdst, psrc, alpha);
 			}
 			src += bitmap_width;
 			dst += width;
@@ -803,10 +742,7 @@ static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkR
 				m = (i*scale_w) >> 8;
 				d = pdst+i;
 				s = psrc+m;
-				
-				d->r = FTK_ALPHA_1(s->r, d->r, alpha);
-				d->g = FTK_ALPHA_1(s->g, d->g, alpha);
-				d->b = FTK_ALPHA_1(s->b, d->b, alpha);
+				PUT_PIXEL(d, s, alpha);
 			}	
 		}
 	}
@@ -821,8 +757,10 @@ static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkR
 			for(i=0 ; i<dst_w ; i++)
 			{
 				m = (i*scale_w) >> 8;
+				d = pdst+i;
+				s = psrc+m;
 
-				pdst[i] = psrc[m];
+				PUT_PIXEL(d, s, s->a);
 			}	
 		}
 	}
