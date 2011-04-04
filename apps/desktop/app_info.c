@@ -31,6 +31,7 @@
 #include <dlfcn.h>
 #include "ftk_mmap.h"
 #include "app_info.h"
+#include "ftk_app_lua.h"
 
 struct _AppInfoManager
 {
@@ -237,21 +238,28 @@ Ret  app_info_manager_init_app(AppInfoManager* thiz, AppInfo* info)
 		return RET_OK;
 	}
 
-	if((info->handle = dlopen(info->exec, RTLD_NOW)) == NULL)
+	if(strstr(info->exec, ".lua") != NULL)
 	{
-		ftk_logd("dlopen %s failed(%s)\n", info->exec, dlerror());
+		info->app = ftk_app_lua_create(info->name, info->exec);
 	}
-	return_val_if_fail(info->handle != NULL, RET_FAIL);
-	
-	load = (FtkLoadApp)dlsym(info->handle, info->init);
-	if(load == NULL)
+	else
 	{
-		ftk_logd("dlsym %s failed(%s)\n", info->init, dlerror());
-	}
-	return_val_if_fail(load != NULL, RET_FAIL);
+		if((info->handle = dlopen(info->exec, RTLD_NOW)) == NULL)
+		{
+			ftk_logd("dlopen %s failed(%s)\n", info->exec, dlerror());
+		}
+		return_val_if_fail(info->handle != NULL, RET_FAIL);
+		
+		load = (FtkLoadApp)dlsym(info->handle, info->init);
+		if(load == NULL)
+		{
+			ftk_logd("dlsym %s failed(%s)\n", info->init, dlerror());
+		}
+		return_val_if_fail(load != NULL, RET_FAIL);
 
-	info->app = load();
-	return_val_if_fail(info->app != NULL, RET_FAIL);
+		info->app = load();
+		return_val_if_fail(info->app != NULL, RET_FAIL);
+	}
 
 	return RET_OK;
 }

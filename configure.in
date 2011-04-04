@@ -233,6 +233,10 @@ AC_CONFIG_FILES([ftk.pc
                 apps/shell/Makefile
                 apps/shell/icons/Makefile
                 apps/shell/data/Makefile
+                apps/gallery/Makefile
+                apps/gallery/icons/Makefile
+                apps/gallery/lua/Makefile
+                apps/gallery/data/Makefile
                 tools/Makefile
                 tools/cross-build/Makefile
                 tools/fontextract/Makefile
