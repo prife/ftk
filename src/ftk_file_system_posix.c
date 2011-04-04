@@ -87,23 +87,6 @@ void ftk_file_close(FtkFsHandle file)
 	fclose(file);
 }
 
-#ifdef WIN32
-/*TODO:*/
-FtkFsHandle ftk_dir_open(const char* dir_name)
-{
-	return 0;
-}
-
-Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
-{
-	return RET_FAIL;
-}
-
-void ftk_dir_close(FtkFsHandle dir)
-{
-	return;
-}
-#else
 FtkFsHandle ftk_dir_open(const char* dir_name)
 {
 	return_val_if_fail(dir_name != NULL, NULL);
@@ -148,7 +131,6 @@ void ftk_dir_close(FtkFsHandle dir)
 		closedir(dir);
 	}
 }
-#endif
 
 Ret ftk_fs_get_cwd(char cwd[FTK_MAX_PATH+1])
 {

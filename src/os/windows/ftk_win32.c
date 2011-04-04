@@ -192,3 +192,61 @@ int win32_socketpair(SOCKET socks[2])
     return SOCKET_ERROR;
 }
 
+DIR *opendir(const char *name)
+{
+	long handle = 0;
+	DIR* dir = NULL;
+	struct _finddata_t data = {0};
+
+	if((handle = _findfirst(name, &data)) == -1)
+	{
+		return NULL;
+	}
+
+	if((dir = calloc(1, sizeof(DIR))) != NULL)
+	{
+		dir->handle = handle;
+	}
+
+	return dir;
+}
+
+struct dirent *readdir(DIR *dir)
+{
+	struct _finddata_t data = {0};
+	long ret = _findnext(dir->handle, &data);
+	if(ret != 0)
+	{
+		if(data.attrib & _A_SUBDIR)
+		{
+			dir->dir.d_type = _S_IFDIR;
+		}
+		else if(data.attrib & _A_NORMAL)
+		{
+			dir->dir.d_type = _S_IFREG;
+		}
+		else if(data.attrib & _A_SYSTEM)
+		{
+			dir->dir.d_type = _S_IFCHR;
+		}
+		else
+		{
+			dir->dir.d_type = 0;
+		}
+		
+		strncpy(dir->dir.d_name, data.name, sizeof(dir->dir.d_name));
+		return &(dir->dir);
+	}
+
+	return NULL;
+}
+
+int closedir(DIR *dir)
+{
+	if(dir != NULL)
+	{
+		_findclose(dir->handle);
+		free(dir);
+	}
+	return 0;
+}

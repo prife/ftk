@@ -62,11 +62,31 @@ char* ftk_get_testdata_dir(void);
 #define ftk_sscanf    sscanf
 #define stat _stat
 #define strcasecmp _stricmp
-//TODO:
-#define S_ISDIR(a) 0
+
+
+#define S_IFDIR _S_IFDIR
+#define S_IFREG _S_IFREG
+#define S_ISDIR(a) ((a) & S_IFDIR)
+
+struct dirent
+{
+	unsigned char d_type;       
+	char d_name[256];
+};
+
+typedef struct _DIR
+{
+	long handle;
+	struct dirent dir;
+}DIR;
+
 #define rmdir _rmdir
 #define mkdir _mkdir
 #define chdir _chdir
+
+DIR *opendir(const char *name);
+struct dirent *readdir(DIR *dir);
+int closedir(DIR *dir);
 
 char* ftk_strncpy(char *dest, const char *src, size_t n);
 int   ftk_snprintf(char *str, size_t size, const char *format, ...);
