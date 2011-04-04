@@ -24,5 +24,6 @@ EXTRA_DIST=\
 	ftk_list_model_default.idl   ftk_window.idl\
 	ftk_list_model.idl           ftk_wnd_manager.idl\
 	ftk_list_render_default.idl  ftk_xul.idl\
-	ftk_list_render.idl
+	ftk_list_render.idl          ftk_file_browser.idl \
+	ftk_dir.idl   ftk_file.idl ftk_fs.idl
 

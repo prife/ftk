@@ -57,6 +57,10 @@
 #include "lua_ftk_bitmap_factory.h"
 #include "lua_ftk_bitmap.h"
 
+#include "lua_ftk_file_browser.h"
+#include "lua_ftk_fs.h"
+#include "lua_ftk_dir.h"
+#include "lua_ftk_file.h"
 #include "lua_ftk_check_button.h"
 #include "lua_ftk_icon_view.h"
 #include "lua_ftk_menu_item.h"
@@ -88,6 +92,10 @@
 int ftk_lua_init(lua_State *L) 
 {
 	tolua_ftk_init(L);
+	tolua_ftk_fs_init(L);
+	tolua_ftk_dir_init(L);
+	tolua_ftk_file_init(L);
+	tolua_ftk_file_browser_init(L);
 	tolua_ftk_widget_init(L);
 	tolua_ftk_window_init(L);
 	tolua_ftk_xul_init(L);

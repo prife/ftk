@@ -41,6 +41,8 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 
 	if((ret = stat(file_name, &st)) == 0)
 	{
+		memset(info, 0x00, sizeof(FtkFileInfo));
+
 		info->uid  = st.st_uid;
 		info->gid  = st.st_gid;
 		info->mode = st.st_mode;
@@ -48,6 +50,7 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 		info->is_dir = S_ISDIR(st.st_mode);
 		info->last_access = st.st_atime;
 		info->last_modify = st.st_mtime;
+		ftk_strncpy(info->name, file_name, FTK_MAX_PATH);
 
 		return RET_OK;
 	}

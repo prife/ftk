@@ -8,12 +8,12 @@ int main(int argc, char* argv[])
 	char cwd[FTK_MAX_PATH+1];
 	char cwd1[FTK_MAX_PATH+1];
 	FtkFsHandle handle = NULL;
-	char mime_type[FTK_MIME_TYPE_LEN+1];
+	const char* mime_type = NULL;
 
 	ftk_set_allocator(ftk_allocator_default_create());
 
-	assert(ftk_file_get_mime_type("test.jpg", mime_type) == RET_OK && strcmp(mime_type, "image/jpeg") == 0);
-	assert(ftk_file_get_mime_type("test.txt", mime_type) == RET_OK && strcmp(mime_type, "text/plain") == 0);
+	assert((mime_type = ftk_file_get_mime_type("test.jpg")) != NULL && strcmp(mime_type, "image/jpeg") == 0);
+	assert((mime_type = ftk_file_get_mime_type("test.txt")) != NULL && strcmp(mime_type, "text/plain") == 0);
 	assert(ftk_fs_get_cwd(cwd) == RET_OK);
 	assert(ftk_fs_create_dir("./testdir/a/b/c") == RET_OK);
 	assert(ftk_fs_change_dir("./testdir/a/b/c") == RET_OK);

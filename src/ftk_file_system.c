@@ -52,11 +52,11 @@ static const FtkKeyValue g_ext_type_map[] =
 	{"", ""}
 };
 
-Ret ftk_file_get_mime_type(const char* file_name, char mime_type[FTK_MIME_TYPE_LEN+1])
+const char* ftk_file_get_mime_type(const char* file_name)
 {
 	size_t i = 0;
 	const char* ext_name = NULL;
-	return_val_if_fail(file_name != NULL && mime_type != NULL, RET_FAIL);
+	return_val_if_fail(file_name != NULL, FTK_MIME_UNKNOWN);
 
 	if((ext_name = strrchr(file_name, '.')) != NULL)
 	{
@@ -64,16 +64,12 @@ Ret ftk_file_get_mime_type(const char* file_name, char mime_type[FTK_MIME_TYPE_L
 		{
 			if(strcasecmp(g_ext_type_map[i].key, ext_name) == 0)
 			{
-				ftk_strncpy(mime_type, g_ext_type_map[i].value, FTK_MIME_TYPE_LEN);
-
-				return RET_OK;
+				return g_ext_type_map[i].value;
 			}
 		}
 	}
 
-	ftk_strncpy(mime_type, FTK_MIME_UNKNOWN, FTK_MIME_TYPE_LEN);
-
-	return RET_FAIL;
+	return FTK_MIME_UNKNOWN;
 }
 
 static Ret ftk_fs_delete_children(char* name)

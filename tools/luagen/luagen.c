@@ -246,6 +246,7 @@ static gboolean lua_code_gen_end_interface(CodeGenInfo *info)
 
 typedef struct _TypeInfo
 {
+	gboolean is_chars;
 	gboolean is_function;
 	gboolean is_userdata;
 
@@ -286,6 +287,20 @@ static void ret_type_init(TypeInfo* info)
 }
 
 static void str_type_init(TypeInfo* info)
+{
+	memset(info, 0x00, sizeof(TypeInfo));
+	info->is_chars = 1;
+	strcpy(info->name     , "char*");
+	strcpy(info->lua_name , "char*");
+	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
+//	strcpy(info->pop      , "(char*)tolua_tostring");
+	strcpy(info->push     , "	tolua_pushstring(L, (char*)retv);\n");
+	strcpy(info->free     , "");
+
+	return;
+}
+
+static void str_ptr_type_init(TypeInfo* info)
 {
 	memset(info, 0x00, sizeof(TypeInfo));
 	strcpy(info->name     , "char*");
@@ -419,9 +434,13 @@ static int get_type_info(IDL_tree type, TypeInfo* info)
 	else if(IDL_NODE_TYPE(type) == IDLN_IDENT)
 	{
 		const char* type_str = IDL_IDENT(type).str;
-		if(strcmp(type_str, "StrPtr") == 0 || strcmp(type_str, "CStrPtr") == 0) 
+		if(strcmp(type_str, "Chars") == 0) 
 		{
 			str_type_init(info);
+		}
+		else if(strcmp(type_str, "StrPtr") == 0 || strcmp(type_str, "CStrPtr") == 0) 
+		{
+			str_ptr_type_init(info);
 		}
 		else if(strcmp(type_str, "StrArray") == 0 || strcmp(type_str, "CStrArray") == 0) 
 		{
@@ -616,7 +635,15 @@ static void lua_code_gen_set_func(CodeGenInfo *info, const char* name, TypeInfo*
 	g_string_append(info->str_funcs, "{\n");
 	g_string_append_printf(info->str_funcs, "	%s* thiz = (%s*)  tolua_tousertype(L, 1, 0);\n", name, name);
 	g_string_append(info->str_funcs, "	return_val_if_fail(thiz != NULL, 0);\n");
-	g_string_append_printf(info->str_funcs, "	thiz->%s = (%s) (%s(L, 2, 0));\n", var, type_info->name, type_info->pop);
+	if(type_info->is_chars)
+	{
+		g_string_append_printf(info->str_funcs, 
+			"	strncpy(thiz->%s, (char*)tolua_tostring(L, 2, 0), sizeof(thiz->%s));\n", var, var);
+	}
+	else
+	{
+		g_string_append_printf(info->str_funcs, "	thiz->%s = (%s) (%s(L, 2, 0));\n", var, type_info->name, type_info->pop);
+	}
 	g_string_append(info->str_funcs, "\n	return 1;\n");
 	g_string_append(info->str_funcs, "}\n\n");
 

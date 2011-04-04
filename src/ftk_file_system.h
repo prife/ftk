@@ -55,7 +55,7 @@ typedef struct _FtkFileInfo
 }FtkFileInfo;
 
 Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info);
-Ret ftk_file_get_mime_type(const char* file_name, char mime_type[FTK_MIME_TYPE_LEN+1]);
+const char* ftk_file_get_mime_type(const char* file_name);
 
 FtkFsHandle ftk_file_open(const char* file_name, const char* mode);
 int  ftk_file_seek(FtkFsHandle file, size_t pos);

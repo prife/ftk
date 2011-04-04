@@ -99,6 +99,22 @@ Ret lua_ftk_listener_func(void* ctx, void* obj)
     return ret;
 }
 
+Ret lua_ftk_file_browser_on_choosed_func(void* ctx, int index, const char* path)
+{
+    Ret ret = RET_OK;
+    const char* func = ctx;
+    lua_State *L = s_current_L;
+
+    lua_getglobal(L, func);
+    lua_pushinteger(L, index);
+	lua_pushstring(L, path);
+    lua_call(L, 2, 1);
+    ret = (int)lua_tonumber(L, -1);
+    lua_pop(L, 1);
+
+    return ret;
+}
+
 Ret lua_ftk_list_item_listener_func(void* ctx, void* obj)
 {
     Ret ret = RET_OK;

@@ -11,6 +11,7 @@ Ret lua_ftk_list_item_listener_func(void* ctx, void* obj);
 Ret lua_ftk_icon_view_item_listener_func(void* ctx, void* obj);
 Ret lua_ftk_widget_listener_func(void* ctx, void* obj);
 Ret lua_ftk_event_listener_func(void* ctx, void* obj);
+Ret lua_ftk_file_browser_on_choosed_func(void* ctx, int index, const char* path);
 
 void lua_ftk_destroy_func(void* ctx);
 Ret lua_ftk_idle_func(void* ctx);

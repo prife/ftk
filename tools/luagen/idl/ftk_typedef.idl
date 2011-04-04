@@ -3,9 +3,11 @@ typedef long int;
 typedef char uchar;
 typedef unsigned long uint;
 typedef unsigned long size_t;
+typedef unsigned long time_t;
 typedef unsigned long ulong;
 typedef unsigned short ushort;
 typedef long voidPtr;
+typedef voidPtr Chars;
 typedef voidPtr FtkListItemInfoPtr;
 typedef voidPtr FtkMmapPtr;
 typedef voidPtr FtkRectPtr;
@@ -53,6 +55,10 @@ typedef voidPtr FtkPrepareOptionsMenuFunc;
 typedef voidPtr FtkWidgetListenerFunc;
 typedef voidPtr FtkEventListenerFunc;
 typedef voidPtr FtkListItemListenerFunc;
+typedef voidPtr FtkFileBrowserOnChoosedFunc;
+typedef long FtkFsHandle;
+typedef voidPtr FtkFileInfoPtr;
+
 
 enum FtkBool
 {
@@ -76,6 +82,13 @@ enum FtkInputType
 	FTK_INPUT_URL,
 	FTK_INPUT_EMAIL,
 	FTK_INPUT_ALL
+};
+
+enum FtkFileBrowserType
+{
+    FTK_FILE_BROWER_APP,
+    FTK_FILE_BROWER_SINGLE_CHOOSER,
+    FTK_FILE_BROWER_MULTI_CHOOSER
 };
 
 enum FtkGcMask
@@ -108,6 +121,18 @@ struct FtkRect
 	int y;
 	int width;
 	int height;
+};
+
+struct FtkFileInfo
+{
+    int uid;
+    int gid;
+    int mode;
+    int is_dir;
+    size_t size;
+    time_t last_access;
+    time_t last_modify;
+    Chars name;
 };
 
 struct FtkListItemInfo

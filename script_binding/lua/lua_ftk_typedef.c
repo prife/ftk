@@ -7,6 +7,7 @@ static void tolua_reg_types (lua_State* L)
 	tolua_usertype(L, "FtkPoint");
 	tolua_usertype(L, "FtkColor");
 	tolua_usertype(L, "FtkRect");
+	tolua_usertype(L, "FtkFileInfo");
 	tolua_usertype(L, "FtkListItemInfo");
 	tolua_usertype(L, "FtkIconViewItem");
 }
@@ -231,6 +232,174 @@ static int tolua_set_FtkRect_height(lua_State* L)
 	FtkRect* thiz = (FtkRect*)  tolua_tousertype(L, 1, 0);
 	return_val_if_fail(thiz != NULL, 0);
 	thiz->height = (int) (tolua_tonumber(L, 2, 0));
+
+	return 1;
+}
+
+int lua_ftk_file_info_create(lua_State* L)
+{
+	FtkFileInfo* retv = calloc(1, sizeof(FtkFileInfo));
+	tolua_pushusertype_and_takeownership(L, (void*)retv, "FtkFileInfo");
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_uid(lua_State* L)
+{
+	lua_Number retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (lua_Number)thiz->uid;
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_uid(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->uid = (int) (tolua_tonumber(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_gid(lua_State* L)
+{
+	lua_Number retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (lua_Number)thiz->gid;
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_gid(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->gid = (int) (tolua_tonumber(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_mode(lua_State* L)
+{
+	lua_Number retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (lua_Number)thiz->mode;
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_mode(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->mode = (int) (tolua_tonumber(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_is_dir(lua_State* L)
+{
+	lua_Number retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (lua_Number)thiz->is_dir;
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_is_dir(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->is_dir = (int) (tolua_tonumber(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_size(lua_State* L)
+{
+	lua_Number retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (lua_Number)thiz->size;
+	tolua_pushnumber(L, (lua_Number)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_size(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->size = (int) (tolua_tonumber(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_last_access(lua_State* L)
+{
+	void* retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (void*)&(thiz->last_access);
+	{time_t* copy=malloc(sizeof(time_t)); if(copy != NULL) memcpy(copy, &retv, sizeof(time_t));tolua_pushusertype_and_takeownership(L, (time_t*)copy, "time_t");}
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_last_access(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->last_access = (time_t) (*(time_t*)tolua_tousertype(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_last_modify(lua_State* L)
+{
+	void* retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (void*)&(thiz->last_modify);
+	{time_t* copy=malloc(sizeof(time_t)); if(copy != NULL) memcpy(copy, &retv, sizeof(time_t));tolua_pushusertype_and_takeownership(L, (time_t*)copy, "time_t");}
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_last_modify(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	thiz->last_modify = (time_t) (*(time_t*)tolua_tousertype(L, 2, 0));
+
+	return 1;
+}
+
+static int tolua_get_FtkFileInfo_name(lua_State* L)
+{
+	char* retv;
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	retv = (char*)thiz->name;
+	tolua_pushstring(L, (char*)retv);
+
+	return 1;
+}
+
+static int tolua_set_FtkFileInfo_name(lua_State* L)
+{
+	FtkFileInfo* thiz = (FtkFileInfo*)  tolua_tousertype(L, 1, 0);
+	return_val_if_fail(thiz != NULL, 0);
+	strncpy(thiz->name, (char*)tolua_tostring(L, 2, 0), sizeof(thiz->name));
 
 	return 1;
 }
@@ -499,6 +668,18 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_variable(L, "width",tolua_get_FtkRect_width, tolua_set_FtkRect_width);
 	tolua_variable(L, "height",tolua_get_FtkRect_height, tolua_set_FtkRect_height);
 	tolua_endmodule(L);
+	tolua_cclass(L, "FtkFileInfo", "FtkFileInfo", "", NULL);
+	tolua_beginmodule(L, "FtkFileInfo");
+	tolua_function(L, "Create", lua_ftk_file_info_create);
+	tolua_variable(L, "uid",tolua_get_FtkFileInfo_uid, tolua_set_FtkFileInfo_uid);
+	tolua_variable(L, "gid",tolua_get_FtkFileInfo_gid, tolua_set_FtkFileInfo_gid);
+	tolua_variable(L, "mode",tolua_get_FtkFileInfo_mode, tolua_set_FtkFileInfo_mode);
+	tolua_variable(L, "is_dir",tolua_get_FtkFileInfo_is_dir, tolua_set_FtkFileInfo_is_dir);
+	tolua_variable(L, "size",tolua_get_FtkFileInfo_size, tolua_set_FtkFileInfo_size);
+	tolua_variable(L, "last_access",tolua_get_FtkFileInfo_last_access, tolua_set_FtkFileInfo_last_access);
+	tolua_variable(L, "last_modify",tolua_get_FtkFileInfo_last_modify, tolua_set_FtkFileInfo_last_modify);
+	tolua_variable(L, "name",tolua_get_FtkFileInfo_name, tolua_set_FtkFileInfo_name);
+	tolua_endmodule(L);
 	tolua_cclass(L, "FtkListItemInfo", "FtkListItemInfo", "", NULL);
 	tolua_beginmodule(L, "FtkListItemInfo");
 	tolua_function(L, "Create", lua_ftk_list_item_info_create);
@@ -530,6 +711,9 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_constant(L, "FTK_INPUT_URL", FTK_INPUT_URL);
 	tolua_constant(L, "FTK_INPUT_EMAIL", FTK_INPUT_EMAIL);
 	tolua_constant(L, "FTK_INPUT_ALL", FTK_INPUT_ALL);
+	tolua_constant(L, "FTK_FILE_BROWER_APP", FTK_FILE_BROWER_APP);
+	tolua_constant(L, "FTK_FILE_BROWER_SINGLE_CHOOSER", FTK_FILE_BROWER_SINGLE_CHOOSER);
+	tolua_constant(L, "FTK_FILE_BROWER_MULTI_CHOOSER", FTK_FILE_BROWER_MULTI_CHOOSER);
 	tolua_constant(L, "FTK_GC_BG", FTK_GC_BG);
 	tolua_constant(L, "FTK_GC_FG", FTK_GC_FG);
 	tolua_constant(L, "FTK_GC_FONT", FTK_GC_FONT);

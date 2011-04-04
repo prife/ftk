@@ -482,8 +482,9 @@ static FtkBitmap* ftk_file_browser_load_mime_icon(const char* file_name)
 {
 	char* p = NULL;
 	char icon_name[FTK_MAX_PATH+1] = {0};
-	char mime_type[FTK_MIME_TYPE_LEN+1] = {0};
-	ftk_file_get_mime_type(file_name, mime_type);
+	const char mime_type[FTK_MIME_TYPE_LEN + 1] = {0};
+	
+	strcpy(mime_type, ftk_file_get_mime_type(file_name));
 
 	p = strrchr(mime_type, '/');
 	return_val_if_fail(p != NULL, NULL);
@@ -523,8 +524,8 @@ Ret		   ftk_file_browser_load(FtkWidget* thiz)
 	FtkFileInfo info = {0};
 	FtkFsHandle handle = NULL;
 	FtkListItemInfo item = {0};
+	const char* mime_type = NULL;
 	char path[FTK_MAX_PATH+1] = {0};
-	char mime_type[FTK_MIME_TYPE_LEN+1] = {0};
 	PrivInfo* priv = ftk_widget_user_data(thiz);
 	return_val_if_fail(priv != NULL && priv->path != NULL, RET_FAIL);	
 
@@ -574,7 +575,7 @@ Ret		   ftk_file_browser_load(FtkWidget* thiz)
 			if(priv->filter_mime_type != NULL)
 			{
 				ftk_strs_cat(path, FTK_MAX_PATH, priv->path, "/", info.name, NULL);
-				ftk_file_get_mime_type(path, mime_type);
+				mime_type = ftk_file_get_mime_type(path);
 				if(strstr(priv->filter_mime_type, mime_type) != NULL)
 				{
 					continue;

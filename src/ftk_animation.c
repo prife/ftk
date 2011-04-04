@@ -172,12 +172,13 @@ Ret ftk_animation_run(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win
 
 	while(ftk_animation_step(thiz) == RET_OK)
 	{
-		ftk_logd("%s: %s %dth frames\n", __func__, thiz->name, i++);
+		i++;
 		if(ftk_animation_get_percent(thiz) >= 1.0)
 		{
 			break;
 		}
 	}
+	ftk_logd("%s: %s show %d frames\n", __func__, thiz->name, i);
 
 	return RET_OK;
 }
