@@ -1,4 +1,5 @@
 SUBDIRS=reference
-EXTRA_DIST=build.txt  cmd_options.txt  FAQ.txt  intro.pdf  Run-FTK-On-Android-Emulator.txt \
-	theme.txt  xul.txt Release-0.2.txt logo.png Release-0.3.txt
-
+EXTRA_DIST=autotest.txt     config.txt  Release-0.2.txt  Release-0.5.txt   \
+	specail_key.txt  WindowAnimations.pdf build.txt        FAQ.txt     \
+	Release-0.3.txt  Release-0.6.txt                  theme.txt        xul.txt \
+	cmd_options.txt  intro.pdf   Release-0.4.txt  Run-FTK-On-Android-Emulator.txt  tslib.txt
