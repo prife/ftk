@@ -42,18 +42,10 @@ FTK_BEGIN_DECLS
 struct _FtkAnimation;
 typedef struct _FtkAnimation FtkAnimation;
 
-typedef enum _FtkAnimationParam
-{
-	FTK_ANIM_PARAM_BITMAP_IN,
-	FTK_ANIM_PARAM_BITMAP_OUT,
-	FTK_ANIM_PARAM_INTERPOLATOR,
-	FTK_ANIM_PARAM_DONE,
-}FtkAnimationParam;
-
 typedef FtkAnimation* (*FtkAnimationCreate)();
 typedef Ret   (*FtkAnimationStep)(FtkAnimation* thiz);
 typedef Ret   (*FtkAnimationReset)(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,
-	FtkRect* old_win_rect, FtkRect* new_win_rect);
+				FtkRect* old_win_rect, FtkRect* new_win_rect);
 typedef void  (*FtkAnimationDestroy)(FtkAnimation* thiz);
 
 struct _FtkAnimation
@@ -78,9 +70,9 @@ const char* ftk_animation_get_param(FtkAnimation* thiz, const char* name);
 int   ftk_animation_get_param_int(FtkAnimation* thiz, const char* name, int defval);
 float ftk_animation_get_param_float(FtkAnimation* thiz, const char* name, float defval);
 Ret   ftk_animation_run(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,
-	FtkRect* old_win_rect, FtkRect* new_win_rect);
+		FtkRect* old_win_rect, FtkRect* new_win_rect);
 Ret   ftk_animation_reset(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,
-	FtkRect* old_win_rect, FtkRect* new_win_rect);
+		FtkRect* old_win_rect, FtkRect* new_win_rect);
 void ftk_animation_dump(FtkAnimation* thiz);
 void ftk_animation_destroy(FtkAnimation* thiz);
 

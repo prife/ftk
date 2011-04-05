@@ -162,7 +162,8 @@ static Ret ftk_animation_ensure_interpolator(FtkAnimation* thiz)
 	return RET_OK;
 }
 
-Ret ftk_animation_run(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win, FtkRect* old_win_rect, FtkRect* new_win_rect)
+Ret ftk_animation_run(FtkAnimation* thiz, FtkBitmap* old_win, 
+	FtkBitmap* new_win, FtkRect* old_win_rect, FtkRect* new_win_rect)
 {
 	int i = 0;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
@@ -183,11 +184,13 @@ Ret ftk_animation_run(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win
 	return RET_OK;
 }
 
-Ret ftk_animation_reset(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,	FtkRect* old_win_rect, FtkRect* new_win_rect)
+Ret ftk_animation_reset(FtkAnimation* thiz, FtkBitmap* old_win, 
+	FtkBitmap* new_win,	FtkRect* old_win_rect, FtkRect* new_win_rect)
 {
 	return_val_if_fail(thiz != NULL && thiz->reset != NULL, RET_FAIL);
 
 	thiz->start_time = ftk_get_relative_time();
+
 	return thiz->reset(thiz, old_win, new_win, old_win_rect, new_win_rect);
 }
 
