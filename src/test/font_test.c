@@ -113,6 +113,14 @@ int main(int argc, char* argv[])
 		FTK_FREE(info.in);
 		FTK_FREE(info.out);
 	}
+
+	font = ftk_font_cache_create(font, 512);
+	for(i = 0; i < 1000; i ++)
+	{
+		c = rand() % 1000 + 0x6129;
+		assert(ftk_font_lookup(font, c, &glyph) == RET_OK);
+	}
+
 	assert(ftk_font_lookup(font, '.', &glyph) == RET_OK);
 	printf("%04x x=%d y=%d w=%d h=%d\n", c, glyph.x, glyph.y, glyph.w, glyph.h);
 	ftk_font_destroy(font);

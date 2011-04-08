@@ -62,8 +62,6 @@ struct _FtkFont
 	FtkFontDestroy destroy;
 
 	int ref;
-	/*now cache ascii chars only.*/
-	char char_extent_cache[0x80];
 	char priv[ZERO_LEN_ARRAY];
 };
 
@@ -118,6 +116,7 @@ static inline int     ftk_font_unref(FtkFont* thiz)
 	return ret;
 }
 
+FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr);
 int ftk_font_get_extent(FtkFont* thiz, const char* str, int len);
 int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode);
 const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width, int* extent);
