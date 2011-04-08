@@ -29,10 +29,17 @@
  *
  */
 #include "fontdata.h"
-#include "ftk_allocator.h"
 
-#define FD_ASSERT(p) assert(p)
-#define FONT_VERSION 0x00000100 /*1.0*/
+#ifdef WITHOUT_FTK 
+#define FTK_ALLOC malloc
+#define FTK_FREE free
+#define FTK_ZALLOC(s) calloc(1, s)
+#define FTK_REALLOC realloc
+#else
+#include "ftk_allocator.h"
+#endif
+
+#define FONT_VERSION 0x00000101 /*1.01*/
 
 typedef struct _FontDataHeader
 {
@@ -58,7 +65,13 @@ struct _FontData
 
 	void* org_data;
 	int   new_created;
+
+	char file_name[260];
+	void* current_glyph_data;
+	size_t current_glyph_data_size;
 };
+
+static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyph* glyph);
 
 FontData* font_data_create(int char_nr, Encoding encoding)
 {
@@ -102,6 +115,107 @@ FontData* font_data_load(char* data, size_t length)
 
 	return thiz;
 }
+
+#ifdef WITHOUT_FTK
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+char* read_file(const char* file_name, int* length)
+{
+	struct stat st = {0};
+	if(stat(file_name, &st))
+	{
+		return NULL;
+	}
+	else
+	{
+		char* buffer = malloc(st.st_size + 1);
+		FILE* fp = fopen(file_name, "rb");
+		fread(buffer, 1, st.st_size, fp);
+		fclose(fp);
+		buffer[st.st_size] = '\0';
+		*length = st.st_size;
+
+		return buffer;
+	}
+}
+
+FontData* font_data_load_file(const char* file_name)
+{
+	int length = 0;
+	char* buffer = read_file(file_name, &length);
+	
+	return font_data_load(buffer, length);
+}
+
+static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyph* glyph)
+{
+
+	return RET_FAIL;
+}
+#else
+#include "ftk_file_system.h"
+
+FontData* font_data_load_file(const char* file_name)
+{
+	FontData* thiz = NULL;
+	return_val_if_fail(file_name != NULL, NULL);
+
+	if((thiz = font_data_create(0, 0)) != NULL)
+	{
+		FtkFsHandle fp = ftk_file_open(file_name, "rb");
+		if(fp != NULL)
+		{
+			int ret = 0;
+			size_t glyphs_size = 0;
+			ret = ftk_file_read(fp, &thiz->header, sizeof(thiz->header));
+			assert(ret == sizeof(thiz->header));
+			glyphs_size = thiz->header.char_nr * sizeof(Glyph);
+			thiz->glyphs = FTK_ZALLOC(glyphs_size);
+			assert(thiz->glyphs != NULL);
+			ftk_file_read(fp, thiz->glyphs, glyphs_size);
+			thiz->data = NULL;
+			thiz->data_size = 0;
+			thiz->new_created = 0;
+			thiz->org_data = NULL;
+			ftk_file_close(fp);
+			ftk_strncpy(thiz->file_name, file_name, sizeof(thiz->file_name)-1);
+		}
+		else
+		{
+			FTK_FREE(thiz);
+		}
+	}
+
+	return thiz;
+}
+
+static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyph* glyph)
+{
+	int ret = 0;
+	FtkFsHandle fp = ftk_file_open(thiz->file_name, "rb");
+	size_t skip = sizeof(thiz->header) + thiz->header.char_nr * sizeof(Glyph) + offset;
+	return_val_if_fail(fp != NULL && glyph != NULL, RET_FAIL);
+
+	ret = ftk_file_seek(fp, skip);
+	assert(ret == 0);
+	
+	if(thiz->current_glyph_data_size < size)
+	{
+		FTK_FREE(thiz->current_glyph_data);
+		thiz->current_glyph_data = FTK_ALLOC(size * 2);
+		thiz->current_glyph_data_size = size * 2;
+	}
+
+	ret = ftk_file_read(fp, thiz->current_glyph_data, size);
+	ftk_logd("%s: offset=%d size=%d ret=%d\n", __func__, offset, size, ret);
+	ftk_file_close(fp);
+	assert(ret == size);
+	glyph->data = thiz->current_glyph_data;
+
+	return RET_OK;
+}
+#endif
 
 Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 {
@@ -171,7 +285,14 @@ Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph)
         if(result == 0)
         {
 			*glyph = thiz->glyphs[mid];
-			glyph->data = (unsigned char*)(thiz->data + (int)(thiz->glyphs[mid].data));
+			if(thiz->data != NULL)
+			{
+				glyph->data = (unsigned char*)(thiz->data + (int)(thiz->glyphs[mid].data));
+			}
+			else
+			{
+				font_data_read_glyph(thiz, (size_t)glyph->data, glyph->w * glyph->h, glyph);
+			}
 
             return RET_OK;
         }
@@ -277,6 +398,7 @@ void font_data_destroy(FontData* thiz)
 		{
 			FTK_FREE(thiz->glyphs);
 			FTK_FREE(thiz->data);
+			FTK_FREE(thiz->current_glyph_data);
 		}
 		FTK_FREE(thiz);
 	}
@@ -286,9 +408,9 @@ void font_data_destroy(FontData* thiz)
 
 #ifdef HAS_FONT_DATA_SAVE
 #include <stdio.h>
-Ret font_data_save(FontData* thiz, const char* filename)
+Ret font_data_save(FontData* thiz, const char* file_name)
 {
-	FILE* fp = fopen(filename, "wb+");
+	FILE* fp = fopen(file_name, "wb+");
 	{
 		fwrite(&thiz->header, 1, sizeof(FontDataHeader), fp);
 		fwrite(thiz->glyphs, 1, sizeof(Glyph) * thiz->header.char_nr, fp);
@@ -304,26 +426,6 @@ Ret font_data_save(FontData* thiz, const char* filename)
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-char* read_file(const char* file_name, int* length)
-{
-	struct stat st = {0};
-	if(stat(file_name, &st))
-	{
-		return NULL;
-	}
-	else
-	{
-		char* buffer = FTK_ALLOC(st.st_size + 1);
-		FILE* fp = fopen(file_name, "rb");
-		fread(buffer, 1, st.st_size, fp);
-		fclose(fp);
-		buffer[st.st_size] = '\0';
-		*length = st.st_size;
-
-		return buffer;
-	}
-}
 
 int main(int argc, char* argv[])
 {

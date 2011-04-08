@@ -31,6 +31,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_font.h"
 #include "ftk_util.h"
 
@@ -253,7 +254,7 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 		if(result == 0)
 		{
 			*glyph = *p;
-			ftk_logd("%s find %p at %d\n", __func__, p->code, mid);
+			//ftk_logd("%s find %p at %d\n", __func__, p->code, mid);
 			return RET_OK;
 		}
 		else if(result < 0)

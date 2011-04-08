@@ -19,33 +19,11 @@ void show_usage(int argc, char* argv[])
 	return;
 }
 
-char* read_file(const char* file_name, int* length)
-{
-	struct stat st = {0};
-	if(stat(file_name, &st))
-	{
-		return NULL;
-	}
-	else
-	{
-		char* buffer = malloc(st.st_size + 1);
-		FILE* fp = fopen(file_name, "rb");
-		fread(buffer, 1, st.st_size, fp);
-		fclose(fp);
-		buffer[st.st_size] = '\0';
-		*length = st.st_size;
-
-		return buffer;
-	}
-}
-
 void verify_font_data(FT_Face face, FILE* fp, const char* font_data_file)
 {
-	int length = 0;
 	Glyph glyph = {0};
 	unsigned short ch = 0;
-	char* buffer = read_file(font_data_file, &length);
-	FontData* data = font_data_load(buffer, length);
+	FontData* data = font_data_load_file(font_data_file);
 
 	printf("verifing...\n");
 	fseek(fp, SEEK_SET, 0);
@@ -77,7 +55,7 @@ void verify_font_data(FT_Face face, FILE* fp, const char* font_data_file)
 	return;
 }
 
-void extract(FT_Face face, const char* input_file, const char* output_file)
+void extract(FT_Face face, const char* input_file, const char* output_file, int size)
 {
 	Glyph glyph = {0};
 	struct stat st = {0};
@@ -94,6 +72,7 @@ void extract(FT_Face face, const char* input_file, const char* output_file)
 	printf("extracting...\n");
 	stat(input_file, &st);
 	data = font_data_create(st.st_size>>1, ENC_UTF16);
+	font_data_set_size(data, size, size);
 	while(fread(&ch, 1, sizeof(ch), fp) > 0 && data != NULL)
 	{
 		int index = FT_Get_Char_Index(face, ch);
@@ -155,7 +134,7 @@ int main(int argc, char* argv[])
 	}
 	err = FT_Set_Pixel_Sizes(face, 0, size);
 
-	extract(face, input_file, output_file);
+	extract(face, input_file, output_file, size);
 
 	FT_Done_Face( face );
 	FT_Done_FreeType( library );

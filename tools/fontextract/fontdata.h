@@ -31,12 +31,16 @@
 
 #ifdef WITHOUT_FTK
 #include "typedef.h"
+#define FTK_BEGIN_DECLS 
+#define FTK_END_DECLS 
 #else
 #include "ftk_typedef.h"
 #endif
 
 #ifndef FONT_DATA_H
 #define FONT_DATA_H
+
+FTK_BEGIN_DECLS
 
 typedef enum _Encoding
 {
@@ -51,6 +55,7 @@ typedef struct _Glyph
 	unsigned char w;
 	unsigned char h;
 	unsigned short code;
+	unsigned short unused;
 	unsigned char* data;
 }Glyph;
 
@@ -59,9 +64,9 @@ typedef struct _FontData FontData;
 
 FontData* font_data_create(int char_nr, Encoding encoding);
 FontData* font_data_load(char* data, size_t length);
+FontData* font_data_load_file(const char* file_name);
 Ret font_data_add_glyph(FontData* thiz, Glyph* glyph);
 Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph);
-
 
 int  font_data_get_version(FontData* thiz);
 int  font_data_get_width(FontData* thiz);
@@ -79,6 +84,8 @@ void font_data_set_style(FontData* thiz, const char* style);
 Ret font_data_save(FontData* thiz, const char* filename);
 #endif
 void font_data_destroy(FontData* thiz);
+
+FTK_END_DECLS
 
 #endif/*FONT_DATA_H*/
 

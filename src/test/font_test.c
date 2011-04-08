@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 	for(c = 0x6129; c != 0x61ff; c++)
 	{
 		assert(ftk_font_lookup(font, c, &glyph) == RET_OK);
-		
+#if 1		
 		info.in = glyph.data;
 		info.in_len = glyph.w * glyph.h;
 		info.out = NULL;
@@ -112,6 +112,7 @@ int main(int argc, char* argv[])
 		}
 		FTK_FREE(info.in);
 		FTK_FREE(info.out);
+#endif		
 	}
 
 	font = ftk_font_cache_create(font, 512);

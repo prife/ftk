@@ -32,14 +32,12 @@
 #include "ftk_log.h"
 #include "fontdata.h"
 #include "ftk_util.h"
-#include "ftk_mmap.h"
 #include "ftk_font_default.h"
 
 typedef struct _PrivInfo
 {
 	size_t size;
 	char* filename;
-	FtkMmap* mmap;
 	FontData* fontdata;
 }PrivInfo;
 
@@ -47,18 +45,14 @@ static Ret ftk_font_default_load(FtkFont* thiz, const char* filename)
 {
 	DECL_PRIV(thiz, priv);
 
-	ftk_logd("%s: default font: %s\n", __func__, filename);
-	priv->mmap = ftk_mmap_create(filename, 0, -1);
-	if(priv->mmap != NULL)
-	{
-		priv->fontdata = font_data_load(ftk_mmap_data(priv->mmap), ftk_mmap_length(priv->mmap));
-		ftk_logd("%s: author=%s\n", __func__, font_data_get_author(priv->fontdata));
-		ftk_logd("%s: family=%s\n", __func__, font_data_get_family(priv->fontdata));
-		ftk_logd("%s: style =%s\n", __func__, font_data_get_style(priv->fontdata));
-		ftk_logd("%s: w=%d h=%d\n", __func__, font_data_get_width(priv->fontdata), font_data_get_height(priv->fontdata));
-	}
+	priv->fontdata = font_data_load_file(filename);
+	ftk_logd("%s: filename=%s\n", __func__, filename);
+	ftk_logd("%s: author=%s\n", __func__, font_data_get_author(priv->fontdata));
+	ftk_logd("%s: family=%s\n", __func__, font_data_get_family(priv->fontdata));
+	ftk_logd("%s: style =%s\n", __func__, font_data_get_style(priv->fontdata));
+	ftk_logd("%s: w=%d h=%d\n", __func__, font_data_get_width(priv->fontdata), font_data_get_height(priv->fontdata));
 	
-	return priv->mmap != NULL ? RET_OK : RET_FAIL;
+	return priv->fontdata != NULL ? RET_OK : RET_FAIL;
 }
 
 static int      ftk_font_default_height(FtkFont* thiz)
@@ -84,7 +78,6 @@ void      ftk_font_default_destroy(FtkFont* thiz)
 		DECL_PRIV(thiz, priv);
 		FTK_FREE(priv->filename);
 		font_data_destroy(priv->fontdata);
-		ftk_mmap_destroy(priv->mmap);
 		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 	}
 
