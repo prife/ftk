@@ -191,6 +191,14 @@ static Ret ftk_move_cursor(void* ctx, void* obj)
 	{
 		ftk_sprite_move(ctx, event->u.mouse.x, event->u.mouse.y);
 	}
+	else if(event->type == FTK_EVT_DISABLE_CURSOR)
+	{
+		ftk_sprite_show(ctx, 0);
+	}
+	else if(event->type == FTK_EVT_ENABLE_CURSOR)
+	{
+		ftk_sprite_show(ctx, 1);
+	}
 
 	return RET_OK;
 }

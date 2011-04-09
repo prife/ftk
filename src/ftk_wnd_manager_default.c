@@ -575,7 +575,12 @@ static Ret  ftk_wnd_manager_default_do_animation(FtkWndManager* thiz, FtkEvent* 
 
 		if(anim_event.new_window != NULL && anim_event.old_window != NULL)
 		{
+			FtkEvent e = {0};
+			e.type = FTK_EVT_DISABLE_CURSOR;
+			ftk_wnd_manager_dispatch_event(thiz, &e);
 			ftk_animation_trigger_on_event(ftk_default_animation_trigger(), &anim_event);
+			e.type = FTK_EVT_ENABLE_CURSOR;
+			ftk_wnd_manager_dispatch_event(thiz, &e);
 		}
 	}
 
