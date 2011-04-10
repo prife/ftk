@@ -71,10 +71,7 @@ src/demos/demo_dialog.c
 src/demos/demo_progress_bar.c
 src/demos/demo_statusbar.c
 src/demos/demo_menu.c
-src/demos/demo_zoom.c
 src/demos/demo_image_button.c
-src/demos/demo_alpha.c
-src/demos/demo_expand.c
 src/demos/demo_icon_view.c
 src/demos/demo_hello.c
 src/demos/demo_button.c
@@ -99,13 +96,11 @@ src/ftk_util.c
 src/ftk_font_freetype.c
 src/ftk_file_system.c
 src/ftk_source_timer.c
-src/ftk_animator_expand.c
 src/ftk_file_browser.c
 src/ftk_message_box.c
 src/ftk_source_primary.c
 src/ftk_bitmap_factory.c
 src/ftk_xml_parser.c
-src/ftk_animator_alpha.c
 src/ftk_text_layout_bidi.c
 src/compiler/ucos-vs2008/UCOS_SIM/src/ucosii/os_flag.c
 src/compiler/ucos-vs2008/UCOS_SIM/src/ucosii/os_task.c
@@ -137,7 +132,6 @@ src/ftk_image_jpeg_decoder.c
 src/ftk_allocator_default.c
 src/ftk_input_method_manager.c
 src/ftk_pipe_socket.c
-src/ftk_animator_zoom.c
 src/ftk.c
 src/ftk_combo_box.c
 src/ftk_menu_panel.c
@@ -240,12 +234,13 @@ src/ftk_menu_item.c
 src/ftk_log.c
 src/ftk_status_panel.c
 src/ftk_icon_view.c
-src/im/ftk_handwrite_engine_dummy.c
-src/im/ftk_stroke_painter_cairo.c
-src/im/ftk_input_method_util.c
-src/im/ftk_input_method_hw.c
-src/im/ftk_input_method_py.c
-src/im/ftk_lookup_table.c
+src/im/gpinyin/ftk/ftk_input_method_gpinyin.cpp
+src/im/default/ftk_handwrite_engine_dummy.c
+src/im/default/ftk_stroke_painter_cairo.c
+src/im/default/ftk_input_method_util.c
+src/im/default/ftk_input_method_hw.c
+src/im/default/ftk_input_method_py.c
+src/im/default/ftk_lookup_table.c
 src/ftk_list_model_default.c
 src/ftk_xul.c
 src/ftk_allocator.c
@@ -267,8 +262,6 @@ services/fconf/fconf.c
 services/fconf/service.c
 services/fconf/fconf_xml.c
 services/fconf/fconf_test.c
-script_binding/lua/lua_ftk_animator_expand.c
-script_binding/lua/lua_ftk_font.c
 script_binding/lua/lua_ftk_clipboard.c
 script_binding/lua/lua_ftk_menu_panel.c
 script_binding/lua/tolua_push.c
@@ -284,7 +277,6 @@ script_binding/lua/lua_ftk_source.c
 script_binding/lua/lua_ftk_icon_view.c
 script_binding/lua/lua_ftk_icon_cache.c
 script_binding/lua/lua_ftk_list_model.c
-script_binding/lua/lua_ftk_font_free_type.c
 script_binding/lua/lua_ftk_window.c
 script_binding/lua/lua_ftk_list_render_default.c
 script_binding/lua/lua/lstrlib.c
@@ -332,7 +324,6 @@ script_binding/lua/lua_ftk_source_timer.c
 script_binding/lua/tolua_is.c
 script_binding/lua/lua_ftk_source_idle.c
 script_binding/lua/tolua_map.c
-script_binding/lua/lua_ftk_animator_alpha.c
 script_binding/lua/lua_ftk_scroll_bar.c
 script_binding/lua/lua_ftk_bitmap.c
 script_binding/lua/lua_ftk_progress_bar.c
@@ -350,7 +341,6 @@ script_binding/lua/lua_ftk_popup_menu.c
 script_binding/lua/lua_ftk_wait_box.c
 script_binding/lua/lua_ftk_sprite.c
 script_binding/lua/lua_runner.c
-script_binding/lua/lua_ftk_animator.c
 script_binding/lua/lua_ftk_painter.c
 script_binding/lua/lua_ftk_dialog.c
 script_binding/lua/lua_ftk_callbacks.c
@@ -370,5 +360,5 @@ tools/fbusgen/coder_intf.c
 tools/fbusgen/coder_xxxx.c
 tools/fbusgen/main.c
 tools/fbusgen/fbusgen.c
-tools/codegen/luagen.c
+tools/luagen/luagen.c
 tools/imconvert/fitx_convert.c

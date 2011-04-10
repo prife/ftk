@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-09-20 07:12-0700\n"
+"POT-Creation-Date: 2011-04-11 13:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,19 +25,19 @@ msgstr ""
 msgid "Calculator"
 msgstr ""
 
-#: apps/desktop/main.c:260
+#: apps/desktop/main.c:229
 msgid "Shutdown"
 msgstr ""
 
-#: apps/desktop/main.c:268
+#: apps/desktop/main.c:237
 msgid "Stop VNC"
 msgstr ""
 
-#: apps/desktop/main.c:272
+#: apps/desktop/main.c:241
 msgid "Start VNC"
 msgstr ""
 
-#: apps/desktop/main.c:344
+#: apps/desktop/main.c:312
 msgid "Hello, GetText"
 msgstr ""
 
@@ -45,11 +45,11 @@ msgstr ""
 msgid "File Browser"
 msgstr ""
 
-#: apps/shell/ftk_app_shell.c:69 apps/shell/ftk_app_shell.c:193
+#: apps/shell/ftk_app_shell.c:69 apps/shell/ftk_app_shell.c:194
 msgid "Shell"
 msgstr ""
 
-#: apps/shell/ftk_app_shell.c:197
+#: apps/shell/ftk_app_shell.c:198
 msgid "Input command at here."
 msgstr ""
 
@@ -61,7 +61,7 @@ msgstr ""
 msgid "fullscreen"
 msgstr ""
 
-#: src/demos/demo_transparent.c:121
+#: src/demos/demo_transparent.c:122
 msgid "transparent"
 msgstr ""
 
@@ -89,24 +89,12 @@ msgstr ""
 msgid "status_bar"
 msgstr ""
 
-#: src/demos/demo_menu.c:88
+#: src/demos/demo_menu.c:91
 msgid "menu"
-msgstr ""
-
-#: src/demos/demo_zoom.c:120
-msgid "zoom"
 msgstr ""
 
 #: src/demos/demo_image_button.c:60
 msgid "image_button"
-msgstr ""
-
-#: src/demos/demo_alpha.c:87
-msgid "alpha"
-msgstr ""
-
-#: src/demos/demo_expand.c:172
-msgid "expand"
 msgstr ""
 
 #: src/demos/demo_icon_view.c:48
@@ -121,11 +109,11 @@ msgstr ""
 msgid "button"
 msgstr ""
 
-#: src/demos/demo_text_view.c:19
+#: src/demos/demo_text_view.c:20
 msgid "text_view"
 msgstr ""
 
-#: src/demos/demo_cairo.c:323
+#: src/demos/demo_cairo.c:331
 msgid "cairo"
 msgstr ""
 
@@ -157,7 +145,7 @@ msgstr ""
 msgid "label"
 msgstr ""
 
-#: src/demos/demo_entry.c:44
+#: src/demos/demo_entry.c:45
 msgid "entry"
 msgstr ""
 
@@ -190,7 +178,7 @@ msgid "No"
 msgstr ""
 
 #: src/ftk_file_browser.c:156 src/ftk_file_browser.c:236
-#: src/ftk_file_browser.c:371 src/ftk_file_browser.c:544
+#: src/ftk_file_browser.c:371 src/ftk_file_browser.c:545
 msgid ".."
 msgstr ""
 
@@ -240,14 +228,17 @@ msgstr ""
 msgid "More"
 msgstr ""
 
-#: src/im/ftk_input_method_hw.c:446
+#: src/im/default/ftk_input_method_hw.c:446
 msgid "Hand Write"
 msgstr ""
 
-#: src/im/ftk_input_method_py.c:263
+#: src/im/default/ftk_input_method_py.c:263
 msgid "Pin Yin"
 msgstr ""
 
-#: src/im/ftk_input_method_py.c:268
+#: src/im/default/ftk_input_method_py.c:268
 msgid "Wu Bi"
+msgstr ""
+
+msgid "Google PinYin"
 msgstr ""

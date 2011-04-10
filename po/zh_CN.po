@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ftk 0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-07 07:52+0800\n"
+"POT-Creation-Date: 2011-04-11 13:12+0800\n"
 "PO-Revision-Date: 2010-08-07 07:52+0800\n"
 "Last-Translator: Li XianJing <xianjimli@gmail.com>\n"
 "Language-Team: Li XianJing <xianjimli@gmail.com>\n"
@@ -16,29 +16,42 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: apps/calculator/ftk_app_calc.c:93
+#: apps/calculator/ftk_app_calc.c:159 apps/calculator/ftk_app_calc.c:183
+#: src/ftk_file_browser.c:342
+msgid "Quit"
+msgstr "退出"
+
+#: apps/calculator/ftk_app_calc.c:216
 msgid "Calculator"
 msgstr "计算器"
 
-#: apps/desktop/main.c:219
+#: apps/desktop/main.c:229
 msgid "Shutdown"
 msgstr "关机"
 
-#: apps/desktop/main.c:227
+#: apps/desktop/main.c:237
 msgid "Stop VNC"
 msgstr "关闭远程桌面"
 
-#: apps/desktop/main.c:231
+#: apps/desktop/main.c:241
 msgid "Start VNC"
 msgstr "开启远程桌面"
 
-#: apps/desktop/main.c:276
+#: apps/desktop/main.c:312
 msgid "Hello, GetText"
 msgstr "你好，GetText"
 
-#: apps/filemanager/ftk_app_file_browser.c:30 src/ftk_file_browser.c:430
+#: apps/filemanager/ftk_app_file_browser.c:30 src/ftk_file_browser.c:438
 msgid "File Browser"
 msgstr "文件浏览器"
+
+#: apps/shell/ftk_app_shell.c:69 apps/shell/ftk_app_shell.c:194
+msgid "Shell"
+msgstr "终端"
+
+#: apps/shell/ftk_app_shell.c:198
+msgid "Input command at here."
+msgstr ""
 
 #: src/demos/demo_xul.c:19
 msgid "xul"
@@ -48,7 +61,7 @@ msgstr "XML界面描述"
 msgid "fullscreen"
 msgstr "全屏幕窗口"
 
-#: src/demos/demo_transparent.c:121
+#: src/demos/demo_transparent.c:122
 msgid "transparent"
 msgstr "透明窗口"
 
@@ -68,7 +81,7 @@ msgstr "组合框"
 msgid "dialog"
 msgstr "对话框"
 
-#: src/demos/demo_progress_bar.c:33
+#: src/demos/demo_progress_bar.c:39
 msgid "progress_bar"
 msgstr "进度条"
 
@@ -76,25 +89,13 @@ msgstr "进度条"
 msgid "status_bar"
 msgstr "状态栏项"
 
-#: src/demos/demo_menu.c:88
+#: src/demos/demo_menu.c:91
 msgid "menu"
 msgstr "菜单"
-
-#: src/demos/demo_zoom.c:120
-msgid "zoom"
-msgstr "缩放动画"
 
 #: src/demos/demo_image_button.c:60
 msgid "image_button"
 msgstr "图片按钮"
-
-#: src/demos/demo_alpha.c:87
-msgid "alpha"
-msgstr "淡入动画"
-
-#: src/demos/demo_expand.c:172
-msgid "expand"
-msgstr "移动动画"
 
 #: src/demos/demo_icon_view.c:48
 msgid "icon_view"
@@ -108,9 +109,13 @@ msgstr "你好FTK"
 msgid "button"
 msgstr "按钮"
 
-#: src/demos/demo_text_view.c:19
+#: src/demos/demo_text_view.c:20
 msgid "text_view"
 msgstr "多行编辑"
+
+#: src/demos/demo_cairo.c:331
+msgid "cairo"
+msgstr ""
 
 #: src/demos/demo_msgbox.c:50
 msgid "msgbox"
@@ -140,11 +145,11 @@ msgstr "滚动条"
 msgid "label"
 msgstr "文本"
 
-#: src/demos/demo_entry.c:44
+#: src/demos/demo_entry.c:45
 msgid "entry"
 msgstr "单行编辑"
 
-#: src/demos/demo_wait_box.c:28
+#: src/demos/demo_wait_box.c:29
 msgid "wait_box"
 msgstr "忙等待"
 
@@ -156,103 +161,96 @@ msgstr "多窗口"
 msgid "ime"
 msgstr "输入法"
 
-#: src/ftk_file_browser.c:126 src/ftk_file_browser.c:206
+#: src/ftk_file_browser.c:127 src/ftk_file_browser.c:207
 msgid "OK"
 msgstr "确定"
 
-#: src/ftk_file_browser.c:131 src/ftk_file_browser.c:211
+#: src/ftk_file_browser.c:132 src/ftk_file_browser.c:212
 msgid "Cancel"
 msgstr "取消"
 
-#: src/ftk_file_browser.c:147
+#: src/ftk_file_browser.c:148
 msgid "Yes"
 msgstr "是"
 
-#: src/ftk_file_browser.c:148
+#: src/ftk_file_browser.c:149
 msgid "No"
 msgstr "否"
 
-#: src/ftk_file_browser.c:155 src/ftk_file_browser.c:235
-#: src/ftk_file_browser.c:370 src/ftk_file_browser.c:530
+#: src/ftk_file_browser.c:156 src/ftk_file_browser.c:236
+#: src/ftk_file_browser.c:371 src/ftk_file_browser.c:545
 msgid ".."
 msgstr "返回上级目录"
 
-#: src/ftk_file_browser.c:160
-#, c-format
+#: src/ftk_file_browser.c:161
+#, fuzzy
 msgid ""
 "Are you sure to remove:\n"
-" %s"
+" "
 msgstr ""
 "请确认删除文件或目录:\n"
 " %s"
 
-#: src/ftk_file_browser.c:162 src/ftk_file_browser.c:321
+#: src/ftk_file_browser.c:163 src/ftk_file_browser.c:322
 msgid "Remove"
 msgstr "删除"
 
-#: src/ftk_file_browser.c:172
-#, c-format
-msgid ""
-"Remove failed:\n"
-" %s"
+#: src/ftk_file_browser.c:173
+#, fuzzy
+msgid "Remove failed:\n"
 msgstr ""
 "删除失败:\n"
 " %s"
 
-#: src/ftk_file_browser.c:240
+#: src/ftk_file_browser.c:241
 msgid "Please input new name:"
 msgstr "请输入新的名称:"
 
-#: src/ftk_file_browser.c:258
+#: src/ftk_file_browser.c:259
 msgid "Rename failed."
 msgstr "重命名失败！"
 
-#: src/ftk_file_browser.c:278
+#: src/ftk_file_browser.c:279
 msgid "Please input folder name:"
 msgstr "请输入目录名称："
 
-#: src/ftk_file_browser.c:294
+#: src/ftk_file_browser.c:295
 msgid "Create folder failed."
 msgstr "创建目录失败。"
 
-#: src/ftk_file_browser.c:326
+#: src/ftk_file_browser.c:327
 msgid "Rename"
 msgstr "重命名"
 
-#: src/ftk_file_browser.c:331
+#: src/ftk_file_browser.c:332
 msgid "Create Folder"
 msgstr "创建目录"
 
-#: src/ftk_file_browser.c:336
+#: src/ftk_file_browser.c:337
 msgid "Detail"
 msgstr "查看详情"
 
-#: src/ftk_file_browser.c:341
-msgid "Quit"
-msgstr "退出"
-
-#: src/ftk_file_browser.c:346
+#: src/ftk_file_browser.c:347
 msgid "More"
 msgstr "更多操作"
 
-#: src/im/ftk_input_method_hw.c:446
+#: src/im/default/ftk_input_method_hw.c:446
 msgid "Hand Write"
 msgstr "手写输入法"
 
-#: src/im/ftk_input_method_py.c:263
+#: src/im/default/ftk_input_method_py.c:263
 msgid "Pin Yin"
 msgstr "拼音输入法"
 
-#: src/im/ftk_input_method_py.c:268
+#: src/im/default/ftk_input_method_py.c:268
 msgid "Wu Bi"
 msgstr "五笔输入法"
+
+msgid "Google PinYin"
+msgstr "谷歌拼音输入法"
 
 msgid "Desktop"
 msgstr "桌面"
 
 msgid "Programs"
 msgstr "应用程序"
-
-#: apps/shell/ftk_app_shell.c:71 apps/shell/ftk_app_shell.c:190
-msgid "Shell"
-msgstr "终端"
