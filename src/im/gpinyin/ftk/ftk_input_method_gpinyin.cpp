@@ -41,9 +41,7 @@ using namespace ime_pinyin;
 
 typedef struct _PrivInfo
 {
-	int inited;
 	int raw_text_size;
-	int candidate_size;
 
 	FtkWidget* editor;
 	FtkInputType input_type;
@@ -61,11 +59,6 @@ static Ret  ftk_input_method_gpinyin_init(FtkInputMethod* thiz)
 	char dict_filename[FTK_MAX_PATH+1];
 	char user_dict_filename[FTK_MAX_PATH+1];
 
-	if(priv->inited)
-	{
-		return RET_OK;
-	}
-
 	ftk_snprintf(dict_filename, FTK_MAX_PATH, "%s/data/gpinyin.dat", DATA_DIR);
 	if(!ftk_file_exist(dict_filename))
 	{
@@ -79,11 +72,6 @@ static Ret  ftk_input_method_gpinyin_init(FtkInputMethod* thiz)
 
 	ret = im_open_decoder(dict_filename, user_dict_filename) ? RET_OK : RET_FAIL;
 	im_set_max_lens(FTK_IM_RAW_TEXT_LENGTH, FTK_IM_WORD_LENGTH);
-
-	if(ret == RET_OK)
-	{
-		priv->inited = 1;
-	}
 
 	return ret;
 }
@@ -192,7 +180,6 @@ static Ret  ftk_input_method_gpinyin_handle_event(FtkInputMethod* thiz, FtkEvent
 				priv->commit_info.raw_text[priv->raw_text_size] = '\0';
 			}
 
-			priv->candidate_size = 0;
 			priv->commit_info.candidate_nr = 0;
 			if(priv->raw_text_size > 0)
 			{
@@ -218,7 +205,8 @@ static Ret  ftk_input_method_gpinyin_handle_event(FtkInputMethod* thiz, FtkEvent
 					utf16_to_utf8(priv->utf16, FTK_IM_WORD_LENGTH, priv->utf8, FTK_IM_WORD_LENGTH << 2);
 					
 					n = strlen(priv->utf8);
-					if((offset + n + 1) < FTK_IM_CANDIDATE_BUFF_LENGTH && info->candidate_nr < FTK_IM_MAX_CANDIDATES)
+					if((offset + n + 1) < FTK_IM_CANDIDATE_BUFF_LENGTH 
+						&& info->candidate_nr < FTK_IM_MAX_CANDIDATES)
 					{
 						info->candidate_nr++;
 						strcpy(info->candidates+offset, priv->utf8);
