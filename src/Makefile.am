@@ -62,9 +62,8 @@ libftk_la_SOURCES=\
 	ftk_clipboard.c       ftk_input_method_chooser_default.c ftk_input_method_manager.c \
 	ftk_allocator.c            ftk_allocator_default.c \
 	ftk_allocator_profile.c  ftk_image_bmp_decoder.c \
-	im/ftk_lookup_table.c ftk_input_method_preeditor.c \
+	ftk_input_method_preeditor.c \
 	ftk_input_method_preeditor_default.c \
-	im/ftk_input_method_py.c im/ftk_input_method_util.c \
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
 	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \
 	ftk_tab.c ftk_font_desc.c ftk_font_manager.c \
@@ -79,16 +78,39 @@ if ENABLE_LINEBREAK
 libftk_la_SOURCES += $(LINEBREAK)
 endif
 
+if ENABLE_GPINYIN
+libftk_la_SOURCES += im/gpinyin/share/ngram.cpp \
+	im/gpinyin/share/sync.cpp \
+	im/gpinyin/share/spellingtrie.cpp \
+	im/gpinyin/share/dicttrie.cpp \
+	im/gpinyin/share/dictbuilder.cpp \
+	im/gpinyin/share/spellingtable.cpp \
+	im/gpinyin/share/splparser.cpp \
+	im/gpinyin/share/searchutility.cpp \
+	im/gpinyin/share/utf16char.cpp \
+	im/gpinyin/share/mystdlib.cpp \
+	im/gpinyin/share/utf16reader.cpp \
+	im/gpinyin/share/userdict.cpp \
+	im/gpinyin/share/matrixsearch.cpp \
+	im/gpinyin/share/pinyinime.cpp \
+	im/gpinyin/share/lpicache.cpp \
+	im/gpinyin/share/dictlist.cpp \
+	im/gpinyin/ftk/ftk_input_method_gpinyin.cpp
+else
+libftk_la_SOURCES += im/default/ftk_input_method_util.c \
+	im/default/ftk_input_method_py.c \
+	im/default/ftk_lookup_table.c 
 if ENABLE_HANDWRITE
-libftk_la_SOURCES += im/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
+libftk_la_SOURCES += im/default/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
 	fhw/fhw_primitive_recognizer.c
+endif
 endif
 
 libftk_la_CFLAGS=
 
 if ENABLE_CAIRO
 libftk_la_SOURCES+=ftk_cairo.c
-libftk_la_SOURCES += im/ftk_stroke_painter_cairo.c
+libftk_la_SOURCES += im/default/ftk_stroke_painter_cairo.c
 endif
 
 if ENABLE_TSLIB
@@ -188,7 +210,7 @@ ftk_HEADERS=\
 	ftk_input_method_manager.h ftk_input_method.h \
 	ftk_allocator.h            ftk_allocator_default.h \
 	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
-	im/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
+	im/default/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
 	ftk_display_mem.h ftk_config.h \
 	ftk_text_layout.h ftk_display_rotate.h ftk_path.h \
 	ftk_file_system.h ftk_file_browser.h ftk_tab.h \

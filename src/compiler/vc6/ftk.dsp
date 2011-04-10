@@ -209,7 +209,7 @@ SOURCE=..\..\ftk_globals.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_handwrite_engine_dummy.c
+SOURCE=..\..\im\default\ftk_handwrite_engine_dummy.c
 # End Source File
 # Begin Source File
 
@@ -229,7 +229,7 @@ SOURCE=..\..\os\windows\ftk_image_win32_decoder.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_input_method_hw.c
+SOURCE=..\..\im\default\ftk_input_method_hw.c
 # End Source File
 # Begin Source File
 
@@ -245,11 +245,11 @@ SOURCE=..\..\ftk_input_method_preeditor_default.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_input_method_py.c
+SOURCE=..\..\im\default\ftk_input_method_py.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_input_method_util.c
+SOURCE=..\..\im\default\ftk_input_method_util.c
 # End Source File
 # Begin Source File
 
@@ -273,7 +273,7 @@ SOURCE=..\..\ftk_log.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_lookup_table.c
+SOURCE=..\..\im\default\ftk_lookup_table.c
 # End Source File
 # Begin Source File
 
@@ -421,7 +421,7 @@ SOURCE=..\..\backend\win32\ftk_display_win32.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_handwrite_engine.h
+SOURCE=..\..\im\default\ftk_handwrite_engine.h
 # End Source File
 # Begin Source File
 
@@ -429,19 +429,19 @@ SOURCE=..\..\os\windows\ftk_image_win32_decoder.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_input_method_hw.h
+SOURCE=..\..\im\default\ftk_input_method_hw.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_input_method_py.h
+SOURCE=..\..\im\default\ftk_input_method_py.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_input_method_util.h
+SOURCE=..\..\im\default\ftk_input_method_util.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_lookup_table.h
+SOURCE=..\..\im\default\ftk_lookup_table.h
 # End Source File
 # Begin Source File
 
@@ -449,7 +449,7 @@ SOURCE=..\..\backend\win32\ftk_source_win32.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\im\ftk_stroke_painter.h
+SOURCE=..\..\im\default\ftk_stroke_painter.h
 # End Source File
 # Begin Source File
 

@@ -32,7 +32,11 @@
 #include "ftk_allocator.h"
 #include "ftk_input_method_manager.h"
 
+#ifdef USE_GPINYIN
+#include "ftk_input_method_gpinyin.h"
+#else
 #include "ftk_input_method_py.h"
+#endif
 
 #ifdef USE_HANDWRITE
 #include "ftk_input_method_hw.h"
@@ -74,8 +78,12 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 		thiz->current = 0;
 
 #if !defined(WINCE) && !defined(ANDROID) && !defined(ANDROID_NDK) && !defined(IPHONE)
+#ifdef USE_GPINYIN
+		ftk_input_method_manager_register(thiz, ftk_input_method_gpinyin_create());
+#else
 		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
 		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
+#endif		
 #endif
 
 #ifdef USE_HANDWRITE

@@ -169,6 +169,165 @@ int utf8_count_char(const char *str, size_t length)
 	return nr;
 }
 
+int unichar_to_utf8 (unsigned short c, char* outbuf)
+{
+  /* If this gets modified, also update the copy in g_string_insert_unichar() */
+  size_t len = 0;    
+  int first;
+  int i;
+
+  if (c < 0x80)
+    {
+      first = 0;
+      len = 1;
+    }
+  else if (c < 0x800)
+    {
+      first = 0xc0;
+      len = 2;
+    }
+  else if (c < 0x10000)
+    {
+      first = 0xe0;
+      len = 3;
+    }
+   else if (c < 0x200000)
+    {
+      first = 0xf0;
+      len = 4;
+    }
+  else if (c < 0x4000000)
+    {
+      first = 0xf8;
+      len = 5;
+    }
+  else
+    {
+      first = 0xfc;
+      len = 6;
+    }
+
+  if (outbuf)
+    {
+      for (i = len - 1; i > 0; --i)
+	{
+	  outbuf[i] = (c & 0x3f) | 0x80;
+	  c >>= 6;
+	}
+      outbuf[0] = c | first;
+    }
+
+  return len;
+}
+
+#define SURROGATE_VALUE(h,l) (((h) - 0xd800) * 0x400 + (l) - 0xdc00 + 0x10000)
+char* utf16_to_utf8 (const unsigned short  *str, long len, char* utf8, size_t out_len)
+{
+  /* This function and g_utf16_to_ucs4 are almost exactly identical - The lines that differ
+   * are marked.
+   */
+  const unsigned short *in;
+  char *out;
+  char *result = NULL;
+  int n_bytes;
+  unsigned short high_surrogate;
+
+  return_val_if_fail (str != NULL, NULL);
+
+  n_bytes = 0;
+  in = str;
+  high_surrogate = 0;
+  while ((len < 0 || in - str < len) && *in)
+    {
+      unsigned short c = *in;
+      unsigned short wc;
+
+      if (c >= 0xdc00 && c < 0xe000) /* low surrogate */
+	{
+	  if (high_surrogate)
+	    {
+	      wc = SURROGATE_VALUE (high_surrogate, c);
+	      high_surrogate = 0;
+	    }
+	  else
+	    {
+          ftk_loge("Invalid sequence in conversion input");
+	      goto err_out;
+	    }
+	}
+      else
+	{
+	  if (high_surrogate)
+	    {
+          ftk_loge("Invalid sequence in conversion input");
+	      goto err_out;
+	    }
+
+	  if (c >= 0xd800 && c < 0xdc00) /* high surrogate */
+	    {
+	      high_surrogate = c;
+	      goto next1;
+	    }
+	  else
+	    wc = c;
+	}
+
+      /********** DIFFERENT for UTF8/UCS4 **********/
+      n_bytes += UTF8_LENGTH (wc);
+
+    next1:
+      in++;
+    }
+
+  if (high_surrogate)
+    {
+      ftk_loge("Partial character sequence at end of input");
+      goto err_out;
+    }
+  
+  /* At this point, everything is valid, and we just need to convert
+   */
+  /********** DIFFERENT for UTF8/UCS4 **********/
+  //result = g_malloc (n_bytes + 1);
+  result = utf8;
+  assert(out_len > n_bytes);
+
+  high_surrogate = 0;
+  out = result;
+  in = str;
+  while (out < result + n_bytes)
+    {
+      unsigned short c = *in;
+      unsigned short wc;
+
+      if (c >= 0xdc00 && c < 0xe000) /* low surrogate */
+	{
+	  wc = SURROGATE_VALUE (high_surrogate, c);
+	  high_surrogate = 0;
+	}
+      else if (c >= 0xd800 && c < 0xdc00) /* high surrogate */
+	{
+	  high_surrogate = c;
+	  goto next2;
+	}
+      else
+	wc = c;
+
+      /********** DIFFERENT for UTF8/UCS4 **********/
+      out += unichar_to_utf8 (wc, out);
+
+    next2:
+      in++;
+    }
+  
+  /********** DIFFERENT for UTF8/UCS4 **********/
+  *out = '\0';
+  
+  return result;
+err_out:
+  return NULL;
+}
+
 static int ftk_hex_to_int(char c)
 {
 	if(c >= '0' && c <= '9')

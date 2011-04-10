@@ -196,6 +196,7 @@ typedef Ret  (*FtkListener)(void* user_data, void* obj);
 #define FTK_KEY_LEN 31
 #define FTK_VALUE_LEN 63
 
+#define FTK_IM_WORD_LENGTH 31
 #define FTK_IM_RAW_TEXT_LENGTH 31
 #define FTK_IM_CANDIDATE_BUFF_LENGTH 1023
 

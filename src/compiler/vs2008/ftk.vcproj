@@ -1043,7 +1043,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_input_method_py.c"
+				RelativePath="..\..\im\default\ftk_input_method_py.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1063,7 +1063,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_input_method_util.c"
+				RelativePath="..\..\im\default\ftk_input_method_util.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1283,7 +1283,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\ftk_lookup_table.c"
+				RelativePath="..\..\im\default\ftk_lookup_table.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2152,7 +2152,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\im\ftk_handwrite_engine.h"
+					RelativePath="..\..\im\default\ftk_handwrite_engine.h"
 					>
 				</File>
 				<File
@@ -2208,11 +2208,11 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\im\ftk_input_method_py.h"
+					RelativePath="..\..\im\default\ftk_input_method_py.h"
 					>
 				</File>
 				<File
-					RelativePath="..\..\im\ftk_input_method_util.h"
+					RelativePath="..\..\im\default\ftk_input_method_util.h"
 					>
 				</File>
 				<File
@@ -2248,7 +2248,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\im\ftk_lookup_table.h"
+					RelativePath="..\..\im\default\ftk_lookup_table.h"
 					>
 				</File>
 				<File

@@ -62,6 +62,8 @@ int  ftk_file_seek(FtkFsHandle file, size_t pos);
 int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length);
 int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length);
 void ftk_file_close(FtkFsHandle file);
+int  ftk_file_exist(const char* file_name);
+int  ftk_file_length(const char* file_name);
 
 FtkFsHandle ftk_dir_open(const char* dir_name);
 Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info);

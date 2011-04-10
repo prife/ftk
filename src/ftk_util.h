@@ -37,6 +37,7 @@
 
 FTK_BEGIN_DECLS
 
+char* utf16_to_utf8 (const unsigned short  *str, long len, char* utf8, size_t out_len);
 unsigned short utf8_get_char (const char *p, const char** next);
 unsigned short utf8_get_prev_char (const char *p, const char** prev);
 int utf8_count_char(const char *begin, size_t length);

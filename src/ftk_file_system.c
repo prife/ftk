@@ -72,6 +72,20 @@ const char* ftk_file_get_mime_type(const char* file_name)
 	return FTK_MIME_UNKNOWN;
 }
 
+int  ftk_file_exist(const char* file_name)
+{
+	FtkFileInfo info;
+
+	return ftk_file_get_info(file_name, &info) == RET_OK;
+}
+
+int  ftk_file_length(const char* file_name)
+{
+	FtkFileInfo info;
+
+	return ftk_file_get_info(file_name, &info) == RET_OK ? (int)info.size : -1;
+}
+
 static Ret ftk_fs_delete_children(char* name)
 {
 	int ret = 0;

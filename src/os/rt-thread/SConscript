@@ -99,9 +99,23 @@ ftk_src = Split("""
 """)
 
 im_src = Split("""
-../../im/ftk_input_method_py.c
-../../im/ftk_input_method_util.c
-../../im/ftk_lookup_table.c
+../../im/gpinyin/share/ngram.cpp 
+../../im/gpinyin/share/sync.cpp 
+../../im/gpinyin/share/spellingtrie.cpp 
+../../im/gpinyin/share/dicttrie.cpp 
+../../im/gpinyin/share/dictbuilder.cpp 
+../../im/gpinyin/share/spellingtable.cpp 
+../../im/gpinyin/share/splparser.cpp 
+../../im/gpinyin/share/searchutility.cpp 
+../../im/gpinyin/share/utf16char.cpp 
+../../im/gpinyin/share/mystdlib.cpp 
+../../im/gpinyin/share/utf16reader.cpp 
+../../im/gpinyin/share/userdict.cpp 
+../../im/gpinyin/share/matrixsearch.cpp 
+../../im/gpinyin/share/pinyinime.cpp 
+../../im/gpinyin/share/lpicache.cpp 
+../../im/gpinyin/share/dictlist.cpp 
+../../im/gpinyin/ftk/ftk_input_method_gpinyin.cpp
 """)
 
 linebreak_src = Split("""

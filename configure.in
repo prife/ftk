@@ -87,6 +87,18 @@ esac
 AM_CONDITIONAL(FONT_ENGINE_FREETYPE, test "$font_engine" = "freetype")
 AM_CONDITIONAL(FONT_ENGINE_DEFAULT,  test "$font_engine" = "default")
 
+AC_ARG_WITH(inputmethod, [AC_HELP_STRING([--with-inputmethod=py_wb_hw|gpinyin],
+                    [use which input method])])
+case "$with_inputmethod" in
+	py_wb_hw) 
+		input_method="py_wb_hw";;
+	*)
+		CFLAGS="$CFLAGS  -DUSE_GPINYIN"
+		input_method="gpinyin";;
+esac
+
+AM_CONDITIONAL(ENABLE_GPINYIN, test "$input_method" = "gpinyin")
+
 AC_ARG_ENABLE(tslib,
   [  --enable-tslib            build with tslib support [[default=no]]],,
   enable_tslib=no)
@@ -196,6 +208,8 @@ AC_CONFIG_FILES([ftk.pc
                 testdata/Makefile
                 src/Makefile
                 src/im/Makefile
+                src/im/default/Makefile
+                src/im/gpinyin/Makefile
                 src/demos/Makefile
                 src/test/Makefile
                 src/backend/Makefile

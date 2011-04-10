@@ -6,7 +6,7 @@ noinst_PROGRAMS=label_test widget_test \
 	sources_manager_test text_buffer_test icon_cache_test  \
 	xml_parser_test xul_test list_model_default_test timer_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
-	lookup_table_test config_test fs_test tab_test font_desc_test \
+	config_test fs_test tab_test font_desc_test \
 	font_manager_test pairs_test params_test animation_trigger_default_test \
 	interpolator_test
 
@@ -45,8 +45,12 @@ endif
 config_test_SOURCES=config_test.c
 config_test_LDFLAGS=$(MYLDFLAGS)
 
+if ENABLE_GPINYIN
+else
+noinst_PROGRAMS+=lookup_table_test
 lookup_table_test_SOURCES=lookup_table_test.c
 lookup_table_test_LDFLAGS=$(MYLDFLAGS)
+endif
 
 bmp_test_SOURCES=bmp_test.c
 bmp_test_LDFLAGS=$(MYLDFLAGS)

@@ -649,7 +649,7 @@ Ret ftk_window_disable_update(FtkWidget* thiz)
 
 	priv->update_disabled++;
 	ftk_window_realize(thiz);
-	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
+//	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
 
 	return RET_OK;
 }
@@ -663,7 +663,7 @@ Ret ftk_window_enable_update(FtkWidget* thiz)
 	priv->update_disabled--;
 	ftk_window_realize(thiz);
 
-	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
+//	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
 	assert(priv->update_disabled >= 0);
 
 	return RET_OK;
