@@ -43,7 +43,7 @@
 				UseUnicodeResponseFiles="false"
 				AdditionalOptions="/D ROOT_DIR=&quot;$(SolutionDir)&quot;"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\im&quot;;&quot;$(SolutionDir)\..\..\fhw&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;F:\ftk\ftk\src\im\default;&quot;$(SolutionDir)\..\..\fhw&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;$(NOINHERIT)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -108,7 +108,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;&quot;$(SolutionDir)\..\..\im&quot;;&quot;$(SolutionDir)\..\..\fhw&quot;"
+				AdditionalIncludeDirectories="&quot;$(SolutionDir)\..\..\&quot;;&quot;$(SolutionDir)\..\..\compiler\vs2005&quot;;&quot;$(SolutionDir)\..\..\os\windows&quot;;F:\ftk\ftk\src\im\default;&quot;$(SolutionDir)\..\..\fhw&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;$(NOINHERIT)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
