@@ -331,6 +331,11 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			event.widget = thiz;
 			event.type = FTK_EVT_SHOW;
 			ftk_window_realize(thiz);
+			if(priv->focus_widget == NULL)
+			{
+				FtkWidget* focus_widget = ftk_window_find_next_focus(thiz->children, 0);
+				ret = ftk_window_set_focus(thiz, focus_widget);
+			}
 			ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 			
 			break;
