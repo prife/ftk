@@ -397,6 +397,14 @@ static Ret ftk_text_view_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 
 	switch(event->u.key.code)
 	{
+		case FTK_KEY_CHOOSE_IME:
+		{
+			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
+			ftk_input_method_chooser();
+			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
+
+			break;
+		}
 		case FTK_KEY_HOME:
 		{
 			ftk_text_view_set_caret(thiz, 0);
