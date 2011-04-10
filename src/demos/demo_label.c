@@ -1,4 +1,4 @@
-﻿#include "ftk.h"
+#include "ftk.h"
 
 typedef struct _TimerInfo
 {
@@ -62,9 +62,11 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
+#ifdef WIN32	
 	label = ftk_label_create(win, 10, 10, width - 20, 20);
 	ftk_widget_set_text(label, "中文文本");
-	
+#else
+#endif
 	label = ftk_label_create(win, 10, 40, width - 20, 20);
 	ftk_widget_set_text(label, "English Text(center)");
 	ftk_label_set_alignment(label, FTK_ALIGN_CENTER);
@@ -81,8 +83,11 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	label = ftk_label_create(win, 10, height/2, width - 20, 120);
 	ftk_widget_set_gc(label, FTK_WIDGET_INSENSITIVE, &gc);
 	ftk_widget_unset_attr(label, FTK_ATTR_TRANSPARENT);
+#ifdef WIN32	
+	ftk_widget_set_text(label, "The linux mobile development(with background color)");
+#else
 	ftk_widget_set_text(label, "中英文混合多行文本显示:the linux mobile development.带有背景颜色。");
-	
+#endif
 	label = ftk_label_create(win, 50, height/2-30, width, 20);
 	info->label = label;
 	
