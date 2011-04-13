@@ -4,7 +4,7 @@
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief: common used font functions.
  *
- * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
+ * Copyright (c) 2009 - 2011  Li XianJing <xianjimli@hotmail.com>
  *
  * Licensed under the Academic Free License version 2.1
  *
@@ -28,6 +28,7 @@
  * ================================================================
  * 2010-07-18 Li XianJing <xianjimli@hotmail.com> created
  * 2011-04-08 Li XianJing <xianjimli@hotmail.com> add ftk_font_cache.
+ * 2011-04-12 Li XianJing <xianjimli@hotmail.com> add lru replace algo.
  *
  */
 
@@ -153,6 +154,12 @@ const char* ftk_font_calc_str_visible_range(FtkFont* thiz,
 }
 
 //////////////////////////////////////////////////////
+typedef struct _FtkGlyphCache
+{
+	FtkGlyph glyph;
+	unsigned short access_nr;;
+	unsigned short load_time; /*unit: about one minute*/
+}FtkGlyphCache;
 
 typedef struct _PrivInfo
 {
@@ -164,14 +171,25 @@ typedef struct _PrivInfo
 	size_t font_height;
 	size_t max_glyph_nr;
 	size_t one_glyph_size;
+	FtkGlyph* lrc_glyph;
 }PrivInfo;
+
+#define SHRINK_TIME(t) ((t) >> 16)
 
 static FtkGlyph* ftk_font_cache_alloc(FtkFont* thiz)
 {
 	char* end = NULL;
 	FtkGlyph* p = NULL;
 	DECL_PRIV(thiz, priv);
-	
+
+	if(priv->lrc_glyph)
+	{
+		p = priv->lrc_glyph;
+		priv->lrc_glyph = NULL;
+
+		return p;
+	}
+
 	end = (char*)priv->glyphs + priv->max_glyph_nr * priv->one_glyph_size;
 
 	if((char*)priv->free_glyphs < end)
@@ -183,11 +201,60 @@ static FtkGlyph* ftk_font_cache_alloc(FtkFont* thiz)
 	return p;
 }
 
+static Ret ftk_font_cache_remove_lru(FtkFont* thiz, unsigned short older_than)
+{
+	int i = 0;
+	int lru = 0;
+	FtkGlyph* p = NULL;
+	FtkGlyphCache* c = NULL;
+	DECL_PRIV(thiz, priv);
+	unsigned short lru_access_nr = 0xffff;
+	unsigned short now = SHRINK_TIME(ftk_get_relative_time());
+	return_val_if_fail(thiz != NULL, -1);
+
+	lru = priv->glyph_nr;
+	for(i = 0; i < priv->glyph_nr; i++)
+	{
+		p = priv->glyphs_ptr[i];
+		c = (FtkGlyphCache*)p;
+		if((now - c->load_time) < older_than)
+		{
+			continue;
+		}
+
+		if(c->access_nr < lru_access_nr)
+		{
+			lru = i;
+			lru_access_nr = c->access_nr;
+		}
+	}
+
+	if(lru == priv->glyph_nr)
+	{
+		return ftk_font_cache_remove_lru(thiz, older_than >> 1);
+	}
+
+	i = lru;
+	priv->lrc_glyph = priv->glyphs_ptr[i];
+	for(; (i + 1) < priv->glyph_nr; i++)
+	{
+		priv->glyphs_ptr[i] = priv->glyphs_ptr[i+1];
+	}
+	priv->glyph_nr--;
+	c = (FtkGlyphCache*)priv->lrc_glyph;
+	
+	ftk_logd("%s: remove %d access_nr=%d load_time =%d\n", 
+		__func__, lru, c->access_nr, c->load_time);
+
+	return RET_OK;
+}
+
 static Ret ftk_font_cache_add(FtkFont* thiz, FtkGlyph* glyph)
 {
 	int i = 0;
 	int pos = 0;
 	FtkGlyph* p = NULL;
+	FtkGlyphCache* c = NULL;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL, -1);
 
@@ -218,17 +285,19 @@ static Ret ftk_font_cache_add(FtkFont* thiz, FtkGlyph* glyph)
 	}
 	else
 	{
-		if(pos == priv->glyph_nr)
-		{
-			pos = priv->glyph_nr - 1;
-		}
+		return RET_FAIL;
 	}
 
 	p = priv->glyphs_ptr[pos];
+	
 	*p = *glyph;
-	p->data = (unsigned char*)p + sizeof(FtkGlyph);
-
+	p->data = (unsigned char*)p + sizeof(FtkGlyphCache);
 	memcpy(p->data, glyph->data, glyph->w * glyph->h);
+
+	c = (FtkGlyphCache*)p;
+	c->access_nr++;
+	c->load_time = SHRINK_TIME(ftk_get_relative_time());
+	
 	ftk_logd("%s add %p at %d\n", __func__, p->code, pos);
 
 	return RET_OK;
@@ -241,6 +310,7 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 	int high   = 0;
 	int result = 0;
 	FtkGlyph* p = NULL;
+	FtkGlyphCache* c = NULL;
 	Ret ret =  RET_FAIL;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL, -1);
@@ -254,7 +324,9 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 		if(result == 0)
 		{
 			*glyph = *p;
-			//ftk_logd("%s find %p at %d\n", __func__, p->code, mid);
+			c = (FtkGlyphCache*)p;
+			c->access_nr++;
+			//ftk_logd("%s find %p at %d accces_nr=%d\n", __func__, p->code, mid, c->access_nr);
 			return RET_OK;
 		}
 		else if(result < 0)
@@ -269,17 +341,26 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 
 	if((ret = ftk_font_lookup(priv->font, code, glyph)) == RET_OK)
 	{
-		if(ftk_font_cache_add(thiz, glyph) == RET_OK)
+		if(ftk_font_cache_add(thiz, glyph) != RET_OK)
 		{
+			if(ftk_font_cache_remove_lru(thiz, 64) == RET_OK)
+			{
+				ret = ftk_font_cache_add(thiz, glyph);
+				assert(ret == RET_OK);
+			}
+		}
 //for test
 #if 0
-			FtkGlyph g = {0};
-			assert(ftk_font_cache_lookup(thiz, code, &g) == RET_OK);
-			assert(g.code == code);
-			assert(memcmp(&g, glyph, sizeof(g) - 4) == 0);
-			assert(memcmp(g.data, glyph->data, g.w * g.h) == 0);
+		FtkGlyph g = {0};
+		assert(ftk_font_cache_lookup(thiz, code, &g) == RET_OK);
+		assert(g.code == code);
+		assert(memcmp(&g, glyph, sizeof(g) - 4) == 0);
+		assert(memcmp(g.data, glyph->data, g.w * g.h) == 0);
 #endif			
-		}
+	}
+	else
+	{
+		assert(!"not found");
 	}
 
 	return RET_OK;
@@ -291,7 +372,6 @@ static int      ftk_font_cache_height(FtkFont* thiz)
 
 		return ftk_font_height(priv->font);
 }
-
 
 static void		ftk_font_cache_destroy(FtkFont* thiz)
 {
@@ -312,8 +392,7 @@ FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
 	size_t font_height = ftk_font_height(font);
 	return_val_if_fail(font != NULL && font_height > 0, NULL);
 
-	thiz = FTK_ZALLOC(sizeof(FtkFont) + sizeof(PrivInfo));
-	if(thiz != NULL)
+	if((thiz = FTK_ZALLOC(sizeof(FtkFont) + sizeof(PrivInfo))) != NULL)
 	{
 		DECL_PRIV(thiz, priv);
 
@@ -328,10 +407,10 @@ FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
 		priv->glyph_nr = 0;
 		priv->font_height = font_height;
 		priv->max_glyph_nr = max_glyph_nr;
-		priv->one_glyph_size = sizeof(FtkGlyph) + font_height * font_height ;
+		priv->one_glyph_size = sizeof(FtkGlyphCache) + font_height * font_height ;
 
 		priv->glyphs = FTK_ZALLOC(max_glyph_nr * priv->one_glyph_size);
-		priv->glyphs_ptr = FTK_ZALLOC(max_glyph_nr * sizeof(FtkGlyph*));
+		priv->glyphs_ptr = FTK_ZALLOC(max_glyph_nr * sizeof(FtkGlyphCache*));
 		priv->free_glyphs = priv->glyphs;
 		
 		ftk_logd("%s: max_glyph_nr=%d memsize=%d\n", __func__, 
