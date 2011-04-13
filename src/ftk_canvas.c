@@ -321,7 +321,7 @@ Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int 
 	return RET_OK;
 }
 
-Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, int len, int vcenter)
+Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len, int vcenter)
 {
 	int i = 0;
 	int j = 0;
@@ -403,16 +403,17 @@ Ret ftk_canvas_draw_string_ex(FtkCanvas* thiz, int x, int y, const char* str, in
 	return RET_OK;
 }
 
-Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len)
-{
-	return ftk_canvas_draw_string_ex(thiz, x, y, str, len, 0);
-}
-
-Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int w, int h, int xoffset, int yoffset)
+Ret ftk_canvas_draw_bitmap_normal(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* s, FtkRect* d)
 {
 	int i = 0;
 	int j = 0;
 	int k = 0;
+	int x = s->x;
+	int y = s->y;
+	int w = s->width;
+	int h = s->height;
+	int xoffset = d->x;
+	int yoffset = d->y;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
 	FtkColor* psrc = NULL;
@@ -478,9 +479,19 @@ Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, int x, int y, int
 	return RET_OK;
 }
 
-Ret ftk_canvas_draw_bitmap_normal(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* src_r, int xoffset, int yoffset)
+Ret ftk_canvas_draw_bitmap_simple(FtkCanvas* thiz, FtkBitmap* b, int x, int y, int w, int h, int ox, int oy)
 {
-	return ftk_canvas_draw_bitmap(thiz, bitmap, src_r->x, src_r->y, src_r->width, src_r->height, xoffset, yoffset);
+	FtkRect src_r;
+	FtkRect dst_r;
+
+	src_r.x = x;
+	src_r.y = y;
+	dst_r.x = ox;
+	dst_r.y = oy;
+	src_r.width = dst_r.width = w;
+	src_r.height = dst_r.height = h;
+
+	return ftk_canvas_draw_bitmap_normal(thiz, b, &src_r, &dst_r);
 }
 
 FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz)
@@ -541,10 +552,10 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* canvas, int x, int 
 	int tile_h = FTK_MIN(bh, h) >> 1;
 	
 	gc.mask = FTK_GC_FG;
-	ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, tile_w, tile_h, x, y);
-	ftk_canvas_draw_bitmap(canvas, bitmap, bw - tile_w, 0, tile_w, tile_h, x + w - tile_w, y);
-	ftk_canvas_draw_bitmap(canvas, bitmap, 0, bh - tile_h, tile_w, tile_h, x, y + h - tile_h);
-	ftk_canvas_draw_bitmap(canvas, bitmap, bw - tile_w, bh - tile_h, tile_w, tile_h, x + w - tile_w, y + h - tile_h);
+	ftk_canvas_draw_bitmap_simple(canvas, bitmap, 0, 0, tile_w, tile_h, x, y);
+	ftk_canvas_draw_bitmap_simple(canvas, bitmap, bw - tile_w, 0, tile_w, tile_h, x + w - tile_w, y);
+	ftk_canvas_draw_bitmap_simple(canvas, bitmap, 0, bh - tile_h, tile_w, tile_h, x, y + h - tile_h);
+	ftk_canvas_draw_bitmap_simple(canvas, bitmap, bw - tile_w, bh - tile_h, tile_w, tile_h, x + w - tile_w, y + h - tile_h);
 
 	if(bw < w)
 	{
@@ -624,7 +635,7 @@ static Ret ftk_canvas_fill_background_normal(FtkCanvas* canvas, int x, int y, in
 	w = FTK_MIN(bw, w);
 	h = FTK_MIN(bh, h);
 
-	return ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, w, h, x, y);
+	return ftk_canvas_draw_bitmap_simple(canvas, bitmap, 0, 0, w, h, x, y);
 }
 
 static Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int w, int h, FtkBitmap* bitmap)
@@ -646,7 +657,7 @@ static Ret ftk_canvas_fill_background_tile(FtkCanvas* canvas, int x, int y, int 
 			int draw_w = (dx + bw) < w ? bw : w - dx;
 			int draw_h = (dy + bh) < h ? bh : h - dy;
 
-			ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, draw_w, draw_h, x + dx, y + dy);
+			ftk_canvas_draw_bitmap_simple(canvas, bitmap, 0, 0, draw_w, draw_h, x + dx, y + dy);
 		}
 	}
 	
@@ -665,7 +676,7 @@ static Ret ftk_canvas_fill_background_center(FtkCanvas* canvas, int x, int y, in
 	w = FTK_MIN(bw, w);
 	h = FTK_MIN(bh, h);
 
-	return ftk_canvas_draw_bitmap(canvas, bitmap, bx, by, w, h, ox, oy);
+	return ftk_canvas_draw_bitmap_simple(canvas, bitmap, bx, by, w, h, ox, oy);
 }
 
 Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h)
@@ -792,7 +803,7 @@ Ret ftk_canvas_draw_bitmap_ex(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* src_r
 
 	if(dst_r->width == src_r->width && dst_r->height == src_r->height)
 	{
-		ret = ftk_canvas_draw_bitmap_normal(thiz, bitmap, src_r, dst_r->x, dst_r->y);
+		ret = ftk_canvas_draw_bitmap_normal(thiz, bitmap, src_r, dst_r);
 	}
 	else
 	{

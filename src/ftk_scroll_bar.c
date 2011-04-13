@@ -187,12 +187,12 @@ static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
 		dy += y;
 		half_size = bitmap_height/2;
 		
-		ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, 0, bitmap_width, half_size, dx, dy);
+		ftk_canvas_draw_bitmap_simple(canvas, priv->bitmap, 0, 0, bitmap_width, half_size, dx, dy);
 		for(i = 0; i < fill_size; i++)
 		{
-			ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, half_size, bitmap_width, 1, dx, dy + i + half_size);
+			ftk_canvas_draw_bitmap_simple(canvas, priv->bitmap, 0, half_size, bitmap_width, 1, dx, dy + i + half_size);
 		}
-		ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, half_size, bitmap_width, half_size, dx, dy + half_size + fill_size);
+		ftk_canvas_draw_bitmap_simple(canvas, priv->bitmap, 0, half_size, bitmap_width, half_size, dx, dy + half_size + fill_size);
 	}
 	else
 	{
@@ -209,12 +209,12 @@ static Ret ftk_scroll_bar_on_paint(FtkWidget* thiz)
 		dx += x;
 		half_size = bitmap_width/2;
 		
-		ftk_canvas_draw_bitmap(canvas, priv->bitmap, 0, 0, half_size, bitmap_height, dx, dy);
+		ftk_canvas_draw_bitmap_simple(canvas, priv->bitmap, 0, 0, half_size, bitmap_height, dx, dy);
 		for(i = 0; i < fill_size; i++)
 		{
-			ftk_canvas_draw_bitmap(canvas, priv->bitmap, half_size, 0, 1, bitmap_height, dx + i + half_size, dy);
+			ftk_canvas_draw_bitmap_simple(canvas, priv->bitmap, half_size, 0, 1, bitmap_height, dx + i + half_size, dy);
 		}
-		ftk_canvas_draw_bitmap(canvas, priv->bitmap, half_size, 0, half_size, bitmap_height, dx + fill_size + half_size, dy);
+		ftk_canvas_draw_bitmap_simple(canvas, priv->bitmap, half_size, 0, half_size, bitmap_height, dx + fill_size + half_size, dy);
 	}
 
 	FTK_END_PAINT();

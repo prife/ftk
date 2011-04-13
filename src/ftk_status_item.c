@@ -92,7 +92,7 @@ static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 	{
 		int dx = FTK_H_MARGIN;
 		int dy = height/2;
-		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
 	}
 
 	FTK_END_PAINT();

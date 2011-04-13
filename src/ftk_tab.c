@@ -216,7 +216,7 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 	if(page->icon != NULL)
 	{
 		oy = y + FTK_HALF(FTK_TAB_HANDLE_HEIGHT - ftk_bitmap_height(page->icon));
-		ftk_canvas_draw_bitmap(canvas, page->icon, 0, 0, 
+		ftk_canvas_draw_bitmap_simple(canvas, page->icon, 0, 0, 
 			ftk_bitmap_width(page->icon), ftk_bitmap_height(page->icon), ox, oy);
 
 		w -= ftk_bitmap_width(page->icon);
@@ -233,7 +233,7 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			ox = ox + FTK_HALF(w - line.extent); 
-			ftk_canvas_draw_string_ex(canvas, ox, oy, text, -1, 1);
+			ftk_canvas_draw_string(canvas, ox, oy, text, -1, 1);
 		}
 	}
 

@@ -113,7 +113,7 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			xoffset = FTK_HALF(width - line.extent); 
-			ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, -1, 1);
+			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset, text, -1, 1);
 		}
 	}
 

@@ -229,7 +229,7 @@ static Ret  ftk_dialog_paint_title(FtkWidget* thiz, FtkCanvas* canvas, int x, in
 		const char* text = ftk_widget_get_text(thiz);
 		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, width - xoffset - FTK_DIALOG_BORDER);
 		
-		ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, end - text, 1);
+		ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset, text, end - text, 1);
 	}
 
 	return RET_OK;

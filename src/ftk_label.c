@@ -76,7 +76,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 				xoffset = x + line.xoffset;
 			}
 
-			ftk_canvas_draw_string(canvas, xoffset, y, line.text, line.len);
+			ftk_canvas_draw_string(canvas, xoffset, y, line.text, line.len, 0);
 		}
 	}
 

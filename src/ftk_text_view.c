@@ -663,7 +663,7 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 			dy += TEXT_VIEW_V_MARGIN;
 			if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK && line.len > 0)
 			{
-				ftk_canvas_draw_string_ex(canvas, dx, dy+font_height/2, line.text, line.len, 1);
+				ftk_canvas_draw_string(canvas, dx, dy+font_height/2, line.text, line.len, 1);
 			}
 			dy += font_height;
 		}

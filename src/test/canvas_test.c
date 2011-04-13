@@ -64,11 +64,11 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 			ftk_canvas_draw_hline(thiz, 0, i, 320);
 		}
 		FtkBitmap* bitmap = ftk_bitmap_create(100, 100, color);
-		ftk_canvas_draw_bitmap(thiz, bitmap, 0, 0, 100, 100, 100, 100);
-		ftk_canvas_draw_string(thiz, 0, 240, " Jim is a Programmer.", -1);
+		ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, 0, 100, 100, 100, 100);
+		ftk_canvas_draw_string(thiz, 0, 240, " Jim is a Programmer.", -1, 0);
 		gc.fg.b = 0xff;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_string(thiz, 0, 220, "李先静是一个程序员", -1);
+		ftk_canvas_draw_string(thiz, 0, 220, "李先静是一个程序员", -1, 0);
 	
 		unsigned int line_mask = 0xaaaaaaaa;
 		gc.line_mask = line_mask;

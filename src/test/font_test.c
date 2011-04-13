@@ -116,10 +116,14 @@ int main(int argc, char* argv[])
 	}
 
 	font = ftk_font_cache_create(font, 512);
-	for(i = 0; i < 1000; i ++)
+
+	for(n = 10; n > 0; n--)
 	{
-		c = rand() % 1000 + 0x6129;
-		assert(ftk_font_lookup(font, c, &glyph) == RET_OK);
+		for(i = 0; i < 3000; i ++)
+		{
+			c = rand() % 1000 + 0x6129;
+			assert(ftk_font_lookup(font, c, &glyph) == RET_OK);
+		}
 	}
 
 	assert(ftk_font_lookup(font, '.', &glyph) == RET_OK);

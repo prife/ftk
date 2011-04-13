@@ -99,7 +99,7 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 		int dy = FTK_HALF(height);
 	
 		assert(fh < height && fw < width);
-		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, text, -1, 1);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, text, -1, 1);
 	}
 	
 	FTK_END_PAINT();

@@ -76,7 +76,6 @@
 #include "lua_ftk_image.h"
 #include "lua_ftk_popup_menu.h"
 #include "lua_ftk_mmap.h"
-#include "lua_ftk_canvas.h"
 #include "lua_ftk_clipboard.h"
 #include "lua_ftk_display.h"
 #include "lua_ftk_icon_cache.h"
@@ -128,7 +127,6 @@ int ftk_lua_init(lua_State *L)
 	tolua_ftk_text_view_init(L);
 	tolua_ftk_wait_box_init(L);
 	tolua_ftk_popup_menu_init(L);
-	tolua_ftk_canvas_init(L);
 	tolua_ftk_clipboard_init(L);
 	tolua_ftk_display_init(L);
 	tolua_ftk_icon_cache_init(L);

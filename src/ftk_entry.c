@@ -408,7 +408,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
-			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len);
+			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len, 0);
 		}
 	}
 

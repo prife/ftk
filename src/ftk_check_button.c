@@ -178,7 +178,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 
 	dy = (height - icon_h) / 2;
 	dx = priv->icon_at_right ? width - icon_w : 0;
-	ftk_canvas_draw_bitmap(canvas, bitmap, 0, 0, icon_w, icon_h, x + dx, y + dy);
+	ftk_canvas_draw_bitmap_simple(canvas, bitmap, 0, 0, icon_w, icon_h, x + dx, y + dy);
 	ftk_bitmap_unref(bitmap);
 
 	if(ftk_widget_get_text(thiz) != NULL)
@@ -187,7 +187,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 		dx = priv->icon_at_right ? 2 : icon_w;
 		
 		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-		ftk_canvas_draw_string_ex(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
 	}
 
 	FTK_END_PAINT();

@@ -93,7 +93,7 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			xoffset = FTK_HALF(width - line.extent); 
-			ftk_canvas_draw_string_ex(canvas, x + xoffset, y + yoffset, text, -1, 1);
+			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset, text, -1, 1);
 		}
 	}
 
@@ -201,7 +201,7 @@ static Ret ftk_progress_bar_on_paint_interactive(FtkWidget* thiz)
 		ox = x + width - ftk_bitmap_width(priv->cursor);
 	}
 
-	ftk_canvas_draw_bitmap(canvas, priv->cursor, 0, 0, ftk_bitmap_width(priv->cursor), 
+	ftk_canvas_draw_bitmap_simple(canvas, priv->cursor, 0, 0, ftk_bitmap_width(priv->cursor), 
 		ftk_bitmap_height(priv->cursor), ox, oy);
 	
 	FTK_END_PAINT();

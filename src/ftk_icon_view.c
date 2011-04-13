@@ -304,7 +304,7 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 						FTK_BG_CENTER, dx, dy, priv->item_width, icon_height);
 				}
 
-				ftk_canvas_draw_string_ex(canvas, dx + FTK_HALF(priv->item_width - fw), 
+				ftk_canvas_draw_string(canvas, dx + FTK_HALF(priv->item_width - fw), 
 					dy + icon_height + FTK_HALF(priv->item_height - icon_height), text, -1, 1);	
 			}
 
