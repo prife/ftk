@@ -157,7 +157,7 @@ const char* ftk_font_calc_str_visible_range(FtkFont* thiz,
 typedef struct _FtkGlyphCache
 {
 	FtkGlyph glyph;
-	unsigned short access_nr;;
+	unsigned short access_nr;
 	unsigned short load_time; /*unit: about one minute*/
 }FtkGlyphCache;
 
