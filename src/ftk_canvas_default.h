@@ -1,7 +1,7 @@
 /*
- * File: ftk_cairo.c
+ * File: ftk_canvas_default.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
- * Brief:   cairo wrapper
+ * Brief:   default drawing kit.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,35 +25,20 @@
 /*
  * History:
  * ================================================================
- * 2009-12-18 Li XianJing <xianjimli@hotmail.com> created
+ * 2011-04-15 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#include "ftk_cairo.h"
 
-cairo_surface_t* ftk_cairo_surface_create(FtkWidget* window)
-{
-	FtkBitmap* bitmap = NULL;
-	FtkCanvas* canvas = NULL;
-	return_val_if_fail(window != NULL, NULL);
-	canvas = ftk_widget_canvas(window);
-	ftk_canvas_lock_buffer(canvas, &bitmap);
-	return_val_if_fail(bitmap != NULL, NULL);
-	return ftk_cairo_surface_create_with_bitmap(bitmap);
-}
+#ifndef FTK_CANVAS_DEFAULT_H
+#define FTK_CANVAS_DEFAULT_H
 
-cairo_surface_t* ftk_cairo_surface_create_with_bitmap(FtkBitmap* bitmap)
-{
-	int width = 0;
-	int height = 0;
-	FtkColor*  data   = NULL;
-	cairo_surface_t*  surface = NULL;
-	return_val_if_fail(bitmap != NULL, NULL);
+#include "ftk_canvas.h"
 
-	data = ftk_bitmap_bits(bitmap);
-	width = ftk_bitmap_width(bitmap);
-	height = ftk_bitmap_height(bitmap);
+FTK_BEGIN_DECLS
 
-	surface = cairo_image_surface_create_for_data(data, CAIRO_FORMAT_ARGB32, width, height, width * 4);
+FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color);
 
-	return surface;
-}
+FTK_END_DECLS
+
+#endif/*FTK_CANVAS_DEFAULT_H*/
+

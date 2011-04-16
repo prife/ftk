@@ -55,6 +55,7 @@ typedef struct _FtkGc
 	FtkFont*   font;
 	FtkBitmap* bitmap;
 	unsigned char alpha;
+	unsigned char unused[3];
 	unsigned int line_mask;
 }FtkGc;
 

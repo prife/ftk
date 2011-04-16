@@ -210,8 +210,8 @@ static Ret  ftk_menu_panel_on_paint(FtkWidget* thiz)
 	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_MENU_PANEL, ftk_widget_state(thiz));
 	ftk_canvas_set_gc(canvas, &gc);
-	ftk_canvas_draw_rect(canvas, x, y, width, height, 0);
-	ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height-2, 0);
+	ftk_canvas_draw_rect(canvas, x, y, width, height, 0, 0);
+	ftk_canvas_draw_rect(canvas, x+1, y+1, width-2, height-2, 0, 0);
 
 	/*draw grid*/
 	gc.fg = ftk_widget_get_gc(thiz)->fg;

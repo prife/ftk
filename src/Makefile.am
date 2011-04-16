@@ -43,7 +43,7 @@ LINEBREAK= \
 OPTIONAL_FUNCS=ftk_file_system_posix.c ftk_file_system.c ftk_file_browser.c 
 
 libftk_la_SOURCES=\
-	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
+	ftk_canvas_default.c ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	ftk_label.c           ftk_source_timer.c \
 	ftk_bitmap.c          ftk_main_loop.c     ftk_util.c \
 	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
@@ -175,7 +175,7 @@ ftk_HEADERS=\
 	ftk_bitmap_factory.h      ftk_menu_item.h\
 	ftk_bitmap.h              ftk_menu_panel.h\
 	ftk_button.h              ftk_mmap.h\
-	ftk_canvas.h              ftk_platform.h\
+	ftk_canvas.h              ftk_platform.h ftk_canvas_default.h \
 	ftk_check_button.h        ftk_progress_bar.h\
 	ftk_clipboard.h           ftk_radio_group.h\
 	ftk_dialog.h              ftk_scroll_bar.h\

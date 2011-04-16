@@ -145,24 +145,35 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 	return RET_OK;
 }
-	
+
+static Ret  ftk_dialog_clear_alpha(FtkCanvas* canvas, int x, int y)
+{
+	FtkColor c = {0};
+
+	ftk_canvas_get_pixel(canvas, x, y, &c);
+	c.a ;
+	ftk_canvas_set_pixel(canvas, x, y, &c);
+
+	return RET_OK;
+}
+
 static Ret  ftk_dialog_change_alpha(FtkWidget* thiz, FtkCanvas* canvas, int x, int y, int width, int height)
 {
-	ftk_canvas_get_pixel(canvas, x, y)->a = 0;
-	ftk_canvas_get_pixel(canvas, x+1, y)->a = 0;
-	ftk_canvas_get_pixel(canvas, x, y+1)->a = 0;
+	ftk_dialog_clear_alpha(canvas, x, y);
+	ftk_dialog_clear_alpha(canvas, x+1, y);
+	ftk_dialog_clear_alpha(canvas, x, y+1);
 	
-	ftk_canvas_get_pixel(canvas, x+width-1, y)->a   = 0;
-	ftk_canvas_get_pixel(canvas, x+width-2, y)->a   = 0;
-	ftk_canvas_get_pixel(canvas, x+width-1, y+1)->a = 0;
+	ftk_dialog_clear_alpha(canvas, x+width-1, y)  ;
+	ftk_dialog_clear_alpha(canvas, x+width-2, y)  ;
+	ftk_dialog_clear_alpha(canvas, x+width-1, y+1);
 	
-	ftk_canvas_get_pixel(canvas, x, y+height-1)->a   = 0;
-	ftk_canvas_get_pixel(canvas, x+1, y+height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, x, y+height-2)->a   = 0;
+	ftk_dialog_clear_alpha(canvas, x, y+height-1)  ;
+	ftk_dialog_clear_alpha(canvas, x+1, y+height-1);
+	ftk_dialog_clear_alpha(canvas, x, y+height-2)  ;
 	
-	ftk_canvas_get_pixel(canvas, x+width-1, y+height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, x+width-2, y+height-1)->a = 0;
-	ftk_canvas_get_pixel(canvas, x+width-1, y+height-2)->a = 0;
+	ftk_dialog_clear_alpha(canvas, x+width-1, y+height-1);
+	ftk_dialog_clear_alpha(canvas, x+width-2, y+height-1);
+	ftk_dialog_clear_alpha(canvas, x+width-1, y+height-2);
 
 	return RET_OK;
 }

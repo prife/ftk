@@ -29,7 +29,22 @@
  *
  */
 #include "ftk.h"
+#include "ftk_canvas_default.h"
 
+static void show_canvas(FtkDisplay* display, FtkCanvas* canvas)
+{
+	FtkBitmap* bitmap = NULL;
+	FtkRect rect = {.x = 0, .y=0, .width=0, .height=0};
+	rect.width = ftk_display_width(display);
+	rect.height = ftk_display_height(display);
+
+	ftk_canvas_lock_buffer(canvas, &bitmap);
+	ftk_display_update(display, bitmap, &rect, 0, 0);
+	ftk_canvas_unlock_buffer(canvas);
+
+	return;
+}
+#if 1
 void test_misc(FtkDisplay* display, FtkFont* font)
 {
 	if(display != NULL)
@@ -48,8 +63,8 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 		gc.fg.b = 0xff;
 		gc.font = font;
 
-		FtkCanvas* thiz = ftk_canvas_create(rect.width, rect.height, color);
-		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+		FtkCanvas* thiz = ftk_canvas_create(rect.width, rect.height, &color);
+		show_canvas(display, thiz);
 		for(i = 0; i < ftk_display_height(display); i++)
 		{
 			if(gc.fg.r < 0xff)
@@ -74,7 +89,7 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 		gc.line_mask = line_mask;
 		gc.mask = FTK_GC_LINE_MASK;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+		show_canvas(display, thiz);
 
 		assert(ftk_canvas_font_height(thiz) == 16);
 		extent = ftk_canvas_get_extent(thiz, "李先静", -1);
@@ -135,7 +150,7 @@ void test_draw_point(FtkDisplay* display)
 		ftk_canvas_draw_point(thiz, i, 30);
 	}
 
-	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	show_canvas(display, thiz);
 	
 	ftk_canvas_destroy(thiz);
 
@@ -152,7 +167,7 @@ void test_draw_vline(FtkDisplay* display)
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 
 	rect.width = width;
 	rect.height = height;
@@ -189,7 +204,7 @@ void test_draw_vline(FtkDisplay* display)
 		ftk_canvas_draw_vline(thiz, i, 60, 20);
 	}
 
-	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	show_canvas(display, thiz);
 	
 	ftk_canvas_destroy(thiz);
 	sleep(3);
@@ -205,7 +220,7 @@ void test_draw_hline(FtkDisplay* display)
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 
 	rect.width = width;
 	rect.height = height;
@@ -242,7 +257,7 @@ void test_draw_hline(FtkDisplay* display)
 		ftk_canvas_draw_hline(thiz, 60, i, 20);
 	}
 
-	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	show_canvas(display, thiz);
 	
 	ftk_canvas_destroy(thiz);
 
@@ -314,7 +329,7 @@ void test_alpha(FtkDisplay* display)
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 
 	rect.width = width;
 	rect.height = height;
@@ -327,14 +342,14 @@ void test_alpha(FtkDisplay* display)
 		color.g = 0;
 		gc.fg = color;
 		ftk_canvas_reset_gc(thiz, &gc);
-		ftk_canvas_draw_rect(thiz, 0, 0, width, height, 1);
+		ftk_canvas_draw_rect(thiz, 0, 0, width, height, 0, 1);
 		
 		color.a = 0xff - i;
 		color.g = 0xff;
 		gc.fg = color;
 		ftk_canvas_reset_gc(thiz, &gc);
-		ftk_canvas_draw_rect(thiz, 0, 0, width, height, 1);
-		ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+		ftk_canvas_draw_rect(thiz, 0, 0, width, height, 0, 1);
+		show_canvas(display, thiz);
 		usleep(200000);
 	}
 	
@@ -352,15 +367,17 @@ void test_put_get_pixel(FtkDisplay* display)
 	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 
 	for(i = 0; i < height; i++)
 	{
 		for(j = 0; j < width; j++)
 		{
+			FtkColor c = {0};
 			FtkColor* colorp = NULL;
-			assert(ftk_canvas_put_pixel(thiz, j, i, color) == RET_OK);
-			assert((colorp = ftk_canvas_get_pixel(thiz, j, i)) != NULL);
+			assert(ftk_canvas_set_pixel(thiz, j, i, &color) == RET_OK);
+			assert(ftk_canvas_get_pixel(thiz, j, i, &c) == RET_OK);
+			colorp = &c;
 			assert(colorp->r == color.r);
 			assert(colorp->g == color.g);
 			assert(colorp->b == color.b);
@@ -375,14 +392,12 @@ void test_put_get_pixel(FtkDisplay* display)
 
 void test_font(FtkDisplay* display, FtkFont* font)
 {
-	int i = 0;
-	int extent1 = 0;
 	int extent2 = 0;
 	FtkGc gc = {.mask = FTK_GC_FONT};
 	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 	const char* str = "隐式声明与内建函数";
 	const char* other_side = NULL;
 	
@@ -415,12 +430,7 @@ void test_font(FtkDisplay* display, FtkFont* font)
 
 	str = "Single line editor, that means you can input a one line only.";
 	
-	for(i = 0; str[i]; i++)
-	{
-		extent1 += ftk_canvas_get_char_extent(thiz, str[i]);
-	}
 	extent2 = ftk_canvas_get_extent(thiz, str, -1);
-	assert(extent1 == extent2);
 
 	ftk_canvas_destroy(thiz);
 	sleep(3);
@@ -434,7 +444,7 @@ static void test_fill_bg(FtkDisplay* display)
 	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 	FtkBitmap* bitmap = ftk_theme_load_image(ftk_default_theme(), "btn_default_pressed.9.png");
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 10, 10, 100, 60);
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 120, 10, 40, 60);
@@ -444,7 +454,7 @@ static void test_fill_bg(FtkDisplay* display)
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 80, 80, 60, 20);
 	rect.width = width;
 	rect.height = height;
-	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);
+	show_canvas(display, thiz);
 	ftk_canvas_destroy(thiz);
 
 	sleep(3);
@@ -460,7 +470,7 @@ static void test_draw_rect(FtkDisplay* display)
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
 	FtkGc gc = {.mask = FTK_GC_FG};
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 	gc.fg.a = 0xff;
 
 	gc.fg.r = 0xff;
@@ -468,7 +478,7 @@ static void test_draw_rect(FtkDisplay* display)
 	{
 		gc.fg.r -= 0x10;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_rect(thiz, width * i/8, 0, width/8 - 1, height/8 - 1, 1);
+		ftk_canvas_draw_rect(thiz, width * i/8, 0, width/8 - 1, height/8 - 1, 0, 1);
 	}
 	
 	gc.fg.r = 0xff;
@@ -477,7 +487,7 @@ static void test_draw_rect(FtkDisplay* display)
 		gc.fg.r -= 0x10;
 		gc.fg.b += 0x10;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_rect(thiz, width * i/8, height/8, width/8 - 1, height/8 - 1, 0);
+		ftk_canvas_draw_rect(thiz, width * i/8, height/8, width/8 - 1, height/8 - 1, 0, 0);
 	}
 	
 	gc.fg.r = 0xff;
@@ -485,7 +495,7 @@ static void test_draw_rect(FtkDisplay* display)
 	{
 		gc.fg.r -= 0x10;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_round_rect(thiz, width * i/8, height/4, width/8 - 1, height/8 - 1, 1);
+		ftk_canvas_draw_rect(thiz, width * i/8, height/4, width/8 - 1, height/8 - 1, 1, 1);
 	}
 	
 	gc.fg.r = 0xff;
@@ -494,11 +504,11 @@ static void test_draw_rect(FtkDisplay* display)
 		gc.fg.r -= 0x10;
 		gc.fg.b += 0x10;
 		ftk_canvas_set_gc(thiz, &gc);
-		ftk_canvas_draw_round_rect(thiz, width * i/8, 3*height/8, width/8 - 1, height/8 - 1, 0);
+		ftk_canvas_draw_rect(thiz, width * i/8, 3*height/8, width/8 - 1, height/8 - 1, 1, 0);
 	}
 	rect.width = width;
 	rect.height = height;
-	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 40);
+	show_canvas(display, thiz);
 	ftk_canvas_destroy(thiz);
 
 	sleep(3);
@@ -538,4 +548,9 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
-
+#else
+int main(int argc, char* argv[])
+{
+	return 0;
+}
+#endif

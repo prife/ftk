@@ -109,12 +109,12 @@ static Ret ftk_animation_trigger_default_ensure_canvas(FtkAnimationTrigger* thiz
 
 	if(priv->old_window == NULL)
 	{
-		priv->old_window = ftk_canvas_create(w, h, bg);
+		priv->old_window = ftk_canvas_create(w, h, &bg);
 	}
 	
 	if(priv->new_window == NULL)
 	{
-		priv->new_window = ftk_canvas_create(w, h, bg);
+		priv->new_window = ftk_canvas_create(w, h, &bg);
 	}
 
 	return priv->old_window && priv->new_window ? RET_OK : RET_FAIL;
@@ -125,6 +125,7 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
 	size_t i = 0;
 	DECL_PRIV(thiz, priv);
 	const char* hint = NULL;
+	FtkBitmap* bitmap = NULL;
 	FtkBitmap* old_bitmap = NULL;
 	FtkBitmap* new_bitmap = NULL;
 	FtkCanvas* save_canvas = NULL;
@@ -146,7 +147,9 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
 		hint = ftk_window_get_animation_hint(evt->old_window);
 		if(evt->new_window == NULL)
 		{
-			ftk_bitmap_clear(ftk_canvas_bitmap(priv->new_window), bg);
+			ftk_canvas_lock_buffer(priv->new_window, &bitmap);
+			ftk_bitmap_clear(bitmap, bg);
+			ftk_canvas_unlock_buffer(priv->new_window);
 		}
 	}
 
@@ -193,8 +196,8 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
     	ftk_window_enable_update(evt->new_window);
   	}
 
-	old_bitmap = ftk_canvas_bitmap(priv->old_window);
-	new_bitmap = ftk_canvas_bitmap(priv->new_window);
+	ftk_canvas_lock_buffer(priv->old_window, &old_bitmap);
+	ftk_canvas_lock_buffer(priv->new_window, &new_bitmap);
 
 	for(i = 0; i < FTK_MAX_ANIMATION_NR; i++)
 	{
@@ -204,7 +207,10 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
 			ftk_animation_run(anim, old_bitmap, new_bitmap, &old_win_rect, &new_win_rect);
 		}
 	}
-	
+
+	ftk_canvas_unlock_buffer(priv->old_window);
+	ftk_canvas_unlock_buffer(priv->new_window);
+
 	ftk_logd("%s: type=%d %s - %s\n", __func__, evt->type, 
 		evt->old_window != NULL ? ftk_widget_get_text(evt->old_window) : "null",
 		evt->new_window != NULL ? ftk_widget_get_text(evt->new_window) : "null");

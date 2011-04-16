@@ -64,7 +64,7 @@ static Ret   ftk_animation_expand_step_base_left(FtkAnimation* thiz, float perce
 			dst_r.width = r.width = r.width - offset;
 		}
 
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -73,7 +73,7 @@ static Ret   ftk_animation_expand_step_base_left(FtkAnimation* thiz, float perce
 	{
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
 		dst_r = r;
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
 	}
 
 	return RET_OK;
@@ -96,7 +96,7 @@ static Ret   ftk_animation_expand_step_base_top(FtkAnimation* thiz, float percen
 			dst_r.height = r.height = r.height - offset;
 		}
 
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -105,7 +105,7 @@ static Ret   ftk_animation_expand_step_base_top(FtkAnimation* thiz, float percen
 	{
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
 		dst_r = r;
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
 	}
 
 	return RET_OK;
@@ -128,7 +128,7 @@ static Ret   ftk_animation_expand_step_base_right(FtkAnimation* thiz, float perc
 			dst_r.width = r.width = r.width - offset;
 		}
 
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -138,7 +138,7 @@ static Ret   ftk_animation_expand_step_base_right(FtkAnimation* thiz, float perc
 	{
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
 		dst_r = r;
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
 	}
 
 	return RET_OK;
@@ -161,7 +161,7 @@ static Ret   ftk_animation_expand_step_base_bottom(FtkAnimation* thiz, float per
 			dst_r.height = r.height = r.height - offset;
 		}
 
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &dst_r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -171,7 +171,7 @@ static Ret   ftk_animation_expand_step_base_bottom(FtkAnimation* thiz, float per
 	{
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
 		dst_r = r;
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
 	}
 
 	return RET_OK;
@@ -186,7 +186,7 @@ static Ret   ftk_animation_expand_step_base_center(FtkAnimation* thiz, float per
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
 	}
 
 	r = priv->front_win_rect;
@@ -202,7 +202,7 @@ static Ret   ftk_animation_expand_step_base_center(FtkAnimation* thiz, float per
 		r.x = dst_r.x;
 		r.y = dst_r.y;
 
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
 	}
 
 	return RET_OK;
@@ -247,8 +247,9 @@ static Ret   ftk_animation_expand_step(FtkAnimation* thiz)
 	rf.width = FTK_MAX(rf.width, rs.width);
 	rf.height = FTK_MAX(rf.height, rs.height);
 
-	return ftk_display_update_and_notify(ftk_default_display(), 
-			ftk_canvas_bitmap(ftk_shared_canvas()), &rf, rf.x, rf.y);
+	ftk_canvas_show(ftk_shared_canvas(), ftk_default_display(), &rf, rf.x, rf.y);
+
+	return RET_OK;
 }
 
 static Ret   ftk_animation_expand_reset(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,

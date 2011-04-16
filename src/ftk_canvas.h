@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
+ * 2011-04-16 Li XianJing <xianjimli@hotmail.com> change to interface.
  *
  */
 
@@ -33,6 +34,7 @@
 #define FTK_CANVAS_H
 
 #include "ftk_gc.h"
+#include "ftk_display.h"
 
 FTK_BEGIN_DECLS
 
@@ -47,33 +49,136 @@ typedef enum _FtkBgStyle
 struct _FtkCanvas;
 typedef struct _FtkCanvas FtkCanvas;
 
-FtkCanvas* ftk_canvas_create(int w, int h, FtkColor clear_color);
+typedef Ret (*FtkCanvasGetPixel)(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c);
+typedef Ret (*FtkCanvasSetPixel)(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c);
+typedef Ret (*FtkCanvasDrawLine)(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2);
+typedef Ret (*FtkCanvasClearRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h);
+typedef Ret (*FtkCanvasDrawRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, int round, int fill);
+typedef Ret (*FtkCanvasDrawBitmap)(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* s, FtkRect* d, int alpha);
+typedef Ret (*FtkCanvasDrawString)(FtkCanvas* thiz, size_t x, size_t y, const char* str, int len, int vcenter);
+typedef Ret (*FtkCanvasLockBuffer)(FtkCanvas* thiz, FtkBitmap** bitmap);
+typedef Ret (*FtkCanvasUnlockBuffer)(FtkCanvas* thiz);
+typedef void (*FtkCanvasDestroy)(FtkCanvas* thiz);
 
-Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc);
-Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc);
+struct _FtkCanvas
+{
+	FtkGc gc;
+	size_t width;
+	size_t height;
+	FtkRegion clip;
+
+	FtkCanvasGetPixel   set_pixel;
+	FtkCanvasSetPixel   get_pixel;
+	FtkCanvasDrawLine   draw_line;
+	FtkCanvasClearRect  clear_rect;
+	FtkCanvasDrawRect   draw_rect;
+	FtkCanvasDrawBitmap draw_bitmap;
+	FtkCanvasDrawString draw_string;
+	FtkCanvasLockBuffer lock_buffer;
+	FtkCanvasUnlockBuffer unlock_buffer;
+	FtkCanvasDestroy      destroy;
+	char priv[ZERO_LEN_ARRAY];
+};
+
+static inline Ret ftk_canvas_get_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
+{
+	return_val_if_fail(thiz != NULL && thiz->get_pixel != NULL, RET_FAIL);
+
+	return thiz->get_pixel(thiz, x, y, c);
+}
+
+static inline Ret ftk_canvas_set_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
+{
+	return_val_if_fail(thiz != NULL && thiz->set_pixel != NULL, RET_FAIL);
+
+	return thiz->set_pixel(thiz, x, y, c);
+}
+
+static inline Ret ftk_canvas_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2)
+{
+	return_val_if_fail(thiz != NULL && thiz->draw_line != NULL, RET_FAIL);
+
+	return thiz->draw_line(thiz, x1, y1, x2, y2);
+}
+
+static inline Ret ftk_canvas_clear_rect(FtkCanvas* thiz, size_t x, size_t y, 
+size_t w, size_t h)
+{
+	return_val_if_fail(thiz != NULL && thiz->clear_rect != NULL, RET_FAIL);
+
+	return thiz->clear_rect(thiz, x, y, w, h);
+}
+
+static inline Ret ftk_canvas_draw_rect(FtkCanvas* thiz, size_t x, size_t y, 
+	size_t w, size_t h, int round, int fill)
+{
+	return_val_if_fail(thiz != NULL && thiz->draw_rect != NULL, RET_FAIL);
+
+	return thiz->draw_rect(thiz, x, y, w, h, round, fill);
+}
+
+static inline Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bmp, 
+	FtkRect* s, FtkRect* d, int alpha)
+{
+	return_val_if_fail(thiz != NULL && thiz->draw_bitmap != NULL, RET_FAIL);
+
+	return thiz->draw_bitmap(thiz, bmp, s, d, alpha);
+}
+
+static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, size_t x, size_t y, 
+	const char* str, int len, int vcenter)
+{
+	return_val_if_fail(thiz != NULL && thiz->draw_string != NULL, RET_FAIL);
+
+	return thiz->draw_string(thiz, x, y, str, len, vcenter);
+}
+
+static inline Ret ftk_canvas_lock_buffer(FtkCanvas* thiz, FtkBitmap** bitmap)
+{
+	return_val_if_fail(thiz != NULL && thiz->lock_buffer != NULL, RET_FAIL);
+
+	return thiz->lock_buffer(thiz, bitmap);
+}
+
+static inline Ret ftk_canvas_unlock_buffer(FtkCanvas* thiz)
+{
+	return_val_if_fail(thiz != NULL && thiz->unlock_buffer != NULL, RET_FAIL);
+
+	return thiz->unlock_buffer(thiz);
+}
+
+static inline void ftk_canvas_destroy(FtkCanvas* thiz)
+{
+	if(thiz != NULL && thiz->destroy != NULL)
+	{
+		thiz->destroy(thiz);
+	}
+
+	return;
+}
+
+Ret    ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc);
+Ret    ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc);
 FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz);
 
-Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h);
-Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w);
-Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
-Ret ftk_canvas_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill);
-Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, const char* str, int len, int vcenter);
+Ret    ftk_canvas_set_clip_rect(FtkCanvas* thiz, FtkRect* rect);
+Ret    ftk_canvas_set_clip_region(FtkCanvas* thiz, FtkRegion* region);
+Ret    ftk_cavans_get_clip_region(FtkCanvas* thiz, FtkRegion** region);
+
+Ret ftk_canvas_draw_vline(FtkCanvas* thiz, size_t x, size_t y, size_t h);
+Ret ftk_canvas_draw_hline(FtkCanvas* thiz, size_t x, size_t y, size_t w);
 
 int ftk_canvas_font_height(FtkCanvas* thiz);
 int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len);
-int ftk_canvas_get_char_extent(FtkCanvas* thiz, unsigned short unicode);
-const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, int vstart, int vend, int width);
+const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, 
+	int vstart, int vend, size_t width);
 
-Ret ftk_canvas_fast_fill_rect(FtkCanvas* thiz, int x, int y, int w, int h);
-Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* s, FtkRect* d, int alpha);
-Ret ftk_canvas_draw_bitmap_simple(FtkCanvas* thiz, FtkBitmap* b, int x, int y, int w, int h, int ox, int oy);
-Ret ftk_canvas_draw_bg_image(FtkCanvas* canvas, FtkBitmap* bitmap, FtkBgStyle style, int x, int y, int w, int h);
+Ret ftk_canvas_draw_bitmap_simple(FtkCanvas* thiz, FtkBitmap* b, 
+	size_t x, size_t y, size_t w, size_t h, size_t ox, size_t oy);
+Ret ftk_canvas_draw_bg_image(FtkCanvas* thiz, FtkBitmap* bitmap, 
+	FtkBgStyle style, size_t x, size_t y, size_t w, size_t h);
 
-FtkColor* ftk_canvas_get_pixel(FtkCanvas* thiz, int x, int y);
-Ret ftk_canvas_put_pixel(FtkCanvas* thiz, int x, int y, FtkColor val);
-
-FtkBitmap* ftk_canvas_bitmap(FtkCanvas* thiz);
-void ftk_canvas_destroy(FtkCanvas* thiz);
+Ret ftk_canvas_show(FtkCanvas* thiz, FtkDisplay* display, FtkRect* rect, int ox, int oy);
 
 FTK_END_DECLS
 

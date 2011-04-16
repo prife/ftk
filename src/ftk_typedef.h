@@ -54,6 +54,12 @@ typedef struct _FtkRect
 	int height;
 }FtkRect;
 
+typedef struct _FtkRegion
+{
+	FtkRect rect;
+	struct _FtkRegion* next;
+}FtkRegion;
+
 typedef struct _FtkColor
 {
 	unsigned char b;

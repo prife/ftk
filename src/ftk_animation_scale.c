@@ -56,7 +56,7 @@ static Ret   ftk_animation_scale_step(FtkAnimation* thiz)
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
 		ftk_logd("%s:%d %d %d %d %d\n", __func__, __LINE__, r.x, r.y, r.width, r.height);
 	}
 
@@ -71,7 +71,7 @@ static Ret   ftk_animation_scale_step(FtkAnimation* thiz)
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
 		dst_r.x = r.x + (r.width - dst_r.width)/2;
 		dst_r.y = r.y + (r.height - dst_r.height)/2;
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &dst_r, alpha);
 	}
 	
 	r = priv->back_win_rect;
@@ -81,8 +81,9 @@ static Ret   ftk_animation_scale_step(FtkAnimation* thiz)
 	r.height = FTK_MAX(r.height, dst_r.height);
 
 	ftk_logd("%s:%d %d %d %d %d\n", __func__, __LINE__, r.x, r.y, r.width, r.height);
-	return ftk_display_update_and_notify(ftk_default_display(), 
-			ftk_canvas_bitmap(ftk_shared_canvas()), &r, r.x, r.y);
+	ftk_canvas_show(ftk_shared_canvas(), ftk_default_display(), &r, r.x, r.y);
+
+	return RET_OK;
 }
 
 static Ret   ftk_animation_scale_reset(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,

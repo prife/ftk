@@ -456,7 +456,7 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	xoffset = rect->x;
 	yoffset = rect->y;
 
-	return ftk_display_update_and_notify(priv->display, ftk_canvas_bitmap(priv->canvas), rect, xoffset, yoffset);
+	return ftk_canvas_show(priv->canvas, priv->display, rect, xoffset, yoffset);
 }
 
 Ret        ftk_window_paint_forcely(FtkWidget* thiz)

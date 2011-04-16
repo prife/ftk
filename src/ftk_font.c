@@ -360,7 +360,7 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 	}
 	else
 	{
-		assert(!"not found");
+		//assert(!"not found");
 	}
 
 	return RET_OK;

@@ -61,7 +61,7 @@ static Ret   ftk_animation_translate_step_h(FtkAnimation* thiz, float percent)
 		dst_r.x = 0;
 		if(r.width > 0)
 		{
-			ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->first_win, &r, &dst_r, 0xff);
+			ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->first_win, &r, &dst_r, 0xff);
 		}
 	}
 
@@ -81,7 +81,7 @@ static Ret   ftk_animation_translate_step_h(FtkAnimation* thiz, float percent)
 
 		if(r.width > 0)
 		{
-			ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->second_win, &r, &dst_r, 0xff);
+			ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->second_win, &r, &dst_r, 0xff);
 		}
 	}
 
@@ -104,7 +104,7 @@ static Ret   ftk_animation_translate_step_v(FtkAnimation* thiz, float percent)
 		dst_r.y = 0;
 		if(r.width > 0)
 		{
-			ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->first_win, &r, &dst_r, 0xff);
+			ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->first_win, &r, &dst_r, 0xff);
 		}
 	}
 
@@ -124,7 +124,7 @@ static Ret   ftk_animation_translate_step_v(FtkAnimation* thiz, float percent)
 
 		if(r.height > 0)
 		{
-			ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->second_win, &r, &dst_r, 0xff);
+			ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->second_win, &r, &dst_r, 0xff);
 		}
 	}
 
@@ -158,8 +158,9 @@ static Ret   ftk_animation_translate_step(FtkAnimation* thiz)
 	rf.width = FTK_MAX(rf.width, rs.width);
 	rf.height = FTK_MAX(rf.height, rs.height);
 
-	return ftk_display_update_and_notify(ftk_default_display(), 
-			ftk_canvas_bitmap(ftk_shared_canvas()), &rf, rf.x, rf.y);
+	ftk_canvas_show(ftk_shared_canvas(), ftk_default_display(), &rf, rf.x, rf.y);
+
+	return RET_OK;
 }
 
 static Ret   ftk_animation_translate_reset(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,

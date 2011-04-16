@@ -69,6 +69,7 @@ static Ret ftk_tab_page_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_tab_page_on_paint(FtkWidget* thiz)
 {
+
 	return RET_OK;
 }
 
@@ -199,6 +200,8 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 
 	(void)height;
 	(void)width;
+	
+	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	if(index != priv->active_page)
 	{
 		bitmap = priv->normal;

@@ -263,7 +263,7 @@ Ret ftk_init(int argc, char* argv[])
 
 	PROFILE_START();
 	bg.a = 0xff;
-	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), bg));
+	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), &bg));
 	PROFILE_END("canvas init");
 
 	PROFILE_START();

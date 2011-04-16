@@ -48,14 +48,13 @@ static Ret   ftk_animation_alpha_step(FtkAnimation* thiz)
 {
 	FtkRect r = {0};
 	FtkRect dst_r = {0};
-
 	float percent = 0;
 	DECL_PRIV(thiz, priv);
 
 	r = priv->back_win_rect;
 	if(r.width > 0 && r.height > 0)
 	{
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->back_win, &r, &r, 0xff);
 	}
 
 	percent = priv->start + (priv->end - priv->start) * ftk_animation_get_percent(thiz);
@@ -64,11 +63,12 @@ static Ret   ftk_animation_alpha_step(FtkAnimation* thiz)
 	if(r.width > 0 && r.height > 0)
 	{
 		int alpha = (int)(0xff * percent) & 0xff;
-		ftk_canvas_draw_bitmap_ex(ftk_shared_canvas(), priv->front_win, &r, &r, alpha);
+		ftk_canvas_draw_bitmap(ftk_shared_canvas(), priv->front_win, &r, &r, alpha);
 	}
-	
-	return ftk_display_update_and_notify(ftk_default_display(), 
-			ftk_canvas_bitmap(ftk_shared_canvas()), &r, r.x, r.y);
+
+	ftk_canvas_show(ftk_shared_canvas(), ftk_default_display(), &r, r.x, r.y);
+
+	return RET_OK;
 }
 
 static Ret   ftk_animation_alpha_reset(FtkAnimation* thiz, FtkBitmap* old_win, FtkBitmap* new_win,
