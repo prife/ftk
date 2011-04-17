@@ -112,6 +112,7 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_wnd_manager_default.c \
 	../../../../../src/ftk_xml_parser.c \
 	../../../../../src/ftk_xul.c \
+	../../../../../src/ftk_canvas_default.c \
 	../../../../../src/backend/android/ftk_backend_android.c \
 	../../../../../src/backend/android/ftk_display_android_skia.c \
 	../../../../../src/backend/android/ftk_source_android.c \
