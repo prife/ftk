@@ -35,6 +35,7 @@ ftk_src = Split("""
 ../../ftk_bitmap_factory.c
 ../../ftk_button.c
 ../../ftk_canvas.c
+../../ftk_canvas_default.c
 ../../ftk_check_button.c
 ../../ftk_clipboard.c
 ../../ftk_combo_box.c
