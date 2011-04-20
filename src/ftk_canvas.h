@@ -154,7 +154,7 @@ static inline Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bmp,
 static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, size_t x, size_t y, 
 	const char* str, int len, int vcenter)
 {
-	len = (len < 0 && str != NULL) ? strlen(str) : len;
+	len = (len < 0 && str != NULL) ? (int)strlen(str) : len;
 	return_val_if_fail(thiz != NULL && thiz->draw_string != NULL, RET_FAIL);
 
 	return thiz->draw_string(thiz, x, y, str, len, vcenter);

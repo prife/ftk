@@ -491,6 +491,26 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\ftk_canvas_default.c"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="0"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\ftk_check_button.c"
 				>
 				<FileConfiguration
@@ -2120,15 +2140,7 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\ftk_font_default.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\ftk_font_desc.h"
-					>
-				</File>
-				<File
-					RelativePath="..\..\ftk_font_freetype.h"
 					>
 				</File>
 				<File

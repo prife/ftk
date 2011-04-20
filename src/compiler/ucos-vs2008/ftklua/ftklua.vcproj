@@ -2020,7 +2020,6 @@
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_callbacks.h"
 				>
 			</File>
-			</File>
 			<File
 				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_check_button.h"
 				>
