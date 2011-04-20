@@ -81,6 +81,7 @@ case "$with_fontengine" in
 		LDFLAGS="$LDFLAGS $FREETYPE_LIBS"
 		font_engine="freetype";;
 	*)
+		CFLAGS="$CFLAGS -DUSE_DEFAULT_FONT"
 		font_engine="default";;
 esac
 

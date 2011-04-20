@@ -108,12 +108,15 @@ FtkFont* ftk_font_manager_load(FtkFontManager* thiz, FtkFontDesc* font_desc)
 	
 	if(font != NULL)
 	{
-		font = ftk_font_cache_create(font, 512);
+#if defined(USE_FREETYPE) || defined(USE_DEFAULT_FONT) 	
+		FtkFont* cached_font = ftk_font_cache_create(font, 512);
+		ftk_font_unref(font);
+		font = cached_font;
+#endif		
 		ftk_font_ref(font);
 		ftk_font_desc_ref(font_desc);
 		thiz->fonts[thiz->used_nr].font = font;
 		thiz->fonts[thiz->used_nr].font_desc = font_desc;
-		ftk_font_unref(font);
 
 		thiz->used_nr++;
 	}

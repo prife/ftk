@@ -187,6 +187,7 @@ typedef struct _PrivInfo
 	size_t font_height;
 	size_t max_glyph_nr;
 	size_t one_glyph_size;
+	size_t last_replaced;
 	FtkGlyph* lrc_glyph;
 }PrivInfo;
 
@@ -229,7 +230,8 @@ static Ret ftk_font_cache_remove_lru(FtkFont* thiz, unsigned short older_than)
 	return_val_if_fail(thiz != NULL, -1);
 
 	lru = priv->glyph_nr;
-	for(i = 0; i < priv->glyph_nr; i++)
+	i = (priv->last_replaced + 1) % priv->glyph_nr;
+	for(; i < priv->glyph_nr; i++)
 	{
 		p = priv->glyphs_ptr[i];
 		c = (FtkGlyphCache*)p;
@@ -251,6 +253,7 @@ static Ret ftk_font_cache_remove_lru(FtkFont* thiz, unsigned short older_than)
 	}
 
 	i = lru;
+	priv->last_replaced = lru;
 	priv->lrc_glyph = priv->glyphs_ptr[i];
 	for(; (i + 1) < priv->glyph_nr; i++)
 	{
@@ -382,20 +385,6 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 	return RET_OK;
 }
 
-static int ftk_font_cache_get_char_extent(FtkFont* thiz, unsigned short code)
-{
-	DECL_PRIV(thiz, priv);
-
-	return ftk_font_get_char_extent(priv->font, code);
-}
-
-static int ftk_font_cache_get_extent(FtkFont* thiz, const char* str, int len)
-{
-	DECL_PRIV(thiz, priv);
-
-	return ftk_font_get_extent(priv->font, str, len);	
-}
-
 static int      ftk_font_cache_height(FtkFont* thiz)
 {
 	DECL_PRIV(thiz, priv);
@@ -411,6 +400,7 @@ static void		ftk_font_cache_destroy(FtkFont* thiz)
 		FTK_FREE(priv->glyphs);
 		FTK_FREE(priv->glyphs_ptr);
 		ftk_font_unref(priv->font);
+		FTK_FREE(thiz);
 	}
 
 	return;
@@ -429,8 +419,6 @@ FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
 		thiz->ref = 1;
 		thiz->height = ftk_font_cache_height;
 		thiz->lookup = ftk_font_cache_lookup;
-		thiz->get_extent = ftk_font_cache_get_extent;
-		thiz->get_char_extent = ftk_font_cache_get_char_extent;
 		thiz->destroy = ftk_font_cache_destroy;
 
 		priv->font = font;
