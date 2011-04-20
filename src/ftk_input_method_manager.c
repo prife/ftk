@@ -32,12 +32,6 @@
 #include "ftk_allocator.h"
 #include "ftk_input_method_manager.h"
 
-#ifdef USE_GPINYIN
-#include "ftk_input_method_gpinyin.h"
-#else
-#include "ftk_input_method_py.h"
-#endif
-
 #ifdef USE_HANDWRITE
 #include "ftk_input_method_hw.h"
 #endif
@@ -54,10 +48,12 @@
 
 #ifdef IPHONE
 #include "ftk_input_method_iphone.h"
-#endif
-
-#if defined(ANDROID) && defined(ANDROID_NDK)
+#elif defined(ANDROID) && defined(ANDROID_NDK)
 #include "ftk_input_method_android.h"
+#elif defined(USE_GPINYIN)
+#include "ftk_input_method_gpinyin.h"
+#else
+#include "ftk_input_method_py.h"
 #endif
 
 #define FTK_INPUT_METHOD_MAX_NR 6

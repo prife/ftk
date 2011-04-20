@@ -32,7 +32,7 @@
 #include "ftk_log.h"
 #include "fontdata.h"
 #include "ftk_util.h"
-#include "ftk_font_default.h"
+#include "ftk_font.h"
 
 typedef struct _PrivInfo
 {
@@ -84,7 +84,7 @@ void      ftk_font_default_destroy(FtkFont* thiz)
 	return;
 }
 
-FtkFont* ftk_font_default_create (const char* filename, FtkFontDesc* font_desc)
+FtkFont* ftk_font_create (const char* filename, FtkFontDesc* font_desc)
 {
 	FtkFont* thiz = NULL;
 	return_val_if_fail(filename != NULL, NULL);

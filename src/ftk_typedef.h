@@ -60,6 +60,15 @@ typedef struct _FtkRegion
 	struct _FtkRegion* next;
 }FtkRegion;
 
+#ifdef FTK_COLOR_RGBA
+typedef struct _FtkColor
+{
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
+	unsigned char a;
+}FtkColor;
+#else
 typedef struct _FtkColor
 {
 	unsigned char b;
@@ -67,6 +76,7 @@ typedef struct _FtkColor
 	unsigned char r;
 	unsigned char a;
 }FtkColor;
+#endif
 
 typedef enum _Ret
 {

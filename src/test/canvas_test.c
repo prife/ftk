@@ -29,7 +29,7 @@
  *
  */
 #include "ftk.h"
-#include "ftk_canvas_default.h"
+#include "ftk_canvas.h"
 
 static void show_canvas(FtkDisplay* display, FtkCanvas* canvas)
 {

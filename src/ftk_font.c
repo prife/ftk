@@ -42,6 +42,11 @@ int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode)
 	FtkGlyph glyph = {0};
 	return_val_if_fail(thiz != NULL, 0);
 
+	if(thiz->get_char_extent != NULL)
+	{
+		return thiz->get_char_extent(thiz, unicode);
+	}
+
 	if(unicode == ' ')
 	{
 		return FTK_SPACE_WIDTH;
@@ -63,13 +68,24 @@ int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode)
 	return extent;
 }
 
+FtkFontDesc* ftk_font_get_desc(FtkFont* thiz)
+{
+	return thiz != NULL ? thiz->font_desc : NULL;
+}
+
 int ftk_font_get_extent(FtkFont* thiz, const char* str, int len)
 {
 	int extent = 0;
 	unsigned short code = 0;
 	const char* iter = str;
+	len = (len < 0 && str != NULL) ? strlen(str) : len;
 	return_val_if_fail(thiz != NULL && str != NULL, 0);
 	
+	if(thiz->get_extent != NULL)
+	{
+		return thiz->get_extent(thiz, str, len);
+	}
+
 	len = len >= 0 ? len : (int)strlen(str);
 	while(*iter && (iter - str) < len)
 	{
@@ -366,11 +382,25 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 	return RET_OK;
 }
 
+static int ftk_font_cache_get_char_extent(FtkFont* thiz, unsigned short code)
+{
+	DECL_PRIV(thiz, priv);
+
+	return ftk_font_get_char_extent(priv->font, code);
+}
+
+static int ftk_font_cache_get_extent(FtkFont* thiz, const char* str, int len)
+{
+	DECL_PRIV(thiz, priv);
+
+	return ftk_font_get_extent(priv->font, str, len);	
+}
+
 static int      ftk_font_cache_height(FtkFont* thiz)
 {
-		DECL_PRIV(thiz, priv);
+	DECL_PRIV(thiz, priv);
 
-		return ftk_font_height(priv->font);
+	return ftk_font_height(priv->font);
 }
 
 static void		ftk_font_cache_destroy(FtkFont* thiz)
@@ -399,12 +429,15 @@ FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
 		thiz->ref = 1;
 		thiz->height = ftk_font_cache_height;
 		thiz->lookup = ftk_font_cache_lookup;
+		thiz->get_extent = ftk_font_cache_get_extent;
+		thiz->get_char_extent = ftk_font_cache_get_char_extent;
 		thiz->destroy = ftk_font_cache_destroy;
 
 		priv->font = font;
 		ftk_font_ref(font);
-		
+
 		priv->glyph_nr = 0;
+		thiz->font_desc = font->font_desc;
 		priv->font_height = font_height;
 		priv->max_glyph_nr = max_glyph_nr;
 		priv->one_glyph_size = sizeof(FtkGlyphCache) + font_height * font_height ;

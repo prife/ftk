@@ -175,7 +175,7 @@ ftk_HEADERS=\
 	ftk_bitmap_factory.h      ftk_menu_item.h\
 	ftk_bitmap.h              ftk_menu_panel.h\
 	ftk_button.h              ftk_mmap.h\
-	ftk_canvas.h              ftk_platform.h ftk_canvas_default.h \
+	ftk_canvas.h              ftk_platform.h \
 	ftk_check_button.h        ftk_progress_bar.h\
 	ftk_clipboard.h           ftk_radio_group.h\
 	ftk_dialog.h              ftk_scroll_bar.h\
@@ -183,7 +183,7 @@ ftk_HEADERS=\
 	ftk_entry.h               ftk_source_idle.h\
 	ftk_event.h               ftk_source_primary.h\
 	ftk_expr.h                ftk_sources_manager.h\
-	ftk_font_default.h        ftk_source_timer.h\
+	ftk_source_timer.h\
 	ftk_font.h                ftk_sprite.h\
 	ftk_gc.h                  ftk_status_item.h\
 	ftk_gesture.h             ftk_status_panel.h\
@@ -200,7 +200,7 @@ ftk_HEADERS=\
 	ftk_label.h               ftk_xml_builder.h\
 	ftk_list_model_default.h  ftk_xml_parser.h\
 	ftk_list_model.h          ftk_xul.h \
-	ftk_font_freetype.h       ftk_icon_view.h\
+	ftk_icon_view.h\
 	ftk_theme.h               ftk_painter.h \
 	ftk_text_view.h           ftk_cairo.h \
 	ftk_pipe.h                ftk_message_box.h \

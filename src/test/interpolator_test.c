@@ -7,7 +7,6 @@
 
 static void test_interpolator(const char* name, FtkInterpolator* interpolator)
 {
-	int i = 0;
 	float percent = 0;
 	
 	ftk_logd("=========================%s==========================\n", name);

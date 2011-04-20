@@ -31,15 +31,11 @@
 
 #include "ftk.h"
 #include "ftk_util.h"
+#include "ftk_font.h"
 #include "ftk_backend.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
 #include "ftk_status_item.h"
-#ifdef USE_FREETYPE
-#include "ftk_font_freetype.h"
-#else
-#include "ftk_font_default.h"
-#endif
 #include "ftk_status_panel.h"
 #include "ftk_bitmap_factory.h"
 #include "ftk_allocator_default.h"
@@ -264,6 +260,7 @@ Ret ftk_init(int argc, char* argv[])
 	PROFILE_START();
 	bg.a = 0xff;
 	ftk_set_shared_canvas(ftk_canvas_create(ftk_display_width(display), ftk_display_height(display), &bg));
+	ftk_logd("canvas init: %d %d\n", ftk_display_width(display), ftk_display_height(display));
 	PROFILE_END("canvas init");
 
 	PROFILE_START();

@@ -31,7 +31,7 @@
 #include "ftk_log.h"
 #include "ftk_util.h"
 #include "ftk_bitmap.h"
-#include "ftk_canvas_default.h"
+#include "ftk_canvas.h"
 
 #define PUT_PIXEL(pdst, color, alpha) \
 	do\

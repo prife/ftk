@@ -53,15 +53,20 @@ typedef struct _FtkFont FtkFont;
 
 typedef int  (*FtkFontHeight)(FtkFont* thiz);
 typedef Ret  (*FtkFontLookup)(FtkFont* thiz, unsigned short code, FtkGlyph* glyph);
+typedef int  (*FtkFontGetCharExtent)(FtkFont* thiz, unsigned short code);
+typedef int  (*FtkFontGetExtent)(FtkFont* thiz, const char* str, int len);
 typedef void (*FtkFontDestroy)(FtkFont* thiz);
 
 struct _FtkFont
 {
 	FtkFontHeight  height;
 	FtkFontLookup  lookup;
+	FtkFontGetExtent get_extent;
+	FtkFontGetCharExtent get_char_extent;
 	FtkFontDestroy destroy;
 
 	int ref;
+	FtkFontDesc* font_desc;
 	char priv[ZERO_LEN_ARRAY];
 };
 
@@ -117,9 +122,13 @@ static inline int     ftk_font_unref(FtkFont* thiz)
 }
 
 FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr);
+
+FtkFontDesc* ftk_font_get_desc(FtkFont* thiz);
 int ftk_font_get_extent(FtkFont* thiz, const char* str, int len);
 int ftk_font_get_char_extent(FtkFont* thiz, unsigned short unicode);
 const char* ftk_font_calc_str_visible_range(FtkFont* thiz, const char* start, int vstart, int vend, int width, int* extent);
+
+FtkFont* ftk_font_create (const char* filename, FtkFontDesc* font_desc);
 
 FTK_END_DECLS
 

@@ -527,7 +527,23 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 	PROFILE_TIME("begin");
 	PROFILE_START();
 	ftk_window_disable_update(thiz);
+	if(priv->dirty_rect_nr == 1)
+	{
+		ftk_canvas_set_clip_rect(priv->canvas, priv->dirty_rect);
+	}
+	else if(priv->dirty_rect_nr == 2)
+	{
+		FtkRegion regions[2];
+		regions[0].rect = priv->dirty_rect[0];
+		regions[1].rect = priv->dirty_rect[1];
+		regions[0].next = regions+1;
+		regions[1].next = NULL;
+
+		ftk_canvas_set_clip_rect(priv->canvas, regions);
+	}
 	ftk_widget_paint(thiz);
+	ftk_canvas_set_clip_rect(priv->canvas, NULL);
+
 	ftk_window_enable_update(thiz);
 	PROFILE_END("paint");
 

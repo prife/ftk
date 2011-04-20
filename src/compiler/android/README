@@ -1,0 +1,6 @@
+1.put ftk under the source dir of android.
+2.set the env: . build/envsetup.sh
+3.cd ftk/src/compiler/android
+4.build: mm
+5.install the package
+

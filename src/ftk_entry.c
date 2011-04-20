@@ -334,8 +334,11 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 
 		if(HAS_TEXT(priv))
 		{
+			ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 			extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, 
 				priv->caret - priv->visible_start);
+
+			ftk_logd("%s: %d len=%d\n", __func__, extent, priv->caret - priv->visible_start);
 		}
 
 		ftk_canvas_reset_gc(canvas, &gc);

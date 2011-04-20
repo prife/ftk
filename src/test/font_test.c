@@ -1,9 +1,5 @@
 #include "ftk.h"
-#ifdef USE_FREETYPE 
-#include "ftk_font_freetype.h"
-#else
-#include "ftk_font_default.h"
-#endif
+#include "ftk_font.h"
 
 typedef struct _RtlInfo
 {
@@ -78,11 +74,7 @@ int main(int argc, char* argv[])
 	FtkFontDesc* font_desc = ftk_font_desc_create(FTK_DEFAULT_FONT);
 	const char* filename = argv[1] != NULL ? argv[1] : "../../data/unicode.fnt";
 	ftk_set_allocator(ftk_allocator_default_create());
-#ifdef USE_FREETYPE 
-	font = ftk_font_freetype_create(filename, font_desc);
-#else
-	font = ftk_font_default_create(filename, font_desc);
-#endif	
+	font = ftk_font_create(filename, font_desc);
 	ftk_font_desc_unref(font_desc);
 
 	memset(&info, 0xff, sizeof(info));

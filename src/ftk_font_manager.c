@@ -30,13 +30,9 @@
  */
 
 #include "ftk_util.h"
+#include "ftk_font.h"
 #include "ftk_globals.h"
 #include "ftk_font_manager.h"
-#ifdef USE_FREETYPE
-#include "ftk_font_freetype.h"
-#else
-#include "ftk_font_default.h"
-#endif
 
 typedef struct _FtkFontEntry
 {
@@ -102,28 +98,23 @@ FtkFont* ftk_font_manager_load(FtkFontManager* thiz, FtkFontDesc* font_desc)
 	return_val_if_fail((thiz->used_nr+1) < thiz->nr, NULL);
 
 #if defined(USE_FREETYPE) && defined(ANDROID) && defined(ANDROID_NDK)
-	font = ftk_font_freetype_create(FTK_FONT, font_desc);
+	ftk_strcpy(filename, FTK_FONT);
 #else
 	ftk_strs_cat(filename, FTK_MAX_PATH, 
 		ftk_config_get_data_dir(ftk_default_config()), "/data/", FTK_FONT, NULL);
 	ftk_normalize_path(filename);
-#ifdef USE_FREETYPE
-	font = ftk_font_freetype_create(filename, font_desc);
-#else
-	font = ftk_font_default_create(filename, font_desc);
 #endif
-#endif
-
+	font = ftk_font_create(filename, font_desc);
+	
 	if(font != NULL)
 	{
-		FtkFont* cached_font = ftk_font_cache_create(font, 512);
-		ftk_font_ref(cached_font);
+		font = ftk_font_cache_create(font, 512);
+		ftk_font_ref(font);
 		ftk_font_desc_ref(font_desc);
-		thiz->fonts[thiz->used_nr].font = cached_font;
+		thiz->fonts[thiz->used_nr].font = font;
 		thiz->fonts[thiz->used_nr].font_desc = font_desc;
 		ftk_font_unref(font);
 
-		font = cached_font;
 		thiz->used_nr++;
 	}
 

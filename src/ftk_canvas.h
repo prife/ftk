@@ -49,6 +49,8 @@ typedef enum _FtkBgStyle
 struct _FtkCanvas;
 typedef struct _FtkCanvas FtkCanvas;
 
+typedef Ret (*FtkCanvasSyncGc)(FtkCanvas* thiz);
+typedef Ret (*FtkCanvasSetClip)(FtkCanvas* thiz, FtkRegion* clip);
 typedef Ret (*FtkCanvasGetPixel)(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c);
 typedef Ret (*FtkCanvasSetPixel)(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c);
 typedef Ret (*FtkCanvasDrawLine)(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2);
@@ -65,8 +67,9 @@ struct _FtkCanvas
 	FtkGc gc;
 	size_t width;
 	size_t height;
-	FtkRegion clip;
 
+	FtkCanvasSyncGc     sync_gc;
+	FtkCanvasSetClip    set_clip;
 	FtkCanvasGetPixel   set_pixel;
 	FtkCanvasSetPixel   get_pixel;
 	FtkCanvasDrawLine   draw_line;
@@ -77,8 +80,31 @@ struct _FtkCanvas
 	FtkCanvasLockBuffer lock_buffer;
 	FtkCanvasUnlockBuffer unlock_buffer;
 	FtkCanvasDestroy      destroy;
+	
 	char priv[ZERO_LEN_ARRAY];
 };
+
+static inline Ret ftk_canvas_sync_gc(FtkCanvas* thiz)
+{
+	Ret ret = RET_FAIL;
+	if(thiz != NULL && thiz->sync_gc != NULL)
+	{
+		ret = thiz->sync_gc(thiz);
+	}
+
+	return ret;
+}
+
+static inline Ret ftk_canvas_set_clip(FtkCanvas* thiz, FtkRegion* clip)
+{
+	Ret ret = RET_FAIL;
+	if(thiz != NULL && thiz->set_clip != NULL)
+	{
+		ret = thiz->set_clip(thiz, clip);
+	}
+
+	return ret;
+}
 
 static inline Ret ftk_canvas_get_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
 {
@@ -128,6 +154,7 @@ static inline Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bmp,
 static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, size_t x, size_t y, 
 	const char* str, int len, int vcenter)
 {
+	len = (len < 0 && str != NULL) ? strlen(str) : len;
 	return_val_if_fail(thiz != NULL && thiz->draw_string != NULL, RET_FAIL);
 
 	return thiz->draw_string(thiz, x, y, str, len, vcenter);
@@ -179,6 +206,8 @@ Ret ftk_canvas_draw_bg_image(FtkCanvas* thiz, FtkBitmap* bitmap,
 	FtkBgStyle style, size_t x, size_t y, size_t w, size_t h);
 
 Ret ftk_canvas_show(FtkCanvas* thiz, FtkDisplay* display, FtkRect* rect, int ox, int oy);
+
+FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color);
 
 FTK_END_DECLS
 

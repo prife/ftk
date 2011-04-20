@@ -39,14 +39,19 @@ Ret ftk_canvas_reset_gc(FtkCanvas* thiz, FtkGc* gc)
 	return_val_if_fail(thiz != NULL && gc != NULL, RET_FAIL);
 
 	ftk_gc_reset(&thiz->gc);
-	return ftk_gc_copy(&thiz->gc, gc);
+	
+	ftk_gc_copy(&thiz->gc, gc);
+
+	return ftk_canvas_sync_gc(thiz);
 }
 
 Ret ftk_canvas_set_gc(FtkCanvas* thiz, FtkGc* gc)
 {
 	return_val_if_fail(thiz != NULL && gc != NULL, RET_FAIL);
 
-	return ftk_gc_copy(&thiz->gc, gc);
+	ftk_gc_copy(&thiz->gc, gc);
+
+	return ftk_canvas_sync_gc(thiz);
 }
 
 FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz)
@@ -58,14 +63,23 @@ FtkGc* ftk_canvas_get_gc(FtkCanvas* thiz)
 
 Ret    ftk_canvas_set_clip_rect(FtkCanvas* thiz, FtkRect* rect)
 {
-	/*TODO*/
-	return RET_OK;
+	if(rect != NULL)
+	{
+		FtkRegion region;
+		region.rect = *rect;
+		region.next = NULL;
+
+		return ftk_canvas_set_clip(thiz, &region);
+	}
+	else
+	{
+		return ftk_canvas_set_clip(thiz, NULL);
+	}
 }
 
 Ret    ftk_canvas_set_clip_region(FtkCanvas* thiz, FtkRegion* region)
 {
-	/*TODO*/
-	return RET_OK;
+	return ftk_canvas_set_clip(thiz, region);
 }
 
 Ret    ftk_cavans_get_clip_region(FtkCanvas* thiz, FtkRegion** region)
@@ -131,8 +145,8 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 	int bh = ftk_bitmap_height(bitmap);
 	int tile_w = FTK_MIN(bw, w) >> 1;
 	int tile_h = FTK_MIN(bh, h) >> 1;
-	
 	gc.mask = FTK_GC_FG;
+	FtkColor fg  = thiz->gc.fg;
 	ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, 0, tile_w, tile_h, x, y);
 	ftk_canvas_draw_bitmap_simple(thiz, bitmap, bw - tile_w, 0, tile_w, tile_h, x + w - tile_w, y);
 	ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, bh - tile_h, tile_w, tile_h, x, y + h - tile_h);
@@ -146,6 +160,7 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 		for(i = 0; i < tile_h; i++)
 		{
 			thiz->gc.fg = *bits;	
+			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_hline(thiz, ox, y + i, ow);
 			bits += bw;
 		}
@@ -153,13 +168,15 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 		oy = y + tile_h;
 		oh = h - 2 * tile_h;
 		thiz->gc.fg = *bits;	
+		ftk_canvas_sync_gc(thiz);
 		ftk_canvas_draw_rect(thiz, ox, oy, ow, oh, 0, 1); 
 	
 		oy = y + h - tile_h;
 		bits = ftk_bitmap_bits(bitmap) + (bh - tile_h) * bw + tile_w;
 		for(i = 0; i < tile_h; i++)
 		{
-			thiz->gc.fg = *bits;	
+			thiz->gc.fg = *bits;
+			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_hline(thiz, ox, (oy + i), ow);
 			bits += bw;
 		}
@@ -173,6 +190,7 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 		for(i = 0; i < tile_w; i++)
 		{
 			thiz->gc.fg = *bits;	
+			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_vline(thiz, x + i, oy, oh);
 			bits++;
 		}
@@ -182,10 +200,13 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 		for(i = 0; i < tile_w; i++)
 		{
 			thiz->gc.fg = *bits;	
+			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_vline(thiz, ox + i, oy, oh);
 			bits++;
 		}
 	}
+	thiz->gc.fg = fg;
+	ftk_canvas_sync_gc(thiz);
 
 	return RET_OK;
 }

@@ -34,7 +34,7 @@
 #include FT_GLYPH_H
 #include "ftk_util.h"
 #include "ftk_mmap.h"
-#include "ftk_font_freetype.h"
+#include "ftk_font.h"
 
 
 typedef struct _PrivInfo
@@ -88,7 +88,7 @@ void      ftk_font_freetype_destroy(FtkFont* thiz)
 	return;
 }
 
-FtkFont* ftk_font_freetype_create (const char* filename, FtkFontDesc* font_desc)
+FtkFont* ftk_font_create (const char* filename, FtkFontDesc* font_desc)
 {
 	int size = 0;
 	FtkFont* thiz = NULL;
