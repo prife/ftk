@@ -1,1 +1,0 @@
-本目录是VS2003 工程文件，port from vs2005 by songbohr@gmail.com
