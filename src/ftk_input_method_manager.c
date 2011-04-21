@@ -36,24 +36,21 @@
 #include "ftk_input_method_hw.h"
 #endif
 
-#ifndef UCOS_SIM
-#ifdef WIN32
-#ifndef WINCE
-#include "ftk_input_method_win32.h"
-#else
-#include "ftk_input_method_wince.h"
-#endif
-#endif
-#endif
-
 #ifdef IPHONE
 #include "ftk_input_method_iphone.h"
+#define IME_CREATE ftk_input_method_iphone_create 
 #elif defined(ANDROID) && defined(ANDROID_NDK)
+#define IME_CREATE ftk_input_method_android_create 
 #include "ftk_input_method_android.h"
 #elif defined(USE_GPINYIN)
 #include "ftk_input_method_gpinyin.h"
-#else
-#include "ftk_input_method_py.h"
+#define IME_CREATE ftk_input_method_gpinyin_create 
+#elif defined(WINCE)
+#include "ftk_input_method_wince.h"
+#define IME_CREATE ftk_input_method_wince_create
+#elif defined(WIN32)
+#include "ftk_input_method_win32.h"
+#define IME_CREATE ftk_input_method_win32_create
 #endif
 
 #define FTK_INPUT_METHOD_MAX_NR 6
@@ -73,36 +70,11 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	{
 		thiz->current = 0;
 
-#if !defined(WINCE) && !defined(ANDROID) && !defined(ANDROID_NDK) && !defined(IPHONE)
-#ifdef USE_GPINYIN
-		ftk_input_method_manager_register(thiz, ftk_input_method_gpinyin_create());
-#else
-		ftk_input_method_manager_register(thiz, ftk_input_method_wb_create());
-		ftk_input_method_manager_register(thiz, ftk_input_method_py_create());
-#endif		
-#endif
-
+		ftk_input_method_manager_register(thiz, IME_CREATE());
 #ifdef USE_HANDWRITE
 		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());
 #endif
 
-#ifndef UCOS_SIM
-#ifdef WIN32
-#ifndef WINCE
-		ftk_input_method_manager_register(thiz, ftk_input_method_win32_create());
-#else
-		ftk_input_method_manager_register(thiz, ftk_input_method_wince_create());
-#endif
-#endif
-#endif
-
-#ifdef IPHONE
-		ftk_input_method_manager_register(thiz, ftk_input_method_iphone_create());
-#endif
-
-#if defined(ANDROID) && defined(ANDROID_NDK)
-		ftk_input_method_manager_register(thiz, ftk_input_method_android_create());
-#endif
 	}
 	return thiz;
 }

@@ -872,26 +872,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\im\default\ftk_input_method_py.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\im\default\ftk_input_method_util.c"
 				>
 				<FileConfiguration
@@ -1013,26 +993,6 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_log.c"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						UsePrecompiledHeader="0"
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\im\default\ftk_lookup_table.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1886,10 +1846,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\im\default\ftk_input_method_py.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\im\default\ftk_input_method_util.h"
 				>
 			</File>
@@ -1947,10 +1903,6 @@
 			</File>
 			<File
 				RelativePath="..\..\ftk_log.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\im\default\ftk_lookup_table.h"
 				>
 			</File>
 			<File

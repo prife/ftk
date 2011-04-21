@@ -97,9 +97,7 @@ libftk_la_SOURCES += im/gpinyin/share/ngram.cpp \
 	im/gpinyin/share/dictlist.cpp \
 	im/gpinyin/ftk/ftk_input_method_gpinyin.cpp
 else
-libftk_la_SOURCES += im/default/ftk_input_method_util.c \
-	im/default/ftk_input_method_py.c \
-	im/default/ftk_lookup_table.c 
+libftk_la_SOURCES += im/default/ftk_input_method_util.c 
 if ENABLE_HANDWRITE
 libftk_la_SOURCES += im/default/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
 	fhw/fhw_primitive_recognizer.c
