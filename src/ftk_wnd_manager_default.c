@@ -728,16 +728,13 @@ static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 		win = priv->windows[i];
 		if(ftk_widget_type(win) == FTK_STATUS_PANEL && ftk_widget_is_visible(win))
 		{
-			if(map && !ftk_window_is_mapped(win))
-			{
-				event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
-				event.widget = win;
-				ftk_wnd_manager_dispatch_event(thiz, &event);
-			}
+			event.widget = win;
+			event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
+			ftk_wnd_manager_dispatch_event(thiz, &event);
 		}
 	}
 
-	return 0;
+	return RET_OK;
 }
 
 static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
