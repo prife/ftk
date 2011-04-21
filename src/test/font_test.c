@@ -72,7 +72,7 @@ int main(int argc, char* argv[])
 	FtkFont* font = NULL;
 	RtlInfo info = {0};
 	FtkFontDesc* font_desc = ftk_font_desc_create(FTK_DEFAULT_FONT);
-	const char* filename = argv[1] != NULL ? argv[1] : "../../data/unicode.fnt";
+	const char* filename = argv[1] != NULL ? argv[1] : "../../data/gb2312.fnt";
 	ftk_set_allocator(ftk_allocator_default_create());
 	font = ftk_font_create(filename, font_desc);
 	ftk_font_desc_unref(font_desc);

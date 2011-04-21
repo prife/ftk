@@ -49,7 +49,7 @@ char* ftk_get_testdata_dir(void);
 
 #define __func__       __FILE__
 #define FTK_ROOT_DIR   ftk_get_root_dir()
-#define FTK_FONT       "\\unicode.fnt"
+#define FTK_FONT       "\\gb2312.fnt"
 #define DATA_DIR       ftk_get_root_dir()
 #define LOCAL_DATA_DIR ftk_get_root_dir()
 #define FTK_DATA_ROOT  ftk_get_data_dir()

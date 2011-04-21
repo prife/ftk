@@ -47,7 +47,7 @@
 #define APP_DATA_DIR                    FTK_ROOT_DIR"/apps"
 #define APP_LOCAL_DATA_DIR              FTK_ROOT_DIR"/apps"
 
-#define FTK_FONT                        "unicode.fnt"
+#define FTK_FONT                        "gb2312.fnt"
 
 #define ftk_strncpy                     strncpy
 #define ftk_snprintf                    snprintf

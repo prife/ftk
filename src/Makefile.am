@@ -163,7 +163,7 @@ libftk_la_CFLAGS+=-DFTK_FONT="\"font.ttf\""
 endif
 
 if FONT_ENGINE_DEFAULT
-libftk_la_CFLAGS+=-DFTK_FONT="\"unicode.fnt\"" 
+libftk_la_CFLAGS+=-DFTK_FONT="\"gb2312.fnt\"" 
 endif
 
 ftkdir=$(includedir)/ftk

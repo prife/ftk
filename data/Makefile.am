@@ -6,7 +6,7 @@ ftkdata_DATA+=$(srcdir)/font.ttf
 endif
 
 if FONT_ENGINE_DEFAULT
-ftkdata_DATA+=$(srcdir)/unicode.fnt
+ftkdata_DATA+=$(srcdir)/gb2312.fnt
 endif
 
 if ENABLE_GPINYIN
@@ -15,4 +15,4 @@ else
 ftkdata_DATA +=$(srcdir)/fhw.bin  $(srcdir)/py.bin  $(srcdir)/wbx.bin
 endif
 
-EXTRA_DIST=font.ttf unicode.fnt fhw.bin  py.bin  wbx.bin gpinyin.dat gpinyin_user.dat
+EXTRA_DIST=font.ttf gb2312.fnt fhw.bin  py.bin  wbx.bin gpinyin.dat gpinyin_user.dat
