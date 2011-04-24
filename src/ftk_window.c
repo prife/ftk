@@ -539,7 +539,7 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 		regions[0].next = regions+1;
 		regions[1].next = NULL;
 
-		ftk_canvas_set_clip_rect(priv->canvas, regions);
+		ftk_canvas_set_clip_region(priv->canvas, regions);
 	}
 	ftk_widget_paint(thiz);
 	ftk_canvas_set_clip_rect(priv->canvas, NULL);

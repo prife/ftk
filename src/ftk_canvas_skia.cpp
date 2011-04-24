@@ -92,7 +92,7 @@ static Ret ftk_canvas_skia_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 		ftk_logd("set_clip: %d %d %d %d\n", 0, 0, priv->w, priv->h);
 	}
 
-//	priv->canvas->clipRegion(clipReg);
+	priv->canvas->clipRegion(clipReg, SkRegion::kReplace_Op);
 
 	return RET_OK;
 }
