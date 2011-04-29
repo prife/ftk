@@ -48,6 +48,8 @@
 #elif defined(WINCE)
 #include "ftk_input_method_wince.h"
 #define IME_CREATE ftk_input_method_wince_create
+#elif defined(UCOS_SIM)
+#define IME_CREATE NULL
 #elif defined(WIN32)
 #include "ftk_input_method_win32.h"
 #define IME_CREATE ftk_input_method_win32_create
@@ -69,8 +71,10 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	if(thiz != NULL)
 	{
 		thiz->current = 0;
-
+#ifndef UCOS_SIM
 		ftk_input_method_manager_register(thiz, IME_CREATE());
+#endif
+
 #ifdef USE_HANDWRITE
 		ftk_input_method_manager_register(thiz, ftk_input_method_hw_create());
 #endif

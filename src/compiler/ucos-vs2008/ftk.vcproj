@@ -600,7 +600,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_file_system_posix.c"
+				RelativePath="..\..\ftk_file_system_dummy.c"
 				>
 			</File>
 			<File

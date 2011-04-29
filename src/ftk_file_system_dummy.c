@@ -34,34 +34,58 @@
 
 Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 {
+	int ret = 0;
+	struct stat st;
+	return_val_if_fail(file_name != NULL && info != NULL, RET_FAIL);
+
+	if((ret = stat(file_name, &st)) == 0)
+	{
+		memset(info, 0x00, sizeof(FtkFileInfo));
+
+		info->uid  = st.st_uid;
+		info->gid  = st.st_gid;
+		info->mode = st.st_mode;
+		info->size = st.st_size; 
+		info->is_dir = 0;
+		info->last_access = st.st_atime;
+		info->last_modify = st.st_mtime;
+		ftk_strncpy(info->name, file_name, FTK_MAX_PATH);
+
+		return RET_OK;
+	}
 
 	return RET_FAIL;
 }
 
 FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 {
-	return NULL;
+	return_val_if_fail(file_name != NULL && mode != NULL, NULL);
+
+	return fopen(file_name, mode);
 }
 
 int  ftk_file_seek(FtkFsHandle file, size_t pos)
 {
-	return -1;
+	return fseek(file, pos, SEEK_SET);
 }
 
 int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length)
 {
-	return -1;
+	return fread(buffer, 1, length, file);
 }
 
 int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length)
 {
-	return -1;
+	return fwrite(buffer, 1, length, file);
 }
 
 void ftk_file_close(FtkFsHandle file)
 {
-	return;
+	return_if_fail(file != NULL);
+
+	fclose(file);
 }
+
 
 FtkFsHandle ftk_dir_open(const char* dir_name)
 {

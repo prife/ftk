@@ -648,6 +648,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 	size_t oy = y;
 	size_t right = 0;
 	size_t bottom = 0;
+	unsigned char data = 0;
 	int vcenter_offset = 0;
 	FtkGlyph glyph = {0};
 	FtkColor color = {0};
@@ -704,7 +705,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 				{
 					break;
 				}
-				unsigned char data = glyph.data[i * glyph.w + j];
+				data = glyph.data[i * glyph.w + j];
 				offset = y * priv->w + x;
 				bg = bits[offset];
 				if(data)
