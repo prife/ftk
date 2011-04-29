@@ -174,6 +174,7 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
 		ftk_window_disable_update(evt->old_window);
    		FTK_GET_PAINT_RECT(evt->old_window, old_win_rect);
 		ftk_set_shared_canvas(priv->old_window);
+		ftk_canvas_set_clip_region(priv->old_window, NULL);
     	ftk_window_paint_forcely(evt->old_window);
 	}
 
@@ -182,6 +183,7 @@ static Ret ftk_animation_trigger_default_on_event(FtkAnimationTrigger* thiz, Ftk
 		ftk_window_disable_update(evt->new_window);
    		FTK_GET_PAINT_RECT(evt->new_window, new_win_rect);
    		ftk_set_shared_canvas(priv->new_window);
+		ftk_canvas_set_clip_region(priv->new_window, NULL);
 		ftk_window_paint_forcely(evt->new_window);
 	}
 

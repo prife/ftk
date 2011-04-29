@@ -216,7 +216,7 @@ ftk_HEADERS=\
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
 	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \
-	Android-build.sh Android.mk linebreak/linebreakdef.h linebreak/linebreak.h \
-	ftk_translator.c  ftk_translator.h
+	linebreak/linebreakdef.h linebreak/linebreak.h \
+	ftk_translator.c  ftk_translator.h ftk_file_system_dummy.c
 
 

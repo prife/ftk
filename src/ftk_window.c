@@ -471,6 +471,7 @@ Ret        ftk_window_paint_forcely(FtkWidget* thiz)
 	
 	priv->mapped = 1;
 	ftk_widget_set_visible(thiz, 1);
+	ftk_canvas_set_clip_region(priv->canvas, NULL);
 	ftk_widget_paint(thiz);
 	priv->mapped = mapped;
 	ftk_widget_set_visible(thiz, visible);
@@ -540,6 +541,10 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 		regions[1].next = NULL;
 
 		ftk_canvas_set_clip_region(priv->canvas, regions);
+	}
+	else
+	{
+		ftk_canvas_set_clip_rect(priv->canvas, NULL);
 	}
 	ftk_widget_paint(thiz);
 	ftk_canvas_set_clip_rect(priv->canvas, NULL);

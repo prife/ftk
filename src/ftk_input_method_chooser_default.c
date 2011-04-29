@@ -60,7 +60,7 @@ int ftk_input_method_chooser(void)
 		return -1;
 	}
 
-	h = ftk_popup_menu_calc_height(FTK_TRUE, nr + 1);
+	h = ftk_popup_menu_calc_height(FTK_TRUE, nr + 1) + 5;
 	im_chooser = ftk_popup_menu_create(0, 0, 0, h, NULL, "Input Method");
 
 	for(i = 0; i < nr; i++)
