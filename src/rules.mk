@@ -4,7 +4,8 @@ INCLUDES=-Wall -g -DHAS_PNG -DHAS_JPEG -DHAS_BMP \
 	-I$(abs_top_srcdir)/src/im/gpinyin/ftk \
 	-I$(abs_top_srcdir)/src/im/gpinyin/include \
 	-DFTK_SUPPORT_C99 \
-	-DFTK_SHARED_CANVAS
+	-DFTK_SHARED_CANVAS \
+	-DFTK_HAS_DLOPEN
 
 #INCLUDES+= \
 	-DPSP \

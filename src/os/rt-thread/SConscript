@@ -97,6 +97,7 @@ ftk_src = Split("""
 ../../ftk_wnd_manager_default.c
 ../../ftk_xml_parser.c
 ../../ftk_xul.c
+../../ftk_dlfcn.c
 """)
 
 im_src = Split("""

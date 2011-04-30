@@ -62,7 +62,7 @@ libftk_la_SOURCES=\
 	ftk_clipboard.c       ftk_input_method_chooser_default.c ftk_input_method_manager.c \
 	ftk_allocator.c            ftk_allocator_default.c \
 	ftk_allocator_profile.c  ftk_image_bmp_decoder.c \
-	ftk_input_method_preeditor.c \
+	ftk_input_method_preeditor.c ftk_dlfcn.c \
 	ftk_input_method_preeditor_default.c \
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
 	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \

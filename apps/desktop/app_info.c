@@ -28,7 +28,7 @@
  * 2009-11-29 Li XianJing <xianjimli@hotmail.com> created
  *
  */
-#include <dlfcn.h>
+#include  "ftk_dlfcn.h"
 #include "ftk_mmap.h"
 #include "app_info.h"
 #include "ftk_app_lua.h"
@@ -244,16 +244,16 @@ Ret  app_info_manager_init_app(AppInfoManager* thiz, AppInfo* info)
 	}
 	else
 	{
-		if((info->handle = dlopen(info->exec, RTLD_NOW)) == NULL)
+		if((info->handle = ftk_dlopen(info->exec)) == NULL)
 		{
-			ftk_logd("dlopen %s failed(%s)\n", info->exec, dlerror());
+			ftk_logd("ftk_dlopen %s failed(%s)\n", info->exec, dlerror());
 		}
 		return_val_if_fail(info->handle != NULL, RET_FAIL);
 		
-		load = (FtkLoadApp)dlsym(info->handle, info->init);
+		load = (FtkLoadApp)ftk_dlsym(info->handle, info->init);
 		if(load == NULL)
 		{
-			ftk_logd("dlsym %s failed(%s)\n", info->init, dlerror());
+			ftk_logd("ftk_dlsym %s failed(%s)\n", info->init, dlerror());
 		}
 		return_val_if_fail(load != NULL, RET_FAIL);
 
@@ -324,6 +324,13 @@ void app_info_manager_destroy(AppInfoManager* thiz)
 {
 	if(thiz != NULL)
 	{
+		size_t i = 0;
+		for(i = 0; i < thiz->nr; i++)
+		{
+			ftk_dlclose(thiz->infos[i].handle);
+			thiz->infos[i].handle = NULL;
+			ftk_app_destroy(thiz->infos[i].app);
+		}
 		FTK_FREE(thiz->infos);
 		FTK_FREE(thiz);
 	}
