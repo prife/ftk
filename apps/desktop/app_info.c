@@ -28,6 +28,7 @@
  * 2009-11-29 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "ftk_util.h"
 #include  "ftk_dlfcn.h"
 #include "ftk_mmap.h"
 #include "app_info.h"
@@ -214,6 +215,7 @@ Ret  app_info_manager_load_dir(AppInfoManager* thiz, const char* path)
 		if(strstr(iter->d_name, ".desktop") == NULL) continue;
 
 		ftk_snprintf(filename, sizeof(filename), "%s/%s", path, iter->d_name);
+		ftk_normalize_path(filename);
 		app_info_manager_load_file(thiz, filename);
 	}
 	closedir(dir);
@@ -231,36 +233,39 @@ int  app_info_manager_get_count(AppInfoManager* thiz)
 Ret  app_info_manager_init_app(AppInfoManager* thiz, AppInfo* info)
 {
 	FtkLoadApp load = NULL;
+	char filename[FTK_MAX_PATH+1] = {0};
 	return_val_if_fail(thiz != NULL && info != NULL, RET_FAIL);
 
 	if(info->app != NULL)
 	{
 		return RET_OK;
 	}
-
+#ifdef FTK_HAS_LUA
 	if(strstr(info->exec, ".lua") != NULL)
 	{
 		info->app = ftk_app_lua_create(info->name, info->exec);
 	}
 	else
 	{
-		if((info->handle = ftk_dlopen(info->exec)) == NULL)
+#endif
+		ftk_dl_file_name(info->exec, filename);
+		if((info->handle = ftk_dlopen(filename)) == NULL)
 		{
-			ftk_logd("ftk_dlopen %s failed(%s)\n", info->exec, dlerror());
 		}
 		return_val_if_fail(info->handle != NULL, RET_FAIL);
 		
 		load = (FtkLoadApp)ftk_dlsym(info->handle, info->init);
 		if(load == NULL)
 		{
-			ftk_logd("ftk_dlsym %s failed(%s)\n", info->init, dlerror());
+
 		}
 		return_val_if_fail(load != NULL, RET_FAIL);
 
 		info->app = load();
 		return_val_if_fail(info->app != NULL, RET_FAIL);
+#ifdef FTK_HAS_LUA
 	}
-
+#endif
 	return RET_OK;
 }
 

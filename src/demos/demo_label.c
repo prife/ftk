@@ -12,7 +12,7 @@ static Ret timeout(void* ctx)
 	char buffer[32] = {0};
 	if(info->times > 0)
 	{
-		snprintf(buffer, sizeof(buffer), "Quit after %d seconds", info->times);
+		ftk_snprintf(buffer, sizeof(buffer), "Quit after %d seconds", info->times);
 		ftk_widget_set_text(info->label, buffer);
 		info->times--;
 

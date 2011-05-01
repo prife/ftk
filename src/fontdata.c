@@ -208,7 +208,7 @@ static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyp
 	}
 
 	ret = ftk_file_read(fp, thiz->current_glyph_data, size);
-	ftk_logd("%s: offset=%d size=%d ret=%d\n", __func__, offset, size, ret);
+////	ftk_logd("%s: offset=%d size=%d ret=%d\n", __func__, offset, size, ret);
 	ftk_file_close(fp);
 	assert(ret == size);
 	glyph->data = thiz->current_glyph_data;

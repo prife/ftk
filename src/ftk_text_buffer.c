@@ -217,7 +217,7 @@ char* ftk_text_buffer_append_string(FtkTextBuffer* thiz, const char* str)
 	return_val_if_fail(ftk_text_buffer_extend(thiz, str_len) == RET_OK, NULL);
 
 	start = thiz->buffer + thiz->length;
-	strcpy(start, str);
+	ftk_strncpy(start, str, strlen);
 
 	thiz->length += str_len;
 

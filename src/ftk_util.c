@@ -375,6 +375,7 @@ FtkColor ftk_parse_color( const char* value)
 
 char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 {
+	int i = 0;
 	int in_index = 0;
 	int out_index = 0;
 
@@ -458,6 +459,14 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 	}
 
 	path_out[out_index] = '\0';
+
+	for(i = 0; i < out_index; i++)
+	{
+		if(path_out[i] == '\\' || path_out[i] == '/')
+		{
+			path_out[i] = FTK_PATH_DELIM;
+		}
+	}
 
 	return path_out;
 }

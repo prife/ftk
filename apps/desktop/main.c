@@ -32,6 +32,7 @@
 #include "ftk.h"
 #include <time.h>
 #include "ftk_xul.h"
+#include "ftk_util.h"
 #include "app_info.h"
 #include "ftk_tester.h"
 #include "vnc_service.h"
@@ -61,12 +62,9 @@ static const char* desktop_translate_text(void* ctx, const char* text)
 static const char* desktop_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
 	struct stat st = {0};
-	snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_DATA_DIR, path);
+	ftk_snprintf(out_path, FTK_MAX_PATH, "%s/desktop/%s", DATA_DIR, path);
+	ftk_normalize_path(out_path);
 
-	if(stat(out_path, &st) < 0)
-	{
-		snprintf(out_path, FTK_MAX_PATH, "%s/%s", APP_LOCAL_DATA_DIR, path);
-	}
 	ftk_logd("%s: %s --> %s\n", __func__, path, out_path);
 
 	return out_path;
@@ -144,13 +142,6 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
-static const char* s_default_path[FTK_ICON_PATH_NR]=
-{
-	FTK_DATA_ROOT"/desktop",
-	".",
-	NULL
-};
-
 #define IDC_TIME_ITEM 2000
 
 static Ret desktop_update_time(void* ctx)
@@ -166,28 +157,28 @@ static Ret desktop_update_time(void* ctx)
 	struct tm* t = localtime(&now);
 
 	panel = ftk_default_status_panel();
-	snprintf(text, sizeof(text)-1, "%d:%02d", t->tm_hour, t->tm_min);
+	ftk_snprintf(text, sizeof(text)-1, "%d:%02d", t->tm_hour, t->tm_min);
 	item = ftk_widget_lookup(panel, IDC_TIME_ITEM);
 	ftk_widget_set_text(item, text);
 	ftk_logd("%s\n", __func__);
 	
 	image = ftk_widget_lookup(win, 1);
-	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour/10);
+	ftk_snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour/10);
 	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 	
 	image = ftk_widget_lookup(win, 2);
-	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour%10);
+	ftk_snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_hour%10);
 	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 
 	image = ftk_widget_lookup(win, 4);
-	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min/10);
+	ftk_snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min/10);
 	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 	
 	image = ftk_widget_lookup(win, 5);
-	snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min%10);
+	ftk_snprintf(filename, sizeof(filename)-1, "icons/%d.png", t->tm_min%10);
 	bitmap = ftk_icon_cache_load(g_desktop.icon_cache, filename);
 	ftk_image_set_image(image, bitmap);
 
@@ -269,13 +260,14 @@ static void desktop_destroy(void* data)
 	return;
 }
 
-int main(int argc, char* argv[])
+int FTK_MAIN(int argc, char* argv[])
 {
 	int i = 0;
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 	FtkSource* timer = NULL;
 	char path[FTK_MAX_PATH] = {0};
+	const char* root_path[FTK_ICON_PATH_NR] = {0};
 
 	ftk_init(argc, argv);
 
@@ -283,7 +275,7 @@ int main(int argc, char* argv[])
 	{
 		const char* key_play="--event-play=";
 		const char* key_record="--event-record=";
-
+#ifdef FTK_HAS_TESTER
 		if(strncmp(argv[i], key_play, strlen(key_play)) == 0)
 		{
 			ftk_tester_start_play(argv[i] + strlen(key_play));	
@@ -293,6 +285,7 @@ int main(int argc, char* argv[])
 		{
 			ftk_tester_start_record(argv[i] + strlen(key_record));	
 		}
+#endif
 	}
 
 #ifdef ENABLE_NLS
@@ -321,14 +314,19 @@ int main(int argc, char* argv[])
 
 	g_desktop.app_manager = app_info_manager_create();
 
-	snprintf(path, sizeof(path), DATA_DIR"/apps");
+	ftk_snprintf(path, sizeof(path), "%s/base/apps", DATA_DIR);
+	ftk_normalize_path(path);
 	if(app_info_manager_load_dir(g_desktop.app_manager, path) != RET_OK)
 	{
-		snprintf(path, sizeof(path), LOCAL_DATA_DIR"/apps");
+		ftk_snprintf(path, sizeof(path), "%s/apps", LOCAL_DATA_DIR);
 		app_info_manager_load_dir(g_desktop.app_manager, path);
 	}
 
-	g_desktop.icon_cache = ftk_icon_cache_create(s_default_path, NULL);
+	ftk_snprintf(path, sizeof(path), "%s/desktop", DATA_DIR);
+	root_path[0] = path;
+	root_path[1] = NULL;
+
+	g_desktop.icon_cache = ftk_icon_cache_create(root_path, NULL);
 	win = desktop_load_xul(g_desktop.is_horizonal ? "xul/desktop-h.xul" : "xul/desktop-v.xul"); 
 	ftk_app_window_set_on_prepare_options_menu(win, desktop_on_prepare_options_menu, win);
 	button = ftk_widget_lookup(win, 100);

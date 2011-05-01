@@ -64,7 +64,7 @@ static void ftk_list_model_default_destroy(FtkListModel* thiz)
 	
 	if(priv != NULL)
 	{
-		int i = 0;
+		size_t i = 0;
 
 		for(i = 0; i < priv->nr; i++)
 		{
@@ -164,7 +164,7 @@ Ret ftk_list_model_default_add(FtkListModel* thiz, void* item)
 
 static Ret ftk_list_model_default_reset(FtkListModel* thiz)
 {
-	int i = 0;
+	size_t i = 0;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 

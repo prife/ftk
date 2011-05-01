@@ -33,6 +33,10 @@
 #define FTK_WIN32_H
 
 #ifdef WIN32
+
+#define FTK_HAS_LOAD_LIBRARY 1
+#define  _CRT_SECURE_NO_WARNINGS 1
+#define FTK_HAS_L
 #include <io.h>
 #include <time.h>
 #include <stdio.h>

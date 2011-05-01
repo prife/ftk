@@ -33,23 +33,53 @@
 #include "ftk_win32.h"
 #include "ftk_log.h"
 
-static char g_work_dir[MAX_PATH+1] = {0};
-static char g_data_dir[MAX_PATH+1] = {0};
-static char g_testdata_dir[MAX_PATH+1] = {0};
+static char root_dir[FTK_MAX_PATH+1] = {0};
+static char data_dir[FTK_MAX_PATH+1] = {0};
+static char testdata_dir[FTK_MAX_PATH+1] = {0};
 
 char* ftk_get_root_dir(void)
 {
-	return g_work_dir;
+	char filename[FTK_MAX_PATH+1] = {0};
+
+	if(!root_dir[0])
+	{
+		if(ftk_file_exist("c:\\ftk\\bin\\ftk.dll"))
+		{
+			ftk_strncpy(root_dir, "c:\\ftk", sizeof(root_dir));
+		}
+		//else
+		{
+			char* p = NULL;
+			GetModuleFileName(NULL, filename, sizeof(filename));
+			p=strrchr(filename, '\\');
+			*p = '\0';
+			p=strrchr(filename, '\\');
+			*p = '\0';
+			ftk_strncpy(root_dir, filename, sizeof(root_dir));
+		}
+	}
+
+	return root_dir;
 }
 
 char* ftk_get_data_dir(void)
 {
-	return g_data_dir;
+	if(!data_dir[0])
+	{
+		ftk_snprintf(data_dir, sizeof(data_dir), "%s\\data", ftk_get_root_dir());
+	}
+
+	return data_dir;
 }
 
 char* ftk_get_testdata_dir(void)
 {
-	return g_testdata_dir;
+	if(!testdata_dir[0])
+	{
+		ftk_snprintf(testdata_dir, sizeof(testdata_dir), "%s\\testdata", ftk_get_root_dir());
+	}
+
+	return testdata_dir;
 }
 
 int ftk_platform_init(int argc, char** argv)
@@ -62,17 +92,6 @@ int ftk_platform_init(int argc, char** argv)
 	{
 		assert(!"WSAStartup failed with error %d\n");
 		return 0;
-	}
-	
-	if(_getcwd(g_work_dir, MAX_PATH) != NULL)
-	{
-		p = strstr(g_work_dir, "\\src");
-		if(p != NULL)
-		{
-			*p = '\0';
-			ftk_snprintf(g_data_dir, MAX_PATH, "%s\\data", g_work_dir);
-			ftk_snprintf(g_testdata_dir, MAX_PATH, "%s\\testdata", g_work_dir);
-		}
 	}
 
 	return 0;
@@ -196,9 +215,11 @@ DIR *opendir(const char *name)
 {
 	long handle = 0;
 	DIR* dir = NULL;
+	char filename[FTK_MAX_PATH+1] = {0};
 	struct _finddata_t data = {0};
 
-	if((handle = _findfirst(name, &data)) == -1)
+	ftk_snprintf(filename, sizeof(filename), "%s\\*.*", name);
+	if((handle = _findfirst(filename, &data)) == -1)
 	{
 		return NULL;
 	}
@@ -215,7 +236,7 @@ struct dirent *readdir(DIR *dir)
 {
 	struct _finddata_t data = {0};
 	long ret = _findnext(dir->handle, &data);
-	if(ret != 0)
+	if(ret == 0)
 	{
 		if(data.attrib & _A_SUBDIR)
 		{

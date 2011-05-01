@@ -80,7 +80,7 @@ static inline void ftk_app_destroy(FtkApp* thiz)
 {
 	if(thiz != NULL && thiz->destroy != NULL)
 	{
-		thiz->destroy(thiz);
+//		thiz->destroy(thiz);
 	}
 
 	return;

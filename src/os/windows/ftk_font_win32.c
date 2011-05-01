@@ -149,9 +149,12 @@ void ftk_font_win32_destroy(FtkFont* thiz)
 	return;
 }
 
-FtkFont* ftk_font_win32_create(const char* filename, int bold, int italic, size_t size)
+FtkFont* ftk_font_create(const char* filename, FtkFontDesc* font_desc)
 {
 	FtkFont* thiz = NULL;
+	int size = ftk_font_desc_get_size(font_desc);
+	int bold = ftk_font_desc_is_bold(font_desc);
+	int italic = ftk_font_desc_is_italic(font_desc);
 	return_val_if_fail(filename != NULL, NULL);
 
 	size = 12;
