@@ -47,7 +47,7 @@ char* ftk_get_root_dir(void)
 		{
 			ftk_strncpy(root_dir, "c:\\ftk", sizeof(root_dir));
 		}
-		//else
+		else
 		{
 			char* p = NULL;
 			GetModuleFileName(NULL, filename, sizeof(filename));

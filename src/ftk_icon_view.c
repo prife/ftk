@@ -244,6 +244,7 @@ static Ret ftk_icon_view_calc(FtkWidget* thiz)
 
 static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 {
+	int x1 = 0;
 	int dx = 0;
 	int dy = 0;
 	int fw = 0;
@@ -304,7 +305,8 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 						FTK_BG_CENTER, dx, dy, priv->item_width, icon_height);
 				}
 
-				ftk_canvas_draw_string(canvas, dx + FTK_HALF(priv->item_width - fw), 
+				x1 = dx +  ((priv->item_width > fw) ? FTK_HALF(priv->item_width - fw) : 0);
+				ftk_canvas_draw_string(canvas, x1, 
 					dy + icon_height + FTK_HALF(priv->item_height - icon_height), text, -1, 1);	
 			}
 

@@ -56,7 +56,7 @@ static Ret ftk_source_win32_dispatch(FtkSource* thiz)
 		DispatchMessage(&msg);
 	}
 	
-	Sleep(20);
+	Sleep(10);
 
 	return RET_OK;
 }

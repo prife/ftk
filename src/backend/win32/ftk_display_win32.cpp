@@ -42,7 +42,7 @@
 #include "ftk_input_method_manager.h"
 #include "ftk_input_method_win32.h"
 
-#define DISPLAY_WIDTH  320
+#define DISPLAY_WIDTH  640
 #define DISPLAY_HEIGHT 480
 
 static char szClassName[ ] = "FtkEmulator";
