@@ -69,6 +69,14 @@ void  ftk_dlclose(void* handle)
 
 	return;
 }
+
+char* ftk_dl_file_name(const char* name, char filename[FTK_MAX_PATH+1])
+{
+	ftk_snprintf(filename, FTK_MAX_PATH, "lib%s.so", name);
+
+	return filename;
+}
+
 #elif defined(FTK_HAS_LOAD_LIBRARY)
 void* ftk_dlopen(const char* filename)
 {
@@ -99,6 +107,14 @@ void  ftk_dlclose(void* handle)
 
 	return;
 }
+
+char* ftk_dl_file_name(const char* name, char filename[FTK_MAX_PATH+1])
+{
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s.dll", name);
+
+	return filename;
+}
+
 #else
 void* ftk_dlopen(const char* filename)
 {
@@ -113,4 +129,10 @@ void* ftk_dlsym(void* handle, const char* func)
 void  ftk_dlclose(void* handle)
 {
 }
+
+char* ftk_dl_file_name(const char* name, char filename[FTK_MAX_PATH+1])
+{
+	return NULL;
+}
+
 #endif

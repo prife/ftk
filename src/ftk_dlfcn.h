@@ -39,6 +39,7 @@ FTK_BEGIN_DECLS
 void* ftk_dlopen(const char* filename);
 void* ftk_dlsym(void* handle, const char* func);
 void  ftk_dlclose(void* handle);
+char* ftk_dl_file_name(const char* name, char filename[FTK_MAX_PATH+1]);
 
 FTK_END_DECLS
 
