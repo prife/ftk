@@ -408,7 +408,7 @@ FtkAnimationTrigger* ftk_animation_trigger_default_create(const char* theme, con
 
 		if(ftk_animation_trigger_parse_file(thiz, filename) == RET_OK)
 		{	
-			ftk_animation_trigger_default_dump(thiz);
+			//ftk_animation_trigger_default_dump(thiz);
 			ftk_logd("%s: them=%s\n", __func__, theme);
 		}
 		else

@@ -1,7 +1,10 @@
 SUBDIRS=icons xul
 include $(abs_top_srcdir)/src/rules.mk
 LOCAL_CFLAGS=-I$(abs_top_srcdir)/apps/common  -DAPP_DATA_DIR="\"$(datadir)/ftk/desktop\"" \
-	-DAPP_LOCAL_DATA_DIR="\"$(srcdir)\"" -I$(abs_top_srcdir)/script_binding/lua -I$(abs_top_srcdir)/script_binding/lua/lua
+	-DAPP_LOCAL_DATA_DIR="\"$(srcdir)\"" -I$(abs_top_srcdir)/script_binding/lua \
+	-I$(abs_top_srcdir)/script_binding/lua/lua \
+	-DFTK_HAS_LUA -DFTK_HAS_TESTER
+
 LUALDFLAGS=$(abs_top_builddir)/script_binding/lua/libftklua.la $(abs_top_builddir)/script_binding/lua/lua/liblua.la
 
 noinst_PROGRAMS=app_info_test

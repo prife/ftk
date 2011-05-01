@@ -62,7 +62,7 @@ static const char* desktop_translate_text(void* ctx, const char* text)
 static const char* desktop_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
 	struct stat st = {0};
-	ftk_snprintf(out_path, FTK_MAX_PATH, "%s/desktop/%s", DATA_DIR, path);
+	ftk_snprintf(out_path, FTK_MAX_PATH, "%s/desktop/%s", FTK_ROOT_DIR, path);
 	ftk_normalize_path(out_path);
 
 	ftk_logd("%s: %s --> %s\n", __func__, path, out_path);
@@ -314,7 +314,7 @@ int FTK_MAIN(int argc, char* argv[])
 
 	g_desktop.app_manager = app_info_manager_create();
 
-	ftk_snprintf(path, sizeof(path), "%s/base/apps", DATA_DIR);
+	ftk_snprintf(path, sizeof(path), "%s/base/apps", FTK_ROOT_DIR);
 	ftk_normalize_path(path);
 	if(app_info_manager_load_dir(g_desktop.app_manager, path) != RET_OK)
 	{
@@ -322,7 +322,7 @@ int FTK_MAIN(int argc, char* argv[])
 		app_info_manager_load_dir(g_desktop.app_manager, path);
 	}
 
-	ftk_snprintf(path, sizeof(path), "%s/desktop", DATA_DIR);
+	ftk_snprintf(path, sizeof(path), "%s/desktop", FTK_ROOT_DIR);
 	root_path[0] = path;
 	root_path[1] = NULL;
 
