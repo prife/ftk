@@ -51,7 +51,7 @@
 	bg[active]="ff808080"
 	bg[disable]="ff808080"/>
 
-<menu_panel bg[normal]="ffffffff" fg[normal]="ffccc9b8" bd[normal]="ffb0a080"/>
+<menu_panel bg[normal]="ffffffff" fg[normal]="ffff0000" bd[normal]="ffb0a080"/>
 <menu_item bg_image[focused]="menuitem_background_focus.png" bg_image[active]="menuitem_background_pressed.png" />
 
 <status_item font="size:20" />

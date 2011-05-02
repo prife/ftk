@@ -1,4 +1,4 @@
-REAMDE has described the general steps of building, here are some special
+ftk/README has described the general steps of building, here are some special
 configure options for FTK:
 
 --enable-cairo
@@ -7,7 +7,7 @@ build with cairo support.
 
 --enable-bidi
 
-build with bidi support.
+build with bidi support(NOT tested yet)
 
 --enable-opengles
 build with opengles support.
