@@ -50,13 +50,16 @@ static Ret ftk_source_win32_dispatch(FtkSource* thiz)
 	MSG msg;
 	DECL_PRIV(thiz, priv);
 
-	while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+	if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}
 	
-	Sleep(10);
+	if(!PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE))
+	{
+		Sleep(10);
+	}
 
 	return RET_OK;
 }
