@@ -220,7 +220,7 @@ static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, s
 
 	if(!FTK_POINT_IN_RECT(x1, y1, clip) && !FTK_POINT_IN_RECT(x2, y2, clip))
 	{
-		ftk_logd("%s: skip.\n", __func__);
+//		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
 	}
 
@@ -288,7 +288,7 @@ static Ret ftk_canvas_default_clear_rect(FtkCanvas* thiz, size_t x, size_t y, si
 
 	if(rect.width <= 0 || rect.height <= 0)
 	{
-		ftk_logd("%s: skip.\n", __func__);
+//		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
 	}
 
@@ -396,7 +396,7 @@ static Ret ftk_canvas_default_draw_rect(FtkCanvas* thiz, size_t x, size_t y, siz
 
 	if(rect.width <= 0 || rect.height <= 0)
 	{
-		ftk_logd("%s: skip.\n", __func__);
+//		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
 	}
 
@@ -586,7 +586,7 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 	rect = ftk_rect_and(&rect, &priv->clip->rect);
 	if(rect.width <= 0 || rect.height <= 0)
 	{
-		ftk_logd("%s: skip.\n", __func__);
+//		ftk_logd("%s: skip.\n", __func__);
 		return 0;
 	}
 
