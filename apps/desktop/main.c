@@ -61,7 +61,6 @@ static const char* desktop_translate_text(void* ctx, const char* text)
 
 static const char* desktop_translate_path(const char* path, char out_path[FTK_MAX_PATH+1])
 {
-	struct stat st = {0};
 	ftk_snprintf(out_path, FTK_MAX_PATH, "%s/desktop/%s", FTK_ROOT_DIR, path);
 	ftk_normalize_path(out_path);
 
@@ -100,6 +99,7 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 {
 	size_t i = 0;
 	size_t n = 0;
+	size_t item_size = 100;
 	FtkWidget* win = NULL;
 	AppInfo* app_info = NULL;
 	FtkWidget* button = NULL;
@@ -119,7 +119,14 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 	ftk_button_set_clicked_listener(button, desktop_on_button_close_applist_clicked, win);
 
 	icon_view = ftk_widget_lookup(win, 99);
-	ftk_icon_view_set_item_size(icon_view, 100);
+
+	item_size = 6 * ftk_font_height(ftk_widget_get_gc(icon_view)->font);
+	if(ftk_widget_width(icon_view) < 2 * item_size)
+	{
+		item_size = (ftk_widget_width(icon_view) - 10) / 2;
+	}
+
+	ftk_icon_view_set_item_size(icon_view, item_size);
 	ftk_icon_view_set_clicked_listener(icon_view, applist_on_item_clicked, win);
 	n = app_info_manager_get_count(g_desktop.app_manager);
 	

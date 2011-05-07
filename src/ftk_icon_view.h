@@ -47,7 +47,7 @@ typedef struct _FtkIconViewItem
 
 #define FTK_ICON_VIEW_ITEM_SIZE 64
 #define FTK_ICON_VIEW_ITEM_MIN  32
-#define FTK_ICON_VIEW_ITEM_MAX  128
+#define FTK_ICON_VIEW_ITEM_MAX  240
 
 FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int height);
 

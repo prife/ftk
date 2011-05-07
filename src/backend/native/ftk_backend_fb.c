@@ -11,6 +11,7 @@ static Ret ftk_init_input(void)
 	const char* tsdev = NULL;
 	FtkSource* source = NULL;
 	struct dirent* iter = NULL;
+	const char* extra_input = NULL;
 	DIR* dir = opendir("/dev/input");
 	
 	return_val_if_fail(dir != NULL, RET_FAIL);
@@ -50,6 +51,19 @@ static Ret ftk_init_input(void)
 	}
 	ftk_logd("%s: tsdev %s source=%p\n", __func__, tsdev, source);
 #endif
+
+	extra_input = getenv("FTK_EXTRA_INPUT");
+	if(extra_input != NULL)
+	{
+		source = ftk_source_input_create(filename, 
+				(FtkOnEvent)ftk_wnd_manager_queue_event_auto_rotate, ftk_default_wnd_manager());
+		if(source != NULL)
+		{
+			ftk_sources_manager_add(ftk_default_sources_manager(), source);
+
+			ftk_logd("add %s input device\n", extra_input);
+		}
+	}
 
 	return RET_OK;
 }

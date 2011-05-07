@@ -360,12 +360,19 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 
 	if((ret = ftk_font_lookup(priv->font, code, glyph)) == RET_OK)
 	{
+		if(glyph->w > priv->font_height || glyph->h > priv->font_height)
+		{
+			ftk_logd("%s: %p is too large to cache%dx%d %dx%d\n", 
+				__func__, glyph->code, glyph->w, glyph->h, priv->font_height, priv->font_height);
+			return RET_FAIL;
+		}
+
 		if(ftk_font_cache_add(thiz, glyph) != RET_OK)
 		{
 			if(ftk_font_cache_remove_lru(thiz, 64) == RET_OK)
 			{
 				ret = ftk_font_cache_add(thiz, glyph);
-				assert(ret == RET_OK);
+				//assert(ret == RET_OK);
 			}
 		}
 //for test
