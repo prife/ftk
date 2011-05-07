@@ -5,12 +5,20 @@
 ##export TARGET_CC=arm-linux-gcc
 #export PATH=/usr/local/arm-linux-4.1.1/bin/:$PATH
 
+#sh
+#######################################################
+export ARCH=sh4
+export HOST_PARAM=--host=sh4-linux
+export TARGET_CC=sh4-linux-gcc
+export PATH=/opt/STM/STLinux-2.3/devkit/sh4/bin/:$PATH
+export TARGET_CFLAGS="-DFTK_FONT_SIZE=32"
+
 #openmoko
 #######################################################
-export ARCH=arm
-export HOST_PARAM=--host=arm-linux
-export TARGET_CC=arm-linux-gcc
-export PATH=/usr/local/openmoko/arm/bin/:$PATH
+#export ARCH=arm
+#export HOST_PARAM=--host=arm-linux
+#export TARGET_CC=arm-linux-gcc
+#export PATH=/usr/local/openmoko/arm/bin/:$PATH
 
 #mini4020
 #######################################################
