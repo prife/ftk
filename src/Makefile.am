@@ -6,6 +6,7 @@ lib_LTLIBRARIES=libftk.la
 
 LINUX_FB=$(srcdir)/backend/native/ftk_display_fb.c \
 	$(srcdir)/backend/native/ftk_source_input.c \
+	$(srcdir)/backend/native/ftk_source_ps2mouse.c \
 	$(srcdir)/backend/native/ftk_backend_fb.c
 
 LINUX_ST7781=$(srcdir)/backend/native/ftk_display_st7781.c \

@@ -4,6 +4,7 @@
 #include "ftk_source_input.h"
 #include "ftk_wnd_manager.h"
 #include "ftk_source_tslib.h"
+#include "ftk_source_ps2mouse.h"
 
 static Ret ftk_init_input(void)
 {
@@ -31,6 +32,15 @@ static Ret ftk_init_input(void)
 		}
 		else
 #endif
+		if(strcmp(filename, "/dev/input/mice") == 0)
+		{
+			int max_x = ftk_display_width(ftk_default_display());
+			int max_y = ftk_display_height(ftk_default_display());
+
+			source = ftk_source_ps2mouse_create(filename, 
+				(FtkOnEvent)ftk_wnd_manager_queue_event_auto_rotate, ftk_default_wnd_manager(), max_x, max_y);
+		}
+		else
 		{
 			source = ftk_source_input_create(filename, 
 				(FtkOnEvent)ftk_wnd_manager_queue_event_auto_rotate, ftk_default_wnd_manager());
@@ -70,13 +80,14 @@ static Ret ftk_init_input(void)
 
 Ret ftk_backend_init(int argc, char* argv[])
 {
-	ftk_init_input();
 	ftk_set_display(ftk_display_fb_create(getenv("FTK_FB_NAME") ? getenv("FTK_FB_NAME") : FTK_FB_NAME));
 	if(ftk_default_display() == NULL)
 	{
 		ftk_loge("open display failed.\n");
 		exit(0);
 	}
+	
+	ftk_init_input();
 
 	return RET_OK;
 }

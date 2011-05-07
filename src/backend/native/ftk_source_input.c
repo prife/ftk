@@ -47,7 +47,7 @@ typedef struct _PrivInfo
 	FtkEvent event;
 	FtkOnEvent on_event;
 	void* user_data;
-	char filename[32];
+	char filename[64];
 }PrivInfo;
 
 #include <linux/input.h>
