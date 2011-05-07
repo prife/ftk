@@ -44,7 +44,19 @@ struct _FtkFontDesc
 static Ret ftk_font_desc_parse(FtkFontDesc* thiz, const char* font_desc)
 {
 	const char* p = NULL;
-	font_desc = font_desc != NULL ? font_desc : FTK_DEFAULT_FONT;
+
+	if(font_desc == NULL)
+	{
+#ifdef FTK_FONT_SIZE
+		thiz->size = FTK_FONT_SIZE;
+		thiz->is_italic = 0;
+		thiz->is_bold = 0;
+
+		return RET_OK;
+#else
+		font_desc = font_desc != NULL ? font_desc : FTK_DEFAULT_FONT;
+#endif		
+	}
 
 	p = strstr(font_desc, "size:");
 	if(p != NULL)

@@ -29,13 +29,13 @@ backend_sigma_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/sigma
 endif
 
 if FTK_BACKEND_FB
-noinst_PROGRAMS +=input_test
+bin_PROGRAMS+=input_test
 
 input_test_SOURCES=input_test.c
 input_test_LDFLAGS=$(MYLDFLAGS)
 input_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/native
 if ENABLE_TSLIB
-noinst_PROGRAMS +=tslib_test
+bin_PROGRAMS+=tslib_test
 tslib_test_SOURCES=tslib_test.c
 tslib_test_LDFLAGS=$(MYLDFLAGS)
 tslib_test_CFLAGS=-I$(abs_top_srcdir)/src/backend/native

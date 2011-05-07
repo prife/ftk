@@ -56,7 +56,7 @@ FtkFontManager* ftk_font_manager_create(int max_font_nr)
 	if(thiz != NULL)
 	{
 		thiz->nr = max_font_nr;
-		thiz->default_font_desc = ftk_font_desc_create(FTK_DEFAULT_FONT);
+		thiz->default_font_desc = ftk_font_desc_create(NULL);
 	}
 
 	return thiz;
