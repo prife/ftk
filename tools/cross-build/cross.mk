@@ -1,5 +1,5 @@
-all: check zlib png_new jpeg $(TSLIB) freetype $(CAIRO) libftk
-all_clean:  zlib_clean png_new_clean jpeg_clean  tslib_clean freetype_clean libftk_clean
+all: check zlib png jpeg $(TSLIB) freetype $(CAIRO) libftk
+all_clean:  zlib_clean png_clean jpeg_clean  tslib_clean freetype_clean libftk_clean
 
 all_dfb: check zlib png jpeg $(TSLIB) freetype directfb directfb_examples $(CAIRO) libftk
 all_dfb_clean:  zlib_clean png_clean jpeg_clean tslib_clean freetype_clean directfb_clean directfb_examples_clean libftk_clean
@@ -8,7 +8,7 @@ check:
 	if [ ! -e packages ]; then mkdir packages;fi
 
 packages/zlib-1.2.5.tar.gz:
-	cd packages && wget ftp://ftp.simplesystems.org/pub/libpng/png/src/zlib-1.2.5.tar.gz
+	cd packages && wget http://www.limodev.cn/ftk/zlib-1.2.5.tar.gz
 zlib-1.2.5: packages/zlib-1.2.5.tar.gz
 	tar xf packages/zlib-1.2.5.tar.gz
 zlib: zlib-1.2.5
@@ -20,32 +20,20 @@ zlib: zlib-1.2.5
 zlib_clean:
 	cd zlib-1.2.5 && make clean
 
-packages/libpng-1.2.35.tar.bz2:
-	cd packages && wget http://nchc.dl.sourceforge.net/sourceforge/libpng/libpng-1.2.35.tar.bz2
-libpng-1.2.35: packages/libpng-1.2.35.tar.bz2
-	tar xf packages/libpng-1.2.35.tar.bz2
-png: libpng-1.2.35
-	mkdir libpng-1.2.35/$(ARCH); cd libpng-1.2.35/$(ARCH) && \
+packages/libpng-1.4.7.tar.gz:
+	cd packages && wget http://www.limodev.cn/ftk/libpng-1.4.7.tar.gz
+libpng-1.4.7: packages/libpng-1.4.7.tar.gz
+	tar xf packages/libpng-1.4.7.tar.gz
+png: libpng-1.4.7
+	mkdir libpng-1.4.7/$(ARCH); cd libpng-1.4.7/$(ARCH) && \
 	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 png_clean:
-	rm -rf libpng-1.2.35/$(ARCH)
-
-packages/libpng-1.4.5.tar.gz:
-	cd packages && wget ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.4.5.tar.gz
-libpng-1.4.5: packages/libpng-1.4.5.tar.gz
-	tar xf packages/libpng-1.4.5.tar.gz
-png_new: libpng-1.4.5
-	mkdir libpng-1.4.5/$(ARCH); cd libpng-1.4.5/$(ARCH) && \
-	../configure $(HOST_PARAM) --prefix=$(PREFIX)  &&\
-	make clean; make && make install DESTDIR=${STAGING} && \
-	make install DESTDIR=/ 
-png_new_clean:
-	rm -rf libpng-1.4.5/$(ARCH)
+	rm -rf libpng-1.4.7/$(ARCH)
 
 packages/jpegsrc.v7.tar.gz:
-	cd packages && wget ftp://ftp.carnet.hr/misc/imagemagick/delegates/jpegsrc.v7.tar.gz
+	cd packages && wget http://www.limodev.cn/ftk//jpegsrc.v7.tar.gz
 jpegsrc.v7: packages/jpegsrc.v7.tar.gz
 	tar xf packages/jpegsrc.v7.tar.gz
 jpeg: jpegsrc.v7
@@ -57,7 +45,7 @@ jpeg_clean:
 	rm -rf jpeg-7/$(ARCH)
 
 packages/tslib-1.0.tar.bz2:
-	cd packages && wget http://download.berlios.de/tslib/tslib-1.0.tar.bz2
+	cd packages && wget http://www.limodev.cn/ftk/tslib-1.0.tar.bz2
 tslib-1.0: packages/tslib-1.0.tar.bz2
 	tar xf packages/tslib-1.0.tar.bz2
 tslib: tslib-1.0
