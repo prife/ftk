@@ -63,11 +63,45 @@ typedef struct _PrivInfo
 
 static Ret ftk_icon_view_item_reset(FtkIconViewItem* item);
 
+Ret ftk_widget_invalidate_item(FtkWidget* thiz, int item)
+{
+	int row = 0;
+	int col = 0;
+	int offset = 0;
+	FtkRect rect = {0};
+	DECL_PRIV0(thiz, priv);
+
+	if(!ftk_widget_is_visible(ftk_widget_toplevel(thiz)))
+	{
+		return RET_FAIL;
+	}
+
+	offset = item - priv->visible_start;
+	if(offset < 0) return RET_OK;
+
+	row = offset / priv->cols;
+	col = offset % priv->cols;
+
+	if(row > priv->rows) return RET_OK;
+
+	rect.width = priv->item_width;
+	rect.height = priv->item_height;
+	rect.x = ftk_widget_left_abs(thiz) + priv->left_margin + col * priv->item_width;
+	rect.y = ftk_widget_top_abs(thiz) + priv->top_margin + row * priv->item_height;
+
+	ftk_logd("%s: item=%d %d %d %d %d\n", __func__, item, rect.x, rect.y, rect.width, rect.height);
+
+	return ftk_window_invalidate(ftk_widget_toplevel(thiz), &rect);
+}
+
 static Ret ftk_icon_view_set_cursor(FtkWidget* thiz, int current)
 {
 	DECL_PRIV0(thiz, priv);
-	priv->current = current;
+	int	visible_start = priv->visible_start;
 
+	ftk_widget_invalidate_item(thiz, priv->current);
+	
+	priv->current = current;
 	if(priv->current < 0)
 	{
 		priv->current = 0;
@@ -98,7 +132,14 @@ static Ret ftk_icon_view_set_cursor(FtkWidget* thiz, int current)
 		priv->visible_start = 0;
 	}
 
-	ftk_widget_invalidate(thiz);
+	if(visible_start != priv->visible_start)
+	{
+		ftk_widget_invalidate(thiz);
+	}
+	else
+	{
+		ftk_widget_invalidate_item(thiz, priv->current);
+	}
 
 	return RET_REMOVE;
 }
@@ -141,7 +182,7 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_MOUSE_UP:
 		{
-			ftk_widget_invalidate(thiz);
+			ftk_widget_invalidate_item(thiz, priv->current);
 			ftk_window_ungrab(ftk_widget_toplevel(thiz), thiz);
 			if(priv->current < priv->nr && priv->active)
 			{
@@ -157,7 +198,7 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && !priv->active)
 			{
 				priv->active = 1;
-				ftk_widget_invalidate(thiz);
+				ftk_widget_invalidate_item(thiz, priv->current);
 			}
 
 			switch(event->u.key.code)
@@ -207,7 +248,7 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 			if(FTK_IS_ACTIVE_KEY(event->u.key.code) && priv->active) 
 			{
 				priv->active = 0;
-				ftk_widget_invalidate(thiz);
+				ftk_widget_invalidate_item(thiz, priv->current);
 				if(priv->current < priv->nr)
 				{
 					FtkIconViewItem* item = priv->items + priv->current;

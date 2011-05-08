@@ -302,15 +302,15 @@ Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	{
 		for(j = x, k = ox; j < w; j++, k++)
 		{
-			if(likely(src[j].a == 0xff))
+			FtkColor* pdst = dst+k;
+			FtkColor* psrc = src+j;
+
+			if(likely(psrc->a == 0xff))
 			{
-				dst[k] = src[j];
+				*(unsigned int*)(pdst) = *(unsigned int*)(psrc);	
 			}
 			else
 			{
-				FtkColor* pdst = dst+k;
-				FtkColor* psrc = src+j;
-				
 				alpha = psrc->a;
 				FTK_ALPHA_1(psrc->b, pdst->b, alpha);
 				FTK_ALPHA_1(psrc->g, pdst->g, alpha);
@@ -473,11 +473,12 @@ Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, void* data,
 	{
 		for(ox = 0; ox < w; ox++)
 		{
+			FtkColor* pdst = dst + ox;
 			unsigned char* psrc =(unsigned char*) (src + ox);
-			dst[ox].r = psrc[0];
-			dst[ox].g = psrc[1];
-			dst[ox].b = psrc[2]; 
-			dst[ox].a = psrc[3];
+			pdst->r = psrc[0];
+			pdst->g = psrc[1];
+			pdst->b = psrc[2]; 
+			pdst->a = psrc[3];
 		}
 		src += dw; 
 		dst += bw;
