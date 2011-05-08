@@ -54,6 +54,7 @@ Ret ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source)
 	event.type = FTK_EVT_REMOVE_SOURCE;
 	event.u.extra = source;
 
+	ftk_source_disable(source);
 	return ftk_source_queue_event(ftk_primary_source(), &event);
 }
 

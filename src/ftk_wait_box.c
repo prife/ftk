@@ -71,6 +71,11 @@ static void ftk_wait_box_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
+
+		if(priv->waiting)
+		{
+			ftk_wait_box_stop_waiting(thiz);
+		}
 		ftk_source_unref(priv->timer);
 		ftk_bitmap_unref(priv->bitmap);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
