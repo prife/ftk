@@ -66,6 +66,7 @@ Ret ftk_source_timer_reset(FtkSource* thiz)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
 
+	thiz->disable = 0;
 	ftk_source_timer_calc_timer(priv);
 
 	return RET_OK;

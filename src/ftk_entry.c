@@ -214,6 +214,16 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 			if(ftk_text_buffer_delete_chars(priv->text_buffer, caret, -1) == RET_OK)
 			{
 			}
+			
+			/*FIXME*/
+			if(priv->visible_start > 0)
+			{
+				if(priv->caret == priv->visible_start)
+				{
+					ftk_entry_move_caret(thiz, -1);
+					ftk_entry_move_caret(thiz, 1);
+				}
+			}
 			break;
 		}
 		default:
