@@ -50,7 +50,7 @@
 #define FTK_FONT                        "gb2312.fnt"
 
 #define ftk_strncpy                     strncpy
-#define ftk_snprintf                    snprintf
+#define ftk_snprintf                    rt_snprintf
 #define ftk_vsnprintf                   vsnprintf
 #define ftk_getcwd                      getcwd
 #define ftk_sscanf                      sscanf
@@ -59,7 +59,7 @@
 
 #define USE_FTK_MAIN
 
-#define usleep(us)			            rt_thread_sleep(us*1000000/RT_TICK_PER_SECOND)
+#define usleep(us)			            rt_thread_sleep(us*1000/RT_TICK_PER_SECOND)
 #define select 							ftk_rtthread_select
 #define printf							rt_kprintf
 

@@ -51,7 +51,7 @@ void ftk_rtthread_select_deinit(void)
 int ftk_rtthread_select(int mfd, fd_set *read_fdset, fd_set *write_fdset, fd_set *err_fdset, struct timeval *tv)
 {
 	rt_uint32_t tick = 0;
-    rt_uint32_t flags = 0;
+	rt_uint32_t flags = 0;
 	int i = 0, n = 0;
 
 	if (tv != NULL)
@@ -85,12 +85,12 @@ int ftk_rtthread_select(int mfd, fd_set *read_fdset, fd_set *write_fdset, fd_set
 
 int ftk_rtthread_set_file_readble(int fd)
 {
-    rt_event_send(&ftk_event, (0x01ul<<fd));
+	rt_event_send(&ftk_event, (0x01ul<<fd));
 }
 
 int ftk_rtthread_select_fd_alloc(void)
 {
-	int	i;
+	int i;
 
 	for (i=0; i<32; i++)
 	{
@@ -105,5 +105,6 @@ int ftk_rtthread_select_fd_alloc(void)
 
 void ftk_rtthread_select_fd_free(int fd)
 {
-    ftk_select_fd_pool &= ~(0x01ul<<fd);
+	ftk_select_fd_pool &= ~(0x01ul<<fd);
 }
+

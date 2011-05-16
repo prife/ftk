@@ -21,9 +21,9 @@ struct LcdInfo
 
 static int  lcd_open(struct LcdInfo* lcd, const char *filename)
 {
-	extern rt_uint16_t _rt_hw_framebuffer[RT_HW_LCD_HEIGHT][RT_HW_LCD_WIDTH];
+	extern rt_uint16_t _rt_framebuffer[RT_HW_LCD_HEIGHT][RT_HW_LCD_WIDTH];
 
-	lcd->bits 		    = _rt_hw_framebuffer;
+	lcd->bits 		    = _rt_framebuffer;
 	lcd->bits_per_pixel = 16;
 	lcd->width 			= LCD_WIDTH;
 	lcd->height 		= LCD_HEIGHT;
