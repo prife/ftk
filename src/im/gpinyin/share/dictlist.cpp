@@ -47,7 +47,7 @@ DictList::~DictList() {
   free_resource();
 }
 
-bool DictList::alloc_resource(size_t buf_size, size_t scis_num) {
+bool DictList::alloc_resource(unsigned buf_size, unsigned scis_num) {
   // Allocate memory
   buf_ = static_cast<char16*>(malloc(buf_size * sizeof(char16)));
   if (NULL == buf_)
@@ -83,8 +83,8 @@ void DictList::free_resource() {
 }
 
 #ifdef ___BUILD_MODEL___
-bool DictList::init_list(const SingleCharItem *scis, size_t scis_num,
-                         const LemmaEntry *lemma_arr, size_t lemma_num) {
+bool DictList::init_list(const SingleCharItem *scis, unsigned scis_num,
+                         const LemmaEntry *lemma_arr, unsigned lemma_num) {
   if (NULL == scis || 0 == scis_num || NULL == lemma_arr || 0 == lemma_num)
     return false;
 
@@ -94,7 +94,7 @@ bool DictList::init_list(const SingleCharItem *scis, size_t scis_num,
     free(buf_);
 
   // calculate the size
-  size_t buf_size = calculate_size(lemma_arr, lemma_num);
+  unsigned buf_size = calculate_size(lemma_arr, lemma_num);
   if (0 == buf_size)
     return false;
 
@@ -110,12 +110,12 @@ bool DictList::init_list(const SingleCharItem *scis, size_t scis_num,
   return true;
 }
 
-size_t DictList::calculate_size(const LemmaEntry* lemma_arr, size_t lemma_num) {
-  size_t last_hz_len = 0;
-  size_t list_size = 0;
-  size_t id_num = 0;
+unsigned DictList::calculate_size(const LemmaEntry* lemma_arr, unsigned lemma_num) {
+  unsigned last_hz_len = 0;
+  unsigned list_size = 0;
+  unsigned id_num = 0;
 
-  for (size_t i = 0; i < lemma_num; i++) {
+  for (unsigned i = 0; i < lemma_num; i++) {
     if (0 == i) {
       last_hz_len = lemma_arr[i].hz_str_len;
 
@@ -129,7 +129,7 @@ size_t DictList::calculate_size(const LemmaEntry* lemma_arr, size_t lemma_num) {
       last_hz_len = 1;
       list_size += last_hz_len;
     } else {
-      size_t current_hz_len = lemma_arr[i].hz_str_len;
+      unsigned current_hz_len = lemma_arr[i].hz_str_len;
 
       assert(current_hz_len >= last_hz_len);
 
@@ -137,7 +137,7 @@ size_t DictList::calculate_size(const LemmaEntry* lemma_arr, size_t lemma_num) {
           list_size += current_hz_len;
           id_num++;
       } else {
-        for (size_t len = last_hz_len; len < current_hz_len - 1; len++) {
+        for (unsigned len = last_hz_len; len < current_hz_len - 1; len++) {
           start_pos_[len] = start_pos_[len - 1];
           start_id_[len] = start_id_[len - 1];
         }
@@ -153,7 +153,7 @@ size_t DictList::calculate_size(const LemmaEntry* lemma_arr, size_t lemma_num) {
     }
   }
 
-  for (size_t i = last_hz_len; i <= kMaxLemmaSize; i++) {
+  for (unsigned i = last_hz_len; i <= kMaxLemmaSize; i++) {
     if (0 == i) {
       start_pos_[0] = 0;
       start_id_[0] = 1;
@@ -166,26 +166,26 @@ size_t DictList::calculate_size(const LemmaEntry* lemma_arr, size_t lemma_num) {
   return start_pos_[kMaxLemmaSize];
 }
 
-void DictList::fill_scis(const SingleCharItem *scis, size_t scis_num) {
+void DictList::fill_scis(const SingleCharItem *scis, unsigned scis_num) {
   assert(scis_num_ == scis_num);
 
-  for (size_t pos = 0; pos < scis_num_; pos++) {
+  for (unsigned pos = 0; pos < scis_num_; pos++) {
     scis_hz_[pos] = scis[pos].hz;
     scis_splid_[pos] = scis[pos].splid;
   }
 }
 
-void DictList::fill_list(const LemmaEntry* lemma_arr, size_t lemma_num) {
-  size_t current_pos = 0;
+void DictList::fill_list(const LemmaEntry* lemma_arr, unsigned lemma_num) {
+  unsigned current_pos = 0;
 
   utf16_strncpy(buf_, lemma_arr[0].hanzi_str,
                 lemma_arr[0].hz_str_len);
 
   current_pos = lemma_arr[0].hz_str_len;
 
-  size_t id_num = 1;
+  unsigned id_num = 1;
 
-  for (size_t i = 1; i < lemma_num; i++) {
+  for (unsigned i = 1; i < lemma_num; i++) {
     utf16_strncpy(buf_ + current_pos, lemma_arr[i].hanzi_str,
                   lemma_arr[i].hz_str_len);
 
@@ -213,7 +213,7 @@ char16* DictList::find_pos2_startedbyhz(char16 hz_char) {
 #endif  // ___BUILD_MODEL___
 
 char16* DictList::find_pos_startedbyhzs(const char16 last_hzs[],
-    size_t word_len, int (*cmp_func)(const void *, const void *)) {
+    unsigned word_len, int (*cmp_func)(const void *, const void *)) {
   char16 *found_w = static_cast<char16*>
                     (mybsearch(last_hzs, buf_ + start_pos_[word_len - 1],
                                (start_pos_[word_len] - start_pos_[word_len - 1])
@@ -230,9 +230,9 @@ char16* DictList::find_pos_startedbyhzs(const char16 last_hzs[],
   return found_w;
 }
 
-size_t DictList::predict(const char16 last_hzs[], uint16 hzs_len,
-                         NPredictItem *npre_items, size_t npre_max,
-                         size_t b4_used) {
+unsigned DictList::predict(const char16 last_hzs[], uint16 hzs_len,
+                         NPredictItem *npre_items, unsigned npre_max,
+                         unsigned b4_used) {
   assert(hzs_len <= kMaxPredictSize && hzs_len > 0);
 
   // 1. Prepare work
@@ -240,7 +240,7 @@ size_t DictList::predict(const char16 last_hzs[], uint16 hzs_len,
 
   NGram& ngram = NGram::get_instance();
 
-  size_t item_num = 0;
+  unsigned item_num = 0;
 
   // 2. Do prediction
   for (uint16 pre_len = 1; pre_len <= kMaxPredictSize + 1 - hzs_len;
@@ -255,7 +255,7 @@ size_t DictList::predict(const char16 last_hzs[], uint16 hzs_len,
       memset(npre_items + item_num, 0, sizeof(NPredictItem));
       utf16_strncpy(npre_items[item_num].pre_hzs, w_buf + hzs_len, pre_len);
       npre_items[item_num].psb =
-        ngram.get_uni_psb((size_t)(w_buf - buf_ - start_pos_[word_len - 1])
+        ngram.get_uni_psb((unsigned)(w_buf - buf_ - start_pos_[word_len - 1])
                           / word_len + start_id_[word_len - 1]);
       npre_items[item_num].his_len = hzs_len;
       item_num++;
@@ -263,10 +263,10 @@ size_t DictList::predict(const char16 last_hzs[], uint16 hzs_len,
     }
   }
 
-  size_t new_num = 0;
-  for (size_t i = 0; i < item_num; i++) {
+  unsigned new_num = 0;
+  for (unsigned i = 0; i < item_num; i++) {
     // Try to find it in the existing items
-    size_t e_pos;
+    unsigned e_pos;
     for (e_pos = 1; e_pos <= b4_used; e_pos++) {
       if (utf16_strncmp((*(npre_items - e_pos)).pre_hzs, npre_items[i].pre_hzs,
                         kMaxPredictSize) == 0)
@@ -294,7 +294,7 @@ uint16 DictList::get_lemma_str(LemmaIdType id_lemma, char16 *str_buf,
     if (i + 1 > str_max - 1)
       return 0;
     if (start_id_[i] <= id_lemma && start_id_[i + 1] > id_lemma) {
-      size_t id_span = id_lemma - start_id_[i];
+      unsigned id_span = id_lemma - start_id_[i];
 
       uint16 *buf = buf_ + start_pos_[i] + id_span * (i + 1);
       for (uint16 len = 0; len <= i; len++) {
@@ -354,7 +354,7 @@ LemmaIdType DictList::get_lemma_id(const char16 *str, uint16 str_len) {
     return 0;
 
   assert(found > buf_);
-  assert(static_cast<size_t>(found - buf_) >= start_pos_[str_len - 1]);
+  assert(static_cast<unsigned>(found - buf_) >= start_pos_[str_len - 1]);
   return static_cast<LemmaIdType>
       (start_id_[str_len - 1] +
        (found - buf_ - start_pos_[str_len - 1]) / str_len);
@@ -384,14 +384,14 @@ bool DictList::save_list(FILE *fp) {
       NULL == scis_hz_ || NULL == scis_splid_ || 0 == scis_num_)
     return false;
 
-  if (fwrite(&scis_num_, sizeof(size_t), 1, fp) != 1)
+  if (fwrite(&scis_num_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fwrite(start_pos_, sizeof(size_t), kMaxLemmaSize + 1, fp) !=
+  if (fwrite(start_pos_, sizeof(unsigned), kMaxLemmaSize + 1, fp) !=
       kMaxLemmaSize + 1)
     return false;
 
-  if (fwrite(start_id_, sizeof(size_t), kMaxLemmaSize + 1, fp) !=
+  if (fwrite(start_id_, sizeof(unsigned), kMaxLemmaSize + 1, fp) !=
       kMaxLemmaSize + 1)
     return false;
 
@@ -414,14 +414,14 @@ bool DictList::load_list(FILE *fp) {
 
   initialized_ = false;
 
-  if (fread(&scis_num_, sizeof(size_t), 1, fp) != 1)
+  if (fread(&scis_num_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fread(start_pos_, sizeof(size_t), kMaxLemmaSize + 1, fp) !=
+  if (fread(start_pos_, sizeof(unsigned), kMaxLemmaSize + 1, fp) !=
       kMaxLemmaSize + 1)
     return false;
 
-  if (fread(start_id_, sizeof(size_t), kMaxLemmaSize + 1, fp) !=
+  if (fread(start_id_, sizeof(unsigned), kMaxLemmaSize + 1, fp) !=
       kMaxLemmaSize + 1)
     return false;
 

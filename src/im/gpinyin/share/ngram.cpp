@@ -58,10 +58,10 @@ int qsearch_nearest(double code_book[], double freq, int start, int end) {
     return qsearch_nearest(code_book, freq, mid, end);
 }
 
-size_t update_code_idx(double freqs[], size_t num, double code_book[],
+unsigned update_code_idx(double freqs[], unsigned num, double code_book[],
                        CODEBOOK_TYPE *code_idx) {
-  size_t changed = 0;
-  for (size_t pos = 0; pos < num; pos++) {
+  unsigned changed = 0;
+  for (unsigned pos = 0; pos < num; pos++) {
     CODEBOOK_TYPE idx;
     idx = qsearch_nearest(code_book, freqs[pos], 0, kCodeBookSize - 1);
     if (idx != code_idx[pos])
@@ -71,26 +71,26 @@ size_t update_code_idx(double freqs[], size_t num, double code_book[],
   return changed;
 }
 
-double recalculate_kernel(double freqs[], size_t num, double code_book[],
+double recalculate_kernel(double freqs[], unsigned num, double code_book[],
                           CODEBOOK_TYPE *code_idx) {
   double ret = 0;
 
-  size_t *item_num =  new size_t[kCodeBookSize];
+  unsigned *item_num =  new unsigned[kCodeBookSize];
   assert(item_num);
-  memset(item_num, 0, sizeof(size_t) * kCodeBookSize);
+  memset(item_num, 0, sizeof(unsigned) * kCodeBookSize);
 
   double *cb_new = new double[kCodeBookSize];
   assert(cb_new);
   memset(cb_new, 0, sizeof(double) * kCodeBookSize);
 
-  for (size_t pos = 0; pos < num; pos++) {
+  for (unsigned pos = 0; pos < num; pos++) {
     ret += distance(freqs[pos], code_book[code_idx[pos]]);
 
     cb_new[code_idx[pos]] += freqs[pos];
     item_num[code_idx[pos]] += 1;
   }
 
-  for (size_t code = 0; code < kCodeBookSize; code++) {
+  for (unsigned code = 0; code < kCodeBookSize; code++) {
     assert(item_num[code] > 0);
     code_book[code] = cb_new[code] / item_num[code];
   }
@@ -101,12 +101,12 @@ double recalculate_kernel(double freqs[], size_t num, double code_book[],
   return ret;
 }
 
-void iterate_codes(double freqs[], size_t num, double code_book[],
+void iterate_codes(double freqs[], unsigned num, double code_book[],
                    CODEBOOK_TYPE *code_idx) {
-  size_t iter_num = 0;
+  unsigned iter_num = 0;
   double delta_last = 0;
   do {
-    size_t changed = update_code_idx(freqs, num, code_book, code_idx);
+    unsigned changed = update_code_idx(freqs, num, code_book, code_idx);
 
     double delta = recalculate_kernel(freqs, num, code_book, code_idx);
 
@@ -164,7 +164,7 @@ bool NGram::save_ngram(FILE *fp) {
   if (0 == idx_num_ || NULL == freq_codes_ ||  NULL == lma_freq_idx_)
     return false;
 
-  if (fwrite(&idx_num_, sizeof(size_t), 1, fp) != 1)
+  if (fwrite(&idx_num_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
   if (fwrite(freq_codes_, sizeof(LmaScoreType), kCodeBookSize, fp) !=
@@ -183,7 +183,7 @@ bool NGram::load_ngram(FILE *fp) {
 
   initialized_ = false;
 
-  if (fread(&idx_num_, sizeof(size_t), 1, fp) != 1 )
+  if (fread(&idx_num_, sizeof(unsigned), 1, fp) != 1 )
     return false;
 
   if (NULL != lma_freq_idx_)
@@ -213,7 +213,7 @@ bool NGram::load_ngram(FILE *fp) {
   return true;
 }
 
-void NGram::set_total_freq_none_sys(size_t freq_none_sys) {
+void NGram::set_total_freq_none_sys(unsigned freq_none_sys) {
   total_freq_none_sys_ = freq_none_sys;
   if (0 == total_freq_none_sys_) {
     sys_score_compensation_ = 0;
@@ -241,7 +241,7 @@ float NGram::convert_psb_to_score(double psb) {
 }
 
 #ifdef ___BUILD_MODEL___
-bool NGram::build_unigram(LemmaEntry *lemma_arr, size_t lemma_num,
+bool NGram::build_unigram(LemmaEntry *lemma_arr, unsigned lemma_num,
                           LemmaIdType next_idx_unused) {
   if (NULL == lemma_arr || 0 == lemma_num || next_idx_unused <= 1)
     return false;
@@ -254,7 +254,7 @@ bool NGram::build_unigram(LemmaEntry *lemma_arr, size_t lemma_num,
   freqs[0] = ADD_COUNT;
   total_freq += freqs[0];
   LemmaIdType idx_now = 0;
-  for (size_t pos = 0; pos < lemma_num; pos++) {
+  for (unsigned pos = 0; pos < lemma_num; pos++) {
     if (lemma_arr[pos].idx_by_hz == idx_now)
       continue;
     idx_now++;
@@ -272,7 +272,7 @@ bool NGram::build_unigram(LemmaEntry *lemma_arr, size_t lemma_num,
   idx_num_ = idx_now + 1;
   assert(idx_now + 1 == next_idx_unused);
 
-  for (size_t pos = 0; pos < idx_num_; pos++) {
+  for (unsigned pos = 0; pos < idx_num_; pos++) {
     freqs[pos] = freqs[pos] / total_freq;
     assert(freqs[pos] > 0);
     if (freqs[pos] > max_freq)
@@ -290,14 +290,14 @@ bool NGram::build_unigram(LemmaEntry *lemma_arr, size_t lemma_num,
   assert(freq_codes_);
   memset(freq_codes_, 0, sizeof(LmaScoreType) * kCodeBookSize);
 
-  size_t freq_pos = 0;
-  for (size_t code_pos = 0; code_pos < kCodeBookSize; code_pos++) {
+  unsigned freq_pos = 0;
+  for (unsigned code_pos = 0; code_pos < kCodeBookSize; code_pos++) {
     bool found = true;
 
     while (found) {
       found = false;
       double cand = freqs[freq_pos];
-      for (size_t i = 0; i < code_pos; i++)
+      for (unsigned i = 0; i < code_pos; i++)
         if (freq_codes_df_[i] == cand) {
           found = true;
           break;
@@ -324,7 +324,7 @@ bool NGram::build_unigram(LemmaEntry *lemma_arr, size_t lemma_num,
     printf("\n------Language Model Unigram Codebook------\n");
   }
 
-  for (size_t code_pos = 0; code_pos < kCodeBookSize; code_pos++) {
+  for (unsigned code_pos = 0; code_pos < kCodeBookSize; code_pos++) {
     double log_score = log(freq_codes_df_[code_pos]);
     float final_score = convert_psb_to_score(freq_codes_df_[code_pos]);
     if (kPrintDebug0) {

@@ -36,6 +36,7 @@
 #define FTK_ZALLOC(s) calloc(1, s)
 #define FTK_REALLOC realloc
 #else
+#include "ftk_log.h"
 #include "ftk_allocator.h"
 #endif
 
@@ -54,13 +55,24 @@ typedef struct _FontDataHeader
 	char style[32];
 }FontDataHeader;
 
+typedef struct _FGlyph
+{
+	signed char x;
+	signed char y;
+	unsigned char w;
+	unsigned char h;
+	unsigned short code;
+	unsigned short unused;
+	unsigned offset;
+}FGlyph;
+
 struct _FontData
 {
 	FontDataHeader header;
 
-	Glyph* glyphs;
-	size_t data_size;
-	size_t data_buffer_size;
+	FGlyph* glyphs;
+	unsigned data_size;
+	unsigned data_buffer_size;
 	unsigned char* data;
 
 	void* org_data;
@@ -68,10 +80,10 @@ struct _FontData
 
 	char file_name[260];
 	void* current_glyph_data;
-	size_t current_glyph_data_size;
+	unsigned current_glyph_data_size;
 };
 
-static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyph* glyph);
+static Ret font_data_read_glyph(FontData* thiz, unsigned offset, unsigned size, Glyph* glyph);
 
 FontData* font_data_create(int char_nr, Encoding encoding)
 {
@@ -86,14 +98,14 @@ FontData* font_data_create(int char_nr, Encoding encoding)
 		if(char_nr > 0)
 		{
 			thiz->new_created = 1;
-			thiz->glyphs = FTK_ZALLOC(char_nr * sizeof(Glyph));
+			thiz->glyphs = FTK_ZALLOC(char_nr * sizeof(FGlyph));
 		}
 	}
 
 	return thiz;
 }
 
-FontData* font_data_load(char* data, size_t length)
+FontData* font_data_load(char* data, unsigned length)
 {
 	FontData* thiz = font_data_create(0, 0);
 
@@ -103,9 +115,9 @@ FontData* font_data_load(char* data, size_t length)
 	{
 		int glyph_size = 0;
 		thiz->header = *(FontDataHeader*)data;
-		glyph_size = thiz->header.char_nr * sizeof(Glyph);
+		glyph_size = thiz->header.char_nr * sizeof(FGlyph);
 
-		thiz->glyphs = (Glyph*)(data + sizeof(FontDataHeader));
+		thiz->glyphs = (FGlyph*)(data + sizeof(FontDataHeader));
 		thiz->data = (unsigned char*)(data + sizeof(FontDataHeader) + glyph_size);
 		thiz->data_size = length - ((char*)thiz->data - data);
 		thiz->data_buffer_size = thiz->data_size;
@@ -148,7 +160,7 @@ FontData* font_data_load_file(const char* file_name)
 	return font_data_load(buffer, length);
 }
 
-static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyph* glyph)
+static Ret font_data_read_glyph(FontData* thiz, unsigned offset, unsigned size, Glyph* glyph)
 {
 
 	return RET_FAIL;
@@ -167,10 +179,10 @@ FontData* font_data_load_file(const char* file_name)
 		if(fp != NULL)
 		{
 			int ret = 0;
-			size_t glyphs_size = 0;
+			unsigned glyphs_size = 0;
 			ret = ftk_file_read(fp, &thiz->header, sizeof(thiz->header));
 			assert(ret == sizeof(thiz->header));
-			glyphs_size = thiz->header.char_nr * sizeof(Glyph);
+			glyphs_size = thiz->header.char_nr * sizeof(FGlyph);
 			thiz->glyphs = FTK_ZALLOC(glyphs_size);
 			assert(thiz->glyphs != NULL);
 			ftk_file_read(fp, thiz->glyphs, glyphs_size);
@@ -190,11 +202,11 @@ FontData* font_data_load_file(const char* file_name)
 	return thiz;
 }
 
-static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyph* glyph)
+static Ret font_data_read_glyph(FontData* thiz, unsigned offset, unsigned size, Glyph* glyph)
 {
 	int ret = 0;
 	FtkFsHandle fp = ftk_file_open(thiz->file_name, "rb");
-	size_t skip = sizeof(thiz->header) + thiz->header.char_nr * sizeof(Glyph) + offset;
+	unsigned skip = sizeof(thiz->header) + thiz->header.char_nr * sizeof(FGlyph) + offset;
 	return_val_if_fail(fp != NULL && glyph != NULL, RET_FAIL);
 
 	ret = ftk_file_seek(fp, skip);
@@ -208,7 +220,7 @@ static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyp
 	}
 
 	ret = ftk_file_read(fp, thiz->current_glyph_data, size);
-////	ftk_logd("%s: offset=%d size=%d ret=%d\n", __func__, offset, size, ret);
+	ftk_logd("%s: offset=%d size=%d ret=%d\n", __func__, offset, size, ret);
 	ftk_file_close(fp);
 	assert(ret == size);
 	glyph->data = thiz->current_glyph_data;
@@ -219,7 +231,7 @@ static Ret font_data_read_glyph(FontData* thiz, size_t offset, size_t size, Glyp
 
 Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 {
-	size_t i = 0;
+	unsigned i = 0;
 	return_val_if_fail(thiz != NULL && glyph != NULL && thiz->new_created, RET_FAIL);
 	
 	for(i = 0; i < thiz->header.char_nr; i++)
@@ -231,10 +243,10 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 
 		if(thiz->glyphs[i].code > glyph->code || thiz->glyphs[i].code == 0)
 		{
-			size_t size = glyph->w * glyph->h;
+			unsigned size = glyph->w * glyph->h;
 			if(thiz->glyphs[i].code > glyph->code)
 			{
-				size_t k = 0;
+				unsigned k = 0;
 				for(k = thiz->header.char_nr - 1; k > i; k--)
 				{
 					thiz->glyphs[k] = thiz->glyphs[k-1];
@@ -243,7 +255,7 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 
 			if((thiz->data_size + size) >= thiz->data_buffer_size)
 			{
-				size_t data_buffer_size = thiz->data_buffer_size + (thiz->data_buffer_size >> 1) + (size << 4);
+				unsigned data_buffer_size = thiz->data_buffer_size + (thiz->data_buffer_size >> 1) + (size << 4);
 				unsigned char* data = (unsigned char*)FTK_REALLOC(thiz->data, data_buffer_size);
 				if(data != NULL)
 				{
@@ -252,14 +264,20 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
 				}
 			}
 
-			thiz->glyphs[i] = *glyph;
 			if((thiz->data_size + size) < thiz->data_buffer_size)
 			{
 				memcpy(thiz->data + thiz->data_size, glyph->data, size);
-				thiz->glyphs[i].data = (unsigned char*)thiz->data_size;
+				thiz->glyphs[i].offset = thiz->data_size;
+                thiz->glyphs[i].x = glyph->x;
+                thiz->glyphs[i].y = glyph->y;
+                thiz->glyphs[i].w = glyph->w;
+                thiz->glyphs[i].h = glyph->h;
+                thiz->glyphs[i].code = glyph->code;
+                thiz->glyphs[i].unused = glyph->unused;
 				thiz->data_size += size;
 			}
-
+            else
+                return RET_OUT_OF_SPACE;
 			return RET_OK;
 		}
 	}
@@ -284,16 +302,20 @@ Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph)
 
         if(result == 0)
         {
-			*glyph = thiz->glyphs[mid];
+            glyph->x = thiz->glyphs[mid].x;
+            glyph->y = thiz->glyphs[mid].y;
+            glyph->w = thiz->glyphs[mid].w;
+            glyph->h = thiz->glyphs[mid].h;
+            glyph->code = thiz->glyphs[mid].code;
+            glyph->unused = thiz->glyphs[mid].unused;
 			if(thiz->data != NULL)
 			{
-				glyph->data = (unsigned char*)(thiz->data + (int)(thiz->glyphs[mid].data));
+				glyph->data = (unsigned char*)(thiz->data + (int)(thiz->glyphs[mid].offset));
 			}
 			else
 			{
-				font_data_read_glyph(thiz, (size_t)glyph->data, glyph->w * glyph->h, glyph);
+				font_data_read_glyph(thiz, thiz->glyphs[mid].offset, glyph->w * glyph->h, glyph);
 			}
-
             return RET_OK;
         }
         else if(result < 0)
@@ -413,7 +435,7 @@ Ret font_data_save(FontData* thiz, const char* file_name)
 	FILE* fp = fopen(file_name, "wb+");
 	{
 		fwrite(&thiz->header, 1, sizeof(FontDataHeader), fp);
-		fwrite(thiz->glyphs, 1, sizeof(Glyph) * thiz->header.char_nr, fp);
+		fwrite(thiz->glyphs, 1, sizeof(FGlyph) * thiz->header.char_nr, fp);
 		fwrite(thiz->data, 1, thiz->data_size, fp);
 		fclose(fp);
 	}

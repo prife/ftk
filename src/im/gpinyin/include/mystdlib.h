@@ -21,11 +21,11 @@
 
 namespace ime_pinyin {
 
-void myqsort(void *p, size_t n, size_t es,
+void myqsort(void *p, unsigned n, unsigned es,
              int (*cmp)(const void *, const void *));
 
 void *mybsearch(const void *key, const void *base,
-                size_t nmemb, size_t size,
+                unsigned nmemb, unsigned size,
                 int (*compar)(const void *, const void *));
 }
 

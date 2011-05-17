@@ -2,6 +2,7 @@
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
+#include "tolua++.h"
 
 static lua_State* s_current_L = NULL;
 

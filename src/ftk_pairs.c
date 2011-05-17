@@ -29,6 +29,8 @@
  *
  */
 
+#include "ftk_allocator.h"
+#include "ftk_log.h"
 #include "ftk_pairs.h"
 
 struct _FtkPairs

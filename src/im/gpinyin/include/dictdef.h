@@ -40,14 +40,14 @@ const bool kPrintDebug1 = false;
 const bool kPrintDebug2 = false;
 
 // The max length of a lemma.
-const size_t kMaxLemmaSize = 8;
+const unsigned kMaxLemmaSize = 8;
 
 // The max length of a Pinyin (spelling).
-const size_t kMaxPinyinSize = 6;
+const unsigned kMaxPinyinSize = 6;
 
 // The number of half spelling ids. For Chinese Pinyin, there 30 half ids.
 // See SpellingTrie.h for details.
-const size_t kHalfSpellingIdNum = 29;
+const unsigned kHalfSpellingIdNum = 29;
 
 // The maximum number of full spellings. For Chinese Pinyin, there are only
 // about 410 spellings.
@@ -55,26 +55,26 @@ const size_t kHalfSpellingIdNum = 29;
 // other structures like SpellingNode, to make sure than a spelling id can be
 // stored.
 // -1 is because that 0 is never used.
-const size_t kMaxSpellingNum = 512 - kHalfSpellingIdNum - 1;
-const size_t kMaxSearchSteps = 40;
+const unsigned kMaxSpellingNum = 512 - kHalfSpellingIdNum - 1;
+const unsigned kMaxSearchSteps = 40;
 
 // One character predicts its following characters.
-const size_t kMaxPredictSize = (kMaxLemmaSize - 1);
+const unsigned kMaxPredictSize = (kMaxLemmaSize - 1);
 
-// LemmaIdType must always be size_t.
-typedef size_t LemmaIdType;
-const size_t kLemmaIdSize = 3;  // Actually, a Id occupies 3 bytes in storage.
-const size_t kLemmaIdComposing = 0xffffff;
+// LemmaIdType must always be unsigned.
+typedef unsigned LemmaIdType;
+const unsigned kLemmaIdSize = 3;  // Actually, a Id occupies 3 bytes in storage.
+const unsigned kLemmaIdComposing = 0xffffff;
 
 typedef uint16 LmaScoreType;
 typedef uint16 KeyScoreType;
 
 // Number of items with highest score are kept for prediction purpose.
-const size_t kTopScoreLemmaNum = 10;
+const unsigned kTopScoreLemmaNum = 10;
 
-const size_t kMaxPredictNumByGt3 = 1;
-const size_t kMaxPredictNumBy3 = 2;
-const size_t kMaxPredictNumBy2 = 2;
+const unsigned kMaxPredictNumByGt3 = 1;
+const unsigned kMaxPredictNumBy3 = 2;
+const unsigned kMaxPredictNumBy2 = 2;
 
 // The last lemma id (included) for the system dictionary. The system
 // dictionary's ids always start from 1.
@@ -109,8 +109,8 @@ typedef struct {
  * A node occupies 16 bytes. so, totallly less than 16 * 500 = 8K
  */
 struct LmaNodeLE0 {
-  size_t son_1st_off;
-  size_t homo_idx_buf_off;
+  unsigned son_1st_off;
+  unsigned homo_idx_buf_off;
   uint16 spl_idx;
   uint16 num_of_son;
   uint16 num_of_homo;

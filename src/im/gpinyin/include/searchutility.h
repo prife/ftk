@@ -30,8 +30,8 @@ typedef uint16 MileStoneHandle;
 
 // Type used to express a lemma and its probability score.
 typedef struct {
-  size_t id:(kLemmaIdSize * 8);
-  size_t lma_len:4;
+  unsigned id:(kLemmaIdSize * 8);
+  unsigned lma_len:4;
   uint16 psb;  // The score, the lower psb, the higher possibility.
   // For single character items, we may also need Hanzi.
   // For multiple characer items, ignore it.
@@ -133,9 +133,9 @@ int cmp_npre_by_hislen_score(const void *p1, const void *p2);
 int cmp_npre_by_hanzi_score(const void *p1, const void *p2);
 
 
-size_t remove_duplicate_npre(NPredictItem *npre_items, size_t npre_num);
+unsigned remove_duplicate_npre(NPredictItem *npre_items, unsigned npre_num);
 
-size_t align_to_size_t(size_t size);
+unsigned align_to_unsigned(unsigned size);
 
 }  // namespace
 

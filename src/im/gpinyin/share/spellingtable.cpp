@@ -41,13 +41,13 @@ int compare_raw_spl_eb(const void* p1, const void* p2) {
                 (static_cast<const RawSpelling*>(p2))->str);
 }
 
-size_t get_odd_next(size_t value) {
-  size_t v_next = value;
+unsigned get_odd_next(unsigned value) {
+  unsigned v_next = value;
   while (true) {
-    size_t v_next_sqrt = (size_t)sqrt(v_next);
+    unsigned v_next_sqrt = (unsigned)sqrt(v_next);
 
     bool is_odd = true;
-    for (size_t v_dv = 2; v_dv < v_next_sqrt + 1; v_dv++) {
+    for (unsigned v_dv = 2; v_dv < v_next_sqrt + 1; v_dv++) {
       if (v_next % v_dv == 0) {
         is_odd = false;
         break;
@@ -77,19 +77,19 @@ SpellingTable::~SpellingTable() {
   free_resource();
 }
 
-size_t SpellingTable::get_hash_pos(const char* spelling_str) {
-  size_t hash_pos = 0;
-  for (size_t pos = 0; pos < spelling_size_; pos++) {
+unsigned SpellingTable::get_hash_pos(const char* spelling_str) {
+  unsigned hash_pos = 0;
+  for (unsigned pos = 0; pos < spelling_size_; pos++) {
     if ('\0' == spelling_str[pos])
       break;
-    hash_pos += (size_t)spelling_str[pos];
+    hash_pos += (unsigned)spelling_str[pos];
   }
 
   hash_pos = hash_pos % spelling_max_num_;
   return hash_pos;
 }
 
-size_t SpellingTable::hash_pos_next(size_t hash_pos) {
+unsigned SpellingTable::hash_pos_next(unsigned hash_pos) {
   hash_pos += 123;
   hash_pos = hash_pos % spelling_max_num_;
   return hash_pos;
@@ -105,7 +105,7 @@ void SpellingTable::free_resource() {
   spelling_buf_ = NULL;
 }
 
-bool SpellingTable::init_table(size_t pure_spl_size, size_t spl_max_num,
+bool SpellingTable::init_table(unsigned pure_spl_size, unsigned spl_max_num,
                                bool need_score) {
   if (pure_spl_size == 0 || spl_max_num ==0)
     return false;
@@ -138,7 +138,7 @@ bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
   if (frozen_ || NULL == spelling_str)
     return false;
 
-  for (size_t pos = 0; pos < kNotSupportNum; pos++) {
+  for (unsigned pos = 0; pos < kNotSupportNum; pos++) {
     if (strcmp(spelling_str, kNotSupportList[pos]) == 0) {
       return false;
     }
@@ -146,7 +146,7 @@ bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
 
   total_freq_ += freq;
 
-  size_t hash_pos = get_hash_pos(spelling_str);
+  unsigned hash_pos = get_hash_pos(spelling_str);
 
   raw_spellings_[hash_pos].str[spelling_size_ - 1] = '\0';
 
@@ -156,7 +156,7 @@ bool SpellingTable::put_spelling(const char* spelling_str, double freq) {
     return true;
   }
 
-  size_t hash_pos_ori = hash_pos;
+  unsigned hash_pos_ori = hash_pos;
 
   while (true) {
     if (strncmp(raw_spellings_[hash_pos].str,
@@ -186,7 +186,7 @@ bool SpellingTable::contain(const char* spelling_str) {
   if (NULL == spelling_str || NULL == spelling_buf_ || frozen_)
     return false;
 
-  size_t hash_pos = get_hash_pos(spelling_str);
+  unsigned hash_pos = get_hash_pos(spelling_str);
 
   if ('\0' == raw_spellings_[hash_pos].str[0])
     return false;
@@ -195,7 +195,7 @@ bool SpellingTable::contain(const char* spelling_str) {
       == 0)
     return true;
 
-  size_t hash_pos_ori = hash_pos;
+  unsigned hash_pos_ori = hash_pos;
 
   while (true) {
     hash_pos = hash_pos_next(hash_pos);
@@ -214,7 +214,7 @@ bool SpellingTable::contain(const char* spelling_str) {
   return false;
 }
 
-const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
+const char* SpellingTable::arrange(unsigned *item_size, unsigned *spl_num) {
   if (NULL == raw_spellings_ || NULL == spelling_buf_ ||
       NULL == item_size || NULL == spl_num)
     return NULL;
@@ -224,7 +224,7 @@ const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
 
   // After sorting, only the first spelling_num_ items are valid.
   // Copy them to the destination buffer.
-  for (size_t pos = 0; pos < spelling_num_; pos++) {
+  for (unsigned pos = 0; pos < spelling_num_; pos++) {
     strncpy(spelling_buf_ + pos * spelling_size_, raw_spellings_[pos].str,
             spelling_size_);
   }
@@ -237,7 +237,7 @@ const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
     double min_score = 0;
 
     // After sorting, only the first spelling_num_ items are valid.
-    for (size_t pos = 0; pos < spelling_num_; pos++) {
+    for (unsigned pos = 0; pos < spelling_num_; pos++) {
       raw_spellings_[pos].freq /= total_freq_;
       if (need_score_) {
         if (0 == pos) {
@@ -267,7 +267,7 @@ const char* SpellingTable::arrange(size_t *item_size, size_t *spl_num) {
     score_amplifier_ = 1.0 * 255 / min_score;
 
     double average_score = 0;
-    for (size_t pos = 0; pos < spelling_num_; pos++) {
+    for (unsigned pos = 0; pos < spelling_num_; pos++) {
       double score = log(raw_spellings_[pos].freq) * score_amplifier_;
       assert(score >= 0);
 

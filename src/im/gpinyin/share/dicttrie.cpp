@@ -83,16 +83,16 @@ void DictTrie::free_resource(bool free_dict_list) {
   reset_milestones(0, kFirstValidMileStoneHandle);
 }
 
-inline size_t DictTrie::get_son_offset(const LmaNodeGE1 *node) {
-  return ((size_t)node->son_1st_off_l + ((size_t)node->son_1st_off_h << 16));
+inline unsigned DictTrie::get_son_offset(const LmaNodeGE1 *node) {
+  return ((unsigned)node->son_1st_off_l + ((unsigned)node->son_1st_off_h << 16));
 }
 
-inline size_t DictTrie::get_homo_idx_buf_offset(const LmaNodeGE1 *node) {
-  return ((size_t)node->homo_idx_buf_off_l +
-          ((size_t)node->homo_idx_buf_off_h << 16));
+inline unsigned DictTrie::get_homo_idx_buf_offset(const LmaNodeGE1 *node) {
+  return ((unsigned)node->homo_idx_buf_off_l +
+          ((unsigned)node->homo_idx_buf_off_h << 16));
 }
 
-inline LemmaIdType DictTrie::get_lemma_id(size_t id_offset) {
+inline LemmaIdType DictTrie::get_lemma_id(unsigned id_offset) {
   LemmaIdType id = 0;
   for (uint16 pos = kLemmaIdSize - 1; pos > 0; pos--)
     id = (id << 8) + lma_idx_buf_[id_offset * kLemmaIdSize + pos];
@@ -113,16 +113,16 @@ bool DictTrie::save_dict(FILE *fp) {
   if (NULL == fp)
     return false;
 
-  if (fwrite(&lma_node_num_le0_, sizeof(size_t), 1, fp) != 1)
+  if (fwrite(&lma_node_num_le0_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fwrite(&lma_node_num_ge1_, sizeof(size_t), 1, fp) != 1)
+  if (fwrite(&lma_node_num_ge1_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fwrite(&lma_idx_buf_len_, sizeof(size_t), 1, fp) != 1)
+  if (fwrite(&lma_idx_buf_len_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fwrite(&top_lmas_num_, sizeof(size_t), 1, fp) != 1)
+  if (fwrite(&top_lmas_num_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
   if (fwrite(root_, sizeof(LmaNodeLE0), lma_node_num_le0_, fp)
@@ -169,16 +169,16 @@ bool DictTrie::load_dict(FILE *fp) {
   if (NULL == fp)
     return false;
 
-  if (fread(&lma_node_num_le0_, sizeof(size_t), 1, fp) != 1)
+  if (fread(&lma_node_num_le0_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fread(&lma_node_num_ge1_, sizeof(size_t), 1, fp) != 1)
+  if (fread(&lma_node_num_ge1_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fread(&lma_idx_buf_len_, sizeof(size_t), 1, fp) != 1)
+  if (fread(&lma_idx_buf_len_, sizeof(unsigned), 1, fp) != 1)
     return false;
 
-  if (fread(&top_lmas_num_, sizeof(size_t), 1, fp) != 1 ||
+  if (fread(&top_lmas_num_, sizeof(unsigned), 1, fp) != 1 ||
       top_lmas_num_ >= lma_idx_buf_len_)
     return false;
 
@@ -191,7 +191,7 @@ bool DictTrie::load_dict(FILE *fp) {
   lma_idx_buf_ = (unsigned char*)malloc(lma_idx_buf_len_);
   total_lma_num_ = lma_idx_buf_len_ / kLemmaIdSize;
 
-  size_t buf_size = SpellingTrie::get_instance().get_spelling_num() + 1;
+  unsigned buf_size = SpellingTrie::get_instance().get_spelling_num() + 1;
   assert(lma_node_num_le0_ <= buf_size);
   splid_le0_index_ = static_cast<uint16*>(malloc(buf_size * sizeof(uint16)));
 
@@ -221,8 +221,8 @@ bool DictTrie::load_dict(FILE *fp) {
 
   // The quick index for the first level sons
   uint16 last_splid = kFullSplIdStart;
-  size_t last_pos = 0;
-  for (size_t i = 1; i < lma_node_num_le0_; i++) {
+  unsigned last_pos = 0;
+  for (unsigned i = 1; i < lma_node_num_le0_; i++) {
     for (uint16 splid = last_splid; splid < root_[i].spl_idx; splid++)
       splid_le0_index_[splid - kFullSplIdStart] = last_pos;
 
@@ -234,7 +234,7 @@ bool DictTrie::load_dict(FILE *fp) {
 
   for (uint16 splid = last_splid + 1;
        splid < buf_size + kFullSplIdStart; splid++) {
-    assert(static_cast<size_t>(splid - kFullSplIdStart) < buf_size);
+    assert(static_cast<unsigned>(splid - kFullSplIdStart) < buf_size);
     splid_le0_index_[splid - kFullSplIdStart] = last_pos + 1;
   }
 
@@ -312,11 +312,11 @@ bool DictTrie::load_dict_fd(int sys_fd, long start_offset,
   return true;
 }
 
-size_t DictTrie::fill_lpi_buffer(LmaPsbItem lpi_items[], size_t lpi_max,
+unsigned DictTrie::fill_lpi_buffer(LmaPsbItem lpi_items[], unsigned lpi_max,
                                  LmaNodeLE0 *node) {
-  size_t lpi_num = 0;
+  unsigned lpi_num = 0;
   NGram& ngram = NGram::get_instance();
-  for (size_t homo = 0; homo < (size_t)node->num_of_homo; homo++) {
+  for (unsigned homo = 0; homo < (unsigned)node->num_of_homo; homo++) {
     lpi_items[lpi_num].id = get_lemma_id(node->homo_idx_buf_off +
                                          homo);
     lpi_items[lpi_num].lma_len = 1;
@@ -330,12 +330,12 @@ size_t DictTrie::fill_lpi_buffer(LmaPsbItem lpi_items[], size_t lpi_max,
   return lpi_num;
 }
 
-size_t DictTrie::fill_lpi_buffer(LmaPsbItem lpi_items[], size_t lpi_max,
-                                 size_t homo_buf_off, LmaNodeGE1 *node,
+unsigned DictTrie::fill_lpi_buffer(LmaPsbItem lpi_items[], unsigned lpi_max,
+                                 unsigned homo_buf_off, LmaNodeGE1 *node,
                                  uint16 lma_len) {
-  size_t lpi_num = 0;
+  unsigned lpi_num = 0;
   NGram& ngram = NGram::get_instance();
-  for (size_t homo = 0; homo < (size_t)node->num_of_homo; homo++) {
+  for (unsigned homo = 0; homo < (unsigned)node->num_of_homo; homo++) {
     lpi_items[lpi_num].id = get_lemma_id(homo_buf_off + homo);
     lpi_items[lpi_num].lma_len = lma_len;
     lpi_items[lpi_num].psb =
@@ -364,8 +364,8 @@ void DictTrie::reset_milestones(uint16 from_step, MileStoneHandle from_handle) {
 
 MileStoneHandle DictTrie::extend_dict(MileStoneHandle from_handle,
                                       const DictExtPara *dep,
-                                      LmaPsbItem *lpi_items, size_t lpi_max,
-                                      size_t *lpi_num) {
+                                      LmaPsbItem *lpi_items, unsigned lpi_max,
+                                      unsigned *lpi_num) {
   if (NULL == dep)
     return 0;
 
@@ -386,7 +386,7 @@ MileStoneHandle DictTrie::extend_dict(MileStoneHandle from_handle,
 MileStoneHandle DictTrie::extend_dict0(MileStoneHandle from_handle,
                                        const DictExtPara *dep,
                                        LmaPsbItem *lpi_items,
-                                       size_t lpi_max, size_t *lpi_num) {
+                                       unsigned lpi_max, unsigned *lpi_num) {
   assert(NULL != dep && 0 == from_handle);
   *lpi_num = 0;
   MileStoneHandle ret_handle = 0;
@@ -401,9 +401,9 @@ MileStoneHandle DictTrie::extend_dict0(MileStoneHandle from_handle,
   // 2. Begin exgtending
   // 2.1 Get the LmaPsbItem list
   LmaNodeLE0 *node = root_;
-  size_t son_start = splid_le0_index_[id_start - kFullSplIdStart];
-  size_t son_end = splid_le0_index_[id_start + id_num - kFullSplIdStart];
-  for (size_t son_pos = son_start; son_pos < son_end; son_pos++) {
+  unsigned son_start = splid_le0_index_[id_start - kFullSplIdStart];
+  unsigned son_end = splid_le0_index_[id_start + id_num - kFullSplIdStart];
+  for (unsigned son_pos = son_start; son_pos < son_end; son_pos++) {
     assert(1 == node->son_1st_off);
     LmaNodeLE0 *son = root_ + son_pos;
     assert(son->spl_idx >= id_start && son->spl_idx < id_start + id_num);
@@ -444,14 +444,14 @@ MileStoneHandle DictTrie::extend_dict0(MileStoneHandle from_handle,
 MileStoneHandle DictTrie::extend_dict1(MileStoneHandle from_handle,
                                        const DictExtPara *dep,
                                        LmaPsbItem *lpi_items,
-                                       size_t lpi_max, size_t *lpi_num) {
+                                       unsigned lpi_max, unsigned *lpi_num) {
   assert(NULL != dep && from_handle > 0 && from_handle < mile_stones_pos_);
 
   MileStoneHandle ret_handle = 0;
 
   // 1. If this is a half Id, get its corresponding full starting Id and
   // number of full Id.
-  size_t ret_val = 0;
+  unsigned ret_val = 0;
 
   uint16 id_start = dep->id_start;
   uint16 id_num = dep->id_num;
@@ -464,15 +464,15 @@ MileStoneHandle DictTrie::extend_dict1(MileStoneHandle from_handle,
     uint16 ext_num = p_mark.node_num;
     for (uint16 ext_pos = 0; ext_pos < ext_num; ext_pos++) {
       LmaNodeLE0 *node = root_ + p_mark.node_offset + ext_pos;
-      size_t found_start = 0;
-      size_t found_num = 0;
-      for (size_t son_pos = 0; son_pos < (size_t)node->num_of_son; son_pos++) {
+      unsigned found_start = 0;
+      unsigned found_num = 0;
+      for (unsigned son_pos = 0; son_pos < (unsigned)node->num_of_son; son_pos++) {
         assert(node->son_1st_off <= lma_node_num_ge1_);
         LmaNodeGE1 *son = nodes_ge1_ + node->son_1st_off + son_pos;
         if (son->spl_idx >= id_start
             && son->spl_idx < id_start + id_num) {
           if (*lpi_num < lpi_max) {
-            size_t homo_buf_off = get_homo_idx_buf_offset(son);
+            unsigned homo_buf_off = get_homo_idx_buf_offset(son);
             *lpi_num += fill_lpi_buffer(lpi_items + (*lpi_num),
                                         lpi_max - *lpi_num, homo_buf_off, son,
                                         2);
@@ -485,7 +485,7 @@ MileStoneHandle DictTrie::extend_dict1(MileStoneHandle from_handle,
           found_num++;
         }
         if (son->spl_idx >= id_start + id_num - 1 || son_pos ==
-            (size_t)node->num_of_son - 1) {
+            (unsigned)node->num_of_son - 1) {
           if (found_num > 0) {
             if (mile_stones_pos_ < kMaxMileStone &&
                 parsing_marks_pos_ < kMaxParsingMark) {
@@ -521,14 +521,14 @@ MileStoneHandle DictTrie::extend_dict1(MileStoneHandle from_handle,
 MileStoneHandle DictTrie::extend_dict2(MileStoneHandle from_handle,
                                        const DictExtPara *dep,
                                        LmaPsbItem *lpi_items,
-                                       size_t lpi_max, size_t *lpi_num) {
+                                       unsigned lpi_max, unsigned *lpi_num) {
   assert(NULL != dep && from_handle > 0 && from_handle < mile_stones_pos_);
 
   MileStoneHandle ret_handle = 0;
 
   // 1. If this is a half Id, get its corresponding full starting Id and
   // number of full Id.
-  size_t ret_val = 0;
+  unsigned ret_val = 0;
 
   uint16 id_start = dep->id_start;
   uint16 id_num = dep->id_num;
@@ -541,16 +541,16 @@ MileStoneHandle DictTrie::extend_dict2(MileStoneHandle from_handle,
     uint16 ext_num = p_mark.node_num;
     for (uint16 ext_pos = 0; ext_pos < ext_num; ext_pos++) {
       LmaNodeGE1 *node = nodes_ge1_ + p_mark.node_offset + ext_pos;
-      size_t found_start = 0;
-      size_t found_num = 0;
+      unsigned found_start = 0;
+      unsigned found_num = 0;
 
-      for (size_t son_pos = 0; son_pos < (size_t)node->num_of_son; son_pos++) {
+      for (unsigned son_pos = 0; son_pos < (unsigned)node->num_of_son; son_pos++) {
         assert(node->son_1st_off_l > 0 || node->son_1st_off_h > 0);
         LmaNodeGE1 *son = nodes_ge1_ + get_son_offset(node) + son_pos;
         if (son->spl_idx >= id_start
             && son->spl_idx < id_start + id_num) {
           if (*lpi_num < lpi_max) {
-            size_t homo_buf_off = get_homo_idx_buf_offset(son);
+            unsigned homo_buf_off = get_homo_idx_buf_offset(son);
             *lpi_num += fill_lpi_buffer(lpi_items + (*lpi_num),
                                         lpi_max - *lpi_num, homo_buf_off, son,
                                         dep->splids_extended + 1);
@@ -563,7 +563,7 @@ MileStoneHandle DictTrie::extend_dict2(MileStoneHandle from_handle,
           found_num++;
         }
         if (son->spl_idx >= id_start + id_num - 1 || son_pos ==
-            (size_t)node->num_of_son - 1) {
+            (unsigned)node->num_of_son - 1) {
           if (found_num > 0) {
             if (mile_stones_pos_ < kMaxMileStone &&
                 parsing_marks_pos_ < kMaxParsingMark) {
@@ -639,8 +639,8 @@ bool DictTrie::try_extend(const uint16 *splids, uint16 splid_num,
 
   if (1 == splid_num) {
     LmaNodeLE0* node_le0 = reinterpret_cast<LmaNodeLE0*>(node);
-    size_t num_of_homo = (size_t)node_le0->num_of_homo;
-    for (size_t homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
+    unsigned num_of_homo = (unsigned)node_le0->num_of_homo;
+    for (unsigned homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
       LemmaIdType id_this = get_lemma_id(node_le0->homo_idx_buf_off + homo_pos);
       char16 str[2];
       get_lemma_str(id_this, str, 2);
@@ -649,9 +649,9 @@ bool DictTrie::try_extend(const uint16 *splids, uint16 splid_num,
     }
   } else {
     LmaNodeGE1* node_ge1 = reinterpret_cast<LmaNodeGE1*>(node);
-    size_t num_of_homo = (size_t)node_ge1->num_of_homo;
-    for (size_t homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
-      size_t node_homo_off = get_homo_idx_buf_offset(node_ge1);
+    unsigned num_of_homo = (unsigned)node_ge1->num_of_homo;
+    for (unsigned homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
+      unsigned node_homo_off = get_homo_idx_buf_offset(node_ge1);
       if (get_lemma_id(node_homo_off + homo_pos) == id_lemma)
         return true;
     }
@@ -660,28 +660,28 @@ bool DictTrie::try_extend(const uint16 *splids, uint16 splid_num,
   return false;
 }
 
-size_t DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
-                          LmaPsbItem* lma_buf, size_t max_lma_buf) {
+unsigned DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
+                          LmaPsbItem* lma_buf, unsigned max_lma_buf) {
   if (splid_str_len > kMaxLemmaSize)
     return 0;
 
 #define MAX_EXTENDBUF_LEN 200
 
-  size_t* node_buf1[MAX_EXTENDBUF_LEN];  // use size_t for data alignment
-  size_t* node_buf2[MAX_EXTENDBUF_LEN];
+  unsigned* node_buf1[MAX_EXTENDBUF_LEN];  // use unsigned for data alignment
+  unsigned* node_buf2[MAX_EXTENDBUF_LEN];
   LmaNodeLE0** node_fr_le0 =
     reinterpret_cast<LmaNodeLE0**>(node_buf1);      // Nodes from.
   LmaNodeLE0** node_to_le0 =
     reinterpret_cast<LmaNodeLE0**>(node_buf2);      // Nodes to.
   LmaNodeGE1** node_fr_ge1 = NULL;
   LmaNodeGE1** node_to_ge1 = NULL;
-  size_t node_fr_num = 1;
-  size_t node_to_num = 0;
+  unsigned node_fr_num = 1;
+  unsigned node_to_num = 0;
   node_fr_le0[0] = root_;
   if (NULL == node_fr_le0[0])
     return 0;
 
-  size_t spl_pos = 0;
+  unsigned spl_pos = 0;
 
   while (spl_pos < splid_str_len) {
     uint16 id_num = 1;
@@ -694,13 +694,13 @@ size_t DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
 
     // Extend the nodes
     if (0 == spl_pos) {  // From LmaNodeLE0 (root) to LmaNodeLE0 nodes
-      for (size_t node_fr_pos = 0; node_fr_pos < node_fr_num; node_fr_pos++) {
+      for (unsigned node_fr_pos = 0; node_fr_pos < node_fr_num; node_fr_pos++) {
         LmaNodeLE0 *node = node_fr_le0[node_fr_pos];
         assert(node == root_ && 1 == node_fr_num);
-        size_t son_start = splid_le0_index_[id_start - kFullSplIdStart];
-        size_t son_end =
+        unsigned son_start = splid_le0_index_[id_start - kFullSplIdStart];
+        unsigned son_end =
             splid_le0_index_[id_start + id_num - kFullSplIdStart];
-        for (size_t son_pos = son_start; son_pos < son_end; son_pos++) {
+        for (unsigned son_pos = son_start; son_pos < son_end; son_pos++) {
           assert(1 == node->son_1st_off);
           LmaNodeLE0 *node_son = root_ + son_pos;
           assert(node_son->spl_idx >= id_start
@@ -726,9 +726,9 @@ size_t DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
       node_to_le0 = NULL;
       node_to_ge1 = reinterpret_cast<LmaNodeGE1**>(node_tmp);
     } else if (1 == spl_pos) {  // From LmaNodeLE0 to LmaNodeGE1 nodes
-      for (size_t node_fr_pos = 0; node_fr_pos < node_fr_num; node_fr_pos++) {
+      for (unsigned node_fr_pos = 0; node_fr_pos < node_fr_num; node_fr_pos++) {
         LmaNodeLE0 *node = node_fr_le0[node_fr_pos];
-        for (size_t son_pos = 0; son_pos < (size_t)node->num_of_son;
+        for (unsigned son_pos = 0; son_pos < (unsigned)node->num_of_son;
              son_pos++) {
           assert(node->son_1st_off <= lma_node_num_ge1_);
           LmaNodeGE1 *node_son = nodes_ge1_ + node->son_1st_off
@@ -757,9 +757,9 @@ size_t DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
       node_fr_le0 = NULL;
       node_to_le0 = NULL;
     } else {  // From LmaNodeGE1 to LmaNodeGE1 nodes
-      for (size_t node_fr_pos = 0; node_fr_pos < node_fr_num; node_fr_pos++) {
+      for (unsigned node_fr_pos = 0; node_fr_pos < node_fr_num; node_fr_pos++) {
         LmaNodeGE1 *node = node_fr_ge1[node_fr_pos];
-        for (size_t son_pos = 0; son_pos < (size_t)node->num_of_son;
+        for (unsigned son_pos = 0; son_pos < (unsigned)node->num_of_son;
              son_pos++) {
           assert(node->son_1st_off_l > 0 || node->son_1st_off_h > 0);
           LmaNodeGE1 *node_son = nodes_ge1_
@@ -797,20 +797,20 @@ size_t DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
     return 0;
 
   NGram &ngram = NGram::get_instance();
-  size_t lma_num = 0;
+  unsigned lma_num = 0;
 
   // If the length is 1, and the splid is a one-char Yunmu like 'a', 'o', 'e',
   // only those candidates for the full matched one-char id will be returned.
   if (1 == splid_str_len && spl_trie_->is_half_id_yunmu(splid_str[0]))
     node_to_num = node_to_num > 0 ? 1 : 0;
 
-  for (size_t node_pos = 0; node_pos < node_to_num; node_pos++) {
-    size_t num_of_homo = 0;
+  for (unsigned node_pos = 0; node_pos < node_to_num; node_pos++) {
+    unsigned num_of_homo = 0;
     if (spl_pos <= 1) {  // Get from LmaNodeLE0 nodes
       LmaNodeLE0* node_le0 = node_to_le0[node_pos];
-      num_of_homo = (size_t)node_le0->num_of_homo;
-      for (size_t homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
-        size_t ch_pos = lma_num + homo_pos;
+      num_of_homo = (unsigned)node_le0->num_of_homo;
+      for (unsigned homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
+        unsigned ch_pos = lma_num + homo_pos;
         lma_buf[ch_pos].id =
             get_lemma_id(node_le0->homo_idx_buf_off + homo_pos);
         lma_buf[ch_pos].lma_len = 1;
@@ -822,10 +822,10 @@ size_t DictTrie::get_lpis(const uint16* splid_str, uint16 splid_str_len,
       }
     } else {  // Get from LmaNodeGE1 nodes
       LmaNodeGE1* node_ge1 = node_to_ge1[node_pos];
-      num_of_homo = (size_t)node_ge1->num_of_homo;
-      for (size_t homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
-        size_t ch_pos = lma_num + homo_pos;
-        size_t node_homo_off = get_homo_idx_buf_offset(node_ge1);
+      num_of_homo = (unsigned)node_ge1->num_of_homo;
+      for (unsigned homo_pos = 0; homo_pos < num_of_homo; homo_pos++) {
+        unsigned ch_pos = lma_num + homo_pos;
+        unsigned node_homo_off = get_homo_idx_buf_offset(node_ge1);
         lma_buf[ch_pos].id = get_lemma_id(node_homo_off + homo_pos);
         lma_buf[ch_pos].lma_len = splid_str_len;
         lma_buf[ch_pos].psb =
@@ -891,7 +891,7 @@ uint16 DictTrie::get_lemma_splids(LemmaIdType id_lemma, uint16 *splids,
   return 0;
 }
 
-void DictTrie::set_total_lemma_count_of_others(size_t count) {
+void DictTrie::set_total_lemma_count_of_others(unsigned count) {
   NGram& ngram = NGram::get_instance();
   ngram.set_total_freq_none_sys(count);
 }
@@ -911,13 +911,13 @@ LemmaIdType DictTrie::get_lemma_id(const char16 lemma_str[], uint16 lemma_len) {
   return dict_list_->get_lemma_id(lemma_str, lemma_len);
 }
 
-size_t DictTrie::predict_top_lmas(size_t his_len, NPredictItem *npre_items,
-                                  size_t npre_max, size_t b4_used) {
+unsigned DictTrie::predict_top_lmas(unsigned his_len, NPredictItem *npre_items,
+                                  unsigned npre_max, unsigned b4_used) {
   NGram &ngram = NGram::get_instance();
 
-  size_t item_num = 0;
-  size_t top_lmas_id_offset = lma_idx_buf_len_ / kLemmaIdSize - top_lmas_num_;
-  size_t top_lmas_pos = 0;
+  unsigned item_num = 0;
+  unsigned top_lmas_id_offset = lma_idx_buf_len_ / kLemmaIdSize - top_lmas_num_;
+  unsigned top_lmas_pos = 0;
   while (item_num < npre_max && top_lmas_pos < top_lmas_num_) {
     memset(npre_items + item_num, 0, sizeof(NPredictItem));
     LemmaIdType top_lma_id = get_lemma_id(top_lmas_id_offset + top_lmas_pos);
@@ -934,9 +934,9 @@ size_t DictTrie::predict_top_lmas(size_t his_len, NPredictItem *npre_items,
   return item_num;
 }
 
-size_t DictTrie::predict(const char16 *last_hzs, uint16 hzs_len,
-                         NPredictItem *npre_items, size_t npre_max,
-                         size_t b4_used) {
+unsigned DictTrie::predict(const char16 *last_hzs, uint16 hzs_len,
+                         NPredictItem *npre_items, unsigned npre_max,
+                         unsigned b4_used) {
   return dict_list_->predict(last_hzs, hzs_len, npre_items, npre_max, b4_used);
 }
 }  // namespace ime_pinyin

@@ -52,8 +52,8 @@ bool LpiCache::is_cached(uint16 splid) {
   return lpi_cache_len_[splid] != 0;
 }
 
-size_t LpiCache::put_cache(uint16 splid, LmaPsbItem lpi_items[],
-                           size_t lpi_num) {
+unsigned LpiCache::put_cache(uint16 splid, LmaPsbItem lpi_items[],
+                           unsigned lpi_num) {
   uint16 num = kMaxLpiCachePerId;
   if (num > lpi_num)
     num = static_cast<uint16>(lpi_num);
@@ -66,8 +66,8 @@ size_t LpiCache::put_cache(uint16 splid, LmaPsbItem lpi_items[],
   return num;
 }
 
-size_t LpiCache::get_cache(uint16 splid, LmaPsbItem lpi_items[],
-                           size_t lpi_max) {
+unsigned LpiCache::get_cache(uint16 splid, LmaPsbItem lpi_items[],
+                           unsigned lpi_max) {
   if (lpi_max > lpi_cache_len_[splid])
     lpi_max = lpi_cache_len_[splid];
 

@@ -63,7 +63,7 @@ struct _FontData;
 typedef struct _FontData FontData;
 
 FontData* font_data_create(int char_nr, Encoding encoding);
-FontData* font_data_load(char* data, size_t length);
+FontData* font_data_load(char* data, unsigned length);
 FontData* font_data_load_file(const char* file_name);
 Ret font_data_add_glyph(FontData* thiz, Glyph* glyph);
 Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph);

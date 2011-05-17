@@ -25,7 +25,7 @@ namespace ime_pinyin {
 
 typedef unsigned char CODEBOOK_TYPE;
 
-static const size_t kCodeBookSize = 256;
+static const unsigned kCodeBookSize = 256;
 
 class NGram {
  public:
@@ -42,16 +42,16 @@ class NGram {
   // total frequency changes.
   // In this version, frequencies of system lemmas are fixed. We are considering
   // to make them changable in next version.
-  static const size_t kSysDictTotalFreq = 100000000;
+  static const unsigned kSysDictTotalFreq = 100000000;
 
  private:
 
   static NGram* instance_;
 
   bool initialized_;
-  size_t idx_num_;
+  unsigned idx_num_;
 
-  size_t total_freq_none_sys_;
+  unsigned total_freq_none_sys_;
 
   // Score compensation for system dictionary lemmas.
   // Because after user adds some user lemmas, the total frequency changes, and
@@ -74,7 +74,7 @@ class NGram {
   bool load_ngram(FILE *fp);
 
   // Set the total frequency of all none system dictionaries.
-  void set_total_freq_none_sys(size_t freq_none_sys);
+  void set_total_freq_none_sys(unsigned freq_none_sys);
 
   float get_uni_psb(LemmaIdType lma_id);
 
@@ -87,7 +87,7 @@ class NGram {
 
 #ifdef ___BUILD_MODEL___
   // For constructing the unigram mode model.
-  bool build_unigram(LemmaEntry *lemma_arr, size_t num,
+  bool build_unigram(LemmaEntry *lemma_arr, unsigned num,
                      LemmaIdType next_idx_unused);
 #endif
 };

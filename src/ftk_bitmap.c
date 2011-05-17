@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_bitmap.h"
 
 struct _FtkBitmap

@@ -21,13 +21,13 @@ namespace ime_pinyin {
 // For debug purpose. You can add a fixed version of qsort and bsearch functions
 // here so that the output will be totally the same under different platforms.
 
-void myqsort(void *p, size_t n, size_t es,
+void myqsort(void *p, unsigned n, unsigned es,
              int (*cmp)(const void *, const void *)) {
   qsort(p,n, es, cmp);
 }
 
 void *mybsearch(const void *k, const void *b,
-                size_t n, size_t es,
+                unsigned n, unsigned es,
                 int (*cmp)(const void *, const void *)) {
   return bsearch(k, b, n, es, cmp);
 }

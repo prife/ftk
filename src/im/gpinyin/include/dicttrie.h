@@ -28,8 +28,8 @@ namespace ime_pinyin {
 class DictTrie : AtomDictBase {
  private:
   struct ParsingMark {
-    size_t node_offset:24;
-    size_t node_num:8;           // Number of nodes with this spelling id given
+    unsigned node_offset:24;
+    unsigned node_num:8;           // Number of nodes with this spelling id given
                                  // by spl_id. If spl_id is a Shengmu, for nodes
                                  // in the first layer of DictTrie, it equals to
                                  // SpellingTrie::shm2full_num(); but for those
@@ -73,15 +73,15 @@ class DictTrie : AtomDictBase {
   // root_[splid_le0_index_[splid - kFullSplIdStart]]
   uint16 *splid_le0_index_;
 
-  size_t lma_node_num_le0_;
-  size_t lma_node_num_ge1_;
+  unsigned lma_node_num_le0_;
+  unsigned lma_node_num_ge1_;
 
   // The first part is for homophnies, and the last  top_lma_num_ items are
   // lemmas with highest scores.
   unsigned char *lma_idx_buf_;
-  size_t lma_idx_buf_len_;  // The total size of lma_idx_buf_ in byte.
-  size_t total_lma_num_;    // Total number of lemmas in this dictionary.
-  size_t top_lmas_num_;     // Number of lemma with highest scores.
+  unsigned lma_idx_buf_len_;  // The total size of lma_idx_buf_ in byte.
+  unsigned total_lma_num_;    // Total number of lemmas in this dictionary.
+  unsigned top_lmas_num_;     // Number of lemma with highest scores.
 
   // Parsing mark list used to mark the detailed extended statuses.
   ParsingMark *parsing_marks_;
@@ -95,13 +95,13 @@ class DictTrie : AtomDictBase {
   MileStoneHandle mile_stones_pos_;
 
   // Get the offset of sons for a node.
-  inline size_t get_son_offset(const LmaNodeGE1 *node);
+  inline unsigned get_son_offset(const LmaNodeGE1 *node);
 
   // Get the offset of homonious ids for a node.
-  inline size_t get_homo_idx_buf_offset(const LmaNodeGE1 *node);
+  inline unsigned get_homo_idx_buf_offset(const LmaNodeGE1 *node);
 
   // Get the lemma id by the offset.
-  inline LemmaIdType get_lemma_id(size_t id_offset);
+  inline LemmaIdType get_lemma_id(unsigned id_offset);
 
   void free_resource(bool free_dict_list);
 
@@ -110,31 +110,31 @@ class DictTrie : AtomDictBase {
   // Given a LmaNodeLE0 node, extract the lemmas specified by it, and fill
   // them into the lpi_items buffer.
   // This function is called by the search engine.
-  size_t fill_lpi_buffer(LmaPsbItem lpi_items[], size_t max_size,
+  unsigned fill_lpi_buffer(LmaPsbItem lpi_items[], unsigned max_size,
                          LmaNodeLE0 *node);
 
   // Given a LmaNodeGE1 node, extract the lemmas specified by it, and fill
   // them into the lpi_items buffer.
   // This function is called by inner functions extend_dict0(), extend_dict1()
   // and extend_dict2().
-  size_t fill_lpi_buffer(LmaPsbItem lpi_items[], size_t max_size,
-                         size_t homo_buf_off, LmaNodeGE1 *node,
+  unsigned fill_lpi_buffer(LmaPsbItem lpi_items[], unsigned max_size,
+                         unsigned homo_buf_off, LmaNodeGE1 *node,
                          uint16 lma_len);
 
   // Extend in the trie from level 0.
   MileStoneHandle extend_dict0(MileStoneHandle from_handle,
                                const DictExtPara *dep, LmaPsbItem *lpi_items,
-                               size_t lpi_max, size_t *lpi_num);
+                               unsigned lpi_max, unsigned *lpi_num);
 
   // Extend in the trie from level 1.
   MileStoneHandle extend_dict1(MileStoneHandle from_handle,
                                const DictExtPara *dep, LmaPsbItem *lpi_items,
-                               size_t lpi_max, size_t *lpi_num);
+                               unsigned lpi_max, unsigned *lpi_num);
 
   // Extend in the trie from level 2.
   MileStoneHandle extend_dict2(MileStoneHandle from_handle,
                                const DictExtPara *dep, LmaPsbItem *lpi_items,
-                               size_t lpi_max, size_t *lpi_num);
+                               unsigned lpi_max, unsigned *lpi_num);
 
   // Try to extend the given spelling id buffer, and if the given id_lemma can
   // be successfully gotten, return true;
@@ -179,26 +179,26 @@ class DictTrie : AtomDictBase {
   bool load_dict_fd(int sys_fd, long start_offset, long length,
                     LemmaIdType start_id, LemmaIdType end_id);
   bool close_dict() {return true;}
-  size_t number_of_lemmas() {return 0;}
+  unsigned number_of_lemmas() {return 0;}
 
   void reset_milestones(uint16 from_step, MileStoneHandle from_handle);
 
   MileStoneHandle extend_dict(MileStoneHandle from_handle,
                               const DictExtPara *dep,
                               LmaPsbItem *lpi_items,
-                              size_t lpi_max, size_t *lpi_num);
+                              unsigned lpi_max, unsigned *lpi_num);
 
-  size_t get_lpis(const uint16 *splid_str, uint16 splid_str_len,
-                  LmaPsbItem *lpi_items, size_t lpi_max);
+  unsigned get_lpis(const uint16 *splid_str, uint16 splid_str_len,
+                  LmaPsbItem *lpi_items, unsigned lpi_max);
 
   uint16 get_lemma_str(LemmaIdType id_lemma, char16 *str_buf, uint16 str_max);
 
   uint16 get_lemma_splids(LemmaIdType id_lemma, uint16 *splids,
                           uint16 splids_max, bool arg_valid);
 
-  size_t predict(const char16 *last_hzs, uint16 hzs_len,
-                 NPredictItem *npre_items, size_t npre_max,
-                 size_t b4_used);
+  unsigned predict(const char16 *last_hzs, uint16 hzs_len,
+                 NPredictItem *npre_items, unsigned npre_max,
+                 unsigned b4_used);
 
   LemmaIdType put_lemma(char16 lemma_str[], uint16 splids[],
                         uint16 lemma_len, uint16 count) {return 0;}
@@ -216,8 +216,8 @@ class DictTrie : AtomDictBase {
 
   bool remove_lemma(LemmaIdType lemma_id) {return false;}
 
-  size_t get_total_lemma_count() {return 0;}
-  void set_total_lemma_count_of_others(size_t count);
+  unsigned get_total_lemma_count() {return 0;}
+  void set_total_lemma_count_of_others(unsigned count);
 
   void flush_cache() {}
 
@@ -225,8 +225,8 @@ class DictTrie : AtomDictBase {
 
   // Fill the lemmas with highest scores to the prediction buffer.
   // his_len is the history length to fill in the prediction buffer.
-  size_t predict_top_lmas(size_t his_len, NPredictItem *npre_items,
-                          size_t npre_max, size_t b4_used);
+  unsigned predict_top_lmas(unsigned his_len, NPredictItem *npre_items,
+                          unsigned npre_max, unsigned b4_used);
 };
 }
 

@@ -39,7 +39,7 @@ struct SpellingNode {
 class SpellingTrie {
  private:
   static const int kMaxYmNum = 64;
-  static const size_t kValidSplCharNum = 26;
+  static const unsigned kValidSplCharNum = 26;
 
   static const uint16 kHalfIdShengmuMask = 0x01;
   static const uint16 kHalfIdYunmuMask = 0x02;
@@ -63,10 +63,10 @@ class SpellingTrie {
   // so spelling_size_ is 8.
   // Structure: The string ended with '\0' + score char.
   // An item with a lower score has a higher probability.
-  size_t spelling_size_;
+  unsigned spelling_size_;
 
   // Number of full spelling ids.
-  size_t spelling_num_;
+  unsigned spelling_num_;
 
   float score_amplifier_;
   unsigned char average_score_;
@@ -80,8 +80,8 @@ class SpellingTrie {
   // The Yunmu table.
   // Each Yunmu will be assigned with Yunmu id from 1.
   char *ym_buf_;
-  size_t ym_size_;  // The size of longest Yunmu string, '\0'included.
-  size_t ym_num_;
+  unsigned ym_size_;  // The size of longest Yunmu string, '\0'included.
+  unsigned ym_num_;
 
   // The spelling string just queried
   char *splstr_queried_;
@@ -116,7 +116,7 @@ class SpellingTrie {
 
 #ifdef ___BUILD_MODEL___
   // How many node used to build the trie.
-  size_t node_num_;
+  unsigned node_num_;
 #endif
 
   SpellingTrie();
@@ -127,8 +127,8 @@ class SpellingTrie {
   // item_star to item_end).
   // Member spelliing_buf_ and spelling_size_ should be valid.
   // parent is used to update its num_of_son and score.
-  SpellingNode* construct_spellings_subset(size_t item_start, size_t item_end,
-                                           size_t level, SpellingNode *parent);
+  SpellingNode* construct_spellings_subset(unsigned item_start, unsigned item_end,
+                                           unsigned level, SpellingNode *parent);
   bool build_f2h();
 
   // The caller should guarantee ch >= 'A' && ch <= 'Z'
@@ -168,7 +168,7 @@ class SpellingTrie {
   // score_amplifier is used to convert a possibility value into score.
   // average_score is the average_score of all spellings. The dumb node is
   // assigned with this score.
-  bool construct(const char* spelling_arr, size_t item_size, size_t item_num,
+  bool construct(const char* spelling_arr, unsigned item_size, unsigned item_num,
                  float score_amplifier, unsigned char average_score);
 
   // Test if the given id is a valid spelling id.
@@ -236,7 +236,7 @@ class SpellingTrie {
   bool load_spl_trie(FILE *fp);
 
   // Get the number of spellings
-  size_t get_spelling_num();
+  unsigned get_spelling_num();
 
   // Return the Yunmu id for the given Yunmu string.
   // If the string is not valid, return 0;
@@ -250,8 +250,8 @@ class SpellingTrie {
 
   // Get Pinyin string for a given spelling id. Return the length of the
   // string, and fill-in '\0' at the end.
-  size_t get_spelling_str16(uint16 splid, char16 *splstr16,
-                            size_t splstr16_len);
+  unsigned get_spelling_str16(uint16 splid, char16 *splstr16,
+                            unsigned splstr16_len);
 };
 }
 

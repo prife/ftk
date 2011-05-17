@@ -66,7 +66,7 @@ extern "C" {
    * @param max_sps_len Maximum length of the spelling string(Pinyin string).
    * @max_hzs_len Maximum length of the decoded Chinese character string.
    */
-  void im_set_max_lens(size_t max_sps_len, size_t max_hzs_len);
+  void im_set_max_lens(unsigned max_sps_len, unsigned max_hzs_len);
 
   /**
    * Flush cached data to persistent memory. Because at runtime, in order to
@@ -87,7 +87,7 @@ extern "C" {
    * @param sps_len The length of the spelling string buffer.
    * @return The number of candidates.
    */
-  size_t im_search(const char* sps_buf, size_t sps_len);
+  unsigned im_search(const char* sps_buf, unsigned sps_len);
 
   /**
    * Make a delete operation in the current search result, and make research if
@@ -99,7 +99,7 @@ extern "C" {
    * in the spelling string, or the position in the result spelling id string.
    * @return The number of candidates.
    */
-  size_t im_delsearch(size_t pos, bool is_pos_in_splid,
+  unsigned im_delsearch(unsigned pos, bool is_pos_in_splid,
                       bool clear_fixed_this_step);
 
   /**
@@ -115,7 +115,7 @@ extern "C" {
    * @param ch The letter to add.
    * @return The number of candidates.
    */
-  size_t im_add_letter(char ch);
+  unsigned im_add_letter(char ch);
 
   /**
    * Get the spelling string kept by the decoder.
@@ -124,7 +124,7 @@ extern "C" {
    * string is successfully parsed.
    * @return The spelling string kept by the decoder.
    */
-  const char *im_get_sps_str(size_t *decoded_len);
+  const char *im_get_sps_str(unsigned *decoded_len);
 
   /**
    * Get a candidate(or choice) string.
@@ -135,8 +135,8 @@ extern "C" {
    * @param max_len The maximum length of the buffer.
    * @return cand_str if succeeds, otherwise NULL.
    */
-  char16* im_get_candidate(size_t cand_id, char16* cand_str,
-                           size_t max_len);
+  char16* im_get_candidate(unsigned cand_id, char16* cand_str,
+                           unsigned max_len);
 
   /**
    * Get the segmentation information(the starting positions) of the spelling
@@ -147,7 +147,7 @@ extern "C" {
    * elements in spl_start, and spl_start[L] is the posistion after the end of
    * the last spelling id.
    */
-  size_t im_get_spl_start_pos(const uint16 *&spl_start);
+  unsigned im_get_spl_start_pos(const uint16 *&spl_start);
 
   /**
    * Choose a candidate and make it fixed. If the candidate does not match
@@ -160,21 +160,21 @@ extern "C" {
    * @return The number of candidates. If after the selection, the whole result
    * string has been fixed, there will be only one candidate.
    */
-  size_t im_choose(size_t cand_id);
+  unsigned im_choose(unsigned cand_id);
 
   /**
    * Cancel the last selection, or revert the last operation of im_choose().
    *
    * @return The number of candidates.
    */
-  size_t im_cancel_last_choice();
+  unsigned im_cancel_last_choice();
 
   /**
    * Get the number of fixed spelling ids, or Chinese characters.
    *
    * @return The number of fixed spelling ids, of Chinese characters.
    */
-  size_t im_get_fixed_len();
+  unsigned im_get_fixed_len();
 
   /**
    * Cancel the input state and reset the search workspace.
@@ -190,7 +190,7 @@ extern "C" {
    * @param pre_buf Used to return prediction result list.
    * @return The number of predicted result string.
    */
-  size_t im_get_predicts(const char16 *his_buf,
+  unsigned im_get_predicts(const char16 *his_buf,
                          char16 (*&pre_buf)[kMaxPredictSize + 1]);
 
   /**

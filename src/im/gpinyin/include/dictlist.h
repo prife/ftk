@@ -33,7 +33,7 @@ class DictList {
   const SpellingTrie *spl_trie_;
 
   // Number of SingCharItem. The first is blank, because id 0 is invalid.
-  size_t scis_num_;
+  unsigned scis_num_;
   char16 *scis_hz_;
   SpellingId *scis_splid_;
 
@@ -42,25 +42,25 @@ class DictList {
 
   // Starting position of those words whose lengths are i+1, counted in
   // char16
-  size_t start_pos_[kMaxLemmaSize + 1];
+  unsigned start_pos_[kMaxLemmaSize + 1];
 
-  size_t start_id_[kMaxLemmaSize + 1];
+  unsigned start_id_[kMaxLemmaSize + 1];
 
   int (*cmp_func_[kMaxLemmaSize])(const void *, const void *);
 
-  bool alloc_resource(size_t buf_size, size_t scim_num);
+  bool alloc_resource(unsigned buf_size, unsigned scim_num);
 
   void free_resource();
 
 #ifdef ___BUILD_MODEL___
   // Calculate the requsted memory, including the start_pos[] buffer.
-  size_t calculate_size(const LemmaEntry *lemma_arr, size_t lemma_num);
+  unsigned calculate_size(const LemmaEntry *lemma_arr, unsigned lemma_num);
 
-  void fill_scis(const SingleCharItem *scis, size_t scis_num);
+  void fill_scis(const SingleCharItem *scis, unsigned scis_num);
 
   // Copy the related content to the inner buffer
   // It should be called after calculate_size()
-  void fill_list(const LemmaEntry *lemma_arr, size_t lemma_num);
+  void fill_list(const LemmaEntry *lemma_arr, unsigned lemma_num);
 
   // Find the starting position for the buffer of those 2-character Chinese word
   // whose first character is the given Chinese character.
@@ -71,7 +71,7 @@ class DictList {
   // word_len. The given parameter cmp_func decides how many characters from
   // beginning will be used to compare.
   char16* find_pos_startedbyhzs(const char16 last_hzs[],
-                                size_t word_Len,
+                                unsigned word_Len,
                                 int (*cmp_func)(const void *, const void *));
 
  public:
@@ -86,8 +86,8 @@ class DictList {
   // Init the list from the LemmaEntry array.
   // lemma_arr should have been sorted by the hanzi_str, and have been given
   // ids from 1
-  bool init_list(const SingleCharItem *scis, size_t scis_num,
-                 const LemmaEntry *lemma_arr, size_t lemma_num);
+  bool init_list(const SingleCharItem *scis, unsigned scis_num,
+                 const LemmaEntry *lemma_arr, unsigned lemma_num);
 #endif
 
   // Get the hanzi string for the given id
@@ -104,9 +104,9 @@ class DictList {
   // buf_len specifies the buffer length.
   // b4_used specifies how many items before predict_buf have been used.
   // Returned value is the number of newly added items.
-  size_t predict(const char16 last_hzs[], uint16 hzs_len,
-                 NPredictItem *npre_items, size_t npre_max,
-                 size_t b4_used);
+  unsigned predict(const char16 last_hzs[], uint16 hzs_len,
+                 NPredictItem *npre_items, unsigned npre_max,
+                 unsigned b4_used);
 
   // If half_splid is a valid half spelling id, return those full spelling
   // ids which share this half id.

@@ -76,7 +76,7 @@ class AtomDictBase {
    *
    * @return The total number of lemmas.
    */
-  virtual size_t number_of_lemmas() = 0;
+  virtual unsigned number_of_lemmas() = 0;
 
   /**
    * This function is called by the decoder when user deletes a character from
@@ -124,7 +124,7 @@ class AtomDictBase {
   virtual MileStoneHandle extend_dict(MileStoneHandle from_handle,
                                       const DictExtPara *dep,
                                       LmaPsbItem *lpi_items,
-                                      size_t lpi_max, size_t *lpi_num) = 0;
+                                      unsigned lpi_max, unsigned *lpi_num) = 0;
 
   /**
    * Get lemma items with scores according to a spelling id stream.
@@ -136,8 +136,8 @@ class AtomDictBase {
    * @param lpi_max The maximum size of the buffer to return result.
    * @return The number of matched items which have been filled in to lpi_items.
    */
-  virtual size_t get_lpis(const uint16 *splid_str, uint16 splid_str_len,
-                          LmaPsbItem *lpi_items, size_t lpi_max) = 0;
+  virtual unsigned get_lpis(const uint16 *splid_str, uint16 splid_str_len,
+                          LmaPsbItem *lpi_items, unsigned lpi_max) = 0;
 
   /**
    * Get a lemma string (The Chinese string) by the given lemma id.
@@ -178,9 +178,9 @@ class AtomDictBase {
    * from other atom dictionaries. A atom ditionary can just ignore it.
    * @return The number of prediction result from this atom dictionary.
    */
-  virtual size_t predict(const char16 last_hzs[], uint16 hzs_len,
-                         NPredictItem *npre_items, size_t npre_max,
-                         size_t b4_used) = 0;
+  virtual unsigned predict(const char16 last_hzs[], uint16 hzs_len,
+                         NPredictItem *npre_items, unsigned npre_max,
+                         unsigned b4_used) = 0;
 
   /**
    * Add a lemma to the dictionary. If the dictionary allows to add new
@@ -249,14 +249,14 @@ class AtomDictBase {
    *
    * @return The total occuring count of this atom dictionary.
    */
-  virtual size_t get_total_lemma_count() = 0;
+  virtual unsigned get_total_lemma_count() = 0;
 
   /**
    * Set the total occuring count of other atom dictionaries.
    *
    * @param count The total occuring count of other atom dictionaies.
    */
-  virtual void set_total_lemma_count_of_others(size_t count) = 0;
+  virtual void set_total_lemma_count_of_others(unsigned count) = 0;
 
   /**
    * Notify this atom dictionary to flush the cached data to persistent storage

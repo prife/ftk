@@ -346,7 +346,7 @@ bool UserDict::close_dict() {
   return true;
 }
 
-size_t UserDict::number_of_lemmas() {
+unsigned UserDict::number_of_lemmas() {
   return dict_info_.lemma_count;
 }
 
@@ -357,7 +357,7 @@ void UserDict::reset_milestones(uint16 from_step, MileStoneHandle from_handle) {
 MileStoneHandle UserDict::extend_dict(MileStoneHandle from_handle,
                                       const DictExtPara *dep,
                                       LmaPsbItem *lpi_items,
-                                      size_t lpi_max, size_t *lpi_num) {
+                                      unsigned lpi_max, unsigned *lpi_num) {
   if (is_valid_state() == false)
     return 0;
 
@@ -505,14 +505,14 @@ void UserDict::prepare_locate(UserDictSearchable *searchable,
   }
 }
 
-size_t UserDict::get_lpis(const uint16 *splid_str, uint16 splid_str_len,
-                          LmaPsbItem *lpi_items, size_t lpi_max) {
+unsigned UserDict::get_lpis(const uint16 *splid_str, uint16 splid_str_len,
+                          LmaPsbItem *lpi_items, unsigned lpi_max) {
   return _get_lpis(splid_str, splid_str_len, lpi_items, lpi_max, NULL);
 }
 
-size_t UserDict::_get_lpis(const uint16 *splid_str,
+unsigned UserDict::_get_lpis(const uint16 *splid_str,
                            uint16 splid_str_len, LmaPsbItem *lpi_items,
-                           size_t lpi_max, bool * need_extend) {
+                           unsigned lpi_max, bool * need_extend) {
   bool tmp_extend;
   if (!need_extend)
     need_extend = &tmp_extend;
@@ -564,11 +564,11 @@ size_t UserDict::_get_lpis(const uint16 *splid_str,
     return 0;
   }
 
-  size_t lpi_current = 0;
+  unsigned lpi_current = 0;
 
   bool fuzzy_break = false;
   bool prefix_break = false;
-  while ((size_t)middle < max_off && !fuzzy_break && !prefix_break) {
+  while ((unsigned)middle < max_off && !fuzzy_break && !prefix_break) {
     if (lpi_current >= lpi_max)
       break;
     uint32 offset = offsets_[middle];
@@ -648,9 +648,9 @@ uint16 UserDict::get_lemma_splids(LemmaIdType id_lemma, uint16 *splids,
   return i;
 }
 
-size_t UserDict::predict(const char16 last_hzs[], uint16 hzs_len,
-                         NPredictItem *npre_items, size_t npre_max,
-                         size_t b4_used) {
+unsigned UserDict::predict(const char16 last_hzs[], uint16 hzs_len,
+                         NPredictItem *npre_items, unsigned npre_max,
+                         unsigned b4_used) {
   uint32 new_added = 0;
 #ifdef ___PREDICT_ENABLED___
   int32 end = dict_info_.lemma_count - 1;
@@ -1019,7 +1019,7 @@ bool UserDict::reset(const char *file) {
     return false;
   }
   uint32 version = kUserDictVersion;
-  size_t wred = fwrite(&version, 1, 4, fp);
+  unsigned wred = fwrite(&version, 1, 4, fp);
   UserDictInfo info;
   memset(&info, 0, sizeof(info));
   // By default, no limitation for lemma count and size
@@ -1042,8 +1042,8 @@ bool UserDict::validate(const char *file) {
     return false;
   }
 
-  size_t size;
-  size_t readed;
+  unsigned size;
+  unsigned readed;
   uint32 version;
   UserDictInfo dict_info;
 
@@ -1105,7 +1105,7 @@ bool UserDict::load(const char *file, LemmaIdType start_id) {
     return false;
   }
 
-  size_t readed, toread;
+  unsigned readed, toread;
   UserDictInfo dict_info;
   uint8 *lemmas = NULL;
   uint32 *offsets = NULL;
@@ -1118,7 +1118,7 @@ bool UserDict::load(const char *file, LemmaIdType start_id) {
 #ifdef ___PREDICT_ENABLED___
   uint32 *predicts = NULL;
 #endif
-  size_t i;
+  unsigned i;
   int err;
 
   err = fseek(fp, -1 * sizeof(dict_info), SEEK_END);
@@ -1332,7 +1332,7 @@ void UserDict::write_back_lemma(int fd) {
   if (err == -1)
     return;
   // New lemmas are always appended, no need to write whole lemma block
-  size_t need_write = kUserDictPreAlloc *
+  unsigned need_write = kUserDictPreAlloc *
       (2 + (kUserDictAverageNchar << 2)) - lemma_size_left_;
   err = lseek(fd, dict_info_.lemma_size - need_write, SEEK_CUR);
   if (err == -1)
@@ -1524,8 +1524,8 @@ void UserDict::defragment(void) {
   if (is_valid_state() == false)
     return;
   // Fixup offsets_, set REMOVE flag to lemma's flag if needed
-  size_t first_freed = 0;
-  size_t first_inuse = 0;
+  unsigned first_freed = 0;
+  unsigned first_inuse = 0;
   while (first_freed < dict_info_.lemma_count) {
     // Find first freed offset
     while ((offsets_[first_freed] & kUserDictOffsetFlagRemove) == 0 &&
@@ -1597,12 +1597,12 @@ void UserDict::defragment(void) {
 #endif
   dict_info_.lemma_count = first_freed;
   // Fixup lemmas_
-  size_t begin = 0;
-  size_t end = 0;
-  size_t dst = 0;
+  unsigned begin = 0;
+  unsigned end = 0;
+  unsigned dst = 0;
   int total_size = dict_info_.lemma_size + lemma_size_left_;
   int total_count = dict_info_.lemma_count + lemma_count_left_;
-  size_t real_size = total_size - lemma_size_left_;
+  unsigned real_size = total_size - lemma_size_left_;
   while (dst < real_size) {
     unsigned char flag = get_lemma_flag(dst);
     unsigned char nchr = get_lemma_nchar(dst);
@@ -1639,7 +1639,7 @@ void UserDict::defragment(void) {
       break;
     }
     memmove(lemmas_ + dst, lemmas_ + begin, end - begin);
-    for (size_t j = 0; j < dict_info_.lemma_count; j++) {
+    for (unsigned j = 0; j < dict_info_.lemma_count; j++) {
       if (offsets_[j] >= begin && offsets_[j] < end) {
         offsets_[j] -= (begin - dst);
         offsets_by_id_[ids_[j] - start_id_] = offsets_[j];
@@ -1651,7 +1651,7 @@ void UserDict::defragment(void) {
 #endif
     }
 #ifdef ___SYNC_ENABLED___
-    for (size_t j = 0; j < dict_info_.sync_count; j++) {
+    for (unsigned j = 0; j < dict_info_.sync_count; j++) {
       if (syncs_[j] >= begin && syncs_[j] < end) {
         syncs_[j] -= (begin - dst);
       }
@@ -2091,7 +2091,7 @@ LemmaIdType UserDict::_put_lemma(char16 lemma_str[], uint16 splids[],
     }
     int flushed = 0;
     if (lemma_count_left_ == 0 ||
-        lemma_size_left_ < (size_t)(2 + (lemma_len << 2))) {
+        lemma_size_left_ < (unsigned)(2 + (lemma_len << 2))) {
 
       // XXX When there is no space for new lemma, we flush to disk
       // flush_cache() may be called by upper user
@@ -2175,24 +2175,24 @@ LemmaIdType UserDict::update_lemma(LemmaIdType lemma_id, int16 delta_count,
   return 0;
 }
 
-size_t UserDict::get_total_lemma_count() {
+unsigned UserDict::get_total_lemma_count() {
   return dict_info_.total_nfreq;
 }
 
-void UserDict::set_total_lemma_count_of_others(size_t count) {
+void UserDict::set_total_lemma_count_of_others(unsigned count) {
   total_other_nfreq_ = count;
 }
 
 LemmaIdType UserDict::append_a_lemma(char16 lemma_str[], uint16 splids[],
                                    uint16 lemma_len, uint16 count, uint64 lmt) {
   LemmaIdType id = get_max_lemma_id() + 1;
-  size_t offset = dict_info_.lemma_size;
+  unsigned offset = dict_info_.lemma_size;
   if (offset > kUserDictOffsetMask)
     return 0;
 
   lemmas_[offset] = 0;
   lemmas_[offset + 1] = (uint8)lemma_len;
-  for (size_t i = 0; i < lemma_len; i++) {
+  for (unsigned i = 0; i < lemma_len; i++) {
     *((uint16*)&lemmas_[offset + 2 + (i << 1)]) = splids[i];
     *((char16*)&lemmas_[offset + 2 + (lemma_len << 1) + (i << 1)])
         = lemma_str[i];
@@ -2217,7 +2217,7 @@ LemmaIdType UserDict::append_a_lemma(char16 lemma_str[], uint16 splids[],
   UserDictSearchable searchable;
   prepare_locate(&searchable, splids, lemma_len);
 
-  size_t i = 0;
+  unsigned i = 0;
   while (i < off) {
     offset = offsets_[i];
     uint32 nchar = get_lemma_nchar(offset);

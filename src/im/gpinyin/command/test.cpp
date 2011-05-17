@@ -5,9 +5,9 @@ using namespace ime_pinyin;
 
 int main(int argc, char* argv[])
 {
-	size_t i = 0;
-	size_t nr = 0;
-	size_t size = 0;
+	unsigned i = 0;
+	unsigned nr = 0;
+	unsigned size = 0;
 	char16 str[64] = {0};
 	bool ret = im_open_decoder("./dict_pinyin.dat", "./user.dat");
 	assert(ret);
