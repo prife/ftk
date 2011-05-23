@@ -3,7 +3,9 @@ Import('RTT_ROOT')
 from building import *
 
 ftk_app_src	= Split("""
-../../demos/demo_button.c
+../../../../ftk_module.c
+../../../apps/desktop/main.c
+../../../apps/desktop/app_info.c
 """)
 
 ftk_src = Split("""
@@ -131,6 +133,7 @@ rtthread_port_src = Split("""
 ./ftk_pipe_rtthread.c
 ./ftk_rtthread.c
 ./ftk_select_rtthread.c
+./ftk_input_method_chooser_rtthread.c
 ../../backend/rt-thread/ftk_backend_rtthread.c
 ../../backend/rt-thread/ftk_display_rtthread.c
 ../../backend/rt-thread/ftk_source_touch.c
@@ -138,14 +141,16 @@ rtthread_port_src = Split("""
 """)
 
 # The set of source files associated with this SConscript file.
-src_local = ftk_src	+ im_src + linebreak_src + rtthread_port_src + ftk_app_src
+src_local = ftk_src + linebreak_src + rtthread_port_src + ftk_app_src
 
 path = [RTT_ROOT + '/components/external/ftk/ftk/src',
-	RTT_ROOT + '/components/external/ftk/ftk/src/im', 
-	RTT_ROOT + '/components/external/ftk/ftk/src/im/gpinyin/include',
-	RTT_ROOT + '/components/external/ftk/ftk/src/im/gpinyin/ftk',
+#	RTT_ROOT + '/components/external/ftk/ftk/src/im', 
+#	RTT_ROOT + '/components/external/ftk/ftk/src/im/gpinyin/include',
+#	RTT_ROOT + '/components/external/ftk/ftk/src/im/gpinyin/ftk',
+	RTT_ROOT + '/components/external/ftk/ftk/apps/common',
 	RTT_ROOT + '/components/external/ftk/ftk/src/os/rt-thread',
 	RTT_ROOT + '/components/external/ftk/ftk/src/linebreak',
+	RTT_ROOT + '/components/external/ftk/ftk/src/demos',	
 	RTT_ROOT + '/components/external/ftk/ftk/src/backend/rt-thread' ]
 
 group = DefineGroup('FTK', 

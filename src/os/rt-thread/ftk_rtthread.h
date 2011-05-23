@@ -58,6 +58,7 @@
 #define FTK_PATH_DELIM                  '/'
 
 #define USE_FTK_MAIN
+#define FTK_HAS_DLOPEN
 
 #define usleep(us)			            rt_thread_sleep(us*1000/RT_TICK_PER_SECOND)
 #define select 							ftk_rtthread_select
