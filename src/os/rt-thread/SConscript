@@ -157,6 +157,6 @@ group = DefineGroup('FTK',
     File(src_local), 
     depend = ['RT_USING_FTK'], 
     CCFLAGS = ' -DRT_THREAD', 
-    CPPPATH = path)
+    CPPPATH = path, LIBRARY= '')
 
 Return('group')
