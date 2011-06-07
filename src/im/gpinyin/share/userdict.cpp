@@ -1291,8 +1291,8 @@ void UserDict::write_back_sync(int fd) {
                   , SEEK_SET);
   if (err == -1)
     return;
-  write(fd, syncs_, dict_info_.sync_count << 2);
-  write(fd, &dict_info_, sizeof(dict_info_));
+  write(fd, (const char *)syncs_, dict_info_.sync_count << 2);
+  write(fd, (const char *)&dict_info_, sizeof(dict_info_));
 }
 #endif
 
@@ -1300,15 +1300,15 @@ void UserDict::write_back_offset(int fd) {
   int err = lseek(fd, 4 + dict_info_.lemma_size, SEEK_SET);
   if (err == -1)
     return;
-  write(fd, offsets_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)offsets_, dict_info_.lemma_count << 2);
 #ifdef ___PREDICT_ENABLED___
-  write(fd, predicts_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)predicts_, dict_info_.lemma_count << 2);
 #endif
-  write(fd, scores_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)scores_, dict_info_.lemma_count << 2);
 #ifdef ___SYNC_ENABLED___
-  write(fd, syncs_, dict_info_.sync_count << 2);
+  write(fd, (const char *)syncs_, dict_info_.sync_count << 2);
 #endif
-  write(fd, &dict_info_, sizeof(dict_info_));
+  write(fd, (const char *)&dict_info_, sizeof(dict_info_));
 }
 
 void UserDict::write_back_score(int fd) {
@@ -1320,11 +1320,11 @@ void UserDict::write_back_score(int fd) {
                   , SEEK_SET);
   if (err == -1)
     return;
-  write(fd, scores_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)scores_, dict_info_.lemma_count << 2);
 #ifdef ___SYNC_ENABLED___
-  write(fd, syncs_, dict_info_.sync_count << 2);
+  write(fd, (const char *)syncs_, dict_info_.sync_count << 2);
 #endif
-  write(fd, &dict_info_, sizeof(dict_info_));
+  write(fd, (const char *)&dict_info_, sizeof(dict_info_));
 }
 
 void UserDict::write_back_lemma(int fd) {
@@ -1337,17 +1337,17 @@ void UserDict::write_back_lemma(int fd) {
   err = lseek(fd, dict_info_.lemma_size - need_write, SEEK_CUR);
   if (err == -1)
     return;
-  write(fd, lemmas_ + dict_info_.lemma_size - need_write, need_write);
+  write(fd, (const char *)lemmas_ + dict_info_.lemma_size - need_write, need_write);
 
-  write(fd, offsets_,  dict_info_.lemma_count << 2);
+  write(fd, (const char *)offsets_,  dict_info_.lemma_count << 2);
 #ifdef ___PREDICT_ENABLED___
-  write(fd, predicts_,  dict_info_.lemma_count << 2);
+  write(fd, (const char *)predicts_,  dict_info_.lemma_count << 2);
 #endif
-  write(fd, scores_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)scores_, dict_info_.lemma_count << 2);
 #ifdef ___SYNC_ENABLED___
-  write(fd, syncs_, dict_info_.sync_count << 2);
+  write(fd, (const char *)syncs_, dict_info_.sync_count << 2);
 #endif
-  write(fd, &dict_info_, sizeof(dict_info_));
+  write(fd, (const char *)&dict_info_, sizeof(dict_info_));
 }
 
 void UserDict::write_back_all(int fd) {
@@ -1357,16 +1357,16 @@ void UserDict::write_back_all(int fd) {
   int err = lseek(fd, 4, SEEK_SET);
   if (err == -1)
     return;
-  write(fd, lemmas_, dict_info_.lemma_size);
-  write(fd, offsets_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)lemmas_, dict_info_.lemma_size);
+  write(fd, (const char *)offsets_, dict_info_.lemma_count << 2);
 #ifdef ___PREDICT_ENABLED___
-  write(fd, predicts_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)predicts_, dict_info_.lemma_count << 2);
 #endif
-  write(fd, scores_, dict_info_.lemma_count << 2);
+  write(fd, (const char *)scores_, dict_info_.lemma_count << 2);
 #ifdef ___SYNC_ENABLED___
-  write(fd, syncs_, dict_info_.sync_count << 2);
+  write(fd, (const char *)syncs_, dict_info_.sync_count << 2);
 #endif
-  write(fd, &dict_info_, sizeof(dict_info_));
+  write(fd, (const char *)&dict_info_, sizeof(dict_info_));
 }
 
 #ifdef ___CACHE_ENABLED___
