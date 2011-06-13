@@ -33,7 +33,7 @@ static void ftk_source_input_init(void)
 
 Ret ftk_backend_init(int argc, char* argv[])
 {
-	ftk_set_display(ftk_display_lcd_create("/dev/lcd"));
+	ftk_set_display(ftk_display_lcd_create("lcd"));
 
 	ftk_default_display();
 

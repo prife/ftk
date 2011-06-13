@@ -4,73 +4,45 @@
 #include "ftk_display_mem.h"
 #include "ftk_display_rtthread.h"
 
-#define LCD_WIDTH 			240
-#define LCD_HEIGHT 			320
-			
-#define RT_HW_LCD_WIDTH		LCD_WIDTH
-#define RT_HW_LCD_HEIGHT	LCD_HEIGHT
-
-struct LcdInfo
-{
-    void* bits;
-	int bits_per_pixel;
-	int width;
-	int height;
-	int fd;
-};
-
-static int  lcd_open(struct LcdInfo* lcd, const char *filename)
-{
-	extern rt_uint16_t _rt_framebuffer[RT_HW_LCD_HEIGHT][RT_HW_LCD_WIDTH];
-
-	lcd->bits 		    = _rt_framebuffer;
-	lcd->bits_per_pixel = 16;
-	lcd->width 			= LCD_WIDTH;
-	lcd->height 		= LCD_HEIGHT;
-	lcd->fd 			= 1;
-
- 	return lcd->fd;
-}
-
-static void lcd_close(struct LcdInfo* lcd)
-{
-    if (lcd != NULL)
-    {
-        FTK_FREE(lcd);
-    }
-}
-
 FtkDisplay* ftk_display_lcd_create(const char* filename)
 {
+	rt_device_t device;
+	rt_err_t result;
+	struct rt_device_graphic_info info;
     FtkDisplay* thiz = NULL;
-    struct LcdInfo* lcd = NULL;
 	FtkPixelFormat format = 0;
+	
+	device = rt_device_find(filename);
+	if(device == RT_NULL) return NULL;
 
-    lcd = FTK_ZALLOC(sizeof(struct LcdInfo));
-    return_val_if_fail(lcd != NULL, NULL);
-
-	if (lcd_open(lcd, filename) > 0)
+	/* get framebuffer address */
+	result = rt_device_control(device, RTGRAPHIC_CTRL_GET_INFO, &info);
+	if(result != RT_EOK)
 	{
-        if (lcd->bits_per_pixel == 16)
-        {
-            format = FTK_PIXEL_RGB565;
-        }
-        else if (lcd->bits_per_pixel == 24)
-        {
-            format = FTK_PIXEL_BGR24;
-        }
-        else if (lcd->bits_per_pixel == 32)
-        {
-            format = FTK_PIXEL_BGRA32;
-        }
-        else
-        {
-            assert(!"not supported framebuffer format.");
-        }
-
-        thiz = ftk_display_mem_create(format, lcd->width, lcd->height,
-                lcd->bits, (FtkDestroy) lcd_close, lcd);
+		/* get device information failed */
+		return NULL;
 	}
+
+    if(info.bits_per_pixel == 16)
+    {
+        format = FTK_PIXEL_RGB565;
+    }
+    else if(info.bits_per_pixel == 24)
+    {
+        format = FTK_PIXEL_BGR24;
+    }
+    else if(info.bits_per_pixel == 32)
+    {
+        format = FTK_PIXEL_BGRA32;
+    }
+    else
+    {
+        assert(!"not supported framebuffer format.");
+    }
+
+    thiz = ftk_display_mem_create(format, info.width, info.height,
+            info.framebuffer, NULL, NULL);
 
     return thiz;
 }
+
