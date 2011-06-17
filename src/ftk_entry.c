@@ -61,12 +61,14 @@ typedef struct _PrivInfo
 #define HAS_TEXT(priv) (priv != NULL && priv->text_buffer != NULL && TB_LENGTH > 0) 
 
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
+static Ret ftk_entry_update_caret_pos(FtkWidget* thiz);
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
 
 static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 {
 	DECL_PRIV0(thiz, priv);
 	priv->caret_visible = 0;
+	ftk_entry_update_caret_pos(thiz);
 	ftk_entry_on_paint_caret(thiz);
 
 	if(!HAS_TEXT(priv))
@@ -321,7 +323,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 	return ret;
 }
 
-static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
+static Ret ftk_entry_update_caret_pos(FtkWidget* thiz)
 {
 	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
@@ -356,6 +358,36 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 		y += FTK_ENTRY_V_MARGIN;
 		priv->caret_pos.x = x;
 		priv->caret_pos.y = y;
+	}
+
+	return RET_OK;
+}
+
+static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
+{
+	FtkGc gc = {0};
+	DECL_PRIV0(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	if(priv->caret < priv->visible_start || priv->caret > priv->visible_end 
+		|| priv->visible_start < 0 || priv->visible_end < 0)
+	{
+		return RET_FAIL;
+	}
+
+	(void)width;
+	gc.mask = FTK_GC_FG;
+	if(ftk_widget_is_focused(thiz))
+	{
+		int extent = 0;
+
+		priv->caret_visible = !priv->caret_visible;
+		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
+		
+		x = priv->caret_pos.x;
+		y = priv->caret_pos.y;
+		ftk_canvas_reset_gc(canvas, &gc);
 		ftk_canvas_draw_vline(canvas, x, y, height - 2 * FTK_ENTRY_V_MARGIN);
 		FTK_END_PAINT();
 	}
@@ -425,6 +457,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 		}
 	}
 
+	ftk_entry_update_caret_pos(thiz);
 	ftk_entry_on_paint_caret(thiz);
 
 	FTK_END_PAINT();
