@@ -595,7 +595,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 	for(i = 0; i < priv->dirty_rect_nr; i++)
 	{
 		r = priv->dirty_rect + i;
-		if(r->x == rect->x && r->x == rect->y 
+		if(r->x == rect->x && r->y == rect->y 
 			&& r->width == rect->width && r->height == rect->height)
 		{
 			ftk_logd("%s: remove repeated rect\n", __func__);
