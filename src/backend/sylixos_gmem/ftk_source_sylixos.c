@@ -178,6 +178,8 @@ static int ftk_source_sylixos_input_init (char  *file, const char  *file_list[])
         } else {
             break;
         }
+
+        i++;
     } while (divptr);
 
     return  (i);
