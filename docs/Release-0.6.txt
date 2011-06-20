@@ -1,10 +1,10 @@
-o tab widget
-o file browser widget
-o opengles backend
-o port to iphone
+o add tab widget
+o add file browser widget
+o add opengles backend
 o port to android
 o port to rt-thread
 o port to wince
+o port to iphone
 o more documation.
 o multi font size supported.
 o re-implement window animation.

@@ -5,7 +5,7 @@ AC_PREREQ([2.60])
 AC_INIT(ftk, 0.1, xianjimli@hotmail.com)
 AC_CONFIG_SRCDIR([src/ftk_canvas.h])
 AC_CONFIG_HEADERS([config_ftk.h])
-AM_INIT_AUTOMAKE(ftk, 0.5)
+AM_INIT_AUTOMAKE(ftk, 0.6)
 AC_CONFIG_MACRO_DIR([m4])
 # Checks for programs.
 AC_PROG_CC
