@@ -6,7 +6,7 @@ noinst_PROGRAMS=demo_label demo_button demo_image demo_image_button demo_dialog 
 	demo_menu demo_entry demo_progress_bar demo_check_button demo_wait_box \
 	demo_scroll_bar demo_sprite demo_xul demo_transparent demo_listview demo_hello \
 	demo_fullscreen demo_icon_view demo_text_view demo_msgbox demo_popup \
-	demo_combo_box demo_ime demo_statusbar demo_file_browser demo_tab
+	demo_combo_box demo_ime demo_statusbar demo_file_browser demo_tab demo_draw
 
 LOCAL_CFLAGS=-I$(abs_top_srcdir)/apps/common
 libftk_demos_la_SOURCES=demo_button.c demo_label.c demo_image.c \
@@ -99,6 +99,9 @@ demo_label_LDFLAGS=$(MYLDFLAGS)
 
 demo_button_SOURCES=demo_button.c
 demo_button_LDFLAGS=$(MYLDFLAGS)
+
+demo_draw_SOURCES=demo_draw.c
+demo_draw_LDFLAGS=$(MYLDFLAGS)
 
 demo_image_SOURCES=demo_image.c
 demo_image_LDFLAGS=$(MYLDFLAGS)
