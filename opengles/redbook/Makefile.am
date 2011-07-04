@@ -5,7 +5,7 @@ INCLUDES = -I$(abs_top_srcdir)/opengles/include -I$(abs_top_srcdir)/opengles/src
 
 noinst_PROGRAMS=aargb  alpha3D  alpha  checker  colormat  cube  double  fog  hello  light  lines  material  mipmap  model  movelight  planet  polyoff  robot  scene  smooth  texbind  texsub  torus  varray  wrap
 
-LIBS=$(abs_top_builddir)/src/libftk.la $(abs_top_builddir)/opengles/src/libopengles.la -lpthread -ldl
+LIBS=$(abs_top_builddir)/src/libftk.la $(abs_top_builddir)/opengles/src/libopengles.la -lpthread -ldl -lm
 
 lib_LTLIBRARIES=libftk_opengles_demos.la
 libftk_opengles_demos_la_SOURCES=$(top_srcdir)/src/demos/ftk_app_demo.c alpha3D.c material.c fog.c hello.c
