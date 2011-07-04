@@ -200,6 +200,35 @@ static void paint_ball(int x, int y, int width, int height)
 
 	return;
 }
+
+static void paint_sin(int x, int y, int width, int height)
+{
+	int i = 0;
+	int base_y = height/2;
+
+	cairo_translate (cr, x, y);
+	cairo_set_source_rgba (cr, 1.0, 0, 0, 1.0);
+	cairo_set_line_width (cr, 2);
+	cairo_move_to  (cr, 0, base_y);
+	cairo_line_to (cr, width, base_y);
+	cairo_stroke (cr);
+	
+	cairo_set_line_width (cr, 1);
+	cairo_move_to  (cr, 0, base_y);
+	cairo_set_source_rgba (cr, 0, 1.0, 0, 1.0);
+	for(i = 0; i < width; i++)
+	{
+		double r =  2 * 3.14 * i /(width >> 2);
+		int h = height/3 * sin(r);
+		cairo_line_to  (cr, i, base_y + h);
+	}
+
+	ftk_logd("%s:x=%d y=%d base_y=%d width=%d\n", __func__, x, y, base_y, width);
+	cairo_stroke (cr);
+
+	return;
+}
+
 static void paint_helloworld(int x, int y, int width, int height)
 {
 	cairo_select_font_face (cr, "Sans", CAIRO_FONT_SLANT_NORMAL,
@@ -257,6 +286,7 @@ static size_t g_index = 0;
 static const PaintFunc paints[] = 
 {
 	paint_car,
+	paint_sin,
 //	paint_helloworld,
 	paint_ball,
 	paint_segments,
