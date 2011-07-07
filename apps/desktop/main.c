@@ -164,6 +164,11 @@ static Ret desktop_update_time(void* ctx)
 	struct tm* t = localtime(&now);
 
 	panel = ftk_default_status_panel();
+	if(panel == NULL)
+	{
+		return RET_REMOVE;
+	}
+
 	ftk_snprintf(text, sizeof(text)-1, "%d:%02d", t->tm_hour, t->tm_min);
 	item = ftk_widget_lookup(panel, IDC_TIME_ITEM);
 	ftk_widget_set_text(item, text);
@@ -251,9 +256,12 @@ static Ret desktop_add_time_item_on_statusbar(void)
 	FtkWidget* panel = NULL;
 
 	panel = ftk_default_status_panel();
-	item = ftk_status_item_create(panel, -2, 60);
-	ftk_widget_set_id(item, IDC_TIME_ITEM);
-	ftk_widget_show(item, 1);
+	if(panel != NULL)
+	{
+		item = ftk_status_item_create(panel, -2, 60);
+		ftk_widget_set_id(item, IDC_TIME_ITEM);
+		ftk_widget_show(item, 1);
+	}
 
 	ftk_logd("%s\n", __func__);
 	return RET_OK;
