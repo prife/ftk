@@ -78,7 +78,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 	ftk_combo_box_append(combo_box, NULL, "0 seconds");
 	
-	ftk_widget_set_text(win, "ComboBox Demo");
+	ftk_widget_set_text(win, "It is ComboBox Demo");
 	ftk_widget_show_all(win, 1);
 	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 

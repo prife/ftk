@@ -31,6 +31,7 @@
 
 #include "ftk_log.h"
 #include "ftk_window.h"
+#include "ftk_globals.h"
 #include "ftk_status_item.h"
 #include "ftk_status_panel.h"
 
@@ -86,13 +87,20 @@ static Ret ftk_status_item_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 {
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	(void)width;
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		int dx = FTK_H_MARGIN;
-		int dy = height/2;
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
+		int xoffset = 0;
+		int yoffset = FTK_HALF(height);
+		FtkTextLine line = {0};
+		const char* text = ftk_widget_get_text(thiz);
+		FtkTextLayout* text_layout = ftk_default_text_layout();
+	
+		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			ftk_canvas_draw_string(canvas, x, y + yoffset, line.text, line.len, 1);
+		}
 	}
 
 	FTK_END_PAINT();

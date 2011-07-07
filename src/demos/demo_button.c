@@ -64,7 +64,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_button_set_clicked_listener(button, button_hide_clicked, win);
 	
 	button = ftk_button_create(win, 2*(width + 10), 30, width, 50);
-	ftk_widget_set_text(button, "按钮测试");
+	ftk_widget_set_text(button, "按钮测试(BUTTON)");
 	ftk_widget_set_id(button, IDC_TEST_BUTTON);
 	ftk_button_set_clicked_listener(button, button_default_clicked, win);
 	
