@@ -412,6 +412,7 @@ static const VarConst s_var_conts[] =
 	{"FTK_ATTR_INSENSITIVE",     FTK_ATTR_INSENSITIVE},
 	{"FTK_ATTR_FOCUSED",         FTK_ATTR_FOCUSED},
 	{"FTK_ATTR_QUIT_WHEN_CLOSE", FTK_ATTR_QUIT_WHEN_CLOSE},
+	{"FTK_ATTR_FULLSCREEN",      FTK_ATTR_FULLSCREEN},
 	{NULL, 0},
 };
 
@@ -420,7 +421,7 @@ static int ftk_xul_find_const(const char* name)
 	int i = 0;
 	for(i = 0; s_var_conts[i].name != NULL; i++)
 	{
-		if(strcmp(s_var_conts[i].name, name) == 0)
+		if(strncmp(s_var_conts[i].name, name, strlen(s_var_conts[i].name)) == 0)
 		{
 			return i;
 		}
@@ -446,17 +447,23 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 			if((i = ftk_xul_find_getter(iter+1)) >= 0)
 			{
 				ftk_itoa(value, sizeof(value), s_var_getters[i].get(thiz));
-				strncpy(priv->processed_value+dst, value, len);
-				dst += strlen(priv->processed_value+dst);
-				iter += strlen(s_var_getters[i].name);
+				if(len > strlen(value))
+				{
+					strcpy(priv->processed_value+dst, value);
+					dst += strlen(priv->processed_value+dst);
+					iter += strlen(s_var_getters[i].name);
+				}
 				continue;
 			}
 			else if((i = ftk_xul_find_const(iter+1)) >= 0)
 			{
 				ftk_itoa(value, sizeof(value), s_var_conts[i].value);
-				strncpy(priv->processed_value+dst, value, len);
-				dst += strlen(priv->processed_value+dst);
-				iter += strlen(s_var_getters[i].name);
+				if(len > strlen(value))
+				{
+					strcpy(priv->processed_value+dst, value);
+					dst += strlen(priv->processed_value+dst);
+					iter += strlen(s_var_conts[i].name);
+				}
 				continue;
 			}
 		}
