@@ -33,6 +33,7 @@ static Ret button_unfullscreen_clicked(void* ctx, void* obj)
 	{
 		ftk_window_set_fullscreen(ctx, 0);
 	}
+	ftk_logd("%s: width=%d height=%d\n", __func__, ftk_widget_width(ctx), ftk_widget_height(ctx));
 
 	return RET_OK;
 }
@@ -48,6 +49,7 @@ static Ret button_fullscreen_clicked(void* ctx, void* obj)
 		ftk_window_set_fullscreen(ctx, 1);
 	}
 
+	ftk_logd("%s: width=%d height=%d\n", __func__, ftk_widget_width(ctx), ftk_widget_height(ctx));
 	return RET_OK;
 }
 
