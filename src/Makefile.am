@@ -167,53 +167,114 @@ endif
 
 ftkdir=$(includedir)/ftk
 ftk_HEADERS=\
-	fontdata.h                ftk_list_render_default.h\
-	ftk_list_render.h         ftk_list_view.h\
-	ftk_app_window.h          ftk_log.h\
-	ftk_backend.h             ftk_main_loop.h\
-	ftk_bitmap_factory.h      ftk_menu_item.h\
-	ftk_bitmap.h              ftk_menu_panel.h\
-	ftk_button.h              ftk_mmap.h\
-	ftk_canvas.h              ftk_platform.h \
-	ftk_check_button.h        ftk_progress_bar.h\
-	ftk_clipboard.h           ftk_radio_group.h\
-	ftk_dialog.h              ftk_scroll_bar.h\
-	ftk_display.h             ftk_source.h\
-	ftk_entry.h               ftk_source_idle.h\
-	ftk_event.h               ftk_source_primary.h\
-	ftk_expr.h                ftk_sources_manager.h\
-	ftk_source_timer.h\
-	ftk_font.h                ftk_sprite.h\
-	ftk_gc.h                  ftk_status_item.h\
-	ftk_gesture.h             ftk_status_panel.h\
-	ftk_gesture_listener.h    \
-	ftk_globals.h             ftk_text_buffer.h\
-	ftk.h                     ftk_typedef.h\
-	ftk_icon_cache.h          ftk_util.h\
-	ftk_image_bmp_decoder.h   ftk_wait_box.h\
-	ftk_image_decoder.h       ftk_widget.h\
-	ftk_image.h               \
-	ftk_image_jpeg_decoder.h  ftk_window.h\
-	ftk_image_png_decoder.h   ftk_wnd_manager_default.h\
-	ftk_key.h                 ftk_wnd_manager.h\
-	ftk_label.h               ftk_xml_builder.h\
-	ftk_list_model_default.h  ftk_xml_parser.h\
-	ftk_list_model.h          ftk_xul.h \
-	ftk_icon_view.h\
-	ftk_theme.h               ftk_painter.h \
-	ftk_text_view.h           ftk_cairo.h \
-	ftk_pipe.h                ftk_message_box.h \
-	ftk_popup_menu.h          \
-	ftk_combo_box.h           ftk_clipboard.h \
+	fontdata.h \
+	ftk_allocator_default.h \
+	ftk_allocator.h \
+	ftk_allocator_profile.h \
+	ftk_animation_alpha.h \
+	ftk_animation_expand.h \
+	ftk_animation.h \
+	ftk_animation_scale.h \
+	ftk_animation_translate.h \
+	ftk_animation_trigger_default.h \
+	ftk_animation_trigger.h \
+	ftk_animation_trigger_silence.h \
+	ftk_app_window.h \
+	ftk_backend.h \
+	ftk_bitmap_factory.h \
+	ftk_bitmap.h \
+	ftk_button.h \
+	ftk_cairo.h \
+	ftk_canvas.h \
+	ftk_check_button.h \
+	ftk_clipboard.h \
+	ftk_combo_box.h \
+	ftk_config.h \
+	ftk_dialog.h \
+	ftk_display.h \
+	ftk_display_mem.h \
+	ftk_display_rotate.h \
+	ftk_dlfcn.h \
+	ftk_entry.h \
+	ftk_event.h \
+	ftk_expr.h \
+	ftk_file_browser.h \
+	ftk_file_system.h \
+	ftk_font_desc.h \
+	ftk_font.h \
+	ftk_font_manager.h \
+	ftk_gc.h \
+	ftk_gesture.h \
+	ftk_gesture_listener.h \
+	ftk_globals.h \
+	ftk.h \
+	ftk_icon_cache.h \
+	ftk_icon_view.h \
+	ftk_image_bmp_decoder.h \
+	ftk_image_decoder.h \
+	ftk_image.h \
+	ftk_image_jpeg_decoder.h \
+	ftk_image_png_decoder.h \
 	ftk_input_method_chooser.h \
-	ftk_input_method_manager.h ftk_input_method.h \
-	ftk_allocator.h            ftk_allocator_default.h \
-	ftk_allocator_profile.h    ftk_input_method_preeditor.h \
-	im/default/ftk_input_method_util.h fhw/fhw_primitive_recognizer.h \
-	ftk_display_mem.h ftk_config.h \
-	ftk_text_layout.h ftk_display_rotate.h ftk_path.h \
-	ftk_file_system.h ftk_file_browser.h ftk_tab.h \
-	ftk_font_desc.h ftk_font_manager.h 
+	ftk_input_method.h \
+	ftk_input_method_manager.h \
+	ftk_input_method_preeditor_default.h \
+	ftk_input_method_preeditor.h \
+	ftk_interpolator_acc_decelerate.h \
+	ftk_interpolator_accelerate.h \
+	ftk_interpolator_bounce.h \
+	ftk_interpolator_decelerate.h \
+	ftk_interpolator.h \
+	ftk_interpolator_linear.h \
+	ftk_key.h \
+	ftk_label.h \
+	ftk_list_model_default.h \
+	ftk_list_model.h \
+	ftk_list_render_default.h \
+	ftk_list_render.h \
+	ftk_list_view.h \
+	ftk_log.h \
+	ftk_main_loop.h \
+	ftk_menu_item.h \
+	ftk_menu_panel.h \
+	ftk_message_box.h \
+	ftk_mmap.h \
+	ftk_painter.h \
+	ftk_pairs.h \
+	ftk_params.h \
+	ftk_path.h \
+	ftk_pipe.h \
+	ftk_platform.h \
+	ftk_popup_menu.h \
+	ftk_progress_bar.h \
+	ftk_radio_group.h \
+	ftk_scroll_bar.h \
+	ftk_source.h \
+	ftk_source_idle.h \
+	ftk_source_primary.h \
+	ftk_sources_manager.h \
+	ftk_source_timer.h \
+	ftk_sprite.h \
+	ftk_status_item.h \
+	ftk_status_panel.h \
+	ftk_tab.h \
+	ftk_text_buffer.h \
+	ftk_text_layout.h \
+	ftk_text_view.h \
+	ftk_theme.h \
+	ftk_translator.h \
+	ftk_typedef.h \
+	ftk_util.h \
+	ftk_wait_box.h \
+	ftk_widget.h \
+	ftk_window.h \
+	ftk_wnd_manager_default.h \
+	ftk_wnd_manager.h \
+	ftk_xml_builder.h \
+	ftk_xml_parser.h \
+	ftk_xul.h \
+	im/default/ftk_input_method_util.h \
+	fhw/fhw_primitive_recognizer.h 
 
 EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
 	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \

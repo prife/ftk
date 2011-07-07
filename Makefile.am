@@ -10,7 +10,7 @@ SUBDIRS+=fbus services script_binding apps
 endif
 pkgconfigdir=$(libdir)/pkgconfig
 
-pkgconfig_DATA=ftk.pc ftk.cnf
+pkgconfig_DATA=ftk.pc 
 ACLOCAL_AMFLAGS=-I m4
 
 cnfdir=$(datadir)/ftk/
