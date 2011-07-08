@@ -109,6 +109,77 @@ static int ftk_source_sylixos_key_map (int key)
     return f_key_map[key] != 0 ? f_key_map[key] : key;
 }
 
+struct tslib_linear {
+    int swap_xy;
+
+    // Linear scaling and offset parameters for pressure
+    int p_offset;
+    int p_mult;
+    int p_div;
+
+    // Linear scaling and offset parameters for x,y (can include rotation)
+    int a[7];
+};
+
+static struct tslib_linear __g_lin;
+
+static int linear_init(void)
+{
+    struct stat sbuf;
+    int         pcal_fd;
+    char        pcalbuf[200];
+    int         index;
+    char*       tokptr;
+    char*       calfile;
+
+    // Use default values that leave ts numbers unchanged after transform
+    __g_lin.a[0] = 1;
+    __g_lin.a[1] = 0;
+    __g_lin.a[2] = 0;
+    __g_lin.a[3] = 0;
+    __g_lin.a[4] = 1;
+    __g_lin.a[5] = 0;
+    __g_lin.a[6] = 1;
+    __g_lin.p_offset = 0;
+    __g_lin.p_mult   = 1;
+    __g_lin.p_div    = 1;
+    __g_lin.swap_xy  = 0;
+
+    /*
+     * Check calibration file
+     */
+    calfile = FTK_ROOT_DIR"/pointercal";
+
+    if (stat(calfile, &sbuf) == 0) {
+
+        pcal_fd = open(calfile, O_RDONLY);
+
+        read(pcal_fd, pcalbuf, 200);
+
+        __g_lin.a[0] = atoi(strtok(pcalbuf, " "));
+
+        index = 1;
+
+        while (index < 7) {
+            tokptr = strtok(NULL, " ");
+            if (*tokptr != '\0') {
+                __g_lin.a[index] = atoi(tokptr);
+                index++;
+            }
+        }
+
+        printf("Linear calibration constants: ");
+        for (index = 0; index < 7; index++) {
+            printf("%d ",__g_lin.a[index]);
+        }
+        printf("\n");
+
+        close(pcal_fd);
+    }
+
+    return 0;
+}
+
 static void  ftk_source_sylixos_on_pointer_event (mouse_event_notify  *pmnotify)
 {
     if (pmnotify) {
@@ -120,23 +191,43 @@ static void  ftk_source_sylixos_on_pointer_event (mouse_event_notify  *pmnotify)
             eventMouse.u.mouse.y += pmnotify->ymovement;
 
         } else { /* absolutely coordinate */
-            eventMouse.u.mouse.x = 10;  /* temp */
-            eventMouse.u.mouse.y = 10;
+            int xtemp, ytemp;
+
+            eventMouse.u.mouse.x = pmnotify->xanalog;
+            eventMouse.u.mouse.y = pmnotify->yanalog;
+
+            xtemp = eventMouse.u.mouse.x;
+            ytemp = eventMouse.u.mouse.y;
+            eventMouse.u.mouse.x =   ( __g_lin.a[2] +
+                                       __g_lin.a[0]*xtemp +
+                                       __g_lin.a[1]*ytemp ) / __g_lin.a[6];
+            eventMouse.u.mouse.y =   ( __g_lin.a[5] +
+                                       __g_lin.a[3]*xtemp +
+                                       __g_lin.a[4]*ytemp ) / __g_lin.a[6];
+
+            if (__g_lin.swap_xy) {
+                int tmp = eventMouse.u.mouse.x;
+                eventMouse.u.mouse.x = eventMouse.u.mouse.y;
+                eventMouse.u.mouse.y = tmp;
+            }
+
+            if (pmnotify->kstat & MOUSE_LEFT) {
+                if (eventMouse.u.mouse.press) {
+                    eventMouse.type = FTK_EVT_MOUSE_MOVE;
+                } else {
+                    eventMouse.type = FTK_EVT_MOUSE_DOWN;
+                    eventMouse.u.mouse.press = 1;
+                }
+            } else {
+                if (eventMouse.u.mouse.press) {
+                    eventMouse.type = FTK_EVT_MOUSE_UP;
+                    eventMouse.u.mouse.press = 0;
+                }
+            }
         }
 
-        if (pmnotify->kstat & MOUSE_LEFT) {
-            if (eventMouse.u.mouse.press) {
-                eventMouse.type = FTK_EVT_MOUSE_MOVE;
-            } else {
-                eventMouse.type = FTK_EVT_MOUSE_DOWN;
-                eventMouse.u.mouse.press = 1;
-            }
-        } else {
-            if (eventMouse.u.mouse.press) {
-                eventMouse.type = FTK_EVT_MOUSE_UP;
-                eventMouse.u.mouse.press = 0;
-            }
-        }
+        ftk_logd("%s: sample.pressure=%d x=%d y=%d\n",
+            __func__, eventMouse.u.mouse.press, eventMouse.u.mouse.x, eventMouse.u.mouse.y);
 
         if (eventMouse.type != FTK_EVT_NOP) {
             ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &eventMouse);
@@ -209,6 +300,8 @@ void ftk_source_sylixos_input_create (void)
         pcMouseArray[0] = "/dev/input/mouse0";
         max_mouse_num = 1;
     }
+
+    linear_init();
 
     guiInputDevReg(pcKeyboradArray, max_keyboard_num, pcMouseArray, max_mouse_num);
     guiInputDevKeyboardHookSet(ftk_source_sylixos_on_keyboard_event);

@@ -56,6 +56,11 @@ extern "C" {
 # define GLAPI
 #	define EGL_PLATFORM_HEADER_INCLUDE <stdlib.h>
 
+#elif defined(SYLIXOS)
+
+# define GLAPI
+#   define EGL_PLATFORM_HEADER_INCLUDE <stdlib.h>
+
 #else
 
 #	error "Unsupported Operating System"

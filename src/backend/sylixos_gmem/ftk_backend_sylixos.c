@@ -3,11 +3,15 @@
 #include "ftk_wnd_manager.h"
 #include "ftk_globals.h"
 
+int ftk_sylixos_ts_calibrate(void);
+
 Ret ftk_backend_init (int argc, char *argv[])
 {
     FtkDisplay* display = NULL;
     char         namebuffer[PATH_MAX + 1];
     char        *name = FTK_FB_NAME;
+
+    ftk_sylixos_ts_calibrate();
 
     if (getenv_r("FRAMEBUFFER", namebuffer, PATH_MAX + 1) >= 0) {
         name = namebuffer;

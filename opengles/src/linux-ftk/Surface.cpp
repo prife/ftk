@@ -332,14 +332,14 @@ bool Surface::Save(const char *filename)
 		return false;
 	}
 
-	if (write(fd, &header, sizeof(header)) != sizeof(header))
+	if (write(fd, (const char *)&header, sizeof(header)) != sizeof(header))
 	{
 		fprintf(stderr, "Error writing bitmap %s header\n", filename);
 		close(fd);
 		return false;
 	}
 
-	if (write(fd, &info, sizeof(info)) != sizeof(info))
+	if (write(fd, (const char *)&info, sizeof(info)) != sizeof(info))
 	{
 		fprintf(stderr, "Error writing bitmap %s info\n", filename);
 		close(fd);
@@ -350,7 +350,7 @@ bool Surface::Save(const char *filename)
 
 	for (h = GetHeight(); h; --h) 
 	{
-		if (write(fd, pixels, sizeof(U16)*GetWidth()) != 
+		if (write(fd, (const char *)pixels, sizeof(U16)*GetWidth()) !=
 			sizeof(U16)*GetWidth())
 		{
 			fprintf(stderr, "Error writing bitmap %s data\n", filename);

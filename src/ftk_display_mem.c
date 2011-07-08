@@ -249,3 +249,14 @@ Ret ftk_display_mem_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
 
 	return RET_OK;
 }
+
+void* ftk_display_bits(FtkDisplay* thiz, int* bpp)
+{
+    DECL_PRIV(thiz, priv);
+    return_val_if_fail(thiz != NULL && priv != NULL && priv->bits != NULL, NULL);
+    return_val_if_fail(bpp != NULL, NULL);
+
+    *bpp = priv->bpp;
+
+    return priv->bits;
+}
