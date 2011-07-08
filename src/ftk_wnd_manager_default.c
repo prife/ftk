@@ -408,7 +408,7 @@ static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
 	for(; i > 0; i--)
 	{
 		FtkWidget* win = priv->windows[i-1];
-		if(!ftk_widget_is_visible(win))
+		if(!ftk_widget_is_visible(win) || !ftk_window_is_mapped(win))
 		{
 			continue;
 		}
