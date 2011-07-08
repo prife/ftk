@@ -182,7 +182,8 @@ typedef enum _FtkWidgetAttr
 	FTK_ATTR_IGNORE_CLOSE    = 1<<7, /*for window only*/
 	FTK_ATTR_QUIT_WHEN_CLOSE = 1<<8, /*for window only*/
 	FTK_ATTR_AUTO_LAYOUT     = 1<<9,  /*for dialog only*/
-	FTK_ATTR_POPUP           = 1<<10  /*for dialog only*/
+	FTK_ATTR_POPUP           = 1<<10,  /*for dialog only*/
+	FTK_ATTR_FULLSCREEN      = 1<<11  /*for window only*/
 }FtkWidgetAttr;
 
 typedef enum _FtkRotate

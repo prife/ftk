@@ -398,6 +398,10 @@ void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 	{
 		ftk_window_set_focus(ftk_widget_toplevel(thiz), thiz);
 	}
+	else if(attr & FTK_ATTR_FULLSCREEN)
+	{
+		ftk_window_set_fullscreen(thiz, FTK_ATTR_FULLSCREEN);
+	}
 
 	return;
 }
