@@ -59,6 +59,8 @@ typedef struct _PrivInfo
 	int disable_anim;
 }PrivInfo;
 
+static int  ftk_wnd_manager_default_has_fullscreen_win(FtkWndManager* thiz);
+static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map);
 static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz);
 
 static Ret  ftk_wnd_manager_default_restack(FtkWndManager* thiz, FtkWidget* window, int offset)
@@ -637,6 +639,10 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
 			priv->disable_anim--;
 			ftk_wnd_manager_default_do_animation(thiz, event);
+			if(ftk_wnd_manager_default_map_panels(thiz, !ftk_wnd_manager_default_has_fullscreen_win(thiz)) == RET_OK)
+			{
+				ftk_wnd_manager_update(thiz);
+			}
 			return RET_OK;
 		}
 		case FTK_EVT_RELAYOUT_WND:
@@ -711,7 +717,7 @@ static int  ftk_wnd_manager_default_has_fullscreen_win(FtkWndManager* thiz)
 	{
 		win = priv->windows[i];
 
-		if(ftk_widget_is_visible(win) && ftk_window_is_fullscreen(win))
+		if(ftk_widget_is_visible(win) && ftk_window_is_fullscreen(win) && ftk_window_is_mapped(win))
 		{
 			return 1;
 		}
@@ -723,6 +729,7 @@ static int  ftk_wnd_manager_default_has_fullscreen_win(FtkWndManager* thiz)
 static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 {
 	int i = 0;
+	Ret ret = RET_IGNORED;
 	FtkEvent event = {0};
 	FtkWidget* win = NULL;
 	DECL_PRIV(thiz, priv);
@@ -733,13 +740,17 @@ static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 		win = priv->windows[i];
 		if(ftk_widget_type(win) == FTK_STATUS_PANEL && ftk_widget_is_visible(win))
 		{
-			event.widget = win;
-			event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
-			ftk_wnd_manager_dispatch_event(thiz, &event);
+			if(!(map && ftk_window_is_mapped(win)))
+			{
+				event.widget = win;
+				event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
+				ftk_wnd_manager_dispatch_event(thiz, &event);
+				ret = RET_OK;
+			}
 		}
 	}
 
-	return RET_OK;
+	return ret;
 }
 
 static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
@@ -773,7 +784,7 @@ static Ret  ftk_wnd_manager_default_update(FtkWndManager* thiz)
 		if(ftk_widget_is_visible(win))
 		{
 			ftk_window_paint_forcely(win);
-			if(ftk_window_is_fullscreen(win))
+			if(ftk_window_is_fullscreen(win) && ftk_window_is_mapped(win))
 			{
 				return RET_OK;
 			}
