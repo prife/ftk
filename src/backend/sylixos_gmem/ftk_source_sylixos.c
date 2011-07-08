@@ -121,29 +121,29 @@ struct tslib_linear {
     int a[7];
 };
 
-static struct tslib_linear __g_lin;
+static struct tslib_linear f_linear_info;
 
 static int linear_init(void)
 {
     struct stat sbuf;
-    int         pcal_fd;
-    char        pcalbuf[200];
+    int         cal_fd;
+    char        calbuf[200];
     int         index;
     char*       tokptr;
     char*       calfile;
 
     // Use default values that leave ts numbers unchanged after transform
-    __g_lin.a[0] = 1;
-    __g_lin.a[1] = 0;
-    __g_lin.a[2] = 0;
-    __g_lin.a[3] = 0;
-    __g_lin.a[4] = 1;
-    __g_lin.a[5] = 0;
-    __g_lin.a[6] = 1;
-    __g_lin.p_offset = 0;
-    __g_lin.p_mult   = 1;
-    __g_lin.p_div    = 1;
-    __g_lin.swap_xy  = 0;
+    f_linear_info.a[0] = 1;
+    f_linear_info.a[1] = 0;
+    f_linear_info.a[2] = 0;
+    f_linear_info.a[3] = 0;
+    f_linear_info.a[4] = 1;
+    f_linear_info.a[5] = 0;
+    f_linear_info.a[6] = 1;
+    f_linear_info.p_offset = 0;
+    f_linear_info.p_mult   = 1;
+    f_linear_info.p_div    = 1;
+    f_linear_info.swap_xy  = 0;
 
     /*
      * Check calibration file
@@ -152,29 +152,29 @@ static int linear_init(void)
 
     if (stat(calfile, &sbuf) == 0) {
 
-        pcal_fd = open(calfile, O_RDONLY);
+        cal_fd = open(calfile, O_RDONLY);
 
-        read(pcal_fd, pcalbuf, 200);
+        read(cal_fd, calbuf, 200);
 
-        __g_lin.a[0] = atoi(strtok(pcalbuf, " "));
+        f_linear_info.a[0] = atoi(strtok(calbuf, " "));
 
         index = 1;
 
         while (index < 7) {
             tokptr = strtok(NULL, " ");
             if (*tokptr != '\0') {
-                __g_lin.a[index] = atoi(tokptr);
+                f_linear_info.a[index] = atoi(tokptr);
                 index++;
             }
         }
 
         printf("Linear calibration constants: ");
         for (index = 0; index < 7; index++) {
-            printf("%d ",__g_lin.a[index]);
+            printf("%d ", f_linear_info.a[index]);
         }
         printf("\n");
 
-        close(pcal_fd);
+        close(cal_fd);
     }
 
     return 0;
@@ -198,14 +198,14 @@ static void  ftk_source_sylixos_on_pointer_event (mouse_event_notify  *pmnotify)
 
             xtemp = eventMouse.u.mouse.x;
             ytemp = eventMouse.u.mouse.y;
-            eventMouse.u.mouse.x =   ( __g_lin.a[2] +
-                                       __g_lin.a[0]*xtemp +
-                                       __g_lin.a[1]*ytemp ) / __g_lin.a[6];
-            eventMouse.u.mouse.y =   ( __g_lin.a[5] +
-                                       __g_lin.a[3]*xtemp +
-                                       __g_lin.a[4]*ytemp ) / __g_lin.a[6];
+            eventMouse.u.mouse.x =   ( f_linear_info.a[2] +
+                                       f_linear_info.a[0] * xtemp +
+                                       f_linear_info.a[1] * ytemp ) / f_linear_info.a[6];
+            eventMouse.u.mouse.y =   ( f_linear_info.a[5] +
+                                       f_linear_info.a[3] * xtemp +
+                                       f_linear_info.a[4] * ytemp ) / f_linear_info.a[6];
 
-            if (__g_lin.swap_xy) {
+            if (f_linear_info.swap_xy) {
                 int tmp = eventMouse.u.mouse.x;
                 eventMouse.u.mouse.x = eventMouse.u.mouse.y;
                 eventMouse.u.mouse.y = tmp;

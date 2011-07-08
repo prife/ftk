@@ -388,7 +388,7 @@ int ftk_sylixos_ts_calibrate(void)
 
         cal_fd = open(calfile, O_CREAT | O_RDWR);
 
-        sprintf(namebuffer,"%d %d %d %d %d %d %d",
+        sprintf(namebuffer, "%d %d %d %d %d %d %d",
                 cal.a[1], cal.a[2], cal.a[0],
                 cal.a[4], cal.a[5], cal.a[3], cal.a[6]);
 
