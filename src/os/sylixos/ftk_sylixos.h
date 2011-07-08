@@ -53,8 +53,8 @@
 #define FTK_DATA_ROOT                   FTK_ROOT_DIR"/data"
 #define TESTDATA_DIR                    FTK_ROOT_DIR"/testdata"
 #define FTK_FONT_DIR                    FTK_ROOT_DIR"/data"
-#define APP_DATA_DIR                    FTK_ROOT_DIR"/app"
-#define APP_LOCAL_DATA_DIR              FTK_ROOT_DIR"/app"
+#define APP_DATA_DIR                    FTK_ROOT_DIR"/apps"
+#define APP_LOCAL_DATA_DIR              FTK_ROOT_DIR"/apps"
 
 #define FTK_FONT                        "font.ttf"
 
@@ -77,6 +77,7 @@
 
 #define FTK_HAS_MAIN                    0
 #define FTK_HAS_DLOPEN                  1
+#define FTK_HAS_LUA                     1
 
 #endif  /* FTK_SYLIXOS_H */
 
