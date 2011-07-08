@@ -150,7 +150,7 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 		if((ftk_widget_type(win) == FTK_WINDOW 
 			|| ftk_widget_type(win) == FTK_DIALOG
 			|| ftk_widget_type(win) == FTK_WINDOW_MISC)
-			&& ftk_widget_is_visible(win))
+			&& (ftk_widget_is_visible(win)))
 		{
 			priv->focus_widget = win;
 			break;
@@ -674,7 +674,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 		int y = event->u.mouse.y;
 		
 		target = ftk_wnd_manager_find_target(thiz, x, y);
-		if(event->type == FTK_EVT_MOUSE_DOWN)
+		if(event->type == FTK_EVT_MOUSE_DOWN && !ftk_widget_has_attr(target, FTK_ATTR_NO_FOCUS))
 		{
 			priv->focus_widget = target;
 		}
