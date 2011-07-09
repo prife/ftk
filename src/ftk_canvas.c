@@ -279,7 +279,19 @@ Ret ftk_canvas_draw_bg_image(FtkCanvas* thiz, FtkBitmap* bitmap, FtkBgStyle styl
 		case FTK_BG_CENTER: 
 			ret = ftk_canvas_fill_background_center(thiz, x, y, w, h, bitmap);break;
 		case FTK_BG_FOUR_CORNER:
-			ret = ftk_canvas_fill_background_four_corner(thiz, x, y, w, h, bitmap);break;
+		{
+			int bw = ftk_bitmap_width(bitmap);
+			int bh = ftk_bitmap_height(bitmap);
+			if(w <= bw && h <= bh)
+			{
+				ret = ftk_canvas_fill_background_center(thiz, x, y, w, h, bitmap);break;
+			}
+			else
+			{
+				ret = ftk_canvas_fill_background_four_corner(thiz, x, y, w, h, bitmap);
+			}
+			break;
+		}
 		default:
 			ret = ftk_canvas_fill_background_normal(thiz, x, y, w, h, bitmap);break;
 	}
