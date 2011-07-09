@@ -170,7 +170,7 @@ static Ret ftk_canvas_default_draw_vline(FtkCanvas* thiz, size_t x, size_t y, si
 	pdst = bits + width * y + x;
 	color = &(thiz->gc.fg);
 	
-	for(i = h; i; i--, pdst+=width)
+	for(i = h; i >= 0; i--, pdst+=width)
 	{
 		PUT_PIXEL(pdst, color, alpha);
 	}
@@ -201,7 +201,7 @@ static Ret ftk_canvas_default_draw_hline(FtkCanvas* thiz, size_t x, size_t y, si
 	color = &(thiz->gc.fg);
 	pdst = bits + y * width + x;
 	
-	for(i = w; i; i--, pdst++)
+	for(i = w; i >= 0; i--, pdst++)
 	{
 		PUT_PIXEL(pdst, color, alpha);
 	}
