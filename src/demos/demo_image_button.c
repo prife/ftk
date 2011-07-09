@@ -67,6 +67,8 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int i = 0;
 	int j = 0;
+	int w = 80;
+	int h = 80;
 	int width = 0;
 	int height = 0;
 	char filename[FTK_MAX_PATH] = {0};
@@ -80,14 +82,14 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_window_set_animation_hint(win, "app_main_window");
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
-	for(i = 0; i < height/80; i++)
+	for(i = 0; i < height/h; i++)
 	{
-		for(j = 0; j < width/80; j++)
+		for(j = 0; j < width/w; j++)
 		{
 			ftk_snprintf(filename, sizeof(filename), "%s%s", 
 				ftk_config_get_test_data_dir(ftk_default_config()), pngs[i + 2]);
 			gc.bitmap = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename);
-			button = ftk_button_create(win, j * 80, i * 80, ftk_bitmap_width(gc.bitmap), ftk_bitmap_height(gc.bitmap));
+			button = ftk_button_create(win, j * w, i * h, ftk_bitmap_width(gc.bitmap), ftk_bitmap_height(gc.bitmap));
 			if(i == 0)
 			{
 				ftk_widget_unset_attr(button, FTK_ATTR_TRANSPARENT);

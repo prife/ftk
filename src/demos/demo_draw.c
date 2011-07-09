@@ -10,6 +10,7 @@ static Ret on_paint(void* ctx, void* obj)
 	int i = 0;
 	int w = 0;
 	int h = 0;
+	FtkPoint p = {0};
 	FtkWidget* thiz = obj;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
@@ -30,8 +31,12 @@ static Ret on_paint(void* ctx, void* obj)
 	{
 		double r =  2 * 3.14 * i / width;
 		h = height/3 * sin(r);
-		ftk_canvas_set_pixel(canvas, x + i, y + height/2 + h, &gc.fg);
+		p.x = x + i;
+		p.y = y + height/2 + h;
+		ftk_canvas_draw_pixels(canvas, &p, 1);
 	}
+	
+	ftk_canvas_draw_line(canvas, 0, 0, 100, 200);
 
 	ftk_logd("%s:%d\n", __func__, __LINE__);
 	FTK_END_PAINT();
