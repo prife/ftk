@@ -51,8 +51,7 @@ typedef struct _FtkCanvas FtkCanvas;
 
 typedef Ret (*FtkCanvasSyncGc)(FtkCanvas* thiz);
 typedef Ret (*FtkCanvasSetClip)(FtkCanvas* thiz, FtkRegion* clip);
-typedef Ret (*FtkCanvasGetPixel)(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c);
-typedef Ret (*FtkCanvasSetPixel)(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c);
+typedef Ret (*FtkCanvasDrawPixels)(FtkCanvas* thiz, FtkPoint* points, size_t nr);
 typedef Ret (*FtkCanvasDrawLine)(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2);
 typedef Ret (*FtkCanvasClearRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h);
 typedef Ret (*FtkCanvasDrawRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, int round, int fill);
@@ -70,8 +69,7 @@ struct _FtkCanvas
 
 	FtkCanvasSyncGc     sync_gc;
 	FtkCanvasSetClip    set_clip;
-	FtkCanvasGetPixel   set_pixel;
-	FtkCanvasSetPixel   get_pixel;
+	FtkCanvasDrawPixels draw_pixels;
 	FtkCanvasDrawLine   draw_line;
 	FtkCanvasClearRect  clear_rect;
 	FtkCanvasDrawRect   draw_rect;
@@ -106,18 +104,11 @@ static inline Ret ftk_canvas_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 	return ret;
 }
 
-static inline Ret ftk_canvas_get_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
+static inline Ret ftk_canvas_draw_pixels(FtkCanvas* thiz, FtkPoint* points, size_t nr)
 {
-	return_val_if_fail(thiz != NULL && thiz->get_pixel != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && thiz->draw_pixels != NULL && points != NULL, RET_FAIL);
 
-	return thiz->get_pixel(thiz, x, y, c);
-}
-
-static inline Ret ftk_canvas_set_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
-{
-	return_val_if_fail(thiz != NULL && thiz->set_pixel != NULL, RET_FAIL);
-
-	return thiz->set_pixel(thiz, x, y, c);
+	return thiz->draw_pixels(thiz, points, nr);
 }
 
 static inline Ret ftk_canvas_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2)

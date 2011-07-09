@@ -375,8 +375,6 @@ void test_put_get_pixel(FtkDisplay* display)
 		{
 			FtkColor c = {0};
 			FtkColor* colorp = NULL;
-			assert(ftk_canvas_set_pixel(thiz, j, i, &color) == RET_OK);
-			assert(ftk_canvas_get_pixel(thiz, j, i, &c) == RET_OK);
 			colorp = &c;
 			assert(colorp->r == color.r);
 			assert(colorp->g == color.g);

@@ -97,22 +97,10 @@ static Ret ftk_canvas_skia_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 	return RET_OK;
 }
 
-static Ret ftk_canvas_skia_get_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
+static Ret ftk_canvas_skia_draw_pixels(FtkCanvas* thiz, FtkPoint* points, size_t nr)
 {
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(c != NULL && x < priv->w && y < priv->h, RET_FAIL);
-
-	*(unsigned int*)c = *(unsigned int*)(priv->bits + y * priv->w + x);
-
-	return RET_OK;
-}
-
-static Ret ftk_canvas_skia_set_pixel(FtkCanvas* thiz, size_t x, size_t y, FtkColor* c)
-{
-	DECL_PRIV(thiz, priv);
-	return_val_if_fail(c != NULL && x < priv->w && y < priv->h, RET_FAIL);
-
-	*(unsigned int*)(priv->bits + y * priv->w + x) = *(unsigned int*)c;
+	/*TODO:*/
 
 	return RET_OK;
 }
@@ -258,8 +246,7 @@ FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color)
 
 		thiz->sync_gc = ftk_canvas_skia_sync_gc;
 		thiz->set_clip = ftk_canvas_skia_set_clip;
-		thiz->get_pixel = ftk_canvas_skia_get_pixel;
-		thiz->set_pixel = ftk_canvas_skia_set_pixel;
+		thiz->draw_pixels = ftk_canvas_skia_draw_pixels;
 		thiz->draw_line = ftk_canvas_skia_draw_line;
 		thiz->draw_rect = ftk_canvas_skia_draw_rect;
 		thiz->clear_rect = ftk_canvas_skia_clear_rect;

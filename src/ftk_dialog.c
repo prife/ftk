@@ -148,12 +148,6 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret  ftk_dialog_clear_alpha(FtkCanvas* canvas, int x, int y)
 {
-	FtkColor c = {0};
-
-	ftk_canvas_get_pixel(canvas, x, y, &c);
-	c.a ;
-	ftk_canvas_set_pixel(canvas, x, y, &c);
-
 	return RET_OK;
 }
 
