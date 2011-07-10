@@ -639,7 +639,8 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
 			priv->disable_anim--;
 			ftk_wnd_manager_default_do_animation(thiz, event);
-			if(ftk_wnd_manager_default_map_panels(thiz, !ftk_wnd_manager_default_has_fullscreen_win(thiz)) == RET_OK)
+			if(ftk_widget_type(event->widget) == FTK_WINDOW 
+				&& ftk_wnd_manager_default_map_panels(thiz, !ftk_wnd_manager_default_has_fullscreen_win(thiz)) == RET_OK)
 			{
 				ftk_wnd_manager_update(thiz);
 			}

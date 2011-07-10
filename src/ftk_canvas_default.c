@@ -130,8 +130,10 @@ static Ret ftk_canvas_default_draw_pixels(FtkCanvas* thiz, FtkPoint* points, siz
 	size_t y = 0;
 	size_t i = 0;
 	DECL_PRIV(thiz, priv);
-	FtkColor* c = &(thiz->gc.fg);
+	FtkColor* pdst = NULL;
+	FtkColor* color = &(thiz->gc.fg);
 	FtkRect clip = priv->clip->rect;
+	unsigned char alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
 
 	for(i = 0; i < nr; i++)
 	{
@@ -139,7 +141,8 @@ static Ret ftk_canvas_default_draw_pixels(FtkCanvas* thiz, FtkPoint* points, siz
 		y = points[i].y;
 		if(FTK_POINT_IN_RECT(x, y, clip))
 		{
-			*(unsigned int*)(priv->bits + y * priv->w + x) = *(unsigned int*)c;
+			pdst = priv->bits + y * priv->w + x;
+			PUT_PIXEL(pdst, color, alpha);
 		}
 	}
 
@@ -208,6 +211,70 @@ static Ret ftk_canvas_default_draw_hline(FtkCanvas* thiz, size_t x, size_t y, si
 	return RET_OK;
 }
 
+/*FROM: http://blog.csdn.net/zwh37333/article/details/2507661*/
+#define swap_int(a, b) {v = a; a = b; b = v;}
+static Ret ftk_canvas_default_draw_normal_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
+{  
+	int v = 0;
+	int x = 0;
+	int y = 0;
+	int dx = abs(x2 - x1);  
+	int dy = abs(y2 - y1);  
+	FtkBool direction = 0;  
+  
+	if (dx < dy)	
+	{  
+		// y direction is step direction	
+		swap_int(x1, y1);  
+		swap_int(dx, dy);  
+		swap_int(x2, y2);    
+		direction = 1;  
+	}  
+  
+	// calculate the x, y increment  
+	int inc_x = (x2 - x1) > 0  ? 1 : -1;  
+	int inc_y = (y2 - y1) > 0  ? 1 : -1;  
+  
+	int cur_x = x1;  
+	int cur_y = y1;  
+	int two_dy = 2 * dy;  
+	int two_dy_dx = 2 * (dy - dx);  
+	int init_d = 2 * dy - dx;	
+	DECL_PRIV(thiz, priv);
+	FtkColor* pdst = NULL;
+	FtkColor* color = &(thiz->gc.fg);
+	unsigned char alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
+  
+	while (cur_x !=  x2)  // cur_x == x2 can not use in bitmap   
+	{  
+		if(init_d < 0)  
+		{  
+			init_d += two_dy;	
+		}  
+		else  
+		{  
+			cur_y += inc_y;  
+			init_d += two_dy_dx;	
+		}  
+		if (direction)  
+		{  
+			x = cur_y;
+			y = cur_x;
+		}  
+		else  
+		{  
+			x = cur_x;
+			y = cur_y;
+		}  
+		pdst = priv->bits + y * priv->w + x;
+		PUT_PIXEL(pdst, color, alpha);
+
+		cur_x += inc_x;  
+	} 
+
+	return RET_OK;  
+}  
+
 static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2)
 {
 	size_t len = 0;
@@ -219,8 +286,16 @@ static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, s
 
 	if(!FTK_POINT_IN_RECT(x1, y1, clip) && !FTK_POINT_IN_RECT(x2, y2, clip))
 	{
-//		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
+	}
+
+	if(x1 == x2 && y1 == y2)
+	{
+		FtkPoint p = {0};
+		p.x = x1;
+		p.y = y1;
+
+		return ftk_canvas_default_draw_pixels(thiz, &p, 1);
 	}
 
 	if(x1 == x2)
@@ -262,6 +337,10 @@ static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, s
 
 		len = max - min;
 		ret = ftk_canvas_default_draw_hline(thiz, min, y1, len);
+	}
+	else
+	{
+		ret = ftk_canvas_default_draw_normal_line(thiz, x1, y1, x2, y2);
 	}
 
 	return ret;

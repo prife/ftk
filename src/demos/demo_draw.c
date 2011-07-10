@@ -23,10 +23,21 @@ static Ret on_paint(void* ctx, void* obj)
 	
 	w = g_width % width;
 	ftk_canvas_set_gc(canvas, &gc);
-	ftk_canvas_draw_hline(canvas, x, y + height/2, w);
+	ftk_canvas_draw_line(canvas, x, y + height/2, x + w, y + height/2);
+	for(i = 0; i < height; i+=10)
+	{
+		ftk_canvas_draw_line(canvas, x, y, x + width, y + i);
+	}
+	
+	for(i = width; i >= 0; i-=10)
+	{
+		ftk_canvas_draw_line(canvas, x, y, x + i, y + height);
+	}
 
 	gc.fg.r = 0;
 	gc.fg.g = 0xff;
+	ftk_canvas_set_gc(canvas, &gc);
+
 	for(i = 0; i < w; i++)
 	{
 		double r =  2 * 3.14 * i / width;
@@ -36,8 +47,6 @@ static Ret on_paint(void* ctx, void* obj)
 		ftk_canvas_draw_pixels(canvas, &p, 1);
 	}
 	
-	ftk_canvas_draw_line(canvas, 0, 0, 100, 200);
-
 	ftk_logd("%s:%d\n", __func__, __LINE__);
 	FTK_END_PAINT();
 
