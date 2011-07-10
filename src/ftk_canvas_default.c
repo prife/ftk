@@ -221,7 +221,18 @@ static Ret ftk_canvas_default_draw_normal_line(FtkCanvas* thiz, int x1, int y1, 
 	int dx = abs(x2 - x1);  
 	int dy = abs(y2 - y1);  
 	FtkBool direction = 0;  
-  
+	int inc_x = 0;  
+	int inc_y = 0;  
+	int cur_x = x1;  
+	int cur_y = y1;  
+	int two_dy = 0;  
+	int two_dy_dx = 0;  
+	int init_d = 0;	
+	DECL_PRIV(thiz, priv);
+	FtkColor* pdst = NULL;
+	FtkColor* color = &(thiz->gc.fg);
+	unsigned char alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
+
 	if (dx < dy)	
 	{  
 		// y direction is step direction	
@@ -232,19 +243,15 @@ static Ret ftk_canvas_default_draw_normal_line(FtkCanvas* thiz, int x1, int y1, 
 	}  
   
 	// calculate the x, y increment  
-	int inc_x = (x2 - x1) > 0  ? 1 : -1;  
-	int inc_y = (y2 - y1) > 0  ? 1 : -1;  
+	inc_x = (x2 - x1) > 0  ? 1 : -1;  
+	inc_y = (y2 - y1) > 0  ? 1 : -1;  
   
-	int cur_x = x1;  
-	int cur_y = y1;  
-	int two_dy = 2 * dy;  
-	int two_dy_dx = 2 * (dy - dx);  
-	int init_d = 2 * dy - dx;	
-	DECL_PRIV(thiz, priv);
-	FtkColor* pdst = NULL;
-	FtkColor* color = &(thiz->gc.fg);
-	unsigned char alpha = thiz->gc.mask & FTK_GC_ALPHA ? thiz->gc.alpha :  thiz->gc.fg.a;
-  
+	cur_x = x1;  
+	cur_y = y1;  
+	two_dy = 2 * dy;  
+	two_dy_dx = 2 * (dy - dx);  
+	init_d = 2 * dy - dx;	
+
 	while (cur_x !=  x2)  // cur_x == x2 can not use in bitmap   
 	{  
 		if(init_d < 0)  
