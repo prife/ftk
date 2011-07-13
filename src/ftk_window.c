@@ -201,8 +201,8 @@ static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_n
 	parent = ftk_widget_parent(focus_widget);
 	if(parent != NULL&& parent->next != NULL)
 	{
-		if(ftk_widget_is_insensitive(parent) || !ftk_widget_is_visible(parent)
-			|| ftk_widget_has_attr(parent, FTK_ATTR_NO_FOCUS))
+//		if(ftk_widget_is_insensitive(parent) || !ftk_widget_is_visible(parent)
+//			|| ftk_widget_has_attr(parent, FTK_ATTR_NO_FOCUS))
 		{		
 			temp = ftk_window_find_next_focus(parent->next, 0);
 			if(temp != NULL)
@@ -210,8 +210,6 @@ static FtkWidget* ftk_window_find_next_focus(FtkWidget* focus_widget, int move_n
 				return temp;
 			}
 		}
-		else
-			return parent;
 	}
 
 	return parent;
