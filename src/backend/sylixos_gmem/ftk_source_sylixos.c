@@ -29,6 +29,19 @@
  *
  */
 
+/*
+ *  tslib/plugins/linear.c
+ *
+ *  Copyright (C) 2001 Russell King.
+ *
+ * This file is placed under the LGPL.  Please see the file
+ * COPYING for more details.
+ *
+ * $Id: linear.c,v 1.10 2005/02/26 01:47:23 kergoth Exp $
+ *
+ * Linearly scale touchscreen values
+ */
+
 #include "ftk_log.h"
 #include "ftk_key.h"
 #include "ftk_display.h"
@@ -127,10 +140,10 @@ static int linear_init(void)
 {
     struct stat sbuf;
     int         cal_fd;
-    char        calbuf[200];
+    char        namebuffer[PATH_MAX + 1];
+    char*       name;
     int         index;
     char*       tokptr;
-    char*       calfile;
 
     // Use default values that leave ts numbers unchanged after transform
     f_linear_info.a[0] = 1;
@@ -148,15 +161,19 @@ static int linear_init(void)
     /*
      * Check calibration file
      */
-    calfile = FTK_ROOT_DIR"/pointercal";
+    if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0) {
+        name = namebuffer;
+    } else {
+        name = FTK_ROOT_DIR"/pointercal";
+    }
 
-    if (stat(calfile, &sbuf) == 0) {
+    if (stat(name, &sbuf) == 0) {
 
-        cal_fd = open(calfile, O_RDONLY);
+        cal_fd = open(name, O_RDONLY);
 
-        read(cal_fd, calbuf, 200);
+        read(cal_fd, namebuffer, 200);
 
-        f_linear_info.a[0] = atoi(strtok(calbuf, " "));
+        f_linear_info.a[0] = atoi(strtok(namebuffer, " "));
 
         index = 1;
 
@@ -180,6 +197,27 @@ static int linear_init(void)
     return 0;
 }
 
+static void ftk_source_sylixos_ad_to_abs(mouse_event_notify  *pmnotify)
+{
+    int xtemp, ytemp;
+
+    xtemp = pmnotify->xanalog;
+    ytemp = pmnotify->yanalog;
+
+    eventMouse.u.mouse.x =   (f_linear_info.a[2] +
+                              f_linear_info.a[0] * xtemp +
+                              f_linear_info.a[1] * ytemp) / f_linear_info.a[6];
+    eventMouse.u.mouse.y =   (f_linear_info.a[5] +
+                              f_linear_info.a[3] * xtemp +
+                              f_linear_info.a[4] * ytemp) / f_linear_info.a[6];
+
+    if (f_linear_info.swap_xy) {
+        int tmp = eventMouse.u.mouse.x;
+        eventMouse.u.mouse.x = eventMouse.u.mouse.y;
+        eventMouse.u.mouse.y = tmp;
+    }
+}
+
 static void  ftk_source_sylixos_on_pointer_event (mouse_event_notify  *pmnotify)
 {
     if (pmnotify) {
@@ -191,38 +229,20 @@ static void  ftk_source_sylixos_on_pointer_event (mouse_event_notify  *pmnotify)
             eventMouse.u.mouse.y += pmnotify->ymovement;
 
         } else { /* absolutely coordinate */
-            int xtemp, ytemp;
+            ftk_source_sylixos_ad_to_abs(pmnotify);
+        }
 
-            eventMouse.u.mouse.x = pmnotify->xanalog;
-            eventMouse.u.mouse.y = pmnotify->yanalog;
-
-            xtemp = eventMouse.u.mouse.x;
-            ytemp = eventMouse.u.mouse.y;
-            eventMouse.u.mouse.x =   ( f_linear_info.a[2] +
-                                       f_linear_info.a[0] * xtemp +
-                                       f_linear_info.a[1] * ytemp ) / f_linear_info.a[6];
-            eventMouse.u.mouse.y =   ( f_linear_info.a[5] +
-                                       f_linear_info.a[3] * xtemp +
-                                       f_linear_info.a[4] * ytemp ) / f_linear_info.a[6];
-
-            if (f_linear_info.swap_xy) {
-                int tmp = eventMouse.u.mouse.x;
-                eventMouse.u.mouse.x = eventMouse.u.mouse.y;
-                eventMouse.u.mouse.y = tmp;
-            }
-
-            if (pmnotify->kstat & MOUSE_LEFT) {
-                if (eventMouse.u.mouse.press) {
-                    eventMouse.type = FTK_EVT_MOUSE_MOVE;
-                } else {
-                    eventMouse.type = FTK_EVT_MOUSE_DOWN;
-                    eventMouse.u.mouse.press = 1;
-                }
+        if (pmnotify->kstat & MOUSE_LEFT) {
+            if (eventMouse.u.mouse.press) {
+                eventMouse.type = FTK_EVT_MOUSE_MOVE;
             } else {
-                if (eventMouse.u.mouse.press) {
-                    eventMouse.type = FTK_EVT_MOUSE_UP;
-                    eventMouse.u.mouse.press = 0;
-                }
+                eventMouse.type = FTK_EVT_MOUSE_DOWN;
+                eventMouse.u.mouse.press = 1;
+            }
+        } else {
+            if (eventMouse.u.mouse.press) {
+                eventMouse.type = FTK_EVT_MOUSE_UP;
+                eventMouse.u.mouse.press = 0;
             }
         }
 

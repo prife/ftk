@@ -34,8 +34,8 @@
 #include "ftk_event.h"
 #include "ftk_source.h"
 
-#ifndef FTK_CALIBRATE_NAME
-#define FTK_CALIBRATE_NAME "/dev/ts"
+#ifndef FTK_TS_NAME
+#define FTK_TS_NAME     "/dev/input/touch0"
 #endif
 
 void ftk_source_sylixos_input_create(void);

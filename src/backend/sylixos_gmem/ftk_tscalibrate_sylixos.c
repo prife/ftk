@@ -29,6 +29,19 @@
  *
  */
 
+/*
+ *  tslib/tests/ts_calibrate.c
+ *
+ *  Copyright (C) 2001 Russell King.
+ *
+ * This file is placed under the GPL.  Please see the file
+ * COPYING for more details.
+ *
+ * $Id: ts_calibrate.c,v 1.8 2004/10/19 22:01:27 dlowder Exp $
+ *
+ * Basic test program for touchscreen library.
+ */
+
 #include "ftk_display_sylixos.h"
 #include "ftk_source_sylixos.h"
 #include <string.h>
@@ -184,7 +197,7 @@ static void getxy(int ts_fd, FtkDisplay* display, int* x, int* y)
             exit(1);
         }
     } while (samp[index].pressure > 0);
-    printf("Took %d samples...\n",index);
+    printf("Took %d samples...\n", index);
 
     /*
      * At this point, we have samples in indices zero to (index-1)
@@ -255,7 +268,7 @@ static void get_sample(int ts_fd, FtkDisplay* display, calibration* cal, int ind
 
 static int perform_calibration(calibration* cal)
 {
-    int j;
+    int   j;
     float n, x, y, x2, y2, xy, z, zx, zy;
     float det, a, b, c, e, f, i;
     float scaling = 65536.0;
@@ -263,9 +276,9 @@ static int perform_calibration(calibration* cal)
     // Get sums for matrix
     n = x = y = x2 = y2 = xy = 0;
     for (j = 0; j < 5; j++) {
-        n += 1.0;
-        x += (float)cal->x[j];
-        y += (float)cal->y[j];
+        n  += 1.0;
+        x  += (float)cal->x[j];
+        y  += (float)cal->y[j];
         x2 += (float)(cal->x[j]*cal->x[j]);
         y2 += (float)(cal->y[j]*cal->y[j]);
         xy += (float)(cal->x[j]*cal->y[j]);
@@ -274,22 +287,22 @@ static int perform_calibration(calibration* cal)
     // Get determinant of matrix -- check if determinant is too small
     det = n*(x2*y2 - xy*xy) + x*(xy*y - x*y2) + y*(x*xy - y*x2);
     if (det < 0.1 && det > -0.1) {
-        printf("ts_calibrate: determinant is too small -- %f\n",det);
+        printf("ts_calibrate: determinant is too small -- %f\n", det);
         return 0;
     }
 
     // Get elements of inverse matrix
-    a = (x2*y2 - xy*xy)/det;
-    b = (xy*y - x*y2)/det;
-    c = (x*xy - y*x2)/det;
-    e = (n*y2 - y*y)/det;
-    f = (x*y - n*xy)/det;
-    i = (n*x2 - x*x)/det;
+    a = (x2*y2 - xy*xy) / det;
+    b = (xy*y  - x*y2)  / det;
+    c = (x*xy  - y*x2)  / det;
+    e = (n*y2  - y*y)   / det;
+    f = (x*y   - n*xy)  / det;
+    i = (n*x2  - x*x)   / det;
 
     // Get sums for x calibration
     z = zx = zy = 0;
     for (j = 0; j < 5; j++) {
-        z += (float)cal->xfb[j];
+        z  += (float) cal->xfb[j];
         zx += (float)(cal->xfb[j]*cal->x[j]);
         zy += (float)(cal->xfb[j]*cal->y[j]);
     }
@@ -299,14 +312,15 @@ static int perform_calibration(calibration* cal)
     cal->a[1] = (int)((b*z + e*zx + f*zy)*(scaling));
     cal->a[2] = (int)((c*z + f*zx + i*zy)*(scaling));
 
-    printf("%f %f %f\n",(a*z + b*zx + c*zy),
-                (b*z + e*zx + f*zy),
-                (c*z + f*zx + i*zy));
+    printf("%f %f %f\n",
+            (a*z + b*zx + c*zy),
+            (b*z + e*zx + f*zy),
+            (c*z + f*zx + i*zy));
 
     // Get sums for y calibration
     z = zx = zy = 0;
     for (j = 0; j < 5; j++) {
-        z += (float)cal->yfb[j];
+        z  += (float) cal->yfb[j];
         zx += (float)(cal->yfb[j]*cal->x[j]);
         zy += (float)(cal->yfb[j]*cal->y[j]);
     }
@@ -316,9 +330,10 @@ static int perform_calibration(calibration* cal)
     cal->a[4] = (int)((b*z + e*zx + f*zy)*(scaling));
     cal->a[5] = (int)((c*z + f*zx + i*zy)*(scaling));
 
-    printf("%f %f %f\n",(a*z + b*zx + c*zy),
-                (b*z + e*zx + f*zy),
-                (c*z + f*zx + i*zy));
+    printf("%f %f %f\n",
+            (a*z + b*zx + c*zy),
+            (b*z + e*zx + f*zy),
+            (c*z + f*zx + i*zy));
 
     // If we got here, we're OK, so assign scaling to a[6] and return
     cal->a[6] = (int)scaling;
@@ -328,21 +343,24 @@ static int perform_calibration(calibration* cal)
 
 int ftk_sylixos_ts_calibrate(void)
 {
-    FtkDisplay  *display;
+    FtkDisplay*  display;
     char         namebuffer[PATH_MAX + 1];
-    char        *name;
+    char*        name;
     calibration  cal;
     int          xres;
     int          yres;
-    char        *calfile;
     int          cal_fd;
-    unsigned int i;
     int          ts_fd;
+    unsigned int i;
     struct stat  sbuf;
 
-    calfile = FTK_ROOT_DIR"/pointercal";
+    if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0) {
+        name = namebuffer;
+    } else {
+        name = FTK_ROOT_DIR"/pointercal";
+    }
 
-    if (stat(calfile, &sbuf) == 0) {
+    if (stat(name, &sbuf) == 0) {
         return 0;
     }
 
@@ -360,10 +378,10 @@ int ftk_sylixos_ts_calibrate(void)
     xres = ftk_display_width(display);
     yres = ftk_display_height(display);
 
-    if (getenv_r("CALIBRATE", namebuffer, PATH_MAX + 1) >= 0) {
+    if (getenv_r("TSLIB_TSDEVICE", namebuffer, PATH_MAX + 1) >= 0) {
         name = namebuffer;
     } else {
-        name = FTK_CALIBRATE_NAME;
+        name = FTK_TS_NAME;
     }
 
     ts_fd = open(name, O_RDONLY, 0666);
@@ -386,7 +404,13 @@ int ftk_sylixos_ts_calibrate(void)
         }
         printf("\n");
 
-        cal_fd = open(calfile, O_CREAT | O_RDWR);
+        if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0) {
+            name = namebuffer;
+        } else {
+            name = FTK_ROOT_DIR"/pointercal";
+        }
+
+        cal_fd = open(name, O_CREAT | O_RDWR);
 
         sprintf(namebuffer, "%d %d %d %d %d %d %d",
                 cal.a[1], cal.a[2], cal.a[0],

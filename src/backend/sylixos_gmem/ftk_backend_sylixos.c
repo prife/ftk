@@ -8,8 +8,8 @@ int ftk_sylixos_ts_calibrate(void);
 Ret ftk_backend_init (int argc, char *argv[])
 {
     FtkDisplay* display = NULL;
-    char         namebuffer[PATH_MAX + 1];
-    char        *name = FTK_FB_NAME;
+    char        namebuffer[PATH_MAX + 1];
+    char*       name = FTK_FB_NAME;
 
     ftk_sylixos_ts_calibrate();
 
