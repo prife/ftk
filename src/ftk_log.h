@@ -37,6 +37,8 @@ FTK_BEGIN_DECLS
 
 Ret ftk_logv(const char* format, ...);
 Ret ftk_logd(const char* format, ...);
+Ret ftk_logi(const char* format, ...);
+Ret ftk_logw(const char* format, ...);
 Ret ftk_loge(const char* format, ...);
 
 FTK_END_DECLS

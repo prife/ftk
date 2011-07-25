@@ -90,6 +90,32 @@ Ret ftk_logd(const char* format, ...)
 	return RET_OK;
 }
 
+Ret ftk_logi(const char* format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+	if(ftk_default_log_level() <= FTK_LOG_I)
+	{
+		ftk_log(format, ap);
+	}
+	va_end(ap);
+	
+	return RET_OK;
+}
+
+Ret ftk_logw(const char* format, ...)
+{
+	va_list ap;
+	va_start(ap, format);
+	if(ftk_default_log_level() <= FTK_LOG_W)
+	{
+		ftk_log(format, ap);
+	}
+	va_end(ap);
+	
+	return RET_OK;
+}
+
 Ret ftk_loge(const char* format, ...)
 {
 	va_list ap;
