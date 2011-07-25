@@ -369,6 +369,11 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
+	
+	if(!ftk_window_is_mapped(ftk_widget_toplevel(thiz)))
+	{
+		return RET_OK;
+	}
 
 	if(priv->caret < priv->visible_start || priv->caret > priv->visible_end 
 		|| priv->visible_start < 0 || priv->visible_end < 0)

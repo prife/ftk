@@ -569,6 +569,11 @@ static Ret ftk_text_view_on_paint_caret(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
+	
+	if(!ftk_window_is_mapped(ftk_widget_toplevel(thiz)))
+	{
+		return RET_OK;
+	}
 
 	if(ftk_widget_is_focused(thiz))
 	{
