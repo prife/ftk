@@ -332,6 +332,8 @@ static void ftk_theme_builder_on_start(FtkXmlBuilder* thiz, const char* tag, con
 				}
 			}
 		}
+		
+		return;
 	}
 
 	type = ftk_theme_get_widget_type(theme, tag);
