@@ -226,6 +226,8 @@ Ret ftk_init(int argc, char* argv[])
 		ftk_inited = 1;
 	}
 
+	ftk_set_log_level(FTK_LOG_I);
+
 	PROFILE_START();
 #ifndef USE_STD_MALLOC
 	ftk_set_allocator(FTK_ALLOC_PROFILE(ftk_allocator_default_create()));
