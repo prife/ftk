@@ -34,6 +34,7 @@
 
 #include "ftk_font_desc.h"
 #include "ftk_allocator.h"
+#include "ftk_log.h"
 
 FTK_BEGIN_DECLS
 

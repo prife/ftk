@@ -251,6 +251,7 @@ typedef struct _FtkCommitInfo
 	     FTK_ALPHA_1(sc->b, dc->b, a);
 
 #define FTK_ARRAY_SIZE(a) (sizeof(a)/sizeof(a[0]))
+#define FTK_STR_SIZE(s) (sizeof(s)-1)
 
 /*for customize*/
 #define FTK_H_MARGIN            3

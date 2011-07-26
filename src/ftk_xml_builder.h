@@ -29,7 +29,7 @@
  *
  */
 
-#include "ftk_typedef.h"
+#include "ftk_log.h"
 
 #ifndef XML_BUILDER_H
 #define XML_BUILDER_H

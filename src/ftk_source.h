@@ -31,6 +31,7 @@
 #ifndef FTK_SOURCE_H
 #define FTK_SOURCE_H
 
+#include "ftk_log.h"
 #include "ftk_allocator.h"
 
 FTK_BEGIN_DECLS
