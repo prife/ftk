@@ -16,3 +16,10 @@ A: Add the following line to env.sh, and rebuild it.
  
    uclinux doesn't support MAP_SHARED or MAP_PRIVATE with PROT_WRITE, we use
    smem_start instead.
+
+Q: How to change the log level, so I can see the debug message.
+
+A: There are two ways to specify the log level:
+   1.Cammand line: --log-level=D|V|I|W|E
+   2.Config: log-level=D|V|I|W|E
+
