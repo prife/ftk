@@ -421,16 +421,16 @@ static Ret ftk_canvas_default_draw_rect_impl(FtkCanvas* thiz, size_t x, size_t y
 		{
 			if((y + i) < height)
 			{
-				ftk_canvas_draw_hline(thiz, x, (y+i), w);	
+				ftk_canvas_default_draw_hline(thiz, x, (y+i), w);	
 			}
 		}
 	}
 	else
 	{
-		ftk_canvas_draw_hline(thiz, x,   y, w);		
-		ftk_canvas_draw_hline(thiz, x,   y+h-1, w);		
-		ftk_canvas_draw_vline(thiz, x,   y, h);		
-		ftk_canvas_draw_vline(thiz, x+w-1, y, h);		
+		ftk_canvas_default_draw_hline(thiz, x,   y, w);		
+		ftk_canvas_default_draw_hline(thiz, x,   y+h-1, w);		
+		ftk_canvas_default_draw_vline(thiz, x,   y, h);		
+		ftk_canvas_default_draw_vline(thiz, x+w-1, y, h);		
 	}
 
 	return RET_OK;
@@ -447,15 +447,15 @@ static Ret ftk_canvas_default_draw_round_rect(FtkCanvas* thiz, size_t x, size_t 
 	return_val_if_fail(x < width && y < height, RET_FAIL);
 	return_val_if_fail(w > 8 && h > 8, RET_FAIL);
 
-	ftk_canvas_draw_hline(thiz, x + 2, y, w-4);
-	ftk_canvas_draw_hline(thiz, x + 1, y + 1, w-2);
-	ftk_canvas_draw_vline(thiz, x, y + 2, h - 4);
-	ftk_canvas_draw_vline(thiz, x + 1, y + 1, h - 2);
+	ftk_canvas_default_draw_hline(thiz, x + 2, y, w-4);
+	ftk_canvas_default_draw_hline(thiz, x + 1, y + 1, w-2);
+	ftk_canvas_default_draw_vline(thiz, x, y + 2, h - 4);
+	ftk_canvas_default_draw_vline(thiz, x + 1, y + 1, h - 2);
 
-	ftk_canvas_draw_vline(thiz, x+w-1, y + 2, h - 4);
-	ftk_canvas_draw_vline(thiz, x + w -2, y + 1, h - 2);
-	ftk_canvas_draw_hline(thiz, x + 1, y + h - 1, w-2);
-	ftk_canvas_draw_hline(thiz, x + 2, y + h - 2, w-4);
+	ftk_canvas_default_draw_vline(thiz, x+w-1, y + 2, h - 4);
+	ftk_canvas_default_draw_vline(thiz, x + w -2, y + 1, h - 2);
+	ftk_canvas_default_draw_hline(thiz, x + 1, y + h - 1, w-2);
+	ftk_canvas_default_draw_hline(thiz, x + 2, y + h - 2, w-4);
 
 	if(fill)
 	{
