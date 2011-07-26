@@ -71,6 +71,7 @@ struct _FtkWidgetInfo
 };
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz);
+static void ftk_widget_validate_position_size(FtkWidget* thiz);
 
 /**
  * ftk_widget_init:
@@ -441,6 +442,7 @@ void ftk_widget_move(FtkWidget* thiz, int x, int y)
 
 	thiz->priv->left = x;
 	thiz->priv->top  = y;
+	ftk_widget_validate_position_size(thiz);
 
 	if(thiz->on_event != NULL)
 	{
@@ -464,6 +466,7 @@ void ftk_widget_resize(FtkWidget* thiz, int width, int height)
 
 	thiz->priv->width = width;
 	thiz->priv->height = height;
+	ftk_widget_validate_position_size(thiz);
 
 	if(thiz->on_event != NULL)
 	{
@@ -490,6 +493,7 @@ void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height
 	thiz->priv->top  = y;
 	thiz->priv->width = width;
 	thiz->priv->height = height;
+	ftk_widget_validate_position_size(thiz);
 	
 	if(thiz->on_event != NULL)
 	{
@@ -689,6 +693,25 @@ void ftk_widget_set_parent(FtkWidget* thiz, FtkWidget* parent)
 	return;
 }
 
+static void ftk_widget_validate_position_size(FtkWidget* thiz)
+{
+	FtkWidgetInfo* priv = thiz->priv;
+	FtkWidget* parent = thiz->parent;
+
+	if(parent != NULL)
+	{
+		int parent_w = ftk_widget_width(parent);
+		int parent_h = ftk_widget_height(parent);
+
+		priv->left = (priv->left >= parent_w) ? (parent_w - 1) : priv->left;
+		priv->top = (priv->top >= parent_h) ? (parent_h - 1) : priv->top;
+		priv->width = (priv->left + priv->width) > parent_w ? (parent_w - priv->left) : priv->width;
+		priv->height = (priv->height + priv->top) > parent_h ? (parent_h - priv->top) : priv->height;
+	}
+
+	return;
+}
+
 void ftk_widget_append_child(FtkWidget* thiz, FtkWidget* child)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
@@ -702,6 +725,8 @@ void ftk_widget_append_child(FtkWidget* thiz, FtkWidget* child)
 	{
 		ftk_widget_append_sibling(thiz->children, child);
 	}
+
+	ftk_widget_validate_position_size(child);
 
 	return;
 }
