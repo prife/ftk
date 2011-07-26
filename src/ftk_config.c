@@ -154,10 +154,65 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 	return ftk_config_load_file(thiz, filename);
 }
 
+static Ret ftk_config_set_log_level(const char* level)
+{
+	return_val_if_fail(level != NULL, RET_FAIL);
+
+	switch(level[0])
+	{
+		case 'V':
+		case 'v':
+		{
+			ftk_set_log_level(FTK_LOG_V);
+			break;
+		}
+		case 'D':
+		case 'd':
+		{
+			ftk_set_log_level(FTK_LOG_D);
+			break;
+		}
+		case 'I':
+		case 'i':
+		{
+			ftk_set_log_level(FTK_LOG_I);
+			break;
+		}
+		case 'W':
+		case 'w':
+		{
+			ftk_set_log_level(FTK_LOG_W);
+			break;
+		}
+		case 'E':
+		case 'e':
+		{
+			ftk_set_log_level(FTK_LOG_E);
+			break;
+		}
+		default:break;
+	}
+
+	return RET_OK;
+}
+
+static const char* ftk_config_get_value(const char* str, const char* name)
+{
+	if(strncmp(str, name, strlen(name)) == 0)
+	{
+		return str + strlen(name);
+	}
+
+	return NULL;
+}
+
 Ret  ftk_config_init(FtkConfig* thiz, int argc, char* argv[])
 {
 	int i = 0;
+	const char* value = NULL;
 	return_val_if_fail(thiz != NULL && argv != NULL, RET_OK);
+
+	ftk_set_log_level(FTK_LOG_I);
 
 #ifdef FTK_CNF
 	if(ftk_mmap_exist(FTK_CNF))
@@ -178,24 +233,29 @@ Ret  ftk_config_init(FtkConfig* thiz, int argc, char* argv[])
 			ftk_config_set_enable_cursor(thiz, 1);
 			continue;
 		}
-		else if(strncmp(argv[i], "--theme=", 8) == 0)
+		else if((value = ftk_config_get_value(argv[i], "--theme=")) != NULL)
 		{
-			ftk_config_set_theme(thiz, argv[i]+8);
+			ftk_config_set_theme(thiz, value);
 			continue;
 		}
-		else if(strncmp(argv[i], "--data-dir=", 11) == 0)
+		else if((value = ftk_config_get_value(argv[i], "--data-dir=")) != NULL)
 		{
-			ftk_config_set_data_dir(thiz, argv[i]+11);
+			ftk_config_set_data_dir(thiz, value);
 			continue;
 		}
-		else if(strncmp(argv[i], "--test-data-dir=", 16) == 0)
+		else if((value = ftk_config_get_value(argv[i], "--test-data-dir=")) != NULL)
 		{
-			ftk_config_set_test_data_dir(thiz, argv[i]+16);
+			ftk_config_set_test_data_dir(thiz, value);
 			continue;
 		}
-		else if(strncmp(argv[i], "--rotate=", 9) == 0)
+		else if((value = ftk_config_get_value(argv[i], "--rotate=")) != NULL)
 		{
-			ftk_config_parse_rotate(thiz, argv[i]+9);
+			ftk_config_parse_rotate(thiz, value);
+			continue;
+		}
+		else if((value = ftk_config_get_value(argv[i], "--log-level=")) != NULL)
+		{
+			ftk_config_set_log_level(value);
 			continue;
 		}
 		else if(strncmp(argv[i], "--help", 6) == 0 || strncmp(argv[i], "-h", 2) == 0)
@@ -204,7 +264,7 @@ Ret  ftk_config_init(FtkConfig* thiz, int argc, char* argv[])
 			continue;
 		}
 	}
-
+	
 	return RET_OK;
 }
 
@@ -246,6 +306,11 @@ static void ftk_config_builder_on_start(FtkXmlBuilder* thiz, const char* tag, co
 	else if(strcmp(tag, "rotate") == 0)
 	{
 		ftk_config_parse_rotate(priv->config, attrs[1]);
+		return;
+	}
+	else if(strcmp(tag, "log-level") == 0)
+	{
+		ftk_config_set_log_level(attrs[1]);
 		return;
 	}
 
