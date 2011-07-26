@@ -261,7 +261,10 @@ ftk_list_view_repaint_focus_item
 ftk_list_view_set_clicked_listener
 ftk_list_view_set_cursor
 ftk_log
+ftk_logv
 ftk_logd
+ftk_logi
+ftk_logw
 ftk_loge
 ftk_logv
 ftk_main_loop_add_source
