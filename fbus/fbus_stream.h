@@ -32,7 +32,7 @@
 #ifndef FBUS_STREAM_H
 #define FBUS_STREAM_H
 
-#include "ftk_typedef.h"
+#include "ftk_log.h"
 
 FTK_BEGIN_DECLS
 
