@@ -239,8 +239,6 @@ static FtkBitmap* load_bmp (const char *filename)
 	size_t bpp = 0;
 	size_t width = 0;
 	size_t height = 0;
-	size_t length = 0;
-	size_t colors = 0;
 	size_t doffset = 0;
 	int compress = 0;
 	FtkColor bg = {0};
@@ -253,7 +251,6 @@ static FtkBitmap* load_bmp (const char *filename)
 	return_val_if_fail(m != NULL, NULL);
 
 	data = ftk_mmap_data(m);
-	length = ftk_mmap_length(m);
 
 	if(data[0] != 'B' || data[1] != 'M')
 	{
@@ -268,7 +265,6 @@ static FtkBitmap* load_bmp (const char *filename)
 	height   = *(unsigned int*)(data + 0x0016);
 	bpp      = *(unsigned short*)(data + 0x001c);
 	compress = *(unsigned int*)(data + 0x001e);
-	colors   = *(unsigned int*)(data + 0x002e);
 	palette  = (FtkColor*)(data + 0x0036);
 	src      = data + doffset;
 
