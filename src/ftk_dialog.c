@@ -38,6 +38,8 @@ typedef struct _PrivInfo
 {
 	int no_title;
 	FtkBitmap* icon;
+	FtkBitmap* bg;
+	FtkBitmap* title_bg;
 	FtkSource* timer;
 	FtkMainLoop* main_loop;
 	FtkWidgetOnEvent parent_on_event;
@@ -174,41 +176,20 @@ static Ret  ftk_dialog_change_alpha(FtkWidget* thiz, FtkCanvas* canvas, int x, i
 
 static Ret  ftk_dialog_paint_border(FtkWidget* thiz, FtkCanvas* canvas, int x, int y, int width, int height)
 {
-	int w = 0;
-	int h = 0;
-	int i = 0;
-	int offset = 0;
-	FtkGc gc = {0};
 	DECL_PRIV1(thiz, priv);
-	
-	gc.mask = FTK_GC_FG;
-	gc.fg = ftk_widget_get_gc(thiz)->fg;
+	return_val_if_fail(priv->bg != NULL && priv->title_bg != NULL, RET_FAIL);
 
-	h = height;
-	gc.fg.r += 0x20 * FTK_DIALOG_BORDER + 0x80;
-	gc.fg.g += 0x20 * FTK_DIALOG_BORDER + 0x80;
-	gc.fg.b += 0x20 * FTK_DIALOG_BORDER + 0x80;
-	for(i = 0; i < FTK_DIALOG_BORDER; i++)
+	if(priv->no_title)
 	{
-		gc.fg.r -= 0x20;
-		gc.fg.g -= 0x20;
-		gc.fg.b -= 0x20;
-		ftk_canvas_set_gc(canvas, &gc);
-		offset = i << 1;
-		ftk_canvas_draw_hline(canvas, x+i, y+i, width-offset);
-		ftk_canvas_draw_hline(canvas, x+i, y+height-i-1, width-offset);
-
-		ftk_canvas_draw_vline(canvas, x+i, y+i, h-offset);
-		ftk_canvas_draw_vline(canvas, x+width-i-1, y+i, h-offset);
+		ftk_canvas_draw_bg_image(canvas, priv->bg, FTK_BG_FOUR_CORNER, x, y, width, height);	
 	}
-
-	if(!priv->no_title)
+	else
 	{
-		w = width - 2 * FTK_DIALOG_BORDER;
-		for(i = FTK_DIALOG_BORDER; i < FTK_DIALOG_TITLE_HEIGHT; i++)
-		{
-			ftk_canvas_draw_hline(canvas, x+FTK_DIALOG_BORDER, y+i, w);
-		}
+		size_t title_height = ftk_bitmap_height(priv->title_bg);
+		
+		return_val_if_fail(title_height < height, RET_FAIL);
+		ftk_canvas_draw_bg_image(canvas, priv->title_bg, FTK_BG_TILE, x, y, width, title_height);
+		ftk_canvas_draw_bg_image(canvas, priv->bg, FTK_BG_FOUR_CORNER, x, y+title_height, width, height-title_height);	
 	}
 
 	return RET_OK;
@@ -272,6 +253,16 @@ static void ftk_dialog_destroy(FtkWidget* thiz)
 		ftk_bitmap_unref(priv->icon);
 	}
 
+	if(priv->bg != NULL)
+	{
+		ftk_bitmap_unref(priv->bg);
+	}
+	
+	if(priv->title_bg != NULL)
+	{
+		ftk_bitmap_unref(priv->title_bg);
+	}
+
 	if(priv->timer != NULL)
 	{
 		ftk_main_loop_remove_source(ftk_default_main_loop(), priv->timer);
@@ -297,6 +288,9 @@ FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height)
 		thiz->on_event = ftk_dialog_on_event;
 		thiz->on_paint = ftk_dialog_on_paint;
 		thiz->destroy  = ftk_dialog_destroy;
+
+		priv->bg = ftk_theme_load_image(ftk_default_theme(), "dialog_bg"FTK_STOCK_IMG_SUFFIX);
+		priv->title_bg = ftk_theme_load_image(ftk_default_theme(), "dialog_title_bg"FTK_STOCK_IMG_SUFFIX);
 	}
 	else
 	{
