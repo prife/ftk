@@ -27,6 +27,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
 	int height = 0;
+	int win_width = 0;
 	FtkWidget* win = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* group = NULL;
@@ -34,10 +35,10 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	
 	win = ftk_app_window_create();
 	ftk_window_set_animation_hint(win, "app_main_window");
-	width = ftk_widget_width(win);
+	win_width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	
-	width = width/2 - 10;
+	width = win_width/2 - 10;
 	button = ftk_check_button_create(win,0, 10, width, 50);
 	ftk_widget_set_text(button, "show");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
@@ -46,7 +47,8 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(button, "hide");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
-	group = ftk_radio_group_create(win, 0, 60, 2 * width, 60);
+	group = ftk_radio_group_create(win, 0, 60, win_width, 80);
+	ftk_widget_set_text(group, "Group 1");
 	
 	button = ftk_check_button_create_radio(group,0, 10, width, 50);
 	ftk_widget_set_text(button, "Male");
@@ -56,8 +58,8 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(button, "Female");
 	ftk_check_button_set_clicked_listener(button, button_clicked, win);
 	
-	group = ftk_radio_group_create(win, 0, 120, 2 * width, 60);
-
+	group = ftk_radio_group_create(win, 0, 150, win_width, 80);
+	ftk_widget_set_text(group, "Group 2");
 	button = ftk_check_button_create_radio(group,0, 10, width, 50);
 	ftk_widget_set_text(button, "1(图标右)");
 	ftk_check_button_set_icon_position(button, 1);

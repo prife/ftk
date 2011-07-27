@@ -29,8 +29,15 @@
  *
  */
 
+#include "ftk_theme.h"
+#include "ftk_globals.h"
 #include "ftk_radio_group.h"
 #include "ftk_check_button.h"
+
+typedef struct _PrivInfo
+{
+	FtkBitmap* bg;
+}PrivInfo;
 
 static Ret ftk_radio_group_on_event(FtkWidget* thiz, FtkEvent* event)
 {
@@ -39,24 +46,70 @@ static Ret ftk_radio_group_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_radio_group_on_paint(FtkWidget* thiz)
 {
-	return RET_OK;
+	DECL_PRIV0(thiz, priv);
+	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+
+	return_val_if_fail(priv->bg != NULL, RET_FAIL);
+
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
+	ftk_canvas_draw_bg_image(canvas, priv->bg, FTK_BG_FOUR_CORNER, x, y, width, height);	
+
+	if(ftk_widget_get_text(thiz) != NULL)
+	{
+		int yoffset = 2;
+		int xoffset = 10;
+		FtkTextLine line = {0};
+		FtkFont* font = ftk_widget_get_gc(thiz)->font;
+		int font_height = ftk_font_height(font);
+		const char* text = ftk_widget_get_text(thiz);
+		FtkTextLayout* text_layout = ftk_default_text_layout();
+	
+		ftk_text_layout_init(text_layout, text, -1, font, width - 2 * xoffset); 
+		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
+		{
+			FtkGc gc = {0};
+			gc.mask = FTK_GC_FG;
+			/*fill bg with the first pixel of bg image.*/
+			gc.fg = *ftk_bitmap_bits(priv->bg);
+			
+			ftk_canvas_set_gc(canvas, &gc);
+			ftk_canvas_draw_rect(canvas, x + xoffset, y + yoffset, line.extent, font_height, 0, 1);
+
+			ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
+			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset + font_height, line.text, line.len, 0);
+		}
+	}
+
+	FTK_END_PAINT();
 }
 
 static void ftk_radio_group_destroy(FtkWidget* thiz)
 {
+	DECL_PRIV0(thiz, priv);
+
+	if(priv->bg != NULL)
+	{
+		ftk_bitmap_unref(priv->bg);
+	}
+	FTK_ZFREE(thiz->priv_subclass[0], sizeof(PrivInfo));
+
 	return;
 }
 
 FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, int height)
 {
-	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
-		
-	if(thiz != NULL)
+	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget) + sizeof(PrivInfo));
+	return_val_if_fail(thiz != NULL, NULL);
+
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	if(thiz->priv_subclass[0] != NULL)
 	{
+		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_radio_group_on_event;
 		thiz->on_paint = ftk_radio_group_on_paint;
 		thiz->destroy  = ftk_radio_group_destroy;
 
+		priv->bg = ftk_theme_load_image(ftk_default_theme(), "groupbox_bg"FTK_STOCK_IMG_SUFFIX);
 		ftk_widget_init(thiz, FTK_RADIO_GROUP, 0, x, y, width, height, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}
