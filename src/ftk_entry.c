@@ -393,7 +393,7 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 		x = priv->caret_pos.x;
 		y = priv->caret_pos.y;
 		ftk_canvas_reset_gc(canvas, &gc);
-		ftk_canvas_draw_vline(canvas, x, y, height - 2 * FTK_ENTRY_V_MARGIN);
+		ftk_canvas_draw_vline(canvas, x, y, height - (3 * FTK_ENTRY_V_MARGIN)/2 );
 		FTK_END_PAINT();
 	}
 
