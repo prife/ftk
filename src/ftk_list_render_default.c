@@ -56,6 +56,7 @@ typedef struct _PrivInfo
 	FtkBitmap* radio_on;
 	FtkBitmap* check_off;
 	FtkBitmap* check_on;
+	FtkBitmap* bg_disable;
 	FtkListModel* model;
 	FtkWidget* list_view;
 
@@ -178,6 +179,11 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 	ftk_list_model_get_data(priv->model, pos, (void**)&info);
 	return_val_if_fail(info != NULL, RET_FAIL);
 
+	if(info->disable)
+	{
+		ftk_canvas_draw_bg_image(canvas, priv->bg_disable, FTK_BG_FOUR_CORNER, x, y, w, h);
+	}
+
 	if(info->left_icon != NULL)
 	{
 		ftk_canvas_draw_bg_image(canvas, info->left_icon, FTK_BG_CENTER, x, y, h, h);
@@ -297,6 +303,7 @@ static void ftk_list_render_default_destroy(FtkListRender* thiz)
 		ftk_bitmap_unref(priv->check_on);
 		ftk_bitmap_unref(priv->check_off);
 		ftk_bitmap_unref(priv->more);
+		ftk_bitmap_unref(priv->bg_disable);
 		if(priv->marquee_timer != NULL)
 		{
 			ftk_source_disable(priv->marquee_timer);
@@ -325,6 +332,7 @@ FtkListRender* ftk_list_render_default_create(void)
 		priv->check_off = ftk_theme_load_image(ftk_default_theme(), "btn_check_off"FTK_STOCK_IMG_SUFFIX);
 		priv->check_on = ftk_theme_load_image(ftk_default_theme(),  "btn_check_on"FTK_STOCK_IMG_SUFFIX);
 		priv->more = ftk_theme_load_image(ftk_default_theme(),      "more"FTK_STOCK_IMG_SUFFIX);
+		priv->bg_disable = ftk_theme_load_image(ftk_default_theme(),  "list_selector_background_disabled"FTK_STOCK_IMG_SUFFIX);
 	}
 
 	return thiz;

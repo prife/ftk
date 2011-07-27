@@ -44,11 +44,11 @@ Ret on_item_clicked(void* ctx, void* list)
 	int i = ftk_list_view_get_selected(list);
 
 	ftk_list_model_get_data(model, i, (void**)&info);
-	if(info != NULL)
+	if(info != NULL && !info->disable)
 	{
 		info->state = !info->state;
 	}
-	ftk_logd("%s: %d/%d\n", __func__, 
+	ftk_logi("%s: %d/%d\n", __func__, 
 		ftk_list_view_get_selected(list),
 		ftk_list_model_get_total(model));
 
@@ -104,7 +104,17 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 		info.type = g_index%4;
 		ftk_list_model_add(model, &info);
 	}
-
+	
+	for(g_index = 0; g_index < 4; g_index++)
+	{
+		info.disable = 1;
+		info.text = "This item is disable";
+		info.left_icon = left_icon;
+		info.right_icon = right_icon;
+		info.type = g_index%4;
+		ftk_list_model_add(model, &info);
+	}
+	
 	ftk_list_render_default_set_marquee_attr(render, FTK_MARQUEE_AUTO | FTK_MARQUEE_RIGHT2LEFT | FTK_MARQUEE_FOREVER);
 	ftk_list_view_init(list, model, render, 40);
 	ftk_list_model_unref(model);
