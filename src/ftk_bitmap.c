@@ -176,7 +176,7 @@ Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 	\
 	/*width/height must less than bitmap's width/height*/\
 	w = w < bw ? w : bw;\
-	h = w < bh ? h : bh;\
+	h = h < bh ? h : bh;\
 	\
 	/*width/height must less than data's width/height*/\
 	w = (x + w) < dw ? w : dw - x;\
