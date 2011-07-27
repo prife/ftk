@@ -35,7 +35,7 @@
 #include "ftk_window.h"
 #include "ftk_icon_cache.h"
 #include "ftk_check_button.h"
-#include "ftk_radio_group.h"
+#include "ftk_group_box.h"
 
 typedef struct _PrivInfo
 {
@@ -51,9 +51,9 @@ static Ret ftk_check_button_check(FtkWidget* thiz)
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
 	
-	if(priv->is_radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_RADIO_GROUP)
+	if(priv->is_radio && ftk_widget_type(ftk_widget_parent(thiz)) == FTK_GROUP_BOX)
 	{
-		ret = ftk_radio_group_set_checked(ftk_widget_parent(thiz), thiz);
+		ret = ftk_group_box_set_checked(ftk_widget_parent(thiz), thiz);
 	}
 	else
 	{

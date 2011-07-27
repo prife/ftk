@@ -91,7 +91,7 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_pipe_socket.c \
 	../../../../../src/ftk_popup_menu.c \
 	../../../../../src/ftk_progress_bar.c \
-	../../../../../src/ftk_radio_group.c \
+	../../../../../src/ftk_group_box.c \
 	../../../../../src/ftk_scroll_bar.c \
 	../../../../../src/ftk_source_idle.c \
 	../../../../../src/ftk_source_primary.c \

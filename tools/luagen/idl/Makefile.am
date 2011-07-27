@@ -7,7 +7,7 @@ EXTRA_DIST=\
 	ftk_bitmap.idl               ftk_painter.idl\
 	ftk_button.idl               ftk_popup_menu.idl\
 	ftk_canvas.idl               ftk_progress_bar.idl\
-	ftk_check_button.idl         ftk_radio_group.idl\
+	ftk_check_button.idl         ftk_group_box.idl\
 	ftk_clipboard.idl            ftk_scroll_bar.idl\
 	ftk_combo_box.idl            ftk_source.idl\
 	ftk_dialog.idl               ftk_source_idle.idl\

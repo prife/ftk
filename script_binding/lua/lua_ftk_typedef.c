@@ -780,7 +780,7 @@ int tolua_ftk_typedef_init(lua_State* L)
 	tolua_constant(L, "FTK_WAIT_BOX", FTK_WAIT_BOX);
 	tolua_constant(L, "FTK_STATUS_ITEM", FTK_STATUS_ITEM);
 	tolua_constant(L, "FTK_PROGRESS_BAR", FTK_PROGRESS_BAR);
-	tolua_constant(L, "FTK_RADIO_GROUP", FTK_RADIO_GROUP);
+	tolua_constant(L, "FTK_GROUP_BOX", FTK_GROUP_BOX);
 	tolua_constant(L, "FTK_RADIO_BUTTON", FTK_RADIO_BUTTON);
 	tolua_constant(L, "FTK_CHECK_BUTTON", FTK_CHECK_BUTTON);
 	tolua_constant(L, "FTK_SCROLL_VBAR", FTK_SCROLL_VBAR);

@@ -1375,7 +1375,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_radio_group.c"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_group_box.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -2133,7 +2133,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_radio_group.h"
+				RelativePath="..\..\..\..\script_binding\lua\lua_ftk_group_box.h"
 				>
 			</File>
 			<File

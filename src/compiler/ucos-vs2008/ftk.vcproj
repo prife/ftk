@@ -1188,7 +1188,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\ftk_radio_group.c"
+				RelativePath="..\..\ftk_group_box.c"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -1950,7 +1950,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\ftk_radio_group.h"
+				RelativePath="..\..\ftk_group_box.h"
 				>
 			</File>
 			<File

@@ -9,7 +9,7 @@ libftklua_la_SOURCES=ftk_lua.c tolua_event.c  tolua_is.c  tolua_map.c  tolua_pus
 	lua_ftk_combo_box.c lua_ftk_dialog.c lua_ftk_theme.c lua_ftk_bitmap.c \
 	lua_ftk_bitmap_factory.c lua_ftk_check_button.c lua_ftk_icon_view.c lua_ftk_image.c \
 	lua_ftk_menu_item.c lua_ftk_menu_panel.c lua_ftk_painter.c \
-	lua_ftk_progress_bar.c lua_ftk_radio_group.c lua_ftk_scroll_bar.c\
+	lua_ftk_progress_bar.c lua_ftk_group_box.c lua_ftk_scroll_bar.c\
 	lua_ftk_status_item.c lua_ftk_status_panel.c lua_ftk_text_view.c lua_ftk_wait_box.c \
 	lua_ftk_popup_menu.c \
 	lua_ftk_mmap.c lua_ftk_clipboard.c lua_ftk_display.c \
@@ -94,7 +94,7 @@ EXTRA_DIST=\
 	lua_ftk_painter.h\
 	lua_ftk_popup_menu.h\
 	lua_ftk_progress_bar.h\
-	lua_ftk_radio_group.h\
+	lua_ftk_group_box.h\
 	lua_ftk_scroll_bar.h\
 	lua_ftk_source.h\
 	lua_ftk_source_idle.h\

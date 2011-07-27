@@ -1,5 +1,5 @@
 /*
- * File: ftk_radio_group.h    
+ * File: ftk_group_box.h    
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   radio group. 
  *
@@ -29,8 +29,8 @@
  *
  */
 
-#ifndef FTK_RADIO_GROUP_H
-#define FTK_RADIO_GROUP_H
+#ifndef FTK_GROUP_BOX_H
+#define FTK_GROUP_BOX_H
 
 #include "ftk_widget.h"
 
@@ -38,10 +38,10 @@ FTK_INHERITE_FROM(Widget)
 
 FTK_BEGIN_DECLS
 
-FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, int height);
-Ret  ftk_radio_group_set_checked(FtkWidget* thiz, FtkWidget* radio);
+FtkWidget* ftk_group_box_create(FtkWidget* parent, int x, int y, int width, int height);
+Ret  ftk_group_box_set_checked(FtkWidget* thiz, FtkWidget* radio);
 
 FTK_END_DECLS
 
-#endif/*FTK_RADIO_GROUP_H*/
+#endif/*FTK_GROUP_BOX_H*/
 

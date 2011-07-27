@@ -468,7 +468,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_radio_group.c"
+				RelativePath="..\..\..\..\ftk_group_box.c"
 				>
 			</File>
 			<File
@@ -904,7 +904,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_radio_group.h"
+				RelativePath="..\..\..\..\ftk_group_box.h"
 				>
 			</File>
 			<File

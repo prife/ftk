@@ -336,8 +336,8 @@ ftk_progress_bar_set_interactive
 ftk_progress_bar_set_percent
 ftk_question
 ftk_quit
-ftk_radio_group_create
-ftk_radio_group_set_checked
+ftk_group_box_create
+ftk_group_box_set_checked
 ftk_run
 ftk_scroll_bar_create
 ftk_scroll_bar_dec

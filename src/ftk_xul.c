@@ -162,11 +162,11 @@ static FtkWidget* ftk_xul_progress_bar_create(FtkWidgetCreateInfo* info)
 	return widget;
 }
 
-static FtkWidget* ftk_xul_radio_group_create(FtkWidgetCreateInfo* info)
+static FtkWidget* ftk_xul_group_box_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
 
-	widget = ftk_radio_group_create(info->parent, info->x, info->y, info->w, info->h);
+	widget = ftk_group_box_create(info->parent, info->x, info->y, info->w, info->h);
 
 	return widget;
 }
@@ -288,7 +288,7 @@ static const WidgetCreator s_widget_creaters[] =
 	{"button",       ftk_xul_button_create},
 	{"wait_box",     ftk_xul_wait_box_create},
 	{"progress_bar", ftk_xul_progress_bar_create},
-	{"radio_group",  ftk_xul_radio_group_create},
+	{"group_box",  ftk_xul_group_box_create},
 	{"radio_button", ftk_xul_radio_button_create},
 	{"check_button", ftk_xul_check_button_create},
 	{"image",        ftk_xul_image_create},

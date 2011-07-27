@@ -76,7 +76,7 @@ ftk_src = Split("""
 ../../ftk_path.c
 ../../ftk_popup_menu.c
 ../../ftk_progress_bar.c
-../../ftk_radio_group.c
+../../ftk_group_box.c
 ../../ftk_scroll_bar.c
 ../../ftk_sources_manager.c
 ../../ftk_source_idle.c

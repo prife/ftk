@@ -71,7 +71,7 @@ extern "C" {
 #include "ftk_file_system.h"
 #include "ftk_file_browser.h"
 #include "ftk_message_box.h"
-#include "ftk_radio_group.h"
+#include "ftk_group_box.h"
 #include "ftk_scroll_bar.h"
 #include "ftk_icon_view.h"
 #include "ftk_clipboard.h"

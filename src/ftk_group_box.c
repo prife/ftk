@@ -1,5 +1,5 @@
 /*
- * File: ftk_radio_group.c
+ * File: ftk_group_box.c
  * Author:  Li XianJing <xianjimli@hotmail.com>
  * Brief:   radio group. 
  *
@@ -31,7 +31,7 @@
 
 #include "ftk_theme.h"
 #include "ftk_globals.h"
-#include "ftk_radio_group.h"
+#include "ftk_group_box.h"
 #include "ftk_check_button.h"
 
 typedef struct _PrivInfo
@@ -39,12 +39,12 @@ typedef struct _PrivInfo
 	FtkBitmap* bg;
 }PrivInfo;
 
-static Ret ftk_radio_group_on_event(FtkWidget* thiz, FtkEvent* event)
+static Ret ftk_group_box_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	return RET_OK;
 }
 
-static Ret ftk_radio_group_on_paint(FtkWidget* thiz)
+static Ret ftk_group_box_on_paint(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
@@ -83,7 +83,7 @@ static Ret ftk_radio_group_on_paint(FtkWidget* thiz)
 	FTK_END_PAINT();
 }
 
-static void ftk_radio_group_destroy(FtkWidget* thiz)
+static void ftk_group_box_destroy(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 
@@ -96,7 +96,7 @@ static void ftk_radio_group_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, int height)
+FtkWidget* ftk_group_box_create(FtkWidget* parent, int x, int y, int width, int height)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget) + sizeof(PrivInfo));
 	return_val_if_fail(thiz != NULL, NULL);
@@ -105,19 +105,19 @@ FtkWidget* ftk_radio_group_create(FtkWidget* parent, int x, int y, int width, in
 	if(thiz->priv_subclass[0] != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
-		thiz->on_event = ftk_radio_group_on_event;
-		thiz->on_paint = ftk_radio_group_on_paint;
-		thiz->destroy  = ftk_radio_group_destroy;
+		thiz->on_event = ftk_group_box_on_event;
+		thiz->on_paint = ftk_group_box_on_paint;
+		thiz->destroy  = ftk_group_box_destroy;
 
 		priv->bg = ftk_theme_load_image(ftk_default_theme(), "groupbox_bg"FTK_STOCK_IMG_SUFFIX);
-		ftk_widget_init(thiz, FTK_RADIO_GROUP, 0, x, y, width, height, FTK_ATTR_TRANSPARENT);
+		ftk_widget_init(thiz, FTK_GROUP_BOX, 0, x, y, width, height, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 	}
 
 	return thiz;
 }
 
-Ret  ftk_radio_group_set_checked(FtkWidget* thiz, FtkWidget* radio)
+Ret  ftk_group_box_set_checked(FtkWidget* thiz, FtkWidget* radio)
 {
 	FtkWidget* iter = NULL;
 	return_val_if_fail(thiz != NULL && radio != NULL, RET_FAIL);

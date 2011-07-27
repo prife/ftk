@@ -164,7 +164,7 @@ static const WidgetNameType s_widget_name_types[] =
 	{"image",        FTK_IMAGE},
 	{"button",       FTK_BUTTON},
 	{"wait_box",     FTK_WAIT_BOX},
-	{"radio_group",  FTK_RADIO_GROUP},
+	{"group_box",  FTK_GROUP_BOX},
 	{"radio_button", FTK_RADIO_BUTTON},
 	{"check_button", FTK_CHECK_BUTTON},
 	{"progress_bar", FTK_PROGRESS_BAR},

@@ -53,7 +53,7 @@ libftk_la_SOURCES=\
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
 	ftk_text_buffer.c     ftk_icon_cache.c          \
-	ftk_progress_bar.c    ftk_radio_group.c         ftk_check_button.c  \
+	ftk_progress_bar.c    ftk_group_box.c         ftk_check_button.c  \
 	ftk_gesture.c         ftk_wait_box.c  ftk_scroll_bar.c \
 	ftk_sprite.c          ftk_display.c             ftk_xml_parser.c    ftk_xul.c \
 	ftk_expr.c            ftk_list_view.c           ftk_list_model_default.c \
@@ -247,7 +247,7 @@ ftk_HEADERS=\
 	ftk_platform.h \
 	ftk_popup_menu.h \
 	ftk_progress_bar.h \
-	ftk_radio_group.h \
+	ftk_group_box.h \
 	ftk_scroll_bar.h \
 	ftk_source.h \
 	ftk_source_idle.h \
