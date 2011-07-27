@@ -187,7 +187,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 		thiz->on_paint = ftk_combo_box_on_paint;
 		thiz->destroy  = ftk_combo_box_destroy;
 
-		ftk_widget_init(thiz, FTK_COMBO_BOX, 0, x, y, 0, 0, FTK_ATTR_TRANSPARENT);
+		ftk_widget_init(thiz, FTK_COMBO_BOX, 0, x, y, width, height, FTK_ATTR_TRANSPARENT);
 		ftk_widget_append_child(parent, thiz);
 
 		priv->entry = ftk_entry_create(thiz, 0, 0, width-height, height);
