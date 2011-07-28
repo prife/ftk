@@ -263,7 +263,6 @@ typedef struct _FtkCommitInfo
 #define FTK_STATUS_PANEL_HEIGHT 36
 #define FTK_DIALOG_MARGIN       (ftk_display_width(ftk_default_display()) >> 5)
 #define FTK_DIALOG_BORDER       2
-#define FTK_DIALOG_TITLE_HEIGHT 32
 #define FTK_SCROLL_BAR_WIDTH    10
 #define FTK_MENU_MAX_ITEM       16
 #define FTK_MENU_ITEM_HEIGHT    48

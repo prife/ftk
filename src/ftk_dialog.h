@@ -45,6 +45,10 @@ int ftk_dialog_run(FtkWidget* thiz);
 Ret ftk_dialog_quit(FtkWidget* thiz);
 Ret ftk_dialog_quit_after(FtkWidget* thiz, int ms);
 
+/*internal used functions*/
+
+int ftk_dialog_get_title_height(void);
+
 FTK_END_DECLS
 
 #endif/*FTK_DIALOG_H*/

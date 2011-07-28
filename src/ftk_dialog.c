@@ -37,6 +37,7 @@
 typedef struct _PrivInfo
 {
 	int no_title;
+	int title_height;
 	FtkBitmap* icon;
 	FtkBitmap* bg;
 	FtkBitmap* title_bg;
@@ -110,7 +111,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 			int y = 0;
 			FtkWidget* child = event->u.extra;
 			x = ftk_widget_left(child) + FTK_DIALOG_BORDER;
-			y = ftk_widget_top(child) + (priv->no_title ? FTK_DIALOG_BORDER : FTK_DIALOG_TITLE_HEIGHT);
+			y = ftk_widget_top(child) + (priv->no_title ? FTK_DIALOG_BORDER : priv->title_height);
 
 			ftk_widget_move(child, x, y);
 
@@ -204,14 +205,14 @@ static Ret  ftk_dialog_paint_title(FtkWidget* thiz, FtkCanvas* canvas, int x, in
 	if(priv->icon != NULL)
 	{
 		ftk_canvas_draw_bg_image(canvas, priv->icon, FTK_BG_CENTER, x + FTK_DIALOG_BORDER, y, 
-			FTK_DIALOG_TITLE_HEIGHT, FTK_DIALOG_TITLE_HEIGHT);
+			priv->title_height, priv->title_height);
 	}
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		int xoffset = FTK_DIALOG_BORDER + (priv->icon != NULL ? FTK_DIALOG_TITLE_HEIGHT : FTK_DIALOG_BORDER);
-		int yoffset = FTK_DIALOG_TITLE_HEIGHT >> 1;
+		int xoffset = FTK_DIALOG_BORDER + (priv->icon != NULL ? priv->title_height : FTK_DIALOG_BORDER);
+		int yoffset = priv->title_height >> 1;
 		const char* text = ftk_widget_get_text(thiz);
 		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, width - xoffset - FTK_DIALOG_BORDER);
 		
@@ -291,6 +292,7 @@ FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height)
 
 		priv->bg = ftk_theme_load_image(ftk_default_theme(), "dialog_bg"FTK_STOCK_IMG_SUFFIX);
 		priv->title_bg = ftk_theme_load_image(ftk_default_theme(), "dialog_title_bg"FTK_STOCK_IMG_SUFFIX);
+		priv->title_height = ftk_bitmap_height(priv->title_bg);
 	}
 	else
 	{
@@ -359,5 +361,18 @@ int ftk_dialog_run(FtkWidget* thiz)
 	priv->main_loop = NULL;
 
 	return ftk_widget_id(ftk_window_get_focus(thiz));
+}
+
+int ftk_dialog_get_title_height(void)
+{
+	static int title_height = 0;
+	if(title_height == 0)
+	{
+		FtkBitmap* title_bg = ftk_theme_load_image(ftk_default_theme(), "dialog_title_bg"FTK_STOCK_IMG_SUFFIX);
+		title_height =  ftk_bitmap_height(title_bg);
+		ftk_bitmap_unref(title_bg);
+	}
+
+	return title_height;
 }
 

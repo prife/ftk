@@ -101,6 +101,7 @@ void ftk_widget_resize(FtkWidget* thiz, int width, int height);
 void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height);
 void ftk_widget_set_type(FtkWidget* thiz, int type);
 void ftk_widget_set_insensitive(FtkWidget* thiz, int insensitive);
+/*ftk_widget_set_focused is internal used. user should call ftk_window_set_focus*/
 void ftk_widget_set_focused(FtkWidget* thiz, int focused);
 void ftk_widget_set_active(FtkWidget* thiz, int active);
 void ftk_widget_set_id(FtkWidget* thiz, int id);
