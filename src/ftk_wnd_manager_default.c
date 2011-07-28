@@ -240,7 +240,12 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 				x = FTK_DIALOG_MARGIN;
 				w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
 				h = work_area_h < ftk_widget_height(window) ? work_area_h : ftk_widget_height(window);
-				y = (work_area_h - h) / 2 + ftk_wnd_manager_get_status_bar_height(thiz);
+				y = (work_area_h - h) / 2;
+				
+				if(!ftk_wnd_manager_default_has_fullscreen_win(thiz))
+				{
+					y += ftk_wnd_manager_get_status_bar_height(thiz);
+				}
 			}
 			else
 			{
