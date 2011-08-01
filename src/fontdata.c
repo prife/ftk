@@ -422,6 +422,19 @@ void font_data_destroy(FontData* thiz)
 			FTK_FREE(thiz->data);
 			FTK_FREE(thiz->current_glyph_data);
 		}
+		else
+		{
+			if((char*)thiz->glyphs != (char*)thiz->data)
+			{
+				FTK_FREE(thiz->glyphs);
+			}
+		}
+
+		if(thiz->current_glyph_data != NULL)
+		{
+			FTK_FREE(thiz->current_glyph_data);
+		}
+
 		FTK_FREE(thiz);
 	}
 

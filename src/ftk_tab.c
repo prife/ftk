@@ -285,7 +285,7 @@ static void ftk_tab_destroy(FtkWidget* thiz)
 			FTK_FREE(iter->text);
 			FTK_BITMAP_UNREF(iter->icon);
 		}
-
+		FTK_FREE(priv->pages);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 

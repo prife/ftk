@@ -594,6 +594,7 @@ void       ftk_theme_destroy(FtkTheme* thiz)
 			}
 		}
 		ftk_icon_cache_destroy(thiz->icon_cache);
+		ftk_animation_trigger_destroy(thiz->animation_trigger);
 
 		FTK_ZFREE(thiz, sizeof(FtkTheme));
 	}

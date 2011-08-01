@@ -132,7 +132,7 @@ void ftk_font_manager_destroy(FtkFontManager* thiz)
 	{
 		for(i = 0; i < thiz->used_nr; i++)
 		{
-			ftk_font_unref(thiz->fonts[i].font);
+			ftk_font_destroy(thiz->fonts[i].font);
 			ftk_font_desc_unref(thiz->fonts[i].font_desc);
 		}
 
