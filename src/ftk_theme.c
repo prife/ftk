@@ -447,7 +447,7 @@ Ret        ftk_theme_parse_data(FtkTheme* thiz, const char* xml, size_t length)
 		PrivInfo* priv = (PrivInfo*)builder->priv;
 		priv->theme = thiz;
 		ftk_xml_parser_set_builder(parser, builder);
-		ftk_xml_parser_parse(parser, xml, strlen(xml));
+		ftk_xml_parser_parse(parser, xml, length);
 	}
 	ftk_xml_builder_destroy(builder);
 	ftk_xml_parser_destroy(parser);

@@ -779,7 +779,7 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkXulCallbacks* callbac
 		PrivInfo* priv = (PrivInfo*)builder->priv;
 		priv->callbacks = callbacks;
 		ftk_xml_parser_set_builder(parser, builder);
-		ftk_xml_parser_parse(parser, xml, strlen(xml));
+		ftk_xml_parser_parse(parser, xml, length);
 		widget = priv->root;
 		
 	}

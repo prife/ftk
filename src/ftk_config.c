@@ -361,7 +361,7 @@ Ret  ftk_config_parse(FtkConfig* thiz, const char* xml, int length)
 		PrivInfo* priv = (PrivInfo*)builder->priv;
 		priv->config = thiz;
 		ftk_xml_parser_set_builder(parser, builder);
-		ftk_xml_parser_parse(parser, xml, strlen(xml));
+		ftk_xml_parser_parse(parser, xml, length);
 	}
 	ftk_xml_builder_destroy(builder);
 	ftk_xml_parser_destroy(parser);
