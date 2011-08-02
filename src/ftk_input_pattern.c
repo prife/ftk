@@ -58,10 +58,21 @@ typedef struct _InputPattern
 struct _FtkInputPattern
 {
 	char* text;
-	size_t caret;
+	int caret;
+	size_t max_length;
 
 	InputPattern* pattern;
 };
+
+static void input_pattern_clear(InputPattern* p)
+{
+	p->offset = p->size = p->min_size = p->max_size = 0;
+	p->default_char = p->delim_char = '\0';
+	p->next = NULL;
+	p->is_valid_char = NULL;
+
+	return;
+}
 
 static int is_digit(unsigned char c)
 {
@@ -83,6 +94,11 @@ static int is_id(unsigned char c)
 	return is_alpha(c) || is_digit(c) || c == '_';
 }
 
+static int is_any(unsigned char c)
+{
+	return 1;
+}
+
 static IsValidChar find_valid_function(unsigned char d)
 {
 	switch(d)
@@ -94,11 +110,35 @@ static IsValidChar find_valid_function(unsigned char d)
 		default: break;
 	}
 
-	return NULL;
+	return is_any;
 }
 
 static Ret ftk_input_pattern_append(FtkInputPattern* thiz, InputPattern* p)
 {
+	InputPattern* iter = NULL;
+	InputPattern* pattern = NULL;
+	return_val_if_fail(p->is_valid_char != NULL, RET_FAIL);
+
+	if(p->max_size == 0)
+	{
+		p->max_size = p->min_size;
+	}
+
+	pattern = (InputPattern*)FTK_ZALLOC(sizeof(InputPattern));
+	memcpy(pattern, p, sizeof(InputPattern));
+
+	if(thiz->pattern == NULL)
+	{
+		thiz->pattern = pattern;
+	}
+	else
+	{
+		for(iter = thiz->pattern; iter->next != NULL; iter = iter->next);
+		iter->next = pattern;
+	}
+
+	thiz->max_length += p->max_size + 1;
+
 	return RET_OK;
 }
 
@@ -120,7 +160,7 @@ static Ret ftk_input_pattern_parse(FtkInputPattern* thiz, const char* pattern)
 	};
 
 	state = ST_TYPE;
-
+	input_pattern_clear(&p);
 	for(i = 0; pattern[i]; i++)
 	{
 		c = pattern[i];
@@ -129,7 +169,6 @@ static Ret ftk_input_pattern_parse(FtkInputPattern* thiz, const char* pattern)
 		{
 			case ST_TYPE:
 			{
-				memset(&p, sizeof(p), 0x00);
 				if(c == '[')
 				{
 					state = ST_MIN;
@@ -164,22 +203,31 @@ static Ret ftk_input_pattern_parse(FtkInputPattern* thiz, const char* pattern)
 				}
 				else
 				{
-					p.max_size = p.min_size * 10 + c - '0';
+					p.max_size = p.max_size * 10 + c - '0';
 				}
 				
 				break;
 			}
 			case ST_DEFAULT:
 			{
-				p.default_char = c;
-				state = ST_DELIM;
+				if(p.is_valid_char(c))
+				{
+					p.default_char = c;
+					state = ST_DELIM;
+					break;
+				}
+				else
+				{
+					/*fall down*/
+				}
 			}
 			case ST_DELIM:
 			{
 				p.delim_char = c;
 				state = ST_TYPE;
 				ftk_input_pattern_append(thiz, &p);
-				memset(&p, sizeof(p), 0x00);
+				input_pattern_clear(&p);
+				break;
 			}
 			default:break;
 		}
@@ -201,14 +249,169 @@ FtkInputPattern* ftk_input_pattern_create(const char* pattern, const char* init)
 	if(thiz != NULL)
 	{
 		ftk_input_pattern_parse(thiz, pattern);
+		thiz->max_length += 1;
+		ftk_input_pattern_set_text(thiz, init);
 	}
 
 	return thiz;
 }
 
+static InputPattern* ftk_input_pattern_get_pattern_of_caret(FtkInputPattern* thiz)
+{
+	size_t i = 0;
+	size_t start = 0;
+	size_t end = 0;
+	unsigned char c = 0;
+	InputPattern* iter = thiz->pattern;
+
+	for(i = 0; thiz->text[i] && i < thiz->caret && iter != NULL; i++)
+	{
+		c = thiz->text[i];
+
+		if(c == iter->delim_char)
+		{
+			iter = iter->next;
+			start = i + 1;
+		}
+	}
+
+	if(iter != NULL)
+	{
+		for(; thiz->text[i]; i++)
+		{
+			c = thiz->text[i];
+
+			if(c == iter->delim_char)
+			{
+				break;
+			}	
+		}
+		end = i;
+		iter->offset = start;
+		iter->size = end - start;
+	}
+
+	return iter;
+}
+
 Ret    ftk_input_pattern_input(FtkInputPattern* thiz, FtkKey key)
 {
-	return RET_OK;
+	size_t i = 0;
+	Ret ret = RET_OK;
+	InputPattern* pattern = NULL;
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	pattern = ftk_input_pattern_get_pattern_of_caret(thiz);
+	return_val_if_fail(pattern != NULL, RET_FAIL);
+
+	switch(key)
+	{
+		case FTK_KEY_DELETE:
+		{
+			if(pattern->size <= pattern->min_size)
+			{
+				if(thiz->text[thiz->caret] != pattern->delim_char)
+				{
+					thiz->text[thiz->caret] = pattern->default_char;
+				}
+				break;
+			}
+
+			if(thiz->text[thiz->caret] != pattern->delim_char)
+			{
+				if(pattern->size > 1)
+				{
+					for(i = thiz->caret + 1; thiz->text[i]; i++)
+					{
+						thiz->text[i] = thiz->text[i+1];
+					}
+				}
+				else if(pattern->size == 1)
+				{
+					thiz->text[thiz->caret] == pattern->default_char;
+				}
+			}
+			break;
+		}
+		case FTK_KEY_BACKSPACE:
+		{
+			thiz->caret--;
+			if(thiz->caret < pattern->offset) break;
+
+			if(pattern->size <= pattern->min_size)
+			{
+				if(thiz->text[thiz->caret] != pattern->delim_char)
+				{
+					thiz->text[thiz->caret] = pattern->default_char;
+				}
+			}
+			else
+			{
+				if(pattern->size > 1)
+				{
+					for(i = thiz->caret; thiz->text[i]; i++)
+					{
+						thiz->text[i] = thiz->text[i+1];
+					}
+				}
+				else if(pattern->size == 1)
+				{
+					thiz->text[thiz->caret] = pattern->default_char;
+				}
+			}
+			break;
+		}
+		case FTK_KEY_LEFT:
+		{
+			if(thiz->caret > 0)
+			{
+				thiz->caret--;
+			}
+			break;
+		}
+		case FTK_KEY_RIGHT:
+		{
+			if(thiz->caret < strlen(thiz->text))
+			{
+				thiz->caret++;
+			}
+			break;
+		}
+		default:
+		{
+			unsigned char c = (unsigned char)key;
+			if(pattern->is_valid_char(c))
+			{
+				if(pattern->size == pattern->max_size)
+				{
+					/*replace*/
+					if(thiz->text[thiz->caret] != pattern->delim_char)
+					{
+						thiz->text[thiz->caret] = c;
+					}
+				}
+				else
+				{
+					/*insert*/
+					thiz->text[strlen(thiz->text) + 1] = '\0';
+					for(i = strlen(thiz->text); i > thiz->caret; i--)
+					{
+						thiz->text[i] = thiz->text[i-1];
+					}
+					thiz->text[i] = c;
+				}
+				thiz->caret++;
+			}
+			else
+			{
+				ret = RET_CONTINUE;
+			}
+		}
+	}
+
+	if(thiz->caret < 0) thiz->caret == 0;
+
+	return ret;
 }
 
 Ret    ftk_input_pattern_set_caret(FtkInputPattern* thiz, size_t caret)
@@ -227,15 +430,12 @@ Ret    ftk_input_pattern_set_text(FtkInputPattern* thiz, const char* text)
 {
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
 
-	if(strlen(thiz->text) >= strlen(text))
+	if(thiz->text == NULL)
 	{
-		strcpy(thiz->text, text);
+		thiz->text = (char*)FTK_ZALLOC(thiz->max_length + 1);
 	}
-	else
-	{
-		FTK_FREE(thiz->text);
-		thiz->text = ftk_strdup(text);
-	}
+
+	strncpy(thiz->text, text, thiz->max_length);
 
 	return RET_OK;
 }
@@ -277,5 +477,78 @@ void ftk_input_pattern_destroy(FtkInputPattern* thiz)
 	return;
 }
 
+#ifdef _TEST
+int main(int argc, char* argv[])
+{
+	InputPattern* p = NULL;
+	ftk_set_allocator(ftk_allocator_default_create());
+	FtkInputPattern* thiz = ftk_input_pattern_create("D[2]0:A[2-4]a:X[0-4]b", "12:abc:4");
+	assert(thiz->pattern->is_valid_char == is_digit);
+	assert(thiz->pattern->min_size == 2);
+	assert(thiz->pattern->max_size == 2);
+	assert(thiz->pattern->default_char == '0');
+	
+	assert(thiz->pattern->next->is_valid_char == is_alpha);
+	assert(thiz->pattern->next->min_size == 2);
+	assert(thiz->pattern->next->max_size == 4);
+	assert(thiz->pattern->next->default_char == 'a');
+	
+	assert(thiz->pattern->next->next->is_valid_char == is_xdigit);
+	assert(thiz->pattern->next->next->min_size == 0);
+	assert(thiz->pattern->next->next->max_size == 4);
+	assert(thiz->pattern->next->next->default_char == 'b');
+
+	ftk_input_pattern_destroy(thiz);
+	
+	thiz = ftk_input_pattern_create("D[2-2]0:A[2-4]a:X[0-4]b", "12:abc:4");
+	assert(thiz->pattern->is_valid_char == is_digit);
+	assert(thiz->pattern->min_size == 2);
+	assert(thiz->pattern->max_size == 2);
+	assert(thiz->pattern->default_char == '0');
+	
+	assert(thiz->pattern->next->is_valid_char == is_alpha);
+	assert(thiz->pattern->next->min_size == 2);
+	assert(thiz->pattern->next->max_size == 4);
+	assert(thiz->pattern->next->default_char == 'a');
+	
+	assert(thiz->pattern->next->next->is_valid_char == is_xdigit);
+	assert(thiz->pattern->next->next->min_size == 0);
+	assert(thiz->pattern->next->next->max_size == 4);
+	assert(thiz->pattern->next->next->default_char == 'b');
+
+	ftk_input_pattern_set_caret(thiz, 0);
+	p = ftk_input_pattern_get_pattern_of_caret(thiz);
+	assert(p->offset == 0);
+	assert(p->size == 2);
+	
+	ftk_input_pattern_set_caret(thiz, 1);
+	p = ftk_input_pattern_get_pattern_of_caret(thiz);
+	assert(p->is_valid_char == is_digit);
+	assert(p->offset == 0);
+	assert(p->size == 2);
+	
+	ftk_input_pattern_set_caret(thiz, 3);
+	p = ftk_input_pattern_get_pattern_of_caret(thiz);
+	assert(p->is_valid_char == is_alpha);
+	assert(p->offset == 3);
+	assert(p->size == 3);
+	
+	ftk_input_pattern_set_caret(thiz, 7);
+	p = ftk_input_pattern_get_pattern_of_caret(thiz);
+	assert(p->is_valid_char == is_xdigit);
+	assert(p->offset == 7);
+	assert(p->size == 1);
+
+	assert(strcmp(thiz->text, "12:abc:4") == 0);
+	ftk_input_pattern_set_caret(thiz, 0);
+	ftk_input_pattern_input(thiz, FTK_KEY_DELETE);
+	assert(strcmp(thiz->text, "1:abc:4") == 0);
+	ftk_input_pattern_input(thiz, FTK_KEY_DELETE);
+	assert(strcmp(thiz->text, "0:abc:4") == 0);
+
+	ftk_input_pattern_destroy(thiz);
 
 
+	return 0;
+}
+#endif
