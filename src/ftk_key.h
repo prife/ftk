@@ -181,6 +181,8 @@ typedef enum _FtkKey
 	FTK_KEY_CHOOSE_IME  = FTK_KEY_F4
 }FtkKey;
 
+#define FTK_IS_DIGIT(key) ((key) >= FTK_KEY_0 && (key) <= FTK_KEY_9)
+#define FTK_IS_ALPHA(key) ((key) >= FTK_KEY_A && (key) <= FTK_KEY_Z) && ((key) >= FTK_KEY_a && (key) <= FTK_KEY_z)
 #define FTK_IS_ACTIVE_KEY(key) ((key) == FTK_KEY_ENTER || (key) == FTK_KEY_SPACE)
 
 FTK_END_DECLS

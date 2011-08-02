@@ -63,6 +63,7 @@ typedef struct _PrivInfo
 static Ret ftk_entry_on_paint_caret(FtkWidget* thiz);
 static Ret ftk_entry_update_caret_pos(FtkWidget* thiz);
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz);
+static Ret ftk_entry_set_text_internal(FtkWidget* thiz, const char* text);
 
 static Ret ftk_entry_move_caret(FtkWidget* thiz, int offset)
 {
@@ -245,7 +246,6 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
-	FtkInputMethod* im = NULL;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	switch(event->type)
@@ -305,7 +305,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SET_TEXT:
 		{
-			ftk_entry_set_text(thiz, event->u.extra);
+			ftk_entry_set_text_internal(thiz, event->u.extra);
 			ret = RET_REMOVE;
 
 			break;
@@ -385,8 +385,6 @@ static Ret ftk_entry_on_paint_caret(FtkWidget* thiz)
 	gc.mask = FTK_GC_FG;
 	if(ftk_widget_is_focused(thiz))
 	{
-		int extent = 0;
-
 		priv->caret_visible = !priv->caret_visible;
 		gc.fg = priv->caret_visible ? ftk_widget_get_gc(thiz)->fg : ftk_widget_get_gc(thiz)->bg;
 		
@@ -546,7 +544,7 @@ static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
 	return RET_OK;
 }
 
-Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
+static Ret ftk_entry_set_text_internal(FtkWidget* thiz, const char* text)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(thiz != NULL && text != NULL, RET_FAIL);
@@ -604,5 +602,12 @@ const char* ftk_entry_get_text(FtkWidget* thiz)
 	return_val_if_fail(thiz != NULL, NULL);
 
 	return TB_TEXT;
+}
+
+Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
+{
+	ftk_widget_set_text(thiz, text);
+
+	return RET_OK;
 }
 
