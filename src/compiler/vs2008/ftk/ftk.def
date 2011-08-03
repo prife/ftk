@@ -94,6 +94,7 @@ ftk_combo_box_append
 ftk_combo_box_create
 ftk_combo_box_get_text
 ftk_combo_box_set_text
+ftk_combo_box_get_entry
 ftk_config_create
 ftk_config_destroy
 ftk_config_get_data_dir

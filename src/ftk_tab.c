@@ -421,11 +421,23 @@ Ret ftk_tab_set_active_page(FtkWidget* thiz, size_t index)
 
 	if(priv->active_page != index)
 	{
+		FtkEvent event = {0};
+		size_t old = priv->active_page;
+
 		priv->active_page = index;
+		memset(&event, 0x00, sizeof(event));
+
+		event.type = FTK_EVT_FOCUS_OUT;
+		ftk_widget_event(priv->pages[old].page, &event);
+		
+		event.type = FTK_EVT_FOCUS_IN;
+		ftk_widget_event(priv->pages[index].page, &event);
+		
 		for(i = 0; i < priv->page_use_nr; i++)
 		{
 			ftk_widget_show_all(priv->pages[i].page, i == priv->active_page);
 		}
+
 		ftk_widget_invalidate(thiz);
 	}
 
