@@ -245,6 +245,14 @@ Ret ftk_combo_box_set_text(FtkWidget* thiz, const char* text)
 	return ftk_entry_set_text(priv->entry, text);	
 }
 
+FtkWidget* ftk_combo_box_get_entry(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, NULL);
+
+	return priv->entry;
+}
+
 Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 {
 	DECL_PRIV0(thiz, priv);

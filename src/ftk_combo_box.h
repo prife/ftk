@@ -43,6 +43,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 const char* ftk_combo_box_get_text(FtkWidget* thiz);
 Ret ftk_combo_box_set_text(FtkWidget* thiz, const char* text);
 Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text);
+FtkWidget* ftk_combo_box_get_entry(FtkWidget* thiz);
 
 FTK_END_DECLS
 
