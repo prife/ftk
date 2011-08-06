@@ -98,10 +98,10 @@ FtkFont* ftk_font_manager_load(FtkFontManager* thiz, FtkFontDesc* font_desc)
 	return_val_if_fail((thiz->used_nr+1) < thiz->nr, NULL);
 
 #if defined(USE_FREETYPE) && defined(ANDROID) && defined(ANDROID_NDK)
-	ftk_strcpy(filename, FTK_FONT);
+	ftk_strcpy(filename, ftk_font_desc_get_fontname(font_desc));
 #else
 	ftk_strs_cat(filename, FTK_MAX_PATH, 
-		ftk_config_get_data_dir(ftk_default_config()), "/data/", FTK_FONT, NULL);
+		ftk_config_get_data_dir(ftk_default_config()), "/data/", ftk_font_desc_get_fontname(font_desc), NULL);
 	ftk_normalize_path(filename);
 #endif
 	font = ftk_font_create(filename, font_desc);

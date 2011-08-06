@@ -38,6 +38,6 @@
 #define FTK_TS_NAME     "/dev/input/touch0"
 #endif
 
-void ftk_source_sylixos_input_create(void);
+FtkSource* ftk_source_sylixos_input_create (void);
 
 #endif  /*FTK_SOURCE_SYLIXOS_H*/

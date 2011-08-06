@@ -99,6 +99,10 @@ size_t ftk_get_relative_time(void)
 
 int ftk_platform_init(int argc, char** argv)
 {
+    int gsnap(int argc, char* argv[]);
+
+    API_TShellKeywordAdd("gsnap", gsnap);
+
     ftk_set_tty_mode(1);
     ftk_install_crash_signal();
 

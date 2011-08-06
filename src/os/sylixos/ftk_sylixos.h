@@ -1,4 +1,3 @@
-
 /*
  * File: ftk_sylixos.h
  * Author:  Han.hui <sylixos@gmail.com>
@@ -80,4 +79,3 @@
 #define FTK_HAS_LUA                     1
 
 #endif  /* FTK_SYLIXOS_H */
-

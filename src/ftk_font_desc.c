@@ -39,6 +39,7 @@ struct _FtkFontDesc
 	int size;
 	int is_bold;
 	int is_italic;
+	char *fontname;
 };
 
 static Ret ftk_font_desc_parse(FtkFontDesc* thiz, const char* font_desc)
@@ -51,7 +52,7 @@ static Ret ftk_font_desc_parse(FtkFontDesc* thiz, const char* font_desc)
 		thiz->size = FTK_FONT_SIZE;
 		thiz->is_italic = 0;
 		thiz->is_bold = 0;
-
+        thiz->fontname = ftk_strdup(FTK_FONT);
 		return RET_OK;
 #else
 		font_desc = font_desc != NULL ? font_desc : FTK_DEFAULT_FONT;
@@ -75,6 +76,16 @@ static Ret ftk_font_desc_parse(FtkFontDesc* thiz, const char* font_desc)
 	{
 		thiz->is_italic = ftk_atoi(p + 7);
 	}
+
+    p = strstr(font_desc, "fontname:");
+    if(p != NULL)
+    {
+        thiz->fontname = ftk_strdup(p + 9);
+    }
+    else
+    {
+        thiz->fontname = ftk_strdup(FTK_FONT);
+    }
 
 	return RET_OK;
 }
@@ -147,12 +158,19 @@ Ret  ftk_font_desc_set_size(FtkFontDesc* thiz, int size)
 	return RET_OK;
 }
 
+const char *ftk_font_desc_get_fontname(FtkFontDesc* thiz)
+{
+    return_val_if_fail(thiz != NULL && thiz->fontname != NULL, NULL);
+
+    return thiz->fontname;
+}
+
 Ret ftk_font_desc_get_string(FtkFontDesc* thiz, char* desc, size_t len)
 {
 	return_val_if_fail(thiz != NULL && desc != NULL, RET_FAIL);
 
 	ftk_snprintf(desc, len, FONT_DESC_FMT, 
-		thiz->size, thiz->is_bold, thiz->is_italic);
+		thiz->size, thiz->is_bold, thiz->is_italic, thiz->fontname);
 
 	return RET_OK;
 }
@@ -161,6 +179,9 @@ static void ftk_font_desc_destroy(FtkFontDesc* thiz)
 {
 	if(thiz != NULL)
 	{
+	    if (thiz->fontname != NULL) {
+	        FTK_FREE(thiz->fontname);
+	    }
 		FTK_FREE(thiz);
 	}
 

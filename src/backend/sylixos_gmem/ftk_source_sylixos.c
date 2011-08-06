@@ -296,7 +296,28 @@ static int ftk_source_sylixos_input_init (char  *file, const char  *file_list[])
     return  (i);
 }
 
-void ftk_source_sylixos_input_create (void)
+static int ftk_source_sylixos_get_fd(FtkSource* thiz)
+{
+    return -1;
+}
+
+static int ftk_source_sylixos_check(FtkSource* thiz)
+{
+    return -1;
+}
+
+static Ret ftk_source_sylixos_dispatch(FtkSource* thiz)
+{
+    return RET_OK;
+}
+
+static void ftk_source_sylixos_destroy(FtkSource* thiz)
+{
+    guiInputDevKeyboardHookSet(NULL);
+    guiInputDevMouseHookSet(NULL);
+}
+
+FtkSource* ftk_source_sylixos_input_create (void)
 {
     LW_CLASS_THREADATTR   attr = Lw_ThreadAttr_GetDefault();
     int                   max_keyboard_num;
@@ -305,26 +326,39 @@ void ftk_source_sylixos_input_create (void)
     const char           *pcKeyboradArray[MAX_INPUT_DEVICE];
     const char           *pcMouseArray[MAX_INPUT_DEVICE];
 
-    ftk_source_sylixos_keyboard_initmap();
+    FtkSource            *thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource));
 
-    if (getenv_r("KEYBOARD", cKeyboradFiles, PATH_MAX + 1) >= 0) {
-        max_keyboard_num = ftk_source_sylixos_input_init(cKeyboradFiles, pcKeyboradArray);
-    } else {
-        pcKeyboradArray[0] = "/dev/input/keyboard0";
-        max_keyboard_num = 1;
+    if (thiz != NULL)
+    {
+        thiz->get_fd   = ftk_source_sylixos_get_fd;
+        thiz->check    = ftk_source_sylixos_check;
+        thiz->dispatch = ftk_source_sylixos_dispatch;
+        thiz->destroy  = ftk_source_sylixos_destroy;
+        thiz->ref      = 1;
+
+        ftk_source_sylixos_keyboard_initmap();
+
+        if (getenv_r("KEYBOARD", cKeyboradFiles, PATH_MAX + 1) >= 0) {
+            max_keyboard_num = ftk_source_sylixos_input_init(cKeyboradFiles, pcKeyboradArray);
+        } else {
+            pcKeyboradArray[0] = "/dev/input/keyboard0";
+            max_keyboard_num = 1;
+        }
+
+        if (getenv_r("MOUSE", cMouseFiles, PATH_MAX + 1) >= 0) {
+            max_mouse_num = ftk_source_sylixos_input_init(cMouseFiles, pcMouseArray);
+        } else {
+            pcMouseArray[0] = "/dev/input/mouse0";
+            max_mouse_num = 1;
+        }
+
+        linear_init();
+
+        guiInputDevReg(pcKeyboradArray, max_keyboard_num, pcMouseArray, max_mouse_num);
+        guiInputDevKeyboardHookSet(ftk_source_sylixos_on_keyboard_event);
+        guiInputDevMouseHookSet(ftk_source_sylixos_on_pointer_event);
+        guiInputDevProcStart(&attr);
     }
 
-    if (getenv_r("MOUSE", cMouseFiles, PATH_MAX + 1) >= 0) {
-        max_mouse_num = ftk_source_sylixos_input_init(cMouseFiles, pcMouseArray);
-    } else {
-        pcMouseArray[0] = "/dev/input/mouse0";
-        max_mouse_num = 1;
-    }
-
-    linear_init();
-
-    guiInputDevReg(pcKeyboradArray, max_keyboard_num, pcMouseArray, max_mouse_num);
-    guiInputDevKeyboardHookSet(ftk_source_sylixos_on_keyboard_event);
-    guiInputDevMouseHookSet(ftk_source_sylixos_on_pointer_event);
-    guiInputDevProcStart(&attr);
+    return thiz;
 }

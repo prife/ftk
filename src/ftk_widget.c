@@ -887,7 +887,7 @@ void ftk_widget_paint(FtkWidget* thiz)
 void ftk_widget_set_font_size(FtkWidget* thiz, int font_size)
 {
 	char font_desc[64] = {0};
-	ftk_snprintf(font_desc, sizeof(font_desc)-1, FONT_DESC_FMT, font_size, 0, 0);
+	ftk_snprintf(font_desc, sizeof(font_desc)-1, FONT_DESC_FMT, font_size, 0, 0, FTK_FONT);
 
 	ftk_widget_set_font(thiz, font_desc);
 

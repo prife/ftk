@@ -37,8 +37,8 @@
 
 FTK_BEGIN_DECLS
 
-#define FTK_DEFAULT_FONT "size:16 bold:0 italic:0"
-#define FONT_DESC_FMT "size:%d bold:%d italic:%d"
+#define FTK_DEFAULT_FONT "size:16 bold:0 italic:0 fontname:"FTK_FONT
+#define FONT_DESC_FMT "size:%d bold:%d italic:%d fontname:%s"
 
 
 struct _FtkFontDesc;
@@ -54,6 +54,7 @@ Ret ftk_font_desc_set_bold(FtkFontDesc* thiz, int bold);
 Ret ftk_font_desc_set_italic(FtkFontDesc* thiz, int italic);
 Ret ftk_font_desc_set_size(FtkFontDesc* thiz, int size);
 Ret ftk_font_desc_get_string(FtkFontDesc* thiz, char* desc, size_t len);
+const char *ftk_font_desc_get_fontname(FtkFontDesc* thiz);
 
 int ftk_font_desc_ref(FtkFontDesc* thiz);
 int ftk_font_desc_unref(FtkFontDesc* thiz);

@@ -76,6 +76,7 @@ extern "C" {
 #include "ftk_icon_view.h"
 #include "ftk_clipboard.h"
 #include "ftk_sprite.h"
+#include "ftk_tab.h"
 
 FTK_BEGIN_DECLS
 
