@@ -1,5 +1,6 @@
 #include "ftk.h"
 #include "ftk_font.h"
+#include "ftk_font_desc.h"
 
 typedef struct _RtlInfo
 {
@@ -71,7 +72,7 @@ int main(int argc, char* argv[])
 	unsigned short c = 'a';
 	FtkFont* font = NULL;
 	RtlInfo info = {0};
-	FtkFontDesc* font_desc = ftk_font_desc_create(FTK_DEFAULT_FONT);
+	FtkFontDesc* font_desc = ftk_font_desc_create(NULL);
 	const char* filename = argv[1] != NULL ? argv[1] : "../../data/gb2312.fnt";
 	ftk_set_allocator(ftk_allocator_default_create());
 	font = ftk_font_create(filename, font_desc);
