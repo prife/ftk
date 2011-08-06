@@ -133,27 +133,27 @@ static Ret ftk_key_board_send_key(FtkWidget* thiz, FtkKeyBoardCell* cell)
 {
 	FtkEvent event;
 	const char* key = NULL;
-	memset(&event, 0x00, sizeof(event));
-	
+	FtkKey code = FTK_KEY_0;
+
 	key = cell->action_args;
 	if(strlen(key) == 1)
 	{
-		event.u.key.code = key[0];
+		code = key[0];
 	}
 	else
 	{
 		/*FIXME*/
 		if(strcmp(key, "BACKSPACE") == 0)
 		{
-			event.u.key.code = FTK_KEY_BACKSPACE;
+			code = FTK_KEY_BACKSPACE;
 		}
 		else if(strcmp(key, "DELETE") == 0)
 		{
-			event.u.key.code = FTK_KEY_DELETE;
+			code = FTK_KEY_DELETE;
 		}
 		else if(strcmp(key, "ENTER") == 0)
 		{
-			event.u.key.code = FTK_KEY_ENTER;
+			code = FTK_KEY_ENTER;
 		}
 		else
 		{
@@ -161,10 +161,12 @@ static Ret ftk_key_board_send_key(FtkWidget* thiz, FtkKeyBoardCell* cell)
 		}
 	}
 
-	event.type = FTK_EVT_KEY_DOWN;
+	ftk_event_init(&event, FTK_EVT_KEY_DOWN);
+	event.u.key.code = code;
 	ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 	
-	event.type = FTK_EVT_KEY_UP;
+	ftk_event_init(&event, FTK_EVT_KEY_UP);
+	event.u.key.code = code;
 	ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 
 	ftk_logd("%s:%d %s\n", __func__, __LINE__, cell->text);
@@ -208,8 +210,7 @@ static Ret ftk_key_board_candidate_text(FtkWidget* thiz, FtkKeyBoardCell* cell)
 	{
 		candidate = desc->candidates + desc->candidate_focus;
 
-		memset(&event, 0x00, sizeof(event));
-		event.type     = FTK_EVT_IM_COMMIT;
+		ftk_event_init(&event,     FTK_EVT_IM_COMMIT);
 		event.widget   = priv->editor;
 		event.u.extra  = (char*)candidate->text;
 		ftk_widget_event(priv->editor, &event);

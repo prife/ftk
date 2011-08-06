@@ -56,11 +56,11 @@ typedef struct _PrivInfo
 static Ret ftk_popup_on_raw_text_clicked(void* ctx, void* button)
 {
 	PrivInfo* priv = ctx;
-	FtkEvent event = {0};
+	FtkEvent event;
 	
+	ftk_event_init(&event,   FTK_EVT_IM_COMMIT);
 	event.widget   = priv->editor;
 	event.u.extra  = (char*)ftk_widget_get_text(button);
-	event.type     = FTK_EVT_IM_COMMIT;
 
 	ftk_widget_event(priv->editor, &event);
 	ftk_widget_show_all(ftk_widget_toplevel(button), 0);
@@ -79,10 +79,11 @@ static Ret ftk_popup_on_item_clicked(void* ctx, void* list)
 	ftk_list_model_get_data(model, i, (void**)&info);
 	if(info != NULL)
 	{
-		FtkEvent event = {0};
+		FtkEvent event;
+		
+		ftk_event_init(&event,   FTK_EVT_IM_COMMIT);
 		event.widget   = priv->editor;
 		event.u.extra  = (void*)info->text;
-		event.type     = FTK_EVT_IM_COMMIT;
 
 		ftk_widget_event(priv->editor, &event);
 	}

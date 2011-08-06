@@ -37,10 +37,10 @@
 
 Ret ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source)
 {
-	FtkEvent event = {0};
+	FtkEvent event;
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 
-	event.type = FTK_EVT_ADD_SOURCE;
+	ftk_event_init(&event, FTK_EVT_ADD_SOURCE);
 	event.u.extra = source;
 
 	ftk_source_enable(source);
@@ -49,10 +49,10 @@ Ret ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source)
 
 Ret ftk_main_loop_remove_source(FtkMainLoop* thiz, FtkSource* source)
 {
-	FtkEvent event = {0};
+	FtkEvent event;
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 
-	event.type = FTK_EVT_REMOVE_SOURCE;
+	ftk_event_init(&event, FTK_EVT_REMOVE_SOURCE);
 	event.u.extra = source;
 
 	ftk_source_disable(source);

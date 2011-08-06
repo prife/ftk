@@ -120,6 +120,17 @@ typedef struct _FtkEvent
 
 typedef Ret (*FtkOnEvent)(void* user_data, FtkEvent* event);
 
+static inline Ret ftk_event_init(FtkEvent* event, FtkEventType type)
+{
+	if(event != NULL)
+	{
+		memset(event, 0x00, sizeof(FtkEvent));
+		event->type = type;
+	}
+
+	return RET_OK;
+}
+
 FTK_END_DECLS
 
 #endif/*FTK_EVENT_H*/

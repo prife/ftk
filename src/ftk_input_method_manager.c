@@ -213,8 +213,8 @@ Ret  ftk_input_method_manager_focus_ack_commit(FtkInputMethodManager* thiz)
 
 	if(thiz->current < thiz->nr)
 	{
-		FtkEvent event = {0};
-		event.type = FTK_EVT_IM_ACT_COMMIT;
+		FtkEvent event;
+		ftk_event_init(&event, FTK_EVT_IM_ACT_COMMIT);
 		ftk_input_method_handle_event(thiz->methods[thiz->current], &event);
 	}
 

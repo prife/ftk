@@ -324,6 +324,9 @@ typedef struct _FtkCommitInfo
 #define FTK_STRDUP(p)      p != NULL ? ftk_strdup(p) : NULL
 #endif
 
+#define FTK_NEW(Type)      (Type*)FTK_ZALLOC(sizeof(Type))
+#define FTK_NEW_PRIV(Type) (Type*)FTK_ZALLOC(sizeof(Type) + sizeof(PrivInfo))
+
 #ifdef HAVE_CONFIG_FTK_H
 #include "config_ftk.h"
 #endif

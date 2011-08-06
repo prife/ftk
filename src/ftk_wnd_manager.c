@@ -24,8 +24,8 @@ Ret  ftk_wnd_manager_set_rotate(FtkWndManager* thiz, FtkRotate rotate)
 	
 	if(old != rotate)
 	{
-		FtkEvent event = {0};
-		event.type = FTK_EVT_SCREEN_ROTATED;
+		FtkEvent event;
+		ftk_event_init(&event, FTK_EVT_SCREEN_ROTATED);
 		ftk_wnd_manager_queue_event(thiz, &event);
 	}
 

@@ -168,10 +168,10 @@ Ret ftk_main_loop_run(FtkMainLoop* thiz)
 
 Ret ftk_main_loop_quit(FtkMainLoop* thiz)
 {
-	FtkEvent event = {0};
+	FtkEvent event;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	event.type = FTK_EVT_NOP;
+	ftk_event_init(&event, FTK_EVT_NOP);
 	thiz->running = 0;
 
 	return ftk_source_queue_event(ftk_primary_source(), &event);

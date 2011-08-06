@@ -139,10 +139,10 @@ static Ret  ftk_wnd_manager_default_ungrab(FtkWndManager* thiz, FtkWidget* windo
 static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 {
 	int i = 0;
-	FtkEvent event = {0};
+	FtkEvent event;
 	DECL_PRIV(thiz, priv);
 	FtkWidget* win = NULL;
-	event.type = FTK_EVT_TOP_WND_CHANGED;
+	ftk_event_init(&event, FTK_EVT_TOP_WND_CHANGED);
 	/*find the topest app/dialog window*/
 	for(i = priv->top - 1; i >=0; i--)
 	{
@@ -166,14 +166,14 @@ static Ret ftk_wnd_manager_default_emit_top_wnd_changed(FtkWndManager* thiz)
 	
 	if(priv->top_window != NULL)
 	{
-		event.type = FTK_EVT_UNMAP;
+		ftk_event_init(&event, FTK_EVT_UNMAP);
 		event.widget = priv->top_window;
 		ftk_wnd_manager_dispatch_event(thiz, &event);
 	}
 	priv->top_window = win;
 	if(priv->top_window != NULL)
 	{
-		event.type = FTK_EVT_MAP;
+		ftk_event_init(&event, FTK_EVT_MAP);
 		event.widget = priv->top_window;
 		ftk_wnd_manager_dispatch_event(thiz, &event);
 	}
@@ -213,7 +213,7 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 	int w = 0;
 	int h = 0;
 	int work_area_h = 0;
-	FtkEvent event = {0};
+	FtkEvent event;
 	return_val_if_fail(thiz != NULL && window != NULL, RET_FAIL);
 
 	work_area_h = ftk_display_height(ftk_default_display()) - ftk_wnd_manager_get_status_bar_height(thiz);
@@ -258,7 +258,7 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		}
 		case FTK_STATUS_PANEL:
 		{
-			event.type = FTK_EVT_MAP;
+			ftk_event_init(&event, FTK_EVT_MAP);
 			event.widget = window;
 			ftk_wnd_manager_dispatch_event(thiz, &event);
 			w = ftk_display_width(ftk_default_display());
@@ -268,7 +268,7 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		}
 		case FTK_MENU_PANEL:
 		{
-			event.type = FTK_EVT_MAP;
+			ftk_event_init(&event, FTK_EVT_MAP);
 			event.widget = window;
 			ftk_wnd_manager_dispatch_event(thiz, &event);
 			w = ftk_display_width(ftk_default_display());
@@ -544,8 +544,9 @@ static Ret  ftk_wnd_manager_default_do_animation(FtkWndManager* thiz, FtkEvent* 
 	{
 		int i = 0;
 		FtkWidget* peer_win = NULL;
-		FtkAnimationEvent anim_event = {0};
-		
+		FtkAnimationEvent anim_event;
+	
+		memset(&anim_event, 0x00, sizeof(anim_event));
 		anim_event.type = event->type;
 		for(i = (priv->top - 1); i >= 0; i--)
 		{
@@ -582,11 +583,11 @@ static Ret  ftk_wnd_manager_default_do_animation(FtkWndManager* thiz, FtkEvent* 
 
 		if(anim_event.new_window != NULL && anim_event.old_window != NULL)
 		{
-			FtkEvent e = {0};
-			e.type = FTK_EVT_DISABLE_CURSOR;
+			FtkEvent e;
+			ftk_event_init(&e, FTK_EVT_DISABLE_CURSOR);
 			ftk_wnd_manager_dispatch_event(thiz, &e);
 			ftk_animation_trigger_on_event(ftk_default_animation_trigger(), &anim_event);
-			e.type = FTK_EVT_ENABLE_CURSOR;
+			ftk_event_init(&e, FTK_EVT_ENABLE_CURSOR);
 			ftk_wnd_manager_dispatch_event(thiz, &e);
 		}
 	}
@@ -736,7 +737,7 @@ static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 {
 	int i = 0;
 	Ret ret = RET_IGNORED;
-	FtkEvent event = {0};
+	FtkEvent event;
 	FtkWidget* win = NULL;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && priv->top > 0, RET_FAIL);
@@ -748,8 +749,8 @@ static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 		{
 			if(!(map && ftk_window_is_mapped(win)))
 			{
+				ftk_event_init(&event, map ? FTK_EVT_MAP : FTK_EVT_UNMAP);
 				event.widget = win;
-				event.type = map ? FTK_EVT_MAP : FTK_EVT_UNMAP;
 				ftk_wnd_manager_dispatch_event(thiz, &event);
 				ret = RET_OK;
 			}
@@ -885,12 +886,12 @@ static void ftk_wnd_manager_default_destroy(FtkWndManager* thiz)
 
 static Ret ftk_wnd_manager_default_long_press(FtkWndManager* thiz)
 {
-	FtkEvent event = {0};
+	FtkEvent event;
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_REMOVE);
 
 	event = priv->pressed_event;
-	event.type = event.type == FTK_EVT_MOUSE_DOWN ? FTK_EVT_MOUSE_LONG_PRESS : FTK_EVT_KEY_LONG_PRESS;
+	event.type = (event.type == FTK_EVT_MOUSE_DOWN) ? FTK_EVT_MOUSE_LONG_PRESS : FTK_EVT_KEY_LONG_PRESS;
 
 	ftk_wnd_manager_default_dispatch_event(thiz, &event);
 

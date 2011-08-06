@@ -326,9 +326,9 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SHOW:
 		{
-			FtkEvent event = {0};
+			FtkEvent event;
+			ftk_event_init(&event, FTK_EVT_SHOW);
 			event.widget = thiz;
-			event.type = FTK_EVT_SHOW;
 			ftk_window_realize(thiz);
 			if(priv->focus_widget == NULL)
 			{
@@ -341,9 +341,9 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_HIDE:
 		{
-			FtkEvent event = {0};
+			FtkEvent event;
+			ftk_event_init(&event, FTK_EVT_HIDE);
 			event.widget = thiz;
-			event.type = FTK_EVT_HIDE;
 			ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 
 			break;
@@ -414,10 +414,10 @@ static void ftk_window_destroy(FtkWidget* thiz)
 {
 	if(thiz != NULL)
 	{
-		FtkEvent event = {0};
+		FtkEvent event;
 		DECL_PRIV0(thiz, priv);
 
-		event.type = FTK_EVT_WND_DESTROY;
+		ftk_event_init(&event, FTK_EVT_WND_DESTROY);
 		event.widget = thiz;
 
 		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
@@ -485,10 +485,10 @@ Ret ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 
 	if(priv->fullscreen != fullscreen)
 	{
-		FtkEvent event = {0};
+		FtkEvent event;
 		priv->fullscreen = fullscreen;
 
-		event.type = FTK_EVT_RELAYOUT_WND;
+		ftk_event_init(&event, FTK_EVT_RELAYOUT_WND);
 		ftk_wnd_manager_dispatch_event(ftk_default_wnd_manager(), &event);
 	}
 
