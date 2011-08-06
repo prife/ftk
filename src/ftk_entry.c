@@ -426,7 +426,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_draw_hline(canvas, x + 2, y + height - 2, width-4);
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-	if(priv->text_buffer != NULL || priv->tips != NULL)
+	if(HAS_TEXT(priv) || priv->tips != NULL)
 	{
 		FtkTextLine line = {0};
 		FtkTextLayout* text_layout = ftk_default_text_layout();

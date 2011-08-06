@@ -73,6 +73,7 @@ libftk_la_SOURCES=\
 	ftk_animation.c ftk_pairs.c ftk_params.c ftk_interpolator_linear.c \
 	ftk_interpolator_acc_decelerate.c  ftk_interpolator_bounce.c   \
 	ftk_interpolator_accelerate.c      ftk_interpolator_decelerate.c \
+	ftk_key_board.c \
 	$(OPTIONAL_FUNCS)
 
 if ENABLE_LINEBREAK

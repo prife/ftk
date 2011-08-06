@@ -8,7 +8,10 @@ noinst_PROGRAMS=label_test widget_test \
 	expr_test theme_test xul_stress_test clipboard_test bmp_test \
 	config_test fs_test tab_test font_desc_test \
 	font_manager_test pairs_test params_test animation_trigger_default_test \
-	interpolator_test
+	interpolator_test keyboard_test
+
+keyboard_test_SOURCES=keyboard_test.c
+keyboard_test_LDFLAGS=$(MYLDFLAGS)
 
 fs_test_SOURCES=fs_test.c
 fs_test_LDFLAGS=$(MYLDFLAGS)

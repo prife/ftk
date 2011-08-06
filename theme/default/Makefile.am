@@ -48,12 +48,20 @@ theme_DATA=\
 	scrollbar_handle_vertical.png \
 	status-bg.png \
 	wait_box.png \
-	warning.png theme.xml animations.xml \
+	warning.png \
+	theme.xml \
+	animations.xml \
+	keyboard.xml \
 	folder.png  mime_image.png  mime_text.png \
 	mime_unknown.png mime_audio.png up.png \
 	progressbar_i_bg.png progressbar_i_cursor.png \
 	more.png tab-bar-pressed.png   tab-normal.png \
 	tab-selected.png tab-bar-selected.png  tab-pressed.png \
-	dialog_bg.png  dialog_title_bg.png  groupbox_bg.png
+	dialog_bg.png  dialog_title_bg.png  groupbox_bg.png \
+	key_board_arrow_left.png   key_board_candidate_hl_bg.png           key_board_down_normal.png  key_board_up_active.png \
+	key_board_arrow_right.png  key_board_candidates_area_bg.png        key_board_enter.png        key_board_up_normal.png \
+	key_board_bg.png           key_board_candidates_vertical_line.png  key_board_shift_off.png \
+	key_board_btn_active.png   key_board_delete.png                    key_board_shift_on.png \
+	key_board_btn_normal.png   key_board_down_active.png               key_board_space.png
 
 EXTRA_DIST=$(theme_DATA)
