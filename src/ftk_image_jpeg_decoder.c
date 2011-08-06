@@ -164,7 +164,7 @@ static Ret ftk_image_jpeg_decoder_match(FtkImageDecoder* thiz, const char* filen
 
 	if(m == NULL) return RET_FAIL;
 
-	data = ftk_mmap_data(m);
+	data = (unsigned char*)ftk_mmap_data(m);
 	length = ftk_mmap_length(m);
 
 	/* check SOI */

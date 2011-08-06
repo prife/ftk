@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_clipboard.h"
 
 static char g_clipboard[FTK_CLIPBOARD_SIZE+1];

@@ -59,7 +59,7 @@ typedef struct _PrivInfo
 
 static void priv_info_destroy(void* obj)
 {
-	PrivInfo* priv = obj;
+	PrivInfo* priv = (PrivInfo*)obj;
 
 	FTK_FREE(priv);
 
@@ -68,7 +68,7 @@ static void priv_info_destroy(void* obj)
 
 static Ret ftk_file_browser_on_quit(void* ctx, void* obj)
 {
-	ftk_widget_unref(ctx);
+	ftk_widget_unref((FtkWidget*)ctx);
 	
 	return RET_OK;
 }
@@ -76,10 +76,10 @@ static Ret ftk_file_browser_on_quit(void* ctx, void* obj)
 static Ret ftk_file_browser_on_ok(void* ctx, void* obj)
 {
 	int i = 0;
-	FtkWidget* win = ctx;
+	FtkWidget* win = (FtkWidget*)ctx;
 	FtkListItemInfo* info = NULL;
 	char path[FTK_MAX_PATH+1] = {0};
-	PrivInfo* priv = ftk_widget_user_data(win);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(win);
 	return_val_if_fail(priv != NULL && priv->on_choosed != NULL, RET_FAIL);
 
 	if(priv->type == FTK_FILE_BROWER_SINGLE_CHOOSER)
@@ -107,14 +107,14 @@ static Ret ftk_file_browser_on_ok(void* ctx, void* obj)
 		}
 		priv->on_choosed(priv->on_choosed_ctx, -1, NULL);
 	}
-	ftk_widget_unref(ctx);
+	ftk_widget_unref((FtkWidget*)ctx);
 	
 	return RET_OK;
 }
 
 static Ret ftk_file_browser_on_cancel(void* ctx, void* obj)
 {
-	ftk_widget_unref(ctx);
+	ftk_widget_unref((FtkWidget*)ctx);
 	
 	return RET_OK;
 }
@@ -141,9 +141,9 @@ static Ret ftk_file_browser_on_remove(void* ctx, void* obj)
 	int i = 0;
 	int ret = 0;
 	const char* buttons[3];
-	FtkWidget* win = ctx;
+	FtkWidget* win = (FtkWidget*)ctx;
 	FtkListItemInfo* info = NULL;
-	PrivInfo* priv = ftk_widget_user_data(win);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(win);
 	char message[FTK_MAX_PATH + 30] = {0};
 	buttons[0] = _("Yes");
 	buttons[1] = _("No");
@@ -225,10 +225,10 @@ static Ret ftk_file_browser_on_rename(void* ctx, void* obj)
 	int i = 0;
 	int ret = 0;
 	const char* name = NULL;
-	FtkWidget* win = ctx;
+	FtkWidget* win = (FtkWidget*)ctx;
 	FtkWidget* dialog = NULL;
 	FtkListItemInfo* info = NULL;
-	PrivInfo* priv = ftk_widget_user_data(win);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(win);
 	i = ftk_list_view_get_selected(priv->list_view);
 	ftk_list_model_get_data(priv->model, i, (void**)&info);
 	return_val_if_fail(info != NULL, RET_FAIL);
@@ -272,9 +272,9 @@ static Ret ftk_file_browser_on_create_folder(void* ctx, void* obj)
 {
 	int ret = 0;
 	const char* name = NULL;
-	FtkWidget* win = ctx;
+	FtkWidget* win = (FtkWidget*)ctx;
 	FtkWidget* dialog = NULL;
-	PrivInfo* priv = ftk_widget_user_data(win);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(win);
 		
 	dialog = ftk_file_browser_input_dialog(win, _("Please input folder name:"));
 	ret = ftk_dialog_run(dialog);
@@ -353,11 +353,11 @@ static Ret ftk_file_browser_on_prepare_options_menu(void* ctx, FtkWidget* menu_p
 
 static Ret ftk_file_browser_on_item_clicked(void* ctx, void* list)
 {
-	FtkWidget* win = ctx;
+	FtkWidget* win = (FtkWidget*)ctx;
 	FtkListItemInfo* info = NULL;
-	int i = ftk_list_view_get_selected(list);
-	PrivInfo* priv = ftk_widget_user_data(win);
-	FtkListModel* model = ftk_list_view_get_model(list);
+	int i = ftk_list_view_get_selected((FtkWidget*)list);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(win);
+	FtkListModel* model = ftk_list_view_get_model((FtkWidget*)list);
  
  	return_val_if_fail(priv != NULL, RET_FAIL);
 
@@ -415,7 +415,7 @@ FtkWidget* ftk_file_browser_create(FtkFileBrowserType type)
 	FtkListRender* render = NULL;	
 	FtkPrepareOptionsMenu option_menu = NULL;
 	FtkWidget* win  = ftk_app_window_create();
-	PrivInfo* priv  = FTK_ZALLOC(sizeof(PrivInfo));
+	PrivInfo* priv  = FTK_NEW(PrivInfo);
 	FtkWidget* list = ftk_list_view_create(win, 0, 0, ftk_widget_width(win), ftk_widget_height(win));
 
 	if(type == FTK_FILE_BROWER_APP)
@@ -447,7 +447,7 @@ FtkWidget* ftk_file_browser_create(FtkFileBrowserType type)
 
 Ret		   ftk_file_browser_set_path(FtkWidget* thiz, const char* path)
 {
-	PrivInfo* priv = ftk_widget_user_data(thiz);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(thiz);
 	return_val_if_fail(priv != NULL && path != NULL, RET_FAIL);	
 
 	strncpy(priv->path, path, FTK_MAX_PATH);
@@ -458,7 +458,7 @@ Ret		   ftk_file_browser_set_path(FtkWidget* thiz, const char* path)
 
 Ret		   ftk_file_browser_set_filter(FtkWidget* thiz, const char* mime_type)
 {
-	PrivInfo* priv = ftk_widget_user_data(thiz);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(thiz);
 	return_val_if_fail(priv != NULL, RET_FAIL);	
 
 	FTK_FREE(priv->filter_mime_type);
@@ -469,7 +469,7 @@ Ret		   ftk_file_browser_set_filter(FtkWidget* thiz, const char* mime_type)
 
 Ret		   ftk_file_browser_set_choosed_handler(FtkWidget* thiz, FtkFileBrowserOnChoosed on_choosed, void* ctx)
 {
-	PrivInfo* priv = ftk_widget_user_data(thiz);
+	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(thiz);
 	return_val_if_fail(priv != NULL, RET_FAIL);	
 
 	priv->on_choosed = on_choosed;
@@ -484,7 +484,7 @@ static FtkBitmap* ftk_file_browser_load_mime_icon(const char* file_name)
 	char icon_name[FTK_MAX_PATH+1] = {0};
 	const char mime_type[FTK_MIME_TYPE_LEN + 1] = {0};
 	
-	strcpy(mime_type, ftk_file_get_mime_type(file_name));
+	strcpy(mime_type, (char*)ftk_file_get_mime_type(file_name));
 
 	p = strrchr(mime_type, '/');
 	return_val_if_fail(p != NULL, NULL);

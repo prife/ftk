@@ -37,9 +37,9 @@
 
 static Ret message_box_on_button_clicked(void* ctx, void* obj)
 {
-	*(int*)ctx = ftk_widget_id(obj);
+	*(int*)ctx = ftk_widget_id((FtkWidget*)obj);
 
-	ftk_logd("%s: the %dth button is clicked.\n", __func__, ftk_widget_id(obj));
+	ftk_logd("%s: the %dth button is clicked.\n", __func__, ftk_widget_id((FtkWidget*)obj));
 
 	return RET_QUIT;
 }

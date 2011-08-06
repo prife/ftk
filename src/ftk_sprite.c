@@ -46,7 +46,7 @@ struct _FtkSprite
 
 FtkSprite* ftk_sprite_create(void)
 {
-	FtkSprite* thiz = FTK_ZALLOC(sizeof(FtkSprite));
+	FtkSprite* thiz = FTK_NEW(FtkSprite);
 	
 	return thiz;
 }
@@ -128,7 +128,7 @@ Ret  ftk_sprite_set_icon(FtkSprite* thiz, FtkBitmap* icon)
 Ret ftk_sprite_on_display_update(void* ctx, FtkDisplay* display, int before,
 	FtkBitmap* bitmap, FtkRect* rect, int xoffset, int yoffset)
 {
-	FtkSprite* thiz = ctx;
+	FtkSprite* thiz = (FtkSprite*)ctx;
 	return_val_if_fail(thiz != NULL && bitmap != NULL, RET_FAIL);
 
 	if(bitmap == thiz->icon || bitmap == thiz->snap)

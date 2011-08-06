@@ -160,7 +160,7 @@ Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 	int oy = 0;\
 	int bw = ftk_bitmap_width(bitmap);\
 	int bh = ftk_bitmap_height(bitmap);\
-	Type* src = data;\
+	Type* src = (Type*)data;\
 	FtkColor* dst = ftk_bitmap_bits(bitmap);\
 	\
 	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);\
@@ -192,7 +192,7 @@ Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 	int y = rect != NULL ? rect->y : 0;\
 	int w = rect != NULL ? rect->width : bw;\
 	int h = rect != NULL ? rect->height : bh;\
-	Type* dst = data;\
+	Type* dst = (Type*)data;\
 	FtkColor* src = ftk_bitmap_bits(bitmap);\
 	\
 	return_val_if_fail(ox < dw, RET_FAIL);\

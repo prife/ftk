@@ -32,6 +32,7 @@
 #include "ftk_util.h"
 #include "ftk_log.h"
 #include "ftk_mmap.h"
+#include "ftk_globals.h"
 #include "ftk_config.h"
 #include "ftk_allocator.h"
 #include "ftk_xml_parser.h"
@@ -51,7 +52,7 @@ static Ret ftk_config_parse_rotate(FtkConfig* thiz, const char* rotate);
 
 FtkConfig* ftk_config_create()
 {
-	FtkConfig* thiz = FTK_ZALLOC(sizeof(FtkConfig));
+	FtkConfig* thiz = FTK_NEW(FtkConfig);
 	
 	if(thiz != NULL)
 	{
@@ -104,7 +105,7 @@ Ret ftk_config_load_file(FtkConfig* thiz, const char* filename)
 	m = ftk_mmap_create(filename, 0, -1);
 	if(m != NULL)
 	{
-		const char* data = ftk_mmap_data(m);
+		const char* data = (const char*)ftk_mmap_data(m);
 		size_t length = ftk_mmap_length(m);
 		ftk_config_parse(thiz, 	data, length);
 		ftk_mmap_destroy(m);
@@ -334,7 +335,7 @@ static void ftk_config_builder_destroy(FtkXmlBuilder* thiz)
 
 static FtkXmlBuilder* ftk_config_builder_create(void)
 {
-	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(PrivInfo));
+	FtkXmlBuilder* thiz = FTK_NEW_PRIV(FtkXmlBuilder); 
 
 	if(thiz != NULL)
 	{

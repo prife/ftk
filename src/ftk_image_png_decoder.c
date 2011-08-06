@@ -67,14 +67,13 @@ static FtkBitmap* load_png (const char *filename)
 	int y = 0;
 	int w = 0;
 	int h = 0;
-	int passes_nr = 0;
-
 #ifndef RT_THREAD
 	FILE *fp = NULL;
 #else
 	int fd = -1;
 #endif	
 
+	int passes_nr = 0;
 	FtkColor* dst = NULL;
 	unsigned char* src = NULL;
 	FtkBitmap* bitmap = NULL;

@@ -61,10 +61,10 @@ static void ftk_popup_menu_destroy(FtkWidget* thiz)
 }
 static Ret ftk_popup_menu_on_item_clicked(void* ctx, void* list)
 {
-	FtkWidget* thiz = ctx;
+	FtkWidget* thiz = (FtkWidget*)ctx;
 	FtkListItemInfo* info = NULL;
-	int i = ftk_list_view_get_selected(list);
-	FtkListModel* model = ftk_list_view_get_model(list);
+	int i = ftk_list_view_get_selected((FtkWidget*)list);
+	FtkListModel* model = ftk_list_view_get_model((FtkWidget*)list);
 	ftk_list_model_get_data(model, i, (void**)&info);
 	
 	if(info != NULL)
@@ -91,8 +91,8 @@ FtkWidget* ftk_popup_menu_create(int x, int y, int w, int h, FtkBitmap* icon, co
 	
 	return_val_if_fail(thiz != NULL, NULL);
 
-	thiz->priv_subclass[2] = FTK_ZALLOC(sizeof(PrivInfo));
-	priv = thiz->priv_subclass[2];
+	thiz->priv_subclass[2] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+	priv = (PrivInfo*)thiz->priv_subclass[2];
 	if(has_title)
 	{
 		ftk_dialog_set_icon(thiz, icon);

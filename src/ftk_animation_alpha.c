@@ -115,7 +115,7 @@ static void  ftk_animation_alpha_destroy(FtkAnimation* thiz)
 
 FtkAnimation* ftk_animation_alpha_create(void)
 {
-	FtkAnimation* thiz = FTK_ZALLOC(sizeof(FtkAnimation) + sizeof(PrivInfo));
+	FtkAnimation* thiz = FTK_NEW_PRIV(FtkAnimation);
 
 	if(thiz != NULL)
 	{

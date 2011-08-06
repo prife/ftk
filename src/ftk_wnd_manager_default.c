@@ -432,7 +432,7 @@ static FtkWidget* ftk_wnd_manager_find_target(FtkWndManager* thiz, int x, int y)
 	return NULL;
 }
 
-#ifdef FTK_SUPPORT_C99
+#if 0 
 static const unsigned char const key_tanslate_table[0xff] = 
 {
 	[FTK_KEY_1]             =  FTK_KEY_EXCLAM,
@@ -573,12 +573,12 @@ static Ret  ftk_wnd_manager_default_do_animation(FtkWndManager* thiz, FtkEvent* 
 		if(event->type == FTK_EVT_SHOW)
 		{
 			anim_event.old_window = peer_win;
-			anim_event.new_window = event->widget;
+			anim_event.new_window = (FtkWidget*)event->widget;
 		}
 		else
 		{
 			anim_event.new_window = peer_win;
-			anim_event.old_window = event->widget;
+			anim_event.old_window = (FtkWidget*)event->widget;
 		}
 
 		if(anim_event.new_window != NULL && anim_event.old_window != NULL)
@@ -626,7 +626,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 			}
 
 			priv->disable_anim++;
-			ftk_wnd_manager_default_remove(thiz, event->widget);	
+			ftk_wnd_manager_default_remove(thiz, (FtkWidget*)event->widget);	
 			priv->disable_anim--;
 			return RET_OK;
 		}
@@ -645,7 +645,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 			ftk_wnd_manager_default_emit_top_wnd_changed(thiz);
 			priv->disable_anim--;
 			ftk_wnd_manager_default_do_animation(thiz, event);
-			if(ftk_widget_type(event->widget) == FTK_WINDOW 
+			if(ftk_widget_type((FtkWidget*)event->widget) == FTK_WINDOW 
 				&& ftk_wnd_manager_default_map_panels(thiz, !ftk_wnd_manager_default_has_fullscreen_win(thiz)) == RET_OK)
 			{
 				ftk_wnd_manager_update(thiz);
@@ -688,7 +688,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 	}
 	else if(event->widget != NULL)
 	{
-		target = event->widget;
+		target = (FtkWidget*)event->widget;
 	}
 	else if(priv->grab_widget != NULL)
 	{

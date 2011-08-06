@@ -66,7 +66,7 @@ static int ftk_source_primary_check(FtkSource* thiz)
 
 static Ret ftk_source_primary_dispatch(FtkSource* thiz)
 {
-	FtkEvent event = {0};
+	FtkEvent event;
 	DECL_PRIV(thiz, priv);
 	int ret = ftk_pipe_read(priv->pipe, &event, sizeof(FtkEvent));
 	return_val_if_fail(ret == sizeof(FtkEvent), RET_REMOVE);
@@ -79,12 +79,12 @@ static Ret ftk_source_primary_dispatch(FtkSource* thiz)
 		}
 		case FTK_EVT_ADD_SOURCE:
 		{
-			ftk_sources_manager_add(ftk_default_sources_manager(), event.u.extra);
+			ftk_sources_manager_add(ftk_default_sources_manager(), (FtkSource*)event.u.extra);
 			break;
 		}
 		case FTK_EVT_REMOVE_SOURCE:
 		{
-			ftk_sources_manager_remove(ftk_default_sources_manager(), event.u.extra);
+			ftk_sources_manager_remove(ftk_default_sources_manager(), (FtkSource*)event.u.extra);
 			break;
 		}
 		default:

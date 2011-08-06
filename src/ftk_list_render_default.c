@@ -84,7 +84,7 @@ static Ret ftk_list_render_default_init(FtkListRender* thiz, FtkListModel* model
 
 static Ret marquee_timer_func(void* ctx)
 {
-	FtkListRender* thiz = ctx;
+	FtkListRender* thiz = (FtkListRender*)ctx;
 	DECL_PRIV(thiz, priv);
 	FtkWidget* list_view = priv->list_view;
 
@@ -317,7 +317,7 @@ static void ftk_list_render_default_destroy(FtkListRender* thiz)
 
 FtkListRender* ftk_list_render_default_create(void)
 {
-	FtkListRender* thiz = FTK_ZALLOC(sizeof(FtkListRender) + sizeof(PrivInfo));
+	FtkListRender* thiz = FTK_NEW_PRIV(FtkListRender);
 	
 	if(thiz != NULL)
 	{

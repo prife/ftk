@@ -58,7 +58,7 @@ struct _FtkWidgetInfo
 
 	int painting;
 	FtkCanvas* canvas;
-	FtkWidgetAttr attr;
+	unsigned int attr;
 	FtkWidgetState state;
 	FtkGc gc[FTK_WIDGET_STATE_NR];
 	void* user_data;
@@ -88,7 +88,7 @@ static void ftk_widget_validate_position_size(FtkWidget* thiz);
  *
  */
 void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y, 
-	int width, int height, FtkWidgetAttr attr)
+	int width, int height, unsigned int attr)
 {
 	return_if_fail(thiz != NULL && thiz->priv == NULL);
 
@@ -98,7 +98,7 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y,
 	if(thiz->priv != NULL)
 	{
 		FtkWidgetInfo* priv =  thiz->priv;
-		FtkWidgetState state = FTK_WIDGET_NORMAL;
+		int state = FTK_WIDGET_NORMAL;
 
 		priv->id     = id;
 		priv->type   = type;
@@ -111,10 +111,10 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y,
 		for(; state < FTK_WIDGET_STATE_NR; state++)
 		{
 			priv->gc[state].mask   = FTK_GC_BG | FTK_GC_FG | FTK_GC_FONT;
-			priv->gc[state].font   = ftk_theme_get_font(ftk_default_theme(), type);
-			priv->gc[state].fg     = ftk_theme_get_fg_color(ftk_default_theme(), type, state);
-			priv->gc[state].bg     = ftk_theme_get_bg_color(ftk_default_theme(), type, state);
-			priv->gc[state].bitmap = ftk_theme_get_bg(ftk_default_theme(), type, state);
+			priv->gc[state].font   = ftk_theme_get_font(ftk_default_theme(), (FtkWidgetType)type);
+			priv->gc[state].fg     = ftk_theme_get_fg_color(ftk_default_theme(), (FtkWidgetType)type, (FtkWidgetState)state);
+			priv->gc[state].bg     = ftk_theme_get_bg_color(ftk_default_theme(), (FtkWidgetType)type, (FtkWidgetState)state);
+			priv->gc[state].bitmap = ftk_theme_get_bg(ftk_default_theme(), (FtkWidgetType)type, (FtkWidgetState)state);
 
 			if(priv->gc[state].bitmap != NULL) priv->gc[state].mask |= FTK_GC_BITMAP;
 		}
@@ -359,7 +359,7 @@ int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 
 FtkWidgetState ftk_widget_state(FtkWidget* thiz)
 {
-	return_val_if_fail(thiz != NULL && thiz->priv != NULL, 0);
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, FTK_WIDGET_NORMAL);
 
 	return thiz->priv->state;
 }
@@ -379,13 +379,13 @@ const char* ftk_widget_get_text(FtkWidget* thiz)
 	ftk_event_init(&event, FTK_EVT_GET_TEXT);
 	if(ftk_widget_event(thiz, &event) == RET_REMOVE)
 	{
-		return event.u.extra;
+		return (char*)event.u.extra;
 	}
 
 	return thiz->priv->text != NULL ? thiz->priv->text : "";
 }
 
-void ftk_widget_set_attr(FtkWidget* thiz, FtkWidgetAttr attr)
+void ftk_widget_set_attr(FtkWidget* thiz, unsigned int attr)
 {
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
@@ -909,7 +909,7 @@ void ftk_widget_set_font(FtkWidget* thiz, const char* font_desc_str)
 		int i = 0;
 		for(i = 0; i < FTK_WIDGET_STATE_NR; i++)
 		{
-			ftk_widget_set_gc(thiz, i, &gc);
+			ftk_widget_set_gc(thiz, (FtkWidgetState)i, &gc);
 		}
 	}
 	ftk_gc_reset(&gc);

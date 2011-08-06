@@ -833,7 +833,7 @@ struct _FtkTextLayout
 
 FtkTextLayout* ftk_text_layout_create(void)
 {
-	FtkTextLayout* thiz = FTK_ZALLOC(sizeof(FtkTextLayout));
+	FtkTextLayout* thiz = FTK_NEW(FtkTextLayout);
 
 	return thiz;
 }

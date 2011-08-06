@@ -95,7 +95,7 @@ FtkFont* ftk_font_create (const char* filename, FtkFontDesc* font_desc)
 	return_val_if_fail(filename != NULL && font_desc != NULL, NULL);
 
 	size = ftk_font_desc_get_size(font_desc);
-	thiz = FTK_ZALLOC(sizeof(FtkFont) + sizeof(PrivInfo));
+	thiz = FTK_NEW_PRIV(FtkFont); 
 	if(thiz != NULL)
 	{
 		FT_Error err = 0;

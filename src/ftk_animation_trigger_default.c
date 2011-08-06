@@ -317,7 +317,7 @@ static void ftk_animation_builder_destroy(FtkXmlBuilder* thiz)
 
 static FtkXmlBuilder* ftk_animation_builder_create(FtkAnimationTrigger* trigger)
 {
-	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(BuilderInfo));
+	FtkXmlBuilder* thiz = (FtkXmlBuilder*)FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(BuilderInfo));
 
 	if(thiz != NULL)
 	{
@@ -363,7 +363,7 @@ static Ret ftk_animation_trigger_parse_file(FtkAnimationTrigger* thiz, const cha
 		ftk_logd("%s: mmap %s failed.\n", __func__, filename);
 	}
 	return_val_if_fail(m != NULL, RET_FAIL);
-	ret = ftk_animation_trigger_parse_data(thiz, ftk_mmap_data(m), ftk_mmap_length(m));
+	ret = ftk_animation_trigger_parse_data(thiz, (const char*)ftk_mmap_data(m), ftk_mmap_length(m));
 	ftk_mmap_destroy(m);
 
 	return ret;
@@ -393,7 +393,7 @@ void ftk_animation_trigger_default_dump(FtkAnimationTrigger* thiz)
 
 FtkAnimationTrigger* ftk_animation_trigger_default_create(const char* theme, const char* name)
 {
-	FtkAnimationTrigger* thiz = FTK_ZALLOC(sizeof(FtkAnimationTrigger) + sizeof(PrivInfo));
+	FtkAnimationTrigger* thiz = FTK_NEW_PRIV(FtkAnimationTrigger);
 
 	if(thiz != NULL)
 	{

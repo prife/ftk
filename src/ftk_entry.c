@@ -33,6 +33,7 @@
 #include "ftk_log.h"
 #include "ftk_entry.h"
 #include "ftk_globals.h"
+#include "ftk_window.h"
 #include "ftk_text_buffer.h"
 #include "ftk_source_timer.h"
 #include "ftk_input_method_preeditor.h"
@@ -253,7 +254,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_EVT_FOCUS_IN:
 		{
 			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
-			ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), priv->input_type);
+			ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), (FtkInputType)priv->input_type);
 			ftk_source_ref(priv->caret_timer);
 			ftk_source_timer_reset(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
@@ -286,12 +287,12 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_IM_PREEDIT:
 		{
-			ftk_im_show_preeditor(thiz, &(priv->caret_pos), event->u.extra);
+			ftk_im_show_preeditor(thiz, &(priv->caret_pos), (FtkCommitInfo*)event->u.extra);
 			break;
 		}
 		case FTK_EVT_IM_COMMIT:
 		{
-			ftk_entry_input_str(thiz, event->u.extra);
+			ftk_entry_input_str(thiz, (const char*)event->u.extra);
 			ftk_input_method_manager_focus_ack_commit(ftk_default_input_method_manager());
 			break;
 		}
@@ -305,7 +306,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SET_TEXT:
 		{
-			ftk_entry_set_text_internal(thiz, event->u.extra);
+			ftk_entry_set_text_internal(thiz, (const char*)event->u.extra);
 			ret = RET_REMOVE;
 
 			break;

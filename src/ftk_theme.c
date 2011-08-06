@@ -116,7 +116,7 @@ static Ret ftk_theme_init_default(FtkTheme* thiz)
 
 FtkTheme*  ftk_theme_create(int init_default)
 {
-	FtkTheme* thiz = FTK_ZALLOC(sizeof(FtkTheme));
+	FtkTheme* thiz = FTK_NEW(FtkTheme);
 
 	ftk_init_default_path();
 	if(thiz != NULL)
@@ -410,7 +410,7 @@ static void ftk_theme_builder_destroy(FtkXmlBuilder* thiz)
 }
 static FtkXmlBuilder* ftk_theme_builder_create(void)
 {
-	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(PrivInfo));
+	FtkXmlBuilder* thiz = FTK_NEW_PRIV(FtkXmlBuilder);
 
 	if(thiz != NULL)
 	{
@@ -481,7 +481,7 @@ Ret        ftk_theme_parse_file(FtkTheme* thiz, const char* filename)
 		ftk_logd("%s: mmap %s failed.\n", __func__, filename);
 	}
 	return_val_if_fail(m != NULL, RET_FAIL);
-	ret = ftk_theme_parse_data(thiz, ftk_mmap_data(m), ftk_mmap_length(m));
+	ret = ftk_theme_parse_data(thiz, (const char*)ftk_mmap_data(m), ftk_mmap_length(m));
 	ftk_mmap_destroy(m);
 
 	return ret;

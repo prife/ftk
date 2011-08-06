@@ -472,7 +472,7 @@ static Ret ftk_icon_view_extend(FtkWidget* thiz, size_t delta)
 	}
 
 	alloc_nr = priv->nr + delta + FTK_HALF(priv->nr + delta) + 5;
-	items = FTK_REALLOC(priv->items, sizeof(FtkIconViewItem) * alloc_nr);
+	items = (FtkIconViewItem*)FTK_REALLOC(priv->items, sizeof(FtkIconViewItem) * alloc_nr);
 	if(items != NULL)
 	{
 		priv->items    = items;

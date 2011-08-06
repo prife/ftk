@@ -220,7 +220,7 @@ static Ret ftk_canvas_default_draw_normal_line(FtkCanvas* thiz, int x1, int y1, 
 	int y = 0;
 	int dx = abs(x2 - x1);  
 	int dy = abs(y2 - y1);  
-	FtkBool direction = 0;  
+	int direction = 0;  
 	int inc_x = 0;  
 	int inc_y = 0;  
 	int cur_x = x1;  
@@ -670,7 +670,7 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 	if(rect.width <= 0 || rect.height <= 0)
 	{
 //		ftk_logd("%s: skip.\n", __func__);
-		return 0;
+		return RET_OK;
 	}
 
 	if(alpha == 0)
@@ -924,7 +924,7 @@ FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color)
 	FtkCanvas* thiz = NULL;
 	return_val_if_fail(w > 0 && h > 0 && clear_color != NULL, NULL);
 
-	if((thiz = FTK_ZALLOC(sizeof(FtkCanvas) + sizeof(PrivInfo))) != NULL)
+	if((thiz = FTK_NEW_PRIV(FtkCanvas)) != NULL)
 	{
 		DECL_PRIV(thiz, priv);
 

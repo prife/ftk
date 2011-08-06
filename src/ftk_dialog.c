@@ -109,7 +109,7 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 		{
 			int x = 0;
 			int y = 0;
-			FtkWidget* child = event->u.extra;
+			FtkWidget* child = (FtkWidget*)event->u.extra;
 			x = ftk_widget_left(child) + FTK_DIALOG_BORDER;
 			y = ftk_widget_top(child) + (priv->no_title ? FTK_DIALOG_BORDER : priv->title_height);
 
@@ -320,7 +320,7 @@ Ret ftk_dialog_quit(FtkWidget* thiz)
 
 static Ret ftk_dialog_timeout_quit(void* ctx)
 {
-	FtkWidget* thiz = ctx;
+	FtkWidget* thiz = (FtkWidget*)ctx;
 	DECL_PRIV1(thiz, priv);
 	return_val_if_fail(priv != NULL && priv->timer != NULL, RET_REMOVE);
 

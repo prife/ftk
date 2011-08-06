@@ -97,7 +97,7 @@ static void ftk_init_default_path()
 
 FtkIconCache* ftk_icon_cache_create(const char* root_path[FTK_ICON_PATH_NR], const char* rel_path)
 {
-	FtkIconCache* thiz = FTK_ZALLOC(sizeof(FtkIconCache));
+	FtkIconCache* thiz = FTK_NEW(FtkIconCache);
 
 	ftk_init_default_path();
 	if(thiz != NULL)

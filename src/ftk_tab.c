@@ -379,7 +379,7 @@ FtkWidget* ftk_tab_add_page(FtkWidget* thiz, const char* text, FtkBitmap* icon)
 	if((priv->page_use_nr + 1) > priv->page_total_nr)
 	{
 		size_t page_total_nr = priv->page_total_nr + 3;
-		TabPage* pages = FTK_REALLOC(priv->pages, page_total_nr * sizeof(TabPage));
+		TabPage* pages = (TabPage*)FTK_REALLOC(priv->pages, page_total_nr * sizeof(TabPage));
 		if(pages != NULL)
 		{
 			priv->pages = pages;

@@ -33,6 +33,7 @@
 #define FTK_GESTURE_LISTENER_H
 
 #include "ftk_event.h"
+#include "ftk_log.h"
 
 struct _FtkGestureListener;
 typedef struct _FtkGestureListener FtkGestureListener;

@@ -28,6 +28,7 @@
  * 2010-08-01 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "ftk_log.h"
 #include "ftk_path.h"
 #include "ftk_allocator.h"
 
@@ -44,7 +45,7 @@ struct _FtkPath
 
 FtkPath* ftk_path_create(const char* path)
 {
-	FtkPath* thiz = FTK_ZALLOC(sizeof(FtkPath));
+	FtkPath* thiz = FTK_NEW(FtkPath);
 
 	if(thiz != NULL)
 	{
@@ -127,7 +128,7 @@ static int parse_token(const char* text, const char* delims, OnTokenFunc on_toke
 
 static void on_sub_path(void* ctx, int index, const char* token)
 {
-	FtkPath* thiz = ctx;
+	FtkPath* thiz = (FtkPath*)ctx;
 
 	if(index >= 0)
 	{

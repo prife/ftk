@@ -92,7 +92,7 @@ static Ret ftk_font_desc_parse(FtkFontDesc* thiz, const char* font_desc)
 
 FtkFontDesc* ftk_font_desc_create(const char* font_desc)
 {
-	FtkFontDesc* thiz = FTK_ZALLOC(sizeof(FtkFontDesc));
+	FtkFontDesc* thiz = FTK_NEW(FtkFontDesc);
 
 	if(thiz != NULL)
 	{
@@ -142,7 +142,7 @@ Ret  ftk_font_desc_set_bold(FtkFontDesc* thiz, int bold)
 
 Ret  ftk_font_desc_set_italic(FtkFontDesc* thiz, int italic)
 {
-	return_val_if_fail(thiz != NULL, 0);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	thiz->is_italic = italic;
 
@@ -151,7 +151,7 @@ Ret  ftk_font_desc_set_italic(FtkFontDesc* thiz, int italic)
 
 Ret  ftk_font_desc_set_size(FtkFontDesc* thiz, int size)
 {
-	return_val_if_fail(thiz != NULL, 0);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	thiz->size = size;
 

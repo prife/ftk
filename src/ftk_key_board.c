@@ -138,7 +138,7 @@ static Ret ftk_key_board_send_key(FtkWidget* thiz, FtkKeyBoardCell* cell)
 	key = cell->action_args;
 	if(strlen(key) == 1)
 	{
-		code = key[0];
+		code = (FtkKey)key[0];
 	}
 	else
 	{
@@ -341,7 +341,7 @@ static void ftk_key_board_desc_builder_on_start(FtkXmlBuilder* thiz, const char*
 		}
 		assert(desc->view_nr > 0);
 		desc->current_view = 0;
-		desc->views = FTK_ZALLOC(desc->view_nr * sizeof(FtkKeyBoardView));
+		desc->views = (FtkKeyBoardView*)FTK_ZALLOC(desc->view_nr * sizeof(FtkKeyBoardView));
 	}
 	else if(strcmp(tag, "view") == 0)
 	{
@@ -516,7 +516,7 @@ static void ftk_key_board_desc_builder_destroy(FtkXmlBuilder* thiz)
 
 static FtkXmlBuilder* ftk_key_board_desc_builder_create(void)
 {
-	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(BuilderInfo));
+	FtkXmlBuilder* thiz = (FtkXmlBuilder*)FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(BuilderInfo));
 
 	if(thiz != NULL)
 	{
@@ -564,7 +564,7 @@ static FtkKeyBoardDesc* ftk_key_board_desc_create(const char* filename)
 	if((m = ftk_mmap_create(filename, 0, -1)) != NULL)
 	{
 		desc = (FtkKeyBoardDesc*)FTK_ZALLOC(sizeof(FtkKeyBoardDesc));
-		ftk_key_board_desc_load(desc, ftk_mmap_data(m), ftk_mmap_length(m));
+		ftk_key_board_desc_load(desc, (const char*)ftk_mmap_data(m), ftk_mmap_length(m));
 		ftk_mmap_destroy(m);
 	}
 

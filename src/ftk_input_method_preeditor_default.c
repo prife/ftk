@@ -55,26 +55,26 @@ typedef struct _PrivInfo
 
 static Ret ftk_popup_on_raw_text_clicked(void* ctx, void* button)
 {
-	PrivInfo* priv = ctx;
+	PrivInfo* priv = (PrivInfo*)ctx;
 	FtkEvent event;
 	
 	ftk_event_init(&event,   FTK_EVT_IM_COMMIT);
 	event.widget   = priv->editor;
-	event.u.extra  = (char*)ftk_widget_get_text(button);
+	event.u.extra  = (char*)ftk_widget_get_text((FtkWidget*)button);
 
 	ftk_widget_event(priv->editor, &event);
-	ftk_widget_show_all(ftk_widget_toplevel(button), 0);
-	ftk_widget_set_text(button, "");
+	ftk_widget_show_all(ftk_widget_toplevel((FtkWidget*)button), 0);
+	ftk_widget_set_text((FtkWidget*)button, "");
 
 	return RET_OK;
 }
 
 static Ret ftk_popup_on_item_clicked(void* ctx, void* list)
 {
-	PrivInfo* priv = ctx;
+	PrivInfo* priv = (PrivInfo*)ctx;
 	FtkListItemInfo* info = NULL;
 	FtkListModel* model = priv->model;
-	int i = ftk_list_view_get_selected(list);
+	int i = ftk_list_view_get_selected((FtkWidget*)list);
 	
 	ftk_list_model_get_data(model, i, (void**)&info);
 	if(info != NULL)
@@ -87,7 +87,7 @@ static Ret ftk_popup_on_item_clicked(void* ctx, void* list)
 
 		ftk_widget_event(priv->editor, &event);
 	}
-	ftk_widget_show_all(ftk_widget_toplevel(list), 0);
+	ftk_widget_show_all(ftk_widget_toplevel((FtkWidget*)list), 0);
 
 	return RET_OK;
 }
@@ -265,7 +265,7 @@ FtkImPreeditor* ftk_input_method_preeditor_default_create(void)
 
 	ftk_list_view_init(list, model, render, FTK_IM_PREEDITOR_ITEM_HEIGHT);
 
-	thiz = FTK_ZALLOC(sizeof(FtkImPreeditor) + sizeof(PrivInfo));
+	thiz = FTK_NEW_PRIV(FtkImPreeditor);
 
 	if(thiz != NULL)
 	{

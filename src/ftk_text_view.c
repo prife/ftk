@@ -31,6 +31,7 @@
 
 #include "ftk_log.h"
 #include "ftk_util.h"
+#include "ftk_window.h"
 #include "ftk_globals.h"
 #include "ftk_text_view.h"
 #include "ftk_text_buffer.h"
@@ -171,7 +172,7 @@ static Ret ftk_text_view_calc_lines(FtkWidget* thiz)
 }
 
 
-static Ret ftk_text_view_get_chars_nr_in_line(FtkWidget* thiz, int line)
+static int ftk_text_view_get_chars_nr_in_line(FtkWidget* thiz, int line)
 {
 	DECL_PRIV0(thiz, priv);
 
@@ -242,7 +243,7 @@ static Ret ftk_text_view_extend_lines_offset(FtkWidget* thiz, int nr)
 	}
 
 	lines_offset_nr = priv->lines_offset_nr + ((priv->lines_offset_nr + 10) >> 1);
-	lines_offset = FTK_REALLOC(priv->lines_offset, sizeof(priv->lines_offset[0]) * lines_offset_nr);
+	lines_offset = (short unsigned int*)FTK_REALLOC(priv->lines_offset, sizeof(priv->lines_offset[0]) * lines_offset_nr);
 	if(lines_offset != NULL)
 	{
 		for(i = priv->lines_offset_nr; i < lines_offset_nr; i++)
@@ -526,12 +527,12 @@ static Ret ftk_text_view_on_event(FtkWidget* thiz, FtkEvent* event)
 			FtkPoint caret_pos = {0};
 			caret_pos.x = priv->caret_x;
 			caret_pos.y = priv->caret_y;
-			ftk_im_show_preeditor(thiz, &caret_pos, event->u.extra);
+			ftk_im_show_preeditor(thiz, &caret_pos, (FtkCommitInfo*)event->u.extra);
 			break;
 		}
 		case FTK_EVT_IM_COMMIT:
 		{
-			ftk_text_view_input_str(thiz, event->u.extra);
+			ftk_text_view_input_str(thiz, (const char*)event->u.extra);
 			ftk_input_method_manager_focus_ack_commit(ftk_default_input_method_manager());
 			break;
 		}
@@ -547,7 +548,7 @@ static Ret ftk_text_view_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_SET_TEXT:
 		{
-			ftk_text_view_set_text(thiz, event->u.extra, -1);
+			ftk_text_view_set_text(thiz, (const char*)event->u.extra, -1);
 			ret = RET_REMOVE;
 
 			break;

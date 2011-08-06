@@ -32,6 +32,7 @@
 #ifndef FTK_INTERPOLATOR_H
 #define FTK_INTERPOLATOR_H
 #include "ftk_typedef.h"
+#include "ftk_log.h"
 
 FTK_BEGIN_DECLS
 

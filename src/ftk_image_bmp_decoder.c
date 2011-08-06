@@ -250,7 +250,7 @@ static FtkBitmap* load_bmp (const char *filename)
 
 	return_val_if_fail(m != NULL, NULL);
 
-	data = ftk_mmap_data(m);
+	data = (unsigned char*)ftk_mmap_data(m);
 
 	if(data[0] != 'B' || data[1] != 'M')
 	{

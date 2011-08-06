@@ -210,7 +210,7 @@ static int ftk_xml_parser_strdup(FtkXmlParser* thiz, const char* start, size_t l
 	if((thiz->buffer_used + length) >= thiz->buffer_total)
 	{
 		size_t length = thiz->buffer_total+(thiz->buffer_total>>1) + 128;
-		char* buffer = FTK_REALLOC(thiz->buffer, length);
+		char* buffer = (char*)FTK_REALLOC(thiz->buffer, length);
 		if(buffer != NULL)
 		{
 			thiz->buffer = buffer;

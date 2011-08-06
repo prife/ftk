@@ -37,7 +37,7 @@
 
 static Ret on_im_selected(void* ctx, void* item)
 {
-	ftk_dialog_quit(ctx);
+	ftk_dialog_quit((FtkWidget*)ctx);
 
 	return RET_QUIT;
 }
@@ -54,7 +54,7 @@ int ftk_input_method_chooser(void)
 
 	nr = (int)ftk_input_method_manager_count(im_mgr);
 
-	im_infos = FTK_ZALLOC(sizeof(FtkListItemInfo) * (nr + 1));
+	im_infos = (FtkListItemInfo*)FTK_ZALLOC(sizeof(FtkListItemInfo) * (nr + 1));
 	if(im_infos == NULL)
 	{
 		return -1;
@@ -71,7 +71,7 @@ int ftk_input_method_chooser(void)
 		im_infos[i].user_data = im_chooser;
 	}
 	
-	im_infos[i].text = "None";
+	im_infos[i].text = (char*)"None";
 	im_infos[i].type = FTK_LIST_ITEM_NORMAL;
 	im_infos[i].user_data = im_chooser;
 	

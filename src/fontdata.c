@@ -98,7 +98,7 @@ FontData* font_data_create(int char_nr, Encoding encoding)
 		if(char_nr > 0)
 		{
 			thiz->new_created = 1;
-			thiz->glyphs = FTK_ZALLOC(char_nr * sizeof(FGlyph));
+			thiz->glyphs = (FGlyph*)FTK_ZALLOC(char_nr * sizeof(FGlyph));
 		}
 	}
 
@@ -183,7 +183,7 @@ FontData* font_data_load_file(const char* file_name)
 			ret = ftk_file_read(fp, &thiz->header, sizeof(thiz->header));
 			assert(ret == sizeof(thiz->header));
 			glyphs_size = thiz->header.char_nr * sizeof(FGlyph);
-			thiz->glyphs = FTK_ZALLOC(glyphs_size);
+			thiz->glyphs = (FGlyph*)FTK_ZALLOC(glyphs_size);
 			assert(thiz->glyphs != NULL);
 			ftk_file_read(fp, thiz->glyphs, glyphs_size);
 			thiz->data = NULL;
@@ -475,7 +475,7 @@ int main(int argc, char* argv[])
 	glyph->h = 9;
 	glyph->x = 5;
 	glyph->y = 5;
-	glyph->data = FTK_ZALLOC(glyph->w * glyph->h);
+	glyph->data = (unsigned char*) FTK_ZALLOC(glyph->w * glyph->h);
 
 	for(; ch <= 'z'; ch++)
 	{

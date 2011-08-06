@@ -94,7 +94,7 @@ static Ret ftk_fs_delete_children(char* name)
 	return_val_if_fail(name != NULL, RET_FAIL);
 
 	ret = ftk_file_get_info(name, &info);
-	return_val_if_fail(ret == RET_OK, ret);
+	return_val_if_fail(ret == RET_OK, RET_FAIL);
 
 	if(info.is_dir)
 	{

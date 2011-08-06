@@ -67,7 +67,7 @@ struct _FtkInputMethodManager
 
 FtkInputMethodManager* ftk_input_method_manager_create(void)
 {
-	FtkInputMethodManager* thiz = FTK_ZALLOC(sizeof(FtkInputMethodManager));
+	FtkInputMethodManager* thiz = FTK_NEW(FtkInputMethodManager);
 	if(thiz != NULL)
 	{
 		thiz->current = 0;

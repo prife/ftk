@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_pipe.h"
 #include "ftk_allocator.h"
 
@@ -48,7 +49,7 @@ static Ret make_sock_pipe(int pipes[2])
 FtkPipe* ftk_pipe_create(void)
 {
 	int pipes[2] = {0};
-	FtkPipe* thiz = FTK_ZALLOC(sizeof(FtkPipe));
+	FtkPipe* thiz = FTK_NEW(FtkPipe);
 	
 	if(thiz != NULL)
 	{

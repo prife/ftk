@@ -628,7 +628,7 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 	return_val_if_fail(thiz != NULL, NULL);
 
 	PROFILE_TIME("window create begin");
-	thiz->priv_subclass[0] = FTK_ZALLOC(sizeof(PrivInfo));
+	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
 		FtkGc gc = {0};

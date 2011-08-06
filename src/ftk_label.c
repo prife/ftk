@@ -41,7 +41,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 {
 	int i = 0;
 	int rows = 0;
-	FtkAlignment alignment = (FtkAlignment)thiz->priv_subclass[0];
+	FtkAlignment alignment = (FtkAlignment)(int)(thiz->priv_subclass[0]);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 	
 	if(ftk_widget_get_text(thiz) != NULL)

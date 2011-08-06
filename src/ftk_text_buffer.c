@@ -34,11 +34,11 @@
 
 FtkTextBuffer* ftk_text_buffer_create(size_t init_buffer_length)
 {
-	FtkTextBuffer* thiz = FTK_ALLOC(sizeof(FtkTextBuffer));
+	FtkTextBuffer* thiz = (FtkTextBuffer*)FTK_ALLOC(sizeof(FtkTextBuffer));
 	if(thiz != NULL)
 	{
 		thiz->length = 0;
-		thiz->buffer = FTK_ALLOC(init_buffer_length);
+		thiz->buffer = (char*)FTK_ALLOC(init_buffer_length);
 		thiz->buffer_length = init_buffer_length;
 		thiz->buffer[thiz->length] = '\0';
 	}
@@ -58,7 +58,7 @@ static Ret ftk_text_buffer_extend(FtkTextBuffer* thiz, size_t length)
 	buffer_length = (thiz->buffer_length + length + 10);
 	buffer_length = buffer_length + (buffer_length>>1);
 
-	if((buffer = FTK_REALLOC(thiz->buffer, buffer_length)) != NULL)
+	if((buffer = (char*)FTK_REALLOC(thiz->buffer, buffer_length)) != NULL)
 	{
 		thiz->buffer = buffer;
 		thiz->buffer_length = buffer_length;
@@ -134,7 +134,7 @@ Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count)
 {
 	int length = 0;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, RET_FAIL);
-	return_val_if_fail(offset <= (int)thiz->length && offset >= 0, 0);
+	return_val_if_fail(offset <= (int)thiz->length && offset >= 0, RET_FAIL);
 	return_val_if_fail((offset + count) <= (int)thiz->length && (offset + count) >= 0, RET_FAIL);
 
 	length = ftk_text_buffer_chars_bytes(thiz, offset, count);

@@ -50,7 +50,7 @@ struct _FtkFontManager
 
 FtkFontManager* ftk_font_manager_create(int max_font_nr)
 {
-	FtkFontManager* thiz = FTK_ZALLOC(sizeof(FtkFontManager) 
+	FtkFontManager* thiz = (FtkFontManager*)FTK_ZALLOC(sizeof(FtkFontManager) 
 		+ sizeof(FtkFontEntry) * max_font_nr);
 
 	if(thiz != NULL)

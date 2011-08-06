@@ -221,7 +221,7 @@ static void  ftk_animation_translate_destroy(FtkAnimation* thiz)
 
 FtkAnimation* ftk_animation_translate_create(void)
 {
-	FtkAnimation* thiz = FTK_ZALLOC(sizeof(FtkAnimation) + sizeof(PrivInfo));
+	FtkAnimation* thiz = FTK_NEW_PRIV(FtkAnimation);
 
 	if(thiz != NULL)
 	{

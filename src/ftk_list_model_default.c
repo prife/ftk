@@ -89,7 +89,7 @@ static Ret ftk_list_model_default_extend(FtkListModel* thiz, size_t delta)
 	}
 
 	alloc_nr = (priv->alloc_nr + delta) + FTK_HALF(priv->alloc_nr + delta) + 2; 
-	items = FTK_REALLOC(priv->items, sizeof(FtkListItemInfo) * alloc_nr);
+	items = (FtkListItemInfo*)FTK_REALLOC(priv->items, sizeof(FtkListItemInfo) * alloc_nr);
 	if(items != NULL)
 	{
 		priv->items = items;
@@ -150,7 +150,7 @@ static Ret ftk_list_item_copy(FtkListModel* thiz, FtkListItemInfo* dst, FtkListI
 Ret ftk_list_model_default_add(FtkListModel* thiz, void* item)
 {
 	DECL_PRIV(thiz, priv);
-	FtkListItemInfo* info = item;
+	FtkListItemInfo* info = (FtkListItemInfo*)item;
 	return_val_if_fail(thiz != NULL && info != NULL, RET_FAIL);
 	return_val_if_fail(ftk_list_model_default_extend(thiz, 1) == RET_OK, RET_FAIL);
 
@@ -199,7 +199,7 @@ Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index)
 
 FtkListModel* ftk_list_model_default_create(size_t init_nr)
 {
-	FtkListModel* thiz = FTK_ZALLOC(sizeof(FtkListModel) + sizeof(PrivInfo));
+	FtkListModel* thiz = FTK_NEW_PRIV(FtkListModel);
 	if(thiz != NULL)
 	{
 		DECL_PRIV(thiz, priv);

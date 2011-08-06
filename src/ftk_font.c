@@ -227,7 +227,7 @@ static Ret ftk_font_cache_remove_lru(FtkFont* thiz, unsigned short older_than)
 	DECL_PRIV(thiz, priv);
 	unsigned short lru_access_nr = 0xffff;
 	unsigned short now = SHRINK_TIME(ftk_get_relative_time());
-	return_val_if_fail(thiz != NULL, -1);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	lru = priv->glyph_nr;
 	i = (priv->last_replaced + 1) % priv->glyph_nr;
@@ -275,7 +275,7 @@ static Ret ftk_font_cache_add(FtkFont* thiz, FtkGlyph* glyph)
 	FtkGlyph* p = NULL;
 	FtkGlyphCache* c = NULL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL, -1);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	if(glyph->w > priv->font_height || glyph->h > priv->font_height)
 	{
@@ -332,7 +332,7 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 	FtkGlyphCache* c = NULL;
 	Ret ret =  RET_FAIL;
 	DECL_PRIV(thiz, priv);
-	return_val_if_fail(thiz != NULL, -1);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	high = priv->glyph_nr-1;
 	while(low <= high)
@@ -419,7 +419,7 @@ FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
 	size_t font_height = ftk_font_height(font);
 	return_val_if_fail(font != NULL && font_height > 0, NULL);
 
-	if((thiz = FTK_ZALLOC(sizeof(FtkFont) + sizeof(PrivInfo))) != NULL)
+	if((thiz = FTK_NEW_PRIV(FtkFont)) != NULL)
 	{
 		DECL_PRIV(thiz, priv);
 
@@ -437,8 +437,8 @@ FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
 		priv->max_glyph_nr = max_glyph_nr;
 		priv->one_glyph_size = sizeof(FtkGlyphCache) + font_height * font_height ;
 
-		priv->glyphs = FTK_ZALLOC(max_glyph_nr * priv->one_glyph_size);
-		priv->glyphs_ptr = FTK_ZALLOC(max_glyph_nr * sizeof(FtkGlyphCache*));
+		priv->glyphs = (FtkGlyph*)FTK_ZALLOC(max_glyph_nr * priv->one_glyph_size);
+		priv->glyphs_ptr = (FtkGlyph**)FTK_ZALLOC(max_glyph_nr * sizeof(FtkGlyphCache*));
 		priv->free_glyphs = priv->glyphs;
 		
 		ftk_logd("%s: max_glyph_nr=%d memsize=%d\n", __func__, 

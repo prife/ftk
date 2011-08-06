@@ -39,7 +39,7 @@ struct _FtkGesture
 
 FtkGesture* ftk_gesture_create(FtkGestureListener* listener)
 {
-	FtkGesture* thiz = FTK_ZALLOC(sizeof(FtkGesture));
+	FtkGesture* thiz = FTK_NEW(FtkGesture);
 
 	if(thiz != NULL)
 	{

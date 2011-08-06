@@ -117,7 +117,7 @@ void  ftk_allocator_profile_destroy(FtkAllocator* thiz)
 
 FtkAllocator* ftk_allocator_profile_create(FtkAllocator* allocator)
 {
-	FtkAllocator* thiz = ftk_allocator_zalloc(allocator, sizeof(FtkAllocator) + sizeof(PrivInfo));
+	FtkAllocator* thiz = (FtkAllocator*)ftk_allocator_zalloc(allocator, sizeof(FtkAllocator) + sizeof(PrivInfo));
 
 	if(thiz != NULL)
 	{

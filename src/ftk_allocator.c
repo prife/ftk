@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_allocator.h"
 
 void* ftk_allocator_alloc(FtkAllocator* thiz, size_t size)
@@ -90,7 +91,7 @@ char* ftk_strdup(const char* str)
 {
 	char* new_str = NULL;
 	return_val_if_fail(str != NULL, NULL);
-	new_str = ftk_allocator_alloc(ftk_default_allocator(), strlen(str) + 1);
+	new_str = (char*)ftk_allocator_alloc(ftk_default_allocator(), strlen(str) + 1);
 
 	if(new_str != NULL)
 	{

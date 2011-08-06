@@ -734,7 +734,7 @@ static void ftk_xul_builder_destroy(FtkXmlBuilder* thiz)
 
 static FtkXmlBuilder* ftk_xul_builder_create(void)
 {
-	FtkXmlBuilder* thiz = FTK_ZALLOC(sizeof(FtkXmlBuilder) + sizeof(PrivInfo));
+	FtkXmlBuilder* thiz = FTK_NEW_PRIV(FtkXmlBuilder);
 
 	if(thiz != NULL)
 	{
@@ -802,7 +802,7 @@ FtkWidget* ftk_xul_load_file(const char* filename, FtkXulCallbacks* callbacks)
 
 	if((m = ftk_mmap_create(filename, 0, -1)) != NULL)
 	{
-		widget = ftk_xul_load_ex(ftk_mmap_data(m), ftk_mmap_length(m), callbacks);
+		widget = ftk_xul_load_ex((const char*)ftk_mmap_data(m), ftk_mmap_length(m), callbacks);
 		ftk_mmap_destroy(m);
 	}
 

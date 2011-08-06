@@ -349,7 +349,7 @@ FtkDisplay* ftk_display_rotate_create(FtkDisplay* display, FtkRotate rotate)
 	FtkDisplay* thiz = NULL;
 	return_val_if_fail(display != NULL, NULL);
 
-	thiz = FTK_ZALLOC(sizeof(FtkDisplay) + sizeof(PrivInfo));
+	thiz = FTK_NEW_PRIV(FtkDisplay);
 
 	if(thiz != NULL)
 	{

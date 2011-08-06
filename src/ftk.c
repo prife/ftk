@@ -181,19 +181,19 @@ void ftk_deinit(void)
 
 static Ret ftk_move_cursor(void* ctx, void* obj)
 {
-	FtkEvent* event = obj;
+	FtkEvent* event = (FtkEvent*)obj;
 
 	if(event->type == FTK_EVT_MOUSE_MOVE)
 	{
-		ftk_sprite_move(ctx, event->u.mouse.x, event->u.mouse.y);
+		ftk_sprite_move((FtkSprite*)ctx, event->u.mouse.x, event->u.mouse.y);
 	}
 	else if(event->type == FTK_EVT_DISABLE_CURSOR)
 	{
-		ftk_sprite_show(ctx, 0);
+		ftk_sprite_show((FtkSprite*)ctx, 0);
 	}
 	else if(event->type == FTK_EVT_ENABLE_CURSOR)
 	{
-		ftk_sprite_show(ctx, 1);
+		ftk_sprite_show((FtkSprite*)ctx, 1);
 	}
 
 	return RET_OK;
@@ -310,7 +310,7 @@ void ftk_quit(void)
 static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 {
 	Ret ret = RET_OK;
-	FtkEvent* event = obj;
+	FtkEvent* event = (FtkEvent*)obj;
 	FtkWidget* panel = NULL;
 	FtkWidget* top_window = NULL;
 	FtkWidget* close_widget = NULL;
@@ -322,7 +322,7 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 		return RET_OK;
 	}
 
-	if(ftk_widget_type(event->widget) != FTK_WINDOW)
+	if(ftk_widget_type((FtkWidget*)event->widget) != FTK_WINDOW)
 	{
 		return RET_OK;
 	}
@@ -334,7 +334,7 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 	{
 		case FTK_EVT_TOP_WND_CHANGED:
 		{
-			top_window = event->widget;
+			top_window = (FtkWidget*)event->widget;
 
 			if(top_window != NULL)
 			{
@@ -352,7 +352,7 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 		}
 		case FTK_EVT_WND_CONFIG_CHANGED:
 		{
-			top_window = ftk_widget_user_data(title_widget);
+			top_window = (FtkWidget*)ftk_widget_user_data(title_widget);
 			if(top_window == event->widget)
 			{
 				ftk_widget_set_text(title_widget, ftk_widget_get_text(top_window));
@@ -377,7 +377,7 @@ static Ret button_close_top_clicked(void* ctx, void* obj)
 {
 	FtkWidget* panel = ftk_default_status_panel();
 	FtkWidget* title_widget = ftk_widget_lookup(panel, IDC_TITLE_ITEM);
-	FtkWidget* top_window = ftk_widget_user_data(title_widget);
+	FtkWidget* top_window = (FtkWidget*)ftk_widget_user_data(title_widget);
 
 	if(top_window != NULL && ftk_widget_type(top_window) == FTK_WINDOW)
 	{
