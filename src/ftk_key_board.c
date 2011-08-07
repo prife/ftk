@@ -178,20 +178,29 @@ static Ret ftk_key_board_switch_view(FtkWidget* thiz, FtkKeyBoardCell* cell)
 {
 	DECL_PRIV0(thiz, priv);
 	FtkKeyBoardDesc* desc = priv->desc;
-
+	const char* im_str = strchr(cell->action_args, ',');
+	
 	desc->current_view = ftk_atoi(cell->action_args);
+
+	/*The second args is optional, means input method.*/
+	if(im_str != NULL)
+	{
+		int im_index = ftk_atoi(im_str + 1);
+		ftk_input_method_manager_set_current(ftk_default_input_method_manager(), im_index);
+		ftk_logd("%s: input method change to %d\n", __func__, im_index);
+	}
 	ftk_widget_invalidate(thiz);
 
-	ftk_logd("%s:%d %s\n", __func__, __LINE__, cell->text);
+	ftk_logd("%s:%d %s %s\n", __func__, __LINE__, cell->text, cell->action_args);
 
 	return RET_OK;
 }
 
 static Ret ftk_key_board_candidate_prev(FtkWidget* thiz, FtkKeyBoardCell* cell)
 {
-	DECL_PRIV0(thiz, priv);
-	FtkKeyBoardDesc* desc = priv->desc;
-	FtkKeyBoardCandidate* candidate = NULL;
+	//DECL_PRIV0(thiz, priv);
+	//FtkKeyBoardDesc* desc = priv->desc;
+	//FtkKeyBoardCandidate* candidate = NULL;
 
 	/*TODO*/
 
