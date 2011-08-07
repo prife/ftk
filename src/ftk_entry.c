@@ -351,7 +351,7 @@ static Ret ftk_entry_update_caret_pos(FtkWidget* thiz)
 			extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, 
 				priv->caret - priv->visible_start);
 
-			ftk_logd("%s: %d len=%d\n", __func__, extent, priv->caret - priv->visible_start);
+			//ftk_logd("%s: %d len=%d\n", __func__, extent, priv->caret - priv->visible_start);
 		}
 
 		ftk_canvas_reset_gc(canvas, &gc);

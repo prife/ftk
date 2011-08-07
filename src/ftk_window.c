@@ -386,7 +386,7 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		default:
 		{
-			ftk_logd("%s: type=%d\n", __func__, event->type);
+			//ftk_logd("%s: type=%d\n", __func__, event->type);
 			break;
 		}
 	}
@@ -406,7 +406,7 @@ static Ret ftk_window_realize(FtkWidget* thiz)
 
 static Ret ftk_window_on_paint(FtkWidget* thiz)
 {
-	ftk_logd("%s: %s\n", __func__, ftk_widget_get_text(thiz));
+//	ftk_logd("%s: %s\n", __func__, ftk_widget_get_text(thiz));
 	return RET_OK;
 }
 
@@ -597,7 +597,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 		if(r->x == rect->x && r->y == rect->y 
 			&& r->width == rect->width && r->height == rect->height)
 		{
-			ftk_logd("%s: remove repeated rect\n", __func__);
+			//ftk_logd("%s: remove repeated rect\n", __func__);
 			return RET_OK;
 		}
 	}
