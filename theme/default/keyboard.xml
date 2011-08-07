@@ -45,7 +45,7 @@
 		<cell text="" action="send_key(BACKSPACE)" width_weight="1" icon="key_board_delete.png"/>
 	</row>
 	<row cols="5" height_weight="10">
-		<cell text="ZH" action="switch_view(1)" width_weight="1"/>
+		<cell text="ZH" action="switch_view(1,-1)" width_weight="1"/>
 		<cell text="123." action="switch_view(1)" width_weight="1"/>
 		<cell text=" " action="send_key( )" width_weight="1" icon="key_board_space.png"/>
 		<cell text="" action="switch_view(1)" width_weight="1" icon="key_board_shift_off.png"/>
@@ -99,7 +99,7 @@
 		<cell text="" action="send_key(BACKSPACE)" width_weight="1" icon="key_board_delete.png"/>
 	</row>
 	<row cols="5" height_weight="10">
-		<cell text="EN" action="switch_view(1)" width_weight="1"/>
+		<cell text="EN" action="switch_view(0,0)" width_weight="1"/>
 		<cell text="123." action="switch_view(1)" width_weight="1"/>
 		<cell text=" " action="send_key( )" width_weight="1" icon="key_board_space.png"/>
 		<cell text="" action="switch_view(0)" width_weight="1" icon="key_board_shift_off.png"/>
