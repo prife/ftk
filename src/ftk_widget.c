@@ -703,11 +703,17 @@ static void ftk_widget_validate_position_size(FtkWidget* thiz)
 	{
 		int parent_w = ftk_widget_width(parent);
 		int parent_h = ftk_widget_height(parent);
+		
+		priv->width = (priv->width + 1) & 0xfffffffe;
+		priv->height = (priv->height + 1) & 0xfffffffe;
 
 		priv->left = (priv->left >= parent_w) ? (parent_w - 1) : priv->left;
 		priv->top = (priv->top >= parent_h) ? (parent_h - 1) : priv->top;
 		priv->width = (priv->left + priv->width) > parent_w ? (parent_w - priv->left) : priv->width;
 		priv->height = (priv->height + priv->top) > parent_h ? (parent_h - priv->top) : priv->height;
+
+		priv->width = priv->width & 0xfffffffe;
+		priv->height = priv->height & 0xfffffffe;
 	}
 
 	return;

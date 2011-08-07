@@ -75,8 +75,8 @@ static Ret ftk_message_box_size(int has_title, int has_button, const char* text,
 	height = height < FTK_MESSAGE_BOX_MIN_HEIGHT ? FTK_MESSAGE_BOX_MIN_HEIGHT : height;
 	height = height < rect.height ? height : rect.height;
 
-	*h = height;
-	*w = rect.width;
+	*h = (height + 1) & 0xfffffffe;
+	*w = (rect.width + 1)  & 0xfffffffe;
 
 	return RET_OK;
 }
