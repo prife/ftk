@@ -41,6 +41,7 @@ typedef struct _PrivInfo
 	FtkWidget* root;
 	FtkWidget* current;
 	int  meet_start_tag;
+	int  prev_is_widget;
 	char processed_value[128];
 	char translated_path[FTK_MAX_PATH+1];
 	FtkXulCallbacks* callbacks;
@@ -62,9 +63,30 @@ typedef struct _FtkWidgetCreateInfo
 	
 	/*check button*/
 	int checked;
+	int icon_position;
+
+	/* dialog */
+	int hide_title;
+
+	/* entry */
+	const char *tips;
+
+	/* file_browser */
+	const char *filter;
+
+    /* label */
+    int alignment;
+
 	/*scroll bar*/
 	int max_value;
 	int page_delta;
+
+	/*text_view*/
+	int readonly;
+
+    int type;
+    FtkBitmap* icon;
+    const char *font;
 
 	PrivInfo* priv;
 }FtkWidgetCreateInfo;
@@ -75,6 +97,7 @@ typedef struct _WidgetCreator
 {
 	const char* name;
 	FtkXulWidgetCreate create;
+	int is_widget;
 }WidgetCreator;
 
 static inline const char*  ftk_xul_translate_text(FtkXulCallbacks* thiz, const char* text)
@@ -96,7 +119,6 @@ static inline  FtkBitmap*  ftk_xul_load_image(FtkXulCallbacks* thiz, const char*
 	return thiz->load_image(thiz->ctx, filename);
 }
 
-
 static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
@@ -105,6 +127,11 @@ static FtkWidget* ftk_xul_label_create(FtkWidgetCreateInfo* info)
 	if(info->value != NULL)
 	{
 		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
+	}
+
+	if(info->alignment > 0)
+	{
+	    ftk_label_set_alignment(widget, info->alignment);
 	}
 
 	return widget;
@@ -133,6 +160,16 @@ static FtkWidget* ftk_xul_entry_create(FtkWidgetCreateInfo* info)
 		ftk_entry_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
+    if(info->tips != NULL)
+    {
+        ftk_entry_set_tips(widget, ftk_xul_translate_text(info->priv->callbacks, info->tips));
+    }
+
+    if(info->type > 0)
+    {
+        ftk_entry_set_input_type(widget, info->type);
+    }
+
 	return widget;
 }
 
@@ -141,7 +178,7 @@ static FtkWidget* ftk_xul_wait_box_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_wait_box_create(info->parent, info->x, info->y);
-	if(info->value != NULL && atoi(info->value))
+	if(info->value != NULL && atoi(info->value) > 0)
 	{
 		ftk_wait_box_start_waiting(widget);
 	}
@@ -152,12 +189,18 @@ static FtkWidget* ftk_xul_wait_box_create(FtkWidgetCreateInfo* info)
 static FtkWidget* ftk_xul_progress_bar_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
+	int value = 0;
 
 	widget = ftk_progress_bar_create(info->parent, info->x, info->y, info->w, info->h);
-	if(info->value != NULL)
+    if(info->value != NULL && (value = atoi(info->value)) > 0)
 	{
-		ftk_progress_bar_set_percent(widget, atoi(info->value));
+		ftk_progress_bar_set_percent(widget, value);
 	}
+
+    if(info->tips != NULL)
+    {
+        ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->tips));
+    }
 
 	return widget;
 }
@@ -167,6 +210,10 @@ static FtkWidget* ftk_xul_group_box_create(FtkWidgetCreateInfo* info)
 	FtkWidget* widget = NULL;
 
 	widget = ftk_group_box_create(info->parent, info->x, info->y, info->w, info->h);
+    if(info->value != NULL)
+    {
+        ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
+    }
 
 	return widget;
 }
@@ -181,6 +228,11 @@ static FtkWidget* ftk_xul_radio_button_create(FtkWidgetCreateInfo* info)
 		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 	
+    if(info->icon_position > 0)
+    {
+        ftk_check_button_set_icon_position(widget, info->icon_position);
+    }
+
 	if(info->checked)
 	{
 		ftk_check_button_set_checked(widget, info->checked);
@@ -199,6 +251,11 @@ static FtkWidget* ftk_xul_check_button_create(FtkWidgetCreateInfo* info)
 		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 	
+	if(info->icon_position > 0)
+	{
+	    ftk_check_button_set_icon_position(widget, info->icon_position);
+	}
+
 	if(info->checked)
 	{
 		ftk_check_button_set_checked(widget, info->checked);
@@ -214,7 +271,7 @@ static FtkWidget* ftk_xul_image_create(FtkWidgetCreateInfo* info)
 	widget = ftk_image_create(info->parent, info->x, info->y, info->w, info->h);
 	if(info->value != NULL)
 	{
-		ftk_image_set_image(widget, ftk_xul_load_image(info->priv->callbacks,info->value));
+		ftk_image_set_image(widget, ftk_xul_load_image(info->priv->callbacks, info->value));
 	}
 
 	return widget;
@@ -223,11 +280,12 @@ static FtkWidget* ftk_xul_image_create(FtkWidgetCreateInfo* info)
 static FtkWidget* ftk_xul_scroll_bar_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
+	int value = 0;
 
 	widget = ftk_scroll_bar_create(info->parent, info->x, info->y, info->w, info->h);
-	if(info->value != NULL)
+    if(info->value != NULL && (value = atoi(info->value)) > 0)
 	{
-		ftk_scroll_bar_set_param(widget, atoi(info->value), info->max_value, info->page_delta);
+		ftk_scroll_bar_set_param(widget, value, info->max_value, info->page_delta);
 	}
 
 	return widget;
@@ -245,14 +303,29 @@ static FtkWidget* ftk_xul_list_view_create(FtkWidgetCreateInfo* info)
 static FtkWidget* ftk_xul_icon_view_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
+    int value = 0;
 
 	widget = ftk_icon_view_create(info->parent, info->x, info->y, info->w, info->h);
-	if(info->value != NULL)
+    if(info->value != NULL && (value = atoi(info->value)) > 0)
 	{
-		ftk_icon_view_set_item_size(widget, atoi(info->value));
+		ftk_icon_view_set_item_size(widget, value);
 	}
 
 	return widget;
+}
+
+static FtkWidget* ftk_xul_icon_view_item_create(FtkWidgetCreateInfo* info)
+{
+    DECL_PRIV(info, priv);
+    FtkIconViewItem item;
+
+    item.text = (char *)info->value;
+    item.icon = info->icon;
+    item.user_data = NULL;
+
+    ftk_icon_view_add(priv->current, &item);
+
+    return NULL;
 }
 
 static FtkWidget* ftk_xul_window_create(FtkWidgetCreateInfo* info)
@@ -278,29 +351,176 @@ static FtkWidget* ftk_xul_dialog_create(FtkWidgetCreateInfo* info)
 		ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
 	}
 
+	if(info->hide_title)
+	{
+	    ftk_dialog_hide_title(widget);
+	}
+
+	if(info->icon != NULL)
+	{
+	    ftk_dialog_set_icon(widget, info->icon);
+	}
+
 	return widget;
+}
+
+static FtkWidget* ftk_xul_combo_box_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_combo_box_create(info->parent, info->x, info->y, info->w, info->h);
+    if(info->value != NULL)
+    {
+        ftk_combo_box_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
+    }
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_combo_box_item_create(FtkWidgetCreateInfo* info)
+{
+    DECL_PRIV(info, priv);
+
+    ftk_combo_box_append(priv->current, info->icon, info->value);
+
+    return NULL;
+}
+
+static FtkWidget* ftk_xul_file_browser_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_file_browser_create(info->type);
+
+    if(info->value != NULL)
+    {
+        ftk_file_browser_set_path(widget, info->value);
+    }
+
+    if(info->filter != NULL)
+    {
+        ftk_file_browser_set_filter(widget, info->filter);
+    }
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_menu_panel_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_menu_panel_create();
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_menu_item_create(FtkWidgetCreateInfo* info)
+{
+    DECL_PRIV(info, priv);
+    FtkWidget* widget = NULL;
+
+    widget = ftk_menu_item_create(info->parent);
+    if(info->value != NULL)
+    {
+        ftk_widget_set_text(widget, ftk_xul_translate_text(priv->callbacks, info->value));
+    }
+
+    ftk_menu_panel_relayout(info->parent);
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_painter_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_painter_create(info->parent, info->x, info->y, info->w, info->h);
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_status_item_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_status_item_create(ftk_default_status_panel(), info->x, info->w);
+    if(info->value != NULL)
+    {
+        ftk_widget_set_text(widget, ftk_xul_translate_text(info->priv->callbacks, info->value));
+    }
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_tab_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_tab_create(info->parent, info->x, info->y, info->w, info->h);
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_page_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_tab_add_page(info->parent, info->value, info->icon);
+
+    return widget;
+}
+
+static FtkWidget* ftk_xul_text_view_create(FtkWidgetCreateInfo* info)
+{
+    FtkWidget* widget = NULL;
+
+    widget = ftk_text_view_create(info->parent, info->x, info->y, info->w, info->h);
+    if(info->value != NULL)
+    {
+        const char *text = ftk_xul_translate_text(info->priv->callbacks, info->value);
+
+        ftk_text_view_set_text(widget, text, strlen(text));
+    }
+
+    if(info->readonly)
+    {
+        ftk_text_view_set_readonly(widget, info->readonly);
+    }
+
+    return widget;
 }
 
 static const WidgetCreator s_widget_creaters[] = 
 {
-	{"label",        ftk_xul_label_create},
-	{"entry",        ftk_xul_entry_create},
-	{"button",       ftk_xul_button_create},
-	{"wait_box",     ftk_xul_wait_box_create},
-	{"progress_bar", ftk_xul_progress_bar_create},
-	{"group_box",  ftk_xul_group_box_create},
-	{"radio_button", ftk_xul_radio_button_create},
-	{"check_button", ftk_xul_check_button_create},
-	{"image",        ftk_xul_image_create},
-	{"scroll_bar",   ftk_xul_scroll_bar_create},
-	{"list_view",    ftk_xul_list_view_create},
-	{"icon_view",    ftk_xul_icon_view_create},
-	{"window",       ftk_xul_window_create},
-	{"dialog",       ftk_xul_dialog_create},
+	{"label",              ftk_xul_label_create,               1},
+	{"entry",              ftk_xul_entry_create,               1},
+	{"button",             ftk_xul_button_create,              1},
+	{"wait_box",           ftk_xul_wait_box_create,            1},
+	{"progress_bar",       ftk_xul_progress_bar_create,        1},
+	{"group_box",          ftk_xul_group_box_create,           1},
+	{"radio_button",       ftk_xul_radio_button_create,        1},
+	{"check_button",       ftk_xul_check_button_create,        1},
+	{"image",              ftk_xul_image_create,               1},
+	{"scroll_bar",         ftk_xul_scroll_bar_create,          1},
+	{"list_view",          ftk_xul_list_view_create,           1},
+	{"icon_view",          ftk_xul_icon_view_create,           1},
+	{"icon_view_item",     ftk_xul_icon_view_item_create,      0},
+	{"window",             ftk_xul_window_create,              1},
+	{"dialog",             ftk_xul_dialog_create,              1},
+    {"combo_box",          ftk_xul_combo_box_create,           1},
+    {"combo_box_item",     ftk_xul_combo_box_item_create,      0},
+    {"file_browser",       ftk_xul_file_browser_create,        1},
+    {"menu_panel",         ftk_xul_menu_panel_create,          1},
+    {"menu_item",          ftk_xul_menu_item_create,           1},
+    {"painter",            ftk_xul_painter_create,             1},
+    {"status_item",        ftk_xul_status_item_create,         1},
+    {"tab",                ftk_xul_tab_create,                 1},
+    {"page",               ftk_xul_page_create,                1},
+    {"text_view",          ftk_xul_text_view_create,           1},
 	{NULL, NULL},
 };
 
-static FtkXulWidgetCreate ftk_xul_find_creator(const char* name)
+static const WidgetCreator *ftk_xul_find_creator(const char* name)
 {
 	int i = 0;
 	return_val_if_fail(name != NULL, NULL);
@@ -309,7 +529,7 @@ static FtkXulWidgetCreate ftk_xul_find_creator(const char* name)
 	{
 		if(strcmp(s_widget_creaters[i].name, name) == 0)
 		{
-			return s_widget_creaters[i].create;
+			return &s_widget_creaters[i];
 		}
 	}
 
@@ -328,14 +548,14 @@ static int ftk_xul_builder_get_parent_width(FtkXmlBuilder* thiz)
 {
 	DECL_PRIV(thiz, priv);
 	
-	return ftk_widget_width(ftk_widget_parent(priv->current));
+	return ftk_widget_width(priv->current);
 }
 
 static int ftk_xul_builder_get_parent_height(FtkXmlBuilder* thiz)
 {
 	DECL_PRIV(thiz, priv);
 
-	return ftk_widget_height(ftk_widget_parent(priv->current));
+	return ftk_widget_height(priv->current);
 }
 
 static int ftk_xul_builder_get_window_width(FtkXmlBuilder* thiz)
@@ -413,6 +633,22 @@ static const VarConst s_var_conts[] =
 	{"FTK_ATTR_FOCUSED",         FTK_ATTR_FOCUSED},
 	{"FTK_ATTR_QUIT_WHEN_CLOSE", FTK_ATTR_QUIT_WHEN_CLOSE},
 	{"FTK_ATTR_FULLSCREEN",      FTK_ATTR_FULLSCREEN},
+
+    {"FTK_ALIGN_LEFT",           FTK_ALIGN_LEFT},
+    {"FTK_ALIGN_RIGHT",          FTK_ALIGN_RIGHT},
+    {"FTK_ALIGN_CENTER",         FTK_ALIGN_CENTER},
+
+    {"FTK_INPUT_NORMAL",         FTK_INPUT_NORMAL},
+    {"FTK_INPUT_DIGIT",          FTK_INPUT_DIGIT},
+    {"FTK_INPUT_ALPHA",          FTK_INPUT_ALPHA},
+    {"FTK_INPUT_URL",            FTK_INPUT_URL},
+    {"FTK_INPUT_EMAIL",          FTK_INPUT_EMAIL},
+    {"FTK_INPUT_ALL",            FTK_INPUT_ALL},
+
+    {"FTK_FILE_BROWER_APP",                     FTK_FILE_BROWER_APP},
+    {"FTK_FILE_BROWER_SINGLE_CHOOSER",          FTK_FILE_BROWER_SINGLE_CHOOSER},
+    {"FTK_FILE_BROWER_MULTI_CHOOSER",           FTK_FILE_BROWER_MULTI_CHOOSER},
+
 	{NULL, 0},
 };
 
@@ -428,6 +664,25 @@ static int ftk_xul_find_const(const char* name)
 	}
 
 	return -1;
+}
+
+static int ftk_xul_find_const_value(const char* name)
+{
+    int i = 0;
+
+    if (name[0] == '$')
+    {
+        name++;
+    }
+    i = ftk_xul_find_const(name);
+    if (i < 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return s_var_conts[i].value;
+    }
 }
 
 static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const char* value)
@@ -494,9 +749,25 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 		{
 			case 'i':
 			{
-				/*id*/
-				info->id = atoi(value);
-				break;
+	            if(name[1] == 'd')
+	            {
+	                /*id*/
+	                info->id = atoi(value);
+	            }
+	            else if(name[1] == 'c')
+	            {
+	                if(name[4] == '\0')
+	                {
+	                    /*icon*/
+	                    info->icon = ftk_xul_load_image(info->priv->callbacks, value);
+	                }
+	                else if (name[4] == '_')
+	                {
+	                    /*icon_position*/
+	                    info->icon_position = atoi(value);
+	                }
+	            }
+	            break;
 			}
 			case 'x':
 			{
@@ -519,9 +790,17 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'h':
 			{
-				/*height*/
-				value = ftk_xul_builder_preprocess_value(thiz, value);
-				info->h = (int)ftk_expr_eval(value);
+	            if(name[1] == '\0' || name[1] == 'e')
+	            {
+                    /*height*/
+                    value = ftk_xul_builder_preprocess_value(thiz, value);
+                    info->h = (int)ftk_expr_eval(value);
+	            }
+	            else if(name[1] == 'i')
+	            {
+	                /*hide_title*/
+	                info->hide_title = atoi(value);
+	            }
 				break;
 			}
 			case 'a':
@@ -529,14 +808,18 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 				if(name[1] == 't')
 				{
 					/*attr*/
-					value = ftk_xul_builder_preprocess_value(thiz, value);
-					info->attr = (int)ftk_expr_eval(value);
+					info->attr = ftk_xul_find_const_value(value);
 				}
 				else if(name[1] == 'n')
 				{
 					/*anim_hint*/
 					value = ftk_xul_builder_preprocess_value(thiz, value);
 					ftk_strncpy(info->anim_hint, value, sizeof(info->anim_hint)-1);
+				}
+				else if (name[1] == 'l')
+				{
+				    /*alignment*/
+                    info->alignment = ftk_xul_find_const_value(value);
 				}
 				break;
 			}
@@ -562,8 +845,8 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 			}
 			case 'p':
 			{
-				/*page_delta*/
-				info->page_delta = atoi(value);
+                /*page_delta*/
+                info->page_delta = atoi(value);
 				break;
 			}
 			case 'c':
@@ -642,12 +925,36 @@ static void ftk_xul_builder_init_widget_info(FtkXmlBuilder* thiz, const char** a
 					info->gc[FTK_WIDGET_INSENSITIVE].mask |= FTK_GC_FG;
 					info->gc[FTK_WIDGET_INSENSITIVE].fg = ftk_parse_color(value);
 				}
+				else if(strcmp(name, "filter") == 0)
+				{
+				    info->filter = value;
+				}
+                else if(strcmp(name, "font") == 0)
+                {
+                    info->font = value;
+                }
 				else
 				{
 					ftk_logd("%s: unknown %s\n", __func__, name);
 				}
 				break;
 			}
+
+			case 't':
+			{
+			    if (name[1] == 'i')
+			    {
+                    /*tips*/
+                    info->tips = value;
+			    }
+			    else if (name[1] == 'y')
+			    {
+			        /*type*/
+                    info->type = ftk_xul_find_const_value(value);
+			    }
+			    break;
+			}
+
 			default:break;/*TODO: handle other attrs*/
 		}
 	}
@@ -671,43 +978,69 @@ static void ftk_xul_builder_on_start(FtkXmlBuilder* thiz, const char* tag, const
 	DECL_PRIV(thiz, priv);
 	FtkWidget* widget = NULL;
 	FtkWidgetCreateInfo info = {0};
-	FtkXulWidgetCreate create = ftk_xul_find_creator(tag);
+	const WidgetCreator* creator = ftk_xul_find_creator(tag);
 	
 	priv->meet_start_tag = 0;
-	return_if_fail(create != NULL && attrs != NULL && thiz != NULL);
+	return_if_fail(creator != NULL && creator->create != NULL && attrs != NULL && thiz != NULL);
 
 	ftk_xul_builder_init_widget_info(thiz, attrs, &info);
-	if((widget = create(&info)) != NULL)
+	if (creator->is_widget)
 	{
-		ftk_widget_set_id(widget, info.id);
-		ftk_widget_set_attr(widget, info.attr);
-		if(info.gc[FTK_WIDGET_NORMAL].mask & FTK_GC_BG)
-		{
-			ftk_widget_unset_attr(widget, FTK_ATTR_TRANSPARENT);
-		}
-		ftk_widget_set_gc(widget, FTK_WIDGET_NORMAL, info.gc+FTK_WIDGET_NORMAL);
-		ftk_widget_set_gc(widget, FTK_WIDGET_FOCUSED, info.gc+FTK_WIDGET_FOCUSED);
-		ftk_widget_set_gc(widget, FTK_WIDGET_ACTIVE, info.gc+FTK_WIDGET_ACTIVE);
-		ftk_widget_set_gc(widget, FTK_WIDGET_INSENSITIVE, info.gc+FTK_WIDGET_INSENSITIVE);
+	    if (!priv->prev_is_widget && priv->current != NULL)
+	    {
+	        info.parent = ftk_widget_parent(priv->current);
+	    }
 
-		if(info.anim_hint[0])
-		{
-			ftk_window_set_animation_hint(widget, info.anim_hint);
-		}
-		ftk_widget_show(widget, info.visible);
+        if((widget = creator->create(&info)) != NULL)
+        {
+            ftk_widget_set_id(widget, info.id);
+            ftk_widget_set_attr(widget, info.attr);
+            if(info.gc[FTK_WIDGET_NORMAL].mask & FTK_GC_BG)
+            {
+                ftk_widget_unset_attr(widget, FTK_ATTR_TRANSPARENT);
+            }
+            ftk_widget_set_gc(widget, FTK_WIDGET_NORMAL, info.gc+FTK_WIDGET_NORMAL);
+            ftk_widget_set_gc(widget, FTK_WIDGET_FOCUSED, info.gc+FTK_WIDGET_FOCUSED);
+            ftk_widget_set_gc(widget, FTK_WIDGET_ACTIVE, info.gc+FTK_WIDGET_ACTIVE);
+            ftk_widget_set_gc(widget, FTK_WIDGET_INSENSITIVE, info.gc+FTK_WIDGET_INSENSITIVE);
+
+            if(info.anim_hint[0])
+            {
+                ftk_window_set_animation_hint(widget, info.anim_hint);
+            }
+
+            if(info.font != NULL)
+            {
+                ftk_widget_set_font(widget, info.font);
+            }
+
+            ftk_widget_show(widget, info.visible);
+        }
+        ftk_xul_builder_reset_widget_info(thiz, &info);
+
+        return_if_fail(widget != NULL);
+
+        priv->current = widget;
+        priv->meet_start_tag = 1;
+        priv->prev_is_widget = 1;
+
+        if(priv->root == NULL)
+        {
+            priv->root = widget;
+        }
 	}
-	ftk_xul_builder_reset_widget_info(thiz, &info);
-	return_if_fail(widget != NULL);
-
-	priv->current = widget;
-	priv->meet_start_tag = 1;
-
-	if(priv->root == NULL)
+	else
 	{
-	 	priv->root = widget;
+	    creator->create(&info);
+
+        ftk_xul_builder_reset_widget_info(thiz, &info);
+
+        priv->meet_start_tag = 0;
+
+        priv->prev_is_widget = 0;
 	}
 
-	return;
+    return;
 }
 
 static void ftk_xul_builder_on_end(FtkXmlBuilder* thiz, const char* tag)
@@ -778,6 +1111,7 @@ FtkWidget* ftk_xul_load_ex(const char* xml, int length, FtkXulCallbacks* callbac
 	{
 		PrivInfo* priv = (PrivInfo*)builder->priv;
 		priv->callbacks = callbacks;
+		priv->prev_is_widget = 0;
 		ftk_xml_parser_set_builder(parser, builder);
 		ftk_xml_parser_parse(parser, xml, length);
 		widget = priv->root;
