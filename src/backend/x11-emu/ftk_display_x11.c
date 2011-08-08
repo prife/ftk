@@ -40,6 +40,7 @@
 typedef struct _PrivInfo
 {
 	GC gc;
+	Atom win_del_atom;
 	int width;
 	int height;
 	Window win;
@@ -130,6 +131,7 @@ static void ftk_display_x11_destroy(FtkDisplay* thiz)
 FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event, void* ctx)
 {
 	GC gc;
+	Atom win_del_atom;
 	int width  = 0;
 	int height = 0;
 	int screen = 0;
@@ -151,6 +153,8 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 	XSelectInput(display, win, ExposureMask|KeyPressMask |KeyReleaseMask| ButtonPressMask 
 		|ButtonReleaseMask|StructureNotifyMask | PointerMotionMask);
 	gc = XCreateGC(display, win, 0, NULL);
+	win_del_atom = XInternAtom(display, "WM_DELETE_WINDOW", False);
+	XSetWMProtocols(display, win, &win_del_atom, 1);
 	XMapWindow(display, win);
 
 	XEvent event = {0};
@@ -167,6 +171,7 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 		thiz->destroy  = ftk_display_x11_destroy;
 	
 		priv->gc      = gc;
+		priv->win_del_atom = win_del_atom;
 		priv->win     = win;
 		priv->width   = width;
 		priv->height  = height;
@@ -242,4 +247,11 @@ void* ftk_display_x11_get_xwindow(FtkDisplay* thiz)
 	return (void*)priv->win;
 }
 
+void* ftk_display_x11_get_win_del_atom(FtkDisplay *thiz)
+{
+	PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL;
+	return_val_if_fail(priv != NULL, NULL);
+
+	return (void*)&priv->win_del_atom;
+}
 

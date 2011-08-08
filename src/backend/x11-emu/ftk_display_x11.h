@@ -41,6 +41,7 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 Ret   ftk_display_x11_on_resize(FtkDisplay* thiz, int width, int height);
 void* ftk_display_x11_get_xdisplay(FtkDisplay* thiz);
 void* ftk_display_x11_get_xwindow(FtkDisplay* thiz);
+void* ftk_display_x11_get_win_del_atom(FtkDisplay *thiz);
 
 #endif/*FTK_DISPLAY_X11_H*/
 

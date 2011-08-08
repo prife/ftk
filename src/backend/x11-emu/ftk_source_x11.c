@@ -28,6 +28,7 @@
  * 2009-10-06 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "ftk_typedef.h"
 #include "ftk_key.h"
 #include "ftk_log.h"
 #include <X11/Xlib.h>
@@ -160,6 +161,7 @@ static Ret ftk_source_x11_dispatch(FtkSource* thiz)
 	XEvent event = {0};
 	DECL_PRIV(thiz, priv);
 	Display* display = (Display*)ftk_display_x11_get_xdisplay(priv->display);
+	Atom* win_del_atom = (Atom*)ftk_display_x11_get_win_del_atom(priv->display);
 	return_val_if_fail(priv->fd > 0, RET_FAIL); 
 
 	while(XPending (display))
@@ -212,6 +214,13 @@ static Ret ftk_source_x11_dispatch(FtkSource* thiz)
 			case DestroyNotify:
 			{
 				ftk_logd("%s: window destroied\n", __func__);	
+				break;
+			}
+			case ClientMessage:
+			{
+				if ((Atom)event.xclient.data.l[0] == *win_del_atom) {
+					FTK_QUIT();
+				}
 				break;
 			}
 			default:break;
