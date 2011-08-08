@@ -29,7 +29,9 @@ static Ret button_normal_clicked(void* ctx, void* obj)
 		ftk_popup_menu_add(thiz, g_infos+i);
 	}
 	ftk_bitmap_unref(icon);
-	
+
+	ftk_popup_menu_set_clicked_listener(thiz, on_menu_item_clicked, NULL);
+
 	ftk_widget_show_all(thiz, 1);
 
 	return RET_OK;
@@ -49,6 +51,8 @@ static Ret button_radio_clicked(void* ctx, void* obj)
 	}
 	ftk_bitmap_unref(icon);
 	
+	ftk_popup_menu_set_clicked_listener(thiz, on_menu_item_clicked, NULL);
+
 	ftk_widget_show_all(thiz, 1);
 
 	return RET_OK;
@@ -67,6 +71,8 @@ static Ret button_check_clicked(void* ctx, void* obj)
 		ftk_popup_menu_add(thiz, g_infos+i);
 	}
 	ftk_bitmap_unref(icon);
+
+	ftk_popup_menu_set_clicked_listener(thiz, on_menu_item_clicked, NULL);
 
 	ftk_widget_show_all(thiz, 1);
 
@@ -97,10 +103,6 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	g_infos[1].text = "Paste";
 	g_infos[2].text = "Cut";
 	g_infos[3].text = "Select All";
-	g_infos[0].extra_user_data = on_menu_item_clicked;
-	g_infos[1].extra_user_data = on_menu_item_clicked;
-	g_infos[2].extra_user_data = on_menu_item_clicked;
-	g_infos[3].extra_user_data = on_menu_item_clicked;
 
 	win = ftk_app_window_create();
 	width = ftk_widget_width(win);

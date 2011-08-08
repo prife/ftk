@@ -70,7 +70,7 @@ static void create_app_window(void)
 	label = ftk_label_create(win, 10, height/2, width-20, 60);
 
 	ftk_snprintf(title, sizeof(title), 
-		"Press F2 to open menu, Presss F3 close window%02d", g_index++);
+		"Press F2 to open menu, Presss F3 close window%02d", g_index);
 	ftk_widget_set_text(label, title);
 	
 	ftk_snprintf(title, sizeof(title), "window%02d", g_index++);
