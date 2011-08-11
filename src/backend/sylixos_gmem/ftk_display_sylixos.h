@@ -30,13 +30,13 @@
  */
 #ifndef FTK_DISPLAY_SYLIXOS_H
 #define FTK_DISPLAY_SYLIXOS_H
+
 #include "ftk_display.h"
 
-#ifndef FTK_FB_NAME
-#define FTK_FB_NAME "/dev/fb0"
+#ifndef FTK_DEFAULT_FRAMEBUFFER
+#define FTK_DEFAULT_FRAMEBUFFER "/dev/fb0"
 #endif
 
 FtkDisplay* ftk_display_sylixos_create(const char* filename);
 
 #endif  /*FTK_DISPLAY_SYLIXOS_H*/
-

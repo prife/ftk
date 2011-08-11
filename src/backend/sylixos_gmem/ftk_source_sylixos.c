@@ -51,29 +51,26 @@
 #include <mouse.h>
 #include <input_device.h>
 #include "ftk_source_sylixos.h"
+#include "ftk_tscalibrate_sylixos.h"
 
-#define MAX_INPUT_DEVICE    5
+static FtkKey f_key_map[512];
 
-static FtkKey   f_key_map[512];
-
-static FtkEvent eventMouse;
-static FtkEvent eventKeyborad;
-
-static char     cKeyboradFiles[PATH_MAX + 1];
-static char     cMouseFiles[PATH_MAX + 1];
-
-static void ftk_source_sylixos_keyboard_initmap (void)
+static void ftk_source_sylixos_init_key_map(void)
 {
-    int  i;
-    static int  init = 0;
+    int        i;
+    static int init = 0;
 
-    if (init == 0) {
+    if (init == 0)
+    {
         init =  1;
-    } else {
+    }
+    else
+    {
         return;
     }
 
-    for (i = 0; i <= 0x7f; i++) {
+    for (i = 0; i <= 0x7f; i++)
+    {
         f_key_map[i] = i;
     }
 
@@ -117,26 +114,23 @@ static void ftk_source_sylixos_keyboard_initmap (void)
     f_key_map[K_RIGHT]       = FTK_KEY_RIGHT;
 }
 
-static int ftk_source_sylixos_key_map (int key)
+static int ftk_source_sylixos_key_map(int key)
 {
     return f_key_map[key] != 0 ? f_key_map[key] : key;
 }
 
-struct tslib_linear {
+struct tslib_linear
+{
     int swap_xy;
-
-    // Linear scaling and offset parameters for pressure
     int p_offset;
     int p_mult;
     int p_div;
-
-    // Linear scaling and offset parameters for x,y (can include rotation)
     int a[7];
 };
 
-static struct tslib_linear f_linear_info;
+static struct tslib_linear f_tslib_linear;
 
-static int linear_init(void)
+static int ftk_source_sylixos_init_tslib_linear(void)
 {
     struct stat sbuf;
     int         cal_fd;
@@ -146,50 +140,50 @@ static int linear_init(void)
     char*       tokptr;
 
     // Use default values that leave ts numbers unchanged after transform
-    f_linear_info.a[0] = 1;
-    f_linear_info.a[1] = 0;
-    f_linear_info.a[2] = 0;
-    f_linear_info.a[3] = 0;
-    f_linear_info.a[4] = 1;
-    f_linear_info.a[5] = 0;
-    f_linear_info.a[6] = 1;
-    f_linear_info.p_offset = 0;
-    f_linear_info.p_mult   = 1;
-    f_linear_info.p_div    = 1;
-    f_linear_info.swap_xy  = 0;
+    f_tslib_linear.a[0]     = 1;
+    f_tslib_linear.a[1]     = 0;
+    f_tslib_linear.a[2]     = 0;
+    f_tslib_linear.a[3]     = 0;
+    f_tslib_linear.a[4]     = 1;
+    f_tslib_linear.a[5]     = 0;
+    f_tslib_linear.a[6]     = 1;
+    f_tslib_linear.p_offset = 0;
+    f_tslib_linear.p_mult   = 1;
+    f_tslib_linear.p_div    = 1;
+    f_tslib_linear.swap_xy  = 0;
 
     /*
      * Check calibration file
      */
-    if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0) {
+    if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0)
+    {
         name = namebuffer;
-    } else {
-        name = FTK_ROOT_DIR"/pointercal";
+    }
+    else
+    {
+        name = FTK_DEFAULT_CALIBFILE;
     }
 
-    if (stat(name, &sbuf) == 0) {
-
+    if (stat(name, &sbuf) == 0)
+    {
         cal_fd = open(name, O_RDONLY);
 
         read(cal_fd, namebuffer, 200);
 
-        f_linear_info.a[0] = atoi(strtok(namebuffer, " "));
+        f_tslib_linear.a[0] = atoi(strtok(namebuffer, " "));
 
         index = 1;
 
-        while (index < 7) {
+        while (index < 7)
+        {
             tokptr = strtok(NULL, " ");
-            if (*tokptr != '\0') {
-                f_linear_info.a[index] = atoi(tokptr);
+
+            if (*tokptr != '\0')
+            {
+                f_tslib_linear.a[index] = atoi(tokptr);
                 index++;
             }
         }
-
-        printf("Linear calibration constants: ");
-        for (index = 0; index < 7; index++) {
-            printf("%d ", f_linear_info.a[index]);
-        }
-        printf("\n");
 
         close(cal_fd);
     }
@@ -197,103 +191,108 @@ static int linear_init(void)
     return 0;
 }
 
-static void ftk_source_sylixos_ad_to_abs(mouse_event_notify  *pmnotify)
+static void ftk_source_sylixos_ad_to_abs(mouse_event_notify* notify,  FtkEvent* pevent)
 {
     int xtemp, ytemp;
 
-    xtemp = pmnotify->xanalog;
-    ytemp = pmnotify->yanalog;
+    xtemp = notify->xanalog;
 
-    eventMouse.u.mouse.x =   (f_linear_info.a[2] +
-                              f_linear_info.a[0] * xtemp +
-                              f_linear_info.a[1] * ytemp) / f_linear_info.a[6];
-    eventMouse.u.mouse.y =   (f_linear_info.a[5] +
-                              f_linear_info.a[3] * xtemp +
-                              f_linear_info.a[4] * ytemp) / f_linear_info.a[6];
+    ytemp = notify->yanalog;
 
-    if (f_linear_info.swap_xy) {
-        int tmp = eventMouse.u.mouse.x;
-        eventMouse.u.mouse.x = eventMouse.u.mouse.y;
-        eventMouse.u.mouse.y = tmp;
+    pevent->u.mouse.x = (f_tslib_linear.a[2] +
+                         f_tslib_linear.a[0] * xtemp +
+                         f_tslib_linear.a[1] * ytemp) / f_tslib_linear.a[6];
+
+    pevent->u.mouse.y = (f_tslib_linear.a[5] +
+                         f_tslib_linear.a[3] * xtemp +
+                         f_tslib_linear.a[4] * ytemp) / f_tslib_linear.a[6];
+
+    if (f_tslib_linear.swap_xy)
+    {
+        int tmp           = pevent->u.mouse.x;
+        pevent->u.mouse.x = pevent->u.mouse.y;
+        pevent->u.mouse.y = tmp;
     }
 }
 
-static void  ftk_source_sylixos_on_pointer_event (mouse_event_notify  *pmnotify)
+static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
 {
-    if (pmnotify) {
+    static FtkEvent event;
 
-        eventMouse.type = FTK_EVT_NOP;
+    if (notify) {
 
-        if (pmnotify->ctype == MOUSE_CTYPE_REL) { /* relative coordinate */
-            eventMouse.u.mouse.x += pmnotify->xmovement;
-            eventMouse.u.mouse.y += pmnotify->ymovement;
+        event.type = FTK_EVT_NOP;
 
-        } else { /* absolutely coordinate */
-            ftk_source_sylixos_ad_to_abs(pmnotify);
+        if (notify->ctype == MOUSE_CTYPE_REL)
+        {
+            /*
+             * relative coordinate
+             */
+            event.u.mouse.x += notify->xmovement;
+            event.u.mouse.y += notify->ymovement;
+        }
+        else
+        {
+            /*
+             * absolutely coordinate
+             */
+            ftk_source_sylixos_ad_to_abs(notify, &event);
         }
 
-        if (pmnotify->kstat & MOUSE_LEFT) {
-            if (eventMouse.u.mouse.press) {
-                eventMouse.type = FTK_EVT_MOUSE_MOVE;
-            } else {
-                eventMouse.type = FTK_EVT_MOUSE_DOWN;
-                eventMouse.u.mouse.press = 1;
+        if (notify->kstat & MOUSE_LEFT)
+        {
+            if (event.u.mouse.press)
+            {
+                event.type = FTK_EVT_MOUSE_MOVE;
+                return;
             }
-        } else {
-            if (eventMouse.u.mouse.press) {
-                eventMouse.type = FTK_EVT_MOUSE_UP;
-                eventMouse.u.mouse.press = 0;
+            else
+            {
+                event.type = FTK_EVT_MOUSE_DOWN;
+                event.u.mouse.press = 1;
+            }
+        }
+        else
+        {
+            if (event.u.mouse.press)
+            {
+                event.type = FTK_EVT_MOUSE_UP;
+                event.u.mouse.press = 0;
+            }
+            else
+            {
+                return;
             }
         }
 
         ftk_logd("%s: sample.pressure=%d x=%d y=%d\n",
-            __func__, eventMouse.u.mouse.press, eventMouse.u.mouse.x, eventMouse.u.mouse.y);
+            __func__, event.u.mouse.press, event.u.mouse.x, event.u.mouse.y);
 
-        if (eventMouse.type != FTK_EVT_NOP) {
-            ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &eventMouse);
+        if (event.type != FTK_EVT_NOP) {
+            ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
         }
     }
 }
 
-static void  ftk_source_sylixos_on_keyboard_event (keyboard_event_notify  *pknotify)
+static void ftk_source_sylixos_on_keyboard_event(keyboard_event_notify* notify)
 {
-    if (pknotify) {
+    static FtkEvent event;
 
-        if (pknotify->type == KE_PRESS) {
-            eventKeyborad.type = FTK_EVT_KEY_DOWN;
-        } else {
-            eventKeyborad.type = FTK_EVT_KEY_UP;
+    if (notify)
+    {
+        if (notify->type == KE_PRESS)
+        {
+            event.type = FTK_EVT_KEY_DOWN;
         }
-        eventKeyborad.u.key.code = ftk_source_sylixos_key_map(pknotify->keymsg[0]);
+        else
+        {
+            event.type = FTK_EVT_KEY_UP;
+        }
 
-        ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &eventKeyborad);
+        event.u.key.code = ftk_source_sylixos_key_map(notify->keymsg[0]);
+
+        ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
     }
-}
-
-static int ftk_source_sylixos_input_init (char  *file, const char  *file_list[])
-{
-    int      i = 0;
-    char    *divptr = file;
-    char    *start;
-
-    do {
-        start  = divptr;
-        divptr = strchr(start, ':');
-        if (divptr) {
-            *divptr = '\0';
-            divptr++;
-        }
-
-        if (i < MAX_INPUT_DEVICE) {
-            file_list[i] = start;
-        } else {
-            break;
-        }
-
-        i++;
-    } while (divptr);
-
-    return  (i);
 }
 
 static int ftk_source_sylixos_get_fd(FtkSource* thiz)
@@ -317,16 +316,48 @@ static void ftk_source_sylixos_destroy(FtkSource* thiz)
     guiInputDevMouseHookSet(NULL);
 }
 
-FtkSource* ftk_source_sylixos_input_create (void)
+#define MAX_INPUT_DEVICE    5
+
+static int ftk_source_sylixos_get_input_dev(char* dev, const char* dev_list[])
 {
-    LW_CLASS_THREADATTR   attr = Lw_ThreadAttr_GetDefault();
-    int                   max_keyboard_num;
-    int                   max_mouse_num;
+    int   i      = 0;
+    char* divptr = dev;
+    char* start;
 
-    const char           *pcKeyboradArray[MAX_INPUT_DEVICE];
-    const char           *pcMouseArray[MAX_INPUT_DEVICE];
+    do {
+        start  = divptr;
+        divptr = strchr(start, ':');
+        if (divptr)
+        {
+            *divptr = '\0';
+            divptr++;
+        }
 
-    FtkSource            *thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource));
+        if (i < MAX_INPUT_DEVICE)
+        {
+            dev_list[i] = start;
+        }
+        else
+        {
+            break;
+        }
+
+        i++;
+    } while (divptr);
+
+    return (i);
+}
+
+FtkSource* ftk_source_sylixos_input_create(void)
+{
+    LW_CLASS_THREADATTR attr = API_ThreadAttrGetDefault();
+    int                 max_keyboard_num;
+    int                 max_mouse_num;
+    char                keyboard_devs[PATH_MAX + 1];
+    char                mouse_devs[PATH_MAX + 1];
+    const char*         keyboard_array[MAX_INPUT_DEVICE];
+    const char*         mouse_array[MAX_INPUT_DEVICE];
+    FtkSource*          thiz = (FtkSource*)FTK_ZALLOC(sizeof(FtkSource));
 
     if (thiz != NULL)
     {
@@ -336,25 +367,31 @@ FtkSource* ftk_source_sylixos_input_create (void)
         thiz->destroy  = ftk_source_sylixos_destroy;
         thiz->ref      = 1;
 
-        ftk_source_sylixos_keyboard_initmap();
+        ftk_source_sylixos_init_key_map();
 
-        if (getenv_r("KEYBOARD", cKeyboradFiles, PATH_MAX + 1) >= 0) {
-            max_keyboard_num = ftk_source_sylixos_input_init(cKeyboradFiles, pcKeyboradArray);
-        } else {
-            pcKeyboradArray[0] = "/dev/input/keyboard0";
-            max_keyboard_num = 1;
+        ftk_source_sylixos_init_tslib_linear();
+
+        if (getenv_r("KEYBOARD", keyboard_devs, PATH_MAX + 1) >= 0)
+        {
+            max_keyboard_num = ftk_source_sylixos_get_input_dev(keyboard_devs, keyboard_array);
+        }
+        else
+        {
+            keyboard_array[0] = FTK_DEFAULT_KEYBOARD;
+            max_keyboard_num  = 1;
         }
 
-        if (getenv_r("MOUSE", cMouseFiles, PATH_MAX + 1) >= 0) {
-            max_mouse_num = ftk_source_sylixos_input_init(cMouseFiles, pcMouseArray);
-        } else {
-            pcMouseArray[0] = "/dev/input/mouse0";
-            max_mouse_num = 1;
+        if (getenv_r("MOUSE", mouse_devs, PATH_MAX + 1) >= 0)
+        {
+            max_mouse_num = ftk_source_sylixos_get_input_dev(mouse_devs, mouse_array);
+        }
+        else
+        {
+            mouse_array[0] = FTK_DEFAULT_MOUSE;
+            max_mouse_num  = 1;
         }
 
-        linear_init();
-
-        guiInputDevReg(pcKeyboradArray, max_keyboard_num, pcMouseArray, max_mouse_num);
+        guiInputDevReg(keyboard_array, max_keyboard_num, mouse_array, max_mouse_num);
         guiInputDevKeyboardHookSet(ftk_source_sylixos_on_keyboard_event);
         guiInputDevMouseHookSet(ftk_source_sylixos_on_pointer_event);
         guiInputDevProcStart(&attr);

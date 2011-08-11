@@ -142,7 +142,7 @@ static int fb_open(FBInfo* fb, const char* fbfilename)
 	if (ioctl(fb->fd, LW_GM_GET_VARINFO, &fb->vi) < 0)
 		goto fail;
 
-	fb->bits = (unsigned char *)fb->fi.GMSI_pcMem;
+    fb->bits = mmap(0, fb_size(fb), PROT_READ | PROT_WRITE, MAP_SHARED, fb->fd, 0);
 
 	if (fb->bits == MAP_FAILED)
 		goto fail;
@@ -160,6 +160,8 @@ fail:
 
 static void fb_close(FBInfo* fb)
 {
+    munmap(fb->bits, fb_size(fb));
+
 	close(fb->fd);
 
 	return;

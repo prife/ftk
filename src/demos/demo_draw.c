@@ -72,9 +72,9 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 #ifdef FTK_AS_PLUGIN
 #include "ftk_app_demo.h"
 FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
-FtkApp* ftk_app_demo_cairo_create()
+FtkApp* ftk_app_demo_draw_create()
 {
-	return ftk_app_demo_create(_("cairo"), ftk_main);
+	return ftk_app_demo_create(_("draw"), ftk_main);
 }
 #else
 #define FTK_HIDE extern

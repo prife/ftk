@@ -5,9 +5,9 @@
 #ifdef FTK_AS_PLUGIN
 #include "ftk_app_demo.h"
 FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
-FtkApp* ftk_app_demo_hello_create()
+FtkApp* ftk_app_demo_keyboard_create()
 {
-	return ftk_app_demo_create(_("hello"), ftk_main);
+	return ftk_app_demo_create(_("keyboard"), ftk_main);
 }
 #else
 #define FTK_HIDE extern

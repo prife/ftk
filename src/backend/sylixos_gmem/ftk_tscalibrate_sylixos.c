@@ -44,9 +44,176 @@
 
 #include "ftk_display_sylixos.h"
 #include "ftk_source_sylixos.h"
+#include "ftk_tscalibrate_sylixos.h"
 #include <string.h>
 #include <mouse.h>
 #include <input_device.h>
+#include "font.h"
+
+void* ftk_display_bits(FtkDisplay* thiz, int* bpp);
+
+union multiptr {
+    unsigned char  *p8;
+    unsigned short *p16;
+    unsigned long  *p32;
+};
+
+#define XORMODE 0x80000000
+
+static inline void __set_pixel(unsigned int   bpp,
+                               union multiptr loc,
+                               unsigned int   xormode,
+                               unsigned int   color)
+{
+    switch(bpp)
+    {
+    case 1:
+    default:
+        if (xormode)
+            *loc.p8 ^= color;
+        else
+            *loc.p8 = color;
+        break;
+
+    case 2:
+        if (xormode)
+            *loc.p16 ^= color;
+        else
+            *loc.p16 = color;
+        break;
+
+    case 4:
+        if (xormode)
+            *loc.p32 ^= color;
+        else
+            *loc.p32 = color;
+        break;
+    }
+}
+
+static void draw_pixel(FtkDisplay* display, int x, int y, unsigned int colidx)
+{
+    void*          bits;
+    int            bpp;
+    unsigned int   xormode;
+    union multiptr loc;
+
+    if ((x < 0) || (x >= ftk_display_width(display)) ||
+        (y < 0) || (y >= ftk_display_height(display)))
+    {
+        return;
+    }
+
+    bits    = ftk_display_bits(display, &bpp);
+    loc.p8  = (unsigned char *)bits + (ftk_display_width(display) * y + x) * bpp;
+
+    xormode = colidx & XORMODE;
+    colidx &= ~XORMODE;
+
+    __set_pixel(bpp, loc, xormode, colidx);
+}
+
+static void draw_line(FtkDisplay* display, int x1, int y1, int x2, int y2, unsigned int colidx)
+{
+    int tmp;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+
+    if (abs(dx) < abs(dy))
+    {
+        if (y1 > y2)
+        {
+            tmp = x1; x1 = x2; x2 = tmp;
+            tmp = y1; y1 = y2; y2 = tmp;
+            dx = -dx; dy = -dy;
+        }
+        x1 <<= 16;
+        /* dy is apriori >0 */
+        dx = (dx << 16) / dy;
+        while (y1 <= y2)
+        {
+            draw_pixel(display, x1 >> 16, y1, colidx);
+            x1 += dx;
+            y1++;
+        }
+    }
+    else
+    {
+        if (x1 > x2)
+        {
+            tmp = x1; x1 = x2; x2 = tmp;
+            tmp = y1; y1 = y2; y2 = tmp;
+            dx = -dx; dy = -dy;
+        }
+        y1 <<= 16;
+        dy = dx ? (dy << 16) / dx : 0;
+        while (x1 <= x2)
+        {
+            draw_pixel(display, x1, y1 >> 16, colidx);
+            y1 += dy;
+            x1++;
+        }
+    }
+}
+
+static void draw_cross(FtkDisplay* display, int x, int y, unsigned int colidx)
+{
+    draw_line(display, x - 10, y, x - 2, y, colidx);
+    draw_line(display, x + 2, y, x + 10, y, colidx);
+    draw_line(display, x, y - 10, x, y - 2, colidx);
+    draw_line(display, x, y + 2, x, y + 10, colidx);
+
+    draw_line(display, x - 6, y - 9, x - 9, y - 9, colidx);
+    draw_line(display, x - 9, y - 8, x - 9, y - 6, colidx);
+    draw_line(display, x - 9, y + 6, x - 9, y + 9, colidx);
+    draw_line(display, x - 8, y + 9, x - 6, y + 9, colidx);
+    draw_line(display, x + 6, y + 9, x + 9, y + 9, colidx);
+    draw_line(display, x + 9, y + 8, x + 9, y + 6, colidx);
+    draw_line(display, x + 9, y - 6, x + 9, y - 9, colidx);
+    draw_line(display, x + 8, y - 9, x + 6, y - 9, colidx);
+}
+
+static void put_char(FtkDisplay* display, int x, int y, int c, unsigned int colidx)
+{
+    int i, j, bits;
+
+    for (i = 0; i < font_vga_8x16.height; i++)
+    {
+        bits = font_vga_8x16.data[font_vga_8x16.height * c + i];
+        for (j = 0; j < font_vga_8x16.width; j++, bits <<= 1)
+        {
+            if (bits & 0x80)
+            {
+                draw_pixel(display, x + j, y + i, colidx);
+            }
+            else
+            {
+                draw_pixel(display, x + j, y + i, 0);
+            }
+        }
+    }
+}
+
+static void put_string(FtkDisplay* display, int x, int y, const char *s, unsigned int colidx)
+{
+    int i;
+
+    for (i = 0; *s; i++, x += font_vga_8x16.width, s++)
+    {
+        put_char(display, x, y, *s, colidx);
+    }
+}
+
+static void put_string_center(FtkDisplay* display, int x, int y, const char *s, unsigned int colidx)
+{
+    size_t sl = strlen (s);
+
+    put_string(display,
+               x - (sl / 2) * font_vga_8x16.width,
+               y - font_vga_8x16.height / 2,
+               s,
+               colidx);
+}
 
 typedef struct {
     int x[5], xfb[5];
@@ -55,100 +222,34 @@ typedef struct {
 } calibration;
 
 struct ts_sample {
-    int             x;
-    int             y;
-    unsigned int    pressure;
+    int          x;
+    int          y;
+    unsigned int pressure;
 };
-
-void* ftk_display_bits(FtkDisplay* thiz, int* bpp);
-
-static void pixel(FtkDisplay* display, int x, int y, unsigned int colidx)
-{
-    void* bits;
-    int   bpp;
-
-    if ((x < 0) || (x >= ftk_display_width(display)) ||
-        (y < 0) || (y >= ftk_display_height(display))) {
-        return;
-    }
-
-    bits = ftk_display_bits(display, &bpp);
-
-    memcpy((uint8_t *)bits + (ftk_display_width(display) * y + x ) * bpp, &colidx, bpp);
-}
-
-static void line(FtkDisplay* display, int x1, int y1, int x2, int y2, unsigned int colidx)
-{
-    int tmp;
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-
-    if (abs(dx) < abs(dy)) {
-        if (y1 > y2) {
-            tmp = x1; x1 = x2; x2 = tmp;
-            tmp = y1; y1 = y2; y2 = tmp;
-            dx = -dx; dy = -dy;
-        }
-        x1 <<= 16;
-        /* dy is apriori >0 */
-        dx = (dx << 16) / dy;
-        while (y1 <= y2) {
-            pixel(display, x1 >> 16, y1, colidx);
-            x1 += dx;
-            y1++;
-        }
-    } else {
-        if (x1 > x2) {
-            tmp = x1; x1 = x2; x2 = tmp;
-            tmp = y1; y1 = y2; y2 = tmp;
-            dx = -dx; dy = -dy;
-        }
-        y1 <<= 16;
-        dy = dx ? (dy << 16) / dx : 0;
-        while (x1 <= x2) {
-            pixel(display, x1, y1 >> 16, colidx);
-            y1 += dy;
-            x1++;
-        }
-    }
-}
-
-static void put_cross(FtkDisplay* display, int x, int y, unsigned int colidx)
-{
-    line(display, x - 10, y, x - 2, y, colidx);
-    line(display, x + 2, y, x + 10, y, colidx);
-    line(display, x, y - 10, x, y - 2, colidx);
-    line(display, x, y + 2, x, y + 10, colidx);
-
-    line(display, x - 6, y - 9, x - 9, y - 9, colidx + 1);
-    line(display, x - 9, y - 8, x - 9, y - 6, colidx + 1);
-    line(display, x - 9, y + 6, x - 9, y + 9, colidx + 1);
-    line(display, x - 8, y + 9, x - 6, y + 9, colidx + 1);
-    line(display, x + 6, y + 9, x + 9, y + 9, colidx + 1);
-    line(display, x + 9, y + 8, x + 9, y + 6, colidx + 1);
-    line(display, x + 9, y - 6, x + 9, y - 9, colidx + 1);
-    line(display, x + 8, y - 9, x + 6, y - 9, colidx + 1);
-}
 
 static int ts_read_raw(int ts_fd, struct ts_sample* samp, int nr)
 {
-    touchscreen_event_notify ts_event;
+    touchscreen_event_notify notify;
     fd_set                   rfds;
 
     FD_ZERO(&rfds);
 
     FD_SET(ts_fd, &rfds);
 
-    if (select(ts_fd + 1, &rfds, NULL, NULL, NULL) != 1) {
+    if (select(ts_fd + 1, &rfds, NULL, NULL, NULL) != 1)
+    {
         return -1;
     }
 
-    if (read(ts_fd, (char *)&ts_event, sizeof(touchscreen_event_notify)) == sizeof(touchscreen_event_notify)) {
-        samp->x         = ts_event.xanalog;
-        samp->y         = ts_event.yanalog;
-        samp->pressure  = ts_event.kstat & MOUSE_LEFT;
+    if (read(ts_fd, (char *)&notify, sizeof(touchscreen_event_notify)) == sizeof(touchscreen_event_notify))
+    {
+        samp->x        = notify.xanalog;
+        samp->y        = notify.yanalog;
+        samp->pressure = notify.kstat & MOUSE_LEFT;
         return 1;
-    } else {
+    }
+    else
+    {
         return -1;
     }
 }
@@ -163,40 +264,36 @@ static int sort_by_y(const void* a, const void* b)
     return (((struct ts_sample*)a)->y - ((struct ts_sample*)b)->y);
 }
 
-static void getxy(int ts_fd, FtkDisplay* display, int* x, int* y)
+static void get_xy(int ts_fd, FtkDisplay* display, int* x, int* y)
 {
 #define MAX_SAMPLES 128
     struct ts_sample samp[MAX_SAMPLES];
     int index, middle;
 
-    do {
-        if (ts_read_raw(ts_fd, &samp[0], 1) < 0) {
-            perror("ts_read");
-            /*
-             * TODO
-             */
-            ftk_display_destroy(display);
-            close(ts_fd);
-            exit(1);
+    do
+    {
+        if (ts_read_raw(ts_fd, &samp[0], 1) < 0)
+        {
+            perror("ts_read_raw");
+            continue;
         }
     } while (samp[0].pressure == 0);
 
     /* Now collect up to MAX_SAMPLES touches into the samp array. */
     index = 0;
-    do {
-        if (index < MAX_SAMPLES - 1) {
+    do
+    {
+        if (index < MAX_SAMPLES - 1)
+        {
             index++;
         }
-        if (ts_read_raw(ts_fd, &samp[index], 1) < 0) {
-            perror("ts_read");
-            /*
-             * TODO
-             */
-            ftk_display_destroy(display);
-            close(ts_fd);
-            exit(1);
+        if (ts_read_raw(ts_fd, &samp[index], 1) < 0)
+        {
+            perror("ts_read_raw");
+            continue;
         }
     } while (samp[index].pressure > 0);
+
     printf("Took %d samples...\n", index);
 
     /*
@@ -218,19 +315,28 @@ static void getxy(int ts_fd, FtkDisplay* display, int* x, int* y)
      * the even odd stuff after we sort.
      */
     middle = index / 2;
-    if (x) {
+    if (x)
+    {
         qsort(samp, index, sizeof(struct ts_sample), sort_by_x);
-        if (index & 1) {
+        if (index & 1)
+        {
             *x = samp[middle].x;
-        } else {
+        }
+        else
+        {
             *x = (samp[middle-1].x + samp[middle].x) / 2;
         }
     }
-    if (y) {
+
+    if (y)
+    {
         qsort(samp, index, sizeof(struct ts_sample), sort_by_y);
-        if (index & 1) {
+        if (index & 1)
+        {
             *y = samp[middle].y;
-        } else {
+        }
+        else
+        {
             *y = (samp[middle-1].y + samp[middle].y) / 2;
         }
     }
@@ -240,25 +346,34 @@ static void get_sample(int ts_fd, FtkDisplay* display, calibration* cal, int ind
 {
     static int last_x = -1, last_y;
 
-    if (last_x != -1) {
+    put_string_center(display,
+                      ftk_display_width(display) / 2,
+                      ftk_display_height(display) / 4 + 60,
+                      name,
+                      0x0fffffff);
+
+    if (last_x != -1)
+    {
 #define NR_STEPS 10
         int dx = ((x - last_x) << 16) / NR_STEPS;
         int dy = ((y - last_y) << 16) / NR_STEPS;
         int i;
+
         last_x <<= 16;
         last_y <<= 16;
-        for (i = 0; i < NR_STEPS; i++) {
-            put_cross(display, last_x >> 16, last_y >> 16, 0xFFFF);
+        for (i = 0; i < NR_STEPS; i++)
+        {
+            draw_cross(display, last_x >> 16, last_y >> 16, 0x0fffffff | XORMODE);
             usleep(1000);
-            put_cross(display, last_x >> 16, last_y >> 16, 0xFFFF);
+            draw_cross(display, last_x >> 16, last_y >> 16, 0x0fffffff | XORMODE);
             last_x += dx;
             last_y += dy;
         }
     }
 
-    put_cross(display, x, y, 0xFFFF);
-    getxy(ts_fd, display, &cal->x[index], &cal->y[index]);
-    put_cross(display, x, y, 0xFFFF);
+    draw_cross(display, x, y, 0x0fffffff | XORMODE);
+    get_xy(ts_fd, display, &cal->x[index], &cal->y[index]);
+    draw_cross(display, x, y, 0x0fffffff | XORMODE);
 
     last_x = cal->xfb[index] = x;
     last_y = cal->yfb[index] = y;
@@ -275,7 +390,8 @@ static int perform_calibration(calibration* cal)
 
     // Get sums for matrix
     n = x = y = x2 = y2 = xy = 0;
-    for (j = 0; j < 5; j++) {
+    for (j = 0; j < 5; j++)
+    {
         n  += 1.0;
         x  += (float)cal->x[j];
         y  += (float)cal->y[j];
@@ -286,7 +402,8 @@ static int perform_calibration(calibration* cal)
 
     // Get determinant of matrix -- check if determinant is too small
     det = n*(x2*y2 - xy*xy) + x*(xy*y - x*y2) + y*(x*xy - y*x2);
-    if (det < 0.1 && det > -0.1) {
+    if (det < 0.1 && det > -0.1)
+    {
         printf("ts_calibrate: determinant is too small -- %f\n", det);
         return 0;
     }
@@ -301,7 +418,8 @@ static int perform_calibration(calibration* cal)
 
     // Get sums for x calibration
     z = zx = zy = 0;
-    for (j = 0; j < 5; j++) {
+    for (j = 0; j < 5; j++)
+    {
         z  += (float) cal->xfb[j];
         zx += (float)(cal->xfb[j]*cal->x[j]);
         zy += (float)(cal->xfb[j]*cal->y[j]);
@@ -319,7 +437,8 @@ static int perform_calibration(calibration* cal)
 
     // Get sums for y calibration
     z = zx = zy = 0;
-    for (j = 0; j < 5; j++) {
+    for (j = 0; j < 5; j++)
+    {
         z  += (float) cal->yfb[j];
         zx += (float)(cal->yfb[j]*cal->x[j]);
         zy += (float)(cal->yfb[j]*cal->y[j]);
@@ -341,7 +460,7 @@ static int perform_calibration(calibration* cal)
     return 1;
 }
 
-int ftk_sylixos_ts_calibrate(void)
+int ftk_sylixos_touchscreen_calibrate(int argc, char *argv[])
 {
     FtkDisplay*  display;
     char         namebuffer[PATH_MAX + 1];
@@ -353,70 +472,114 @@ int ftk_sylixos_ts_calibrate(void)
     int          ts_fd;
     unsigned int i;
     struct stat  sbuf;
+    void*        bits;
+    int          bpp;
 
-    if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0) {
+    if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0)
+    {
         name = namebuffer;
-    } else {
-        name = FTK_ROOT_DIR"/pointercal";
+    }
+    else
+    {
+        name = FTK_DEFAULT_CALIBFILE;
     }
 
-    if (stat(name, &sbuf) == 0) {
-        return 0;
+    if (!(argc > 1 && (strcmp(argv[1], "ts") == 0)))
+    {
+        if (stat(name, &sbuf) == 0)
+        {
+            return 0;
+        }
     }
 
-    if (getenv_r("FRAMEBUFFER", namebuffer, PATH_MAX + 1) >= 0) {
+    if (getenv_r("FRAMEBUFFER", namebuffer, PATH_MAX + 1) >= 0)
+    {
         name = namebuffer;
-    } else {
-        name = FTK_FB_NAME;
+    }
+    else
+    {
+        name = FTK_DEFAULT_FRAMEBUFFER;
     }
 
     display = ftk_display_sylixos_create(name);
-    if (display == NULL) {
+    if (display == NULL)
+    {
         return -1;
     }
 
     xres = ftk_display_width(display);
     yres = ftk_display_height(display);
 
-    if (getenv_r("TSLIB_TSDEVICE", namebuffer, PATH_MAX + 1) >= 0) {
+    bits = ftk_display_bits(display, &bpp);
+    memset(bits, 0x00, xres * yres * bpp);
+
+    if (getenv_r("TSLIB_TSDEVICE", namebuffer, PATH_MAX + 1) >= 0)
+    {
         name = namebuffer;
-    } else {
-        name = FTK_TS_NAME;
+    }
+    else
+    {
+        name = FTK_DEFAULT_TOUCH;
     }
 
     ts_fd = open(name, O_RDONLY, 0666);
-    if (ts_fd < 0) {
+    if (ts_fd < 0)
+    {
         ftk_display_destroy(display);
         return -1;
     }
 
-    get_sample(ts_fd, display, &cal, 0, 50,        50,        "Top left");
-    get_sample(ts_fd, display, &cal, 1, xres - 50, 50,        "Top right");
-    get_sample(ts_fd, display, &cal, 2, xres - 50, yres - 50, "Bot right");
-    get_sample(ts_fd, display, &cal, 3, 50,        yres - 50, "Bot left");
-    get_sample(ts_fd, display, &cal, 4, xres / 2,  yres / 2,  "Center");
+    put_string_center(display,
+                      xres / 2,
+                      yres / 4,
+                      "TSLIB calibration utility",
+                      0x0fffffff);
 
-    if (perform_calibration(&cal)) {
+    put_string_center(display,
+                      xres / 2,
+                      yres / 4 + 20,
+                      "Touch crosshair to calibrate",
+                      0x0fffffff);
 
+    printf("xres = %d, yres = %d\n", xres, yres);
+
+    get_sample(ts_fd, display, &cal, 0, 50,        50,        "  Top left  ");
+    get_sample(ts_fd, display, &cal, 1, xres - 50, 50,        "  Top right ");
+    get_sample(ts_fd, display, &cal, 2, xres - 50, yres - 50, "Bottom right");
+    get_sample(ts_fd, display, &cal, 3, 50,        yres - 50, "Bottom left ");
+    get_sample(ts_fd, display, &cal, 4, xres / 2,  yres / 2,  "   Center   ");
+
+    if (perform_calibration(&cal))
+    {
         printf("Calibration constants: ");
-        for (i = 0; i < 7; i++) {
+        for (i = 0; i < 7; i++)
+        {
             printf("%d ", cal.a[i]);
         }
         printf("\n");
 
-        if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0) {
+        if (getenv_r("TSLIB_CALIBFILE", namebuffer, PATH_MAX + 1) >= 0)
+        {
             name = namebuffer;
-        } else {
-            name = FTK_ROOT_DIR"/pointercal";
+        }
+        else
+        {
+            name = FTK_DEFAULT_CALIBFILE;
         }
 
-        cal_fd = open(name, O_CREAT | O_RDWR);
+        cal_fd = creat(name, 0666);
 
         sprintf(namebuffer, "%d %d %d %d %d %d %d",
-                cal.a[1], cal.a[2], cal.a[0],
-                cal.a[4], cal.a[5], cal.a[3], cal.a[6]);
+                cal.a[1],
+                cal.a[2],
+                cal.a[0],
+                cal.a[4],
+                cal.a[5],
+                cal.a[3],
+                cal.a[6]);
 
         write(cal_fd, namebuffer, strlen(namebuffer) + 1);
+
         close(cal_fd);
 
         i = 0;

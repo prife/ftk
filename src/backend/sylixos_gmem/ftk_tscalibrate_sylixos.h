@@ -1,7 +1,7 @@
 /*
- * File: ftk_source_input.h
- * Author:  Han.hui <sylixos@gmail.com>
- * Brief:   source to handle /dev/input/xx
+ * File: ftk_tscalibrate_sylixos.c
+ * Author:  JiaoJinXing <jiaojinxing1987@gmail.com>
+ * Brief:   sylixos touchscreen calibrate.
  *
  * Copyright (c) 2009 - 2010  Li XianJing <xianjimli@hotmail.com>
  *
@@ -25,27 +25,16 @@
 /*
  * History:
  * ================================================================
- * 2009-10-03 Han.hui <sylixos@gmail.com> created
+ * 2011-07-08 JiaoJinXing <jiaojinxing1987@gmail.com> created
  *
  */
-#ifndef FTK_SOURCE_SYLIXOS_H
-#define FTK_SOURCE_SYLIXOS_H
+#ifndef FTK_TSCALIBRATE_SYLIXOS_H_
+#define FTK_TSCALIBRATE_SYLIXOS_H_
 
-#include "ftk_event.h"
-#include "ftk_source.h"
-
-#ifndef FTK_DEFAULT_TOUCH
-#define FTK_DEFAULT_TOUCH       "/dev/input/touch0"
+#ifndef FTK_DEFAULT_CALIBFILE
+#define FTK_DEFAULT_CALIBFILE   "/etc/pointercal"
 #endif
 
-#ifndef FTK_DEFAULT_KEYBOARD
-#define FTK_DEFAULT_KEYBOARD    "/dev/input/keyboard0"
-#endif
+int ftk_sylixos_touchscreen_calibrate(int argc, char *argv[]);
 
-#ifndef FTK_DEFAULT_MOUSE
-#define FTK_DEFAULT_MOUSE       "/dev/input/mouse0"
-#endif
-
-FtkSource* ftk_source_sylixos_input_create(void);
-
-#endif  /*FTK_SOURCE_SYLIXOS_H*/
+#endif /* FTK_TSCALIBRATE_SYLIXOS_H_ */
