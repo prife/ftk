@@ -163,18 +163,18 @@ void ftk_deinit(void)
 		ftk_config_destroy(ftk_default_config());
 	}
 
-	ftk_clear_globals();
 	ftk_platform_deinit();
 
 #ifndef USE_STD_MALLOC
 	if(ftk_default_allocator() != NULL)
 	{
 		ftk_allocator_destroy(ftk_default_allocator());
-		ftk_set_allocator(NULL);
 	}
 #endif
 
 	ftk_logd("%s: ftk exit.\n", __func__);
+
+	ftk_clear_globals();
 
 	return;
 }
