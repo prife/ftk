@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	
 	for(i = 0; i < 1000; i++)
 	{
-		assert(ftk_list_model_get_total(thiz) == 100-i);
+		assert(ftk_list_model_get_total(thiz) == 1000-i);
 		assert(ftk_list_model_remove(thiz, 0) == RET_OK);
 	}
 

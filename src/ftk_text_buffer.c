@@ -135,7 +135,11 @@ Ret  ftk_text_buffer_delete_chars(FtkTextBuffer* thiz, int offset, int count)
 	int length = 0;
 	return_val_if_fail(thiz != NULL && thiz->buffer != NULL, RET_FAIL);
 	return_val_if_fail(offset <= (int)thiz->length && offset >= 0, RET_FAIL);
-	return_val_if_fail((offset + count) <= (int)thiz->length && (offset + count) >= 0, RET_FAIL);
+
+	if(!((offset + count) <= (int)thiz->length && (offset + count) >= 0))
+	{
+		return RET_FAIL;
+	}
 
 	length = ftk_text_buffer_chars_bytes(thiz, offset, count);
 	if(length == 0)

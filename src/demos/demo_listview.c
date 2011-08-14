@@ -16,12 +16,38 @@ static Ret button_quit_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret button_remove_clicked(void* ctx, void* obj)
+{
+	FtkListModel* model = (FtkListModel*)ctx;
+
+	int total = ftk_list_model_get_total(model);
+
+	if(total > 0)
+	{
+		ftk_list_model_remove(model, 0);
+	}
+
+	total = ftk_list_model_get_total(model);
+	if(total > 0)
+	{
+		ftk_list_model_remove(model, total-1);
+	}
+
+	total = ftk_list_model_get_total(model);
+	if(total > 0)
+	{
+		ftk_list_model_remove(model, 0);
+	}
+
+	return RET_OK;
+}
+
 static Ret button_more_clicked(void* ctx, void* obj)
 {
 	int i = 0;
 	char text[32] = {0};
 	FtkListItemInfo info = {0};
-	FtkListModel* model = ctx;
+	FtkListModel* model = (FtkListModel*)ctx;
 
 	for(i = 0; i < 4; i++)
 	{
@@ -119,10 +145,15 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_list_view_init(list, model, render, 40);
 	ftk_list_model_unref(model);
 
-	button = ftk_button_create(win, width/4, 3 * height/4 + 5, width/4, 60);
+	button = ftk_button_create(win, 0, 3 * height/4 + 5, width/4, 60);
 	ftk_widget_set_text(button, "more");
 	ftk_widget_set_font_size(button, 20);
 	ftk_button_set_clicked_listener(button, button_more_clicked, model);
+	
+	button = ftk_button_create(win, width/4, 3 * height/4 + 5, width/4, 60);
+	ftk_widget_set_text(button, "remove");
+	ftk_widget_set_font_size(button, 20);
+	ftk_button_set_clicked_listener(button, button_remove_clicked, model);
 
 	button = ftk_button_create(win, width/2, 3 * height/4 + 5, width/4, 60);
 	ftk_widget_set_text(button, "quit");

@@ -324,6 +324,12 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	(void)height;
+	if(priv->visible_start >= total)
+	{
+		int visible_start = total - priv->visible_nr;
+		priv->visible_start = (visible_start >= 0) ? visible_start : 0;
+	}
+
 	scroll_bar_width = priv->visible_nr >= total ? 0 : FTK_SCROLL_BAR_WIDTH;
 	dy = y + priv->top_margin;
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
