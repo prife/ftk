@@ -429,7 +429,7 @@ Ret ftk_icon_view_set_item_size(FtkWidget* thiz, size_t size)
 	priv->item_width  = size;
 	priv->item_height = size;
 
-	return RET_FAIL;
+	return RET_OK;
 }
 
 size_t ftk_icon_view_get_count(FtkWidget* thiz)
