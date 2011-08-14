@@ -128,7 +128,6 @@ ftk_default_status_panel
 ftk_default_text_layout
 ftk_default_theme
 ftk_default_wnd_manager
-ftk_deinit
 ftk_dialog_create
 ftk_dialog_create_ex
 ftk_dialog_hide_title

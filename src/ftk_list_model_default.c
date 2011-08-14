@@ -182,10 +182,10 @@ Ret ftk_list_model_default_remove(FtkListModel* thiz, size_t index)
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && index < priv->nr, RET_FAIL);
 
+	ftk_list_item_reset(priv->items+index);
 	if(index < (priv->nr - 1))
 	{
 		size_t i = index; 
-		ftk_list_item_reset(priv->items+i);
 		for(; i < priv->nr; i++)
 		{
 			memcpy(priv->items+i, priv->items+i+1, sizeof(FtkListItemInfo));
