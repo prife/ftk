@@ -40,8 +40,8 @@
 
 FTK_BEGIN_DECLS
 
-struct _FtkWdiget;
-typedef struct _FtkWdiget FtkWidget;
+struct _FtkWidget;
+typedef struct _FtkWidget FtkWidget;
 
 struct _FtkWidgetInfo;
 typedef struct _FtkWidgetInfo FtkWidgetInfo;
@@ -50,7 +50,7 @@ typedef Ret  (*FtkWidgetOnEvent)(FtkWidget* thiz, FtkEvent* event);
 typedef Ret  (*FtkWidgetOnPaint)(FtkWidget* thiz);
 typedef void (*FtkWidgetDestroy)(FtkWidget* thiz);
 
-struct _FtkWdiget
+struct _FtkWidget
 {
 	int ref;
 	FtkWidgetOnEvent on_event;

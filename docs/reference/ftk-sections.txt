@@ -79,7 +79,6 @@ FtkWidgetInfo
 FtkWidgetOnEvent
 FtkWidgetOnPaint
 FtkWidgetDestroy
-FtkWdiget
 ftk_widget_init
 ftk_widget_type
 ftk_widget_top
