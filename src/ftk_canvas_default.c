@@ -81,6 +81,11 @@ static FtkRect ftk_rect_and(FtkRect* r1, FtkRect* r2)
 	return r;
 }
 
+static Ret ftk_canvas_default_sync_gc(FtkCanvas* thiz)
+{
+	return RET_OK;
+}
+
 static Ret ftk_canvas_default_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 {
 	size_t i = 0;
@@ -928,6 +933,7 @@ FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color)
 	{
 		DECL_PRIV(thiz, priv);
 
+		thiz->sync_gc = ftk_canvas_default_sync_gc;
 		thiz->set_clip = ftk_canvas_default_set_clip;
 		thiz->draw_pixels = ftk_canvas_default_draw_pixels_clip;
 		thiz->draw_line = ftk_canvas_default_draw_line_clip;
