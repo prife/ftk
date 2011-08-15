@@ -25,6 +25,16 @@ Ret move_cursor(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static void remove_sprite(void* user_data)
+{
+	FtkSprite* sprite = user_data;
+
+	ftk_wnd_manager_remove_global_listener(ftk_default_wnd_manager(),
+			move_cursor, sprite);
+	ftk_sprite_show(sprite, 0);
+	ftk_sprite_destroy(sprite);
+}
+
 #ifdef FTK_AS_PLUGIN
 #include "ftk_app_demo.h"
 FTK_HIDE int FTK_MAIN(int argc, char* argv[]);
@@ -76,6 +86,8 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_sprite_set_icon(sprite, icon);
 	ftk_sprite_show(sprite, 1);
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), move_cursor, sprite);
+
+	ftk_widget_set_user_data(win, remove_sprite, sprite);
 
 	FTK_RUN();
 
