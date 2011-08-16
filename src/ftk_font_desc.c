@@ -107,7 +107,11 @@ int ftk_font_desc_is_equal(FtkFontDesc* thiz, FtkFontDesc* other)
 {
 	return_val_if_fail(thiz != NULL && other != NULL, 0);
 
-	return memcmp(thiz, other, sizeof(FtkFontDesc)) == 0;
+	return (thiz->size == other->size &&
+			thiz->is_bold == other->is_bold &&
+			thiz->is_italic == other->is_italic &&
+			strcmp(thiz->fontname, other->fontname) == 0);
+
 }
 
 int  ftk_font_desc_is_bold(FtkFontDesc* thiz)
