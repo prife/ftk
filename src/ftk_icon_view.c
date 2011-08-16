@@ -268,13 +268,13 @@ static Ret ftk_icon_view_calc(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	size_t visible_nr = 0;
-	int width = ftk_widget_width(thiz);
-	int height = ftk_widget_height(thiz);
+	int width = ftk_widget_width(thiz) - 2 * FTK_H_MARGIN;
+	int height = ftk_widget_height(thiz) - 2 * FTK_V_MARGIN;
 
 	priv->cols = width/priv->item_width;
-	priv->left_margin = FTK_HALF(width%priv->item_width);
+	priv->left_margin = FTK_HALF(width%priv->item_width) + FTK_H_MARGIN;
 	priv->rows = height/priv->item_height;
-	priv->top_margin = FTK_HALF(height%priv->item_height);
+	priv->top_margin = FTK_HALF(height%priv->item_height) + FTK_V_MARGIN;
 
 	visible_nr = priv->cols * priv->rows;
 	priv->visible_nr = priv->nr - priv->visible_start;
