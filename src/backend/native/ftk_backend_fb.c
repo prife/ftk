@@ -78,15 +78,40 @@ static Ret ftk_init_input(void)
 	return RET_OK;
 }
 
+static const char* fb_dev[] =
+{
+	FTK_FB_NAME,
+	"/dev/fb0",
+	"/dev/graphic/fb0",
+	NULL
+};
+
 Ret ftk_backend_init(int argc, char* argv[])
 {
 	ftk_set_display(ftk_display_fb_create(getenv("FTK_FB_NAME") ? getenv("FTK_FB_NAME") : FTK_FB_NAME));
+	
 	if(ftk_default_display() == NULL)
 	{
-		ftk_loge("open display failed.\n");
+		size_t i = 0;
+		for(i = 0; fb_dev[i] != NULL; i++)
+		{
+			ftk_set_display(ftk_display_fb_create(fb_dev[i]));
+			if(ftk_default_display() != NULL)
+			{
+				break;
+			}
+			else
+			{
+				ftk_loge("open %s failed.\n", fb_dev[i]);
+			}
+		}
+	}
+
+	if(ftk_default_display() == NULL)
+	{
+		ftk_loge("open display failed %s.\n", FTK_FB_NAME);
 		exit(0);
 	}
-	
 	ftk_init_input();
 
 	return RET_OK;

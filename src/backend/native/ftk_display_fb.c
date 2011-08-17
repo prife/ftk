@@ -75,10 +75,10 @@ static int fb_open(struct FbInfo *fb, const char* fbfilename)
 	fb->var.yoffset = 0; 
 	ioctl (fb->fd, FBIOPAN_DISPLAY, &(fb->var)); 
 
-	ftk_logd("FbInfo: %s\n", fbfilename);
-	ftk_logd("FbInfo: xres=%d yres=%d bits_per_pixel=%d mem_size=%d\n", 
+	ftk_logi("FbInfo: %s\n", fbfilename);
+	ftk_logi("FbInfo: xres=%d yres=%d bits_per_pixel=%d mem_size=%d\n", 
 		fb->var.xres, fb->var.yres, fb->var.bits_per_pixel, fb_size(fb));
-	ftk_logd("FbInfo: red(%d %d) green(%d %d) blue(%d %d)\n", 
+	ftk_logi("FbInfo: red(%d %d) green(%d %d) blue(%d %d)\n", 
 		fb->var.red.offset, fb->var.red.length,
 		fb->var.green.offset, fb->var.green.length,
 		fb->var.blue.offset, fb->var.blue.length);
@@ -92,18 +92,18 @@ static int fb_open(struct FbInfo *fb, const char* fbfilename)
 
 	if (fb->bits == MAP_FAILED)
 	{
-		ftk_logd("map framebuffer failed.\n");
+		ftk_logi("map framebuffer failed.\n");
 		goto fail;
 	}
 
 	memset(fb->bits, 0xff, fb_size(fb));
 	
-	ftk_logd("xres_virtual =%d yres_virtual=%d xpanstep=%d ywrapstep=%d\n",
+	ftk_logi("xres_virtual =%d yres_virtual=%d xpanstep=%d ywrapstep=%d\n",
 		fb->var.xres_virtual, fb->var.yres_virtual, fb->fix.xpanstep, fb->fix.ywrapstep);
 
 	return 0;
 fail:
-	ftk_logd("%s is not a framebuffer.\n", fbfilename);
+	ftk_logi("%s is not a framebuffer.\n", fbfilename);
 	close(fb->fd);
 
 	return -1;
@@ -159,7 +159,7 @@ static Ret fb_pan(struct FbInfo* info, int xoffset, int yoffset, int onsync)
 
 	var->activate = onsync ? FB_ACTIVATE_VBL : FB_ACTIVATE_NOW;
 
-	ftk_logd("%s: xoffset=%d yoffset=%d ywrapstep=%d\n", __func__,
+	ftk_logi("%s: xoffset=%d yoffset=%d ywrapstep=%d\n", __func__,
 		var->xoffset, var->yoffset, info->fix.ywrapstep);
 	if (ioctl( info->fd, FBIOPAN_DISPLAY, var ) < 0)
 	{
@@ -180,7 +180,7 @@ static void fb_sync(void* ctx, FtkRect* rect)
 	//ret = ioctl(info->fd, FBIO_WAITFORVSYNC, &zero);
 #ifdef USE_FB_ACTIVATE_ALL
 	ret = ioctl(info->fd, FB_ACTIVATE_ALL, NULL);
-	ftk_logd("%s: FB_ACTIVATE_ALL ret = %d\n", __func__, ret);
+	ftk_logi("%s: FB_ACTIVATE_ALL ret = %d\n", __func__, ret);
 #endif	
 	return;
 }
