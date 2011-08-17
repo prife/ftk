@@ -76,6 +76,9 @@ Ret ftk_widget_invalidate_item(FtkWidget* thiz, int item)
 		return RET_FAIL;
 	}
 
+	/*FIXME:*/
+	return ftk_widget_invalidate(thiz);
+
 	offset = item - priv->visible_start;
 	if(offset < 0) return RET_OK;
 
