@@ -754,6 +754,7 @@ static Ret  ftk_wnd_manager_default_map_panels(FtkWndManager* thiz, int map)
 				ftk_wnd_manager_dispatch_event(thiz, &event);
 				ret = RET_OK;
 			}
+			ftk_widget_invalidate(win);
 		}
 	}
 
