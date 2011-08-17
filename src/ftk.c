@@ -405,7 +405,8 @@ static void ftk_init_panel(void)
 	FtkGc gc = {0};
 	FtkWidget* item = NULL;	
 	FtkWidget* panel = ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT);
-	
+	size_t width = ftk_widget_width(panel);
+
 	gc.mask = FTK_GC_BITMAP;
 	ftk_set_status_panel(panel);
 	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "status-bg"FTK_STOCK_IMG_SUFFIX);
@@ -443,7 +444,7 @@ static void ftk_init_panel(void)
 	}
 	ftk_widget_show(item, 1);
 
-	item = ftk_status_item_create(panel, 2, 160);
+	item = ftk_status_item_create(panel, 2, width/2);
 	ftk_widget_set_id(item, IDC_TITLE_ITEM);
 	ftk_widget_show(item, 1);
 
