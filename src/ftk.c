@@ -38,10 +38,10 @@
 #include "ftk_status_item.h"
 #include "ftk_status_panel.h"
 #include "ftk_bitmap_factory.h"
-#include "ftk_allocator_default.h"
-#include "ftk_input_method_preeditor_default.h"
-#include "ftk_wnd_manager_default.h"
 #include "ftk_display_rotate.h"
+#include "ftk_allocator_default.h"
+#include "ftk_wnd_manager_default.h"
+#include "ftk_input_method_preeditor_default.h"
 
 #ifdef FTK_MEMORY_PROFILE
 #include "ftk_allocator_profile.h"
@@ -50,29 +50,28 @@
 #define FTK_ALLOC_PROFILE(a) a
 #endif
 
+#define quit_if_fail(p, msg) \
+	if(!(p))\
+	{\
+		ftk_deinit();\
+		ftk_loge(msg);\
+		exit(0);\
+	}
+
 static void ftk_init_panel(void);
 
 static Ret ftk_init_bitmap_factory(void)
 {
 	ftk_set_bitmap_factory(ftk_bitmap_factory_create());
-	
+	quit_if_fail(ftk_default_bitmap_factory(), "Init bitmap factory failed.\n");
+
 	return RET_OK;
 }
 
 static Ret ftk_init_font(void)
 {
-	FtkFontManager* font_manager = ftk_font_manager_create(16);
-
-	if(font_manager != NULL)
-	{
-		ftk_set_font_manager(font_manager);
-	}
-	else
-	{
-		ftk_deinit();
-		ftk_loge("create font_manager failed.\n");
-		exit(0);
-	}
+	ftk_set_font_manager(ftk_font_manager_create(16));
+	quit_if_fail(ftk_default_font_manager(), "Init font manager failed.\n");
 
 	return RET_OK;
 }
@@ -95,7 +94,8 @@ static Ret ftk_init_theme(const char* theme)
 		ftk_normalize_path(filename);
 		ftk_theme_parse_file(ftk_default_theme(), filename);
 	}
-
+	
+	quit_if_fail(ftk_default_theme(), "Init theme failed.\n");
 	ftk_set_animation_trigger(ftk_theme_get_animation_trigger(ftk_default_theme()));
 
 	return RET_OK;
@@ -203,6 +203,7 @@ static Ret ftk_enable_curosr(void)
 {
 	FtkSprite* sprite = ftk_sprite_create();
 	FtkBitmap* icon = ftk_theme_load_image(ftk_default_theme(), "cursor"FTK_STOCK_IMG_SUFFIX);
+	
 	ftk_sprite_set_icon(sprite, icon);
 	ftk_sprite_show(sprite, 1);
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), ftk_move_cursor, sprite);
@@ -229,12 +230,15 @@ Ret ftk_init(int argc, char* argv[])
 	PROFILE_START();
 #ifndef USE_STD_MALLOC
 	ftk_set_allocator(FTK_ALLOC_PROFILE(ftk_allocator_default_create()));
+	quit_if_fail(ftk_default_allocator(), "Init allocator failed.\n");
 #endif
 
 	ftk_platform_init(argc, argv);
 	config = ftk_config_create();
 	ftk_set_config(config);
 	ftk_config_init(config, argc, argv);
+	quit_if_fail(ftk_default_config(), "Init config failed.\n");
+
 	PROFILE_END("config init");
 
 	ftk_set_text_layout(ftk_text_layout_create());
@@ -242,6 +246,7 @@ Ret ftk_init(int argc, char* argv[])
 	ftk_set_sources_manager(ftk_sources_manager_create(64));
 	ftk_set_main_loop(ftk_main_loop_create(ftk_default_sources_manager()));
 	ftk_set_wnd_manager(ftk_wnd_manager_default_create(ftk_default_main_loop()));
+	quit_if_fail(ftk_default_wnd_manager(), "Init windows manager failed.\n");
 	PROFILE_END("source main loop wnd manager init");
 
 	PROFILE_START();
@@ -256,6 +261,7 @@ Ret ftk_init(int argc, char* argv[])
 
 	display = ftk_display_rotate_create(ftk_default_display(), ftk_config_get_rotate(ftk_default_config()));
 	ftk_set_display(display);
+	quit_if_fail(ftk_default_display(), "Init display failed.\n");
 
 	PROFILE_START();
 	bg.a = 0xff;
@@ -266,6 +272,7 @@ Ret ftk_init(int argc, char* argv[])
 	PROFILE_START();
 	ftk_set_input_method_manager(ftk_input_method_manager_create());
 	ftk_set_input_method_preeditor(ftk_input_method_preeditor_default_create());
+	quit_if_fail(ftk_default_input_method_manager(), "Init input method failed.\n");
 	PROFILE_END("input method init");
 
 	PROFILE_START();
@@ -402,13 +409,16 @@ static Ret button_close_top_clicked(void* ctx, void* obj)
 
 static void ftk_init_panel(void)
 {
-	FtkGc gc = {0};
+	FtkGc gc;
 	FtkWidget* item = NULL;	
 	FtkWidget* panel = ftk_status_panel_create(FTK_STATUS_PANEL_HEIGHT);
 	size_t width = ftk_widget_width(panel);
 
-	gc.mask = FTK_GC_BITMAP;
 	ftk_set_status_panel(panel);
+	quit_if_fail(ftk_default_status_panel(), "Init status panel failed.\n");
+
+	memset(&gc, 0x00, sizeof(gc));
+	gc.mask   = FTK_GC_BITMAP;
 	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "status-bg"FTK_STOCK_IMG_SUFFIX);
 	ftk_widget_set_gc(panel, FTK_WIDGET_NORMAL, &gc);
 	ftk_widget_set_gc(panel, FTK_WIDGET_ACTIVE, &gc);
@@ -450,7 +460,7 @@ static void ftk_init_panel(void)
 
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), on_wnd_manager_global_event, NULL);
 	ftk_widget_show(panel, 1);
-
+	
 	return;
 }
 
