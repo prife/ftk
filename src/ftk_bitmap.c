@@ -362,12 +362,12 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 	dst += oy * dw + ox;
 
 	pcolor = &dcolor;
-	for(i = h - y; i; i--)
+	for(i = y; i < h; i++)
 	{
 		psrc = src;
 		pdst = dst;
 		
-		for(j = w; j; j--, psrc++, pdst++)
+		for(j = x; j < w; j++, psrc++, pdst++)
 		{
 			if(likely(psrc->a == 0xff))
 			{
