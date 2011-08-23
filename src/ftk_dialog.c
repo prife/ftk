@@ -350,13 +350,21 @@ Ret ftk_dialog_quit_after(FtkWidget* thiz, int ms)
 
 int ftk_dialog_run(FtkWidget* thiz)
 {
+    FtkMainLoop* prev_main_loop = ftk_default_main_loop();
 	DECL_PRIV1(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_type(thiz) == FTK_DIALOG, RET_FAIL);
 
-	ftk_widget_show_all(thiz, 1);
-	priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
+    priv->main_loop = ftk_main_loop_create(ftk_default_sources_manager());
+
+    ftk_set_main_loop(priv->main_loop);
+
+    ftk_widget_show_all(thiz, 1);
+
 	ftk_main_loop_run(priv->main_loop);
+
+    ftk_set_main_loop(prev_main_loop);
+
 	ftk_main_loop_destroy(priv->main_loop);
 	priv->main_loop = NULL;
 

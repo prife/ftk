@@ -48,7 +48,7 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	ftk_logd("%s:%d begin\n", __func__, __LINE__);
 	dialog = ftk_dialog_create(0, 40, 320, 240);
 	
-	icon = ftk_theme_load_image(ftk_default_theme(), "info-icon"FTK_STOCK_IMG_SUFFIX); 
+	icon = ftk_theme_load_image(ftk_default_theme(), "info"FTK_STOCK_IMG_SUFFIX);
 	ftk_dialog_set_icon(dialog, icon);
 
 	width = ftk_widget_width(dialog);
@@ -66,7 +66,6 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	ftk_window_set_focus(dialog, button);
 
 	ftk_widget_set_text(dialog, modal ? "model dialog" : "normal dialog");
-	ftk_widget_show_all(dialog, 1);
 
 	if(modal)
 	{

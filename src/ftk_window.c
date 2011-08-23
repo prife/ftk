@@ -471,7 +471,7 @@ Ret        ftk_window_paint_forcely(FtkWidget* thiz)
 	priv->mapped = 1;
 	ftk_widget_set_visible(thiz, 1);
 	ftk_canvas_set_clip_region(priv->canvas, NULL);
-	ftk_widget_paint(thiz);
+	ftk_widget_paint(thiz, NULL, 0);
 	priv->mapped = mapped;
 	ftk_widget_set_visible(thiz, visible);
 
@@ -545,7 +545,7 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 	{
 		ftk_canvas_set_clip_rect(priv->canvas, NULL);
 	}
-	ftk_widget_paint(thiz);
+	ftk_widget_paint(thiz, priv->dirty_rect, priv->dirty_rect_nr);
 	ftk_canvas_set_clip_rect(priv->canvas, NULL);
 
 	ftk_window_enable_update(thiz);
@@ -616,7 +616,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 		{
 			ftk_source_ref(priv->update_idle);
 		}
-		ftk_main_loop_add_source(ftk_default_main_loop(), priv->update_idle);
+        ftk_main_loop_add_source(ftk_default_main_loop(), priv->update_idle);
 	}
 
 	return RET_OK;

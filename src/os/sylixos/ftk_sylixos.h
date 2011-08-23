@@ -70,9 +70,11 @@
 #define ftk_pipe_recv(fd, buf, length)  read(fd, buf, length)
 #define ftk_pipe_send(fd, buf, length)  write(fd, buf, length)
 
+#ifndef __cplusplus
 void ftk_assert(int cond, const char* func, const char* file, int line);
 #undef assert
 #define assert(cond)                    ftk_assert(cond, __func__, __FILE__, __LINE__)
+#endif
 
 #include "./config_ftk.h"
 
@@ -81,5 +83,7 @@ void ftk_assert(int cond, const char* func, const char* file, int line);
 #define FTK_HAS_MAIN                    0
 #define FTK_HAS_DLOPEN                  1
 #define FTK_HAS_LUA                     1
+
+#define FTK_OPTIMIZE_WIDGET_PAINT       1
 
 #endif  /* FTK_SYLIXOS_H */

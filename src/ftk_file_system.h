@@ -36,7 +36,11 @@
 
 FTK_BEGIN_DECLS
 
-typedef void* FtkFsHandle;
+typedef struct _FtkFsHandle
+{
+    char  name[FTK_MAX_PATH+1];
+    void* handle;
+} *FtkFsHandle;
 
 #define FTK_MIME_TYPE_LEN 31
 #define FTK_MIME_DIR "folder/*"

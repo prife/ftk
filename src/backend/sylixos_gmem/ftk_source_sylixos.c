@@ -219,8 +219,8 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
 {
     static FtkEvent event;
 
-    if (notify) {
-
+    if (notify)
+    {
         event.type = FTK_EVT_NOP;
 
         if (notify->ctype == MOUSE_CTYPE_REL)
@@ -268,7 +268,8 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
         ftk_logd("%s: sample.pressure=%d x=%d y=%d\n",
             __func__, event.u.mouse.press, event.u.mouse.x, event.u.mouse.y);
 
-        if (event.type != FTK_EVT_NOP) {
+        if (event.type != FTK_EVT_NOP)
+        {
             ftk_wnd_manager_queue_event_auto_rotate(ftk_default_wnd_manager(), &event);
         }
     }
@@ -324,7 +325,8 @@ static int ftk_source_sylixos_get_input_dev(char* dev, const char* dev_list[])
     char* divptr = dev;
     char* start;
 
-    do {
+    do
+    {
         start  = divptr;
         divptr = strchr(start, ':');
         if (divptr)

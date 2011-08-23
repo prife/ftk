@@ -60,38 +60,62 @@ Ret ftk_file_get_info(const char* file_name, FtkFileInfo* info)
 
 FtkFsHandle ftk_file_open(const char* file_name, const char* mode)
 {
+    FtkFsHandle file = NULL;
 	return_val_if_fail(file_name != NULL && mode != NULL, NULL);
 
-	return fopen(file_name, mode);
+	file = FTK_ZALLOC(sizeof(struct _FtkFsHandle));
+    return_val_if_fail(file != NULL, NULL);
+
+    file->handle = fopen(file_name, mode);
+    if (file->handle == NULL)
+    {
+        FTK_ZFREE(file, sizeof(struct _FtkFsHandle));
+    }
+    return file;
 }
 
 int  ftk_file_seek(FtkFsHandle file, size_t pos)
 {
-	return fseek((FILE*)file, pos, SEEK_SET);
+	return fseek((FILE*)file->handle, pos, SEEK_SET);
 }
 
 int  ftk_file_read(FtkFsHandle file, void* buffer, size_t length)
 {
-	return fread(buffer, 1, length, (FILE*)file);
+	return fread(buffer, 1, length, (FILE*)file->handle);
 }
 
 int  ftk_file_write(FtkFsHandle file, const void* buffer, size_t length)
 {
-	return fwrite(buffer, 1, length, (FILE*)file);
+	return fwrite(buffer, 1, length, (FILE*)file->handle);
 }
 
 void ftk_file_close(FtkFsHandle file)
 {
 	return_if_fail(file != NULL);
 
-	fclose((FILE*)file);
+	fclose((FILE*)file->handle);
+
+    FTK_ZFREE(file, sizeof(struct _FtkFsHandle));
 }
 
 FtkFsHandle ftk_dir_open(const char* dir_name)
 {
+    FtkFsHandle dir = NULL;
 	return_val_if_fail(dir_name != NULL, NULL);
 
-	return (FtkFsHandle)opendir(dir_name);
+	dir = FTK_ZALLOC(sizeof(struct _FtkFsHandle));
+    return_val_if_fail(dir != NULL, NULL);
+
+    dir->handle = opendir(dir_name);
+    if (dir->handle == NULL)
+    {
+        FTK_ZFREE(dir, sizeof(struct _FtkFsHandle));
+    }
+    else
+    {
+        strcpy(dir->name, dir_name);
+    }
+    return dir;
 }
 
 Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
@@ -99,8 +123,7 @@ Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
 	struct dirent* ent = NULL;
 	return_val_if_fail(dir != NULL && info != NULL, RET_FAIL);
 
-	ent = readdir((DIR*)dir);
-
+	ent = readdir((DIR*)dir->handle);
 	if(ent == NULL)
 	{
 		return RET_EOF;
@@ -115,21 +138,26 @@ Ret  ftk_dir_read(FtkFsHandle dir, FtkFileInfo* info)
 #endif
 	{
 		struct stat st = {0};
-		stat(ent->d_name, &st);
+
+	    ftk_snprintf(info->name, FTK_MAX_PATH, "%s/%s", dir->name, ent->d_name);
+
+		stat(info->name, &st);
+
 		info->is_dir = S_ISDIR(st.st_mode);
 	}
 
-	ftk_strncpy(info->name, ent->d_name, FTK_MAX_PATH);
+    ftk_strncpy(info->name, ent->d_name, FTK_MAX_PATH);
 
 	return RET_OK;
 }
 
 void ftk_dir_close(FtkFsHandle dir)
 {
-	if(dir != NULL)
-	{
-		closedir((DIR*)dir);
-	}
+    return_if_fail(dir != NULL);
+
+    closedir((DIR*)dir->handle);
+
+    FTK_ZFREE(dir, sizeof(struct _FtkFsHandle));
 }
 
 Ret ftk_fs_get_cwd(char cwd[FTK_MAX_PATH+1])

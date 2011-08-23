@@ -52,7 +52,8 @@
 
 void* ftk_display_bits(FtkDisplay* thiz, int* bpp);
 
-union multiptr {
+union multiptr
+{
     unsigned char  *p8;
     unsigned short *p16;
     unsigned long  *p32;
@@ -215,13 +216,15 @@ static void put_string_center(FtkDisplay* display, int x, int y, const char *s, 
                colidx);
 }
 
-typedef struct {
+typedef struct
+{
     int x[5], xfb[5];
     int y[5], yfb[5];
     int a[7];
 } calibration;
 
-struct ts_sample {
+struct ts_sample
+{
     int          x;
     int          y;
     unsigned int pressure;
@@ -583,7 +586,9 @@ int ftk_sylixos_touchscreen_calibrate(int argc, char *argv[])
         close(cal_fd);
 
         i = 0;
-    } else {
+    }
+    else
+    {
         printf("Calibration failed.\n");
         i = -1;
     }

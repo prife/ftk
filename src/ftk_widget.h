@@ -130,13 +130,13 @@ FtkWidget* ftk_widget_last_child(FtkWidget* thiz);
 FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id);
 FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y);
 
-void ftk_widget_paint(FtkWidget* thiz);
+void ftk_widget_paint(FtkWidget* thiz, FtkRect *rects, int rect_nr);
 void ftk_widget_destroy(FtkWidget* thiz);
 
 void ftk_widget_ref(FtkWidget* thiz);
 void ftk_widget_unref(FtkWidget* thiz);
 
-Ret  ftk_widget_paint_self(FtkWidget* thiz);
+Ret ftk_widget_paint_self(FtkWidget* thiz, FtkRect *rects, int rect_nr);
 void ftk_widget_ref_self(FtkWidget* thiz);
 void ftk_widget_unref_self(FtkWidget* thiz);
 Ret  ftk_widget_event(FtkWidget* thiz, FtkEvent* event);

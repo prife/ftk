@@ -918,7 +918,7 @@ static int lua_ftk_widget_paint(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	ftk_widget_paint(thiz);
+	ftk_widget_paint(thiz, NULL, 0);
 
 	return 1;
 }
@@ -975,7 +975,7 @@ static int lua_ftk_widget_paint_self(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	retv = ftk_widget_paint_self(thiz);
+	retv = ftk_widget_paint_self(thiz, NULL, 0);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;

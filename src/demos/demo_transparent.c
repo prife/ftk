@@ -77,7 +77,6 @@ void create_dialog(FtkBitmap* bitmap, FtkColor bg)
 	ftk_window_set_focus(dialog, button);
 
 	ftk_widget_set_text(dialog, "transparent demo");
-	ftk_widget_show_all(dialog, 1);
 
 	assert(ftk_dialog_run(dialog) == id);
 	ftk_widget_unref(dialog);
