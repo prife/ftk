@@ -24,3 +24,6 @@
 <application name="transparent" exec="ftk_demos" init="ftk_app_demo_transparent_create" />
 <application name="wait_box" exec="ftk_demos" init="ftk_app_demo_wait_box_create" />
 <application name="tab" exec="ftk_demos" init="ftk_app_demo_tab_create" />
+<application name="cairo" exec="ftk_demos" init="ftk_app_demo_cairo_create" />
+<application name="draw" exec="ftk_demos" init="ftk_app_demo_draw_create" />
+<application name="keyboard" exec="ftk_demos" init="ftk_app_demo_keyboard_create" />
