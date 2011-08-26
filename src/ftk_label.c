@@ -55,6 +55,12 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
 		
+		if(rows == 0) 
+		{
+			rows = 1;
+			ftk_logi("%s: height is too small.\n", __func__);
+		}
+
 		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
 		ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
 		for(i = 0; i < rows; i++)
