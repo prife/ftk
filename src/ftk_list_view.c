@@ -329,6 +329,11 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 		int visible_start = total - priv->visible_nr;
 		priv->visible_start = (visible_start >= 0) ? visible_start : 0;
 	}
+	
+	if(priv->current >= total)
+	{
+		priv->current = total - 1;
+	}
 
 	scroll_bar_width = priv->visible_nr >= total ? 0 : FTK_SCROLL_BAR_WIDTH;
 	dy = y + priv->top_margin;
