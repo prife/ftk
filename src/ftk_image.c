@@ -57,7 +57,7 @@ FtkWidget* ftk_image_create(FtkWidget* parent, int x, int y, int width, int heig
 	thiz->on_paint = ftk_image_on_paint;
 	thiz->destroy  = ftk_image_destroy;
 
-	ftk_widget_init(thiz, FTK_IMAGE, 0, x, y, width, height, FTK_ATTR_INSENSITIVE);
+	ftk_widget_init(thiz, FTK_IMAGE, 0, x, y, width, height, FTK_ATTR_INSENSITIVE|FTK_ATTR_TRANSPARENT);
 	ftk_widget_append_child(parent, thiz);
 
 	return thiz;
