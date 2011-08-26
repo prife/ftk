@@ -60,6 +60,7 @@ Ret  ftk_sources_manager_add(FtkSourcesManager* thiz, FtkSource* source)
 	return_val_if_fail(thiz != NULL && source != NULL, RET_FAIL);
 	return_val_if_fail(thiz->source_nr < thiz->max_source_nr, RET_FAIL);
 
+	source->active = 1;
 	thiz->sources[thiz->source_nr++] = source;
 
 	ftk_sources_manager_set_need_refresh(thiz);
@@ -88,6 +89,7 @@ Ret  ftk_sources_manager_remove(FtkSourcesManager* thiz, FtkSource* source)
 		}
 		thiz->source_nr--;
 		thiz->sources[thiz->source_nr] = NULL;
+		source->active = 0;
 		ftk_source_unref(source);
 	}
 	ftk_sources_manager_set_need_refresh(thiz);

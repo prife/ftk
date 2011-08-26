@@ -62,11 +62,9 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-#ifdef WIN32	
 	label = ftk_label_create(win, 10, 10, width - 20, 20);
-	ftk_widget_set_text(label, "中文文本");
-#else
-#endif
+	ftk_widget_set_text(label, "Left Text");
+	
 	label = ftk_label_create(win, 10, 40, width - 20, 20);
 	ftk_widget_set_text(label, "English Text(center)");
 	ftk_label_set_alignment(label, FTK_ALIGN_CENTER);

@@ -43,6 +43,7 @@ Ret ftk_main_loop_add_source(FtkMainLoop* thiz, FtkSource* source)
 	ftk_event_init(&event, FTK_EVT_ADD_SOURCE);
 	event.u.extra = source;
 
+	source->active = 1;
 	ftk_source_enable(source);
 	return ftk_source_queue_event(ftk_primary_source(), &event);
 }

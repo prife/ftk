@@ -52,6 +52,7 @@ struct _FtkSource
 	FtkSourceDestroy  destroy;
 	
 	int  ref;
+	int  active;/*If this source is managed by sources_manager.*/
 	int  disable;
 	char priv[ZERO_LEN_ARRAY];
 };
