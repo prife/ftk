@@ -50,6 +50,7 @@ int        ftk_window_is_mapped(FtkWidget* thiz);
 int        ftk_window_is_fullscreen(FtkWidget* thiz);
 Ret        ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen);
 Ret        ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect);
+int        ftk_window_is_opaque(FtkWidget* thiz);
 Ret        ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg);
 Ret        ftk_window_enable_update(FtkWidget* thiz);
 Ret        ftk_window_disable_update(FtkWidget* thiz);

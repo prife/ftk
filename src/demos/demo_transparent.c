@@ -54,7 +54,8 @@ void create_dialog(FtkBitmap* bitmap, FtkColor bg)
 	FtkWidget* button = NULL;
 	FtkWidget* label = NULL;
 	FtkWidget* dialog = ftk_dialog_create(0, 5, 320, height-60);
-	
+
+	ftk_dialog_hide_title(dialog);
 	ftk_widget_set_attr(dialog, FTK_ATTR_BG_CENTER);
 	ftk_window_set_background_with_alpha(dialog, bitmap, bg);
 

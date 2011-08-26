@@ -48,7 +48,7 @@ typedef struct _PrivInfo
 	int grab_ref;
 	int fullscreen;
 	int update_disabled;
-	
+	int is_opaque;	
 	FtkSource* update_idle;
 	size_t dirty_rect_nr;
 	FtkRect dirty_rect[FTK_MAX_DIRTY_RECT];
@@ -639,11 +639,10 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);	
 		const char* anim_hint = "";
-		
-		gc.mask = FTK_GC_BG | FTK_GC_FG;
+	
+		priv->is_opaque = 1;
 		priv->display = ftk_default_display();
 
 		thiz->on_event = ftk_window_on_event;
@@ -702,6 +701,14 @@ Ret ftk_window_enable_update(FtkWidget* thiz)
 	return RET_OK;
 }
 
+int        ftk_window_is_opaque(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, 0);
+
+	return priv->is_opaque;
+}
+
 Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, FtkColor bg)
 {
 	FtkGc gc = {0};
@@ -710,11 +717,16 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 
 	gc.bg = bg;
 	gc.mask = FTK_GC_BG;
-	
+
+	priv->is_opaque = 0;
 	if(bitmap != NULL)
 	{
 		gc.mask |= FTK_GC_BITMAP;
 		gc.bitmap = bitmap;
+	}
+	else
+	{
+		priv->is_opaque = (bg.a == 0xff);
 	}
 
 	ftk_widget_set_gc(thiz, FTK_WIDGET_NORMAL,      &gc);

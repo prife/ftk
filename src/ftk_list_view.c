@@ -324,7 +324,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	(void)height;
-	if(priv->visible_start >= total)
+	if((priv->visible_start + priv->visible_nr) >= total)
 	{
 		int visible_start = total - priv->visible_nr;
 		priv->visible_start = (visible_start >= 0) ? visible_start : 0;
