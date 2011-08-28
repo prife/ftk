@@ -43,6 +43,7 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	FtkWidget* button = NULL;
 	FtkWidget* dialog = NULL;
 	FtkBitmap* icon = NULL;
+	FtkWidget* combo_box = NULL;
 	int modal = (int)ctx;
 	
 	ftk_logd("%s:%d begin\n", __func__, __LINE__);
@@ -53,8 +54,14 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 
 	width = ftk_widget_width(dialog);
 	height = ftk_widget_height(dialog);
-	label = ftk_label_create(dialog, width/6, height/4, 5*width/6, 20);
-	ftk_widget_set_text(label, "Are you sure to quit?");
+//	label = ftk_label_create(dialog, width/6, height/4, 5*width/6, 20);
+//	ftk_widget_set_text(label, "Are you sure to quit?");
+	
+	combo_box = ftk_combo_box_create(dialog, width/6, height/4, 2*width/3, 30);
+	ftk_combo_box_set_text(combo_box, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "2 seconds");
+	ftk_combo_box_append(combo_box, NULL, "3 seconds");
 
 	button = ftk_button_create(dialog, width/6, height/2, width/3, 50);
 	ftk_widget_set_text(button, "yes");

@@ -146,14 +146,27 @@ static Ret button_drop_down_clicked(void* ctx, void* obj)
 	ftk_combo_box_popup_rect(thiz, &x, &y, &w, &h);
 
 	popup = ftk_dialog_create_ex(FTK_ATTR_POPUP, x, y, w, h);
-	if(y < ftk_widget_top_abs(thiz))
+	
+	/*FIXME: 
+	 * If the combobox is placed on a dialog, animation will cause problems, 
+	 * I have no idea how to fix it, so just disable animation now.
+	 */
+	if(ftk_widget_type(ftk_widget_toplevel(thiz)) == FTK_WINDOW)
 	{
-		ftk_window_set_animation_hint(popup, "combobox_up");
+		if(y < ftk_widget_top_abs(thiz))
+		{
+			ftk_window_set_animation_hint(popup, "combobox_up");
+		}
+		else
+		{
+			ftk_window_set_animation_hint(popup, "combobox_down");
+		}
 	}
 	else
 	{
-		ftk_window_set_animation_hint(popup, "combobox_down");
+		ftk_window_set_animation_hint(popup, "");
 	}
+
 	ftk_dialog_hide_title(popup);
 	w = ftk_widget_width(popup) - FTK_DIALOG_BORDER * 2;
 	h = ftk_widget_height(popup) - FTK_DIALOG_BORDER * 2;
