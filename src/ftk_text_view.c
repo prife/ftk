@@ -400,6 +400,7 @@ static Ret ftk_text_view_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_KEY_CHOOSE_IME:
 		{
+			if(priv->readonly) break;
 			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
 			ftk_input_method_chooser();
 			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
@@ -490,15 +491,21 @@ static Ret ftk_text_view_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
-			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
-			ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), FTK_INPUT_NORMAL);
+			if(!priv->readonly)
+			{
+				ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
+				ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), FTK_INPUT_NORMAL);
+			}
 			ftk_source_ref(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
 		case FTK_EVT_FOCUS_OUT:
 		{
-			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
+			if(!priv->readonly)
+			{
+				ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
+			}
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
