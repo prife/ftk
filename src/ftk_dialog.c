@@ -95,16 +95,6 @@ static Ret  ftk_dialog_on_event(FtkWidget* thiz, FtkEvent* event)
 
 	switch(event->type)
 	{
-		case FTK_EVT_SHOW:
-		{
-			ftk_window_grab(thiz, NULL);
-			break;
-		}
-		case FTK_EVT_HIDE:
-		{
-			ftk_window_ungrab(thiz, NULL);
-			break;
-		}
 		case FTK_EVT_ADD_CHILD:
 		{
 			int x = 0;
