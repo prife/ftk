@@ -555,6 +555,12 @@ static Ret  ftk_wnd_manager_default_do_animation(FtkWndManager* thiz, FtkEvent* 
 			{
 				continue;
 			}
+		
+			/*FIXME: If the top window is dialog, we disable animation.*/
+			if(ftk_widget_type(win) == FTK_DIALOG)
+			{
+				return RET_OK;
+			}
 
 			if(ftk_widget_type(win) != FTK_WINDOW)
 			{

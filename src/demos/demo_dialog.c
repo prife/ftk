@@ -62,7 +62,7 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	ftk_combo_box_append(combo_box, NULL, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "2 seconds");
 	ftk_combo_box_append(combo_box, NULL, "3 seconds");
-	ftk_entry_set_readonly(ftk_combo_box_get_entry(combo_box), 1);
+	ftk_entry_set_readonly(ftk_combo_box_get_entry(combo_box), modal);
 
 	button = ftk_button_create(dialog, width/6, height/2, width/3, 50);
 	ftk_widget_set_text(button, "yes");
