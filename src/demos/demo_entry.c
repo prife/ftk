@@ -48,7 +48,7 @@ FtkApp* ftk_app_demo_entry_create()
 #define FTK_HIDE extern
 #endif /*FTK_AS_PLUGIN*/
 
-#define STR_TEXT1 "Single line editor, that means you can input a one line only."
+#define STR_TEXT1 "Read only editor"
 #define STR_TEXT2 "Single line editor, 也就是说你只能输入一行文字."
 
 FTK_HIDE int FTK_MAIN(int argc, char* argv[])
@@ -72,6 +72,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_entry_set_tips(entry, "Please input some digits.");
 	entry = ftk_entry_create(win, 10, 80, ftk_widget_width(win) - 20, 30);
 	ftk_widget_set_text(entry, STR_TEXT1);
+	ftk_entry_set_readonly(entry, 1);
 	assert(strcmp(STR_TEXT1, ftk_widget_get_text(entry)) == 0);
 
 	entry = ftk_entry_create(win, 10, 130, ftk_widget_width(win) - 20, 30);

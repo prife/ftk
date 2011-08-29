@@ -48,6 +48,7 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text);
 Ret ftk_entry_set_tips(FtkWidget* thiz, const char* tips);
 Ret ftk_entry_set_input_type(FtkWidget* thiz, FtkInputType type);
 Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text);
+Ret ftk_entry_set_readonly(FtkWidget* thiz, int readonly);
 
 FTK_END_DECLS
 

@@ -47,6 +47,7 @@ typedef struct _PrivInfo
 	int   selected_end;
 	int   selected_start;
 	int   input_type;
+	int   readonly;
 	FtkPoint caret_pos;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
@@ -175,6 +176,7 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_KEY_CHOOSE_IME:
 		{
+			if(priv->readonly) break;
 			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
 			ftk_input_method_chooser();
 			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
@@ -207,6 +209,7 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_DOWN:break;
 		case FTK_KEY_DELETE:
 		{
+			if(priv->readonly) break;
 			ftk_text_buffer_delete_chars(priv->text_buffer, priv->caret, 1);
 			ftk_entry_move_caret(thiz, 0);
 			break;
@@ -214,6 +217,7 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		case FTK_KEY_BACKSPACE:
 		{
 			int caret = priv->caret;
+			if(priv->readonly) break;
 			ftk_entry_move_caret(thiz, -1);
 			if(ftk_text_buffer_delete_chars(priv->text_buffer, caret, -1) == RET_OK)
 			{
@@ -232,6 +236,7 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		default:
 		{
+			if(priv->readonly) break;
 			if(event->u.key.code < 0xff && isprint(event->u.key.code))
 			{
 				ftk_entry_input_char(thiz, event->u.key.code);
@@ -253,8 +258,11 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 	{
 		case FTK_EVT_FOCUS_IN:
 		{
-			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
-			ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), (FtkInputType)priv->input_type);
+			if(!priv->readonly)
+			{
+				ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
+				ftk_input_method_manager_set_current_type(ftk_default_input_method_manager(), (FtkInputType)priv->input_type);
+			}
 			ftk_source_ref(priv->caret_timer);
 			ftk_source_timer_reset(priv->caret_timer);
 			ftk_main_loop_add_source(ftk_default_main_loop(), priv->caret_timer);
@@ -262,7 +270,10 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_FOCUS_OUT:
 		{
-			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
+			if(!priv->readonly)
+			{
+				ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
+			}
 			ftk_main_loop_remove_source(ftk_default_main_loop(), priv->caret_timer);
 			break;
 		}
@@ -298,6 +309,7 @@ static Ret ftk_entry_on_event(FtkWidget* thiz, FtkEvent* event)
 		}
 		case FTK_EVT_MOUSE_LONG_PRESS:
 		{
+			if(priv->readonly) break;
 			ftk_input_method_manager_focus_out(ftk_default_input_method_manager(), thiz);
 			ftk_input_method_chooser();
 			ftk_input_method_manager_focus_in(ftk_default_input_method_manager(), thiz);
@@ -612,3 +624,12 @@ Ret ftk_entry_set_text(FtkWidget* thiz, const char* text)
 	return RET_OK;
 }
 
+Ret ftk_entry_set_readonly(FtkWidget* thiz, int readonly)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->readonly = readonly;
+
+	return RET_OK;
+}

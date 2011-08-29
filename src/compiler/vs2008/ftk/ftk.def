@@ -160,6 +160,7 @@ ftk_entry_insert_text
 ftk_entry_set_input_type
 ftk_entry_set_text
 ftk_entry_set_tips
+ftk_entry_set_readonly
 ftk_expr_eval
 ftk_file_browser_create
 ftk_file_browser_load
