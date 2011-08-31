@@ -150,6 +150,7 @@ static const char* radio_bg_off_imgs[FTK_WIDGET_STATE_NR] =
 
 static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 {
+	FtkRect box = {0};
 	int dx = 0;
 	int dy = 0;
 	int icon_w = 0;
@@ -158,8 +159,11 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 	FtkBitmap* bitmap = NULL;
 	DECL_PRIV0(thiz, priv);
 	const char** bg_imgs = NULL;
+
+	FTK_GET_PAINT_RECT(thiz, box);
+
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	
+
 	if(priv->is_radio)
 	{
 		bg_imgs = priv->checked ? radio_bg_on_imgs : radio_bg_off_imgs;
@@ -187,7 +191,8 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 		dx = priv->icon_at_right ? 2 : icon_w;
 		
 		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, ftk_widget_get_text(thiz), -1, 1);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, &box,
+			ftk_widget_get_text(thiz), -1, 1);
 	}
 
 	FTK_END_PAINT();

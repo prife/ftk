@@ -172,6 +172,7 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 {
 	int dx = 0;
 	int dy = 0;
+	FtkRect box = {x, y, w, h};
 	DECL_PRIV(thiz, priv);
 	FtkBitmap* right_icon = NULL;
 	FtkListItemInfo* info = NULL;
@@ -286,7 +287,8 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
-			ftk_canvas_draw_string(canvas, dx + line.xoffset, dy, line.text, line.len, 1);
+			ftk_canvas_draw_string(canvas, dx + line.xoffset, dy, &box,
+					line.text, line.len, 1);
 		}
 	}
 

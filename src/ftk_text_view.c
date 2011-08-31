@@ -652,9 +652,12 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 	{
 		int i = 0;
 		int start = 0;
+		FtkRect box = {0};
 		FtkTextLine line = {0};
 		FtkTextLayout* text_layout = ftk_default_text_layout();
-		
+
+		FTK_GET_PAINT_RECT(thiz, box);
+
 		font_height = ftk_canvas_font_height(canvas);
 		dy = y + priv->v_margin + TEXT_VIEW_TOP_MARGIN;
 		dx = x + TEXT_VIEW_H_MARGIN;
@@ -676,7 +679,8 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 			dy += TEXT_VIEW_V_MARGIN;
 			if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK && line.len > 0)
 			{
-				ftk_canvas_draw_string(canvas, dx, dy+font_height/2, line.text, line.len, 1);
+				ftk_canvas_draw_string(canvas, dx, dy+font_height/2, &box,
+						line.text, line.len, 1);
 			}
 			dy += font_height;
 		}

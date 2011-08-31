@@ -64,21 +64,30 @@ typedef struct _PrivInfo
 #define FTK_POINT_IN_RECT(xx, yy, r) ((xx >= r.x && xx < (r.x + r.width)) \
 	&& (yy >= r.y && yy < (r.y + r.height)))
 
-static FtkRect ftk_rect_and(FtkRect* r1, FtkRect* r2)
+static Ret ftk_rect_and(const FtkRect *r1, const FtkRect *r2, FtkRect *r)
 {
-	FtkRect r;
-	size_t right1 = r1->x + r1->width;
-	size_t bottom1 = r1->y + r1->height;
-	size_t right2 = r2->x + r2->width;
-	size_t bottom2 = r2->y + r2->height;
+	return_val_if_fail(r1 != NULL, RET_FAIL);
+	return_val_if_fail(r2 != NULL, RET_FAIL);
+	return_val_if_fail(r != NULL, RET_FAIL);
 
-	r.x = FTK_MAX(r1->x, r2->x);
-	r.y = FTK_MAX(r1->y, r2->y);
+	Ret ret = RET_FAIL;
+	int x = FTK_MAX(r1->x, r2->x);
+	int y = FTK_MAX(r1->y, r2->y);
+	int width = FTK_MIN(r1->x + r1->width, r2->x + r2->width) - x;
+	int height = FTK_MIN(r1->y + r1->height, r2->y + r2->height) - y;
 
-	r.width = FTK_MIN(right1, right2) - r.x;
-	r.height = FTK_MIN(bottom1, bottom2) - r.y;
+	// the horizontal range is [x, x + width), so width == 0 is still invalid
+	// the vertical range is [y, y + height), so height == 0 is still invalid
+	if(width > 0 && height > 0)
+	{
+		r->x = x;
+		r->y = y;
+		r->width = width;
+		r->height = height;
+		ret = RET_OK;
+	}
 
-	return r;
+	return ret;
 }
 
 static Ret ftk_canvas_default_sync_gc(FtkCanvas* thiz)
@@ -374,9 +383,8 @@ static Ret ftk_canvas_default_clear_rect(FtkCanvas* thiz, size_t x, size_t y, si
 	rect.y = y;
 	rect.width = w;
 	rect.height = h;
-	rect = ftk_rect_and(&rect, &priv->clip->rect);
 
-	if(rect.width <= 0 || rect.height <= 0)
+	if (ftk_rect_and(&rect, &priv->clip->rect, &rect) != RET_OK)
 	{
 //		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
@@ -480,9 +488,8 @@ static Ret ftk_canvas_default_draw_rect(FtkCanvas* thiz, size_t x, size_t y, siz
 	rect.y = y;
 	rect.width = w;
 	rect.height = h;
-	rect = ftk_rect_and(&rect, &priv->clip->rect);
 
-	if(rect.width <= 0 || rect.height <= 0)
+	if(ftk_rect_and(&rect, &priv->clip->rect, &rect) != RET_OK)
 	{
 //		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
@@ -671,8 +678,7 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && bitmap != NULL && dst_r != NULL && src_r != NULL, RET_FAIL);
 
-	rect = ftk_rect_and(&rect, &priv->clip->rect);
-	if(rect.width <= 0 || rect.height <= 0)
+	if(ftk_rect_and(&rect, &priv->clip->rect, &rect) != RET_OK)
 	{
 //		ftk_logd("%s: skip.\n", __func__);
 		return RET_OK;
@@ -727,8 +733,8 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 	return ret;
 }
 
-static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y, 
-	const char* str, int len, int vcenter)
+static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
+	const FtkRect* box, const char* str, int len, int vcenter)
 {
 	int i = 0;
 	int j = 0;
@@ -746,8 +752,13 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 	unsigned short code = 0;
 	const char* iter = str;
 	DECL_PRIV(thiz, priv);
-	FtkRect clip = priv->clip->rect;
-	
+	FtkRect clip = {0};
+
+	if(ftk_rect_and(box, &priv->clip->rect, &clip) != RET_OK)
+	{
+		return RET_OK;
+	}
+
 	bits   = priv->bits;
 	right = clip.x + clip.width;
 	bottom = clip.y + clip.height;
@@ -778,10 +789,15 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 		if(code == 0xffff || code == 0) break;
 		if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
 			continue;
-
 		glyph.y = vcenter ? glyph.y - vcenter_offset : glyph.y;
-		if((x + glyph.x + glyph.w) >= right) break;
-		if((y - glyph.y + glyph.h) >= bottom) break;
+		if((x + glyph.x + glyph.w) >= right)
+		{
+			break;
+		}
+		if((y - glyph.y + glyph.h) >= bottom)
+		{
+			break;
+		}
 
 		x = x + glyph.x;
 		y = y - glyph.y;
@@ -908,16 +924,18 @@ static Ret ftk_canvas_default_draw_bitmap_clip(FtkCanvas* thiz, FtkBitmap* bitma
 
 }
 
-static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, size_t x, size_t y, 
-	const char* str, int len, int vcenter)
+static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, size_t x, size_t y,
+	const FtkRect* box, const char* str, int len, int vcenter)
 {
-	DECL_PRIV(thiz, priv);
+	return_val_if_fail(box != NULL, RET_FAIL);
 	return_val_if_fail(str != NULL, RET_FAIL);
+
+	DECL_PRIV(thiz, priv);
 	len = len >= 0 ? len : (int)strlen(str);
 
 	FOR_EACH_CLIP(priv)
 	{
-		ftk_canvas_default_draw_string(thiz, x, y, str, len, vcenter);
+		ftk_canvas_default_draw_string(thiz, x, y, box, str, len, vcenter);
 		if(priv->clip == NULL) break;
 	}
 

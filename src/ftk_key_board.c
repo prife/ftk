@@ -861,6 +861,7 @@ static Ret ftk_key_board_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 {
+	FtkRect box = {0};
 	size_t r = 0;
 	size_t c = 0;
 	size_t xoffset = 0;
@@ -885,6 +886,11 @@ static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 			height = row->height;
 			yoffset = row->y + y;
 			xoffset = cell->x + x;
+
+			box.x = xoffset;
+			box.y = yoffset;
+			box.width = width;
+			box.height = height;
 
 			if(cell->action == NULL)
 			{
@@ -917,8 +923,8 @@ static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 							xoffset + x_c, yoffset, bg_width, height);
 					}
 
-					ftk_canvas_draw_string(canvas, xoffset + x_c, yoffset + FTK_HALF(height), 
-						candidate->text, strlen(candidate->text), 1);
+					ftk_canvas_draw_string(canvas, xoffset + x_c, yoffset + FTK_HALF(height),
+						&box, candidate->text, strlen(candidate->text), 1);
 
 					x_c += candidate->extent + 1;
 					bmp = desc->candidates_vertical_line;
@@ -945,10 +951,10 @@ static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 
 					if(extent <= width)
 					{
-						ftk_canvas_draw_string(canvas, 
-							xoffset + FTK_HALF(width - extent), 
-							yoffset + FTK_HALF(height), 
-							cell->text, len, 1);
+						ftk_canvas_draw_string(canvas,
+							xoffset + FTK_HALF(width - extent),
+							yoffset + FTK_HALF(height),
+							&box, cell->text, len, 1);
 					}
 					else
 					{

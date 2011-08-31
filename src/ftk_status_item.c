@@ -90,16 +90,20 @@ static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
+		FtkRect box = {0};
 		int xoffset = 0;
 		int yoffset = FTK_HALF(height);
 		FtkTextLine line = {0};
 		const char* text = ftk_widget_get_text(thiz);
 		FtkTextLayout* text_layout = ftk_default_text_layout();
-	
+
+		FTK_GET_PAINT_RECT(thiz, box);
+
 		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
-			ftk_canvas_draw_string(canvas, x, y + yoffset, line.text, line.len, 1);
+			ftk_canvas_draw_string(canvas, x, y + yoffset, &box,
+				line.text, line.len, 1);
 		}
 	}
 

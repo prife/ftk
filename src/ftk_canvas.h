@@ -56,7 +56,7 @@ typedef Ret (*FtkCanvasDrawLine)(FtkCanvas* thiz, size_t x1, size_t y1, size_t x
 typedef Ret (*FtkCanvasClearRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h);
 typedef Ret (*FtkCanvasDrawRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, int round, int fill);
 typedef Ret (*FtkCanvasDrawBitmap)(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* s, FtkRect* d, int alpha);
-typedef Ret (*FtkCanvasDrawString)(FtkCanvas* thiz, size_t x, size_t y, const char* str, int len, int vcenter);
+typedef Ret (*FtkCanvasDrawString)(FtkCanvas* thiz, size_t x, size_t y, const FtkRect *box, const char* str, int len, int vcenter);
 typedef Ret (*FtkCanvasLockBuffer)(FtkCanvas* thiz, FtkBitmap** bitmap);
 typedef Ret (*FtkCanvasUnlockBuffer)(FtkCanvas* thiz);
 typedef void (*FtkCanvasDestroy)(FtkCanvas* thiz);
@@ -142,13 +142,13 @@ static inline Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bmp,
 	return thiz->draw_bitmap(thiz, bmp, s, d, alpha);
 }
 
-static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, size_t x, size_t y, 
-	const char* str, int len, int vcenter)
+static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, size_t x, size_t y,
+	const FtkRect* box, const char* str, int len, int vcenter)
 {
 	len = (len < 0 && str != NULL) ? (int)strlen(str) : len;
 	return_val_if_fail(thiz != NULL && thiz->draw_string != NULL, RET_FAIL);
 
-	return thiz->draw_string(thiz, x, y, str, len, vcenter);
+	return thiz->draw_string(thiz, x, y, box, str, len, vcenter);
 }
 
 static inline Ret ftk_canvas_lock_buffer(FtkCanvas* thiz, FtkBitmap** bitmap)
