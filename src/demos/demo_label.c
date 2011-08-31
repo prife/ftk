@@ -62,15 +62,15 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 
-	label = ftk_label_create(win, 10, 10, width - 20, 20);
+	label = ftk_label_create(win, 10, 10, width - 20, 22);
 	ftk_widget_set_text(label, "Left Text");
 	
-	label = ftk_label_create(win, 10, 40, width - 20, 20);
+	label = ftk_label_create(win, 10, 40, width - 20, 22);
 	ftk_widget_set_text(label, "English Text(center)");
 	ftk_label_set_alignment(label, FTK_ALIGN_CENTER);
 	assert(strcmp(ftk_widget_get_text(label), "English Text(center)") == 0);
 	
-	label = ftk_label_create(win, 10, 70, width - 20, 20);
+	label = ftk_label_create(win, 10, 70, width - 20, 22);
 	ftk_widget_set_text(label, "English Text(right)");
 	ftk_label_set_alignment(label, FTK_ALIGN_RIGHT);
 
@@ -86,7 +86,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 #else
 	ftk_widget_set_text(label, "中英文混合多行文本显示:the linux mobile development.带有背景颜色。");
 #endif
-	label = ftk_label_create(win, 50, height/2-30, width, 20);
+	label = ftk_label_create(win, 50, height/2-30, width, 22);
 	info->label = label;
 	
 	ftk_widget_set_text(win, "label demo");
