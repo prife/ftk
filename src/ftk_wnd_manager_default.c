@@ -459,6 +459,7 @@ static const unsigned char const key_tanslate_table[0xff] =
 };
 #else
 static unsigned char key_tanslate_table[0xff] = {0};
+#ifndef FTK_SUPPORT_C99
 static void key_tanslate_table_init(void)
 {
 	key_tanslate_table[FTK_KEY_1]             =  FTK_KEY_EXCLAM;
@@ -485,6 +486,7 @@ static void key_tanslate_table_init(void)
 
 	return;
 }
+#endif /* Not FTK_SUPPORT_C99 */
 #endif
 
 static Ret  ftk_wnd_manager_default_key_translate(FtkWndManager* thiz, FtkEvent* event)
