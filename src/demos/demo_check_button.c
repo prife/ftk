@@ -1,12 +1,5 @@
 #include "ftk.h"
 
-static Ret button_quit_clicked(void* ctx, void* obj)
-{
-	ftk_widget_unref(ctx);
-
-	return RET_OK;
-}
-
 static Ret button_clicked(void* ctx, void* obj)
 {
 	return RET_OK;

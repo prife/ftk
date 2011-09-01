@@ -55,7 +55,6 @@ static Ret  ftk_input_method_gpinyin_handle_event(FtkInputMethod* thiz, FtkEvent
 static Ret  ftk_input_method_gpinyin_init(FtkInputMethod* thiz)
 {
 	Ret ret = RET_FAIL;
-	DECL_PRIV(thiz, priv);
 	char dict_filename[FTK_MAX_PATH+1];
 	char user_dict_filename[FTK_MAX_PATH+1];
 

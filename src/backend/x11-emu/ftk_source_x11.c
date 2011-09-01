@@ -28,6 +28,7 @@
  * 2009-10-06 Li XianJing <xianjimli@hotmail.com> created
  *
  */
+#include "ftk.h"
 #include "ftk_typedef.h"
 #include "ftk_key.h"
 #include "ftk_log.h"

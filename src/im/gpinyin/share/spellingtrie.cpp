@@ -435,7 +435,7 @@ SpellingNode* SpellingTrie::construct_spellings_subset(
 
   const char *spelling_last_start = spelling_buf_ + spelling_size_ * item_start;
   char char_for_node = spelling_last_start[level];
-  assert(char_for_node >= 'A' && char_for_node <= 'Z' ||
+  assert((char_for_node >= 'A' && char_for_node <= 'Z') ||
          'h' == char_for_node);
 
   // Scan the array to find how many sons

@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	ftk_set_allocator(ftk_allocator_default_create());
 
 	thiz = ftk_config_create();
-	assert(ftk_config_init(thiz, (sizeof(args)/sizeof(args[0]))-1, args) == RET_OK);
+	assert(ftk_config_init(thiz, (sizeof(args)/sizeof(args[0]))-1, (char **)args) == RET_OK);
 
 	assert(strcmp(ftk_config_get_theme(thiz), "abc") == 0);
 	assert(strcmp(ftk_config_get_data_dir(thiz), "/data") == 0);

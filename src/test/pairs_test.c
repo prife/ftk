@@ -6,7 +6,7 @@ int main(int argc, char* argv[])
 	int i = 0;
 	int nr = 100;
 	char key[FTK_KEY_LEN+1];
-	char value[FTK_KEY_LEN+1];
+	char value[FTK_VALUE_LEN+1];
 	FtkPairs* thiz = NULL;
 	ftk_set_allocator(ftk_allocator_default_create());
 	

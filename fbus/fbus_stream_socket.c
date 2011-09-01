@@ -173,7 +173,7 @@ FBusStream* fbus_socket_accept(int sock_no)
 	struct sockaddr_in addr_client = {0};
 
 	memset(&addr_client, 0x00, sizeof(addr_client));
-	sock_client = accept(sock_no, (struct sockaddr*)&addr_client, &addrlen);
+	sock_client = accept(sock_no, (struct sockaddr*)&addr_client, (socklen_t*)&addrlen);
 	return_val_if_fail(sock_client > 0, NULL);
 
 	return fbus_stream_socket_create(sock_client);

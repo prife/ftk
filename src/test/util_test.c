@@ -17,7 +17,7 @@ static void test_strtol()
 {
 	int i = 0;
 	const char* p1 = NULL;
-	const char* p2 = NULL;
+	char* p2 = NULL;
 	const char* strs[] = 
 	{
 		"1",

@@ -482,9 +482,9 @@ static FtkBitmap* ftk_file_browser_load_mime_icon(const char* file_name)
 {
 	char* p = NULL;
 	char icon_name[FTK_MAX_PATH+1] = {0};
-	const char mime_type[FTK_MIME_TYPE_LEN + 1] = {0};
+	char mime_type[FTK_MIME_TYPE_LEN + 1] = {0};
 	
-	strcpy(mime_type, (char*)ftk_file_get_mime_type(file_name));
+	strcpy(mime_type, ftk_file_get_mime_type(file_name));
 
 	p = strrchr(mime_type, '/');
 	return_val_if_fail(p != NULL, NULL);
