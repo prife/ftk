@@ -30,6 +30,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_allocator.h"
 #include "ftk_input_pattern.h"
 
@@ -328,7 +329,7 @@ Ret    ftk_input_pattern_input(FtkInputPattern* thiz, FtkKey key)
 				}
 				else if(pattern->size == 1)
 				{
-					thiz->text[thiz->caret] == pattern->default_char;
+					thiz->text[thiz->caret] = pattern->default_char;
 				}
 			}
 			break;
@@ -409,7 +410,10 @@ Ret    ftk_input_pattern_input(FtkInputPattern* thiz, FtkKey key)
 		}
 	}
 
-	if(thiz->caret < 0) thiz->caret == 0;
+	if(thiz->caret < 0)
+	{
+		thiz->caret = 0;
+	}
 
 	return ret;
 }
