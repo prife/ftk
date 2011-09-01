@@ -13,7 +13,7 @@ Ret ftk_main(int argc, char* argv[])
 	ftk_init(argc, argv);
 #endif
 
-	ftk_app_run(ftk_app_file_browser_create(), argc, argv);
+	ftk_app_run(app, argc, argv);
 
 #ifdef HAS_MAIN
 	ftk_run();

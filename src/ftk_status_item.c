@@ -91,7 +91,6 @@ static Ret ftk_status_item_on_paint(FtkWidget* thiz)
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
 		FtkRect box = {0};
-		int xoffset = 0;
 		int yoffset = FTK_HALF(height);
 		FtkTextLine line = {0};
 		const char* text = ftk_widget_get_text(thiz);

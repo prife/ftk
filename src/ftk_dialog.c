@@ -168,7 +168,6 @@ static Ret  ftk_dialog_change_alpha(FtkWidget* thiz, FtkCanvas* canvas, int x, i
 static Ret  ftk_dialog_paint_border(FtkWidget* thiz, FtkCanvas* canvas, int x, int y, int width, int height)
 {
 	DECL_PRIV1(thiz, priv);
-	FtkGc* gc = ftk_widget_get_gc(thiz);
 	return_val_if_fail(priv->bg != NULL && priv->title_bg != NULL, RET_FAIL);
 
 	if(!ftk_window_is_opaque(thiz))

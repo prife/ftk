@@ -47,7 +47,6 @@ typedef struct _PrivInfo
 static Ret   ftk_animation_alpha_step(FtkAnimation* thiz)
 {
 	FtkRect r = {0};
-	FtkRect dst_r = {0};
 	float percent = 0;
 	DECL_PRIV(thiz, priv);
 

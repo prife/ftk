@@ -887,6 +887,7 @@ FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id)
 	return NULL;
 }
 
+#ifdef FTK_OPTIMIZE_WIDGET_PAINT
 static int ftk_rects_is_cross(const FtkRect *a, const FtkRect *b)
 {
     int minx, maxx, miny, maxy;
@@ -907,11 +908,11 @@ static int ftk_rects_is_cross(const FtkRect *a, const FtkRect *b)
 
     return (maxx - minx) * (maxy - miny);
 }
+#endif /* FTK_OPTIMIZE_WIDGET_PAINT */
 
 void ftk_widget_paint(FtkWidget* thiz, FtkRect *rects, int rect_nr)
 {
     FtkRect rect = {0};
-    int     i = 0;
 
 	if(!ftk_widget_is_parent_visible(thiz))
 	{
@@ -1275,8 +1276,9 @@ Ret ftk_widget_paint_self(FtkWidget* thiz, FtkRect *rects, int rect_nr)
             ftk_canvas_clear_rect(canvas, x, y, width, height);
         }
 
+#ifdef FTK_OPTIMIZE_WIDGET_PAINT
         __paint_children:
-
+#endif
         bitmap = priv->gc[priv->state].bitmap;
         if(bitmap != NULL)
         {

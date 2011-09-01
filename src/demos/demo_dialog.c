@@ -39,7 +39,7 @@ static Ret button_dialog_clicked(void* ctx, void* obj)
 	int id = 0;
 	int width = 0;
 	int height = 0;
-	FtkWidget* label = NULL;
+//	FtkWidget* label = NULL;
 	FtkWidget* button = NULL;
 	FtkWidget* dialog = NULL;
 	FtkBitmap* icon = NULL;

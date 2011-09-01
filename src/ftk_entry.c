@@ -341,6 +341,7 @@ static Ret ftk_entry_update_caret_pos(FtkWidget* thiz)
 	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
+	(void)height;
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 
 	if(priv->caret < priv->visible_start || priv->caret > priv->visible_end 
