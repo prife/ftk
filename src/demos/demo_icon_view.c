@@ -35,7 +35,7 @@ static Ret item_clicked(void* ctx, void* obj)
 {
 	FtkIconViewItem* item = obj;
 	
-	ftk_logd("%s: %s: user_data=%d\n", __func__, item->text, item->user_data);
+	ftk_logd("%s: %s: user_data=%d\n", __func__, item->text, (int)item->user_data);
 
 	return RET_OK;
 }

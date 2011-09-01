@@ -90,7 +90,7 @@ static Ret applist_on_item_clicked(void* ctx, void* obj)
 
 	ftk_app_run(info->app, 0, NULL);
 
-	ftk_logd("%s: %s: user_data=%d\n", __func__, item->text, item->user_data);
+	ftk_logd("%s: %s: user_data=%d\n", __func__, item->text, (int)item->user_data);
 
 	return RET_OK;
 }

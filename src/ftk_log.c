@@ -43,7 +43,7 @@ Ret ftk_log(const char* format, va_list ap)
 	char buffer[1024] = {0};
 	ftk_vsnprintf(buffer, sizeof(buffer), format, ap);
 
-	printf(buffer);
+	printf("%s", buffer);
 
 #ifdef IPHONE
 	if(log_file == NULL)

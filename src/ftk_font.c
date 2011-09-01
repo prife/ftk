@@ -279,7 +279,7 @@ static Ret ftk_font_cache_add(FtkFont* thiz, FtkGlyph* glyph)
 
 	if(glyph->w > priv->font_height || glyph->h > priv->font_height)
 	{
-		ftk_logd("%s: %p is too large to cache\n", __func__, glyph->code);
+		ftk_logd("%s: 0x%04x is too large to cache\n", __func__, glyph->code);
 		return RET_FAIL;
 	}
 
@@ -316,8 +316,8 @@ static Ret ftk_font_cache_add(FtkFont* thiz, FtkGlyph* glyph)
 	c = (FtkGlyphCache*)p;
 	c->access_nr++;
 	c->load_time = SHRINK_TIME(ftk_get_relative_time());
-	
-	ftk_logd("%s add %p at %d\n", __func__, p->code, pos);
+
+	ftk_logd("%s add 0x%04x at %d\n", __func__, p->code, pos);
 
 	return RET_OK;
 }
@@ -362,7 +362,7 @@ static Ret ftk_font_cache_lookup (FtkFont* thiz, unsigned short code, FtkGlyph* 
 	{
 		if(glyph->w > priv->font_height || glyph->h > priv->font_height)
 		{
-			ftk_logd("%s: %p is too large to cache%dx%d %dx%d\n", 
+			ftk_logd("%s: 0x%04x is too large to cache%dx%d %dx%d\n",
 				__func__, glyph->code, glyph->w, glyph->h, priv->font_height, priv->font_height);
 			return RET_FAIL;
 		}
