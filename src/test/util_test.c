@@ -145,6 +145,7 @@ static void test_ftk_strs_cat()
 void test_normalize_path()
 {
 	char path_out[FTK_MAX_PATH + 1] = {0};
+	int chdir_ret = 0;
 
 	assert(normalize_path_name(NULL, path_out) == NULL);
 	assert(normalize_path_name(NULL, NULL) == NULL);
@@ -157,7 +158,7 @@ void test_normalize_path()
 	assert(strcmp(normalize_path_name("//////test.txt", path_out), "/test.txt") == 0);
 	assert(strcmp(normalize_path_name("/./././././test.txt", path_out), "/test.txt") == 0);
 
-	chdir("/home");
+	chdir_ret = chdir("/home");
 	assert(strcmp(normalize_path_name("test.txt", path_out), "/home/test.txt") == 0);
 	assert(strcmp(normalize_path_name("./test.txt", path_out), "/home/test.txt") == 0);
 	assert(strcmp(normalize_path_name("./", path_out), "/home/") == 0);

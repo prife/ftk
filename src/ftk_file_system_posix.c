@@ -163,8 +163,9 @@ void ftk_dir_close(FtkFsHandle dir)
 Ret ftk_fs_get_cwd(char cwd[FTK_MAX_PATH+1])
 {
 	return_val_if_fail(cwd != NULL, RET_FAIL);
+	const char* getcwd_ret = NULL;
 
-	ftk_getcwd(cwd, FTK_MAX_PATH);
+	getcwd_ret = ftk_getcwd(cwd, FTK_MAX_PATH);
 	cwd[FTK_MAX_PATH] = '\0';
 
 	return RET_OK;

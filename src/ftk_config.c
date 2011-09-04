@@ -122,6 +122,7 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 	char cwd[FTK_MAX_PATH+1] = {0};
 	char filename[FTK_MAX_PATH+1] = {0};
 	const char* base = progname + strlen(progname);
+	const char *getcwd_ret = NULL;
 
 	while(base > progname)
 	{
@@ -143,7 +144,7 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 	}
 	else
 	{
-		ftk_getcwd(cwd, sizeof(cwd));
+		getcwd_ret = ftk_getcwd(cwd, sizeof(cwd));
 		ftk_strs_cat(filename, sizeof(filename), cwd, "/", path, "/ftk.cnf", NULL);
 	}
 	ftk_normalize_path(filename);

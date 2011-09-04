@@ -74,6 +74,7 @@ static Ret ftk_app_shell_exec(FtkApp* thiz, FtkEvent* event)
 	DECL_PRIV(thiz, priv);
 	const char* cmd = NULL;
 	char buffer[1024] = {0};
+	ssize_t write_ret = 0;
 	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
 	if(event->type != FTK_EVT_KEY_UP || event->u.key.code != FTK_KEY_ENTER)
@@ -90,7 +91,7 @@ static Ret ftk_app_shell_exec(FtkApp* thiz, FtkEvent* event)
 	else
 	{
 		ftk_snprintf(buffer, sizeof(buffer), "%s\n", cmd);
-		write(priv->write_fd, buffer, strlen(buffer));
+		write_ret = write(priv->write_fd, buffer, strlen(buffer));
 
 		ftk_entry_set_text(priv->input_entry, "");
 		ftk_text_view_set_text(priv->output_text_view, buffer, -1);

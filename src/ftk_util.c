@@ -378,6 +378,7 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 	int i = 0;
 	int in_index = 0;
 	int out_index = 0;
+	const char* getcwd_ret = NULL;
 
 	return_val_if_fail(path_in != NULL && path_out != NULL, NULL);
 	
@@ -388,7 +389,7 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 		{
 			if(IS_CURRENT(path_in)) 
 			{
-				ftk_getcwd(path_out, FTK_MAX_PATH);
+				getcwd_ret = ftk_getcwd(path_out, FTK_MAX_PATH);
 				out_index = strlen(path_out);
 				continue;
 			}
@@ -405,7 +406,7 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 			}	
 			else if(path_in[0] != '/')
 			{
-				ftk_getcwd(path_out, FTK_MAX_PATH);
+				getcwd_ret = ftk_getcwd(path_out, FTK_MAX_PATH);
 				out_index = strlen(path_out);
 				path_out[out_index++] = '/';
 				path_out[out_index++] = path_in[in_index];

@@ -41,7 +41,9 @@ struct _FtkPipe
 
 static Ret make_sock_pipe(int pipes[2])
 {
-	ftk_pipe_pair(pipes);	
+	int pipe_ret = 0;
+
+	pipe_ret = ftk_pipe_pair(pipes);
 
 	return RET_OK;
 }

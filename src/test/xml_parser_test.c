@@ -16,6 +16,7 @@ char* read_file(const char* file_name)
 {
 	char* buffer = NULL;
 	FILE* fp = fopen(file_name, "r");
+	size_t fread_ret = 0;
 
 	if(fp != NULL)
 	{
@@ -23,7 +24,7 @@ char* read_file(const char* file_name)
 		if(stat(file_name, &st) == 0)
 		{
 			buffer = malloc(st.st_size + 1);
-			fread(buffer, st.st_size, 1, fp);
+			fread_ret = fread(buffer, st.st_size, 1, fp);
 			buffer[st.st_size] = '\0';
 		}
 	}
