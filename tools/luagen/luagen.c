@@ -307,7 +307,20 @@ static void str_ptr_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "char*");
 	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
 	strcpy(info->pop      , "(char*)tolua_tostring");
-	strcpy(info->push     , "	tolua_pushstring(L, (char*)retv);\n");
+	strcpy(info->push     , "	tolua_pushstring(L, retv);\n");
+	strcpy(info->free     , "");
+
+	return;
+}
+
+static void cstr_ptr_type_init(TypeInfo* info)
+{
+	memset(info, 0x00, sizeof(TypeInfo));
+	strcpy(info->name     , "const char*");
+	strcpy(info->lua_name , "const char*");
+	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
+	strcpy(info->pop      , "tolua_tostring");
+	strcpy(info->push     , "	tolua_pushstring(L, retv);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -332,6 +345,19 @@ static void str_array_type_init(TypeInfo* info)
 	memset(info, 0x00, sizeof(TypeInfo));
 	strcpy(info->name     , "char**");
 	strcpy(info->lua_name , "char**");
+	strcpy(info->check    , "tolua_istable(L, %d, 0, &err)");
+	strcpy(info->pop      , "(char**)tolua_tostrings");
+	strcpy(info->push     , "	assert(!\"not supported\");\n");
+	strcpy(info->free     , "	free(%s);\n");
+
+	return;
+}
+
+static void cstr_array_type_init(TypeInfo* info)
+{
+	memset(info, 0x00, sizeof(TypeInfo));
+	strcpy(info->name     , "const char**");
+	strcpy(info->lua_name , "const char**");
 	strcpy(info->check    , "tolua_istable(L, %d, 0, &err)");
 	strcpy(info->pop      , "tolua_tostrings");
 	strcpy(info->push     , "	assert(!\"not supported\");\n");
@@ -438,13 +464,21 @@ static int get_type_info(IDL_tree type, TypeInfo* info)
 		{
 			str_type_init(info);
 		}
-		else if(strcmp(type_str, "StrPtr") == 0 || strcmp(type_str, "CStrPtr") == 0) 
+		else if(strcmp(type_str, "StrPtr") == 0)
 		{
 			str_ptr_type_init(info);
 		}
-		else if(strcmp(type_str, "StrArray") == 0 || strcmp(type_str, "CStrArray") == 0) 
+		else if(strcmp(type_str, "CStrPtr") == 0)
+		{
+			cstr_ptr_type_init(info);
+		}
+		else if(strcmp(type_str, "StrArray") == 0)
 		{
 			str_array_type_init(info);
+		}
+		else if(strcmp(type_str, "CStrArray") == 0)
+		{
+			cstr_array_type_init(info);
 		}
 		else if(is_pointer(type_str))
 		{

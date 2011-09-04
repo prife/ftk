@@ -21,6 +21,7 @@ typedef voidPtr StrPtr;
 typedef voidPtr StrPtr2;
 typedef voidPtr CStrPtr2;
 typedef voidPtr StrArray;
+typedef voidPtr CStrArray;
 typedef voidPtr FtkEventPtr;
 typedef voidPtr FtkWidgetPtr;
 typedef voidPtr FtkDisplayPtr;

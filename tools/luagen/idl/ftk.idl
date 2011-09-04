@@ -37,7 +37,7 @@ interface Ftk
 	void ftk_quit();
 	
 	int ftk_tips(in CStrPtr text);
-	int ftk_warning(in CStrPtr title, in CStrPtr text, in StrArray buttons);
-	int ftk_question(in CStrPtr title, in CStrPtr text, in StrArray buttons);
-	int ftk_infomation(in CStrPtr title, in CStrPtr text, in StrArray buttons);
+	int ftk_warning(in CStrPtr title, in CStrPtr text, in CStrArray buttons);
+	int ftk_question(in CStrPtr title, in CStrPtr text, in CStrArray buttons);
+	int ftk_infomation(in CStrPtr title, in CStrPtr text, in CStrArray buttons);
 };
