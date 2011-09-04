@@ -60,13 +60,13 @@ interface FtkWidget
 	FtkWidgetPtr ftk_widget_lookup(in FtkWidgetPtr thiz, in int id);
 	FtkWidgetPtr ftk_widget_find_target(in FtkWidgetPtr thiz, in int x, in int y);
 
-	void ftk_widget_paint(in FtkWidgetPtr thiz);
+	void ftk_widget_paint(in FtkWidgetPtr thiz, in FtkRectPtr rects, in int rect_nr);
 	void ftk_widget_destroy(in FtkWidgetPtr thiz);
 
 	void ftk_widget_ref(in FtkWidgetPtr thiz);
 	void ftk_widget_unref(in FtkWidgetPtr thiz);
 
-	Ret  ftk_widget_paint_self(in FtkWidgetPtr thiz);
+	Ret  ftk_widget_paint_self(in FtkWidgetPtr thiz, in FtkRectPtr rects, in int rect_nr);
 	void ftk_widget_ref_self(in FtkWidgetPtr thiz);
 	void ftk_widget_unref_self(in FtkWidgetPtr thiz);
 	Ret  ftk_widget_event(in FtkWidgetPtr thiz, in FtkEventPtr event);
