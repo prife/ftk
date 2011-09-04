@@ -234,7 +234,7 @@ static int lua_ftk_window_disable_update(lua_State* L)
 static int lua_ftk_window_get_animation_hint(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkWidget* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
 
@@ -242,7 +242,7 @@ static int lua_ftk_window_get_animation_hint(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_window_get_animation_hint(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -252,13 +252,13 @@ static int lua_ftk_window_set_animation_hint(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkWidget* thiz;
-	char* hint;
+	const char* hint;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	hint = (char*)tolua_tostring(L, 2, 0);
+	hint = tolua_tostring(L, 2, 0);
 	retv = ftk_window_set_animation_hint(thiz, hint);
 	tolua_pushnumber(L, (lua_Number)retv);
 

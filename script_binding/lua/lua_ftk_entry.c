@@ -34,7 +34,7 @@ static int lua_ftk_entry_create(lua_State* L)
 static int lua_ftk_entry_get_text(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkWidget* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
 
@@ -42,7 +42,7 @@ static int lua_ftk_entry_get_text(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_entry_get_text(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -52,13 +52,13 @@ static int lua_ftk_entry_set_text(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkWidget* thiz;
-	char* text;
+	const char* text;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	text = (char*)tolua_tostring(L, 2, 0);
+	text = tolua_tostring(L, 2, 0);
 	retv = ftk_entry_set_text(thiz, text);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -89,14 +89,14 @@ static int lua_ftk_entry_insert_text(lua_State* L)
 	Ret retv;
 	FtkWidget* thiz;
 	int pos;
-	char* text;
+	const char* text;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isstring(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
 	pos = tolua_tonumber(L, 2, 0);
-	text = (char*)tolua_tostring(L, 3, 0);
+	text = tolua_tostring(L, 3, 0);
 	retv = ftk_entry_insert_text(thiz, pos, text);
 	tolua_pushnumber(L, (lua_Number)retv);
 

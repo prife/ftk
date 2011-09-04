@@ -16,7 +16,7 @@ static int lua_ftk_popup_menu_create(lua_State* L)
 	int w;
 	int h;
 	FtkBitmap* icon;
-	char* title;
+	const char* title;
 	int param_ok = tolua_isnumber(L, 1, 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err) && tolua_isnumber(L, 4, 0, &err) && tolua_isusertype(L, 5, "FtkBitmap", 0, &err) && tolua_isstring(L, 6, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
@@ -26,7 +26,7 @@ static int lua_ftk_popup_menu_create(lua_State* L)
 	w = tolua_tonumber(L, 3, 0);
 	h = tolua_tonumber(L, 4, 0);
 	icon = tolua_tousertype(L, 5, 0);
-	title = (char*)tolua_tostring(L, 6, 0);
+	title = tolua_tostring(L, 6, 0);
 	retv = ftk_popup_menu_create(x, y, w, h, icon, title);
 	tolua_pushusertype(L, (FtkPopupMenu*)retv, "FtkPopupMenu");
 

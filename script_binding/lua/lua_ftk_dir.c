@@ -11,12 +11,12 @@ static int lua_ftk_dir_open(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkDir* retv;
-	char* dir_name;
+	const char* dir_name;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir_name = (char*)tolua_tostring(L, 1, 0);
+	dir_name = tolua_tostring(L, 1, 0);
 	retv = ftk_dir_open(dir_name);
 	tolua_pushusertype(L, (FtkDir*)retv, "FtkDir");
 

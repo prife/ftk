@@ -28,13 +28,13 @@ static int lua_ftk_theme_parse_file(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkTheme* thiz;
-	char* filename;
+	const char* filename;
 	int param_ok = tolua_isusertype(L, 1, "FtkTheme", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = (char*)tolua_tostring(L, 2, 0);
+	filename = tolua_tostring(L, 2, 0);
 	retv = ftk_theme_parse_file(thiz, filename);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -46,14 +46,14 @@ static int lua_ftk_theme_parse_data(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkTheme* thiz;
-	char* data;
+	const char* data;
 	int length;
 	int param_ok = tolua_isusertype(L, 1, "FtkTheme", 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	data = (char*)tolua_tostring(L, 2, 0);
+	data = tolua_tostring(L, 2, 0);
 	length = tolua_tonumber(L, 3, 0);
 	retv = ftk_theme_parse_data(thiz, data, length);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -66,13 +66,13 @@ static int lua_ftk_theme_load_image(lua_State* L)
 	tolua_Error err = {0};
 	FtkBitmap* retv;
 	FtkTheme* thiz;
-	char* filename;
+	const char* filename;
 	int param_ok = tolua_isusertype(L, 1, "FtkTheme", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = (char*)tolua_tostring(L, 2, 0);
+	filename = tolua_tostring(L, 2, 0);
 	retv = ftk_theme_load_image(thiz, filename);
 	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 

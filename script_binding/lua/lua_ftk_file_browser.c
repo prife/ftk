@@ -28,13 +28,13 @@ static int lua_ftk_file_browser_set_path(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkWidget* thiz;
-	char* path;
+	const char* path;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	path = (char*)tolua_tostring(L, 2, 0);
+	path = tolua_tostring(L, 2, 0);
 	retv = ftk_file_browser_set_path(thiz, path);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -46,13 +46,13 @@ static int lua_ftk_file_browser_set_filter(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkWidget* thiz;
-	char* mime_type;
+	const char* mime_type;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	mime_type = (char*)tolua_tostring(L, 2, 0);
+	mime_type = tolua_tostring(L, 2, 0);
 	retv = ftk_file_browser_set_filter(thiz, mime_type);
 	tolua_pushnumber(L, (lua_Number)retv);
 

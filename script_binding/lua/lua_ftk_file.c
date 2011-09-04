@@ -11,13 +11,13 @@ static int lua_ftk_file_get_info(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* file_name;
+	const char* file_name;
 	FtkFileInfo* info;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isusertype(L, 2, "FtkFileInfo", 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	file_name = (char*)tolua_tostring(L, 1, 0);
+	file_name = tolua_tostring(L, 1, 0);
 	info = tolua_tousertype(L, 2, 0);
 	retv = ftk_file_get_info(file_name, info);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -28,15 +28,15 @@ static int lua_ftk_file_get_info(lua_State* L)
 static int lua_ftk_file_get_mime_type(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
-	char* file_name;
+	const char* retv;
+	const char* file_name;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	file_name = (char*)tolua_tostring(L, 1, 0);
+	file_name = tolua_tostring(L, 1, 0);
 	retv = ftk_file_get_mime_type(file_name);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }

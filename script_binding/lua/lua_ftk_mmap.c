@@ -11,14 +11,14 @@ static int lua_ftk_mmap_create(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkMmap* retv;
-	char* filename;
+	const char* filename;
 	int offset;
 	int size;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	filename = (char*)tolua_tostring(L, 1, 0);
+	filename = tolua_tostring(L, 1, 0);
 	offset = tolua_tonumber(L, 2, 0);
 	size = tolua_tonumber(L, 3, 0);
 	retv = ftk_mmap_create(filename, offset, size);

@@ -21,13 +21,13 @@ static int lua_ftk_bitmap_factory_load(lua_State* L)
 	tolua_Error err = {0};
 	FtkBitmap* retv;
 	FtkBitmapFactory* thiz;
-	char* filename;
+	const char* filename;
 	int param_ok = tolua_isusertype(L, 1, "FtkBitmapFactory", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	filename = (char*)tolua_tostring(L, 2, 0);
+	filename = tolua_tostring(L, 2, 0);
 	retv = ftk_bitmap_factory_load(thiz, filename);
 	tolua_pushusertype(L, (FtkBitmap*)retv, "FtkBitmap");
 

@@ -11,13 +11,13 @@ static int lua_ftk_xul_load(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkWidget* retv;
-	char* xml;
+	const char* xml;
 	int length;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isnumber(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	xml = (char*)tolua_tostring(L, 1, 0);
+	xml = tolua_tostring(L, 1, 0);
 	length = tolua_tonumber(L, 2, 0);
 	retv = ftk_xul_load(xml, length);
 	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");

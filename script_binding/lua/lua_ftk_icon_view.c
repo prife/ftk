@@ -134,7 +134,7 @@ static int lua_ftk_icon_view_get(lua_State* L)
 	index = tolua_tonumber(L, 2, 0);
 	retv = ftk_icon_view_get(thiz, index, &item);
 	tolua_pushnumber(L, (lua_Number)retv);
-	tolua_pushusertype(L, (FtkIconViewItem*)retv, "FtkIconViewItem");
+	tolua_pushusertype(L, (FtkIconViewItem*)item, "FtkIconViewItem");
 
 	return 1;
 }

@@ -11,12 +11,12 @@ static int lua_ftk_fs_delete(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* dir;
+	const char* dir;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir = (char*)tolua_tostring(L, 1, 0);
+	dir = tolua_tostring(L, 1, 0);
 	retv = ftk_fs_delete(dir);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -27,12 +27,12 @@ static int lua_ftk_fs_delete_dir(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* dir;
+	const char* dir;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir = (char*)tolua_tostring(L, 1, 0);
+	dir = tolua_tostring(L, 1, 0);
 	retv = ftk_fs_delete_dir(dir);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -43,12 +43,12 @@ static int lua_ftk_fs_delete_file(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* file_name;
+	const char* file_name;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	file_name = (char*)tolua_tostring(L, 1, 0);
+	file_name = tolua_tostring(L, 1, 0);
 	retv = ftk_fs_delete_file(file_name);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -59,12 +59,12 @@ static int lua_ftk_fs_create_dir(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* dir;
+	const char* dir;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir = (char*)tolua_tostring(L, 1, 0);
+	dir = tolua_tostring(L, 1, 0);
 	retv = ftk_fs_create_dir(dir);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -75,12 +75,12 @@ static int lua_ftk_fs_change_dir(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* dir;
+	const char* dir;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir = (char*)tolua_tostring(L, 1, 0);
+	dir = tolua_tostring(L, 1, 0);
 	retv = ftk_fs_change_dir(dir);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -91,14 +91,14 @@ static int lua_ftk_fs_move(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* dir_from;
-	char* dir_to;
+	const char* dir_from;
+	const char* dir_to;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir_from = (char*)tolua_tostring(L, 1, 0);
-	dir_to = (char*)tolua_tostring(L, 2, 0);
+	dir_from = tolua_tostring(L, 1, 0);
+	dir_to = tolua_tostring(L, 2, 0);
 	retv = ftk_fs_move(dir_from, dir_to);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -109,14 +109,14 @@ static int lua_ftk_fs_copy(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* dir_from;
-	char* dir_to;
+	const char* dir_from;
+	const char* dir_to;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	dir_from = (char*)tolua_tostring(L, 1, 0);
-	dir_to = (char*)tolua_tostring(L, 2, 0);
+	dir_from = tolua_tostring(L, 1, 0);
+	dir_to = tolua_tostring(L, 2, 0);
 	retv = ftk_fs_copy(dir_from, dir_to);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -127,12 +127,12 @@ static int lua_ftk_fs_is_root(lua_State* L)
 {
 	tolua_Error err = {0};
 	int retv;
-	char* path;
+	const char* path;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	path = (char*)tolua_tostring(L, 1, 0);
+	path = tolua_tostring(L, 1, 0);
 	retv = ftk_fs_is_root(path);
 	tolua_pushnumber(L, (lua_Number)retv);
 

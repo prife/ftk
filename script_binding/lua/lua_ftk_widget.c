@@ -332,7 +332,7 @@ static int lua_ftk_widget_user_data(lua_State* L)
 static int lua_ftk_widget_get_text(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkWidget* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
 
@@ -340,7 +340,7 @@ static int lua_ftk_widget_get_text(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_widget_get_text(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -583,13 +583,13 @@ static int lua_ftk_widget_set_text(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	char* text;
+	const char* text;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	text = (char*)tolua_tostring(L, 2, 0);
+	text = tolua_tostring(L, 2, 0);
 	ftk_widget_set_text(thiz, text);
 
 	return 1;
@@ -599,13 +599,13 @@ static int lua_ftk_widget_set_font(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	char* font_desc;
+	const char* font_desc;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	font_desc = (char*)tolua_tostring(L, 2, 0);
+	font_desc = tolua_tostring(L, 2, 0);
 	ftk_widget_set_font(thiz, font_desc);
 
 	return 1;
@@ -913,12 +913,16 @@ static int lua_ftk_widget_paint(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkWidget* thiz;
-	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
+	FtkRect* rects;
+	int rect_nr;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isusertype(L, 2, "FtkRect", 0, &err) && tolua_isnumber(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	ftk_widget_paint(thiz, NULL, 0);
+	rects = tolua_tousertype(L, 2, 0);
+	rect_nr = tolua_tonumber(L, 3, 0);
+	ftk_widget_paint(thiz, rects, rect_nr);
 
 	return 1;
 }
@@ -970,12 +974,16 @@ static int lua_ftk_widget_paint_self(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkWidget* thiz;
-	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err);
+	FtkRect* rects;
+	int rect_nr;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isusertype(L, 2, "FtkRect", 0, &err) && tolua_isnumber(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	retv = ftk_widget_paint_self(thiz, NULL, 0);
+	rects = tolua_tousertype(L, 2, 0);
+	rect_nr = tolua_tonumber(L, 3, 0);
+	retv = ftk_widget_paint_self(thiz, rects, rect_nr);
 	tolua_pushnumber(L, (lua_Number)retv);
 
 	return 1;

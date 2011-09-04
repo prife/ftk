@@ -340,7 +340,7 @@ static int lua_ftk_init(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	argc = tolua_tonumber(L, 1, 0);
-	argv = tolua_tostrings(L, 2, 0);
+	argv = (char**)tolua_tostrings(L, 2, 0);
 	retv = ftk_init(argc, argv);
 	tolua_pushnumber(L, (lua_Number)retv);
 	free(argv);
@@ -368,12 +368,12 @@ static int lua_ftk_tips(lua_State* L)
 {
 	tolua_Error err = {0};
 	int retv;
-	char* text;
+	const char* text;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	text = (char*)tolua_tostring(L, 1, 0);
+	text = tolua_tostring(L, 1, 0);
 	retv = ftk_tips(text);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -384,15 +384,15 @@ static int lua_ftk_warning(lua_State* L)
 {
 	tolua_Error err = {0};
 	int retv;
-	char* title;
-	char* text;
-	char** buttons;
+	const char* title;
+	const char* text;
+	const char** buttons;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_istable(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	title = (char*)tolua_tostring(L, 1, 0);
-	text = (char*)tolua_tostring(L, 2, 0);
+	title = tolua_tostring(L, 1, 0);
+	text = tolua_tostring(L, 2, 0);
 	buttons = tolua_tostrings(L, 3, 0);
 	retv = ftk_warning(title, text, buttons);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -405,15 +405,15 @@ static int lua_ftk_question(lua_State* L)
 {
 	tolua_Error err = {0};
 	int retv;
-	char* title;
-	char* text;
-	char** buttons;
+	const char* title;
+	const char* text;
+	const char** buttons;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_istable(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	title = (char*)tolua_tostring(L, 1, 0);
-	text = (char*)tolua_tostring(L, 2, 0);
+	title = tolua_tostring(L, 1, 0);
+	text = tolua_tostring(L, 2, 0);
 	buttons = tolua_tostrings(L, 3, 0);
 	retv = ftk_question(title, text, buttons);
 	tolua_pushnumber(L, (lua_Number)retv);
@@ -426,15 +426,15 @@ static int lua_ftk_infomation(lua_State* L)
 {
 	tolua_Error err = {0};
 	int retv;
-	char* title;
-	char* text;
-	char** buttons;
+	const char* title;
+	const char* text;
+	const char** buttons;
 	int param_ok = tolua_isstring(L, 1, 0, &err) && tolua_isstring(L, 2, 0, &err) && tolua_istable(L, 3, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	title = (char*)tolua_tostring(L, 1, 0);
-	text = (char*)tolua_tostring(L, 2, 0);
+	title = tolua_tostring(L, 1, 0);
+	text = tolua_tostring(L, 2, 0);
 	buttons = tolua_tostrings(L, 3, 0);
 	retv = ftk_infomation(title, text, buttons);
 	tolua_pushnumber(L, (lua_Number)retv);

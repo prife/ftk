@@ -10,7 +10,7 @@ static void tolua_reg_types (lua_State* L)
 static int lua_ftk_config_get_theme(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkConfig* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err);
 
@@ -18,7 +18,7 @@ static int lua_ftk_config_get_theme(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_config_get_theme(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -26,7 +26,7 @@ static int lua_ftk_config_get_theme(lua_State* L)
 static int lua_ftk_config_get_data_dir(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkConfig* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err);
 
@@ -34,7 +34,7 @@ static int lua_ftk_config_get_data_dir(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_config_get_data_dir(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -42,7 +42,7 @@ static int lua_ftk_config_get_data_dir(lua_State* L)
 static int lua_ftk_config_get_data_root_dir(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkConfig* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err);
 
@@ -50,7 +50,7 @@ static int lua_ftk_config_get_data_root_dir(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_config_get_data_root_dir(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -58,7 +58,7 @@ static int lua_ftk_config_get_data_root_dir(lua_State* L)
 static int lua_ftk_config_get_test_data_dir(lua_State* L)
 {
 	tolua_Error err = {0};
-	char* retv;
+	const char* retv;
 	FtkConfig* thiz;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err);
 
@@ -66,7 +66,7 @@ static int lua_ftk_config_get_test_data_dir(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	retv = ftk_config_get_test_data_dir(thiz);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)retv);
 
 	return 1;
 }
@@ -108,13 +108,13 @@ static int lua_ftk_config_set_theme(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkConfig* thiz;
-	char* theme;
+	const char* theme;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	theme = (char*)tolua_tostring(L, 2, 0);
+	theme = tolua_tostring(L, 2, 0);
 	retv = ftk_config_set_theme(thiz, theme);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -126,13 +126,13 @@ static int lua_ftk_config_set_data_dir(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkConfig* thiz;
-	char* data_dir;
+	const char* data_dir;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	data_dir = (char*)tolua_tostring(L, 2, 0);
+	data_dir = tolua_tostring(L, 2, 0);
 	retv = ftk_config_set_data_dir(thiz, data_dir);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -144,13 +144,13 @@ static int lua_ftk_config_set_test_data_dir(lua_State* L)
 	tolua_Error err = {0};
 	Ret retv;
 	FtkConfig* thiz;
-	char* test_data_dir;
+	const char* test_data_dir;
 	int param_ok = tolua_isusertype(L, 1, "FtkConfig", 0, &err) && tolua_isstring(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	test_data_dir = (char*)tolua_tostring(L, 2, 0);
+	test_data_dir = tolua_tostring(L, 2, 0);
 	retv = ftk_config_set_test_data_dir(thiz, test_data_dir);
 	tolua_pushnumber(L, (lua_Number)retv);
 

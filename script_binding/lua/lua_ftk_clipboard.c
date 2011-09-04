@@ -20,12 +20,12 @@ static int lua_ftk_clipboard_set_text(lua_State* L)
 {
 	tolua_Error err = {0};
 	Ret retv;
-	char* text;
+	const char* text;
 	int param_ok = tolua_isstring(L, 1, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
-	text = (char*)tolua_tostring(L, 1, 0);
+	text = tolua_tostring(L, 1, 0);
 	retv = ftk_clipboard_set_text(text);
 	tolua_pushnumber(L, (lua_Number)retv);
 
@@ -35,10 +35,10 @@ static int lua_ftk_clipboard_set_text(lua_State* L)
 static int lua_ftk_clipboard_get_text(lua_State* L)
 {
 	Ret retv;
-	char* text;
+	const char* text;
 	retv = ftk_clipboard_get_text(&text);
 	tolua_pushnumber(L, (lua_Number)retv);
-	tolua_pushstring(L, (char*)retv);
+	tolua_pushstring(L, (const char*)text);
 
 	return 1;
 }
