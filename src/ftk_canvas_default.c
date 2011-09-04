@@ -734,7 +734,7 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 }
 
 static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
-	const FtkRect* box, const char* str, int len, int vcenter)
+	const char* str, int len, int vcenter)
 {
 	int i = 0;
 	int j = 0;
@@ -752,12 +752,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 	unsigned short code = 0;
 	const char* iter = str;
 	DECL_PRIV(thiz, priv);
-	FtkRect clip = {0};
-
-	if(ftk_rect_and(box, &priv->clip->rect, &clip) != RET_OK)
-	{
-		return RET_OK;
-	}
+	FtkRect clip = priv->clip->rect;
 
 	bits   = priv->bits;
 	right = clip.x + clip.width;
@@ -789,15 +784,10 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 		if(code == 0xffff || code == 0) break;
 		if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
 			continue;
+
 		glyph.y = vcenter ? glyph.y - vcenter_offset : glyph.y;
-		if((x + glyph.x + glyph.w) >= right)
-		{
-			break;
-		}
-		if((y - glyph.y + glyph.h) >= bottom)
-		{
-			break;
-		}
+		if((x + glyph.x + glyph.w) >= right) break;
+		if((y - glyph.y + glyph.h) >= bottom) break;
 
 		x = x + glyph.x;
 		y = y - glyph.y;
@@ -925,17 +915,15 @@ static Ret ftk_canvas_default_draw_bitmap_clip(FtkCanvas* thiz, FtkBitmap* bitma
 }
 
 static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, size_t x, size_t y,
-	const FtkRect* box, const char* str, int len, int vcenter)
+	const char* str, int len, int vcenter)
 {
-	return_val_if_fail(box != NULL, RET_FAIL);
-	return_val_if_fail(str != NULL, RET_FAIL);
-
 	DECL_PRIV(thiz, priv);
+	return_val_if_fail(str != NULL, RET_FAIL);
 	len = len >= 0 ? len : (int)strlen(str);
 
 	FOR_EACH_CLIP(priv)
 	{
-		ftk_canvas_default_draw_string(thiz, x, y, box, str, len, vcenter);
+		ftk_canvas_default_draw_string(thiz, x, y, str, len, vcenter);
 		if(priv->clip == NULL) break;
 	}
 

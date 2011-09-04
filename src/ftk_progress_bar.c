@@ -80,12 +80,9 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 	{
 		int xoffset = 0;
 		int yoffset = FTK_HALF(height);
-		FtkRect box = {0};
 		FtkTextLine line = {0};
 		const char* text = ftk_widget_get_text(thiz);
 		FtkTextLayout* text_layout = ftk_default_text_layout();
-
-		FTK_GET_PAINT_RECT(thiz, box);
 
 		gc.fg.a = 0xff;
 		gc.fg.r = 0x00;
@@ -96,7 +93,7 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			xoffset = FTK_HALF(width - line.extent); 
-			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset, &box, text, -1, 1);
+			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset, text, -1, 1);
 		}
 	}
 

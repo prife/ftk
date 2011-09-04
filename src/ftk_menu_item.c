@@ -92,17 +92,14 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz));
 	if(ftk_widget_get_text(thiz))
 	{
-		FtkRect box = {0};
 		const char* text = ftk_widget_get_text(thiz);
 		int fh = ftk_canvas_font_height(canvas);
 		int fw = ftk_canvas_get_extent(canvas, text, -1);
 		int dx = FTK_HALF(width - fw);
 		int dy = FTK_HALF(height);
 
-		FTK_GET_PAINT_RECT(thiz, box);
-
 		assert(fh < height && fw < width);
-		ftk_canvas_draw_string(canvas, x + dx, y + dy, &box, text, -1, 1);
+		ftk_canvas_draw_string(canvas, x + dx, y + dy, text, -1, 1);
 	}
 	
 	FTK_END_PAINT();

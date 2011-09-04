@@ -58,14 +58,11 @@ static Ret ftk_group_box_on_paint(FtkWidget* thiz)
 	{
 		int yoffset = 2;
 		int xoffset = 10;
-		FtkRect box = {0};
 		FtkTextLine line = {0};
 		FtkFont* font = ftk_widget_get_gc(thiz)->font;
 		int font_height = ftk_font_height(font);
 		const char* text = ftk_widget_get_text(thiz);
 		FtkTextLayout* text_layout = ftk_default_text_layout();
-
-		FTK_GET_PAINT_RECT(thiz, box);
 
 		ftk_text_layout_init(text_layout, text, -1, font, width - 2 * xoffset); 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
@@ -79,8 +76,7 @@ static Ret ftk_group_box_on_paint(FtkWidget* thiz)
 			ftk_canvas_draw_rect(canvas, x + xoffset, y + yoffset, line.extent, font_height, 0, 1);
 
 			ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
-			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset + font_height, &box,
-					line.text, line.len, 0);
+			ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset + font_height, line.text, line.len, 0);
 		}
 	}
 

@@ -321,7 +321,6 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 	const char* text = NULL;
 	DECL_PRIV0(thiz, priv);
 	FtkIconViewItem* item_info = NULL;
-	FtkRect box = {0};
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	(void)width;
@@ -334,9 +333,6 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 	dy = y + priv->top_margin;
 	item = priv->visible_start;
 	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
-
-	box.width = priv->item_width;
-	box.height = priv->item_height;
 
 	for(i = 0; i < priv->rows; i++)
 	{
@@ -375,13 +371,9 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 						FTK_BG_CENTER, dx, dy, priv->item_width, icon_height);
 				}
 
-				box.x = dx;
-				box.y = dy;
-
 				x1 = dx +  ((priv->item_width > fw) ? FTK_HALF(priv->item_width - fw) : 0);
 				ftk_canvas_draw_string(canvas, x1,
-					dy + icon_height + FTK_HALF(priv->item_height - icon_height),
-					&box, text, -1, 1);
+					dy + icon_height + FTK_HALF(priv->item_height - icon_height), text, -1, 1);	
 			}
 
 			dx += priv->item_width;

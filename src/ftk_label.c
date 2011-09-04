@@ -39,24 +39,27 @@ static Ret ftk_label_on_event(FtkWidget* thiz, FtkEvent* event)
 
 static Ret ftk_label_on_paint(FtkWidget* thiz)
 {
+	int i = 0;
+	int rows = 0;
+	FtkAlignment alignment = (FtkAlignment)(int)(thiz->priv_subclass[0]);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
 	if(ftk_widget_get_text(thiz) != NULL)
 	{
-		int i = 0;
-		int rows = 0;
-		FtkAlignment alignment = (FtkAlignment)(int)(thiz->priv_subclass[0]);
-		FtkRect box = {0};
 		FtkTextLine line = {0};
 		const char* text = ftk_widget_get_text(thiz);
 		FtkTextLayout* text_layout = ftk_default_text_layout();
-
-		FTK_GET_PAINT_RECT(thiz, box);
 
 		x += FTK_LABEL_LEFT_MARGIN;
 		width -= FTK_LABEL_LEFT_MARGIN * 2;
 		ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
 		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
+
+		if(rows == 0) 
+		{
+			rows = 1;
+			ftk_logi("%s: height is too small.\n", __func__);
+		}
 
 		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
 		ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
@@ -78,7 +81,8 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 			{
 				xoffset = x + line.xoffset;
 			}
-			ftk_canvas_draw_string(canvas, xoffset, y, &box, line.text, line.len, 0);
+
+			ftk_canvas_draw_string(canvas, xoffset, y, line.text, line.len, 0);
 		}
 	}
 

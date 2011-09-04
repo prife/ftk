@@ -442,12 +442,9 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(HAS_TEXT(priv) || priv->tips != NULL)
 	{
-		FtkRect box = {0};
 		FtkTextLine line = {0};
 		FtkTextLayout* text_layout = ftk_default_text_layout();
 		int width = ftk_widget_width(thiz) - 2 * FTK_ENTRY_H_MARGIN;
-
-		FTK_GET_PAINT_RECT(thiz, box);
 
 		if(HAS_TEXT(priv))
 		{
@@ -473,8 +470,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
-			ftk_canvas_draw_string(canvas, x + line.xoffset, y, &box,
-				line.text, line.len, 0);
+			ftk_canvas_draw_string(canvas, x + line.xoffset, y, line.text, line.len, 0);
 		}
 	}
 
