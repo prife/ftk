@@ -34,9 +34,9 @@
 #ifdef HAS_PTHREAD
 #include <pthread.h>
 #else
-#define pthread_mutex_lock(m) 0
+#define pthread_mutex_lock(m) (m)
 #define pthread_mutex_trylock(m) 0
-#define pthread_mutex_unlock(m) 0
+#define pthread_mutex_unlock(m) (m)
 #define pthread_mutex_t int
 #define PTHREAD_MUTEX_INITIALIZER 0
 #endif
