@@ -267,7 +267,7 @@ static void int_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "lua_Number");
 	strcpy(info->check    , "tolua_isnumber(L, %d, 0, &err)");
 	strcpy(info->pop      , "tolua_tonumber");
-	strcpy(info->push     , "	tolua_pushnumber(L, (lua_Number)retv);\n");
+	strcpy(info->push     , "	tolua_pushnumber(L, (lua_Number)%s);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -280,7 +280,7 @@ static void ret_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "lua_Number");
 	strcpy(info->check    , "tolua_isnumber(L, %d, 0, &err)");
 	strcpy(info->pop      , "tolua_tonumber");
-	strcpy(info->push     , "	tolua_pushnumber(L, (lua_Number)retv);\n");
+	strcpy(info->push     , "	tolua_pushnumber(L, (lua_Number)%s);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -294,7 +294,7 @@ static void str_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "char*");
 	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
 //	strcpy(info->pop      , "(char*)tolua_tostring");
-	strcpy(info->push     , "	tolua_pushstring(L, (char*)retv);\n");
+	strcpy(info->push     , "	tolua_pushstring(L, (char*)%s);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -307,7 +307,7 @@ static void str_ptr_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "char*");
 	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
 	strcpy(info->pop      , "(char*)tolua_tostring");
-	strcpy(info->push     , "	tolua_pushstring(L, retv);\n");
+	strcpy(info->push     , "	tolua_pushstring(L, (char*)%s);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -320,7 +320,7 @@ static void cstr_ptr_type_init(TypeInfo* info)
 	strcpy(info->lua_name , "const char*");
 	strcpy(info->check    , "tolua_isstring(L, %d, 0, &err)");
 	strcpy(info->pop      , "tolua_tostring");
-	strcpy(info->push     , "	tolua_pushstring(L, retv);\n");
+	strcpy(info->push     , "	tolua_pushstring(L, (const char*)%s);\n");
 	strcpy(info->free     , "");
 
 	return;
@@ -402,7 +402,7 @@ static void userdata_light_type_init(const char* name, TypeInfo* info)
 	strncat(info->check, name,  ptr - name);
 	strcat(info->check    , "\", 0, &err)");
 	strcpy(info->pop      , "tolua_tousertype");
-	sprintf(info->push, "	tolua_pushusertype(L, (%s)retv, \"%s\");\n",
+	sprintf(info->push, "	tolua_pushusertype(L, (%s)%%s, \"%s\");\n",
 		info->name, usertype);
 	strcpy(info->free     , "");
 
@@ -482,7 +482,6 @@ static int get_type_info(IDL_tree type, TypeInfo* info)
 		}
 		else if(is_pointer(type_str))
 		{
-			char* p = NULL;
 			userdata_light_type_init(type_str, info);
 		}
 		else if(is_function(type_str))
@@ -536,7 +535,7 @@ static gboolean lua_code_gen_on_func_decl(struct _IDL_OP_DCL func, CodeGenInfo *
 		get_type_info(func.op_type_spec, &type_info);
 		g_string_append_printf(call, "	retv = %s(", func_name);
 		g_string_append_printf(param_decl, "	%s retv;\n", type_info.name);
-		g_string_append_printf(retv, type_info.push, type_info.lua_name, type_info.name);
+		g_string_append_printf(retv, type_info.push, "retv");
 	}
 	else
 	{
@@ -574,7 +573,7 @@ static gboolean lua_code_gen_on_func_decl(struct _IDL_OP_DCL func, CodeGenInfo *
 			if(attr == IDL_PARAM_OUT)
 			{
 				g_string_append_printf(call, "&%s", param_name);
-				g_string_append_printf(retv, type_info.push, type_info.lua_name, type_info.name);
+				g_string_append_printf(retv, type_info.push, param_name);
 			}
 			else
 			{
@@ -603,7 +602,7 @@ static gboolean lua_code_gen_on_func_decl(struct _IDL_OP_DCL func, CodeGenInfo *
 
 	if(i > 1)
 	{
-		g_string_append_printf(info->str_funcs, "	tolua_Error err = {0};\n", param_check->str);
+		g_string_append_printf(info->str_funcs, "	tolua_Error err = {0};\n");
 	}
 	g_string_append(info->str_funcs, param_decl->str);
 	if(i > 1)
@@ -615,7 +614,7 @@ static gboolean lua_code_gen_on_func_decl(struct _IDL_OP_DCL func, CodeGenInfo *
 	g_string_append(info->str_funcs, call->str);
 	g_string_append(info->str_funcs, retv->str);
 	g_string_append(info->str_funcs, param_free->str);
-	g_string_append_printf(info->str_funcs, "\n	return 1;\n}\n\n", param_check->str);
+	g_string_append_printf(info->str_funcs, "\n	return 1;\n}\n\n");
 
 	g_string_append_printf(info->str_init, "	tolua_function(L, \"%s\", lua_%s);\n",
 		name_to_upper(func_name, new_name, strlen(info->interface)), func_name);
@@ -656,7 +655,7 @@ static void lua_code_gen_get_func(CodeGenInfo *info, const char* name, TypeInfo*
 	{
 		g_string_append_printf(info->str_funcs, "	retv = (%s)thiz->%s;\n", type_info->lua_name, var);
 	}
-	g_string_append_printf(info->str_funcs, type_info->push, type_info->lua_name);
+	g_string_append_printf(info->str_funcs, type_info->push, "retv");
 	g_string_append(info->str_funcs, "\n	return 1;\n");
 	g_string_append(info->str_funcs, "}\n\n");
 
@@ -751,8 +750,6 @@ static gboolean lua_code_gen_on_enum(struct _IDL_TYPE_ENUM e, CodeGenInfo *info)
 
 static gboolean lua_code_gen_on_union(struct _IDL_TYPE_UNION u, CodeGenInfo *info)
 {
-	struct _IDL_LIST iter = {0};
-	
 	if(!info->only_globals)
 	{
 		return FALSE;
