@@ -125,7 +125,7 @@ static int lua_ftk_icon_view_get(lua_State* L)
 	Ret retv;
 	FtkWidget* thiz;
 	int index;
-	FtkIconViewItem* item;
+	const FtkIconViewItem* item;
 	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err);
 
 	return_val_if_fail(param_ok, 0);

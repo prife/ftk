@@ -148,7 +148,7 @@ static int lua_ftk_list_model_get_data(lua_State* L)
 
 	thiz = tolua_tousertype(L, 1, 0);
 	index = tolua_tonumber(L, 2, 0);
-	retv = ftk_list_model_get_data(thiz, index, &ret);
+	retv = ftk_list_model_get_data(thiz, index, (void**)&ret);
 	tolua_pushnumber(L, (lua_Number)retv);
 	tolua_pushusertype(L, (FtkListItemInfo*)ret, "FtkListItemInfo");
 
