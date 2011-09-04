@@ -1757,8 +1757,8 @@ int UserDict::put_lemmas_no_sync_from_utf16le_string(char16 * lemmas, int len) {
   char16 * hz16 = NULL;
   int py16_len = 0;
   uint16 splid[kMaxLemmaSize];
-  int splid_len = 0;
-  int hz16_len = 0;
+  unsigned int splid_len = 0;
+  unsigned int hz16_len = 0;
   char16 * fr16 = NULL;
   int fr16_len = 0;
 
@@ -1779,7 +1779,7 @@ int UserDict::put_lemmas_no_sync_from_utf16le_string(char16 * lemmas, int len) {
       break;
     }
     bool is_pre;
-    int splidl = spl_parser->splstr16_to_idxs_f(
+    unsigned int splidl = spl_parser->splstr16_to_idxs_f(
         py16, py16_len, splid, NULL, kMaxLemmaSize, is_pre);
     if (splidl != splid_len)
       break;
