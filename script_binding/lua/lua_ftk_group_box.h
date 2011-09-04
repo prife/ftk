@@ -4,11 +4,11 @@
 #include "ftk_group_box.h"
 #include "lua_ftk_widget.h"
 
-#ifndef LUA_FtkRadioGroup_H
-#define LUA_FtkRadioGroup_H
+#ifndef LUA_FtkGroupBox_H
+#define LUA_FtkGroupBox_H
 
-typedef FtkWidget FtkRadioGroup;
+typedef FtkWidget FtkGroupBox;
 int tolua_ftk_group_box_init(lua_State* L);
 
-#endif/*LUA_FtkRadioGroup_H*/
+#endif/*LUA_FtkGroupBox_H*/
 

@@ -26,7 +26,7 @@ function AppInit()
 	button:SetText("hide")
 	button:SetClickedListener("OnClicked")
 
-	group=FtkRadioGroup.Create(win, 0, 60, 2 * width, 60)
+	group=FtkGroupBox.Create(win, 0, 60, 2 * width, 60)
 	button=FtkCheckButton.CreateRadio(group, 0, 10, width, 50);
 	button:SetText("Male")
 	button:SetClickedListener("OnClicked")
@@ -35,7 +35,7 @@ function AppInit()
 	button:SetText("Female")
 	button:SetClickedListener("OnClicked")
 
-	group=FtkRadioGroup.Create(win, 0, 120, 2 * width, 60)
+	group=FtkGroupBox.Create(win, 0, 120, 2 * width, 60)
 	button=FtkCheckButton.CreateRadio(group,0, 10, width, 50)
 	button:SetText("1(图标右)")
 	button:SetIconPosition(1)

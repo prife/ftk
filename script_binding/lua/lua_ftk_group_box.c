@@ -4,13 +4,13 @@
 
 static void tolua_reg_types (lua_State* L)
 {
-	tolua_usertype(L, "FtkRadioGroup");
+	tolua_usertype(L, "FtkGroupBox");
 }
 
 static int lua_ftk_group_box_create(lua_State* L)
 {
 	tolua_Error err = {0};
-	FtkRadioGroup* retv;
+	FtkGroupBox* retv;
 	FtkWidget* parent;
 	int x;
 	int y;
@@ -26,7 +26,7 @@ static int lua_ftk_group_box_create(lua_State* L)
 	width = tolua_tonumber(L, 4, 0);
 	height = tolua_tonumber(L, 5, 0);
 	retv = ftk_group_box_create(parent, x, y, width, height);
-	tolua_pushusertype(L, (FtkRadioGroup*)retv, "FtkRadioGroup");
+	tolua_pushusertype(L, (FtkGroupBox*)retv, "FtkGroupBox");
 
 	return 1;
 }
@@ -55,8 +55,8 @@ int tolua_ftk_group_box_init(lua_State* L)
 	tolua_reg_types(L);
 	tolua_module(L, NULL, 0);
 	tolua_beginmodule(L, NULL);
-	tolua_cclass(L,"FtkRadioGroup", "FtkRadioGroup", "FtkWidget", NULL);
-	tolua_beginmodule(L, "FtkRadioGroup");
+	tolua_cclass(L,"FtkGroupBox", "FtkGroupBox", "FtkWidget", NULL);
+	tolua_beginmodule(L, "FtkGroupBox");
 	tolua_function(L, "Create", lua_ftk_group_box_create);
 	tolua_function(L, "SetChecked", lua_ftk_group_box_set_checked);
 	tolua_endmodule(L);
