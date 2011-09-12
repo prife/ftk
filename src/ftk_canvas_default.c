@@ -66,15 +66,21 @@ typedef struct _PrivInfo
 
 static Ret ftk_rect_and(const FtkRect *r1, const FtkRect *r2, FtkRect *r)
 {
+	Ret ret = RET_FAIL;
+	int x = 0;
+	int y = 0;
+	int width = 0;
+	int height = 0;
+
 	return_val_if_fail(r1 != NULL, RET_FAIL);
 	return_val_if_fail(r2 != NULL, RET_FAIL);
 	return_val_if_fail(r != NULL, RET_FAIL);
 
-	Ret ret = RET_FAIL;
-	int x = FTK_MAX(r1->x, r2->x);
-	int y = FTK_MAX(r1->y, r2->y);
-	int width = FTK_MIN(r1->x + r1->width, r2->x + r2->width) - x;
-	int height = FTK_MIN(r1->y + r1->height, r2->y + r2->height) - y;
+	ret = RET_FAIL;
+	x = FTK_MAX(r1->x, r2->x);
+	y = FTK_MAX(r1->y, r2->y);
+	width = FTK_MIN(r1->x + r1->width, r2->x + r2->width) - x;
+	height = FTK_MIN(r1->y + r1->height, r2->y + r2->height) - y;
 
 	// the horizontal range is [x, x + width), so width == 0 is still invalid
 	// the vertical range is [y, y + height), so height == 0 is still invalid
