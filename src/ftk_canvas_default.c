@@ -681,6 +681,9 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 {
 	Ret ret = RET_FAIL;
 	FtkRect rect = *dst_r;
+	FtkRect new_src_r = *src_r;
+	FtkRect new_dst_r = *dst_r;
+	
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(thiz != NULL && bitmap != NULL && dst_r != NULL && src_r != NULL, RET_FAIL);
 
@@ -709,31 +712,27 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 
 	if(dst_r->width == src_r->width && dst_r->height == src_r->height)
 	{
-#if 0
-		/*TODO*/
-		src_r->x = src_r->x + (rect.x - dst_r->x);
-		src_r->y = src_r->y + (rect.y - dst_r->y);
+		new_src_r.x = src_r->x + (rect.x - dst_r->x);
+		new_src_r.y = src_r->y + (rect.y - dst_r->y);
 		
-		*dst_r = rect;
-		src_r->width = dst_r->width;
-		src_r->height = dst_r->height;
-#endif
-		ret = ftk_canvas_default_draw_bitmap_normal(thiz, bitmap, src_r, dst_r);
+		new_dst_r = rect;
+		new_src_r.width = rect.width;
+		new_src_r.height = rect.height;
+		ret = ftk_canvas_default_draw_bitmap_normal(thiz, bitmap, &new_src_r, &new_dst_r);
 	}
 	else
 	{
-#if 1	
 		int scale_w = (src_r->width << 8)/dst_r->width;
 		int scale_h = (src_r->height << 8)/dst_r->height;
 
-		src_r->x = src_r->x + (((rect.x - dst_r->x) * scale_w) >> 8);
-		src_r->y = src_r->y + (((rect.y - dst_r->y) * scale_h) >> 8);
+		new_src_r.x = src_r->x + (((rect.x - dst_r->x) * scale_w) >> 8);
+		new_src_r.y = src_r->y + (((rect.y - dst_r->y) * scale_h) >> 8);
 		
-		*dst_r = rect;
-		src_r->width = (dst_r->width * scale_w) >> 8;
-		src_r->height = (dst_r->height * scale_h) >> 8;
-#endif		
-		ret = ftk_canvas_draw_bitmap_resize(thiz, bitmap, src_r, dst_r);
+		new_dst_r = rect;
+		new_src_r.width = (dst_r->width * scale_w) >> 8;
+		new_src_r.height = (dst_r->height * scale_h) >> 8;
+
+		ret = ftk_canvas_draw_bitmap_resize(thiz, bitmap, &new_src_r, &new_dst_r);
 	}
 
 	return ret;
