@@ -770,6 +770,8 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 	vcenter_offset = ftk_font_height(thiz->gc.font)/3;
 	while(*iter && (iter - str) < len)
 	{
+		FtkRect rect;
+		FtkRect glyph_rect;
 		int offset = 0;
 		code = utf8_get_char(iter, &iter);
 
@@ -796,23 +798,28 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 
 		x = x + glyph.x;
 		y = y - glyph.y;
-		for(i = 0; i < glyph.h; i++,y++)
+
+		glyph_rect.x = x;
+		glyph_rect.y = y;
+		glyph_rect.width = glyph.w;
+		glyph_rect.height = glyph.h;
+		
+		if ( ftk_rect_and(&clip, &glyph_rect, &rect) == RET_OK )
 		{
-			for(j = 0, x= ox; j < glyph.w; j++,x++)
+			for(i = rect.y - glyph_rect.y; i < rect.height; i++,y++)
 			{
-				if(!FTK_POINT_IN_RECT(x, y, clip))
+				for(j = rect.x - glyph_rect.x, x = ox; j < rect.width; j++,x++)
 				{
-					break;
-				}
-				data = glyph.data[i * glyph.w + j];
-				offset = y * priv->w + x;
-				bg = bits[offset];
-				if(data)
-				{
-					color.r = FTK_ALPHA_1(fg.r, bg.r, data);
-					color.g = FTK_ALPHA_1(fg.g, bg.g, data);
-					color.b = FTK_ALPHA_1(fg.b, bg.b, data);
-					*(unsigned int*)(bits+offset) = *(unsigned int*)&color;
+					data = glyph.data[i * glyph.w + j];
+					offset = y * priv->w + x;
+					bg = bits[offset];
+					if(data)
+					{
+						color.r = FTK_ALPHA_1(fg.r, bg.r, data);
+						color.g = FTK_ALPHA_1(fg.g, bg.g, data);
+						color.b = FTK_ALPHA_1(fg.b, bg.b, data);
+						*(unsigned int*)(bits+offset) = *(unsigned int*)&color;
+					}
 				}
 			}
 		}

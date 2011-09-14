@@ -270,7 +270,7 @@ Ret  ftk_config_init(FtkConfig* thiz, int argc, char* argv[])
 	return RET_OK;
 }
 
-typedef struct _PrivInfo
+typedef struct _ConfigPrivInfo
 {
 	FtkConfig* config;
 }PrivInfo;

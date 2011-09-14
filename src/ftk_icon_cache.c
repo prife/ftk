@@ -69,7 +69,7 @@ static FtkBitmap* ftk_icon_cache_real_load(FtkIconCache* thiz, const char* filen
 	size_t i = 0;
 	FtkBitmap* bitmap = NULL;
 	char path[FTK_MAX_PATH+1] = {0};
-	return_val_if_fail(thiz != NULL && filename != NULL, NULL);
+	return_val_if_fail(thiz != NULL && filename != NULL && strlen(filename) > 0, NULL);
 
 	for(i = 0; i < FTK_ICON_PATH_NR; i++)
 	{
