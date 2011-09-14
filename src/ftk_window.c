@@ -280,7 +280,7 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 		return ftk_widget_event(priv->grab_widget, event);
 	}
 
-	if((target = ftk_widget_find_target(thiz, event->u.mouse.x, event->u.mouse.y)) != NULL && target != thiz)
+	if((target = ftk_widget_find_target(thiz, event->u.mouse.x, event->u.mouse.y, 1)) != NULL && target != thiz)
 	{
 		if(event->type == FTK_EVT_MOUSE_DOWN 
 			&& !ftk_widget_is_insensitive(target)

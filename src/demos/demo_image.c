@@ -14,6 +14,7 @@ FtkApp* ftk_app_demo_image_create()
 FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	FtkWidget* image = NULL;
+	FtkWidget* button = NULL;
 	FtkWidget* win = NULL;
 	char filename[FTK_MAX_PATH+1] = {0};
 	FTK_INIT(argc, argv);
@@ -55,6 +56,12 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_image_set_image(image, 
 		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 	ftk_widget_set_attr(image, FTK_ATTR_BG_TILE);
+
+	button = ftk_button_create(win, 10, 10, 200, 50);
+	ftk_widget_set_text(button, "buton1 on backgruop");
+
+	button = ftk_button_create(win, 10, 70, 200, 50);
+	ftk_widget_set_text(button, "buton2 on backgruop");
 
 	ftk_widget_set_text(win, "image demo");
 	ftk_widget_show_all(win, 1);

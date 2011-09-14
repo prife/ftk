@@ -1086,7 +1086,7 @@ FtkGc* ftk_widget_get_gc(FtkWidget* thiz)
 	return thiz->priv->gc+thiz->priv->state;
 }
 
-FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y)
+FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensitive)
 {
 	FtkWidget* target = NULL;
 	int left = ftk_widget_left_abs(thiz);
@@ -1102,14 +1102,14 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y)
 	if(x < left || y < top || (x > (left + w)) || (y > (top + h)))
 	{
 		return NULL;
-	} 
+	}
 
 	if(thiz->children != NULL)
 	{
 		FtkWidget* iter = thiz->children;
 		while(iter != NULL)
 		{
-			if((target = ftk_widget_find_target(iter, x, y)) != NULL)
+			if((target = ftk_widget_find_target(iter, x, y, only_sensitive)) != NULL)
 			{
 				return target;
 			}
@@ -1117,8 +1117,11 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y)
 			iter = ftk_widget_next(iter);
 		}
 	}
-
-	return thiz;
+	
+	if ( only_sensitive && ftk_widget_is_insensitive(thiz) )
+		return NULL;
+	else
+		return thiz;
 }
 
 void ftk_widget_destroy(FtkWidget* thiz)
