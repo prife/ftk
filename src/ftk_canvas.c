@@ -135,10 +135,10 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 	size_t w, size_t h, FtkBitmap* bitmap)
 {
 	int i = 0;
-	size_t ox = 0;
-	size_t oy = 0;
-	size_t ow = 0;
-	size_t oh = 0;
+	int ox = 0;
+	int oy = 0;
+	int ow = 0;
+	int oh = 0;
 	FtkGc gc = {0};
 	FtkColor* bits = NULL;
 	int bw = ftk_bitmap_width(bitmap);
@@ -148,10 +148,18 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 	FtkColor fg  = thiz->gc.fg;
 	
 	gc.mask = FTK_GC_FG;
-	ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, 0, tile_w, tile_h, x, y);
-	ftk_canvas_draw_bitmap_simple(thiz, bitmap, bw - tile_w, 0, tile_w, tile_h, x + w - tile_w, y);
-	ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, bh - tile_h, tile_w, tile_h, x, y + h - tile_h);
-	ftk_canvas_draw_bitmap_simple(thiz, bitmap, bw - tile_w, bh - tile_h, tile_w, tile_h, x + w - tile_w, y + h - tile_h);
+
+	if ( bw == w && bh == h )
+	{
+		ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, 0, w, h, x, y);
+	}
+	else
+	{
+		ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, 0, tile_w, tile_h, x, y);
+		ftk_canvas_draw_bitmap_simple(thiz, bitmap, bw - tile_w, 0, tile_w, tile_h, x + w - tile_w, y);
+		ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, bh - tile_h, tile_w, tile_h, x, y + h - tile_h);
+		ftk_canvas_draw_bitmap_simple(thiz, bitmap, bw - tile_w, bh - tile_h, tile_w, tile_h, x + w - tile_w, y + h - tile_h);
+	}
 
 	if(bw < w)
 	{
@@ -197,7 +205,7 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, size_t x, siz
 		}
 		
 		ox = x + w - tile_w;
-		bits = ftk_bitmap_bits(bitmap) + bw * tile_h + FTK_HALF(bw);
+		bits = ftk_bitmap_bits(bitmap) + bw * tile_h + bw - tile_w;
 		for(i = 0; i < tile_w; i++)
 		{
 			thiz->gc.fg = *bits;	
