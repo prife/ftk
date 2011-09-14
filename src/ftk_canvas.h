@@ -51,12 +51,12 @@ typedef struct _FtkCanvas FtkCanvas;
 
 typedef Ret (*FtkCanvasSyncGc)(FtkCanvas* thiz);
 typedef Ret (*FtkCanvasSetClip)(FtkCanvas* thiz, FtkRegion* clip);
-typedef Ret (*FtkCanvasDrawPixels)(FtkCanvas* thiz, FtkPoint* points, size_t nr);
-typedef Ret (*FtkCanvasDrawLine)(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2);
-typedef Ret (*FtkCanvasClearRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h);
-typedef Ret (*FtkCanvasDrawRect)(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, int round, int fill);
+typedef Ret (*FtkCanvasDrawPixels)(FtkCanvas* thiz, FtkPoint* points, int nr);
+typedef Ret (*FtkCanvasDrawLine)(FtkCanvas* thiz, int x1, int y1, int x2, int y2);
+typedef Ret (*FtkCanvasClearRect)(FtkCanvas* thiz, int x, int y, int w, int h);
+typedef Ret (*FtkCanvasDrawRect)(FtkCanvas* thiz, int x, int y, int w, int h, int round, int fill);
 typedef Ret (*FtkCanvasDrawBitmap)(FtkCanvas* thiz, FtkBitmap* bitmap, FtkRect* s, FtkRect* d, int alpha);
-typedef Ret (*FtkCanvasDrawString)(FtkCanvas* thiz, size_t x, size_t y, const char* str, int len, int vcenter);
+typedef Ret (*FtkCanvasDrawString)(FtkCanvas* thiz, int x, int y, const char* str, int len, int vcenter);
 typedef Ret (*FtkCanvasLockBuffer)(FtkCanvas* thiz, FtkBitmap** bitmap);
 typedef Ret (*FtkCanvasUnlockBuffer)(FtkCanvas* thiz);
 typedef void (*FtkCanvasDestroy)(FtkCanvas* thiz);
@@ -64,8 +64,8 @@ typedef void (*FtkCanvasDestroy)(FtkCanvas* thiz);
 struct _FtkCanvas
 {
 	FtkGc gc;
-	size_t width;
-	size_t height;
+	int width;
+	int height;
 
 	FtkCanvasSyncGc     sync_gc;
 	FtkCanvasSetClip    set_clip;
@@ -104,30 +104,30 @@ static inline Ret ftk_canvas_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 	return ret;
 }
 
-static inline Ret ftk_canvas_draw_pixels(FtkCanvas* thiz, FtkPoint* points, size_t nr)
+static inline Ret ftk_canvas_draw_pixels(FtkCanvas* thiz, FtkPoint* points, int nr)
 {
 	return_val_if_fail(thiz != NULL && thiz->draw_pixels != NULL && points != NULL, RET_FAIL);
 
 	return thiz->draw_pixels(thiz, points, nr);
 }
 
-static inline Ret ftk_canvas_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2)
+static inline Ret ftk_canvas_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
 {
 	return_val_if_fail(thiz != NULL && thiz->draw_line != NULL, RET_FAIL);
 
 	return thiz->draw_line(thiz, x1, y1, x2, y2);
 }
 
-static inline Ret ftk_canvas_clear_rect(FtkCanvas* thiz, size_t x, size_t y, 
-size_t w, size_t h)
+static inline Ret ftk_canvas_clear_rect(FtkCanvas* thiz, int x, int y, 
+int w, int h)
 {
 	return_val_if_fail(thiz != NULL && thiz->clear_rect != NULL, RET_FAIL);
 
 	return thiz->clear_rect(thiz, x, y, w, h);
 }
 
-static inline Ret ftk_canvas_draw_rect(FtkCanvas* thiz, size_t x, size_t y, 
-	size_t w, size_t h, int round, int fill)
+static inline Ret ftk_canvas_draw_rect(FtkCanvas* thiz, int x, int y, 
+	int w, int h, int round, int fill)
 {
 	return_val_if_fail(thiz != NULL && thiz->draw_rect != NULL, RET_FAIL);
 
@@ -142,7 +142,7 @@ static inline Ret ftk_canvas_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bmp,
 	return thiz->draw_bitmap(thiz, bmp, s, d, alpha);
 }
 
-static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, size_t x, size_t y,
+static inline Ret ftk_canvas_draw_string(FtkCanvas* thiz, int x, int y, 
 	const char* str, int len, int vcenter)
 {
 	len = (len < 0 && str != NULL) ? (int)strlen(str) : len;
@@ -183,22 +183,22 @@ Ret    ftk_canvas_set_clip_rect(FtkCanvas* thiz, FtkRect* rect);
 Ret    ftk_canvas_set_clip_region(FtkCanvas* thiz, FtkRegion* region);
 Ret    ftk_cavans_get_clip_region(FtkCanvas* thiz, FtkRegion** region);
 
-Ret ftk_canvas_draw_vline(FtkCanvas* thiz, size_t x, size_t y, size_t h);
-Ret ftk_canvas_draw_hline(FtkCanvas* thiz, size_t x, size_t y, size_t w);
+Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h);
+Ret ftk_canvas_draw_hline(FtkCanvas* thiz, int x, int y, int w);
 
 int ftk_canvas_font_height(FtkCanvas* thiz);
 int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len);
 const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, 
-	int vstart, int vend, size_t width);
+	int vstart, int vend, int width);
 
 Ret ftk_canvas_draw_bitmap_simple(FtkCanvas* thiz, FtkBitmap* b, 
-	size_t x, size_t y, size_t w, size_t h, size_t ox, size_t oy);
+	int x, int y, int w, int h, int ox, int oy);
 Ret ftk_canvas_draw_bg_image(FtkCanvas* thiz, FtkBitmap* bitmap, 
-	FtkBgStyle style, size_t x, size_t y, size_t w, size_t h);
+	FtkBgStyle style, int x, int y, int w, int h);
 
 Ret ftk_canvas_show(FtkCanvas* thiz, FtkDisplay* display, FtkRect* rect, int ox, int oy);
 
-FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color);
+FtkCanvas* ftk_canvas_create(int w, int h, FtkColor* clear_color);
 
 FTK_END_DECLS
 

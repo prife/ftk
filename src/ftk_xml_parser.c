@@ -67,7 +67,7 @@ void ftk_xml_parser_set_builder(FtkXmlParser* thiz, FtkXmlBuilder* builder)
 	return;
 }
 
-void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml, size_t length)
+void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml, int length)
 {
 	int i = 0;
 	enum _State
@@ -203,13 +203,13 @@ static void ftk_xml_parser_reset_buffer(FtkXmlParser* thiz)
 	return;
 }
 
-static int ftk_xml_parser_strdup(FtkXmlParser* thiz, const char* start, size_t length)
+static int ftk_xml_parser_strdup(FtkXmlParser* thiz, const char* start, int length)
 {
 	int offset = -1;
 
 	if((thiz->buffer_used + length) >= thiz->buffer_total)
 	{
-		size_t length = thiz->buffer_total+(thiz->buffer_total>>1) + 128;
+		int length = thiz->buffer_total+(thiz->buffer_total>>1) + 128;
 		char* buffer = (char*)FTK_REALLOC(thiz->buffer, length);
 		if(buffer != NULL)
 		{
@@ -305,7 +305,7 @@ static void ftk_xml_parser_parse_attrs(FtkXmlParser* thiz, char end_char)
 	
 	for(i = 0; i < thiz->attrs_nr; i++)
 	{
-		thiz->attrs[i] = thiz->buffer + (size_t)(thiz->attrs[i]);
+		thiz->attrs[i] = thiz->buffer + (int)(thiz->attrs[i]);
 	}
 	thiz->attrs[thiz->attrs_nr] = NULL;
 
@@ -355,7 +355,7 @@ static void ftk_xml_parser_parse_start_tag(FtkXmlParser* thiz)
 		}
 	}
 	
-	tag_name = thiz->buffer + (size_t)tag_name;
+	tag_name = thiz->buffer + (int)tag_name;
 	ftk_xml_builder_on_start_element(thiz->builder, tag_name, (const char**)thiz->attrs);
 	
 	if(thiz->read_ptr[0] == '/')
@@ -480,7 +480,7 @@ static void ftk_xml_parser_parse_pi(FtkXmlParser* thiz)
 		}
 	}
 	
-	tag_name = thiz->buffer + (size_t)tag_name;
+	tag_name = thiz->buffer + (int)tag_name;
 	ftk_xml_builder_on_pi_element(thiz->builder, tag_name, (const char**)thiz->attrs);	
 
 	for(; *thiz->read_ptr != '>' && *thiz->read_ptr != '\0'; thiz->read_ptr++);

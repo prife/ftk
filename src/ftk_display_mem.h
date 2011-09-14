@@ -43,7 +43,7 @@ Ret ftk_display_mem_set_sync_func(FtkDisplay* thiz, FtkDisplaySync sync, void* c
 int ftk_display_mem_is_active(FtkDisplay* thiz);
 FtkPixelFormat ftk_display_mem_get_pixel_format(FtkDisplay* thiz);
 Ret ftk_display_mem_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
-	void* bits, size_t width, size_t height, size_t xoffset, size_t yoffset);
+	void* bits, int width, int height, int xoffset, int yoffset);
 
 #endif/*FTK_DISPLAY_MEM_H*/
 

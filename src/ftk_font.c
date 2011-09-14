@@ -183,11 +183,11 @@ typedef struct _FontPrivInfo
 	FtkGlyph* glyphs;
 	FtkGlyph* free_glyphs;
 	FtkGlyph** glyphs_ptr;
-	size_t glyph_nr;
-	size_t font_height;
-	size_t max_glyph_nr;
-	size_t one_glyph_size;
-	size_t last_replaced;
+	int glyph_nr;
+	int font_height;
+	int max_glyph_nr;
+	int one_glyph_size;
+	int last_replaced;
 	FtkGlyph* lrc_glyph;
 }PrivInfo;
 
@@ -413,10 +413,10 @@ static void		ftk_font_cache_destroy(FtkFont* thiz)
 	return;
 }
 
-FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr)
+FtkFont* ftk_font_cache_create (FtkFont* font, int max_glyph_nr)
 {
 	FtkFont* thiz = NULL;
-	size_t font_height = ftk_font_height(font);
+	int font_height = ftk_font_height(font);
 	return_val_if_fail(font != NULL && font_height > 0, NULL);
 
 	if((thiz = FTK_NEW_PRIV(FtkFont)) != NULL)

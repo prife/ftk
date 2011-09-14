@@ -50,7 +50,7 @@ typedef struct _WindowPrivInfo
 	int update_disabled;
 	int is_opaque;	
 	FtkSource* update_idle;
-	size_t dirty_rect_nr;
+	int dirty_rect_nr;
 	FtkRect dirty_rect[FTK_MAX_DIRTY_RECT];
 	char  animation_hint[32];
 }PrivInfo;
@@ -521,7 +521,7 @@ int ftk_window_is_fullscreen(FtkWidget* thiz)
 
 static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 {
-	size_t i = 0;
+	int i = 0;
 	FtkRect rect = {0};
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_REMOVE);

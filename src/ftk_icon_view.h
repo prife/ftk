@@ -51,13 +51,13 @@ typedef struct _FtkIconViewItem
 
 FtkWidget* ftk_icon_view_create(FtkWidget* parent, int x, int y, int width, int height);
 
-Ret ftk_icon_view_set_item_size(FtkWidget* thiz, size_t size);
+Ret ftk_icon_view_set_item_size(FtkWidget* thiz, int size);
 Ret ftk_icon_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
-size_t ftk_icon_view_get_count(FtkWidget* thiz);
-Ret ftk_icon_view_remove(FtkWidget* thiz, size_t index);
+int ftk_icon_view_get_count(FtkWidget* thiz);
+Ret ftk_icon_view_remove(FtkWidget* thiz, int index);
 Ret ftk_icon_view_add(FtkWidget* thiz, const FtkIconViewItem* item);
-Ret ftk_icon_view_get(FtkWidget* thiz, size_t index, const FtkIconViewItem** item);
+Ret ftk_icon_view_get(FtkWidget* thiz, int index, const FtkIconViewItem** item);
 
 FTK_END_DECLS
 

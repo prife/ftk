@@ -181,7 +181,7 @@ static Ret  ftk_dialog_paint_border(FtkWidget* thiz, FtkCanvas* canvas, int x, i
 	}
 	else
 	{
-		size_t title_height = ftk_bitmap_height(priv->title_bg);
+		int title_height = ftk_bitmap_height(priv->title_bg);
 		
 		return_val_if_fail(title_height < height, RET_FAIL);
 		ftk_canvas_draw_bg_image(canvas, priv->title_bg, FTK_BG_TILE, x, y, width, title_height);

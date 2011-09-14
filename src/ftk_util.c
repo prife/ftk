@@ -221,7 +221,7 @@ int unichar_to_utf8 (unsigned short c, char* outbuf)
 }
 
 #define SURROGATE_VALUE(h,l) (((h) - 0xd800) * 0x400 + (l) - 0xdc00 + 0x10000)
-char* utf16_to_utf8 (const unsigned short  *str, long len, char* utf8, size_t out_len)
+char* utf16_to_utf8 (const unsigned short  *str, long len, char* utf8, int out_len)
 {
   /* This function and g_utf16_to_ucs4 are almost exactly identical - The lines that differ
    * are marked.
@@ -753,7 +753,7 @@ double ftk_atof(const char* str)
 	return neg ? -result : result;
 }
 
-static const char* ftk_itoa_simple(char* str, size_t len, int n, const char** end)
+static const char* ftk_itoa_simple(char* str, int len, int n, const char** end)
 {
 	int i = 0;
 	int value = n;
@@ -807,7 +807,7 @@ static const char* ftk_itoa_simple(char* str, size_t len, int n, const char** en
 	return str;
 }
 
-const char* ftk_itoa(char* str, size_t len, int n)
+const char* ftk_itoa(char* str, int len, int n)
 {
 	return ftk_itoa_simple(str, len, n, NULL);
 }

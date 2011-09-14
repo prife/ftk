@@ -38,21 +38,21 @@
 
 typedef struct _IconViewPrivInfo
 {
-	size_t nr;
-	size_t alloc_nr;
+	int nr;
+	int alloc_nr;
 	FtkIconViewItem* items;
 	
 	int    current;
-	size_t visible_nr;
+	int    visible_nr;
 	int    visible_start;
 	
-	size_t cols;
-	size_t rows;
-	size_t left_margin;
-	size_t top_margin;
+	int cols;
+	int rows;
+	int left_margin;
+	int top_margin;
 
-	size_t item_width;
-	size_t item_height;
+	int item_width;
+	int item_height;
 	FtkListener listener;
 	void* listener_ctx;
 
@@ -292,7 +292,7 @@ static Ret ftk_icon_view_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_icon_view_calc(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	size_t visible_nr = 0;
+	int visible_nr = 0;
 	int width = ftk_widget_width(thiz) - 2 * FTK_H_MARGIN;
 	int height = ftk_widget_height(thiz) - 2 * FTK_V_MARGIN;
 
@@ -314,9 +314,9 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 	int dx = 0;
 	int dy = 0;
 	int fw = 0;
-	size_t i = 0;
-	size_t j = 0;
-	size_t item = 0;
+	int i = 0;
+	int j = 0;
+	int item = 0;
 	int icon_height = 0;
 	const char* text = NULL;
 	DECL_PRIV0(thiz, priv);
@@ -388,7 +388,7 @@ static void ftk_icon_view_destroy(FtkWidget* thiz)
 {
 	if(thiz != NULL)
 	{
-		size_t i = 0;
+		int i = 0;
 		DECL_PRIV0(thiz, priv);
 
 		for(i = 0; i < priv->nr; i++)
@@ -443,7 +443,7 @@ Ret ftk_icon_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, vo
 	return RET_OK;
 }
 
-Ret ftk_icon_view_set_item_size(FtkWidget* thiz, size_t size)
+Ret ftk_icon_view_set_item_size(FtkWidget* thiz, int size)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, RET_FAIL);
@@ -457,7 +457,7 @@ Ret ftk_icon_view_set_item_size(FtkWidget* thiz, size_t size)
 	return RET_OK;
 }
 
-size_t ftk_icon_view_get_count(FtkWidget* thiz)
+int ftk_icon_view_get_count(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
@@ -465,7 +465,7 @@ size_t ftk_icon_view_get_count(FtkWidget* thiz)
 	return priv->nr;
 }
 
-Ret ftk_icon_view_remove(FtkWidget* thiz, size_t index)
+Ret ftk_icon_view_remove(FtkWidget* thiz, int index)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && index < priv->nr, RET_FAIL);
@@ -485,9 +485,9 @@ Ret ftk_icon_view_remove(FtkWidget* thiz, size_t index)
 	return RET_OK;
 }
 
-static Ret ftk_icon_view_extend(FtkWidget* thiz, size_t delta)
+static Ret ftk_icon_view_extend(FtkWidget* thiz, int delta)
 {
-	size_t alloc_nr = 0;
+	int alloc_nr = 0;
 	DECL_PRIV0(thiz, priv);
 	FtkIconViewItem* items = NULL;
 
@@ -563,7 +563,7 @@ Ret ftk_icon_view_add(FtkWidget* thiz, const FtkIconViewItem* item)
 	return RET_OK;
 }
 
-Ret ftk_icon_view_get(FtkWidget* thiz, size_t index, const FtkIconViewItem** item)
+Ret ftk_icon_view_get(FtkWidget* thiz, int index, const FtkIconViewItem** item)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && index < priv->nr && item != NULL, RET_FAIL);

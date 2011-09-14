@@ -224,7 +224,7 @@ static void ftk_animation_trigger_default_destroy(FtkAnimationTrigger* thiz)
 {
 	if(thiz != NULL)
 	{
-		size_t i = 0;
+		int i = 0;
 		DECL_PRIV(thiz, priv);
 
 		for(i = 0; i < priv->type_and_animations_nr; i++)

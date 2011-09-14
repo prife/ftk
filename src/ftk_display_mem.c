@@ -216,10 +216,10 @@ FtkPixelFormat ftk_display_mem_get_pixel_format(FtkDisplay* thiz)
 }
 
 Ret ftk_display_mem_update_directly(FtkDisplay* thiz, FtkPixelFormat format,
-	void* bits, size_t width, size_t height, size_t xoffset, size_t yoffset)
+	void* bits, int width, int height, int xoffset, int yoffset)
 {
-	size_t w = 0;
-	size_t h = 0;
+	int w = 0;
+	int h = 0;
 	char* src = NULL;
 	char* dst = NULL;
 	DECL_PRIV(thiz, priv);

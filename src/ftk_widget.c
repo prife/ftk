@@ -736,16 +736,20 @@ static void ftk_widget_validate_position_size(FtkWidget* thiz)
 		int parent_w = ftk_widget_width(parent);
 		int parent_h = ftk_widget_height(parent);
 		
-		priv->width = (priv->width + 1) & 0xfffffffe;
-		priv->height = (priv->height + 1) & 0xfffffffe;
+		// remove by wzw.random@gmail.com.
+		// 加入这段可能会导致宽、高有误；
+		// 我不明白这段代码作用，估计是由于原来width是unsigned int类型，在小于0的时候特殊处理；
+		// 这里将width、height的类型改为int型，以下的代码应该就不用了。
+//		priv->width = (priv->width + 1) & 0xfffffffe;
+//		priv->height = (priv->height + 1) & 0xfffffffe;
 
 		priv->left = (priv->left >= parent_w) ? (parent_w - 1) : priv->left;
 		priv->top = (priv->top >= parent_h) ? (parent_h - 1) : priv->top;
 		priv->width = (priv->left + priv->width) > parent_w ? (parent_w - priv->left) : priv->width;
 		priv->height = (priv->height + priv->top) > parent_h ? (parent_h - priv->top) : priv->height;
 
-		priv->width = priv->width & 0xfffffffe;
-		priv->height = priv->height & 0xfffffffe;
+//		priv->width = priv->width & 0xfffffffe;
+//		priv->height = priv->height & 0xfffffffe;
 	}
 
 	return;

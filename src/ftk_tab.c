@@ -331,7 +331,7 @@ FtkWidget* ftk_tab_create(FtkWidget* parent, int x, int y, int width, int height
 	
 }
 
-size_t     ftk_tab_get_page_count(FtkWidget* thiz)
+int     ftk_tab_get_page_count(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
@@ -339,7 +339,7 @@ size_t     ftk_tab_get_page_count(FtkWidget* thiz)
 	return priv->page_use_nr;
 }
 
-FtkWidget* ftk_tab_get_page(FtkWidget* thiz, size_t index)
+FtkWidget* ftk_tab_get_page(FtkWidget* thiz, int index)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && index < priv->page_use_nr, NULL);
@@ -347,9 +347,9 @@ FtkWidget* ftk_tab_get_page(FtkWidget* thiz, size_t index)
 	return priv->pages[index].page;
 }
 
-Ret        ftk_tab_remove_page(FtkWidget* thiz, size_t index)
+Ret        ftk_tab_remove_page(FtkWidget* thiz, int index)
 {
-	size_t i = 0;
+	int i = 0;
 	TabPage* iter = NULL;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && index < priv->page_use_nr, RET_FAIL);
@@ -378,7 +378,7 @@ FtkWidget* ftk_tab_add_page(FtkWidget* thiz, const char* text, FtkBitmap* icon)
 
 	if((priv->page_use_nr + 1) > priv->page_total_nr)
 	{
-		size_t page_total_nr = priv->page_total_nr + 3;
+		int page_total_nr = priv->page_total_nr + 3;
 		TabPage* pages = (TabPage*)FTK_REALLOC(priv->pages, page_total_nr * sizeof(TabPage));
 		if(pages != NULL)
 		{
@@ -405,7 +405,7 @@ FtkWidget* ftk_tab_add_page(FtkWidget* thiz, const char* text, FtkBitmap* icon)
 	return iter->page;
 }
 
-size_t ftk_tab_get_active_page(FtkWidget* thiz)
+int ftk_tab_get_active_page(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL, 0);
@@ -413,7 +413,7 @@ size_t ftk_tab_get_active_page(FtkWidget* thiz)
 	return priv->active_page;
 }
 
-Ret ftk_tab_set_active_page(FtkWidget* thiz, size_t index)
+Ret ftk_tab_set_active_page(FtkWidget* thiz, int index)
 {
 	int i = 0;
 	DECL_PRIV0(thiz, priv);
@@ -422,7 +422,7 @@ Ret ftk_tab_set_active_page(FtkWidget* thiz, size_t index)
 	if(priv->active_page != index)
 	{
 		FtkEvent event;
-		size_t old = priv->active_page;
+		int old = priv->active_page;
 
 		priv->active_page = index;
 		memset(&event, 0x00, sizeof(event));
@@ -446,7 +446,7 @@ Ret ftk_tab_set_active_page(FtkWidget* thiz, size_t index)
 	return RET_OK;
 }
 
-Ret ftk_tab_set_page_text(FtkWidget* thiz, size_t index, const char* text)
+Ret ftk_tab_set_page_text(FtkWidget* thiz, int index, const char* text)
 {
 	TabPage* iter = NULL;
 	DECL_PRIV0(thiz, priv);
@@ -459,7 +459,7 @@ Ret ftk_tab_set_page_text(FtkWidget* thiz, size_t index, const char* text)
 	return RET_OK;
 }
 
-Ret ftk_tab_set_page_icon(FtkWidget* thiz, size_t index, FtkBitmap* icon)
+Ret ftk_tab_set_page_icon(FtkWidget* thiz, int index, FtkBitmap* icon)
 {
 	TabPage* iter = NULL;
 	DECL_PRIV0(thiz, priv);
@@ -476,7 +476,7 @@ Ret ftk_tab_set_page_icon(FtkWidget* thiz, size_t index, FtkBitmap* icon)
 	return RET_OK;
 }
 
-const char* ftk_tab_get_page_text(FtkWidget* thiz, size_t index)
+const char* ftk_tab_get_page_text(FtkWidget* thiz, int index)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && index < priv->page_use_nr, NULL);
@@ -484,7 +484,7 @@ const char* ftk_tab_get_page_text(FtkWidget* thiz, size_t index)
 	return priv->pages[index].text;
 }
 
-FtkBitmap* ftk_tab_get_page_icon(FtkWidget* thiz, size_t index)
+FtkBitmap* ftk_tab_get_page_icon(FtkWidget* thiz, int index)
 {
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && index < priv->page_use_nr, NULL);

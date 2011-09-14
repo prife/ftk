@@ -11,7 +11,7 @@ typedef struct _FtkXmlParser FtkXmlParser;
 
 FtkXmlParser* ftk_xml_parser_create(void);
 void       ftk_xml_parser_set_builder(FtkXmlParser* thiz, FtkXmlBuilder* builder);
-void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml, size_t length);
+void ftk_xml_parser_parse(FtkXmlParser* thiz, const char* xml, int length);
 void       ftk_xml_parser_destroy(FtkXmlParser* thiz);
 
 FTK_END_DECLS

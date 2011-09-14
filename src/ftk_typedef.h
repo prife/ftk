@@ -222,7 +222,7 @@ typedef Ret  (*FtkListener)(void* user_data, void* obj);
 
 typedef struct _FtkCommitInfo
 {
-	size_t candidate_nr;
+	int candidate_nr;
 	char raw_text[FTK_IM_RAW_TEXT_LENGTH + 1];
 	char candidates[FTK_IM_CANDIDATE_BUFF_LENGTH + 1];
 }FtkCommitInfo;

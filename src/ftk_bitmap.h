@@ -39,8 +39,8 @@ struct _FtkBitmap;
 typedef struct _FtkBitmap FtkBitmap;
 
 FtkBitmap* ftk_bitmap_create(int w, int h, FtkColor clear_color);
-size_t     ftk_bitmap_width(FtkBitmap* thiz);
-size_t     ftk_bitmap_height(FtkBitmap* thiz);
+int     ftk_bitmap_width(FtkBitmap* thiz);
+int     ftk_bitmap_height(FtkBitmap* thiz);
 FtkColor*  ftk_bitmap_bits(FtkBitmap* thiz);
 void       ftk_bitmap_ref(FtkBitmap* thiz);
 void       ftk_bitmap_unref(FtkBitmap* thiz);
@@ -48,34 +48,34 @@ void       ftk_bitmap_clear(FtkBitmap* thiz, FtkColor c);
 Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other);
 
 Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, 
-	void* data, size_t dw, size_t dh, FtkRect* rect);
+	void* data, int dw, int dh, FtkRect* rect);
 Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, 
-	void* data, int ox, int oy, size_t dw, size_t dh);
+	void* data, int ox, int oy, int dw, int dh);
 
 Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, 
-	void* data, size_t dw, size_t dh, FtkRect* rect);
+	void* data, int dw, int dh, FtkRect* rect);
 Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, 
-	void* data, int ox, int oy, size_t dw, size_t dh);
+	void* data, int ox, int oy, int dw, int dh);
 
 Ret ftk_bitmap_copy_from_data_argb32(FtkBitmap* bitmap, 
-	void* data, size_t dw, size_t dh, FtkRect* rect);
+	void* data, int dw, int dh, FtkRect* rect);
 Ret ftk_bitmap_copy_to_data_argb32(FtkBitmap* bitmap, FtkRect* rect, 
-	void* data, int ox, int oy, size_t dw, size_t dh);
+	void* data, int ox, int oy, int dw, int dh);
 
 Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, 
-	void* data, size_t dw, size_t dh, FtkRect* rect);
+	void* data, int dw, int dh, FtkRect* rect);
 Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, 
-	void* data, int ox, int oy, size_t dw, size_t dh);
+	void* data, int ox, int oy, int dw, int dh);
 
 Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, 
-	void* data, size_t dw, size_t dh, FtkRect* rect);
+	void* data, int dw, int dh, FtkRect* rect);
 Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, 
-	void* data, int ox, int oy, size_t dw, size_t dh);
+	void* data, int ox, int oy, int dw, int dh);
 
 typedef Ret (*FtkBitmapCopyFromData)(FtkBitmap* bitmap, 
-	void* data, size_t dw, size_t dh, FtkRect* rect);
+	void* data, int dw, int dh, FtkRect* rect);
 typedef Ret (*FtkBitmapCopyToData)(FtkBitmap* bitmap, FtkRect* rect, 
-	void* data, int ox, int oy, size_t dw, size_t dh);
+	void* data, int ox, int oy, int dw, int dh);
 
 #define FTK_BITMAP_UNREF(bitmap) if(bitmap != NULL) { ftk_bitmap_unref(bitmap); bitmap = NULL;}
 

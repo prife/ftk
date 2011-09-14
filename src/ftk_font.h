@@ -122,7 +122,7 @@ static inline int     ftk_font_unref(FtkFont* thiz)
 	return ret;
 }
 
-FtkFont* ftk_font_cache_create (FtkFont* font, size_t max_glyph_nr);
+FtkFont* ftk_font_cache_create (FtkFont* font, int max_glyph_nr);
 
 FtkFontDesc* ftk_font_get_desc(FtkFont* thiz);
 int ftk_font_get_extent(FtkFont* thiz, const char* str, int len);

@@ -50,8 +50,8 @@
 
 typedef struct _CanvasDefaultPrivInfo
 {
-	size_t w;
-	size_t h;
+	int w;
+	int h;
 	FtkColor* bits;
 	FtkRegion* clip;
 	FtkBitmap* bitmap;
@@ -103,7 +103,7 @@ static Ret ftk_canvas_default_sync_gc(FtkCanvas* thiz)
 
 static Ret ftk_canvas_default_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 {
-	size_t i = 0;
+	int i = 0;
 	DECL_PRIV(thiz, priv);
 	FtkRegion* iter = NULL;
 	
@@ -145,11 +145,11 @@ static Ret ftk_canvas_default_set_clip(FtkCanvas* thiz, FtkRegion* clip)
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_pixels(FtkCanvas* thiz, FtkPoint* points, size_t nr)
+static Ret ftk_canvas_default_draw_pixels(FtkCanvas* thiz, FtkPoint* points, int nr)
 {
-	size_t x = 0;
-	size_t y = 0;
-	size_t i = 0;
+	int x = 0;
+	int y = 0;
+	int i = 0;
 	DECL_PRIV(thiz, priv);
 	FtkColor* pdst = NULL;
 	FtkColor* color = &(thiz->gc.fg);
@@ -170,11 +170,11 @@ static Ret ftk_canvas_default_draw_pixels(FtkCanvas* thiz, FtkPoint* points, siz
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_vline(FtkCanvas* thiz, size_t x, size_t y, size_t h)
+static Ret ftk_canvas_default_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 {
 	int i = 0;
-	size_t width = 0;
-	size_t height = 0;
+	int width = 0;
+	int height = 0;
 	FtkColor* bits = NULL;
 	unsigned char alpha = 0;
 	FtkColor* pdst = NULL;
@@ -201,11 +201,11 @@ static Ret ftk_canvas_default_draw_vline(FtkCanvas* thiz, size_t x, size_t y, si
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_hline(FtkCanvas* thiz, size_t x, size_t y, size_t w)
+static Ret ftk_canvas_default_draw_hline(FtkCanvas* thiz, int x, int y, int w)
 {
 	int i = 0;
-	size_t width = 0;
-	size_t height = 0;
+	int width = 0;
+	int height = 0;
 	FtkColor* bits = NULL;
 	unsigned char alpha = 0;
 	FtkColor* pdst = NULL;
@@ -303,11 +303,11 @@ static Ret ftk_canvas_default_draw_normal_line(FtkCanvas* thiz, int x1, int y1, 
 	return RET_OK;  
 }  
 
-static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2)
+static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
 {
-	size_t len = 0;
-	size_t min = 0;
-	size_t max = 0;
+	int len = 0;
+	int min = 0;
+	int max = 0;
 	Ret ret = RET_FAIL;
 	DECL_PRIV(thiz, priv);
 	FtkRect clip = priv->clip->rect;
@@ -374,9 +374,9 @@ static Ret ftk_canvas_default_draw_line(FtkCanvas* thiz, size_t x1, size_t y1, s
 	return ret;
 }
 
-static Ret ftk_canvas_default_clear_rect(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h)
+static Ret ftk_canvas_default_clear_rect(FtkCanvas* thiz, int x, int y, int w, int h)
 {
-	size_t width = 0;
+	int width = 0;
 	int iter_w = 0;
 	int iter_h = 0;
 	FtkColor* color = NULL;
@@ -424,11 +424,11 @@ static Ret ftk_canvas_default_clear_rect(FtkCanvas* thiz, size_t x, size_t y, si
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_rect_impl(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, int fill)
+static Ret ftk_canvas_default_draw_rect_impl(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 {
 	int i = 0;
-	size_t width  = 0;
-	size_t height = 0;
+	int width  = 0;
+	int height = 0;
 	DECL_PRIV(thiz, priv);
 	width  = priv->w;
 	height = priv->h;
@@ -455,10 +455,10 @@ static Ret ftk_canvas_default_draw_rect_impl(FtkCanvas* thiz, size_t x, size_t y
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_round_rect(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, int fill)
+static Ret ftk_canvas_default_draw_round_rect(FtkCanvas* thiz, int x, int y, int w, int h, int fill)
 {
-	size_t width  = 0;
-	size_t height = 0;
+	int width  = 0;
+	int height = 0;
 	DECL_PRIV(thiz, priv);
 
 	width  = priv->w;
@@ -484,7 +484,7 @@ static Ret ftk_canvas_default_draw_round_rect(FtkCanvas* thiz, size_t x, size_t 
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_rect(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, 
+static Ret ftk_canvas_default_draw_rect(FtkCanvas* thiz, int x, int y, int w, int h, 
 	int round, int fill)
 {
 	Ret ret = RET_FAIL;
@@ -523,20 +523,20 @@ static Ret ftk_canvas_default_draw_bitmap_normal(FtkCanvas* thiz, FtkBitmap* bit
 	int i = 0;
 	int j = 0;
 	int k = 0;
-	size_t x = s->x;
-	size_t y = s->y;
-	size_t w = s->width;
-	size_t h = s->height;
-	size_t xoffset = d->x;
-	size_t yoffset = d->y;
+	int x = s->x;
+	int y = s->y;
+	int w = s->width;
+	int h = s->height;
+	int xoffset = d->x;
+	int yoffset = d->y;
 	FtkColor* src = NULL;
 	FtkColor* dst = NULL;
 	FtkColor* psrc = NULL;
 	FtkColor* pdst = NULL;
 	unsigned char alpha = 0;
 	DECL_PRIV(thiz, priv);
-	size_t width  = priv->w;
-	size_t height = priv->h;
+	int width  = priv->w;
+	int height = priv->h;
 	int bitmap_width   = ftk_bitmap_width(bitmap);
 	int bitmap_height  = ftk_bitmap_height(bitmap);
 
@@ -738,15 +738,15 @@ static Ret ftk_canvas_default_draw_bitmap(FtkCanvas* thiz, FtkBitmap* bitmap,
 	return ret;
 }
 
-static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
+static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y, 
 	const char* str, int len, int vcenter)
 {
 	int i = 0;
 	int j = 0;
-	size_t ox = x;
-	size_t oy = y;
-	size_t right = 0;
-	size_t bottom = 0;
+	int ox = x;
+	int oy = y;
+	int right = 0;
+	int bottom = 0;
 	unsigned char data = 0;
 	int vcenter_offset = 0;
 	FtkGlyph glyph = {0};
@@ -770,7 +770,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 	vcenter_offset = ftk_font_height(thiz->gc.font)/3;
 	while(*iter && (iter - str) < len)
 	{
-		size_t offset = 0;
+		int offset = 0;
 		code = utf8_get_char(iter, &iter);
 
 		if(code == ' ' )
@@ -825,7 +825,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, size_t x, size_t y,
 	return RET_OK;
 }
 
-static Ret fk_canvas_default_lock_buffer(FtkCanvas* thiz, FtkBitmap** bitmap)
+static Ret ftk_canvas_default_lock_buffer(FtkCanvas* thiz, FtkBitmap** bitmap)
 {
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(bitmap != NULL, RET_FAIL);
@@ -849,7 +849,7 @@ static void ftk_canvas_default_destroy(FtkCanvas* thiz)
 	return;
 }
 
-static Ret ftk_canvas_default_draw_pixels_clip(FtkCanvas* thiz, FtkPoint* points, size_t nr) 
+static Ret ftk_canvas_default_draw_pixels_clip(FtkCanvas* thiz, FtkPoint* points, int nr) 
 {
 	DECL_PRIV(thiz, priv);
 	return_val_if_fail(points != NULL, RET_FAIL);
@@ -863,7 +863,7 @@ static Ret ftk_canvas_default_draw_pixels_clip(FtkCanvas* thiz, FtkPoint* points
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_line_clip(FtkCanvas* thiz, size_t x1, size_t y1, size_t x2, size_t y2)
+static Ret ftk_canvas_default_draw_line_clip(FtkCanvas* thiz, int x1, int y1, int x2, int y2)
 {
 	DECL_PRIV(thiz, priv);
 
@@ -876,7 +876,7 @@ static Ret ftk_canvas_default_draw_line_clip(FtkCanvas* thiz, size_t x1, size_t 
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_clear_rect_clip(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h)
+static Ret ftk_canvas_default_clear_rect_clip(FtkCanvas* thiz, int x, int y, int w, int h)
 {
 	DECL_PRIV(thiz, priv);
 
@@ -889,7 +889,7 @@ static Ret ftk_canvas_default_clear_rect_clip(FtkCanvas* thiz, size_t x, size_t 
 	return RET_OK;
 }
 
-static Ret ftk_canvas_default_draw_rect_clip(FtkCanvas* thiz, size_t x, size_t y, size_t w, size_t h, 
+static Ret ftk_canvas_default_draw_rect_clip(FtkCanvas* thiz, int x, int y, int w, int h, 
 	int round, int fill)
 {
 	DECL_PRIV(thiz, priv);
@@ -919,7 +919,7 @@ static Ret ftk_canvas_default_draw_bitmap_clip(FtkCanvas* thiz, FtkBitmap* bitma
 
 }
 
-static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, size_t x, size_t y,
+static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, int x, int y, 
 	const char* str, int len, int vcenter)
 {
 	DECL_PRIV(thiz, priv);
@@ -935,7 +935,7 @@ static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, size_t x, size_t
 	return RET_OK;
 }
 
-FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color)
+FtkCanvas* ftk_canvas_create(int w, int h, FtkColor* clear_color)
 {
 	FtkCanvas* thiz = NULL;
 	return_val_if_fail(w > 0 && h > 0 && clear_color != NULL, NULL);
@@ -952,7 +952,7 @@ FtkCanvas* ftk_canvas_create(size_t w, size_t h, FtkColor* clear_color)
 		thiz->clear_rect = ftk_canvas_default_clear_rect_clip;
 		thiz->draw_bitmap = ftk_canvas_default_draw_bitmap_clip;
 		thiz->draw_string = ftk_canvas_default_draw_string_clip;
-		thiz->lock_buffer = fk_canvas_default_lock_buffer;
+		thiz->lock_buffer = ftk_canvas_default_lock_buffer;
 		thiz->unlock_buffer = ftk_canvas_default_unlock_buffer;
 		thiz->destroy = ftk_canvas_default_destroy;
 
