@@ -51,7 +51,7 @@ typedef struct _TypeAndAnimation
 	FtkAnimation* animations[FTK_MAX_ANIMATION_NR];
 }TypeAndAnimation;
 
-typedef struct _PrivInfo
+typedef struct _AnimationTriggerPrivInfo
 {
 	FtkCanvas* old_window;
 	FtkCanvas* new_window;

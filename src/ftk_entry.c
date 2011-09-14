@@ -38,7 +38,7 @@
 #include "ftk_source_timer.h"
 #include "ftk_input_method_preeditor.h"
 
-typedef struct _PrivInfo
+typedef struct _EntryPrivInfo
 {
 	int   caret;
 	int   caret_visible;

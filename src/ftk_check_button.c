@@ -37,7 +37,7 @@
 #include "ftk_check_button.h"
 #include "ftk_group_box.h"
 
-typedef struct _PrivInfo
+typedef struct _CheckButtonPrivInfo
 {
 	int checked;
 	int is_radio;

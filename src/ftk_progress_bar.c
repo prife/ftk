@@ -35,7 +35,7 @@
 #include "ftk_text_layout.h"
 #include "ftk_progress_bar.h"
 
-typedef struct _PrivInfo
+typedef struct _ProgressBarPrivInfo
 {
 	int percent;
 	int interactive; 

@@ -34,7 +34,7 @@
 #include "ftk_util.h"
 #include "ftk_font.h"
 
-typedef struct _PrivInfo
+typedef struct _FontDefaultPrivInfo
 {
 	size_t size;
 	char* filename;

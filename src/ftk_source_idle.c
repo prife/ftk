@@ -30,7 +30,7 @@
  */
 #include "ftk_source_idle.h"
 
-typedef struct _PrivInfo
+typedef struct _SourceIdlePrivInfo
 {
 	FtkIdle action;
 	void* user_data;

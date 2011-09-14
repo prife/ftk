@@ -36,7 +36,7 @@
 #include "ftk_icon_view.h"
 #include "ftk_icon_cache.h"
 
-typedef struct _PrivInfo
+typedef struct _IconViewPrivInfo
 {
 	size_t nr;
 	size_t alloc_nr;

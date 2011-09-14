@@ -37,7 +37,7 @@
 #include "ftk_globals.h"
 #include "ftk_icon_cache.h"
 
-typedef struct _PrivInfo
+typedef struct _ButtonPrivInfo
 {
 	FtkListener listener;
 	void* listener_ctx;

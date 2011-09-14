@@ -33,7 +33,7 @@
 #include "ftk_globals.h"
 #include "ftk_animation_alpha.h"
 
-typedef struct _PrivInfo
+typedef struct _AnimationAlphaPrivInfo
 {
 	float end;
 	float start;

@@ -31,7 +31,7 @@
 #include "ftk_typedef.h"
 #include "ftk_source_timer.h"
 
-typedef struct _PrivInfo
+typedef struct _SourceTimerPrivInfo
 {
 	FtkTimer action;
 	void* user_data;

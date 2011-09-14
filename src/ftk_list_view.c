@@ -37,7 +37,7 @@
 #include "ftk_list_view.h"
 #include "ftk_scroll_bar.h"
 
-typedef struct _PrivInfo
+typedef struct _ListViewPrivInfo
 {
 	int current;
 	int visible_nr;

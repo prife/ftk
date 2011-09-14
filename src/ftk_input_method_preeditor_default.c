@@ -38,7 +38,7 @@
 #include "ftk_list_render_default.h"
 #include "ftk_input_method_preeditor.h"
 
-typedef struct _PrivInfo
+typedef struct _InputMethodPreeditorPrivInfo
 {
 	FtkWidget* widget;
 	FtkWidget* editor;

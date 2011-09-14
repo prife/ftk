@@ -33,7 +33,7 @@
 #include "ftk_globals.h"
 #include "ftk_menu_item.h"
 
-typedef struct _PrivInfo
+typedef struct _MenuPanelPrivInfo
 {
 	int changed;
 	int items_nr;

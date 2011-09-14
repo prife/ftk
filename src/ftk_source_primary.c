@@ -37,7 +37,7 @@
 
 #define MAX_EVENTS 128
 
-typedef struct _PrivInfo
+typedef struct _SourcePrimaryPrivInfo
 {
 	FtkPipe* pipe;
 	FtkOnEvent on_event;

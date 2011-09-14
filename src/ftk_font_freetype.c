@@ -37,7 +37,7 @@
 #include "ftk_font.h"
 
 
-typedef struct _PrivInfo
+typedef struct _FontFreetypePrivInfo
 {
 	int bold;
 	int italic;

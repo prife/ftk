@@ -35,7 +35,7 @@
 #include "ftk_popup_menu.h"
 #include "ftk_list_render_default.h"
 
-typedef struct _PrivInfo
+typedef struct _PopupMenuPrivInfo
 {
 	FtkWidget*     list;
 	FtkListModel*  model;

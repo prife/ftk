@@ -35,7 +35,7 @@
 #include "ftk_status_item.h"
 #include "ftk_status_panel.h"
 
-typedef struct _PrivInfo
+typedef struct _StutusItemPrivInfo
 {
 	int pos;
 	FtkListener listener;

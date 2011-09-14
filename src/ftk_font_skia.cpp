@@ -36,7 +36,7 @@
 
 using namespace android;
 
-typedef struct _PrivInfo
+typedef struct _FontSkiaPrivInfo
 {
 	SkPaint* paint;
 	FtkGlyph glyph;

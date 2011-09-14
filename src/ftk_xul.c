@@ -36,7 +36,7 @@
 #include "ftk_mmap.h"
 #include "ftk_xml_parser.h"
 
-typedef struct _PrivInfo
+typedef struct _XulPrivInfo
 {
 	FtkWidget* root;
 	FtkWidget* current;

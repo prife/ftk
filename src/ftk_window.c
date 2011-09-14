@@ -37,7 +37,7 @@
 
 #define FTK_MAX_DIRTY_RECT 16
 
-typedef struct _PrivInfo
+typedef struct _WindowPrivInfo
 {
 	FtkCanvas*  canvas;
 	FtkDisplay* display;

@@ -199,7 +199,7 @@ static FtkWidgetType ftk_theme_get_widget_type(FtkTheme* thiz, const char* name)
 	return FTK_WIDGET_NONE;
 }
 
-typedef struct _PrivInfo
+typedef struct _ThemePrivInfo
 {
 	FtkTheme* theme;
 }PrivInfo;

@@ -35,7 +35,7 @@
 #include "ftk_menu_panel.h"
 #include "ftk_app_window.h"
 
-typedef struct _PrivInfo
+typedef struct _AppWinPrivInfo
 {
 	FtkPrepareOptionsMenu on_prepare_options_menu;
 	void* on_prepare_options_menu_ctx;

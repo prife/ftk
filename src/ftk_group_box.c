@@ -34,7 +34,7 @@
 #include "ftk_group_box.h"
 #include "ftk_check_button.h"
 
-typedef struct _PrivInfo
+typedef struct _GroupBoxPrivInfo
 {
 	FtkBitmap* bg;
 }PrivInfo;

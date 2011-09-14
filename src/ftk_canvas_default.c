@@ -48,7 +48,7 @@
 
 #define FTK_MAX_CLIP_REGION_NR 2
 
-typedef struct _PrivInfo
+typedef struct _CanvasDefaultPrivInfo
 {
 	size_t w;
 	size_t h;

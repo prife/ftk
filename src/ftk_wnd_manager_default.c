@@ -38,7 +38,7 @@
 
 #define FTK_MAX_GLOBAL_LISTENER 12
 
-typedef struct _PrivInfo
+typedef struct _WinManagerPrivInfo
 {
 	int top;
 	int pressed;

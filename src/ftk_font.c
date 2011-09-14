@@ -177,7 +177,7 @@ typedef struct _FtkGlyphCache
 	unsigned short load_time; /*unit: about one minute*/
 }FtkGlyphCache;
 
-typedef struct _PrivInfo
+typedef struct _FontPrivInfo
 {
 	FtkFont* font;
 	FtkGlyph* glyphs;

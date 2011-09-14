@@ -49,7 +49,7 @@ typedef enum _RenderMarqueeState
 	MARQUEE_END
 }RenderMarqueeState;
 
-typedef struct _PrivInfo
+typedef struct _ListRenderDefaultPrivInfo
 {
 	FtkBitmap* more;
 	FtkBitmap* radio_off;

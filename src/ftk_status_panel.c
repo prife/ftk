@@ -34,7 +34,7 @@
 #define FTK_PANEL_MAX_ITEM 16
 #define FTK_PANEL_V_MARGIN 2
 
-typedef struct _PrivInfo
+typedef struct _StatusPanelPrivInfo
 {
 	size_t mid_nr;
 	size_t last_nr;

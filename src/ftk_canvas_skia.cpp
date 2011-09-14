@@ -39,7 +39,7 @@ using namespace android;
 
 #define COLOR_TO_SKCOLOR(c) SkColorSetARGB(c.a, c.r, c.g, c.b)
 
-typedef struct _PrivInfo
+typedef struct _CanvasSkiaPrivInfo
 {
 	size_t w;
 	size_t h;

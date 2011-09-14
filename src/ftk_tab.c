@@ -41,7 +41,7 @@ typedef struct _TabPage
 	FtkWidget* page;
 }TabPage;
 
-typedef struct _PrivInfo
+typedef struct _TabPrivInfo
 {
 	TabPage* pages;
 

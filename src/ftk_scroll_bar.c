@@ -33,7 +33,7 @@
 #include "ftk_globals.h"
 #include "ftk_scroll_bar.h"
 
-typedef struct _PrivInfo
+typedef struct _ScrollBarPrivInfo
 {
 	int tracker_pos;
 	int tracker_size;

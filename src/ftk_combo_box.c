@@ -39,7 +39,7 @@
 #include "ftk_list_model_default.h"
 #include "ftk_list_render_default.h"
 
-typedef struct _PrivInfo
+typedef struct _ComboBoxPrivInfo
 {
 	FtkWidget* entry;
 	FtkWidget* button;

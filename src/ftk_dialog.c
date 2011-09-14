@@ -34,7 +34,7 @@
 #include "ftk_main_loop.h"
 #include "ftk_source_timer.h"
 
-typedef struct _PrivInfo
+typedef struct _DialogPrivInfo
 {
 	int no_title;
 	int title_height;

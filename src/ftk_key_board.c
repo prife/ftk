@@ -106,7 +106,7 @@ typedef struct _FtkKeyBoardDesc
 	size_t candidate_space;
 }FtkKeyBoardDesc;
 
-typedef struct _PrivInfo
+typedef struct _KeyBoardPrivInfo
 {
 	FtkWidget* editor;
 	FtkKeyBoardDesc* desc;

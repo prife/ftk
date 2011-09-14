@@ -33,7 +33,7 @@
 #include "ftk_wait_box.h"
 #include "ftk_source_timer.h"
 
-typedef struct _PrivInfo
+typedef struct _WaitBoxPrivInfo
 {
 	int offset;
 	int waiting;

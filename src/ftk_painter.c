@@ -31,7 +31,7 @@
 
 #include "ftk_painter.h"
 
-typedef struct _PrivInfo
+typedef struct _PainterPrivInfo
 {
 	FtkListener listener;
 	void* listener_ctx;

@@ -32,7 +32,7 @@
 #include "ftk.h"
 #include "ftk_allocator_profile.h"
 
-typedef struct _PrivInfo
+typedef struct _AllocPrivInfo
 {
 	int free_times;
 	int allocated_times;

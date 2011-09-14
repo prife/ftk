@@ -36,7 +36,7 @@
 #include "ftk_icon_cache.h"
 #include "ftk_menu_panel.h"
 
-typedef struct _PrivInfo
+typedef struct _MenuItemPrivInfo
 {
 	FtkListener listener;
 	void* listener_ctx;

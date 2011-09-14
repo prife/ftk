@@ -32,7 +32,7 @@
 #include "ftk_log.h"
 #include "ftk_display_rotate.h"
 
-typedef struct _PrivInfo
+typedef struct _DisplayRotatePrivInfo
 {
 	FtkRotate   rotate;
 	FtkDisplay* display;

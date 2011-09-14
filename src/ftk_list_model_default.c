@@ -31,7 +31,7 @@
 
 #include "ftk_list_model_default.h"
 
-typedef struct _PrivInfo
+typedef struct _ListModelDefaultPrivInfo
 {
 	size_t nr;
 	size_t alloc_nr;

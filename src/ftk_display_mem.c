@@ -32,7 +32,7 @@
 #include "ftk_log.h"
 #include "ftk_display_mem.h"
 
-typedef struct _PrivInfo
+typedef struct _DisplayMemPrivInfo
 {
 	int bpp;
 	int width;
