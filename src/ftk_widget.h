@@ -66,6 +66,8 @@ struct _FtkWidget
 	void* priv_subclass[5];
 };
 
+#define FTK_WIGET_MAGIC 0XFC345CAE
+
 void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y, 
 	int width, int height, unsigned int attr);
 int ftk_widget_type(FtkWidget* thiz);

@@ -689,7 +689,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 		int y = event->u.mouse.y;
 		
 		target = ftk_wnd_manager_find_target(thiz, x, y);
-		if(event->type == FTK_EVT_MOUSE_DOWN && !ftk_widget_has_attr(target, FTK_ATTR_NO_FOCUS))
+		if(event->type == FTK_EVT_MOUSE_DOWN && target && !ftk_widget_has_attr(target, FTK_ATTR_NO_FOCUS))
 		{
 			priv->focus_widget = target;
 		}

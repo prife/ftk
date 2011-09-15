@@ -323,6 +323,8 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 	FtkWidget* close_widget = NULL;
 	FtkWidget* title_widget = NULL;
 
+	if ( !event->widget ) return RET_OK;
+
 	if(event->type != FTK_EVT_TOP_WND_CHANGED
 		&& event->type != FTK_EVT_WND_CONFIG_CHANGED)
 	{
