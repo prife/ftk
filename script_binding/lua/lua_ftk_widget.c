@@ -889,26 +889,6 @@ static int lua_ftk_widget_lookup(lua_State* L)
 	return 1;
 }
 
-static int lua_ftk_widget_find_target(lua_State* L)
-{
-	tolua_Error err = {0};
-	FtkWidget* retv;
-	FtkWidget* thiz;
-	int x;
-	int y;
-	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err);
-
-	return_val_if_fail(param_ok, 0);
-
-	thiz = tolua_tousertype(L, 1, 0);
-	x = tolua_tonumber(L, 2, 0);
-	y = tolua_tonumber(L, 3, 0);
-	retv = ftk_widget_find_target(thiz, x, y);
-	tolua_pushusertype(L, (FtkWidget*)retv, "FtkWidget");
-
-	return 1;
-}
-
 static int lua_ftk_widget_paint(lua_State* L)
 {
 	tolua_Error err = {0};
@@ -1097,7 +1077,6 @@ int tolua_ftk_widget_init(lua_State* L)
 	tolua_function(L, "Child", lua_ftk_widget_child);
 	tolua_function(L, "LastChild", lua_ftk_widget_last_child);
 	tolua_function(L, "Lookup", lua_ftk_widget_lookup);
-	tolua_function(L, "FindTarget", lua_ftk_widget_find_target);
 	tolua_function(L, "Paint", lua_ftk_widget_paint);
 	tolua_function(L, "Destroy", lua_ftk_widget_destroy);
 	tolua_function(L, "Ref", lua_ftk_widget_ref);
