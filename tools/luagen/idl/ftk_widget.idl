@@ -58,7 +58,6 @@ interface FtkWidget
 	FtkWidgetPtr ftk_widget_child(in FtkWidgetPtr thiz);
 	FtkWidgetPtr ftk_widget_last_child(in FtkWidgetPtr thiz);
 	FtkWidgetPtr ftk_widget_lookup(in FtkWidgetPtr thiz, in int id);
-	FtkWidgetPtr ftk_widget_find_target(in FtkWidgetPtr thiz, in int x, in int y);
 
 	void ftk_widget_paint(in FtkWidgetPtr thiz, in FtkRectPtr rects, in int rect_nr);
 	void ftk_widget_destroy(in FtkWidgetPtr thiz);
