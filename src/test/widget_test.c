@@ -85,8 +85,8 @@ int main(int argc, char* argv[])
 	assert(ftk_widget_lookup(thiz, 200) == child1);
 	assert(ftk_widget_lookup(thiz, 300) == child2);
 
-	assert(ftk_widget_find_target(thiz, 50, 50) == child1);
-	assert(ftk_widget_find_target(thiz, 150, 150) == child2);
+	assert(ftk_widget_find_target(thiz, 50, 50, 0) == child1);
+	assert(ftk_widget_find_target(thiz, 150, 150, 0) == child2);
 
 	ftk_canvas_destroy(canvas);
 	ftk_widget_unref(thiz);
