@@ -82,7 +82,7 @@ static void ftk_image_gtk_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(FtkImageDecoder));
+		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
 }
 

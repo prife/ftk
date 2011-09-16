@@ -1193,7 +1193,7 @@ void ftk_widget_destroy(FtkWidget* thiz)
 		}
 
 		FTK_FREE(thiz->priv->text);
-		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
+		FTK_ZFREE(thiz->priv, sizeof(*thiz->priv));
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
 	}
 

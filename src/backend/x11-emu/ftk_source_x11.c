@@ -243,7 +243,7 @@ static void ftk_source_x11_destroy(FtkSource* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 		close(priv->fd);
-		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 	}
 
 	return;

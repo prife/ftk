@@ -263,7 +263,7 @@ void ftk_stroke_painter_destroy(FtkStrokePainter* thiz)
 	{
 		ftk_stroke_painter_deinit(thiz);
 
-		FTK_ZFREE(thiz, sizeof(FtkStrokePainter));
+		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
 
 	return;

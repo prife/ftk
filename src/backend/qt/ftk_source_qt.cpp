@@ -21,7 +21,7 @@ static void ftk_source_qt_destroy(FtkSource* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(thiz));
+		FTK_ZFREE(thiz, sizeof(*thiz));
 	}
 }
 

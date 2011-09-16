@@ -108,7 +108,7 @@ static void ftk_source_touch_destroy(FtkSource* thiz)
 
 		rt_device_close(priv->device);
 
-		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 	}
 }
 
@@ -131,7 +131,7 @@ FtkSource* ftk_source_touch_create(const char* filename, FtkOnEvent on_event, vo
 		priv->device = rt_device_find(filename); 
 		if (priv->device == NULL)
 		{
-			FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 			return NULL;
 		}
 		rt_device_open(priv->device, 0);

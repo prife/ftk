@@ -411,7 +411,7 @@ static void ftk_source_ps2mouse_destroy(FtkSource* thiz)
 		DECL_PRIV(thiz, priv);
 
 		close(priv->fd);
-		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 	}
 
 	return;
@@ -437,7 +437,7 @@ FtkSource* ftk_source_ps2mouse_create(const char* filename, FtkOnEvent on_event,
 		open_device(priv, max_x, max_y);
 		if(priv->fd < 0)
 		{
-			FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 			return NULL;
 		}
 

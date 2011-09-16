@@ -284,7 +284,7 @@ static void ftk_source_input_destroy(FtkSource* thiz)
 		DECL_PRIV(thiz, priv);
 
 		close(priv->fd);
-		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 	}
 
 	return;
@@ -310,7 +310,7 @@ FtkSource* ftk_source_input_create(const char* filename, FtkOnEvent on_event, vo
 
 		if(priv->fd < 0)
 		{
-			FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 			return NULL;
 		}
 #ifdef PC_EMU
@@ -320,7 +320,7 @@ FtkSource* ftk_source_input_create(const char* filename, FtkOnEvent on_event, vo
 			close(priv->fd);
 			priv->fd = -1;
 
-			FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 			return NULL;
 		}
 
@@ -329,7 +329,7 @@ FtkSource* ftk_source_input_create(const char* filename, FtkOnEvent on_event, vo
 		{
 			close(priv->fd);
 			priv->fd = -1;
-			FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
+			FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
 			return NULL;
 		}
 #else
