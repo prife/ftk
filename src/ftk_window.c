@@ -37,11 +37,8 @@
 
 #define FTK_MAX_DIRTY_RECT 16
 
-#define FTK_WINDOW_MAGIC (FTK_WIGET_MAGIC + FTK_WINDOW)
-
 typedef struct _WindowPrivInfo
 {
-	unsigned int magic;
 	FtkCanvas*  canvas;
 	FtkDisplay* display;
 	FtkWidget*  focus_widget;
@@ -64,8 +61,10 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz);
 
 static int ftk_windows_check_is_valid(FtkWidget* thiz)
 {
-	if ( thiz && thiz->priv_subclass[0] && 
-		((PrivInfo*)(thiz->priv_subclass[0]))->magic == FTK_WINDOW_MAGIC )
+	int type;
+	type = ftk_widget_type(thiz);
+	if ( type == FTK_WINDOW || type == FTK_DIALOG || type == FTK_WINDOW_MISC
+		|| type == FTK_STATUS_PANEL || type == FTK_MENU_PANEL)
 		return 1;
 	return 0;
 }
@@ -658,7 +657,6 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 	{
 		DECL_PRIV0(thiz, priv);	
 		const char* anim_hint = "";
-		priv->magic = FTK_WINDOW_MAGIC;
 		priv->is_opaque = 1;
 		priv->display = ftk_default_display();
 
@@ -677,9 +675,8 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 				break;
 			}
 		}
-		ftk_window_set_animation_hint(thiz, anim_hint);
 		ftk_widget_init(thiz, type, 0, x, y, width, height, attr);
-
+		ftk_window_set_animation_hint(thiz, anim_hint);
 		ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 	}
 	else
