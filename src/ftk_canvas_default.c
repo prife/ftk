@@ -33,6 +33,13 @@
 #include "ftk_bitmap.h"
 #include "ftk_canvas.h"
 
+
+#define	MASK_ALPHA      0xff000000 	//AlphaÑÚÄ¤Öµ
+#define	MASK_RED        0x00ff0000	//RÑÚÄ¤Öµ
+#define MASK_GREEN      0x0000ff00	//GÑÚÄ¤Öµ	
+#define	MASK_BLUE       0x000000ff	//BÑÚÄ¤Öµ
+#define MASK_RGB        0x00ffffff 
+
 #define PUT_PIXEL(pdst, color, alpha) \
 	do\
 	{\
@@ -42,7 +49,21 @@
 		}\
 		else\
 		{\
-			FTK_ALPHA(color, pdst, alpha);\
+			unsigned int srcColor;\
+			unsigned int destColor;\
+			unsigned int src_R_B;\
+			unsigned int dest_R_B;\
+			unsigned int src_G;\
+			unsigned int dest_G;\
+			srcColor =  *(unsigned int*)color;\
+			destColor =  *(unsigned int*)pdst;\
+			src_R_B = srcColor & ( MASK_RED | MASK_BLUE);\
+			dest_R_B = destColor & (MASK_RED | MASK_BLUE);\
+			src_R_B = ((((src_R_B - dest_R_B) * alpha ) >> 8 ) & 0x00ff00ff)+ dest_R_B;\
+			src_G =	srcColor & MASK_GREEN;\
+			dest_G = destColor & MASK_GREEN;\
+			src_G =   ((((src_G - dest_G) * alpha ) >> 8 ) & 0xff00 )+ dest_G;\
+			*(unsigned int*)pdst = ((src_R_B | src_G) & MASK_RGB) | 0xff000000;\
 		}\
 	}while(0);
 
