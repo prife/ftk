@@ -245,6 +245,9 @@ AC_CONFIG_FILES([ftk.pc
                 apps/filemanager/Makefile
                 apps/filemanager/icons/Makefile
                 apps/filemanager/data/Makefile
+                apps/designer/Makefile
+                apps/designer/icons/Makefile
+                apps/designer/data/Makefile
                 apps/shell/Makefile
                 apps/shell/icons/Makefile
                 apps/shell/data/Makefile
