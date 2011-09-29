@@ -46,7 +46,7 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	width = ftk_widget_width(win);
 	height = ftk_widget_height(win);
 	
-	wait_box = ftk_wait_box_create(win, width/2 - 16, height/4);
+	wait_box = ftk_wait_box_create(win, width/2 - 16, height/4, 0, 0);
 	
 	button = ftk_button_create(win, 0, height/2, width/3, 50);
 	ftk_widget_set_text(button, "start");

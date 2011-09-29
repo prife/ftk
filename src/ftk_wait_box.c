@@ -84,7 +84,7 @@ static void ftk_wait_box_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y)
+FtkWidget* ftk_wait_box_create(FtkWidget* parent, int x, int y, int w, int h)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	return_val_if_fail(thiz != NULL, NULL);

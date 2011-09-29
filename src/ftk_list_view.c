@@ -519,3 +519,24 @@ Ret ftk_list_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, vo
 	return RET_OK;
 }
 
+#include "ftk_list_model_default.h"
+#include "ftk_list_render_default.h"
+
+FtkWidget* ftk_list_view_default_create(FtkWidget* parent, int x, int y, int width, int height)
+{
+	FtkWidget* list = NULL;
+	FtkListModel* model = NULL;
+	FtkListRender* render = NULL;
+
+	return_val_if_fail(parent != NULL, NULL);
+
+	model = ftk_list_model_default_create(10);
+	render = ftk_list_render_default_create();
+	list = ftk_list_view_create(parent, 10, 5, width - 20, 3 * height/4-5);
+	
+	ftk_list_render_default_set_marquee_attr(render, FTK_MARQUEE_AUTO | FTK_MARQUEE_RIGHT2LEFT | FTK_MARQUEE_FOREVER);
+	ftk_list_view_init(list, model, render, 40);
+	ftk_list_model_unref(model);
+
+	return list;
+}

@@ -37,9 +37,11 @@
 FTK_BEGIN_DECLS
 
 FtkWidget* ftk_tab_create(FtkWidget* parent, int x, int y, int width, int height);
+FtkWidget* ftk_tab_page_create(FtkWidget* parent, int x, int y, int width, int height);
 
 int     ftk_tab_get_page_count(FtkWidget* thiz);
 FtkWidget* ftk_tab_get_page(FtkWidget* thiz, int index);
+int        ftk_tab_get_page_index(FtkWidget* thiz, FtkWidget* page);
 Ret        ftk_tab_remove_page(FtkWidget* thiz, int index);
 FtkWidget* ftk_tab_add_page(FtkWidget* thiz, const char* text, FtkBitmap* icon);
 

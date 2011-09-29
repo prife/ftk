@@ -177,7 +177,7 @@ static FtkWidget* ftk_xul_wait_box_create(FtkWidgetCreateInfo* info)
 {
 	FtkWidget* widget = NULL;
 
-	widget = ftk_wait_box_create(info->parent, info->x, info->y);
+	widget = ftk_wait_box_create(info->parent, info->x, info->y, 0, 0);
 	if(info->value != NULL && atoi(info->value) > 0)
 	{
 		ftk_wait_box_start_waiting(widget);

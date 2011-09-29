@@ -1166,9 +1166,13 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensit
 	}
 	
 	if ( only_sensitive && ftk_widget_is_insensitive(thiz) )
+	{
 		return NULL;
+	}
 	else
+	{
 		return thiz;
+	}
 }
 
 void ftk_widget_destroy(FtkWidget* thiz)

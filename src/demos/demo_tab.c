@@ -33,7 +33,11 @@ static void add_page(FtkWidget* tab, const char* text, FtkBitmap* bitmap)
 	FtkWidget* page = NULL;
 	FtkWidget* button = NULL;
 	
-	page = ftk_tab_add_page(tab, text, bitmap);
+	//page = ftk_tab_add_page(tab, text, bitmap);
+	page = ftk_tab_page_create(tab, 0, 0, 0, 0);
+	ftk_tab_set_page_text(tab, ftk_tab_get_page_index(tab, page), text);
+	ftk_tab_set_page_icon(tab, ftk_tab_get_page_index(tab, page), bitmap);
+
 	width = ftk_widget_width(page);
 	height = ftk_widget_height(page);
 
