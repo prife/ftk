@@ -115,8 +115,11 @@ static Ret button_ok_clicked(void* ctx, void* obj)
 		if(info->widget == NULL)
 		{
 			info->widget = widget_info->create(parent, x, y, w, h);
-			ftk_widget_ref(info->widget);
-			ftk_widget_show(info->widget, 1);
+			if(info->widget != NULL)
+			{
+				ftk_widget_ref(info->widget);
+				ftk_widget_show(info->widget, 1);
+			}
 		}
 		else
 		{

@@ -121,8 +121,8 @@ static Ret code_gen_c_file(FtkWidget* widget, FtkFsHandle f)
 		if(ftk_widget_type(iter) == FTK_WINDOW)
 		{
 			ftk_snprintf(buffer, sizeof(buffer), "\twin = ftk_app_window_create();\n\tftk_widget_set_text(win, _(\"%s\"));\n\tftk_window_set_fullscreen(win, %d);\n\tparent = win;\n\n",
-				ftk_widget_get_text(widget), 
-				ftk_window_is_fullscreen(widget));
+				ftk_widget_get_text(iter), 
+				ftk_window_is_fullscreen(iter));
 			ftk_file_write(f, buffer, strlen(buffer));
 
 			if(iter->children != NULL)
@@ -139,11 +139,11 @@ static Ret code_gen_c_file(FtkWidget* widget, FtkFsHandle f)
 		
 			ftk_snprintf(buffer, sizeof(buffer), "\twidget = %s(parent, %d, %d, %d, %d);\n\tftk_widget_set_text(win, _(\"%s\"));\n\n",
 				info->create_func_name,
-				ftk_widget_left(widget),
-				ftk_widget_top(widget),
-				ftk_widget_width(widget),
-				ftk_widget_height(widget),
-				ftk_widget_get_text(widget));
+				ftk_widget_left(iter),
+				ftk_widget_top(iter),
+				ftk_widget_width(iter),
+				ftk_widget_height(iter),
+				ftk_widget_get_text(iter));
 			ftk_file_write(f, buffer, strlen(buffer));
 			if(iter->children != NULL)
 			{

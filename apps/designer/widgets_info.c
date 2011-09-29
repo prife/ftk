@@ -31,30 +31,6 @@
 
 #include "widgets_info.h"
 
-static FtkWidget* ftk_tab_create_ex(FtkWidget* parent, int x, int y, int width, int height)
-{
-	FtkWidget* tab = NULL;
-	FtkWidget* page = NULL;
-
-	tab = ftk_tab_create(parent, x, y, width, height);
-	page = ftk_tab_add_page(tab, "", NULL);
-	ftk_tab_set_active_page(tab, 0);
-
-	return tab;
-}
-
-static FtkWidget* ftk_page_create_ex(FtkWidget* parent, int x, int y, int width, int height)
-{
-	FtkWidget* tab = parent;
-	FtkWidget* page = NULL;
-
-	return_val_if_fail(ftk_widget_type(parent) == FTK_TAB, NULL);
-
-	page = ftk_tab_add_page(tab, "", NULL);
-
-	return page;
-}
-
 static const WidgetInfo s_widgets_info[] = 
 {
  {FTK_BUTTON,       "button",       60, 40, 60, 40, 1, 1, 1,     ftk_button_create             ,NULL, "ftk_button_create"},
@@ -67,12 +43,12 @@ static const WidgetInfo s_widgets_info[] =
  {FTK_CHECK_BUTTON, "check_button", 60, 50, 60, 50, 1, 1, 1,     ftk_check_button_create       ,NULL, "ftk_check_button_create"},
  {FTK_IMAGE,        "image",        32, 32, 80, 80, 1, 1, 1,     ftk_image_create              ,NULL, "ftk_image_create"},
  {FTK_SCROLL_VBAR,  "scroll_bar",    8,  8,  8, 32, 1, 1, 1,     ftk_scroll_bar_create         ,NULL, "ftk_scroll_bar_create"},
- {FTK_LIST_VIEW,    "list_view",    80, 80, 80, 80, 1, 1, 1,     ftk_list_view_create          ,NULL, "ftk_list_view_create"},
+ {FTK_LIST_VIEW,    "list_view",    80, 80, 80, 80, 1, 1, 1,     ftk_list_view_default_create  ,NULL, "ftk_list_view_default_create"},
  {FTK_ICON_VIEW,    "icon_view",    80, 80, 80, 80, 1, 1, 1,     ftk_icon_view_create          ,NULL, "ftk_icon_view_create"},
  {FTK_COMBO_BOX,    "combo_box",    60, 40, 60, 40, 1, 1, 1,     ftk_combo_box_create          ,NULL, "ftk_combo_box_create"},
  {FTK_PAINTER,      "painter",      80, 80, 80, 80, 1, 1, 1,     ftk_painter_create            ,NULL, "ftk_painter_create"},
-// {FTK_TAB,          "tab",          180,180,180,180,1, 1, 1,     ftk_tab_create_ex             ,NULL, "ftk_tab_create"},
-// {FTK_TAB_PAGE,     "page",         180,180,180,180,1, 1, 1,     ftk_page_create_ex             ,NULL, "ftk_tab_create"},
+ {FTK_TAB,          "tab",          180,180,180,180,0, 1, 1,     ftk_tab_create                ,NULL, "ftk_tab_create"},
+ {FTK_TAB_PAGE,     "page",         180,180,180,180,0, 1, 1,     ftk_tab_page_create           ,NULL, "ftk_tab_page_create"},
  {FTK_TEXT_VIEW,    "text_view",    80, 80, 80, 80, 1, 1, 1,     ftk_text_view_create          ,NULL, "ftk_text_view_create"}
 };
 

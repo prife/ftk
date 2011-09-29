@@ -75,7 +75,8 @@ static FtkBitmap* ftk_app_designer_get_icon(FtkApp* thiz)
 	
 	if(priv->icon != NULL) return priv->icon;
 
-	priv->icon = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
+	priv->icon = ftk_app_load_icon(thiz, "designer");
+	//priv->icon = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 
 	return priv->icon;
 }

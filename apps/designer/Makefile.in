@@ -74,7 +74,7 @@ am_libapp_designer_la_OBJECTS = libapp_designer_la-code_gen.lo \
 	libapp_designer_la-ftk_app_designer.lo \
 	libapp_designer_la-widget_editor.lo \
 	libapp_designer_la-widgets_info.lo libapp_designer_la-save.lo \
-	libapp_designer_la-open.lo
+	libapp_designer_la-open.lo libapp_designer_la-select_file.lo
 libapp_designer_la_OBJECTS = $(am_libapp_designer_la_OBJECTS)
 libapp_designer_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) \
@@ -85,7 +85,7 @@ am_designer_OBJECTS = designer-code_gen.$(OBJEXT) \
 	designer-ftk_app_designer.$(OBJEXT) designer-main.$(OBJEXT) \
 	designer-widget_editor.$(OBJEXT) \
 	designer-widgets_info.$(OBJEXT) designer-save.$(OBJEXT) \
-	designer-open.$(OBJEXT)
+	designer-open.$(OBJEXT) designer-select_file.$(OBJEXT)
 designer_OBJECTS = $(am_designer_OBJECTS)
 designer_LDADD = $(LDADD)
 designer_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -296,10 +296,10 @@ LOCAL_CFLAGS = -DAPP_DATA_DIR="\"$(datadir)/ftk/designer\"" -DAPP_LOCAL_DATA_DIR
 	-I$(abs_top_srcdir)/apps/common
 
 lib_LTLIBRARIES = libapp-designer.la
-libapp_designer_la_SOURCES = code_gen.c  ftk_app_designer.c widget_editor.c  widgets_info.c save.c open.c
+libapp_designer_la_SOURCES = code_gen.c  ftk_app_designer.c widget_editor.c  widgets_info.c save.c open.c select_file.c
 libapp_designer_la_LDFLAGS = $(MYLDFLAGS)
 libapp_designer_la_CFLAGS = $(LOCAL_CFLAGS)
-designer_SOURCES = code_gen.c  ftk_app_designer.c  main.c  widget_editor.c  widgets_info.c save.c open.c
+designer_SOURCES = code_gen.c  ftk_app_designer.c  main.c  widget_editor.c  widgets_info.c save.c open.c select_file.c
 designer_LDFLAGS = $(MYLDFLAGS)
 designer_CFLAGS = $(LOCAL_CFLAGS) -DHAS_MAIN
 EXTRA_DIST = ftk_app_designer.h
@@ -394,12 +394,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/designer-main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/designer-open.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/designer-save.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/designer-select_file.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/designer-widget_editor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/designer-widgets_info.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-code_gen.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-ftk_app_designer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-open.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-save.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-select_file.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-widget_editor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libapp_designer_la-widgets_info.Plo@am__quote@
 
@@ -465,6 +467,13 @@ libapp_designer_la-open.lo: open.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='open.c' object='libapp_designer_la-open.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libapp_designer_la_CFLAGS) $(CFLAGS) -c -o libapp_designer_la-open.lo `test -f 'open.c' || echo '$(srcdir)/'`open.c
+
+libapp_designer_la-select_file.lo: select_file.c
+@am__fastdepCC_TRUE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libapp_designer_la_CFLAGS) $(CFLAGS) -MT libapp_designer_la-select_file.lo -MD -MP -MF $(DEPDIR)/libapp_designer_la-select_file.Tpo -c -o libapp_designer_la-select_file.lo `test -f 'select_file.c' || echo '$(srcdir)/'`select_file.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/libapp_designer_la-select_file.Tpo $(DEPDIR)/libapp_designer_la-select_file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='select_file.c' object='libapp_designer_la-select_file.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(LIBTOOL)  --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libapp_designer_la_CFLAGS) $(CFLAGS) -c -o libapp_designer_la-select_file.lo `test -f 'select_file.c' || echo '$(srcdir)/'`select_file.c
 
 designer-code_gen.o: code_gen.c
 @am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(designer_CFLAGS) $(CFLAGS) -MT designer-code_gen.o -MD -MP -MF $(DEPDIR)/designer-code_gen.Tpo -c -o designer-code_gen.o `test -f 'code_gen.c' || echo '$(srcdir)/'`code_gen.c
@@ -563,6 +572,20 @@ designer-open.obj: open.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='open.c' object='designer-open.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(designer_CFLAGS) $(CFLAGS) -c -o designer-open.obj `if test -f 'open.c'; then $(CYGPATH_W) 'open.c'; else $(CYGPATH_W) '$(srcdir)/open.c'; fi`
+
+designer-select_file.o: select_file.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(designer_CFLAGS) $(CFLAGS) -MT designer-select_file.o -MD -MP -MF $(DEPDIR)/designer-select_file.Tpo -c -o designer-select_file.o `test -f 'select_file.c' || echo '$(srcdir)/'`select_file.c
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/designer-select_file.Tpo $(DEPDIR)/designer-select_file.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='select_file.c' object='designer-select_file.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(designer_CFLAGS) $(CFLAGS) -c -o designer-select_file.o `test -f 'select_file.c' || echo '$(srcdir)/'`select_file.c
+
+designer-select_file.obj: select_file.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(designer_CFLAGS) $(CFLAGS) -MT designer-select_file.obj -MD -MP -MF $(DEPDIR)/designer-select_file.Tpo -c -o designer-select_file.obj `if test -f 'select_file.c'; then $(CYGPATH_W) 'select_file.c'; else $(CYGPATH_W) '$(srcdir)/select_file.c'; fi`
+@am__fastdepCC_TRUE@	$(am__mv) $(DEPDIR)/designer-select_file.Tpo $(DEPDIR)/designer-select_file.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='select_file.c' object='designer-select_file.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(designer_CFLAGS) $(CFLAGS) -c -o designer-select_file.obj `if test -f 'select_file.c'; then $(CYGPATH_W) 'select_file.c'; else $(CYGPATH_W) '$(srcdir)/select_file.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

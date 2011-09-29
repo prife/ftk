@@ -86,6 +86,27 @@ static inline void ftk_app_destroy(FtkApp* thiz)
 	return;
 }
 
+#include "ftk_config.h"
+#include "ftk_globals.h"
+
+static FtkBitmap* ftk_app_load_icon(FtkApp* thiz, const char* app_name)
+{
+	FtkBitmap* icon = NULL;
+	char file_name[FTK_MAX_PATH + 1] = {0};
+	return_val_if_fail(thiz != NULL && app_name != NULL, NULL);
+
+	snprintf(file_name, FTK_MAX_PATH, "%s/%s/icons/%s"FTK_STOCK_IMG_SUFFIX, 
+		ftk_config_get_data_root_dir(ftk_default_config()), app_name, app_name);
+	icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), file_name);
+
+	if(icon != NULL) return icon;
+
+	snprintf(file_name, FTK_MAX_PATH, "./icons/%s"FTK_STOCK_IMG_SUFFIX, app_name);
+	icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), file_name);
+
+	return icon;
+}
+
 FTK_END_DECLS
 
 #endif/*FTK_APP_H*/
