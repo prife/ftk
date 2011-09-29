@@ -462,6 +462,8 @@ static void ftk_keymap_init(void)
 	s_key_map[0x58] = FTK_KEY_x;
 	s_key_map[0x59] = FTK_KEY_y;
 	s_key_map[0x5a] = FTK_KEY_z;
+	s_key_map[0xdc] = FTK_KEY_BACKSLASH;
+	s_key_map[0x5c] = FTK_KEY_BACKSLASH;
 	s_key_map[0x21] = FTK_KEY_PAGEUP;
 	s_key_map[0x25] = FTK_KEY_LEFT;
 	s_key_map[0x27] = FTK_KEY_RIGHT;

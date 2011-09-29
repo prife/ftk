@@ -1,4 +1,4 @@
-LIBRARY        "demos"
+LIBRARY        "ftk_demos"
 EXPORTS
 ftk_app_demo_label_create
 ftk_app_demo_button_create

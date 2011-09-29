@@ -71,18 +71,11 @@ static void info_destroy(void* data)
 static FtkBitmap* ftk_app_designer_get_icon(FtkApp* thiz)
 {
 	DECL_PRIV(thiz, priv);
-	const char* name="designer.png";
-	char file_name[FTK_MAX_PATH + 1] = {0};
 	return_val_if_fail(priv != NULL, NULL);
 	
 	if(priv->icon != NULL) return priv->icon;
-	
-	snprintf(file_name, FTK_MAX_PATH, "%s/icons/%s", APP_DATA_DIR, name);
-	priv->icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), file_name);
-	if(priv->icon != NULL) return priv->icon;
 
-	snprintf(file_name, FTK_MAX_PATH, "%s/icons/%s", APP_LOCAL_DATA_DIR, name);
-	priv->icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), file_name);
+	priv->icon = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 
 	return priv->icon;
 }
@@ -238,6 +231,7 @@ static Ret designer_on_delete(void* ctx, void* item)
 	{
 		ftk_widget_remove_child(ftk_widget_parent(info->selected_widget), info->selected_widget);
 		info->selected_widget = NULL;
+		ftk_widget_invalidate(win);
 	}
 
 	return RET_OK;
@@ -430,7 +424,8 @@ static Ret designer_on_key_event(FtkWidget* win, int press, int code)
 		return RET_OK;
 	}
 
-	if(code == FTK_KEY_LEFTALT || code == FTK_KEY_RIGHTALT)
+	if(code == FTK_KEY_LEFTALT || code == FTK_KEY_RIGHTALT 
+		|| code == FTK_KEY_LEFTSHIFT || code == FTK_KEY_RIGHTSHIFT)
 	{
 		info->alt_down = press;
 
