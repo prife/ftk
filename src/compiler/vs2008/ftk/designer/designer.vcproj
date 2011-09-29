@@ -198,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\..\apps\designer\select_file.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\..\apps\designer\widget_editor.c"
 				>
 			</File>
@@ -225,6 +229,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\apps\designer\save.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\..\apps\designer\select_file.h"
 				>
 			</File>
 			<File

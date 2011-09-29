@@ -31,6 +31,7 @@
 
 #include "save.h"
 #include "code_gen.h"
+#include "ftk_util.h"
 #include "ftk_file_system.h"
 #include "ftk_file_browser.h"
 
@@ -67,9 +68,12 @@ static void info_destroy(void* data)
 static Ret on_file_selected(void* ctx, int index, const char* path)
 {
 	FtkWidget* win = (FtkWidget*)ctx;
+	char filename[FTK_MAX_PATH+1] = {0};
 	Info* info = (Info*)ftk_widget_user_data(win);
+	ftk_strncpy(filename, path, FTK_MAX_PATH);
 
-	ftk_widget_set_text(info->widget_file_name, path);
+	ftk_normalize_path(filename);
+	ftk_widget_set_text(info->widget_file_name, filename);
 	
 	return RET_OK;
 }
@@ -97,7 +101,7 @@ static Ret button_ok_clicked(void* ctx, void* obj)
 	if(info->on_select != NULL)
 	{
 		info->on_select(info->on_select_ctx, filename);
-		strcpy(s_last_file, filename);
+		ftk_strncpy(s_last_file, filename, FTK_MAX_PATH);
 	}
 
 	ftk_widget_unref(win);

@@ -264,6 +264,7 @@ ftk_list_view_init
 ftk_list_view_repaint_focus_item
 ftk_list_view_set_clicked_listener
 ftk_list_view_set_cursor
+ftk_list_view_default_create
 ftk_log
 ftk_logv
 ftk_logd
@@ -417,6 +418,8 @@ ftk_tab_remove_page
 ftk_tab_set_active_page
 ftk_tab_set_page_icon
 ftk_tab_set_page_text
+ftk_tab_get_page_index
+ftk_tab_page_create
 ftk_text_buffer_append_string
 ftk_text_buffer_char_bytes
 ftk_text_buffer_chars_bytes

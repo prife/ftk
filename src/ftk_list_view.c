@@ -366,7 +366,10 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	priv->scrolled_by_me = 1;
 	if(priv->visible_nr >= total)
 	{
-		ftk_widget_show(priv->vscroll_bar, 0);
+		if(priv->vscroll_bar != NULL)
+		{
+			ftk_widget_show(priv->vscroll_bar, 0);
+		}
 	}
 	else
 	{
