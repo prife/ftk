@@ -269,3 +269,42 @@ Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 	return ftk_list_model_add(priv->model, &info);
 }
 
+Ret ftk_combo_box_remove(FtkWidget* thiz, size_t index)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(index < ftk_combo_box_get_item_nr(thiz), RET_FAIL);
+
+	return ftk_list_model_remove(priv->model, index);
+}
+
+int ftk_combo_box_get_item_nr(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, 0);
+
+	return ftk_list_model_get_total(priv->model);
+}
+
+Ret ftk_combo_box_get_item(FtkWidget* thiz, size_t index, const FtkBitmap** icon, const char** text)
+{
+	DECL_PRIV0(thiz, priv);
+	FtkListItemInfo* info = NULL;
+	return_val_if_fail(thiz != NULL, 0);
+
+	ftk_list_model_get_data(priv->model, index, &info);
+	if(info != NULL)
+	{
+		if(icon != NULL)
+		{
+			*icon = info->left_icon;
+		}
+
+		if(text != NULL)
+		{
+			*text = info->text;
+		}
+	}
+
+	return info != NULL ? RET_OK : RET_FAIL;
+}
+
