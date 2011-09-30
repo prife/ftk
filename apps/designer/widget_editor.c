@@ -58,6 +58,7 @@ typedef struct _Info
 	FtkWidget* widget_h;
 	FtkWidget* widget_text;
 	FtkWidget* widget_fullscreen;
+	FtkWidget* widget_anim_hint;
 }Info;
 
 static Info* info_create(void)
@@ -90,6 +91,7 @@ static Ret button_ok_clicked(void* ctx, void* obj)
 	if(IS_WIN(widget))
 	{
 		ftk_window_set_fullscreen(widget, ftk_check_button_get_checked(info->widget_fullscreen));
+		ftk_window_set_animation_hint(widget, ftk_widget_get_text(info->widget_anim_hint));
 	}
 	else
 	{
@@ -142,6 +144,33 @@ static Ret button_cancel_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+static Ret type_on_event(void* ctx, void* data)
+{
+	const char* type = NULL;
+	Info* info = (Info*)ctx;
+	WidgetInfo* widget_info = NULL;
+	FtkEvent* event = (FtkEvent*)data;
+
+	if(event->type == FTK_EVT_SET_TEXT)
+	{
+		char text[64] = {0};
+		type =  (const char*)event->u.extra;
+
+		widget_info = widgets_info_find(type);
+
+		if(widget_info != NULL)
+		{
+			ftk_itoa(text, sizeof(text), widget_info->default_width);
+			ftk_widget_set_text(info->widget_w, text);
+
+			ftk_itoa(text, sizeof(text), widget_info->default_height);
+			ftk_widget_set_text(info->widget_h, text);
+		}
+	}
+
+	return RET_OK;
+}
+
 static FtkWidget* ftk_widget_editor_create(FtkWidget* parent, FtkWidget* widget)
 {
 	int i = 0;
@@ -178,6 +207,12 @@ static FtkWidget* ftk_widget_editor_create(FtkWidget* parent, FtkWidget* widget)
 	{
 		info->widget_fullscreen = check_button = ftk_check_button_create(win, width/5, y_offset, width/2, 50);
 		ftk_widget_set_text(check_button, _("Full screen"));
+		y_offset += 50;
+		
+		label = ftk_label_create(win, 0, y_offset, width/5, 30);
+		ftk_widget_set_text(label, _("AnimHint:"));
+		info->widget_anim_hint = entry = ftk_entry_create(win, width/5, y_offset, width*4/5-2, 30);
+		ftk_widget_set_text(entry, ftk_window_get_animation_hint(ftk_widget_toplevel(parent)));
 		y_offset += 20;
 	}
 	else
@@ -187,6 +222,9 @@ static FtkWidget* ftk_widget_editor_create(FtkWidget* parent, FtkWidget* widget)
 		
 		info->widget_type = combo_box = ftk_combo_box_create(win, width/5, y_offset, width*4/5-2, 50);
 		ftk_widget_set_id(combo_box, IDC_TYPE);
+		ftk_entry_set_readonly(ftk_combo_box_get_entry(combo_box), 1);
+		ftk_widget_set_event_listener(ftk_combo_box_get_entry(combo_box), type_on_event, info);
+
 		nr = widgets_info_get_nr();
 		for(i = 0; i < nr; i++)
 		{

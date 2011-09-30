@@ -89,20 +89,24 @@ static inline void ftk_app_destroy(FtkApp* thiz)
 #include "ftk_config.h"
 #include "ftk_globals.h"
 
-static FtkBitmap* ftk_app_load_icon(FtkApp* thiz, const char* app_name)
+static FtkBitmap* ftk_app_load_bitmap(FtkApp* thiz, const char* app_name, const char* icon_name)
 {
 	FtkBitmap* icon = NULL;
 	char file_name[FTK_MAX_PATH + 1] = {0};
-	return_val_if_fail(thiz != NULL && app_name != NULL, NULL);
+	return_val_if_fail(thiz != NULL && app_name != NULL && icon_name != NULL, NULL);
 
-	ftk_snprintf(file_name, FTK_MAX_PATH, "%s/%s/icons/%s"FTK_STOCK_IMG_SUFFIX, 
-		ftk_config_get_data_root_dir(ftk_default_config()), app_name, app_name);
+	snprintf(file_name, FTK_MAX_PATH, "%s/%s/icons/%s"FTK_STOCK_IMG_SUFFIX, 
+		ftk_config_get_data_root_dir(ftk_default_config()), app_name, icon_name);
 	icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), file_name);
 
 	if(icon != NULL) return icon;
 
-	ftk_snprintf(file_name, FTK_MAX_PATH, "./icons/%s"FTK_STOCK_IMG_SUFFIX, app_name);
+	snprintf(file_name, FTK_MAX_PATH, "./icons/%s"FTK_STOCK_IMG_SUFFIX, icon_name);
 	icon = ftk_bitmap_factory_load(ftk_default_bitmap_factory(), file_name);
+
+	if(icon != NULL) return icon;
+
+	icon = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
 
 	return icon;
 }

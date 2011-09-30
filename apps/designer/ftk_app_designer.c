@@ -75,8 +75,7 @@ static FtkBitmap* ftk_app_designer_get_icon(FtkApp* thiz)
 	
 	if(priv->icon != NULL) return priv->icon;
 
-	priv->icon = ftk_app_load_icon(thiz, "designer");
-	//priv->icon = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
+	priv->icon = ftk_app_load_bitmap(thiz, "designer", "designer");
 
 	return priv->icon;
 }
@@ -408,12 +407,92 @@ static Ret designer_move_widget(FtkWidget* widget, int x, int y, int w, int h)
 	return RET_OK;
 }
 
-static Ret designer_on_key_event(FtkWidget* win, int press, int code)
+static  Ret designer_handle_direction_key(FtkWidget* win, int press, int code)
 {
 	int x = 0;
 	int y = 0;
 	int w = 0;
 	int h = 0;
+	Ret ret = RET_OK;
+	Info* info = (Info*)ftk_widget_user_data(win);
+
+	x = ftk_widget_left(info->selected_widget);
+	y = ftk_widget_top(info->selected_widget);
+	w = ftk_widget_width(info->selected_widget);
+	h = ftk_widget_height(info->selected_widget);
+	
+	switch(code)
+	{
+		case FTK_KEY_UP:
+		{
+			if(info->ctrl_down)
+			{
+				y--;
+			}
+
+			if(info->alt_down)
+			{
+				h--;
+			}
+
+			break;
+		}
+		case FTK_KEY_DOWN:
+		{
+			if(info->ctrl_down)
+			{
+				y++;
+			}
+
+			if(info->alt_down)
+			{
+				h++;
+			}
+
+			break;
+		}
+		case FTK_KEY_LEFT:
+		{
+			if(info->ctrl_down)
+			{
+				x--;
+			}
+
+			if(info->alt_down)
+			{
+				w--;
+			}
+
+			break;
+		}
+		case FTK_KEY_RIGHT:
+		{
+			if(info->ctrl_down)
+			{
+				x++;
+			}
+
+			if(info->alt_down)
+			{
+				w++;
+			}
+
+			break;
+		}
+		default:break; 
+	}
+
+	if(info->ctrl_down || info->alt_down)
+	{
+		designer_move_widget(info->selected_widget, x, y, w, h);
+		ret = RET_REMOVE;
+	}
+
+	return ret;
+}
+
+static Ret designer_on_key_event(FtkWidget* win, int press, int code)
+{
 	Ret ret = RET_OK;
 	Info* info = (Info*)ftk_widget_user_data(win);
 
@@ -481,79 +560,7 @@ static Ret designer_on_key_event(FtkWidget* win, int press, int code)
 		}
 	}
 
-	x = ftk_widget_left(info->selected_widget);
-	y = ftk_widget_top(info->selected_widget);
-	w = ftk_widget_width(info->selected_widget);
-	h = ftk_widget_height(info->selected_widget);
-	
-	switch(code)
-	{
-		case FTK_KEY_UP:
-		{
-			if(info->ctrl_down)
-			{
-				y--;
-			}
-
-			if(info->alt_down)
-			{
-				y--;
-				h++;
-			}
-
-			break;
-		}
-		case FTK_KEY_DOWN:
-		{
-			if(info->ctrl_down)
-			{
-				y++;
-			}
-
-			if(info->alt_down)
-			{
-				h++;
-			}
-
-			break;
-		}
-		case FTK_KEY_LEFT:
-		{
-			if(info->ctrl_down)
-			{
-				x--;
-			}
-
-			if(info->alt_down)
-			{
-				x--;
-				w++;
-			}
-
-			break;
-		}
-		case FTK_KEY_RIGHT:
-		{
-			if(info->ctrl_down)
-			{
-				x++;
-			}
-
-			if(info->alt_down)
-			{
-				w++;
-			}
-
-			break;
-		}
-		default:break; 
-	}
-
-	if(info->ctrl_down || info->alt_down)
-	{
-		designer_move_widget(info->selected_widget, x, y, w, h);
-		ret = RET_REMOVE;
-	}
+	ret = designer_handle_direction_key(win, press, code);
 
 	return ret;
 }
