@@ -28,7 +28,7 @@ static Ret on_paint(void* ctx, void* obj)
 	{
 		ftk_canvas_draw_line(canvas, x, y, x + width, y + i);
 	}
-	
+
 	for(i = width; i >= 0; i-=10)
 	{
 		ftk_canvas_draw_line(canvas, x, y, x + i, y + height);
@@ -47,6 +47,9 @@ static Ret on_paint(void* ctx, void* obj)
 		ftk_canvas_draw_pixels(canvas, &p, 1);
 	}
 	
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
+	ftk_canvas_draw_string(canvas, x + 100, y + height/2, "Hello World!", strlen("Hello World!"), 1);
+
 	ftk_logd("%s:%d\n", __func__, __LINE__);
 	FTK_END_PAINT();
 
