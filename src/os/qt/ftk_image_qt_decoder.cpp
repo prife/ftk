@@ -45,7 +45,7 @@ static FtkBitmap* ftk_image_qt_decoder_decode(FtkImageDecoder* thiz, const char*
 	const unsigned char* bits = img->bits();//img->constBits();
 
 	src = (FtkColor*)bits;
-	dst = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_lock(bitmap);
 
 	// TODO: format
 
@@ -68,7 +68,7 @@ static void ftk_image_qt_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(FtkImageDecoder));
 	}
 }
 

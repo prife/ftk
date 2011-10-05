@@ -234,7 +234,7 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 		priv->marquee_width = text_width;
 		ftk_list_render_default_focus_check(thiz);
 		
-		ftk_text_layout_init(text_layout, info->text, -1, ftk_canvas_get_gc(canvas)->font, text_width); 
+		ftk_text_layout_init(text_layout, info->text, -1, canvas, text_width); 
 		ftk_text_layout_get_visual_line(text_layout, &line);
 
 		do
@@ -271,7 +271,7 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 
 			visible_start = priv->visible_start;
 			ftk_text_layout_init(text_layout, utf8_move_forward(info->text, visible_start), 
-				-1, ftk_canvas_get_gc(canvas)->font, text_width); 
+				-1, canvas, text_width); 
 			ftk_text_layout_get_visual_line(text_layout, &line);
 		
 			if((line.extent  + 20) < text_width)
@@ -282,7 +282,7 @@ static Ret ftk_list_render_default_paint(FtkListRender* thiz, FtkCanvas* canvas,
 		}while(0);
 
 		text = utf8_move_forward(info->text, visible_start);
-		ftk_text_layout_init(text_layout, text, -1, ftk_canvas_get_gc(canvas)->font, text_width); 
+		ftk_text_layout_init(text_layout, text, -1, canvas, text_width); 
 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{

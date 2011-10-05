@@ -3,19 +3,20 @@
 #include "ftk_source_dfb.h"
 
 #define DFBCHECK(x) x
+	
+static IDirectFB* s_dfb = NULL;
+
+IDirectFB* directfb_get(void)
+{
+	return s_dfb;
+}
+
 Ret ftk_backend_init(int argc, char* argv[])
 {
-	IDirectFB* dfb = NULL;
-	FtkSource* source = NULL;
 	DFBCHECK(DirectFBInit( &argc, &argv ));
-	DFBCHECK(DirectFBCreate( &dfb ));
+	DFBCHECK(DirectFBCreate( &s_dfb ));
 
-	ftk_set_display(ftk_display_dfb_create(dfb));
-
-	if((source = ftk_source_dfb_create(dfb)) != NULL)
-	{
-		ftk_sources_manager_add(ftk_default_sources_manager(), source);
-	}
+	ftk_set_display(ftk_display_dfb_create(s_dfb));
 
 	return RET_OK;
 }

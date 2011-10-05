@@ -202,7 +202,7 @@ static void put_scanline_to_bitmap (FtkBitmap* bitmap, char *scanline, int y, in
 	FtkColor* dst = NULL;
 	char *pixels = scanline;
 
-	dst = ftk_bitmap_bits(bitmap) + y * width;
+	dst = ftk_bitmap_lock(bitmap) + y * width;
 
 	while (i < width)
 	{
@@ -324,7 +324,7 @@ static void ftk_image_jpeg_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 
 	return;

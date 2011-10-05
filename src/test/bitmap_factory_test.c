@@ -11,8 +11,6 @@ int main(int argc, char* argv[])
 	FtkBitmapFactory* thiz = ftk_bitmap_factory_create();
 	FtkDisplay* display = ftk_default_display();
 
-	ftk_bitmap_factory_add_decoder(thiz, ftk_image_jpeg_decoder_create());
-	ftk_bitmap_factory_add_decoder(thiz, ftk_image_png_decoder_create());
 	if(display != NULL)
 	{
 		FtkRect rect = {0};

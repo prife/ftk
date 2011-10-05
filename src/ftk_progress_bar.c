@@ -89,7 +89,7 @@ static Ret ftk_progress_bar_on_paint(FtkWidget* thiz)
 		gc.fg.g = 0x00;
 		gc.fg.b = 0x00;
 		ftk_canvas_set_gc(canvas, &gc);
-		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		ftk_text_layout_init(text_layout, text, -1, canvas, width); 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			xoffset = FTK_HALF(width - line.extent); 

@@ -370,7 +370,7 @@ static Ret ftk_file_browser_on_item_clicked(void* ctx, void* list)
 
 		if(strcmp(file_name, _("..")) == 0)
 		{
-			strcpy(path, priv->path);
+			ftk_strcpy(path, priv->path);
 			if((p = strrchr(path, FTK_PATH_DELIM)) != NULL)
 			{
 				if(p == path)
@@ -450,7 +450,7 @@ Ret		   ftk_file_browser_set_path(FtkWidget* thiz, const char* path)
 	PrivInfo* priv = (PrivInfo*)ftk_widget_user_data(thiz);
 	return_val_if_fail(priv != NULL && path != NULL, RET_FAIL);	
 
-	strncpy(priv->path, path, FTK_MAX_PATH);
+	ftk_strncpy(priv->path, path, FTK_MAX_PATH);
 	ftk_normalize_path(priv->path);
 
 	return RET_OK;
@@ -484,7 +484,7 @@ static FtkBitmap* ftk_file_browser_load_mime_icon(const char* file_name)
 	char icon_name[FTK_MAX_PATH+1] = {0};
 	char mime_type[FTK_MIME_TYPE_LEN + 1] = {0};
 	
-	strcpy(mime_type, ftk_file_get_mime_type(file_name));
+	ftk_strcpy(mime_type, ftk_file_get_mime_type(file_name));
 
 	p = strrchr(mime_type, '/');
 	return_val_if_fail(p != NULL, NULL);

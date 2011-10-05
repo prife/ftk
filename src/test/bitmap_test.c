@@ -1,24 +1,26 @@
 #include "ftk.h"
 #include "ftk_bitmap.h"
+#include "ftk_bitmap_factory.h"
 #include "ftk_allocator_default.h"
 
 int main(int argc, char* argv[])
 {
-	int i = 0;
-	int w = 100;
-	int h = 100;
-	FtkColor bg = {0xff,0xff,0xff,0xff};
+	FtkColor c = {0};
+	FtkBitmap* bitmap = NULL;
+	FtkBitmapFactory* f = NULL;
 	ftk_set_allocator(ftk_allocator_default_create());
-	FtkBitmap* thiz = ftk_bitmap_create(w, h, bg);
-
-	assert(ftk_bitmap_width(thiz) == w);
-	assert(ftk_bitmap_height(thiz) == h);
-	for(i = 0; i <(w *h); i++)
+	
+	if(argv[1] != NULL)
 	{
-		assert(memcmp(ftk_bitmap_bits(thiz)+i, &bg, sizeof(FtkColor)) == 0);
+		f = ftk_bitmap_factory_create();
+		bitmap = ftk_bitmap_factory_load(f, argv[1]);
+		c = ftk_bitmap_get_pixel(bitmap, 0, 0);
+		ftk_logi("r=%02x g=%02x b=%02x a=%02x\n", c.r, c.g, c.b, c.a);
+		ftk_bitmap_unref(bitmap);
+		ftk_bitmap_factory_destroy(f);
 	}
 
-	ftk_bitmap_unref(thiz);
+	ftk_bitmap_auto_test();
 
 	return 0;
 }

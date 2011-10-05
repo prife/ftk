@@ -113,7 +113,7 @@ FtkFsHandle ftk_dir_open(const char* dir_name)
     }
     else
     {
-        strcpy(dir->name, dir_name);
+        ftk_strcpy(dir->name, dir_name);
     }
     return dir;
 }
@@ -162,11 +162,9 @@ void ftk_dir_close(FtkFsHandle dir)
 
 Ret ftk_fs_get_cwd(char cwd[FTK_MAX_PATH+1])
 {
-	const char* getcwd_ret = NULL;
 	return_val_if_fail(cwd != NULL, RET_FAIL);
-	getcwd_ret = NULL;
 
-	getcwd_ret = ftk_getcwd(cwd, FTK_MAX_PATH);
+	ftk_getcwd(cwd, FTK_MAX_PATH);
 	cwd[FTK_MAX_PATH] = '\0';
 
 	return RET_OK;
@@ -193,7 +191,7 @@ Ret ftk_fs_create_dir(const char* dir)
 	char name[FTK_MAX_PATH+1] = {0};
 	return_val_if_fail(dir != NULL, RET_FAIL);
 
-	strncpy(name, dir, FTK_MAX_PATH);
+	ftk_strncpy(name, dir, FTK_MAX_PATH);
 	ftk_normalize_path(name);
 	p = name;
 	while(1)

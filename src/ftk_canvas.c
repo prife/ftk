@@ -82,12 +82,6 @@ Ret    ftk_canvas_set_clip_region(FtkCanvas* thiz, FtkRegion* region)
 	return ftk_canvas_set_clip(thiz, region);
 }
 
-Ret    ftk_cavans_get_clip_region(FtkCanvas* thiz, FtkRegion** region)
-{
-	/*TODO*/
-	return RET_OK;
-}
-
 Ret ftk_canvas_draw_vline(FtkCanvas* thiz, int x, int y, int h)
 {
 	return ftk_canvas_draw_line(thiz, x, y, x, y + h);
@@ -113,24 +107,6 @@ Ret ftk_canvas_draw_bitmap_simple(FtkCanvas* thiz, FtkBitmap* b, int x, int y, i
 	return ftk_canvas_draw_bitmap(thiz, b, &src_r, &dst_r, 0xff);
 }
 
-int ftk_canvas_font_height(FtkCanvas* thiz)
-{
-	return ftk_font_height(thiz->gc.font);
-}
-
-int ftk_canvas_get_extent(FtkCanvas* thiz, const char* str, int len)
-{
-	return_val_if_fail(thiz != NULL && str != NULL && thiz->gc.font != NULL, 0);
-	
-	return ftk_font_get_extent(thiz->gc.font, str, len);
-}
-
-const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, const char* start, 
-	int vstart, int vend, int width)
-{
-	return ftk_font_calc_str_visible_range(thiz->gc.font, start, vstart, vend, width, NULL);
-}
-
 static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, int x, int y, 
 	int w, int h, FtkBitmap* bitmap)
 {
@@ -139,16 +115,12 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, int x, int y,
 	int oy = 0;
 	int ow = 0;
 	int oh = 0;
-	FtkGc gc = {0};
-	FtkColor* bits = NULL;
+	FtkColor fg  = thiz->gc.fg;
 	int bw = ftk_bitmap_width(bitmap);
 	int bh = ftk_bitmap_height(bitmap);
 	int tile_w = FTK_MIN(bw, w) >> 1;
 	int tile_h = FTK_MIN(bh, h) >> 1;
-	FtkColor fg  = thiz->gc.fg;
 	
-	gc.mask = FTK_GC_FG;
-
 	if ( bw == w && bh == h )
 	{
 		ftk_canvas_draw_bitmap_simple(thiz, bitmap, 0, 0, w, h, x, y);
@@ -165,29 +137,25 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, int x, int y,
 	{
 		ox = x + tile_w;
 		ow = w - 2 * tile_w;
-		bits = ftk_bitmap_bits(bitmap) + tile_w;
 		for(i = 0; i < tile_h; i++)
 		{
-			thiz->gc.fg = *bits;	
+			thiz->gc.fg = ftk_bitmap_get_pixel(bitmap, tile_w, i);
 			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_hline(thiz, ox, y + i, ow);
-			bits += bw;
 		}
 		
 		oy = y + tile_h;
 		oh = h - 2 * tile_h;
-		thiz->gc.fg = *bits;	
+		thiz->gc.fg = ftk_bitmap_get_pixel(bitmap, tile_w, i);
 		ftk_canvas_sync_gc(thiz);
 		ftk_canvas_draw_rect(thiz, ox, oy, ow, oh, 0, 1); 
 	
 		oy = y + h - tile_h;
-		bits = ftk_bitmap_bits(bitmap) + (bh - tile_h) * bw + tile_w;
 		for(i = 0; i < tile_h; i++)
 		{
-			thiz->gc.fg = *bits;
+			thiz->gc.fg = ftk_bitmap_get_pixel(bitmap, tile_w, (bh - tile_h) + i);
 			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_hline(thiz, ox, (oy + i), ow);
-			bits += bw;
 		}
 	}
 
@@ -195,23 +163,19 @@ static Ret ftk_canvas_fill_background_four_corner(FtkCanvas* thiz, int x, int y,
 	{
 		oy = y + tile_h;
 		oh = h - 2 * tile_h;
-		bits = ftk_bitmap_bits(bitmap) + bw * tile_h;
 		for(i = 0; i < tile_w; i++)
 		{
-			thiz->gc.fg = *bits;	
+			thiz->gc.fg = ftk_bitmap_get_pixel(bitmap, i, tile_h);
 			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_vline(thiz, x + i, oy, oh);
-			bits++;
 		}
 		
 		ox = x + w - tile_w;
-		bits = ftk_bitmap_bits(bitmap) + bw * tile_h + bw - tile_w;
 		for(i = 0; i < tile_w; i++)
 		{
-			thiz->gc.fg = *bits;	
+			thiz->gc.fg = ftk_bitmap_get_pixel(bitmap, bw - tile_w + i, tile_h);
 			ftk_canvas_sync_gc(thiz);
 			ftk_canvas_draw_vline(thiz, ox + i, oy, oh);
-			bits++;
 		}
 	}
 	thiz->gc.fg = fg;
@@ -316,4 +280,73 @@ Ret ftk_canvas_show(FtkCanvas* thiz, FtkDisplay* display, FtkRect* rect, int ox,
 	ftk_canvas_unlock_buffer(thiz);
 
 	return RET_OK;
+}
+
+const char* ftk_canvas_calc_str_visible_range(FtkCanvas* thiz, 
+	const char* start, int vstart, int vend, int width, int* ret_extent)
+{
+	int extent = 0;
+	int line_extent = 0;
+	unsigned short unicode = 0;
+	const char* iter = NULL;
+	const char* prev_iter = NULL;
+
+	if(vstart >= 0)
+	{
+		iter = start + vstart;
+		prev_iter = iter;
+		while(width > 0)
+		{
+			prev_iter = iter;
+			unicode = utf8_get_char(iter, &iter);
+			if(unicode == '\r') continue;
+			if(unicode == 0 || unicode == 0xffff)
+			{
+				break;
+			}
+			else if( unicode == '\n') 
+			{	
+				prev_iter = iter;
+				break;
+			}
+
+			extent = ftk_canvas_get_char_extent(thiz, unicode);
+			if(extent > width) break;
+			width -= extent;
+			line_extent += extent;
+			prev_iter = iter;
+		}
+		if(ret_extent != NULL) 
+			*ret_extent = line_extent;
+	
+		return prev_iter;
+	}
+	else if(vend > 0)
+	{
+		iter = start + vend;
+		prev_iter = iter;
+		while(width > 0 && iter >= start)
+		{
+			prev_iter = iter;
+			if(iter <= start) break;
+			unicode = utf8_get_prev_char(iter, &iter);
+			if(unicode == '\r') continue;
+			if(unicode == 0 || unicode == 0xffff || unicode == '\n')
+			{
+			//	prev_iter = iter;
+				break;
+			}
+			extent = ftk_canvas_get_char_extent(thiz, unicode);
+			if(extent > width) break;
+			width -= extent;
+			line_extent += extent;
+		}
+
+		if(ret_extent != NULL) 
+			*ret_extent = line_extent;
+
+		return prev_iter;
+	}
+		
+	return start;
 }

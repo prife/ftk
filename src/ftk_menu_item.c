@@ -93,8 +93,8 @@ static Ret ftk_menu_item_on_paint(FtkWidget* thiz)
 	if(ftk_widget_get_text(thiz))
 	{
 		const char* text = ftk_widget_get_text(thiz);
-		int fh = ftk_canvas_font_height(canvas);
-		int fw = ftk_canvas_get_extent(canvas, text, -1);
+		int fh = ftk_widget_get_font_size(thiz);
+		int fw = ftk_canvas_get_str_extent(canvas, text, -1);
 		int dx = FTK_HALF(width - fw);
 		int dy = FTK_HALF(height);
 

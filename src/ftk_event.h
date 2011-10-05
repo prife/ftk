@@ -113,6 +113,13 @@ typedef struct _FtkEvent
 			unsigned short x;
 			unsigned short y;
 		}mouse;
+		
+		struct _Display
+		{
+			void* display;
+			int width;
+			int height;
+		}display;
 		FtkRect rect;
 		void* extra;
 	}u;

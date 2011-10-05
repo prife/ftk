@@ -120,7 +120,7 @@ static Ret desktop_on_button_open_applist_clicked(void* ctx, void* obj)
 
 	icon_view = ftk_widget_lookup(win, 99);
 
-	item_size = 6 * ftk_font_height(ftk_widget_get_gc(icon_view)->font);
+	item_size = 6 * ftk_widget_get_font_size(icon_view);
 	if(ftk_widget_width(icon_view) < 2 * item_size)
 	{
 		item_size = (ftk_widget_width(icon_view) - 10) / 2;

@@ -31,7 +31,7 @@
 #ifndef FTK_TEXT_LAYOUT_H
 #define FTK_TEXT_LAYOUT_H
 
-#include "ftk_font.h"
+#include "ftk_canvas.h"
 
 FTK_BEGIN_DECLS
 
@@ -60,11 +60,11 @@ typedef struct _FtkTextLine
 }FtkTextLine;
 
 FtkTextLayout* ftk_text_layout_create(void);
-Ret ftk_text_layout_set_font(FtkTextLayout* thiz, FtkFont* font);
+Ret ftk_text_layout_set_canvas(FtkTextLayout* thiz, FtkCanvas* canvas);
 Ret ftk_text_layout_set_width(FtkTextLayout* thiz, size_t width);
 Ret ftk_text_layout_set_text(FtkTextLayout* thiz, const char* text, int len);
 Ret ftk_text_layout_set_wrap_mode(FtkTextLayout* thiz, FtkWrapMode wrap_mode);
-Ret ftk_text_layout_init(FtkTextLayout* thiz, const char* text, int len, FtkFont* font, size_t width);
+Ret ftk_text_layout_init(FtkTextLayout* thiz, const char* text, int len, FtkCanvas* canvas, size_t width);
 
 Ret ftk_text_layout_skip_to(FtkTextLayout* thiz, int pos);
 Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line);

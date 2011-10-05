@@ -86,8 +86,8 @@ static Ret ftk_display_sdl_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 	int width = r->width;
 	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-	FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
+	FtkColor* src = ftk_bitmap_lock(priv->bitmap);
 
 	/*TODO*/
 #endif

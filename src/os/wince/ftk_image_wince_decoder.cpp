@@ -80,7 +80,7 @@ static FtkBitmap* load_image(const char *filename)
 	rect.bottom = h;
 	hr = bmp->LockBits(&rect, ImageLockModeRead, PixelFormat32bppARGB, &bmp_data);
 	FtkColor* src = (FtkColor*)bmp_data.Scan0;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
 	for(y = 0; y < h; y++)
 	{
 		for(x = 0; x < w; x++)
@@ -108,7 +108,7 @@ static void ftk_image_wince_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 }
 

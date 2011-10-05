@@ -37,7 +37,7 @@ void red_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -58,7 +58,7 @@ void green_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -79,7 +79,7 @@ void blue_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -100,7 +100,7 @@ void mire_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for (y = 0; y < h; y++)
 	{

@@ -626,6 +626,32 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 
 	switch(event->type)
 	{
+		case FTK_EVT_DISPLAY_CHANGED:
+		{
+			int width = event->u.display.width;
+			int height = event->u.display.height;
+			FtkCanvas* canvas = ftk_shared_canvas();
+			
+			if(canvas == NULL) 
+			{
+				/*not init yet.*/
+				break;
+			}
+
+			if(canvas->width != width || canvas->height != height)
+			{
+				FtkColor c = {0xff, 0xff, 0xff, 0xff};
+				ftk_canvas_destroy(canvas);
+				
+				canvas = ftk_canvas_create(width, height, &c);
+				ftk_set_shared_canvas(canvas);
+				ftk_wnd_manager_default_relayout(thiz);
+
+				ftk_logi("%s:%d FTK_EVT_DISPLAY_CHANGED: %d %d\n", __func__, __LINE__, width, height);
+			}
+
+			break;
+		}
 		case FTK_EVT_WND_DESTROY:
 		{
 			if(priv->top_window == event->widget)
@@ -689,7 +715,7 @@ static Ret  ftk_wnd_manager_default_dispatch_event(FtkWndManager* thiz, FtkEvent
 		int y = event->u.mouse.y;
 		
 		target = ftk_wnd_manager_find_target(thiz, x, y);
-		if(event->type == FTK_EVT_MOUSE_DOWN && target && !ftk_widget_has_attr(target, FTK_ATTR_NO_FOCUS))
+		if(event->type == FTK_EVT_MOUSE_DOWN && !ftk_widget_has_attr(target, FTK_ATTR_NO_FOCUS))
 		{
 			priv->focus_widget = target;
 		}

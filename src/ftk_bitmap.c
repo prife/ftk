@@ -32,61 +32,6 @@
 #include "ftk_log.h"
 #include "ftk_bitmap.h"
 
-struct _FtkBitmap
-{
-	int w;
-	int h;
-	int ref;
-	int length;
-	FtkColor bits[1];
-};
-
-FtkBitmap* ftk_bitmap_create(int w, int h, FtkColor color)
-{
-	int length = w * h;
-	FtkBitmap* thiz = (FtkBitmap*)FTK_ALLOC(sizeof(FtkBitmap) + length * sizeof(FtkColor));
-
-	if(thiz != NULL)
-	{
-		int i = 0;
-		thiz->w = w;
-		thiz->h = h;
-		thiz->ref = 1;
-		thiz->length = length;
-		
-		for(i = 0; i < length; i++) 
-		{
-			thiz->bits[i] = color;
-		}
-	}
-
-	return thiz;
-}
-
-int ftk_bitmap_width(FtkBitmap* thiz)
-{
-	return thiz != NULL ? thiz->w : 0;
-}
-
-int ftk_bitmap_height(FtkBitmap* thiz)
-{
-	return thiz != NULL ? thiz->h : 0;
-}
-
-FtkColor* ftk_bitmap_bits(FtkBitmap* thiz)
-{
-	return thiz != NULL ? thiz->bits : NULL;
-}
-
-static void ftk_bitmap_destroy(FtkBitmap* thiz)
-{
-	if(thiz != NULL)
-	{
-		FTK_ZFREE(thiz, sizeof(FtkBitmap) + thiz->length * sizeof(FtkColor));
-	}
-
-	return;
-}
 
 void       ftk_bitmap_ref(FtkBitmap* thiz)
 {
@@ -116,36 +61,52 @@ void       ftk_bitmap_clear(FtkBitmap* thiz, FtkColor c)
 {
 	int i = 0;
 	int j = 0;
+	int w = 0;
+	int h = 0;
 	FtkColor* p = NULL;
 
 	return_if_fail(thiz != NULL);
 
-	p = thiz->bits;
-	for(i = 0; i < thiz->h; i++)
+	w = ftk_bitmap_width(thiz);
+	h = ftk_bitmap_height(thiz);
+	p = ftk_bitmap_lock(thiz);
+	for(i = 0; i < h; i++)
 	{
-		for(j = 0; j < thiz->w; j++, p++)
+		for(j = 0; j < w; j++, p++)
 		{
 			*p = c;
 		}
 	}
+	ftk_bitmap_unlock(thiz);
+
+	return;
 }
 
 Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 {
+	int thiz_w = 0;
+	int thiz_h = 0;
+	int other_w = 0;
+	int other_h = 0;
 	int width = 0;
 	int height = 0;
-	FtkColor* dst = ftk_bitmap_bits(thiz);
-	FtkColor* src = ftk_bitmap_bits(other);
+	FtkColor* dst = ftk_bitmap_lock(thiz);
+	FtkColor* src = ftk_bitmap_lock(other);
 	return_val_if_fail(dst != NULL && src != NULL, RET_FAIL);
 
-	width = FTK_MIN(thiz->w, other->w);
-	height = FTK_MIN(thiz->h, other->h);
+	thiz_w = ftk_bitmap_width(thiz);
+	thiz_h = ftk_bitmap_height(thiz);
+	other_w = ftk_bitmap_width(other);
+	other_h = ftk_bitmap_height(other);
+
+	width = FTK_MIN(thiz_w, other_w);
+	height = FTK_MIN(thiz_h, other_h);
 
 	for(; height; height--)
 	{
 		memcpy(dst, src, sizeof(FtkColor) * width);
-		dst += thiz->w;
-		src += other->w;
+		dst += thiz_w;
+		src += other_w;
 	}
 
 	return RET_OK;
@@ -161,7 +122,7 @@ Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 	int bw = ftk_bitmap_width(bitmap);\
 	int bh = ftk_bitmap_height(bitmap);\
 	Type* src = (Type*)data;\
-	FtkColor* dst = ftk_bitmap_bits(bitmap);\
+	FtkColor* dst = ftk_bitmap_lock(bitmap);\
 	\
 	return_val_if_fail(src != NULL && dst != NULL, RET_FAIL);\
 	\
@@ -193,7 +154,7 @@ Ret        ftk_bitmap_copy_from_bitmap(FtkBitmap* thiz, FtkBitmap* other)
 	int w = rect != NULL ? rect->width : bw;\
 	int h = rect != NULL ? rect->height : bh;\
 	Type* dst = (Type*)data;\
-	FtkColor* src = ftk_bitmap_bits(bitmap);\
+	FtkColor* src = ftk_bitmap_lock(bitmap);\
 	\
 	return_val_if_fail(ox < dw, RET_FAIL);\
 	return_val_if_fail(oy < dh, RET_FAIL);\
@@ -232,6 +193,7 @@ Ret ftk_bitmap_copy_from_data_bgr24(FtkBitmap* bitmap, void* data,
 		src += 3*dw; 
 		dst += bw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -267,6 +229,7 @@ Ret ftk_bitmap_copy_to_data_bgr24(FtkBitmap* bitmap, FtkRect* rect, void* data, 
 		src += bw;
 		dst += 3*dw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -283,11 +246,12 @@ Ret ftk_bitmap_copy_from_data_bgra32(FtkBitmap* bitmap, void* data,
 		for(ox = 0; ox < w; ox++)
 		{
 			dst[ox] = src[ox];
-			dst[ox].a = 0xff;
+//			dst[ox].a = 0xff;
 		}
 		src += dw; 
 		dst += bw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -309,6 +273,7 @@ Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 			if(likely(psrc->a == 0xff))
 			{
 				*(unsigned int*)(pdst) = *(unsigned int*)(psrc);	
+				pdst->a = 0xff;
 			}
 			else
 			{
@@ -316,11 +281,13 @@ Ret ftk_bitmap_copy_to_data_bgra32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 				FTK_ALPHA_1(psrc->b, pdst->b, alpha);
 				FTK_ALPHA_1(psrc->g, pdst->g, alpha);
 				FTK_ALPHA_1(psrc->r, pdst->r, alpha);
+				pdst->a = 0xff;
 			}
 		}
 		src += bw;
 		dst += dw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -344,6 +311,7 @@ Ret ftk_bitmap_copy_from_data_rgb565(FtkBitmap* bitmap, void* data,
 		src += dw; 
 		dst += bw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -391,6 +359,7 @@ Ret ftk_bitmap_copy_to_data_rgb565(FtkBitmap* bitmap, FtkRect* rect, void* data,
 		src += bw;
 		dst += dw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -416,6 +385,7 @@ Ret ftk_bitmap_copy_from_data_argb32(FtkBitmap* bitmap, void* data,
 		src += dw; 
 		dst += bw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -459,6 +429,7 @@ Ret ftk_bitmap_copy_to_data_argb32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 		src += bw;
 		dst += dw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -485,6 +456,7 @@ Ret ftk_bitmap_copy_from_data_rgba32(FtkBitmap* bitmap, void* data,
 		src += dw; 
 		dst += bw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
@@ -520,9 +492,44 @@ Ret ftk_bitmap_copy_to_data_rgba32(FtkBitmap* bitmap, FtkRect* rect, void* data,
 		src += bw;
 		dst += dw;
 	}
+	ftk_bitmap_unlock(bitmap);
 
 	return RET_OK;
 }
 
 /*=====================================================================*/
 
+Ret ftk_bitmap_auto_test(void)
+{
+	int x = 0;
+	int y = 0;
+	int w = 10;
+	int h = 10;
+	FtkColor c = {0};
+	FtkColor cc = {0};
+	FtkBitmap* bitmap = NULL;
+	
+	c.a = 0xff;
+	c.r = 0x22;
+	c.g = 0x33;
+	c.b = 0x44;
+	bitmap = ftk_bitmap_create(w, h, c);
+
+	assert(ftk_bitmap_width(bitmap) == w);
+	assert(ftk_bitmap_height(bitmap) == h);
+	for(y = 0; y < h; y++)
+	{
+		for(x = 0; x < w; x++)
+		{
+			cc = ftk_bitmap_get_pixel(bitmap, x, y);
+			assert(cc.a == c.a);
+			assert(cc.r == c.r);
+			assert(cc.g == c.g);
+			assert(cc.b == c.b);
+		}
+	}
+
+	ftk_bitmap_unref(bitmap);
+
+	return RET_OK;
+}

@@ -49,7 +49,7 @@ static Ret ftk_image_bmp_copy32(FtkBitmap* bitmap, int compress, const unsigned 
 	const unsigned char* src = data;
 	int width = ftk_bitmap_width(bitmap);
 	int height = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < height; y++)
 	{
@@ -74,7 +74,7 @@ static Ret ftk_image_bmp_copy24(FtkBitmap* bitmap, int compress, const unsigned 
 	const unsigned char* lsrc = data;
 	int width = ftk_bitmap_width(bitmap);
 	int height = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 	int line_delta = (width * 3 + 3) & 0xfffffffc;
 
 	lsrc += line_delta * (height - 1);
@@ -104,7 +104,7 @@ static Ret ftk_image_bmp_copy8(FtkBitmap* bitmap, int compress, FtkColor* palett
 	const unsigned char* lsrc = data;
 	int width = ftk_bitmap_width(bitmap);
 	int height = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 	int line_delta = (width + 3) & 0xfffffffc;
 
 	lsrc +=line_delta * (height - 1);
@@ -136,7 +136,7 @@ static Ret ftk_image_bmp_copy4(FtkBitmap* bitmap, int compress, FtkColor* palett
 	const unsigned char* lsrc = data;
 	int width = ftk_bitmap_width(bitmap);
 	int height = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 	int line_delta = (((width & 0x01) ? (width + 1) : width )/2 + 3) & 0xfffffffc;
 
 	w = width>>1;
@@ -192,7 +192,7 @@ static Ret ftk_image_bmp_copy1(FtkBitmap* bitmap, int compress, FtkColor* palett
 	const unsigned char* lsrc = data;
 	int width = ftk_bitmap_width(bitmap);
 	int height = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 	int line_delta = (width/8 + 3) & 0xfffffffc;
 
 	w = (width+7)>>3;
@@ -316,7 +316,7 @@ static void ftk_image_bmp_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 
 	return;

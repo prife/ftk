@@ -459,7 +459,7 @@ FtkBitmap* Android_LoadImage(const char* filename)
 
 	bg.a = 0xff;
 	bitmap = ftk_bitmap_create(width, height, bg);
-	dst = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_lock(bitmap);
 
 	memcpy(dst, pixels, sizeof(FtkColor) * width * height);
 

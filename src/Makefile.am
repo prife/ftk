@@ -44,11 +44,11 @@ LINEBREAK= \
 OPTIONAL_FUNCS=ftk_file_system_posix.c ftk_file_system.c ftk_file_browser.c 
 
 libftk_la_SOURCES=\
-	ftk_canvas_default.c ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
+	ftk_canvas.c          ftk_source_primary.c      ftk_wnd_manager_default.c   \
 	ftk_label.c           ftk_source_timer.c \
 	ftk_bitmap.c          ftk_main_loop.c     ftk_util.c \
-	ftk_bitmap_factory.c  ftk_image_jpeg_decoder.c  ftk_source_idle.c   ftk_widget.c \
-	ftk.c                 ftk_image_png_decoder.c   ftk_window.c        ftk_sources_manager.c\
+	ftk_source_idle.c   ftk_widget.c \
+	ftk.c                 ftk_window.c        ftk_sources_manager.c\
 	ftk_globals.c         ftk_button.c              ftk_image.c         ftk_log.c \
 	ftk_dialog.c          ftk_status_item.c         ftk_status_panel.c  \
 	ftk_menu_panel.c      ftk_menu_item.c           ftk_app_window.c    ftk_entry.c \
@@ -62,12 +62,12 @@ libftk_la_SOURCES=\
 	ftk_popup_menu.c      ftk_combo_box.c \
 	ftk_clipboard.c       ftk_input_method_chooser_default.c ftk_input_method_manager.c \
 	ftk_allocator.c            ftk_allocator_default.c \
-	ftk_allocator_profile.c  ftk_image_bmp_decoder.c \
+	ftk_allocator_profile.c  \
 	ftk_input_method_preeditor.c ftk_dlfcn.c \
 	ftk_input_method_preeditor_default.c \
 	ftk_main_loop_select.c ftk_config.c ftk_display_mem.c \
-	ftk_display_rotate.c ftk_wnd_manager.c ftk_font.c ftk_path.c \
-	ftk_tab.c ftk_font_desc.c ftk_font_manager.c \
+	ftk_display_rotate.c ftk_wnd_manager.c ftk_path.c \
+	ftk_tab.c ftk_font_desc.c \
 	ftk_animation_alpha.c   ftk_animation_scale.c      ftk_animation_trigger_default.c \
 	ftk_animation_expand.c  ftk_animation_translate.c  ftk_animation_trigger_silence.c \
 	ftk_animation.c ftk_pairs.c ftk_params.c ftk_interpolator_linear.c \
@@ -80,33 +80,56 @@ if ENABLE_LINEBREAK
 libftk_la_SOURCES += $(LINEBREAK)
 endif
 
-if ENABLE_GPINYIN
-libftk_la_SOURCES += im/gpinyin/share/ngram.cpp \
-	im/gpinyin/share/sync.cpp \
-	im/gpinyin/share/spellingtrie.cpp \
-	im/gpinyin/share/dicttrie.cpp \
-	im/gpinyin/share/dictbuilder.cpp \
-	im/gpinyin/share/spellingtable.cpp \
-	im/gpinyin/share/splparser.cpp \
-	im/gpinyin/share/searchutility.cpp \
-	im/gpinyin/share/utf16char.cpp \
-	im/gpinyin/share/mystdlib.cpp \
-	im/gpinyin/share/utf16reader.cpp \
-	im/gpinyin/share/userdict.cpp \
-	im/gpinyin/share/matrixsearch.cpp \
-	im/gpinyin/share/pinyinime.cpp \
-	im/gpinyin/share/lpicache.cpp \
-	im/gpinyin/share/dictlist.cpp \
-	im/gpinyin/ftk/ftk_input_method_gpinyin.cpp
-else
-libftk_la_SOURCES += im/default/ftk_input_method_util.c 
-if ENABLE_HANDWRITE
-libftk_la_SOURCES += im/default/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
-	fhw/fhw_primitive_recognizer.c
+libftk_la_CFLAGS=$(CANVAS_CFLAGS)
+libftk_la_LDFLAGS=$(CANVAS_LDFLAGS)
+
+if FTK_CANVAS_DUMMY
+CANVAS_SOURCES=$(abs_srcdir)/canvas/dummy/ftk_bitmap_factory_dummy.c $(abs_srcdir)/canvas/dummy/ftk_bitmap_dummy.c  $(abs_srcdir)/canvas/dummy/ftk_canvas_dummy.c
+endif
+
+if FTK_CANVAS_SKIA 
+CANVAS_SOURCES=$(abs_srcdir)/canvas/skia/ftk_bitmap_factory_skia.cpp  $(abs_srcdir)/canvas/skia/ftk_bitmap_skia.cpp  $(abs_srcdir)/canvas/skia/ftk_canvas_skia.cpp
+endif
+
+if FTK_CANVAS_CAIRO
+CANVAS_SOURCES=$(abs_srcdir)/canvas/skia/ftk_bitmap_factory_skia.cpp  $(abs_srcdir)/canvas/skia/ftk_bitmap_skia.cpp  $(abs_srcdir)/canvas/skia/ftk_canvas_skia.cpp
+endif
+
+if FTK_CANVAS_DIRECTFB
+CANVAS_SOURCES=$(abs_srcdir)/canvas/directfb/ftk_bitmap_factory_directfb.c $(abs_srcdir)/canvas/directfb/ftk_bitmap_directfb.c  $(abs_srcdir)/canvas/directfb/ftk_canvas_directfb.c
+libftk_la_CFLAGS+=-DFTK_FONT="\"font.ttf\"" 
+endif
+
+if FTK_CANVAS_DEFAULT
+
+if FONT_ENGINE_FREETYPE
+libftk_la_CFLAGS+=-DFTK_FONT="\"font.ttf\"" 
+endif
+
+if FONT_ENGINE_DEFAULT
+libftk_la_CFLAGS+=-DFTK_FONT="\"gb2312.fnt\"" 
+endif
+
+CANVAS_SOURCES=\
+	$(abs_srcdir)/canvas/default/ftk_font.c \
+	$(abs_srcdir)/canvas/default/ftk_canvas_default.c \
+	$(abs_srcdir)/canvas/default/ftk_bitmap_default.c \
+	$(abs_srcdir)/canvas/default/ftk_font_manager.c \
+	$(abs_srcdir)/canvas/default/ftk_bitmap_factory.c \
+	$(abs_srcdir)/canvas/default/ftk_image_png_decoder.c \
+	$(abs_srcdir)/canvas/default/ftk_image_jpeg_decoder.c \
+	$(abs_srcdir)/canvas/default/ftk_image_bmp_decoder.c
+
+if FONT_ENGINE_FREETYPE
+CANVAS_SOURCES+=$(abs_srcdir)/canvas/default/ftk_font_freetype.c
+endif
+
+if FONT_ENGINE_DEFAULT
+CANVAS_SOURCES+=$(abs_srcdir)/canvas/default/ftk_font_default.c $(abs_srcdir)/canvas/default/fontdata.c
 endif
 endif
 
-libftk_la_CFLAGS=
+libftk_la_SOURCES+=$(CANVAS_SOURCES)
 
 if ENABLE_CAIRO
 libftk_la_SOURCES+=ftk_cairo.c
@@ -116,14 +139,6 @@ endif
 if ENABLE_TSLIB
 LINUX_FB+=$(srcdir)/backend/native/ftk_source_tslib.c 
 LINUX_ST7781+=$(srcdir)/backend/native/ftk_source_tslib.c 
-endif
-
-if FONT_ENGINE_FREETYPE
-libftk_la_SOURCES+=ftk_font_freetype.c
-endif
-
-if FONT_ENGINE_DEFAULT
-libftk_la_SOURCES+=fontdata.c ftk_font_default.c
 endif
 
 if FTK_BACKEND_FB
@@ -158,17 +173,34 @@ libftk_la_SOURCES+=$(PSP) $(OS_PSP)
 libftk_la_CFLAGS+=-I$(abs_top_srcdir)/src/backend/psp
 endif
 
-if FONT_ENGINE_FREETYPE
-libftk_la_CFLAGS+=-DFTK_FONT="\"font.ttf\"" 
+if ENABLE_GPINYIN
+libftk_la_SOURCES += im/gpinyin/share/ngram.cpp \
+	im/gpinyin/share/sync.cpp \
+	im/gpinyin/share/spellingtrie.cpp \
+	im/gpinyin/share/dicttrie.cpp \
+	im/gpinyin/share/dictbuilder.cpp \
+	im/gpinyin/share/spellingtable.cpp \
+	im/gpinyin/share/splparser.cpp \
+	im/gpinyin/share/searchutility.cpp \
+	im/gpinyin/share/utf16char.cpp \
+	im/gpinyin/share/mystdlib.cpp \
+	im/gpinyin/share/utf16reader.cpp \
+	im/gpinyin/share/userdict.cpp \
+	im/gpinyin/share/matrixsearch.cpp \
+	im/gpinyin/share/pinyinime.cpp \
+	im/gpinyin/share/lpicache.cpp \
+	im/gpinyin/share/dictlist.cpp \
+	im/gpinyin/ftk/ftk_input_method_gpinyin.cpp
+else
+libftk_la_SOURCES += im/default/ftk_input_method_util.c 
+if ENABLE_HANDWRITE
+libftk_la_SOURCES += im/default/ftk_input_method_hw.c fhw/ftk_handwrite_engine_fhw.c \
+	fhw/fhw_primitive_recognizer.c
 endif
-
-if FONT_ENGINE_DEFAULT
-libftk_la_CFLAGS+=-DFTK_FONT="\"gb2312.fnt\"" 
 endif
 
 ftkdir=$(includedir)/ftk
 ftk_HEADERS=\
-	fontdata.h \
 	ftk_allocator_default.h \
 	ftk_allocator.h \
 	ftk_allocator_profile.h \
@@ -202,8 +234,6 @@ ftk_HEADERS=\
 	ftk_file_browser.h \
 	ftk_file_system.h \
 	ftk_font_desc.h \
-	ftk_font.h \
-	ftk_font_manager.h \
 	ftk_gc.h \
 	ftk_gesture.h \
 	ftk_gesture_listener.h \
@@ -211,11 +241,8 @@ ftk_HEADERS=\
 	ftk.h \
 	ftk_icon_cache.h \
 	ftk_icon_view.h \
-	ftk_image_bmp_decoder.h \
 	ftk_image_decoder.h \
 	ftk_image.h \
-	ftk_image_jpeg_decoder.h \
-	ftk_image_png_decoder.h \
 	ftk_input_method_chooser.h \
 	ftk_input_method.h \
 	ftk_input_method_manager.h \
@@ -278,8 +305,8 @@ ftk_HEADERS=\
 	im/default/ftk_input_method_util.h \
 	fhw/fhw_primitive_recognizer.h 
 
-EXTRA_DIST=	rules.mk ftk_image_bmp_decoder.c  \
-	ftk_image_bmp_decoder.h ftk_input_method_preeditor_default.h \
+EXTRA_DIST=	rules.mk \
+	ftk_input_method_preeditor_default.h \
 	linebreak/linebreakdef.h linebreak/linebreak.h \
 	ftk_translator.c  ftk_translator.h ftk_file_system_dummy.c
 

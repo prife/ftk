@@ -19,39 +19,6 @@ FtkApp* ftk_app_demo_combo_box_create()
 #define FTK_HIDE extern
 #endif /*FTK_AS_PLUGIN*/
 
-static void auto_test(FtkWidget* combo_box)
-{
-	int i = 0;
-	int n = 0;
-	const char* text = NULL;
-	const char* strs[] = {"1 second", "2 seconds", "3 seconds"};
-	
-	n = FTK_ARRAY_SIZE(strs);
-	for(i = 0; i < n; i++)
-	{
-		assert(ftk_combo_box_get_item_nr(combo_box) == i);
-		ftk_combo_box_append(combo_box, NULL, strs[i]);
-		assert(ftk_combo_box_get_item(combo_box, 0, NULL, &text) == RET_OK);
-		assert(strcmp(text, strs[0]) == 0);
-	}
-	
-	for(i = 0; i < n; i++)
-	{
-		assert(ftk_combo_box_get_item_nr(combo_box) == (n - i));
-		assert(ftk_combo_box_remove(combo_box, 0) == RET_OK);
-	}
-	
-	for(i = 0; i < n; i++)
-	{
-		assert(ftk_combo_box_get_item_nr(combo_box) == i);
-		ftk_combo_box_append(combo_box, NULL, strs[i]);
-	}
-
-	ftk_combo_box_set_text(combo_box, strs[0]);
-
-	return;
-}
-
 FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 {
 	int width = 0;
@@ -69,7 +36,10 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	
 	width = width/2 - 10;
 	combo_box = ftk_combo_box_create(win, 0, height/4, width, 50);
-	auto_test(combo_box);
+	ftk_combo_box_set_text(combo_box, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "1 second");
+	ftk_combo_box_append(combo_box, NULL, "2 seconds");
+	ftk_combo_box_append(combo_box, NULL, "3 seconds");
 	combo_box = ftk_combo_box_create(win, width + 10, height/4, width, 50);
 	ftk_combo_box_set_text(combo_box, "1 second");
 	ftk_combo_box_append(combo_box, NULL, "1 second");

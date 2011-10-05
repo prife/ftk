@@ -163,7 +163,7 @@ static Ret ftk_text_view_calc_lines(FtkWidget* thiz)
 	int font_height = 0;
 	DECL_PRIV0(thiz, priv);
 	int height = ftk_widget_height(thiz);
-	font_height = ftk_font_height(ftk_widget_get_gc(thiz)->font);
+	font_height = ftk_widget_get_font_size(thiz);
 
 	priv->visible_lines = (height - 2 * TEXT_VIEW_TOP_MARGIN) / (font_height + TEXT_VIEW_V_MARGIN);
 	priv->v_margin = ((height - 2 * TEXT_VIEW_TOP_MARGIN) % (font_height + TEXT_VIEW_V_MARGIN))/2;
@@ -207,7 +207,7 @@ static Ret ftk_text_view_get_offset_by_pointer(FtkWidget* thiz, int px, int py)
 
 	(void)height;
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
-	font_height = ftk_canvas_font_height(canvas);
+	font_height = ftk_widget_get_font_size(thiz);
 	
 	delta_h = py - y - TEXT_VIEW_V_MARGIN - TEXT_VIEW_TOP_MARGIN;
 	line_no = priv->visible_start_line + delta_h/(font_height + TEXT_VIEW_V_MARGIN);
@@ -217,7 +217,7 @@ static Ret ftk_text_view_get_offset_by_pointer(FtkWidget* thiz, int px, int py)
 
 	width = px - x - TEXT_VIEW_H_MARGIN + 1;
 	len = ftk_text_view_get_chars_nr_in_line(thiz, line_no);
-	ftk_text_layout_init(text_layout, TB_TEXT + start, len, ftk_widget_get_gc(thiz)->font, width); 
+	ftk_text_layout_init(text_layout, TB_TEXT + start, len, canvas, width); 
 	if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 	{
 		caret = start + line.len;
@@ -272,7 +272,7 @@ static Ret ftk_text_view_relayout(FtkWidget* thiz, int start_line)
 
 	start_line = start_line < 0 ? 0 : start_line;
 	start_offset = priv->lines_offset[start_line];
-	ftk_text_layout_init(text_layout, text+start_offset, -1, ftk_widget_get_gc(thiz)->font, width);
+	ftk_text_layout_init(text_layout, text+start_offset, -1, ftk_widget_canvas(thiz), width);
 	ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
 	ftk_logd("%s: start_line=%d\n", __func__, start_line);
 	for(i = start_line ; ftk_text_view_extend_lines_offset(thiz, i + 1) == RET_OK; i++)
@@ -354,7 +354,7 @@ static Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
 	width = priv->caret_x - TEXT_VIEW_H_MARGIN - FTK_PAINT_X(thiz) + 1;
 	if(width > 0)
 	{
-		ftk_text_layout_init(text_layout, TB_TEXT + start, -1, ftk_widget_get_gc(thiz)->font, width);
+		ftk_text_layout_init(text_layout, TB_TEXT + start, -1, canvas, width);
 		ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
@@ -589,7 +589,7 @@ static Ret ftk_text_view_on_paint_caret(FtkWidget* thiz)
 		int font_height = 0;
 		FTK_BEGIN_PAINT(x, y, width, height, canvas);
 		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
-		font_height = ftk_canvas_font_height(canvas);
+		font_height = ftk_widget_get_font_size(thiz);
 		(void)x;(void)y;(void)width;(void)height;	
 		
 		gc.mask = FTK_GC_FG;
@@ -655,13 +655,13 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 		FtkTextLine line = {0};
 		FtkTextLayout* text_layout = ftk_default_text_layout();
 
-		font_height = ftk_canvas_font_height(canvas);
+		font_height = ftk_widget_get_font_size(thiz);
 		dy = y + priv->v_margin + TEXT_VIEW_TOP_MARGIN;
 		dx = x + TEXT_VIEW_H_MARGIN;
 		width = width - 2 * TEXT_VIEW_H_MARGIN;
 
 		start = priv->lines_offset[priv->visible_start_line];
-		ftk_text_layout_init(text_layout, TB_TEXT + start, -1, ftk_widget_get_gc(thiz)->font, width);
+		ftk_text_layout_init(text_layout, TB_TEXT + start, -1, canvas, width);
 		ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
 
 		for(i = priv->visible_start_line; i < priv->visible_end_line; i++)
@@ -670,7 +670,7 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 			if(priv->caret_at_line == i)
 			{
 				priv->caret_y = dy + TEXT_VIEW_V_MARGIN;
-				priv->caret_x = dx + ftk_canvas_get_extent(canvas, TB_TEXT + start, priv->caret - start) - 1;
+				priv->caret_x = dx + ftk_canvas_get_str_extent(canvas, TB_TEXT + start, priv->caret - start) - 1;
 			}
 			
 			dy += TEXT_VIEW_V_MARGIN;
@@ -727,7 +727,7 @@ FtkWidget* ftk_text_view_create(FtkWidget* parent, int x, int y, int width, int 
 		thiz->on_paint = ftk_text_view_on_paint;
 		thiz->destroy  = ftk_text_view_destroy;
 
-		min_height = ftk_font_height(ftk_default_font()) + TEXT_VIEW_V_MARGIN * 2;
+		min_height = ftk_font_desc_get_size(ftk_default_font()) + TEXT_VIEW_V_MARGIN * 2;
 		height = height < min_height ? min_height : height;
 		ftk_widget_init(thiz, FTK_TEXT_VIEW, 0, x, y, width, height, 0);
 

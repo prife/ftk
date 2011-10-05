@@ -53,9 +53,10 @@ static Ret ftk_message_box_size(int has_title, int has_button, const char* text,
 	int start  = 0;
 	int width  = 0;
 	int height = 0;
+	int font_h = 0;
 	FtkRect rect = {0};
 	const char* end = text;
-	FtkFont* font = ftk_default_font();
+	FtkCanvas* canvas = ftk_shared_canvas();
 	
 	ftk_wnd_manager_get_work_area(ftk_default_wnd_manager(), &rect);
 
@@ -65,10 +66,11 @@ static Ret ftk_message_box_size(int has_title, int has_button, const char* text,
 	height += has_title ? ftk_dialog_get_title_height() : 0;
 	height += has_button ? FTK_BUTTON_DEFAULT_HEIGHT : 0;
 
+	font_h = ftk_font_desc_get_size(ftk_default_font());
 	while(*end != '\0')
 	{
-		height += ftk_font_height(font) + FTK_LABEL_TOP_MARGIN;
-		end = ftk_font_calc_str_visible_range(font, text, start, -1, width, NULL);
+		height += font_h + FTK_LABEL_TOP_MARGIN;
+		end = ftk_canvas_calc_str_visible_range(canvas, text, start, -1, width, NULL);
 		start = end - text;
 	}
 

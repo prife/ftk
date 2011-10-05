@@ -35,7 +35,7 @@
 #include "ftk_source.h"
 #include <directfb.h>
 
-FtkSource* ftk_source_dfb_create(IDirectFB* dfb);
+FtkSource* ftk_source_dfb_create(IDirectFB* dfb, IDirectFBEventBuffer* event_buffer);
 
 #endif/*FTK_SOURCE_DFB_H*/
 

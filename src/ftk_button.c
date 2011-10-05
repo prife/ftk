@@ -109,7 +109,7 @@ static Ret ftk_button_on_paint(FtkWidget* thiz)
 		const char* text = ftk_widget_get_text(thiz);
 		FtkTextLayout* text_layout = ftk_default_text_layout();
 
-		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		ftk_text_layout_init(text_layout, text, -1, canvas, width); 
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			xoffset = FTK_HALF(width - line.extent); 

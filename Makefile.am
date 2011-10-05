@@ -1,4 +1,4 @@
-SUBDIRS=po src data theme tools testdata docs
+SUBDIRS=po src script_binding data theme tools testdata docs
 
 if ENABLE_OPENGLES
 SUBDIRS += opengles
@@ -6,7 +6,7 @@ endif
 
 if FTK_BACKEND_PSP
 else
-SUBDIRS+=fbus services script_binding apps
+SUBDIRS+=fbus services apps
 endif
 pkgconfigdir=$(libdir)/pkgconfig
 

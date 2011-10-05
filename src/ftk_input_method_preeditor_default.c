@@ -51,7 +51,7 @@ typedef struct _InputMethodPreeditorPrivInfo
 #define IDC_CANDIDATES  1001
 #define FTK_IM_PREEDITOR_WIDTH       120
 #define FTK_IM_PREEDITOR_ITEM_HEIGHT 20
-#define FTK_ROW_HEIGHT (ftk_font_height(ftk_default_font()) + 2 * FTK_V_MARGIN)
+#define FTK_ROW_HEIGHT (FTK_FONT_SIZE + 2 * FTK_V_MARGIN)
 
 static Ret ftk_popup_on_raw_text_clicked(void* ctx, void* button)
 {

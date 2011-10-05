@@ -64,7 +64,7 @@ static int display_bitmap(PrivInfo* priv, FtkBitmap* bitmap, int x, int y, int w
 	glEnable(GL_TEXTURE_2D);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ftk_bitmap_width(bitmap), ftk_bitmap_height(bitmap), 
-		0, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_bits(bitmap));
+		0, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_lock(bitmap));
 	glDrawTexiOES(xoffset, yoffset, 0, width, height);
 
 	Android_Render();
@@ -83,8 +83,8 @@ static Ret ftk_display_android_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRe
 	int src_height = ftk_bitmap_height(bitmap);
 	int dst_width = ftk_bitmap_width(priv->bitmap);
 	int dst_height = ftk_bitmap_height(priv->bitmap);
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-	FtkColor* dst = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* src = ftk_bitmap_lock(bitmap);
+	FtkColor* dst = ftk_bitmap_lock(priv->bitmap);
 
 	return_val_if_fail(rect->x < src_width && rect->y < src_height
 		&& xoffset < dst_width && yoffset < dst_height, RET_FAIL);
@@ -120,11 +120,11 @@ static Ret ftk_display_android_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bit
 	int width = r->width;
 	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-	FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
+	FtkColor* src = ftk_bitmap_lock(priv->bitmap);
 
 	/*TODO*/
-	//glReadPixels(r->x, r->y, r->width, r->height, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_bits(bitmap));
+	//glReadPixels(r->x, r->y, r->width, r->height, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_lock(bitmap));
 
 	return RET_OK;
 }

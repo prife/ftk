@@ -32,13 +32,8 @@
 #include "ftk_util.h"
 #include "ftk_bitmap.h"
 #include "ftk_canvas.h"
-
-
-#define	MASK_ALPHA      0xff000000 	//AlphaÑÚÄ¤Öµ
-#define	MASK_RED        0x00ff0000	//RÑÚÄ¤Öµ
-#define MASK_GREEN      0x0000ff00	//GÑÚÄ¤Öµ	
-#define	MASK_BLUE       0x000000ff	//BÑÚÄ¤Öµ
-#define MASK_RGB        0x00ffffff 
+#include "ftk_font.h"
+#include "ftk_font_manager.h"
 
 #define PUT_PIXEL(pdst, color, alpha) \
 	do\
@@ -49,21 +44,7 @@
 		}\
 		else\
 		{\
-			unsigned int srcColor;\
-			unsigned int destColor;\
-			unsigned int src_R_B;\
-			unsigned int dest_R_B;\
-			unsigned int src_G;\
-			unsigned int dest_G;\
-			srcColor =  *(unsigned int*)color;\
-			destColor =  *(unsigned int*)pdst;\
-			src_R_B = srcColor & ( MASK_RED | MASK_BLUE);\
-			dest_R_B = destColor & (MASK_RED | MASK_BLUE);\
-			src_R_B = ((((src_R_B - dest_R_B) * alpha ) >> 8 ) & 0x00ff00ff)+ dest_R_B;\
-			src_G =	srcColor & MASK_GREEN;\
-			dest_G = destColor & MASK_GREEN;\
-			src_G =   ((((src_G - dest_G) * alpha ) >> 8 ) & 0xff00 )+ dest_G;\
-			*(unsigned int*)pdst = ((src_R_B | src_G) & MASK_RGB) | 0xff000000;\
+			FTK_ALPHA(color, pdst, alpha);\
 		}\
 	}while(0);
 
@@ -76,8 +57,39 @@ typedef struct _CanvasDefaultPrivInfo
 	FtkColor* bits;
 	FtkRegion* clip;
 	FtkBitmap* bitmap;
+	FtkFont* font;
+	FtkFontManager* font_manager;
 	FtkRegion  clip_regions[FTK_MAX_CLIP_REGION_NR];
 }PrivInfo;
+
+static int s_font_manager_ref = 0;
+static FtkFontManager* s_font_manager;
+
+static FtkFontManager* font_manager_ref()
+{
+	s_font_manager_ref++;
+
+	if(s_font_manager == NULL)
+	{
+		s_font_manager = ftk_font_manager_create(10);
+	}
+
+	return s_font_manager;
+}
+
+static void font_manager_unref()
+{
+	return_if_fail(s_font_manager_ref > 0);
+
+	s_font_manager_ref--;
+	if(s_font_manager_ref == 0)
+	{
+		ftk_font_manager_destroy(s_font_manager);
+		s_font_manager = NULL;
+	}
+
+	return;
+}
 
 #define FOR_EACH_CLIP(priv) \
 	for(priv->clip = priv->clip_regions; priv->clip != NULL; priv->clip = priv->clip->next)
@@ -119,6 +131,14 @@ static Ret ftk_rect_and(const FtkRect *r1, const FtkRect *r2, FtkRect *r)
 
 static Ret ftk_canvas_default_sync_gc(FtkCanvas* thiz)
 {
+	int size = 0;
+	DECL_PRIV(thiz, priv);
+	
+	if(thiz->gc.font != NULL)
+	{
+		priv->font = ftk_font_manager_load(priv->font_manager, thiz->gc.font);
+	}
+	
 	return RET_OK;
 }
 
@@ -567,7 +587,7 @@ static Ret ftk_canvas_default_draw_bitmap_normal(FtkCanvas* thiz, FtkBitmap* bit
 	return_val_if_fail(xoffset < width, RET_FAIL);
 	return_val_if_fail(yoffset < height, RET_FAIL);
 
-	src = ftk_bitmap_bits(bitmap);
+	src = ftk_bitmap_lock(bitmap);
 	dst = priv->bits;
 
 	w = (x + w) < bitmap_width  ? w : bitmap_width - x;
@@ -645,8 +665,8 @@ static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkR
 	int scale_w = (src_w << 8)/dst_w;
 	int scale_h = (src_h << 8)/dst_h;
 
-	return_val_if_fail(dst_i != NULL && ftk_bitmap_bits(dst_i) != NULL && dst_r != NULL, RET_FAIL);
-	return_val_if_fail(src_i != NULL && ftk_bitmap_bits(src_i) != NULL && src_r != NULL, RET_FAIL);
+	return_val_if_fail(dst_i != NULL && ftk_bitmap_lock(dst_i) != NULL && dst_r != NULL, RET_FAIL);
+	return_val_if_fail(src_i != NULL && ftk_bitmap_lock(src_i) != NULL && src_r != NULL, RET_FAIL);
 	
 	return_val_if_fail(dst_x >= 0 && dst_w > 0 && (dst_x + dst_w) <= dst_i_w, RET_FAIL);
 	return_val_if_fail(dst_y >= 0 && dst_h > 0 && (dst_y + dst_h) <= dst_i_h, RET_FAIL);
@@ -654,8 +674,8 @@ static Ret ftk_canvas_draw_bitmap_resize(FtkCanvas* thiz, FtkBitmap* src_i, FtkR
 	return_val_if_fail(src_x >= 0 && src_w > 0 && (src_x + src_w) <= src_i_w, RET_FAIL);
 	return_val_if_fail(src_y >= 0 && src_h > 0 && (src_y + src_h) <= src_i_h, RET_FAIL);
 	
-	src = ftk_bitmap_bits(src_i) + src_y * src_i_w + src_x;
-	dst = ftk_bitmap_bits(dst_i) + dst_y * dst_i_w + dst_x;
+	src = ftk_bitmap_lock(src_i) + src_y * src_i_w + src_x;
+	dst = ftk_bitmap_lock(dst_i) + dst_y * dst_i_w + dst_x;
         
 	if(thiz->gc.mask & FTK_GC_ALPHA)
 	{
@@ -788,7 +808,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 	fg = thiz->gc.fg;
 
 	/*FIXME: vcenter_offset maybe not correct.*/
-	vcenter_offset = ftk_font_height(thiz->gc.font)/3;
+	vcenter_offset = ftk_font_desc_get_size(thiz->gc.font)/3;
 	while(*iter && (iter - str) < len)
 	{
 		FtkRect rect;
@@ -810,7 +830,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 		}
 
 		if(code == 0xffff || code == 0) break;
-		if(code == '\r' || code == '\n' || ftk_font_lookup(thiz->gc.font, code, &glyph) != RET_OK) 
+		if(code == '\r' || code == '\n' || ftk_font_lookup(priv->font, code, &glyph) != RET_OK) 
 			continue;
 
 		glyph.y = vcenter ? glyph.y - vcenter_offset : glyph.y;
@@ -872,6 +892,7 @@ static void ftk_canvas_default_destroy(FtkCanvas* thiz)
 {
 	DECL_PRIV(thiz, priv);
 	ftk_bitmap_unref(priv->bitmap);
+	font_manager_unref();
 	FTK_FREE(thiz);
 
 	return;
@@ -947,6 +968,14 @@ static Ret ftk_canvas_default_draw_bitmap_clip(FtkCanvas* thiz, FtkBitmap* bitma
 
 }
 
+int ftk_canvas_default_get_extent(FtkCanvas* thiz, const char* str, int len)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL && str != NULL && priv->font != NULL, 0);
+	
+	return ftk_font_get_extent(priv->font, str, len);
+}
+
 static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, int x, int y, 
 	const char* str, int len, int vcenter)
 {
@@ -963,6 +992,40 @@ static Ret ftk_canvas_default_draw_string_clip(FtkCanvas* thiz, int x, int y,
 	return RET_OK;
 }
 
+static int ftk_canvas_default_get_char_extent(FtkCanvas* thiz, unsigned short code)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL, 0);
+
+	return ftk_font_get_char_extent(priv->font, code);
+}
+
+static int ftk_canvas_default_get_str_extent(FtkCanvas* thiz, const char* str, int len)
+{
+	DECL_PRIV(thiz, priv);
+	return_val_if_fail(thiz != NULL, 0);
+
+	return ftk_font_get_extent(priv->font, str, len);
+}
+
+static const FtkCanvasVTable g_canvas_default_vtable=
+{
+	ftk_canvas_default_sync_gc,
+	ftk_canvas_default_set_clip,
+	ftk_canvas_default_draw_pixels_clip,
+	ftk_canvas_default_draw_line_clip,
+	ftk_canvas_default_clear_rect_clip,
+	ftk_canvas_default_draw_rect_clip,
+
+	ftk_canvas_default_draw_bitmap_clip,
+	ftk_canvas_default_draw_string_clip,
+	ftk_canvas_default_get_str_extent,
+	ftk_canvas_default_get_char_extent,
+	ftk_canvas_default_lock_buffer,
+	ftk_canvas_default_unlock_buffer,
+	ftk_canvas_default_destroy
+};
+
 FtkCanvas* ftk_canvas_create(int w, int h, FtkColor* clear_color)
 {
 	FtkCanvas* thiz = NULL;
@@ -972,30 +1035,22 @@ FtkCanvas* ftk_canvas_create(int w, int h, FtkColor* clear_color)
 	{
 		DECL_PRIV(thiz, priv);
 
-		thiz->sync_gc = ftk_canvas_default_sync_gc;
-		thiz->set_clip = ftk_canvas_default_set_clip;
-		thiz->draw_pixels = ftk_canvas_default_draw_pixels_clip;
-		thiz->draw_line = ftk_canvas_default_draw_line_clip;
-		thiz->draw_rect = ftk_canvas_default_draw_rect_clip;
-		thiz->clear_rect = ftk_canvas_default_clear_rect_clip;
-		thiz->draw_bitmap = ftk_canvas_default_draw_bitmap_clip;
-		thiz->draw_string = ftk_canvas_default_draw_string_clip;
-		thiz->lock_buffer = ftk_canvas_default_lock_buffer;
-		thiz->unlock_buffer = ftk_canvas_default_unlock_buffer;
-		thiz->destroy = ftk_canvas_default_destroy;
-
+		thiz->width = w;
+		thiz->height = h;
 		thiz->gc.bg = *clear_color;
 		thiz->gc.fg.a = 0xff;
 		thiz->gc.fg.r = 0xff - clear_color->r;
 		thiz->gc.fg.g = 0xff - clear_color->g;
 		thiz->gc.fg.b = 0xff - clear_color->b;
 		thiz->gc.mask = FTK_GC_FG | FTK_GC_BG;
+		thiz->vtable = &g_canvas_default_vtable;
 
 		priv->bitmap = ftk_bitmap_create(w, h, *clear_color);
-		priv->bits = ftk_bitmap_bits(priv->bitmap);
+		priv->bits = ftk_bitmap_lock(priv->bitmap);
 		priv->w = ftk_bitmap_width(priv->bitmap);
 		priv->h = ftk_bitmap_height(priv->bitmap);
 
+		priv->font_manager = font_manager_ref();
 		ftk_canvas_set_clip_region(thiz, NULL);
 	}
 

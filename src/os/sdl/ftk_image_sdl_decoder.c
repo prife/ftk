@@ -43,7 +43,7 @@ static FtkBitmap* ftk_image_sdl_decoder_decode(FtkImageDecoder* thiz, const char
 	bitmap = ftk_bitmap_create(w, h, bg);
 
 	src = (FtkColor*)img->pixels;
-	dst = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_lock(bitmap);
 
 	ftk_logd("pitch:%d, bpp:%d\n", img->pitch, bpp);
 
@@ -81,7 +81,7 @@ static void ftk_image_sdl_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(FtkImageDecoder));
 	}
 }
 

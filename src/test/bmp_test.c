@@ -8,6 +8,7 @@ int main(int argc, char* argv[])
 	
 	ftk_init(argc, argv);
 
+	ftk_bitmap_autotest();
 	decoder = ftk_image_bmp_decoder_create();
 	bitmap = ftk_image_decoder_decode(decoder, argv[1]);
 	

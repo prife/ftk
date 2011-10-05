@@ -362,11 +362,11 @@ static Ret ftk_icon_view_on_paint(FtkWidget* thiz)
 			else
 			{
 				icon_height = 0;
-				fw = ftk_canvas_get_extent(canvas, text, -1);
+				fw = ftk_canvas_get_str_extent(canvas, text, -1);
 
 				if(item_info->icon != NULL)
 				{
-					icon_height = priv->item_height - ftk_canvas_font_height(canvas) - 2*FTK_V_MARGIN;
+					icon_height = priv->item_height - ftk_widget_get_font_size(thiz) - 2*FTK_V_MARGIN;
 					ftk_canvas_draw_bg_image(canvas, item_info->icon, 
 						FTK_BG_CENTER, dx, dy, priv->item_width, icon_height);
 				}

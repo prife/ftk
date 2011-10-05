@@ -40,7 +40,8 @@ ftk_app_window_set_on_prepare_options_menu
 ftk_atof
 ftk_atoi
 ftk_backend_init
-ftk_bitmap_bits
+ftk_bitmap_lock
+ftk_bitmap_unlock
 ftk_bitmap_clear
 ftk_bitmap_copy_from_bitmap
 ftk_bitmap_copy_from_data_argb32
@@ -70,15 +71,12 @@ ftk_canvas_draw_bg_image
 ftk_canvas_draw_bitmap_simple
 ftk_canvas_draw_hline
 ftk_canvas_draw_vline
-ftk_canvas_font_height
-ftk_canvas_get_extent
 ftk_canvas_get_gc
 ftk_canvas_reset_gc
 ftk_canvas_set_clip_rect
 ftk_canvas_set_clip_region
 ftk_canvas_set_gc
 ftk_canvas_show
-ftk_cavans_get_clip_region
 ftk_check_button_create
 ftk_check_button_create_ex
 ftk_check_button_create_radio
@@ -121,7 +119,6 @@ ftk_default_animation_trigger
 ftk_default_bitmap_factory
 ftk_default_config
 ftk_default_display
-ftk_default_font_manager
 ftk_default_input_method_manager
 ftk_default_input_method_preeditor
 ftk_default_log_level
@@ -180,7 +177,6 @@ ftk_file_read
 ftk_file_seek
 ftk_file_write
 ftk_font_cache_create
-ftk_font_calc_str_visible_range
 ftk_font_create
 ftk_font_desc_create
 ftk_font_desc_get_size
@@ -359,7 +355,6 @@ ftk_set_animation_trigger
 ftk_set_bitmap_factory
 ftk_set_config
 ftk_set_display
-ftk_set_font_manager
 ftk_set_input_method_manager
 ftk_set_input_method_preeditor
 ftk_set_log_level
@@ -433,7 +428,7 @@ ftk_text_layout_create
 ftk_text_layout_destroy
 ftk_text_layout_get_visual_line
 ftk_text_layout_init
-ftk_text_layout_set_font
+ftk_text_layout_set_canvas
 ftk_text_layout_set_text
 ftk_text_layout_set_width
 ftk_text_layout_set_wrap_mode
@@ -502,6 +497,7 @@ ftk_widget_set_event_listener
 ftk_widget_set_focused
 ftk_widget_set_font
 ftk_widget_set_font_size
+ftk_widget_get_font_size
 ftk_widget_set_gc
 ftk_widget_set_id
 ftk_widget_set_insensitive
@@ -553,6 +549,7 @@ ftk_xul_load
 ftk_xul_load_ex
 ftk_xul_load_file
 ftk_snprintf
+ftk_strcpy
 ftk_strncpy
 closedir
 opendir

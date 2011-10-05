@@ -32,6 +32,7 @@
 #include <assert.h>
 #include "ftk_win32.h"
 #include "ftk_log.h"
+#include "ftk_file_system.h"
 
 static char root_dir[FTK_MAX_PATH+1] = {0};
 static char data_dir[FTK_MAX_PATH+1] = {0};

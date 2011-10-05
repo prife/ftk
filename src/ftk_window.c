@@ -58,21 +58,10 @@ typedef struct _WindowPrivInfo
 static Ret ftk_window_realize(FtkWidget* thiz);
 static Ret ftk_window_idle_invalidate(FtkWidget* thiz);
 
-
-static int ftk_windows_check_is_valid(FtkWidget* thiz)
-{
-	int type;
-	type = ftk_widget_type(thiz);
-	if ( type == FTK_WINDOW || type == FTK_DIALOG || type == FTK_WINDOW_MISC
-		|| type == FTK_STATUS_PANEL || type == FTK_MENU_PANEL)
-		return 1;
-	return 0;
-}
-
 Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 	
 	if(priv->focus_widget == focus_widget || thiz == focus_widget)
 	{
@@ -97,16 +86,16 @@ Ret ftk_window_set_focus(FtkWidget* thiz, FtkWidget* focus_widget)
 FtkWidget* ftk_window_get_focus(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(thiz != NULL, NULL);
+
 	return priv->focus_widget;
 }
 
 Ret ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
 	priv->grab_ref++;
 	priv->grab_widget = grab_widget;
 	ftk_wnd_manager_grab(ftk_default_wnd_manager(), thiz);
@@ -117,7 +106,7 @@ Ret ftk_window_grab(FtkWidget* thiz, FtkWidget* grab_widget)
 Ret ftk_window_ungrab(FtkWidget* thiz, FtkWidget* grab_widget)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 	return_val_if_fail(priv->grab_ref > 0, RET_FAIL);
 
 	if(grab_widget == priv->grab_widget || grab_widget == NULL)
@@ -231,7 +220,6 @@ static Ret ftk_window_on_key_event(FtkWidget* thiz, FtkEvent* event)
 	Ret ret = RET_FAIL;
 	DECL_PRIV0(thiz, priv);
 	FtkWidget* focus_widget = NULL;
-	assert(ftk_windows_check_is_valid(thiz));
 
 	if(priv->focus_widget == NULL)
 	{
@@ -286,7 +274,6 @@ static Ret ftk_window_on_mouse_event(FtkWidget* thiz, FtkEvent* event)
 	Ret ret = RET_NO_TARGET;
 	FtkWidget* target = NULL;
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
 
 	if(priv->grab_widget != NULL)
 	{
@@ -320,8 +307,9 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz) && event);
+	return_val_if_fail(thiz != NULL && event != NULL, RET_FAIL);
 
+	ftk_window_realize(thiz);
 	switch(event->type)
 	{
 		case FTK_EVT_UPDATE:
@@ -343,7 +331,7 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 			ftk_event_init(&event, FTK_EVT_SHOW);
 			event.widget = thiz;
 			ftk_window_realize(thiz);
-			if(priv->focus_widget == NULL && thiz->children )
+			if(priv->focus_widget == NULL)
 			{
 				FtkWidget* focus_widget = ftk_window_find_next_focus(thiz->children, 0);
 				ret = ftk_window_set_focus(thiz, focus_widget);
@@ -410,8 +398,7 @@ static Ret ftk_window_on_event(FtkWidget* thiz, FtkEvent* event)
 static Ret ftk_window_realize(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+
 	priv->canvas = ftk_shared_canvas();
 	ftk_widget_set_canvas(thiz, priv->canvas);
 
@@ -426,7 +413,6 @@ static Ret ftk_window_on_paint(FtkWidget* thiz)
 
 static void ftk_window_destroy(FtkWidget* thiz)
 {
-	assert(ftk_windows_check_is_valid(thiz));
 	if(thiz != NULL)
 	{
 		FtkEvent event;
@@ -468,8 +454,8 @@ Ret ftk_window_update(FtkWidget* thiz, FtkRect* rect)
 	int xoffset = 0;
 	int yoffset = 0;
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
 	if(priv->update_disabled || !ftk_widget_is_visible(thiz) || !priv->mapped)
 	{
 		return RET_FAIL;
@@ -486,12 +472,13 @@ Ret        ftk_window_paint_forcely(FtkWidget* thiz)
 	int mapped = 0;
 	int visible = 0;
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
 	mapped = priv->mapped;
 	visible = ftk_widget_is_visible(thiz);
 	
 	priv->mapped = 1;
+	ftk_window_realize(thiz);
 	ftk_widget_set_visible(thiz, 1);
 	ftk_canvas_set_clip_region(priv->canvas, NULL);
 	ftk_widget_paint(thiz, NULL, 0);
@@ -504,8 +491,8 @@ Ret        ftk_window_paint_forcely(FtkWidget* thiz)
 Ret ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, RET_OK);
+
 	if(priv->fullscreen != fullscreen)
 	{
 		FtkEvent event;
@@ -521,16 +508,16 @@ Ret ftk_window_set_fullscreen(FtkWidget* thiz, int fullscreen)
 int        ftk_window_is_mapped(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, 0);
+
 	return priv->mapped;
 }
 
 int ftk_window_is_fullscreen(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, 0);
+
 	return priv->fullscreen;
 }
 
@@ -539,7 +526,7 @@ static Ret ftk_window_idle_invalidate(FtkWidget* thiz)
 	int i = 0;
 	FtkRect rect = {0};
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
+	return_val_if_fail(priv != NULL, RET_REMOVE);
 	
 	if(priv->dirty_rect_nr == 0 || !priv->mapped || !ftk_widget_is_visible(thiz))
 	{
@@ -602,8 +589,7 @@ Ret ftk_window_invalidate(FtkWidget* thiz, FtkRect* rect)
 	int i = 0;
 	FtkRect* r = NULL;
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	return_val_if_fail(rect != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && rect != NULL, RET_FAIL);
 
 	if(!ftk_widget_is_visible(thiz))
 	{
@@ -657,6 +643,7 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 	{
 		DECL_PRIV0(thiz, priv);	
 		const char* anim_hint = "";
+	
 		priv->is_opaque = 1;
 		priv->display = ftk_default_display();
 
@@ -675,8 +662,9 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 				break;
 			}
 		}
-		ftk_widget_init(thiz, type, 0, x, y, width, height, attr);
 		ftk_window_set_animation_hint(thiz, anim_hint);
+		ftk_widget_init(thiz, type, 0, x, y, width, height, attr);
+
 		ftk_wnd_manager_add(ftk_default_wnd_manager(), thiz);
 	}
 	else
@@ -691,8 +679,8 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 Ret ftk_window_disable_update(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
 	priv->update_disabled++;
 	ftk_window_realize(thiz);
 //	ftk_logd("%s: %d\n", __func__, priv->update_disabled);
@@ -703,7 +691,7 @@ Ret ftk_window_disable_update(FtkWidget* thiz)
 Ret ftk_window_enable_update(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
+	return_val_if_fail(priv != NULL, RET_FAIL);
 	return_val_if_fail(priv->update_disabled > 0, RET_FAIL);
 
 	priv->update_disabled--;
@@ -717,8 +705,8 @@ Ret ftk_window_enable_update(FtkWidget* thiz)
 int        ftk_window_is_opaque(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, 0);
+
 	return priv->is_opaque;
 }
 
@@ -726,8 +714,8 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 {
 	FtkGc gc = {0};
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
 	gc.bg = bg;
 	gc.mask = FTK_GC_BG;
 
@@ -756,16 +744,15 @@ Ret ftk_window_set_background_with_alpha(FtkWidget* thiz, FtkBitmap* bitmap, Ftk
 const char* ftk_window_get_animation_hint(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	
+	return_val_if_fail(thiz != NULL, NULL);
+
 	return priv->animation_hint;
 }
 
 Ret        ftk_window_set_animation_hint(FtkWidget* thiz, const char* hint)
 {
 	DECL_PRIV0(thiz, priv);
-	assert(ftk_windows_check_is_valid(thiz));
-	return_val_if_fail(hint != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && hint != NULL, RET_FAIL);
 
 	ftk_strncpy(priv->animation_hint, hint, sizeof(priv->animation_hint)-1);
 

@@ -45,7 +45,7 @@ static void show_canvas(FtkDisplay* display, FtkCanvas* canvas)
 	return;
 }
 #if 1
-void test_misc(FtkDisplay* display, FtkFont* font)
+void test_misc(FtkDisplay* display, FtkFontDesc* font)
 {
 	if(display != NULL)
 	{
@@ -91,9 +91,8 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 		ftk_canvas_set_gc(thiz, &gc);
 		show_canvas(display, thiz);
 
-		assert(ftk_canvas_font_height(thiz) == 16);
-		extent = ftk_canvas_get_extent(thiz, "李先静", -1);
-		printf("extent=%d\n", ftk_canvas_get_extent(thiz, "李先静", -1));
+		extent = ftk_canvas_get_str_extent(thiz, "李先静", -1);
+		printf("extent=%d\n", ftk_canvas_get_str_extent(thiz, "李先静", -1));
 
 
 		ftk_bitmap_unref(bitmap);
@@ -104,27 +103,27 @@ void test_misc(FtkDisplay* display, FtkFont* font)
 
 	return;
 }
-#if 0
+
+#if 1
 void test_draw_point(FtkDisplay* display)
 {
 	int i = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
-	FtkRect rect = {0};
+	FtkPoint p = {0};
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
-
-	rect.width = width;
-	rect.height = height;
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 
 	color.r = 0xff;
 	color.a = 0xff;
 	gc.fg = color;
 	for(i = 0; i < width; i++)
 	{
+		p.x = i;
+		p.y = 10;
 		ftk_canvas_reset_gc(thiz, &gc);
-		ftk_canvas_draw_point(thiz, i, 10);
+		ftk_canvas_draw_pixels(thiz, &p, 1);
 	}
 	
 	color.g = 0xff;
@@ -133,8 +132,10 @@ void test_draw_point(FtkDisplay* display)
 	{
 		color.a = 0xff - (0xff & i);
 		gc.fg = color;
+		p.x = i;
+		p.y = 20;
 		ftk_canvas_reset_gc(thiz, &gc);
-		ftk_canvas_draw_point(thiz, i, 20);
+		ftk_canvas_draw_pixels(thiz, &p, 1);
 	}
 	
 	color.r = 0;
@@ -147,7 +148,9 @@ void test_draw_point(FtkDisplay* display)
 	{
 		gc.alpha = 0xff - (0xff & i);
 		ftk_canvas_reset_gc(thiz, &gc);
-		ftk_canvas_draw_point(thiz, i, 30);
+		p.x = i;
+		p.y = 20;
+		ftk_canvas_draw_pixels(thiz, &p, 1);
 	}
 
 	show_canvas(display, thiz);
@@ -163,14 +166,10 @@ void test_draw_vline(FtkDisplay* display)
 {
 	int i = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
-	FtkRect rect = {0};
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
 	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
-
-	rect.width = width;
-	rect.height = height;
 
 	color.r = 0xff;
 	color.a = 0xff;
@@ -216,14 +215,10 @@ void test_draw_hline(FtkDisplay* display)
 {
 	int i = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
-	FtkRect rect = {0};
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
 	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
-
-	rect.width = width;
-	rect.height = height;
 
 	color.r = 0xff;
 	color.a = 0xff;
@@ -266,7 +261,7 @@ void test_draw_hline(FtkDisplay* display)
 	return;
 }
 
-#if 0
+#if 1
 void test_draw_line(FtkDisplay* display)
 {
 	int i = 0;
@@ -275,7 +270,7 @@ void test_draw_line(FtkDisplay* display)
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
-	FtkCanvas* thiz = ftk_canvas_create(width, height, color);
+	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
 
 	rect.width = width;
 	rect.height = height;
@@ -312,7 +307,7 @@ void test_draw_line(FtkDisplay* display)
 		ftk_canvas_draw_line(thiz, 60, i, 80, i+10);
 	}
 
-	ftk_display_update(display, ftk_canvas_bitmap(thiz), &rect, 0, 0);
+	ftk_canvas_show(thiz, display, &rect, 0, 0);
 	
 	ftk_canvas_destroy(thiz);
 
@@ -325,14 +320,10 @@ void test_alpha(FtkDisplay* display)
 {
 	int i = 0;
 	FtkGc gc = {.mask = FTK_GC_FG};
-	FtkRect rect = {0};
 	FtkColor color = {.a = 0xff};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
 	FtkCanvas* thiz = ftk_canvas_create(width, height, &color);
-
-	rect.width = width;
-	rect.height = height;
 
 	color.g = 0xff;
 	color.r = 0;
@@ -388,7 +379,7 @@ void test_put_get_pixel(FtkDisplay* display)
 	return;
 }
 
-void test_font(FtkDisplay* display, FtkFont* font)
+void test_font(FtkDisplay* display, FtkFontDesc* font)
 {
 	int extent2 = 0;
 	FtkGc gc = {.mask = FTK_GC_FONT};
@@ -402,25 +393,25 @@ void test_font(FtkDisplay* display, FtkFont* font)
 	gc.font = font;
 	ftk_canvas_set_gc(thiz, &gc);
 	
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, 0, -1, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, 0, -1, 60, NULL);
 	assert(strcmp(other_side, "明与内建函数") == 0);
 
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, other_side-str, -1, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, other_side-str, -1, 60, NULL);
 	assert(strcmp(other_side, "建函数") == 0);
 	
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, other_side-str, -1, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, other_side-str, -1, 60, NULL);
 	assert(strcmp(other_side, "") == 0);
 
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60, NULL);
 	assert(strcmp(other_side, "建函数") == 0);
 	
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60, NULL);
 	assert(strcmp(other_side, "明与内建函数") == 0);
 	
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60, NULL);
 	assert(strcmp(other_side, str) == 0);
 	
-	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60);
+	other_side = ftk_canvas_calc_str_visible_range(thiz, str, -1, other_side-str, 60, NULL);
 	assert(strcmp(other_side, str) == 0);
 
 	printf("other_side = %s\n", other_side);
@@ -428,7 +419,7 @@ void test_font(FtkDisplay* display, FtkFont* font)
 
 	str = "Single line editor, that means you can input a one line only.";
 	
-	extent2 = ftk_canvas_get_extent(thiz, str, -1);
+	extent2 = ftk_canvas_get_str_extent(thiz, str, -1);
 
 	ftk_canvas_destroy(thiz);
 	sleep(3);
@@ -438,7 +429,6 @@ void test_font(FtkDisplay* display, FtkFont* font)
 
 static void test_fill_bg(FtkDisplay* display)
 {
-	FtkRect rect = {0};
 	FtkColor color = {.a=0xff, .r=0xef, .g=0xdf, .b=0xcf};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
@@ -450,8 +440,6 @@ static void test_fill_bg(FtkDisplay* display)
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 10, 80, 20, 20);
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 30, 80, 40, 20);
 	ftk_canvas_draw_bg_image(thiz, bitmap, FTK_BG_FOUR_CORNER, 80, 80, 60, 20);
-	rect.width = width;
-	rect.height = height;
 	show_canvas(display, thiz);
 	ftk_canvas_destroy(thiz);
 
@@ -464,7 +452,6 @@ static void test_draw_rect(FtkDisplay* display)
 {
 	int i = 0;
 	FtkColor color = {.a = 0xff};
-	FtkRect rect = {0};
 	int width = ftk_display_width(display);
 	int height = ftk_display_height(display);
 	FtkGc gc = {.mask = FTK_GC_FG};
@@ -504,8 +491,6 @@ static void test_draw_rect(FtkDisplay* display)
 		ftk_canvas_set_gc(thiz, &gc);
 		ftk_canvas_draw_rect(thiz, width * i/8, 3*height/8, width/8 - 1, height/8 - 1, 1, 0);
 	}
-	rect.width = width;
-	rect.height = height;
 	show_canvas(display, thiz);
 	ftk_canvas_destroy(thiz);
 
@@ -521,13 +506,12 @@ int main(int argc, char* argv[])
 	FtkRect rect = {0};
 	FtkColor bg = {.a = 0xff};
 	FtkBitmap* bitmap = NULL;
-	FtkFont* font = ftk_default_font();
+	FtkFontDesc* font = ftk_default_font();
 	FtkDisplay* display = ftk_default_display();
 
 	rect.width = ftk_display_width(display);
 	rect.height = ftk_display_height(display);
-#if 0
-#else	
+	
 	test_draw_rect(display);
 	test_alpha(display);
 	test_draw_vline(display);
@@ -541,7 +525,7 @@ int main(int argc, char* argv[])
 	test_draw_hline(display);
 	test_draw_vline(display);
 	ftk_bitmap_unref(bitmap);
-#endif
+	
 	ftk_run();
 
 	return 0;

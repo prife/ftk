@@ -30,7 +30,7 @@
  */
 
 #include "ftk_log.h"
-#include "ftk_typedef.h"
+#include "ftk_util.h"
 
 /*UTF8-related functions are copied from glib.*/
 
@@ -155,7 +155,7 @@ unsigned short utf8_get_prev_char (const char *p, const char** prev)
 	return 0;
 }
 
-int utf8_count_char(const char *str, size_t length)
+int utf8_count_char(const char *str, int length)
 {
 	int nr = 0;
 	const char* iter = str;
@@ -378,7 +378,6 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 	int i = 0;
 	int in_index = 0;
 	int out_index = 0;
-	const char* getcwd_ret = NULL;
 
 	return_val_if_fail(path_in != NULL && path_out != NULL, NULL);
 	
@@ -389,7 +388,7 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 		{
 			if(IS_CURRENT(path_in)) 
 			{
-				getcwd_ret = ftk_getcwd(path_out, FTK_MAX_PATH);
+				ftk_getcwd(path_out, FTK_MAX_PATH);
 				out_index = strlen(path_out);
 				continue;
 			}
@@ -399,14 +398,14 @@ char* normalize_path(const char* path_in, char path_out[FTK_MAX_PATH+1])
 				const char* home = getenv("HOME");
 				if(home != NULL)
 				{
-					strcpy(path_out, home);
+					ftk_strcpy(path_out, home);
 					out_index = strlen(path_out);
 				}
 				continue;
 			}	
 			else if(path_in[0] != '/')
 			{
-				getcwd_ret = ftk_getcwd(path_out, FTK_MAX_PATH);
+				ftk_getcwd(path_out, FTK_MAX_PATH);
 				out_index = strlen(path_out);
 				path_out[out_index++] = '/';
 				path_out[out_index++] = path_in[in_index];
@@ -478,7 +477,7 @@ const char* ftk_normalize_path(char path[FTK_MAX_PATH+1])
 	return_val_if_fail(path != NULL, NULL);
 
 	normalize_path(path, path_out);
-	strcpy(path, path_out);
+	ftk_strncpy(path, path_out, FTK_MAX_PATH);
 
 	return path;
 }
@@ -595,7 +594,7 @@ int ftk_str2bool(const char* str)
 	return 1;
 }
 
-char* ftk_strs_cat(char* str, size_t len, const char* first, ...)
+char* ftk_strs_cat(char* str, int len, const char* first, ...)
 {
 	va_list arg;
 	size_t dst = 0;
@@ -812,7 +811,7 @@ const char* ftk_itoa(char* str, int len, int n)
 	return ftk_itoa_simple(str, len, n, NULL);
 }
 
-const char* ftk_ftoa(char* str, size_t len, double value)
+const char* ftk_ftoa(char* str, int len, double value)
 {
 	int i = 0;
 	char str_n[32] = {0};
@@ -847,3 +846,7 @@ const char* ftk_ftoa(char* str, size_t len, double value)
 	return ftk_strs_cat(str, len, str_n, ".", str_f, NULL);
 }
 
+char* ftk_strcpy(char* dst, const char* src)
+{
+	return strcpy(dst, src);
+}

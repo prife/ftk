@@ -50,7 +50,7 @@ static Ret   ftk_animation_translate_step_h(FtkAnimation* thiz, float percent)
 	FtkRect r = {0};
 	FtkRect dst_r = {0};
 	DECL_PRIV(thiz, priv);
-	int x = (priv->first_win_rect.width + priv->second_win_rect.width) * percent;
+	int x = (int)((priv->first_win_rect.width + priv->second_win_rect.width) * percent);
 	
 	r = priv->first_win_rect;
 	if(r.width > 0 && r.height > 0)
@@ -93,7 +93,7 @@ static Ret   ftk_animation_translate_step_v(FtkAnimation* thiz, float percent)
 	FtkRect r = {0};
 	FtkRect dst_r = {0};
 	DECL_PRIV(thiz, priv);
-	int y = (priv->first_win_rect.width + priv->second_win_rect.width) * percent;
+	int y = (int)((priv->first_win_rect.width + priv->second_win_rect.width) * percent);
 	
 	r = priv->first_win_rect;
 	if(r.width > 0 && r.height > 0)

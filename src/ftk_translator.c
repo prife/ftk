@@ -29,6 +29,7 @@
  *
  */
 
+#include "ftk_log.h"
 #include "ftk_allocator.h"
 #include "ftk_translator.h"
 

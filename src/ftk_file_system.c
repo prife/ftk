@@ -136,7 +136,7 @@ Ret ftk_fs_delete(const char* dir_or_file)
 	char name[FTK_MAX_PATH + 1] = {0};
 	return_val_if_fail(dir_or_file != NULL, RET_FAIL);
 
-	strncpy(name, dir_or_file, FTK_MAX_PATH);
+	ftk_strncpy(name, dir_or_file, FTK_MAX_PATH);
 	ftk_normalize_path(name);
 	
 	if((ret = ftk_file_get_info(name, &info)) == RET_OK)

@@ -24,6 +24,27 @@ AC_CHECK_LIB([png], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h sys/ioctl.h sys/time.h unistd.h execinfo.h])
 
+AC_ARG_WITH(canvas, [AC_HELP_STRING([--with-canvas=default|skia|cairo|directfb],
+                    [use which canvas])])
+
+CFLAGS="$CFLAGS -DHAVE_CONFIG_FTK_H"
+case "$with_canvas" in
+	skia*) 
+		canvas="skia"
+		SKIA_ROOT="/work/skia/"
+		CANVAS_CFLAGS="-I$SKIA_ROOT/include/core -I$SKIA_ROOT/include/config -I$SKIA_ROOT/include/images -I$SKIA_ROOT/include"
+		SKIA_LIBS_ROOT="$SKIA_ROOT/out/Debug/obj.target/gyp/"
+		CANVAS_LDFLAGS="-lstdc++ -lm -lfreetype -lpthread $SKIA_LIBS_ROOT/libcore.a $SKIA_LIBS_ROOT/libopts.a $SKIA_LIBS_ROOT/libimages.a $SKIA_LIBS_ROOT/libzlib.a $SKIA_LIBS_ROOT/libgr.a $SKIA_LIBS_ROOT/libutils.a";;
+	directfb*)
+		canvas="directfb";;
+	cairo*)
+		canvas="cairo";;
+	dummy*)
+		canvas="dummy";;
+	*)
+		canvas="default";;
+esac
+
 AC_ARG_WITH(backend, [AC_HELP_STRING([--with-backend=linux-x11:WxH|linux-fb|linux-vlcd|linux-dfb|linux-st7781|linux-sigma|psp],
                     [use which display/input backend])])
 
@@ -38,6 +59,7 @@ case "$with_backend" in
 		CFLAGS="$CFLAGS -DUSE_LINUX_FB -DUSE_LINUX_NATIVE -DPC_EMU";;
 	linux-dfb*)
 		backend="dfb"
+		canvas="directfb"
 		DFB_VERSION=1.2.0
 		PKG_CHECK_MODULES(DIRECTFB, [directfb >= $DFB_VERSION])
 
@@ -59,14 +81,26 @@ case "$with_backend" in
 		CFLAGS="$CFLAGS -DUSE_LINUX_FB -DUSE_LINUX_NATIVE ";;
 esac
 
-echo with_backend=$with_backend
-
 AM_CONDITIONAL(FTK_BACKEND_X11, test "$backend" = "x11")
 AM_CONDITIONAL(FTK_BACKEND_FB, test "$backend" = "fb")
 AM_CONDITIONAL(FTK_BACKEND_ST7781, test "$backend" = "st7781")
 AM_CONDITIONAL(FTK_BACKEND_DFB, test "$backend" = "dfb")
 AM_CONDITIONAL(FTK_BACKEND_SIGMA, test "$backend" = "sigma")
 AM_CONDITIONAL(FTK_BACKEND_PSP, test "$backend" = "psp")
+
+AC_SUBST(CANVAS_LDFLAGS)
+AC_SUBST(CANVAS_CFLAGS)
+
+if test "$with_canvas" = "" 
+then
+	with_canvas="default"
+fi
+
+AM_CONDITIONAL(FTK_CANVAS_DUMMY, test "$canvas" = "dummy")
+AM_CONDITIONAL(FTK_CANVAS_DEFAULT, test "$canvas" = "default")
+AM_CONDITIONAL(FTK_CANVAS_SKIA, test "$canvas" = "skia")
+AM_CONDITIONAL(FTK_CANVAS_DIRECTFB, test "$canvas" = "directfb")
+AM_CONDITIONAL(FTK_CANVAS_CAIRO, test "$canvas" = "cairo")
 
 AC_ARG_WITH(fontengine, [AC_HELP_STRING([--with-fontengine=default|freetype],
                     [use which font engine])])
@@ -144,8 +178,8 @@ fi
 AM_CONDITIONAL(ENABLE_FRIBIDI,  test "$enable_fribidi" = "yes")
 
 AC_ARG_ENABLE(opengles,
-  [  --enable-opengles            build with opengles support [[default=yes]]],,
-  enable_opengles=yes)
+  [  --enable-opengles            build with opengles support [[default=no]]],,
+  enable_opengles=no)
 
 if test "$enable_opengles" = "yes"; then
   CFLAGS="$CFLAGS -DUSE_OPENGLES"
@@ -207,6 +241,7 @@ AC_CONFIG_FILES([ftk.pc
                 theme/default/Makefile
                 data/Makefile
                 testdata/Makefile
+                src/rules.mk
                 src/Makefile
                 src/im/Makefile
                 src/im/default/Makefile
@@ -245,9 +280,6 @@ AC_CONFIG_FILES([ftk.pc
                 apps/filemanager/Makefile
                 apps/filemanager/icons/Makefile
                 apps/filemanager/data/Makefile
-                apps/designer/Makefile
-                apps/designer/icons/Makefile
-                apps/designer/data/Makefile
                 apps/shell/Makefile
                 apps/shell/icons/Makefile
                 apps/shell/data/Makefile
@@ -277,3 +309,18 @@ AC_CONFIG_FILES([ftk.pc
 		opengles/redbook/Makefile
                 ])
 AC_OUTPUT
+echo ================================================
+echo with_backend=$with_backend
+echo with_canvas=$with_canvas
+echo enable_cairo=$enable_cairo
+echo enable_opengles=$enable_opengles
+echo enable_vnc=$enable_vnc
+echo enable_profile=$enable_profile
+echo enable_handwrite=$handwrite
+echo enable_linebreak=$enable_linebreak
+echo ================================================
+echo CANVAS_CFLAGS=$CANVAS_CFLAGS
+echo CANVAS_LDFLAGS=$CANVAS_LDFLAGS
+echo ================================================
+
+

@@ -59,7 +59,7 @@ static int lua_ftk_bitmap_height(lua_State* L)
 	return 1;
 }
 
-static int lua_ftk_bitmap_bits(lua_State* L)
+static int lua_ftk_bitmap_lock(lua_State* L)
 {
 	tolua_Error err = {0};
 	FtkColor* retv;
@@ -69,8 +69,22 @@ static int lua_ftk_bitmap_bits(lua_State* L)
 	return_val_if_fail(param_ok, 0);
 
 	thiz = tolua_tousertype(L, 1, 0);
-	retv = ftk_bitmap_bits(thiz);
+	retv = ftk_bitmap_lock(thiz);
 	tolua_pushusertype(L, (FtkColor*)retv, "FtkColor");
+
+	return 1;
+}
+
+static int lua_ftk_bitmap_unlock(lua_State* L)
+{
+	tolua_Error err = {0};
+	FtkBitmap* thiz;
+	int param_ok = tolua_isusertype(L, 1, "FtkBitmap", 0, &err);
+
+	return_val_if_fail(param_ok, 0);
+
+	thiz = tolua_tousertype(L, 1, 0);
+	ftk_bitmap_unlock(thiz);
 
 	return 1;
 }
@@ -114,7 +128,8 @@ int tolua_ftk_bitmap_init(lua_State* L)
 	tolua_function(L, "Create", lua_ftk_bitmap_create);
 	tolua_function(L, "Width", lua_ftk_bitmap_width);
 	tolua_function(L, "Height", lua_ftk_bitmap_height);
-	tolua_function(L, "Bits", lua_ftk_bitmap_bits);
+	tolua_function(L, "Lock", lua_ftk_bitmap_lock);
+	tolua_function(L, "Unlock", lua_ftk_bitmap_unlock);
 	tolua_function(L, "Ref", lua_ftk_bitmap_ref);
 	tolua_function(L, "Unref", lua_ftk_bitmap_unref);
 	tolua_endmodule(L);

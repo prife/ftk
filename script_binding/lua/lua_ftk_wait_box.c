@@ -14,14 +14,18 @@ static int lua_ftk_wait_box_create(lua_State* L)
 	FtkWidget* parent;
 	int x;
 	int y;
-	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err);
+	int width;
+	int height;
+	int param_ok = tolua_isusertype(L, 1, "FtkWidget", 0, &err) && tolua_isnumber(L, 2, 0, &err) && tolua_isnumber(L, 3, 0, &err) && tolua_isnumber(L, 4, 0, &err) && tolua_isnumber(L, 5, 0, &err);
 
 	return_val_if_fail(param_ok, 0);
 
 	parent = tolua_tousertype(L, 1, 0);
 	x = tolua_tonumber(L, 2, 0);
 	y = tolua_tonumber(L, 3, 0);
-	retv = ftk_wait_box_create(parent, x, y);
+	width = tolua_tonumber(L, 4, 0);
+	height = tolua_tonumber(L, 5, 0);
+	retv = ftk_wait_box_create(parent, x, y, width, height);
 	tolua_pushusertype(L, (FtkWaitBox*)retv, "FtkWaitBox");
 
 	return 1;

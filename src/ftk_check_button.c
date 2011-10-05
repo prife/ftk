@@ -212,9 +212,7 @@ FtkWidget* ftk_check_button_create_ex(FtkWidget* parent, int x, int y, int width
 	thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
 	if(thiz->priv_subclass[0] != NULL)
 	{
-		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
-		gc.mask = FTK_GC_FG | FTK_GC_BG;
 
 		priv->is_radio = radio;
 		thiz->on_event = ftk_check_button_on_event;

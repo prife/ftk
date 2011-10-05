@@ -182,7 +182,6 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 	if(thiz->priv_subclass[0] != NULL)
 	{
 		int h = 0;
-		int w = 0;
 		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_combo_box_on_event;
@@ -194,7 +193,6 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 
 		priv->entry = ftk_entry_create(thiz, 0, 0, width-height, height);
 		h = ftk_widget_height(priv->entry);
-		w = ftk_widget_width(priv->entry);
 		ftk_widget_move_resize(priv->entry, 0, FTK_HALF(height-h), width - h, h);
 		ftk_widget_show(priv->entry, 1);
 
@@ -272,7 +270,7 @@ Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 Ret ftk_combo_box_remove(FtkWidget* thiz, size_t index)
 {
 	DECL_PRIV0(thiz, priv);
-	return_val_if_fail(index < ftk_combo_box_get_item_nr(thiz), RET_FAIL);
+	return_val_if_fail((int)index < ftk_combo_box_get_item_nr(thiz), RET_FAIL);
 
 	return ftk_list_model_remove(priv->model, index);
 }
@@ -291,7 +289,7 @@ Ret ftk_combo_box_get_item(FtkWidget* thiz, size_t index, const FtkBitmap** icon
 	FtkListItemInfo* info = NULL;
 	return_val_if_fail(thiz != NULL, 0);
 
-	ftk_list_model_get_data(priv->model, index, &info);
+	ftk_list_model_get_data(priv->model, index, (void**)&info);
 	if(info != NULL)
 	{
 		if(icon != NULL)

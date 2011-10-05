@@ -135,7 +135,7 @@ static Ret ftk_display_qt_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* r
 	int src_height = ftk_bitmap_height(bitmap);
 	int dst_width = priv->width;
 	int dst_height = priv->height;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
+	FtkColor* src = ftk_bitmap_lock(bitmap);
 	FtkColor* dst = (FtkColor*)priv->bits;
 	return_val_if_fail(rect->x < src_width && rect->y < src_height
 		&& xoffset < dst_width && yoffset < dst_height, RET_FAIL);
@@ -167,8 +167,8 @@ static Ret ftk_display_qt_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 	int width = r->width;
 	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-	FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
+	FtkColor* src = ftk_bitmap_lock(priv->bitmap);
 
 	/*TODO*/
 #endif

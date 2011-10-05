@@ -36,12 +36,12 @@
 
 static float my_cos(float d)
 {
-	return cos(d);
+	return (float)cos(d);
 }
 
 static float ftk_interpolator_acc_decelerate_get(FtkInterpolator* thiz, float percent)
 {
-	return (float)(my_cos((percent + 1) * PI) / 2.0f) + 0.5f;
+	return (float)((my_cos((percent + 1) * PI) / 2.0f) + 0.5f);
 }
 
 const static FtkInterpolator s_interpolator_acc_decelerate = 

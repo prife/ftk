@@ -55,6 +55,7 @@ struct _FtkTheme
 {
 	char name[32];
 	FtkIconCache* icon_cache;
+	FtkFontDesc* default_font_desc;
 	FtkAnimationTrigger* animation_trigger;
 	FtkWidgetTheme widget_themes[FTK_WIDGET_TYPE_NR];
 };
@@ -145,6 +146,7 @@ FtkTheme*  ftk_theme_create(int init_default)
 		{
 			ftk_theme_init_default(thiz);
 		}
+		thiz->default_font_desc = ftk_font_desc_create(FTK_DEFAULT_FONT); 
 	}
 
 	return thiz;
@@ -534,24 +536,24 @@ FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWid
 	return thiz->widget_themes[type].border[state];
 }
 
-FtkFont*   ftk_theme_get_font(FtkTheme* thiz, FtkWidgetType type)
+FtkFontDesc*   ftk_theme_get_font(FtkTheme* thiz, FtkWidgetType type)
 {
-	FtkFont* font = NULL;
+	FtkFontDesc* font_desc = NULL;
 	assert(type < FTK_WIDGET_TYPE_NR);
 	return_val_if_fail(thiz != NULL, NULL);
 	
 	if(thiz->widget_themes[type].font_desc != NULL)
 	{
-		font = ftk_font_manager_load(ftk_default_font_manager(), 
-			thiz->widget_themes[type].font_desc);
+		font_desc = thiz->widget_themes[type].font_desc;
 	}
-
-	if(font == NULL)
+	else
 	{
-		font = ftk_default_font();
+		font_desc = thiz->default_font_desc;
 	}
 
-	return font;
+	ftk_font_desc_ref(font_desc);
+
+	return font_desc;
 }
 
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state)
@@ -577,6 +579,7 @@ void       ftk_theme_destroy(FtkTheme* thiz)
 		size_t i = 0;
 		size_t j = 0;
 
+		ftk_font_desc_unref(thiz->default_font_desc);
 		for(i = 0; i < FTK_WIDGET_TYPE_NR; i++)
 		{
 			for(j = 0; j < FTK_WIDGET_STATE_NR; j++)

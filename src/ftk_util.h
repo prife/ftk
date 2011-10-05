@@ -54,7 +54,7 @@ const char* ftk_itoa(char* str, int len, int n);
 const char* ftk_ftoa(char* str, int len, double f);
 long  ftk_strtol(const char* str, const char **end, int base);
 char* ftk_strs_cat(char* str, int len, const char* first, ...);
-
+char* ftk_strcpy(char* dst, const char* src);
 
 FTK_END_DECLS
 

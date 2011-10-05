@@ -53,7 +53,7 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 		x += FTK_LABEL_LEFT_MARGIN;
 		width -= FTK_LABEL_LEFT_MARGIN * 2;
 		ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz)); 
-		rows = height / (ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN);
+		rows = height / (ftk_widget_get_font_size(thiz) + FTK_LABEL_TOP_MARGIN);
 
 		if(rows == 0) 
 		{
@@ -61,13 +61,13 @@ static Ret ftk_label_on_paint(FtkWidget* thiz)
 			ftk_logi("%s: height is too small.\n", __func__);
 		}
 
-		ftk_text_layout_init(text_layout, text, -1, ftk_widget_get_gc(thiz)->font, width); 
+		ftk_text_layout_init(text_layout, text, -1, canvas, width); 
 		ftk_text_layout_set_wrap_mode(text_layout, ftk_widget_get_wrap_mode(thiz));
 		for(i = 0; i < rows; i++)
 		{
 			int xoffset = x;
 			if(ftk_text_layout_get_visual_line(text_layout, &line) != RET_OK) break;
-			y += ftk_canvas_font_height(canvas) + FTK_LABEL_TOP_MARGIN;
+			y += ftk_widget_get_font_size(thiz) + FTK_LABEL_TOP_MARGIN;
 			
 			if(alignment == FTK_ALIGN_CENTER)
 			{

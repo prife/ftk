@@ -48,7 +48,7 @@ FtkBitmap* ftk_theme_get_bg(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState s
 FtkColor   ftk_theme_get_bg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 FtkColor   ftk_theme_get_fg_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
 FtkColor   ftk_theme_get_border_color(FtkTheme* thiz, FtkWidgetType type, FtkWidgetState state);
-FtkFont*   ftk_theme_get_font(FtkTheme* thiz, FtkWidgetType type);
+FtkFontDesc*   ftk_theme_get_font(FtkTheme* thiz, FtkWidgetType type);
 FtkAnimationTrigger* ftk_theme_get_animation_trigger(FtkTheme* thiz);
 
 void       ftk_theme_destroy(FtkTheme* thiz);

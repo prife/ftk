@@ -180,7 +180,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\..\..\fontdata.c"
+				RelativePath="..\..\..\..\canvas\default\fontdata.c"
 				>
 			</File>
 			<File
@@ -240,7 +240,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_bitmap_factory.c"
+				RelativePath="..\..\..\..\canvas\default\ftk_bitmap_default.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\canvas\default\ftk_bitmap_factory.c"
 				>
 			</File>
 			<File
@@ -252,7 +256,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_canvas_default.c"
+				RelativePath="..\..\..\..\canvas\default\ftk_canvas_default.c"
 				>
 			</File>
 			<File
@@ -316,11 +320,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_font.c"
+				RelativePath="..\..\..\..\canvas\default\ftk_font.c"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_font_default.c"
+				RelativePath="..\..\..\..\canvas\default\ftk_font_default.c"
 				>
 			</File>
 			<File
@@ -328,7 +332,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_font_manager.c"
+				RelativePath="..\..\..\..\canvas\default\ftk_font_manager.c"
 				>
 			</File>
 			<File
@@ -337,6 +341,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\ftk_globals.c"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\..\ftk_group_box.c"
 				>
 			</File>
 			<File
@@ -468,10 +476,6 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_group_box.c"
-				>
-			</File>
-			<File
 				RelativePath="..\..\..\..\ftk_scroll_bar.c"
 				>
 			</File>
@@ -580,15 +584,11 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\..\..\fontdata.h"
+				RelativePath="..\..\..\..\canvas\default\fontdata.h"
 				>
 			</File>
 			<File
 				RelativePath="..\..\..\..\ftk.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\ftk_allocator.h"
 				>
 			</File>
 			<File
@@ -716,7 +716,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_font.h"
+				RelativePath="..\..\..\..\canvas\default\ftk_font.h"
 				>
 			</File>
 			<File
@@ -724,7 +724,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\..\ftk_font_manager.h"
+				RelativePath="..\..\..\..\canvas\default\ftk_font_manager.h"
 				>
 			</File>
 			<File
@@ -748,6 +748,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\..\ftk_group_box.h"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\..\ftk_icon_cache.h"
 				>
 			</File>
@@ -757,10 +761,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\ftk_image.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\ftk_image_bmp_decoder.h"
 				>
 			</File>
 			<File
@@ -901,10 +901,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\ftk_progress_bar.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\..\ftk_group_box.h"
 				>
 			</File>
 			<File

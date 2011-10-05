@@ -59,7 +59,7 @@ static Ret   ftk_animation_expand_step_base_left(FtkAnimation* thiz, float perce
 		dst_r = r;
 		if(priv->push)
 		{
-			int offset = priv->front_win_rect.width * percent;
+			int offset = (int)(priv->front_win_rect.width * percent);
 			dst_r.x = dst_r.x + offset;
 			dst_r.width = r.width = r.width - offset;
 		}
@@ -68,7 +68,7 @@ static Ret   ftk_animation_expand_step_base_left(FtkAnimation* thiz, float perce
 	}
 
 	r = priv->front_win_rect;
-	r.width = r.width * percent;
+	r.width = (int)(r.width * percent);
 	if(r.width > 0 && r.height > 0)
 	{
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
@@ -91,7 +91,7 @@ static Ret   ftk_animation_expand_step_base_top(FtkAnimation* thiz, float percen
 		dst_r = r;
 		if(priv->push)
 		{
-			int offset = priv->front_win_rect.height * percent;
+			int offset = (int)(priv->front_win_rect.height * percent);
 			dst_r.y = dst_r.y + offset;
 			dst_r.height = r.height = r.height - offset;
 		}
@@ -100,7 +100,7 @@ static Ret   ftk_animation_expand_step_base_top(FtkAnimation* thiz, float percen
 	}
 
 	r = priv->front_win_rect;
-	r.height = r.height * percent;
+	r.height = (int)(r.height * percent);
 	if(r.width > 0 && r.height > 0)
 	{
 		int alpha = priv->alpha_enable ? (int)(0xff * percent) & 0xff : 0xff;
@@ -123,7 +123,7 @@ static Ret   ftk_animation_expand_step_base_right(FtkAnimation* thiz, float perc
 		dst_r = r;
 		if(priv->push)
 		{
-			int offset = priv->front_win_rect.width * percent;
+			int offset = (int)(priv->front_win_rect.width * percent);
 			r.x = r.x + offset;
 			dst_r.width = r.width = r.width - offset;
 		}
@@ -132,7 +132,7 @@ static Ret   ftk_animation_expand_step_base_right(FtkAnimation* thiz, float perc
 	}
 
 	r = priv->front_win_rect;
-	r.width = r.width * percent;
+	r.width = (int)(r.width * percent);
 	r.x = priv->front_win_rect.width - r.width;
 	if(r.width > 0 && r.height > 0)
 	{
@@ -156,7 +156,7 @@ static Ret   ftk_animation_expand_step_base_bottom(FtkAnimation* thiz, float per
 		dst_r = r;
 		if(priv->push)
 		{
-			int offset = priv->front_win_rect.height * percent;
+			int offset = (int)(priv->front_win_rect.height * percent);
 			r.y = r.y + offset;
 			dst_r.height = r.height = r.height - offset;
 		}
@@ -165,7 +165,7 @@ static Ret   ftk_animation_expand_step_base_bottom(FtkAnimation* thiz, float per
 	}
 
 	r = priv->front_win_rect;
-	r.height = r.height * percent;
+	r.height = (int)(r.height * percent);
 	r.y = r.y + priv->front_win_rect.height - r.height;
 	if(r.width > 0 && r.height > 0)
 	{
@@ -190,8 +190,8 @@ static Ret   ftk_animation_expand_step_base_center(FtkAnimation* thiz, float per
 	}
 
 	r = priv->front_win_rect;
-	r.width = r.width * percent;
-	r.height = r.height * percent;
+	r.width = (int)(r.width * percent);
+	r.height = (int)(r.height * percent);
 
 	if(r.width > 0 && r.height > 0)
 	{

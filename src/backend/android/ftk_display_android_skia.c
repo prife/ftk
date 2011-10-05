@@ -48,7 +48,7 @@ static Ret ftk_display_android_skia_update(FtkDisplay* thiz, FtkBitmap* bitmap, 
 	int height = rect->height;
 	int src_width = ftk_bitmap_width(bitmap);
 	int src_height = ftk_bitmap_height(bitmap);
-	FtkColor* src = ftk_bitmap_bits(bitmap);
+	FtkColor* src = ftk_bitmap_lock(bitmap);
 
 	int dst_width = screen_width;
 	int dst_height = screen_height;
@@ -90,8 +90,8 @@ static Ret ftk_display_android_skia_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap
 	int width = r->width;
 	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-	//FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
+	//FtkColor* src = ftk_bitmap_lock(priv->bitmap);
 
 	/*TODO*/
 

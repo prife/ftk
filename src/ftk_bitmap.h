@@ -31,17 +31,34 @@
 #ifndef FTK_BITMAP_H
 #define FTK_BITMAP_H
 
-#include "ftk_font.h"
+#include "ftk_typedef.h"
+#include "ftk_log.h"
+#include "ftk_allocator.h"
 
 FTK_BEGIN_DECLS
 
 struct _FtkBitmap;
 typedef struct _FtkBitmap FtkBitmap;
 
+struct _FtkBitmap
+{
+	int ref;
+	void* data;
+	void* data1;
+	void* data2;
+	char priv[1];
+};
+
+FtkBitmap* ftk_bitmap_create_with_native(void* bitmap);
 FtkBitmap* ftk_bitmap_create(int w, int h, FtkColor clear_color);
+void*      ftk_bitmap_get_native(FtkBitmap* thiz);
+void ftk_bitmap_destroy(FtkBitmap* thiz);
+FtkColor ftk_bitmap_get_pixel(FtkBitmap* thiz, int x, int y);
+
 int     ftk_bitmap_width(FtkBitmap* thiz);
 int     ftk_bitmap_height(FtkBitmap* thiz);
-FtkColor*  ftk_bitmap_bits(FtkBitmap* thiz);
+FtkColor*  ftk_bitmap_lock(FtkBitmap* thiz);
+void    ftk_bitmap_unlock(FtkBitmap* thiz);
 void       ftk_bitmap_ref(FtkBitmap* thiz);
 void       ftk_bitmap_unref(FtkBitmap* thiz);
 void       ftk_bitmap_clear(FtkBitmap* thiz, FtkColor c);
@@ -78,6 +95,8 @@ typedef Ret (*FtkBitmapCopyToData)(FtkBitmap* bitmap, FtkRect* rect,
 	void* data, int ox, int oy, int dw, int dh);
 
 #define FTK_BITMAP_UNREF(bitmap) if(bitmap != NULL) { ftk_bitmap_unref(bitmap); bitmap = NULL;}
+
+Ret ftk_bitmap_auto_test(void);
 
 FTK_END_DECLS
 

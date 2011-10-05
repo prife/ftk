@@ -258,22 +258,26 @@ static void ftk_source_dfb_destroy(FtkSource* thiz)
 	return;
 }
 
-FtkSource* ftk_source_dfb_create(IDirectFB* dfb)
+FtkSource* ftk_source_dfb_create(IDirectFB* dfb, IDirectFBEventBuffer* event_buffer1)
 {
+	IDirectFBEventBuffer* event_buffer = NULL;
 	FtkSource* thiz = FTK_ZALLOC(sizeof(FtkSource)+sizeof(PrivInfo));
 
 	if(thiz != NULL)
 	{
 		int fd = 0;
 		DECL_PRIV(thiz, priv);
-		IDirectFBEventBuffer* event_buffer = NULL;
 
 		thiz->get_fd   =  ftk_source_dfb_get_fd;
 		thiz->check    = ftk_source_dfb_check;
 		thiz->dispatch = ftk_source_dfb_dispatch;
 		thiz->destroy  = ftk_source_dfb_destroy;
 
-		dfb->CreateInputEventBuffer( dfb, DICAPS_ALL, DFB_FALSE, &event_buffer );
+		if(event_buffer == NULL)
+		{
+			dfb->CreateInputEventBuffer( dfb, DICAPS_ALL, DFB_FALSE, &event_buffer );
+		}
+
 		if(event_buffer != NULL)
 		{
 			event_buffer->CreateFileDescriptor(event_buffer, &fd);

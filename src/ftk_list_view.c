@@ -366,10 +366,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 	priv->scrolled_by_me = 1;
 	if(priv->visible_nr >= total)
 	{
-		if(priv->vscroll_bar != NULL)
-		{
-			ftk_widget_show(priv->vscroll_bar, 0);
-		}
+		ftk_widget_show(priv->vscroll_bar, 0);
 	}
 	else
 	{
@@ -464,7 +461,6 @@ static Ret ftk_list_view_on_model_changed(void* ctx, void* obj)
 Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* render, int item_height)
 {
 	int width = 0;
-	int height = 0;
 	int margin = 0;
 	DECL_PRIV0(thiz, priv);
 	return_val_if_fail(priv != NULL && render != NULL && model != NULL && item_height > 0, RET_FAIL);
@@ -475,7 +471,6 @@ Ret ftk_list_view_init(FtkWidget* thiz, FtkListModel* model, FtkListRender* rend
 	ftk_list_render_init(render, model, thiz);
 	ftk_list_model_set_changed_listener(model, ftk_list_view_on_model_changed, thiz); 
 	width  = ftk_widget_width(thiz);
-	height = ftk_widget_height(thiz);
 
 	ftk_list_model_ref(priv->model);
 	margin = ftk_widget_height(thiz)%item_height;

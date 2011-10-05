@@ -224,7 +224,7 @@ static int ftk_xml_parser_strdup(FtkXmlParser* thiz, const char* start, int leng
 	}
 
 	offset = thiz->buffer_used;
-	strncpy(thiz->buffer + offset, start, length);
+	ftk_strncpy(thiz->buffer + offset, start, length);
 	thiz->buffer[offset + length] = '\0';
 	strtrim(thiz->buffer+offset);
 	thiz->buffer_used += length + 1;

@@ -45,7 +45,7 @@ static Ret make_sock_pipe(int pipes[2])
 
 	pipe_ret = ftk_pipe_pair(pipes);
 
-	return RET_OK;
+	return pipe_ret ? RET_FAIL : RET_OK;
 }
 
 FtkPipe* ftk_pipe_create(void)

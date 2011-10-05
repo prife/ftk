@@ -174,7 +174,7 @@ static Ret ftk_display_st7781_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRec
 	int y = rect != NULL ? rect->y : 0;
 	int w = rect != NULL ? rect->width : bitmap_w;
 	int h = rect != NULL ? rect->height : bitmap_h;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
+	FtkColor* src = ftk_bitmap_lock(bitmap);
 	
 	return_val_if_fail(output_x < display_w, RET_FAIL);
 	return_val_if_fail(output_y < display_h, RET_FAIL);
@@ -222,7 +222,7 @@ static Ret ftk_display_st7781_snap(FtkDisplay* thiz, FtkRect* rect, FtkBitmap* b
 	int display_h = priv->height;
 	int bitmap_w = ftk_bitmap_width(bitmap);
 	int bitmap_h = ftk_bitmap_height(bitmap);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
 	
 	return_val_if_fail(dst != NULL, RET_FAIL);
 	

@@ -158,7 +158,7 @@ static void ftk_source_psp_destroy(FtkSource* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
 	}
 
 	return;

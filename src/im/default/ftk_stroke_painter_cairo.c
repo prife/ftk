@@ -154,7 +154,7 @@ Ret ftk_stroke_painter_clear(FtkStrokePainter* thiz)
 	FtkColor* bits = NULL;
 	return_val_if_fail(thiz != NULL && thiz->bitmap != NULL, RET_FAIL);	
 
-	bits = ftk_bitmap_bits(thiz->bitmap);
+	bits = ftk_bitmap_lock(thiz->bitmap);
 	memset(bits, 0x00, sizeof(FtkColor) * ftk_bitmap_width(thiz->bitmap) * ftk_bitmap_height(thiz->bitmap));
 
 	return RET_OK;
@@ -263,7 +263,7 @@ void ftk_stroke_painter_destroy(FtkStrokePainter* thiz)
 	{
 		ftk_stroke_painter_deinit(thiz);
 
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(FtkStrokePainter));
 	}
 
 	return;

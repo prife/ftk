@@ -1,5 +1,4 @@
 #include "ftk.h"
-#include "ftk_font.h"
 #include "ftk_font_desc.h"
 
 typedef struct _RtlInfo

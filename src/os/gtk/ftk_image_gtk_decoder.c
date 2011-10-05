@@ -44,7 +44,7 @@ static FtkBitmap* ftk_image_gtk_decoder_decode(FtkImageDecoder* thiz, const char
 	bitmap = ftk_bitmap_create(w, h, bg);
 
 	src = (FtkColor*)gdk_pixbuf_get_pixels(img);
-	dst = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_lock(bitmap);
 
 	ftk_logd("ftk_image_gtk_decoder_decode() bpp:%d\n", bpp);
 
@@ -82,7 +82,7 @@ static void ftk_image_gtk_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(FtkImageDecoder));
 	}
 }
 

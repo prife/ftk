@@ -66,8 +66,6 @@ struct _FtkWidget
 	void* priv_subclass[5];
 };
 
-#define FTK_WIGET_MAGIC 0XFC345CAE
-
 void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y, 
 	int width, int height, unsigned int attr);
 int ftk_widget_type(FtkWidget* thiz);
@@ -116,6 +114,7 @@ void ftk_widget_set_attr(FtkWidget* thiz, unsigned int attr);
 void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr);
 void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data);
 void ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);
+int  ftk_widget_get_font_size(FtkWidget* thiz);
 void ftk_widget_set_font_size(FtkWidget* thiz, int font_size);
 void ftk_widget_set_font(FtkWidget* thiz, const char* font_desc);
 void ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc);

@@ -56,17 +56,17 @@ FtkConfig* ftk_config_create()
 	
 	if(thiz != NULL)
 	{
-		strcpy(thiz->theme, "default");
+		ftk_strcpy(thiz->theme, "default");
 		if(ftk_mmap_exist(DATA_DIR))
 		{
-			strcpy(thiz->data_dir, DATA_DIR);
+			ftk_strcpy(thiz->data_dir, DATA_DIR);
 		}
 		else
 		{
-			strcpy(thiz->data_dir, LOCAL_DATA_DIR);
+			ftk_strcpy(thiz->data_dir, LOCAL_DATA_DIR);
 		}
-		strcpy(thiz->data_root_dir, FTK_DATA_ROOT);
-		strcpy(thiz->test_data_dir, TESTDATA_DIR);
+		ftk_strcpy(thiz->data_root_dir, FTK_DATA_ROOT);
+		ftk_strcpy(thiz->test_data_dir, TESTDATA_DIR);
 
 		thiz->rotate = FTK_ROTATE_0;
 		thiz->enable_status_bar = 1;
@@ -122,7 +122,6 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 	char cwd[FTK_MAX_PATH+1] = {0};
 	char filename[FTK_MAX_PATH+1] = {0};
 	const char* base = progname + strlen(progname);
-	const char *getcwd_ret = NULL;
 
 	while(base > progname)
 	{
@@ -144,7 +143,7 @@ Ret ftk_config_load(FtkConfig* thiz, const char* progname)
 	}
 	else
 	{
-		getcwd_ret = ftk_getcwd(cwd, sizeof(cwd));
+		ftk_getcwd(cwd, sizeof(cwd));
 		ftk_strs_cat(filename, sizeof(filename), cwd, "/", path, "/ftk.cnf", NULL);
 	}
 	ftk_normalize_path(filename);

@@ -31,8 +31,9 @@
 #ifndef FTK_GC_H
 #define FTK_GC_H
 
-#include "ftk_font.h"
+#include "ftk_log.h"
 #include "ftk_bitmap.h"
+#include "ftk_font_desc.h"
 
 FTK_BEGIN_DECLS
 
@@ -52,7 +53,7 @@ typedef struct _FtkGc
 	unsigned int mask;
 	FtkColor   bg;
 	FtkColor   fg;
-	FtkFont*   font;
+	FtkFontDesc*   font;
 	FtkBitmap* bitmap;
 	unsigned char alpha;
 	unsigned char unused[3];
@@ -78,11 +79,14 @@ static inline Ret ftk_gc_copy(FtkGc* dst, FtkGc* src)
 	{
 		if(dst->font != NULL)
 		{
-			ftk_font_unref(dst->font);
+			ftk_font_desc_unref(dst->font);
 		}
 
 		dst->font = src->font;
-		ftk_font_ref(dst->font);
+		if(dst->font != NULL)
+		{
+			ftk_font_desc_ref(dst->font);
+		}
 	}
 
 	if(src->mask & FTK_GC_BITMAP)
@@ -115,14 +119,14 @@ static inline Ret ftk_gc_reset(FtkGc* gc)
 {
 	if(gc != NULL)
 	{
-		if(gc->mask & FTK_GC_BITMAP)
+		if(gc->mask & FTK_GC_BITMAP && gc->bitmap != NULL)
 		{
 			ftk_bitmap_unref(gc->bitmap);
 		}
 
-		if(gc->mask & FTK_GC_FONT)
+		if(gc->mask & FTK_GC_FONT && gc->font != NULL)
 		{
-			ftk_font_unref(gc->font);
+			ftk_font_desc_unref(gc->font);
 		}
 
 		memset(gc, 0x00, sizeof(*gc));

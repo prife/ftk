@@ -63,8 +63,8 @@ static Ret   ftk_animation_scale_step(FtkAnimation* thiz)
 	percent = priv->start + (priv->end - priv->start) * ftk_animation_get_percent(thiz);
 
 	r = priv->front_win_rect;
-	dst_r.width = r.width * percent;
-	dst_r.height = r.height * percent;
+	dst_r.width = (int)(r.width * percent);
+	dst_r.height = (int)(r.height * percent);
 
 	if(dst_r.width > 0 && dst_r.height > 0)
 	{

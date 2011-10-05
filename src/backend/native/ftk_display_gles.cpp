@@ -103,7 +103,7 @@ int opengles_init(PrivInfo* priv)
 int opengles_snap_bitmap(PrivInfo* priv, FtkBitmap* bitmap, 
 	int xoffset, int yoffset, int width, int height)
 {
-	glReadPixels(xoffset, yoffset, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_bits(bitmap));
+	glReadPixels(xoffset, yoffset, width, height, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_lock(bitmap));
 
 	return 0;
 }
@@ -128,7 +128,7 @@ int opengles_display_bitmap(PrivInfo* priv, FtkBitmap* bitmap,
 	glEnable(GL_TEXTURE_2D);
 
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ftk_bitmap_width(bitmap), ftk_bitmap_height(bitmap), 
-		0, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_bits(bitmap));
+		0, GL_RGBA, GL_UNSIGNED_BYTE, ftk_bitmap_lock(bitmap));
 	glDrawTexiOES(xoffset, yoffset, 0, width, height);
 
 	eglSwapBuffers(priv->dpy, priv->surface);
@@ -167,8 +167,8 @@ static Ret ftk_display_gles_update(FtkDisplay* thiz, FtkBitmap* bitmap,
 	int src_height = ftk_bitmap_height(bitmap);
 	int dst_width = ftk_bitmap_width(priv->bitmap);
 	int dst_height = ftk_bitmap_height(priv->bitmap);
-	FtkColor* src = ftk_bitmap_bits(bitmap);
-	FtkColor* dst = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* src = ftk_bitmap_lock(bitmap);
+	FtkColor* dst = ftk_bitmap_lock(priv->bitmap);
 	
 	return_val_if_fail(rect->x < src_width && rect->y < src_height
 		&& xoffset < dst_width && yoffset < dst_height, RET_FAIL);
@@ -201,8 +201,8 @@ static Ret ftk_display_gles_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap
 	int width = r->width;
 	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-	FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
+	FtkColor* src = ftk_bitmap_lock(priv->bitmap);
 
 	/*TODO*/
 	opengles_snap_bitmap(priv, bitmap, r->x, r->y, r->width, r->height);
@@ -258,7 +258,7 @@ void red_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -279,7 +279,7 @@ void green_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -300,7 +300,7 @@ void blue_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -321,7 +321,7 @@ void mire_bitmap(FtkBitmap* bitmap)
 	int y = 0;
 	int w = ftk_bitmap_width(bitmap);
 	int h = ftk_bitmap_height(bitmap);
-	FtkColor* bits = ftk_bitmap_bits(bitmap);
+	FtkColor* bits = ftk_bitmap_lock(bitmap);
 
 	for (y = 0; y < h; y++)
 	{

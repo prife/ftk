@@ -121,11 +121,30 @@ static void ftk_display_x11_destroy(FtkDisplay* thiz)
 
 		XDestroyWindow(priv->display, priv->win);
 		XFreeGC(priv->display, priv->gc);
-		FTK_FREE(priv->bits);
+		XDestroyImage(priv->ximage);
+		//FTK_FREE(priv->bits);
 		FTK_ZFREE(thiz, sizeof(FtkDisplay) + sizeof(PrivInfo));
 	}
 
 	return;
+}
+
+static Ret ftk_display_x11_init_image(FtkDisplay* thiz, int width, int height)
+{
+	DECL_PRIV(thiz,priv);
+
+	if(priv->ximage != NULL)
+	{
+		XDestroyImage(priv->ximage);
+		priv->ximage = NULL;
+	}
+
+	priv->bits = FTK_ZALLOC(width * height * priv->pixelsize);
+	priv->ximage = XCreateImage(priv->display, priv->visual, priv->depth, ZPixmap,
+		0, (char*)priv->bits, width, height,
+		32, width * priv->pixelsize);
+
+	return RET_OK;
 }
 
 FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event, void* ctx)
@@ -208,10 +227,7 @@ FtkDisplay* ftk_display_x11_create(FtkSource** event_source, FtkOnEvent on_event
 		{
 			assert(!"not supported depth.");
 		}
-		priv->bits = FTK_ZALLOC(width * height * priv->pixelsize);
-		priv->ximage = XCreateImage(display, priv->visual, priv->depth, ZPixmap,
-			0, (char*)priv->bits, width, height,
-			32, width * priv->pixelsize);
+		ftk_display_x11_init_image(thiz, width, height);
 
 		*event_source = ftk_source_x11_create(thiz, on_event, ctx);
 	}
@@ -226,7 +242,7 @@ Ret ftk_display_x11_on_resize(FtkDisplay* thiz, int width, int height)
 
 	priv->width  = width;
 	priv->height = height;
-	ftk_display_x11_update(thiz, NULL, NULL, 0, 0);
+	ftk_display_x11_init_image(thiz, width, height);
 
 	return RET_OK;
 }

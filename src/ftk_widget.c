@@ -45,10 +45,8 @@
 #include "ftk_canvas.h"
 #include "ftk_window.h"
 
-
 struct _FtkWidgetInfo
 {
-	unsigned int magic;
 	int id;
 	int type;
 	int top;
@@ -71,13 +69,6 @@ struct _FtkWidgetInfo
 	FtkListener event_listener;
 	void* event_listener_ctx;
 };
-
-static int ftk_widget_check_is_valid(FtkWidget* thiz)
-{
-	if ( thiz && thiz->priv && thiz->priv->magic == FTK_WIGET_MAGIC )
-		return 1;
-	return 0;
-}
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz);
 static void ftk_widget_validate_position_size(FtkWidget* thiz);
@@ -109,7 +100,6 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y,
 		FtkWidgetInfo* priv =  thiz->priv;
 		int state = FTK_WIDGET_NORMAL;
 
-		priv->magic  = FTK_WIGET_MAGIC;
 		priv->id     = id;
 		priv->type   = type;
 		priv->left   = x;
@@ -153,8 +143,7 @@ void ftk_widget_init(FtkWidget* thiz, int type, int id, int x, int y,
  */
 int ftk_widget_type(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->type;
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->type : 0;
 }
 
 /**
@@ -166,8 +155,7 @@ int ftk_widget_type(FtkWidget* thiz)
  */
 int ftk_widget_top(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->top;	
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->top : 0;
 }
 
 /**
@@ -179,8 +167,7 @@ int ftk_widget_top(FtkWidget* thiz)
  */
 int ftk_widget_left(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->left;
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->left : 0;
 }
 
 /**
@@ -194,7 +181,6 @@ int ftk_widget_top_abs(FtkWidget* thiz)
 {
 	int top = 0;
 	FtkWidget* iter = thiz;
-	assert(ftk_widget_check_is_valid(thiz));
 
 	for(; iter != NULL; iter = ftk_widget_parent(iter))
 	{
@@ -215,7 +201,6 @@ int ftk_widget_left_abs(FtkWidget* thiz)
 {
 	int left = 0;
 	FtkWidget* iter = thiz;
-	assert(ftk_widget_check_is_valid(thiz));
 
 	for(; iter != NULL; iter = ftk_widget_parent(iter))
 	{
@@ -236,7 +221,6 @@ int ftk_widget_top_in_window(FtkWidget* thiz)
 {
 	int top = 0;
 	FtkWidget* iter = thiz;
-	assert(ftk_widget_check_is_valid(thiz));
 
 	for(; ftk_widget_parent(iter); iter = ftk_widget_parent(iter))
 	{
@@ -257,7 +241,6 @@ int ftk_widget_left_in_window(FtkWidget* thiz)
 {
 	int left = 0;
 	FtkWidget* iter = thiz;
-	assert(ftk_widget_check_is_valid(thiz));
 
 	for(; ftk_widget_parent(iter); iter = ftk_widget_parent(iter))
 	{
@@ -269,51 +252,42 @@ int ftk_widget_left_in_window(FtkWidget* thiz)
 
 int ftk_widget_width(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->width;
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->width : 0;
 }
 
 int ftk_widget_height(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->height;
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->height : 0;
 }
 
 int ftk_widget_is_insensitive(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->state == FTK_WIDGET_INSENSITIVE;
+	return thiz != NULL && thiz->priv != NULL && thiz->priv->state == FTK_WIDGET_INSENSITIVE;
 }
 
 int ftk_widget_is_visible(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->visible;
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->visible: 0;
 }
 
 int ftk_widget_is_focused(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->state == FTK_WIDGET_FOCUSED;
+	return thiz != NULL && thiz->priv != NULL && thiz->priv->state == FTK_WIDGET_FOCUSED;
 }
 
 int ftk_widget_is_active(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->state == FTK_WIDGET_ACTIVE;
+	return thiz != NULL && thiz->priv != NULL && thiz->priv->state == FTK_WIDGET_ACTIVE;
 }
 
 int ftk_widget_id(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->priv->id;
+	return thiz != NULL && thiz->priv != NULL ? thiz->priv->id : 0;
 }
 
 Ret ftk_widget_invalidate(FtkWidget* thiz)
 {
 	FtkRect rect = {0};
-	assert(ftk_widget_check_is_valid(thiz));
-	
 	if(!ftk_widget_is_visible(ftk_widget_toplevel(thiz)))
 	{
 		return RET_FAIL;
@@ -330,7 +304,6 @@ Ret ftk_widget_invalidate(FtkWidget* thiz)
 Ret ftk_widget_invalidate_forcely(FtkWidget* thiz)
 {
     FtkRect rect = {0};
-	assert(ftk_widget_check_is_valid(thiz));
 
     thiz = ftk_widget_toplevel(thiz);
 
@@ -349,13 +322,13 @@ Ret ftk_widget_invalidate_forcely(FtkWidget* thiz)
 
 FtkWrapMode ftk_widget_get_wrap_mode(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, FTK_WRAP_NONE);
+
 	return thiz->priv->wrap_mode;
 }
 
 Ret ftk_widget_update(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
 	return ftk_widget_update_rect(thiz, NULL);
 }
 
@@ -364,7 +337,7 @@ Ret ftk_widget_update_rect(FtkWidget* thiz, FtkRect* rect)
 	FtkEvent event;
 	FtkWidget* window = NULL;
 	FtkWidgetInfo* priv = NULL;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL, RET_FAIL);
 	window = ftk_widget_toplevel(thiz);
 	return_val_if_fail(window != NULL, RET_FAIL);
 
@@ -389,35 +362,41 @@ Ret ftk_widget_update_rect(FtkWidget* thiz, FtkRect* rect)
 FtkCanvas* ftk_widget_canvas(FtkWidget* thiz)
 {
 	FtkWidget* toplevel = NULL;
-	assert(ftk_widget_check_is_valid(thiz));
+	FtkCanvas* canvas = NULL;
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
 	
 	toplevel = ftk_widget_toplevel(thiz);
+	canvas = toplevel->priv->canvas != NULL ? toplevel->priv->canvas : ftk_shared_canvas();
+   	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz));
 
-	return toplevel->priv->canvas;
+	return canvas;
 }
 
 int ftk_widget_has_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, 0);
+
 	return thiz->priv->attr & attr;
 }
 
 FtkWidgetState ftk_widget_state(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, FTK_WIDGET_NORMAL);
+
 	return thiz->priv->state;
 }
 
 void* ftk_widget_user_data(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
+
 	return thiz->priv->user_data;
 }
 
 const char* ftk_widget_get_text(FtkWidget* thiz)
 {
 	FtkEvent event;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
 	
 	ftk_event_init(&event, FTK_EVT_GET_TEXT);
 	if(ftk_widget_event(thiz, &event) == RET_REMOVE)
@@ -430,7 +409,7 @@ const char* ftk_widget_get_text(FtkWidget* thiz)
 
 void ftk_widget_set_attr(FtkWidget* thiz, unsigned int attr)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->attr |= attr;
 
@@ -452,7 +431,7 @@ void ftk_widget_set_attr(FtkWidget* thiz, unsigned int attr)
 
 void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->attr = (~attr) & thiz->priv->attr;
 
@@ -461,7 +440,7 @@ void ftk_widget_unset_attr(FtkWidget* thiz, FtkWidgetAttr attr)
 
 void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->user_data != NULL && thiz->priv->user_data_destroy != NULL)
 	{
@@ -476,7 +455,7 @@ void ftk_widget_set_user_data(FtkWidget* thiz, FtkDestroy destroy, void* data)
 void ftk_widget_move(FtkWidget* thiz, int x, int y)
 {
 	FtkEvent event;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->left == x && thiz->priv->top  == y)
 	{
@@ -502,7 +481,7 @@ void ftk_widget_move(FtkWidget* thiz, int x, int y)
 void ftk_widget_resize(FtkWidget* thiz, int width, int height)
 {
 	FtkEvent event;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->width == width && thiz->priv->height == height)
 	{
@@ -528,7 +507,7 @@ void ftk_widget_resize(FtkWidget* thiz, int width, int height)
 void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height)
 {
 	FtkEvent event;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	
 	if(thiz->priv->left == x && thiz->priv->top  == y
 		&& thiz->priv->width == width && thiz->priv->height == height)
@@ -556,7 +535,7 @@ void ftk_widget_move_resize(FtkWidget* thiz, int x, int y, int width, int height
 
 void ftk_widget_set_type(FtkWidget* thiz, int type)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	thiz->priv->type = type;
 
 	return;
@@ -564,7 +543,7 @@ void ftk_widget_set_type(FtkWidget* thiz, int type)
 
 void ftk_widget_set_insensitive(FtkWidget* thiz, int insensitive)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->state = insensitive ? FTK_WIDGET_INSENSITIVE : FTK_WIDGET_NORMAL;
 
@@ -573,9 +552,7 @@ void ftk_widget_set_insensitive(FtkWidget* thiz, int insensitive)
 
 static int  ftk_widget_is_parent_visible(FtkWidget* thiz)
 {
-	FtkWidget* parent;	
-	assert(ftk_widget_check_is_valid(thiz));
-	parent = ftk_widget_parent(thiz);
+	FtkWidget* parent = ftk_widget_parent(thiz);
 	while(parent != NULL)
 	{
 		if(!ftk_widget_is_visible(parent))
@@ -593,7 +570,7 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 {
 	FtkEvent event;
 	
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	if(thiz->priv->visible == visible) return;
 	
 	thiz->priv->visible = visible;
@@ -623,7 +600,7 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 
 void ftk_widget_show_all(FtkWidget* thiz, int visible)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 		
 	if(thiz->children != NULL)
 	{
@@ -642,7 +619,7 @@ void ftk_widget_show_all(FtkWidget* thiz, int visible)
 
 void ftk_widget_set_visible(FtkWidget* thiz, int visible)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	if(thiz->priv->visible == visible) return;
 	
 	thiz->priv->visible = visible;
@@ -654,7 +631,7 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 {	
 	FtkEvent event;
 	FtkWidgetState state = FTK_WIDGET_ACTIVE;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
 	{
@@ -686,7 +663,7 @@ void ftk_widget_set_focused(FtkWidget* thiz, int focused)
 void ftk_widget_set_active(FtkWidget* thiz, int active)
 {	
 	FtkWidgetState state = FTK_WIDGET_ACTIVE;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->priv->state == FTK_WIDGET_INSENSITIVE)
 	{
@@ -712,7 +689,7 @@ void ftk_widget_set_active(FtkWidget* thiz, int active)
 
 void ftk_widget_set_id(FtkWidget* thiz, int id)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	
 	thiz->priv->id = id;
 
@@ -721,7 +698,7 @@ void ftk_widget_set_id(FtkWidget* thiz, int id)
 
 void ftk_widget_set_canvas(FtkWidget* thiz, FtkCanvas* canvas)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->canvas = canvas;
 
@@ -731,7 +708,7 @@ void ftk_widget_set_canvas(FtkWidget* thiz, FtkCanvas* canvas)
 void ftk_widget_set_parent(FtkWidget* thiz, FtkWidget* parent)
 {
 	FtkEvent event;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->parent != NULL && parent == NULL)
 	{
@@ -756,7 +733,6 @@ static void ftk_widget_validate_position_size(FtkWidget* thiz)
 {
 	FtkWidgetInfo* priv = thiz->priv;
 	FtkWidget* parent = thiz->parent;
-	assert(ftk_widget_check_is_valid(thiz));
 
 	if(parent != NULL)
 	{
@@ -784,7 +760,7 @@ static void ftk_widget_validate_position_size(FtkWidget* thiz)
 
 void ftk_widget_append_child(FtkWidget* thiz, FtkWidget* child)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	if(thiz->children == NULL)
 	{
@@ -804,9 +780,7 @@ void ftk_widget_append_child(FtkWidget* thiz, FtkWidget* child)
 void ftk_widget_append_sibling(FtkWidget* thiz, FtkWidget* sibling)
 {
 	FtkWidget* iter = thiz;
-	assert(ftk_widget_check_is_valid(thiz));
-
-	return_if_fail(sibling != NULL);
+	return_if_fail(thiz != NULL && sibling != NULL);
 
 	for(; iter->next != NULL; iter = iter->next);
 
@@ -821,7 +795,7 @@ void ftk_widget_append_sibling(FtkWidget* thiz, FtkWidget* sibling)
 void ftk_widget_remove_child(FtkWidget* thiz, FtkWidget* child)
 {
 	FtkWidget* iter = thiz->children;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && child != NULL);
 
 	if(iter == child)
 	{
@@ -864,8 +838,7 @@ void ftk_widget_remove_child(FtkWidget* thiz, FtkWidget* child)
 FtkWidget* ftk_widget_toplevel(FtkWidget* thiz)
 {
 	FtkWidget* iter = thiz;
-	assert(ftk_widget_check_is_valid(thiz));
-	
+
 	for(; ftk_widget_parent(iter) != NULL; iter = ftk_widget_parent(iter));
 
 	return iter;
@@ -873,33 +846,28 @@ FtkWidget* ftk_widget_toplevel(FtkWidget* thiz)
 
 FtkWidget* ftk_widget_parent(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->parent;
+	return thiz != NULL ? thiz->parent : NULL;
 }
 
 FtkWidget* ftk_widget_prev(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->prev;
+	return thiz != NULL ? thiz->prev : NULL;
 }
 
 FtkWidget* ftk_widget_next(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->next;
+	return thiz != NULL ? thiz->next : NULL;
 }
 
 FtkWidget* ftk_widget_child(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return thiz->children;
+	return thiz != NULL ? thiz->children : NULL;
 }
 
 FtkWidget* ftk_widget_last_child(FtkWidget* thiz)
 {
 	FtkWidget* iter = NULL;
-	assert(ftk_widget_check_is_valid(thiz));
-	return_val_if_fail(thiz->children != NULL, NULL);
+	return_val_if_fail(thiz != NULL && thiz->children != NULL, NULL);
 
 	for(iter = thiz->children; iter->next != NULL; iter = iter->next)
 	{
@@ -912,8 +880,8 @@ FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id)
 {
 	FtkWidget* iter = thiz;
 	FtkWidget* widget = NULL;
-	assert(ftk_widget_check_is_valid(thiz));
-	
+	return_val_if_fail(thiz != NULL, NULL);
+
 	if(ftk_widget_id(thiz) == id) return iter;
 
 	iter = ftk_widget_child(thiz);
@@ -952,8 +920,7 @@ static int ftk_rects_is_cross(const FtkRect *a, const FtkRect *b)
 void ftk_widget_paint(FtkWidget* thiz, FtkRect *rects, int rect_nr)
 {
     FtkRect rect = {0};
-	assert(ftk_widget_check_is_valid(thiz));
-	
+
 	if(!ftk_widget_is_parent_visible(thiz))
 	{
 		return;
@@ -1013,8 +980,6 @@ void ftk_widget_paint(FtkWidget* thiz, FtkRect *rects, int rect_nr)
 void ftk_widget_set_font_size(FtkWidget* thiz, int font_size)
 {
 	char font_desc[64] = {0};
-	assert(ftk_widget_check_is_valid(thiz));
-	
 	ftk_snprintf(font_desc, sizeof(font_desc)-1, FONT_DESC_FMT, font_size, 0, 0, FTK_FONT);
 
 	ftk_widget_set_font(thiz, font_desc);
@@ -1022,16 +987,20 @@ void ftk_widget_set_font_size(FtkWidget* thiz, int font_size)
 	return;
 }
 
+int  ftk_widget_get_font_size(FtkWidget* thiz)
+{
+	return_val_if_fail(thiz != NULL, 0);
+
+	return ftk_font_desc_get_size(ftk_widget_get_gc(thiz)->font);
+}
+
 void ftk_widget_set_font(FtkWidget* thiz, const char* font_desc_str)
 {
 	FtkGc gc = {0};
-	FtkFontDesc* font_desc;
-	assert(ftk_widget_check_is_valid(thiz));
-	font_desc = ftk_font_desc_create(font_desc_str);
+	FtkFontDesc* font_desc = ftk_font_desc_create(font_desc_str);
 
 	gc.mask = FTK_GC_FONT;
-	gc.font = ftk_font_manager_load(ftk_default_font_manager(), font_desc);
-	ftk_font_desc_unref(font_desc);
+	gc.font = font_desc;
 
 	if(gc.font != NULL)
 	{
@@ -1048,8 +1017,7 @@ void ftk_widget_set_font(FtkWidget* thiz, const char* font_desc_str)
 
 void    ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	return_if_fail(state < FTK_WIDGET_STATE_NR && gc != NULL);
+	return_if_fail(thiz != NULL && state < FTK_WIDGET_STATE_NR && gc != NULL);
 
 	ftk_gc_copy(thiz->priv->gc+state, gc);
 
@@ -1058,8 +1026,7 @@ void    ftk_widget_set_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 
 void    ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	assert(state < FTK_WIDGET_STATE_NR && gc != NULL);
+	return_if_fail(thiz != NULL && state < FTK_WIDGET_STATE_NR && gc != NULL);
 
 	ftk_gc_reset(thiz->priv->gc+state);
 	ftk_gc_copy(thiz->priv->gc+state, gc);
@@ -1070,7 +1037,7 @@ void    ftk_widget_reset_gc(FtkWidget* thiz, FtkWidgetState state, FtkGc* gc)
 void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 {
 	FtkEvent event;
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	
 	ftk_event_init(&event, FTK_EVT_SET_TEXT);
 	event.u.extra = (void*)text;
@@ -1084,7 +1051,7 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 		&& text != NULL 
 		&& thiz->priv->text_buff_length > strlen(text))
 	{
-		strcpy(thiz->priv->text, text);
+		ftk_strcpy(thiz->priv->text, text);
 	}
 	else
 	{
@@ -1108,7 +1075,7 @@ void ftk_widget_set_text(FtkWidget* thiz, const char* text)
 
 void ftk_widget_set_event_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL);
 
 	thiz->priv->event_listener = listener;
 	thiz->priv->event_listener_ctx = ctx;
@@ -1118,7 +1085,7 @@ void ftk_widget_set_event_listener(FtkWidget* thiz, FtkListener listener, void* 
 
 void ftk_widget_set_wrap_mode(FtkWidget* thiz, FtkWrapMode mode)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
 
 	thiz->priv->wrap_mode = mode;
 
@@ -1127,7 +1094,7 @@ void ftk_widget_set_wrap_mode(FtkWidget* thiz, FtkWrapMode mode)
 
 FtkGc* ftk_widget_get_gc(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->priv != NULL, NULL);
 
 	return thiz->priv->gc+thiz->priv->state;
 }
@@ -1139,7 +1106,6 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensit
 	int top  = ftk_widget_top_abs(thiz);
 	int w    = ftk_widget_width(thiz);
 	int h    = ftk_widget_height(thiz);
-	assert(ftk_widget_check_is_valid(thiz));
 
 	if(!ftk_widget_is_visible(thiz))
 	{
@@ -1166,18 +1132,13 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensit
 	}
 	
 	if ( only_sensitive && ftk_widget_is_insensitive(thiz) )
-	{
 		return NULL;
-	}
 	else
-	{
 		return thiz;
-	}
 }
 
 void ftk_widget_destroy(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
 	if(thiz != NULL)
 	{
 		int i = 0;
@@ -1197,7 +1158,7 @@ void ftk_widget_destroy(FtkWidget* thiz)
 		}
 
 		FTK_FREE(thiz->priv->text);
-		FTK_ZFREE(thiz->priv, sizeof(*thiz->priv));
+		FTK_ZFREE(thiz->priv, sizeof(thiz->priv));
 		FTK_ZFREE(thiz, sizeof(FtkWidget));
 	}
 
@@ -1206,7 +1167,6 @@ void ftk_widget_destroy(FtkWidget* thiz)
 
 void ftk_widget_ref(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));	
 	if(thiz != NULL)
 	{
 		if(thiz->children != NULL)
@@ -1227,8 +1187,6 @@ void ftk_widget_ref(FtkWidget* thiz)
 
 void ftk_widget_unref(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
-	
 	if(thiz != NULL)
 	{
 		if(ftk_widget_parent(thiz) == NULL)
@@ -1256,16 +1214,14 @@ void ftk_widget_unref(FtkWidget* thiz)
 
 static int ftk_widget_paint_called_by_parent(FtkWidget* thiz)
 {
-	FtkWidget* parent;
-	assert(ftk_widget_check_is_valid(thiz));
-	parent = thiz->parent;
-
+	FtkWidget* parent = thiz->parent;
+	
 	return parent != NULL ? parent->priv->painting : 0;
 }
 
 Ret ftk_widget_paint_self(FtkWidget* thiz, FtkRect *rects, int rect_nr)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_val_if_fail(thiz != NULL && thiz->on_paint != NULL, RET_FAIL);
 
 	if(thiz->priv->width == 0 || thiz->priv->height == 0)
 	{
@@ -1385,7 +1341,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz, FtkRect *rects, int rect_nr)
 
 void ftk_widget_ref_self(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL);
 	thiz->ref++;
 
 	return;
@@ -1393,7 +1349,7 @@ void ftk_widget_ref_self(FtkWidget* thiz)
 
 void ftk_widget_unref_self(FtkWidget* thiz)
 {
-	assert(ftk_widget_check_is_valid(thiz));
+	return_if_fail(thiz != NULL);
 
 	thiz->ref--;
 	if(thiz->ref == 0)
@@ -1407,9 +1363,8 @@ void ftk_widget_unref_self(FtkWidget* thiz)
 Ret ftk_widget_event(FtkWidget* thiz, FtkEvent* event)
 {
 	Ret ret = RET_OK;
-	assert(ftk_widget_check_is_valid(thiz));
-	assert(event && thiz->on_event);
-
+	return_val_if_fail(thiz != NULL && thiz->on_event != NULL && event != NULL, RET_FAIL);
+	
 	ret = FTK_CALL_LISTENER(thiz->priv->event_listener, thiz->priv->event_listener_ctx, event);
 	
 	if(ret == RET_REMOVE)

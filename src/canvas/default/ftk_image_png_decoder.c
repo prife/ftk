@@ -153,7 +153,7 @@ static FtkBitmap* load_png (const char *filename)
 	png_read_image(png_ptr, row_pointers);
 
 	bitmap = ftk_bitmap_create(w, h, bg);
-	dst = ftk_bitmap_bits(bitmap);
+	dst = ftk_bitmap_lock(bitmap);
 	if (info_ptr->color_type == PNG_COLOR_TYPE_RGBA)
 	{
 		for(y = 0; y < h; y++)
@@ -166,8 +166,15 @@ static FtkBitmap* load_png (const char *filename)
 					dst->r = src[0];
 					dst->g = src[1];
 					dst->b = src[2];
+					dst->a = src[3];
 				}
-				dst->a = src[3];
+				else
+				{
+					dst->r = 0xff;
+					dst->g = 0xff;
+					dst->b = 0xff;
+					dst->a = 0;
+				}
 				src +=4;
 				dst++;
 			}
@@ -256,7 +263,7 @@ static void ftk_image_png_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 }
 

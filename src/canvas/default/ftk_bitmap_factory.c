@@ -30,6 +30,7 @@
  */
 
 #include "ftk_log.h"
+#include "ftk_allocator.h"
 #include "ftk_bitmap_factory.h"
 
 #ifdef HAS_BMP

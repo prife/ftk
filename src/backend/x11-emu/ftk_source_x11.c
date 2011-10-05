@@ -172,6 +172,11 @@ static Ret ftk_source_x11_dispatch(FtkSource* thiz)
 		{
 			case ConfigureNotify:
 			{
+				priv->event.type = FTK_EVT_DISPLAY_CHANGED;
+				priv->event.u.display.width = event.xconfigure.width;
+				priv->event.u.display.height = event.xconfigure.height;
+				priv->event.u.display.display = thiz;
+
 				ftk_display_x11_on_resize(priv->display, event.xconfigure.width, event.xconfigure.height);
 
 				break;
@@ -243,7 +248,7 @@ static void ftk_source_x11_destroy(FtkSource* thiz)
 	{
 		DECL_PRIV(thiz, priv);
 		close(priv->fd);
-		FTK_ZFREE(thiz, sizeof(*thiz) + sizeof(PrivInfo));
+		FTK_ZFREE(thiz, sizeof(thiz) + sizeof(PrivInfo));
 	}
 
 	return;

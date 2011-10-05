@@ -55,9 +55,9 @@ FtkMmap* ftk_mmap_create(const char* filename, size_t offset, size_t size)
 	return_val_if_fail(filename != NULL, NULL);
 	
 	return_val_if_fail(stat(filename, &st) == 0, NULL);
-	return_val_if_fail(offset < st.st_size, NULL);
+	return_val_if_fail(offset < (size_t)st.st_size, NULL);
 
-	size = (offset + size) <= st.st_size ? size : st.st_size - offset;
+	size = (offset + size) <= (size_t)st.st_size ? size : st.st_size - offset;
 
 	thiz = FTK_ZALLOC(sizeof(FtkMmap));
 	return_val_if_fail(thiz != NULL, NULL);

@@ -234,7 +234,7 @@ typedef struct _FtkCommitInfo
 #define return_if_fail(p)          if(!(p)) { ftk_logw("%s:%d "#p" failed.\n", __func__, __LINE__); return;}
 #define return_val_if_fail(p, val) if(!(p)) { ftk_logw("%s:%d "#p" failed.\n", __func__, __LINE__); return (val);}
 
-#define DECL_PRIV(thiz, priv)  PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv : NULL
+#define DECL_PRIV(thiz, priv) PrivInfo* priv = (PrivInfo*)(thiz->priv)
 #define DECL_PRIV0(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[0] : NULL
 #define DECL_PRIV1(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[1] : NULL
 #define DECL_PRIV2(thiz, priv) PrivInfo* priv = thiz != NULL ? (PrivInfo*)thiz->priv_subclass[2] : NULL

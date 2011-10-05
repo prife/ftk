@@ -204,6 +204,7 @@ int ftk_font_desc_ref(FtkFontDesc* thiz)
 int ftk_font_desc_unref(FtkFontDesc* thiz)
 {
 	int ret = 0;
+	assert(thiz != NULL && thiz->ref > 0);
 	return_val_if_fail(thiz != NULL, 0);
 
 	ret = --thiz->ref;
@@ -216,3 +217,16 @@ int ftk_font_desc_unref(FtkFontDesc* thiz)
 	return ret;
 }
 
+static FtkFontDesc* s_default_font_desc;
+
+FtkFontDesc* ftk_default_font()
+{
+	if(s_default_font_desc == NULL)
+	{
+		s_default_font_desc = ftk_font_desc_create(FTK_DEFAULT_FONT);
+	}
+
+	ftk_font_desc_ref(s_default_font_desc);
+
+	return s_default_font_desc;
+}

@@ -103,7 +103,7 @@ float ftk_animation_get_percent(FtkAnimation* thiz)
 {
 	float time_percent = 0;
 	unsigned long pass = 0;
-	long duration = ftk_animation_get_param_int(thiz, "duration", 0);
+	unsigned long duration = ftk_animation_get_param_int(thiz, "duration", 0);
 	return_val_if_fail(thiz != NULL && duration > 0, 1.0);
 
 	pass = ftk_get_relative_time() - thiz->start_time;

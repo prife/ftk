@@ -37,7 +37,7 @@ struct _FtkTextLayout
 	int pos;
 	int len;
 	size_t width;
-	FtkFont* font;
+	FtkCanvas* canvas;
 	const char* text;
 	FtkWrapMode wrap_mode;
 	int pos_v2l[FTK_LINE_CHAR_NR+1];
@@ -50,11 +50,11 @@ FtkTextLayout* ftk_text_layout_create(void)
 	return thiz;
 }
 
-Ret ftk_text_layout_set_font(FtkTextLayout* thiz, FtkFont* font)
+Ret ftk_text_layout_set_canvas(FtkTextLayout* thiz, FtkCanvas* canvas)
 {
-	return_val_if_fail(thiz != NULL && font != NULL, RET_FAIL);
+	return_val_if_fail(thiz != NULL && canvas != NULL, RET_FAIL);
 
-	thiz->font = font;
+	thiz->canvas = canvas;
 
 	return RET_OK;
 }
@@ -88,13 +88,13 @@ Ret ftk_text_layout_set_wrap_mode(FtkTextLayout* thiz, FtkWrapMode wrap_mode)
 	return RET_OK;
 }
 
-Ret ftk_text_layout_init(FtkTextLayout* thiz, const char* text, int len, FtkFont* font, size_t width)
+Ret ftk_text_layout_init(FtkTextLayout* thiz, const char* text, int len, FtkCanvas* canvas, size_t width)
 {
-	return_val_if_fail(thiz != NULL && text != NULL && font != NULL && width > 0, RET_FAIL);
+	return_val_if_fail(thiz != NULL && text != NULL && canvas != NULL && width > 0, RET_FAIL);
 
 	thiz->pos   = 0;
 	thiz->text  = text;
-	thiz->font  = font;
+	thiz->canvas  = canvas;
 	thiz->width = width;
 	thiz->wrap_mode = FTK_WRAP_NONE;
 	thiz->len   = len < 0 ? strlen(text) : len;
@@ -127,7 +127,7 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 	line->pos_v2l = thiz->pos_v2l;
 	line->attr = FTK_TEXT_ATTR_NORMAL;
 	line->text = thiz->text + thiz->pos;
-	end = ftk_font_calc_str_visible_range(thiz->font, thiz->text, thiz->pos, -1, thiz->width, &extent);
+	end = ftk_canvas_calc_str_visible_range(thiz->canvas, thiz->text, thiz->pos, -1, thiz->width, &extent);
 
 	if(thiz->wrap_mode == FTK_WRAP_WORD)
 	{
@@ -137,7 +137,7 @@ Ret ftk_text_layout_get_visual_line(FtkTextLayout* thiz, FtkTextLine* line)
 		if(end != new_end && new_end > (start + 2))
 		{
 			end = new_end;
-			extent = ftk_font_get_extent(thiz->font, start, end - start);
+			extent = ftk_canvas_get_str_extent(thiz->canvas, start, end - start);
 		}
 	}
 

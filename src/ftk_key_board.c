@@ -897,7 +897,6 @@ static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 			{
 				size_t i = 0;
 				size_t x_c = 0;
-				size_t width_c = 0;
 				FtkBitmap* bmp = cell->bg_normal;
 				ftk_canvas_draw_bg_image(canvas, bmp, FTK_BG_FOUR_CORNER, xoffset, yoffset, width, height);
 
@@ -907,8 +906,6 @@ static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 					size_t extent = candidate->extent;
 
 					if((x_c + extent) > width) break;
-
-					width_c = width - x_c;
 
 					if(i == desc->candidate_focus)
 					{
@@ -941,7 +938,7 @@ static Ret ftk_key_board_on_paint(FtkWidget* thiz)
 				if(cell->text[0])
 				{
 					size_t len = strlen(cell->text);
-					size_t extent = ftk_canvas_get_extent(canvas, cell->text, len);
+					size_t extent = ftk_canvas_get_str_extent(canvas, cell->text, len);
 
 					if(extent <= width)
 					{
@@ -1060,10 +1057,9 @@ Ret ftk_key_board_add_candidate(FtkWidget* thiz, const char* text)
 
 	if((priv->desc->candidate_nr + 1) < FTK_MAX_CANDIDATE_NR)
 	{
-		FtkGc* gc = ftk_widget_get_gc(thiz);
 		FtkKeyBoardCandidate* c = priv->desc->candidates + priv->desc->candidate_nr;
 		ftk_strncpy(c->text, text, FTK_MAX_CANDIDATE_LEN);
-		c->extent = ftk_font_get_extent(gc->font, c->text, strlen(c->text));
+		c->extent = ftk_canvas_get_str_extent(ftk_widget_canvas(thiz), c->text, strlen(c->text));
 
 		priv->desc->candidate_nr++;
 	}

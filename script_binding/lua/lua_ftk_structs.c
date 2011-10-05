@@ -96,26 +96,6 @@ static int tolua_set_FtkGc_fg(lua_State* L)
 	return 1;
 }
 
-static int tolua_get_FtkGc_font(lua_State* L)
-{
-	void* retv;
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	retv = (void*)thiz->font;
-	tolua_pushusertype(L, (FtkFont*)retv, "FtkFont");
-
-	return 1;
-}
-
-static int tolua_set_FtkGc_font(lua_State* L)
-{
-	FtkGc* thiz = (FtkGc*)  tolua_tousertype(L, 1, 0);
-	return_val_if_fail(thiz != NULL, 0);
-	thiz->font = (FtkFont*) (tolua_tousertype(L, 2, 0));
-
-	return 1;
-}
-
 static int tolua_get_FtkGc_bitmap(lua_State* L)
 {
 	void* retv;
@@ -371,7 +351,6 @@ int tolua_ftk_structs_init(lua_State* L)
 	tolua_variable(L, "mask",tolua_get_FtkGc_mask, tolua_set_FtkGc_mask);
 	tolua_variable(L, "bg",tolua_get_FtkGc_bg, tolua_set_FtkGc_bg);
 	tolua_variable(L, "fg",tolua_get_FtkGc_fg, tolua_set_FtkGc_fg);
-	tolua_variable(L, "font",tolua_get_FtkGc_font, tolua_set_FtkGc_font);
 	tolua_variable(L, "bitmap",tolua_get_FtkGc_bitmap, tolua_set_FtkGc_bitmap);
 	tolua_variable(L, "alpha",tolua_get_FtkGc_alpha, tolua_set_FtkGc_alpha);
 	tolua_variable(L, "line_mask",tolua_get_FtkGc_line_mask, tolua_set_FtkGc_line_mask);

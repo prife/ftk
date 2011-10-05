@@ -31,7 +31,6 @@
 
 #include "ftk.h"
 #include "ftk_util.h"
-#include "ftk_font.h"
 #include "ftk_backend.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
@@ -64,14 +63,6 @@ static Ret ftk_init_bitmap_factory(void)
 {
 	ftk_set_bitmap_factory(ftk_bitmap_factory_create());
 	quit_if_fail(ftk_default_bitmap_factory(), "Init bitmap factory failed.\n");
-
-	return RET_OK;
-}
-
-static Ret ftk_init_font(void)
-{
-	ftk_set_font_manager(ftk_font_manager_create(16));
-	quit_if_fail(ftk_default_font_manager(), "Init font manager failed.\n");
 
 	return RET_OK;
 }
@@ -133,11 +124,6 @@ void ftk_deinit(void)
 		ftk_text_layout_destroy(ftk_default_text_layout());
 	}
 
-	if(ftk_default_font_manager() != NULL)
-	{
-		ftk_font_manager_destroy(ftk_default_font_manager());
-	}
-
 	if(ftk_default_display() != NULL)
 	{
 		ftk_display_destroy(ftk_default_display());
@@ -179,6 +165,7 @@ void ftk_deinit(void)
 	return;
 }
 
+#ifndef USE_LINUX_DFB
 static Ret ftk_move_cursor(void* ctx, void* obj)
 {
 	FtkEvent* event = (FtkEvent*)obj;
@@ -207,9 +194,10 @@ static Ret ftk_enable_curosr(void)
 	ftk_sprite_set_icon(sprite, icon);
 	ftk_sprite_show(sprite, 1);
 	ftk_wnd_manager_add_global_listener(ftk_default_wnd_manager(), ftk_move_cursor, sprite);
-
+	
 	return RET_OK;
 }
+#endif
 
 Ret ftk_init(int argc, char* argv[])
 {
@@ -227,6 +215,7 @@ Ret ftk_init(int argc, char* argv[])
 		ftk_inited = 1;
 	}
 
+	ftk_clear_globals();
 	PROFILE_START();
 #ifndef USE_STD_MALLOC
 	ftk_set_allocator(FTK_ALLOC_PROFILE(ftk_allocator_default_create()));
@@ -249,9 +238,6 @@ Ret ftk_init(int argc, char* argv[])
 	quit_if_fail(ftk_default_wnd_manager(), "Init windows manager failed.\n");
 	PROFILE_END("source main loop wnd manager init");
 
-	PROFILE_START();
-	ftk_init_font();
-	PROFILE_END("font init");
 	ftk_init_bitmap_factory();
 	
 	PROFILE_START();
@@ -284,7 +270,9 @@ Ret ftk_init(int argc, char* argv[])
 
 	if(ftk_config_get_enable_cursor(config))
 	{
+#ifndef USE_LINUX_DFB
 		ftk_enable_curosr();
+#endif
 	}
 
 	return RET_OK;
@@ -322,8 +310,6 @@ static Ret on_wnd_manager_global_event(void* ctx, void* obj)
 	FtkWidget* top_window = NULL;
 	FtkWidget* close_widget = NULL;
 	FtkWidget* title_widget = NULL;
-
-	if ( !event->widget ) return RET_OK;
 
 	if(event->type != FTK_EVT_TOP_WND_CHANGED
 		&& event->type != FTK_EVT_WND_CONFIG_CHANGED)

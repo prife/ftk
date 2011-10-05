@@ -31,6 +31,7 @@
 
 #include "ftk_allocator.h"
 #include "ftk_log.h"
+#include "ftk_util.h"
 #include "ftk_expr.h"
 #include "ftk_pairs.h"
 #include "ftk_params.h"
@@ -127,7 +128,7 @@ const char* ftk_params_eval_string(FtkParams* thiz, const char* name)
 				var_value = ftk_pairs_find(thiz->vars, var);
 				if(var_value != NULL)
 				{
-					strcpy(thiz->eval+dst, var_value);
+					ftk_strcpy(thiz->eval+dst, var_value);
 					dst += strlen(var_value);
 				}
 			}

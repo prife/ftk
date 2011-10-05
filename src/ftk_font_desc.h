@@ -37,6 +37,10 @@
 
 FTK_BEGIN_DECLS
 
+#ifndef FTK_FONT
+#define FTK_FONT "any"
+#endif
+
 #define FTK_DEFAULT_FONT "size:16 bold:0 italic:0 fontname:"FTK_FONT
 #define FONT_DESC_FMT "size:%d bold:%d italic:%d fontname:%s"
 

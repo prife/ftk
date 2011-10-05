@@ -84,7 +84,6 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	ftk_widget_set_text(win, "button demo");
 	ftk_widget_show_all(win, 1);
 	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
-
 	FTK_RUN();
 
 	return 0;

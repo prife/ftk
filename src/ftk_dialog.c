@@ -209,7 +209,8 @@ static Ret  ftk_dialog_paint_title(FtkWidget* thiz, FtkCanvas* canvas, int x, in
 		int xoffset = FTK_DIALOG_BORDER + (priv->icon != NULL ? priv->title_height : FTK_DIALOG_BORDER);
 		int yoffset = priv->title_height >> 1;
 		const char* text = ftk_widget_get_text(thiz);
-		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, width - xoffset - FTK_DIALOG_BORDER);
+		const char*	end = ftk_canvas_calc_str_visible_range(canvas, text, 0, -1, 
+			width - xoffset - FTK_DIALOG_BORDER, NULL);
 
 		ftk_canvas_draw_string(canvas, x + xoffset, y + yoffset, text, end - text, 1);
 	}
@@ -346,7 +347,6 @@ Ret ftk_dialog_quit_after(FtkWidget* thiz, int ms)
 int ftk_dialog_run(FtkWidget* thiz)
 {
     FtkMainLoop* prev_main_loop = ftk_default_main_loop();
-	FtkWidget* focus_widget;
 	DECL_PRIV1(thiz, priv);
 	return_val_if_fail(thiz != NULL, RET_FAIL);
 	return_val_if_fail(ftk_widget_type(thiz) == FTK_DIALOG, RET_FAIL);
@@ -363,10 +363,8 @@ int ftk_dialog_run(FtkWidget* thiz)
 
 	ftk_main_loop_destroy(priv->main_loop);
 	priv->main_loop = NULL;
-	focus_widget = ftk_window_get_focus(thiz);
 
-	if ( focus_widget ) return ftk_widget_id(focus_widget);
-	else return 0;
+	return ftk_widget_id(ftk_window_get_focus(thiz));
 }
 
 int ftk_dialog_get_title_height(void)

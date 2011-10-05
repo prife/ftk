@@ -248,8 +248,7 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 	if(page->text != NULL)
 	{
 		const char* text = page->text;
-		ftk_text_layout_init(text_layout, text, -1, 
-			ftk_widget_get_gc(thiz)->font, w);
+		ftk_text_layout_init(text_layout, text, -1, canvas, w);
 
 		oy = y + FTK_HALF(FTK_TAB_HANDLE_HEIGHT);
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)

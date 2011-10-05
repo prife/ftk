@@ -30,7 +30,7 @@ static Ret ftk_display_gtk_update(FtkDisplay* thiz, FtkBitmap* bitmap, FtkRect* 
 	int src_height = ftk_bitmap_height(bitmap);
 	int dst_width = priv->width;
 	int dst_height = priv->height;
-	FtkColor* src = ftk_bitmap_bits(bitmap);
+	FtkColor* src = ftk_bitmap_lock(bitmap);
 	FtkColor* dst = (FtkColor*)gdk_pixbuf_get_pixels(priv->pixbuf);
 	GdkRectangle paint_rect;
 	return_val_if_fail(rect->x < src_width && rect->y < src_height
@@ -73,8 +73,8 @@ static Ret ftk_display_gtk_snap(FtkDisplay* thiz, FtkRect* r, FtkBitmap* bitmap)
 	int width = r->width;
 	int height = r->height;
 	DECL_PRIV(thiz, priv);
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
-	FtkColor* src = ftk_bitmap_bits(priv->bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
+	FtkColor* src = ftk_bitmap_lock(priv->bitmap);
 
 	/*TODO*/
 #endif

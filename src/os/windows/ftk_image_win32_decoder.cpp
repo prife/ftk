@@ -83,7 +83,7 @@ static FtkBitmap* load_win32 (const char *filename)
 	img->LockBits(&r, ImageLockModeRead, PixelFormat32bppARGB, &bitmapData);
 #endif
 	FtkColor* src = (FtkColor*)bitmapData.Scan0;
-	FtkColor* dst = ftk_bitmap_bits(bitmap);
+	FtkColor* dst = ftk_bitmap_lock(bitmap);
 
 	for(y = 0; y < h; y++)
 	{
@@ -113,7 +113,7 @@ static void ftk_image_win32_decoder_destroy(FtkImageDecoder* thiz)
 {
 	if(thiz != NULL)
 	{
-		FTK_ZFREE(thiz, sizeof(*thiz));
+		FTK_ZFREE(thiz, sizeof(thiz));
 	}
 
 	 GdiplusShutdown(gdiplusToken);

@@ -90,8 +90,8 @@ static Ret ftk_display_rotate_snap_0(FtkDisplay* thiz, FtkRect* rect, FtkBitmap*
 	w = (r.x + w) < bm_w ? w : bm_w - r.x;\
 	h = r.height;\
 	h = (r.y + h) < bm_h ? h : bm_h - r.y;\
-	src = ftk_bitmap_bits(bitmap);\
-	dst = ftk_bitmap_bits(priv->bitmap);\
+	src = ftk_bitmap_lock(bitmap);\
+	dst = ftk_bitmap_lock(priv->bitmap);\
 	\
 	return_val_if_fail(r.x < bm_w && r.y < bm_h, RET_FAIL);
 
@@ -143,8 +143,8 @@ static Ret ftk_display_rotate_update_180(FtkDisplay* thiz, FtkBitmap* bitmap, Ft
 	int bm_w = ftk_bitmap_width(bitmap);\
 	int display_w = ftk_bitmap_width(priv->bitmap);\
 	int display_h = ftk_bitmap_height(priv->bitmap);\
-	FtkColor* src = ftk_bitmap_bits(priv->bitmap);\
-	FtkColor* dst = ftk_bitmap_bits(bitmap);\
+	FtkColor* src = ftk_bitmap_lock(priv->bitmap);\
+	FtkColor* dst = ftk_bitmap_lock(bitmap);\
 	\
 	w = FTK_MIN(rect->width, ftk_bitmap_width(bitmap));\
 	h = FTK_MIN(rect->height, ftk_bitmap_height(bitmap));

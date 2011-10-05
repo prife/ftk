@@ -49,7 +49,7 @@ cairo_surface_t* ftk_cairo_surface_create_with_bitmap(FtkBitmap* bitmap)
 	cairo_surface_t*  surface = NULL;
 	return_val_if_fail(bitmap != NULL, NULL);
 
-	data = ftk_bitmap_bits(bitmap);
+	data = ftk_bitmap_lock(bitmap);
 	width = ftk_bitmap_width(bitmap);
 	height = ftk_bitmap_height(bitmap);
 

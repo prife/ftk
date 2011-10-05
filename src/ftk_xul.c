@@ -704,7 +704,7 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 				ftk_itoa(value, sizeof(value), s_var_getters[i].get(thiz));
 				if(len > (int)strlen(value))
 				{
-					strcpy(priv->processed_value+dst, value);
+					ftk_strcpy(priv->processed_value+dst, value);
 					dst += strlen(priv->processed_value+dst);
 					iter += strlen(s_var_getters[i].name);
 				}
@@ -715,7 +715,7 @@ static const char* ftk_xul_builder_preprocess_value(FtkXmlBuilder* thiz, const c
 				ftk_itoa(value, sizeof(value), s_var_conts[i].value);
 				if(len > (int)strlen(value))
 				{
-					strcpy(priv->processed_value+dst, value);
+					ftk_strcpy(priv->processed_value+dst, value);
 					dst += strlen(priv->processed_value+dst);
 					iter += strlen(s_var_conts[i].name);
 				}

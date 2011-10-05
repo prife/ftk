@@ -107,6 +107,7 @@ static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 	FtkTextLine line = {0};
 	FtkTextLayout* text_layout = ftk_default_text_layout();
 	int width = x - FTK_PAINT_X(thiz) - FTK_ENTRY_H_MARGIN + 1;
+	FtkCanvas* canvas = NULL;
 	return_val_if_fail(width >= 0, RET_FAIL);
 
 	if(!HAS_TEXT(priv))
@@ -114,8 +115,11 @@ static Ret ftk_entry_get_offset_by_pointer(FtkWidget* thiz, int x)
 		return RET_OK;
 	}
 
+	canvas = ftk_widget_canvas(thiz);
+	ftk_canvas_reset_gc(canvas, ftk_widget_get_gc(thiz));
+
 	ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
-			priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
+			priv->visible_end - priv->visible_start, canvas, width);
 
 	if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 	{
@@ -361,7 +365,7 @@ static Ret ftk_entry_update_caret_pos(FtkWidget* thiz)
 		if(HAS_TEXT(priv))
 		{
 			ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
-			extent = ftk_canvas_get_extent(canvas, TB_TEXT+priv->visible_start, 
+			extent = ftk_canvas_get_str_extent(canvas, TB_TEXT+priv->visible_start, 
 				priv->caret - priv->visible_start);
 
 			//ftk_logd("%s: %d len=%d\n", __func__, extent, priv->caret - priv->visible_start);
@@ -450,7 +454,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 		{
 			ftk_entry_compute_visible_range(thiz);
 			ftk_text_layout_init(text_layout, TB_TEXT + priv->visible_start, 
-				priv->visible_end - priv->visible_start, ftk_widget_get_gc(thiz)->font, width);
+				priv->visible_end - priv->visible_start, canvas, width);
 		}
 		else
 		{
@@ -462,9 +466,9 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 			gc.fg.b = (fg.r + bg.b) >> 1;
 			ftk_canvas_set_gc(canvas, &gc);
 
-			ftk_text_layout_init(text_layout, priv->tips, -1, ftk_widget_get_gc(thiz)->font, width);
+			ftk_text_layout_init(text_layout, priv->tips, -1, canvas, width);
 		}
-		font_height = ftk_canvas_font_height(canvas);
+		font_height = ftk_widget_get_font_size(thiz);
 		x += FTK_ENTRY_H_MARGIN;
 		y += font_height + FTK_ENTRY_V_MARGIN;
 
@@ -516,7 +520,7 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 		thiz->on_paint = ftk_entry_on_paint;
 		thiz->destroy  = ftk_entry_destroy;
 
-		height = ftk_font_height(ftk_default_font()) + FTK_ENTRY_V_MARGIN * 2;
+		height = ftk_font_desc_get_size(ftk_default_font()) + FTK_ENTRY_V_MARGIN * 2;
 		ftk_widget_init(thiz, FTK_ENTRY, 0, x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 
 		priv->input_type = FTK_INPUT_NORMAL;
@@ -543,7 +547,7 @@ static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
 	if(priv->visible_start < 0 || priv->visible_end < 0)
 	{
 		other_side = ftk_canvas_calc_str_visible_range(canvas, TB_TEXT, 
-			priv->visible_start, priv->visible_end, width - 2 * FTK_ENTRY_H_MARGIN);
+			priv->visible_start, priv->visible_end, width - 2 * FTK_ENTRY_H_MARGIN, NULL);
 
 		if(priv->visible_start < 0)
 		{
