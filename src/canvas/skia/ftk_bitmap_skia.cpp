@@ -125,13 +125,16 @@ FtkColor ftk_bitmap_get_pixel(FtkBitmap* thiz, int x, int y)
 	return_val_if_fail(thiz != NULL, c);
 
 	bitmap = (SkBitmap*)thiz->data;
-
+#ifdef ANDROID
+	/*TODO*/
+#else
 	sc = bitmap->getColor(x, y);
 
 	c.a = SkColorGetA(sc);
 	c.r = SkColorGetR(sc);
 	c.g = SkColorGetG(sc);
 	c.b = SkColorGetB(sc);
+#endif
 
 	return c;
 }

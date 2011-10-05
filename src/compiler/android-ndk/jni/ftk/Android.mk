@@ -31,7 +31,6 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_allocator_profile.c \
 	../../../../../src/ftk_app_window.c \
 	../../../../../src/ftk_bitmap.c \
-	../../../../../src/ftk_bitmap_factory.c \
 	../../../../../src/ftk_button.c \
 	../../../../../src/ftk.c \
 	../../../../../src/ftk_animation_alpha.c \
@@ -62,10 +61,7 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_file_browser.c \
 	../../../../../src/ftk_file_system.c \
 	../../../../../src/ftk_file_system_posix.c \
-	../../../../../src/ftk_font.c \
 	../../../../../src/ftk_font_desc.c \
-	../../../../../src/ftk_font_manager.c \
-	../../../../../src/ftk_font_freetype.c \
 	../../../../../src/ftk_gesture.c \
 	../../../../../src/ftk_globals.c \
 	../../../../../src/ftk_icon_cache.c \
@@ -112,7 +108,12 @@ LOCAL_SRC_FILES := \
 	../../../../../src/ftk_wnd_manager_default.c \
 	../../../../../src/ftk_xml_parser.c \
 	../../../../../src/ftk_xul.c \
-	../../../../../src/ftk_canvas_default.c \
+	../../../../../src/canvas/default/ftk_font.c \
+	../../../../../src/canvas/default/ftk_font_manager.c \
+	../../../../../src/canvas/default/ftk_font_freetype.c \
+	../../../../../src/canvas/default/ftk_canvas_default.c \
+	../../../../../src/canvas/default/ftk_bitmap_default.c \
+	../../../../../src/canvas/default/ftk_bitmap_factory.c \
 	../../../../../src/backend/android/ftk_backend_android.c \
 	../../../../../src/backend/android/ftk_display_android_skia.c \
 	../../../../../src/backend/android/ftk_source_android.c \

@@ -33,12 +33,14 @@
 #include "SkColor.h"
 #include "SkStream.h"
 #include "SkTemplates.h"
-#include "SkImageDecoder.h"
+#include "images/SkImageDecoder.h"
 #include "effects/SkPorterDuff.h"
 
 #include "ftk_log.h"
 #include "ftk_allocator.h"
 #include "ftk_bitmap_factory.h"
+
+using namespace android;
 
 struct _FtkBitmapFactory
 {

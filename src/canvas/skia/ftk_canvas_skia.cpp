@@ -54,7 +54,11 @@ static Ret ftk_canvas_skia_sync_gc(FtkCanvas* thiz)
 	int size = 0;
 	DECL_PRIV(thiz, priv);
 	FtkColor c = thiz->gc.fg;
+#ifdef ANDROID
+	SkColor color = SkColorSetARGB(c.a, c.r, c.g, c.b);
+#else
 	SkColor color = SkColorSetARGBInline(c.a, c.r, c.g, c.b);
+#endif
 
 	priv->paint->setColor(color);
 	if(thiz->gc.font != NULL)

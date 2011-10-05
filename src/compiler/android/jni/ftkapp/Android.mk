@@ -19,7 +19,7 @@ LOCAL_C_INCLUDES := \
 
 LOCAL_STATIC_LIBRARIES := libftk libcutils
 LOCAL_SHARED_LIBRARIES := libskia
-LOCAL_LDLIBS := -lGLESv1_CM -llog -lgcc 
+LOCAL_LDLIBS := -lGLESv1_CM -llog -lgcc -L$(EXT_LIBS_DIR) -lskia
 LOCAL_PRELINK_MODULE := false
 
 include $(BUILD_SHARED_LIBRARY)

@@ -1,4 +1,4 @@
-include $(abs_top_srcdir)/src/rules.mk
+include $(abs_top_builddir)/src/rules.mk
 
 noinst_PROGRAMS=label_test widget_test \
 	canvas_test ftk_test bitmap_test primary_source_test\
@@ -19,8 +19,8 @@ canvas_test_LDFLAGS=$(MYLDFLAGS)
 ftk_test_SOURCES=ftk_test.c
 ftk_test_LDFLAGS=$(MYLDFLAGS)
 
-bitmap_factory_test_SOURCES=bitmap_factory_test.c
-bitmap_factory_test_LDFLAGS=$(MYLDFLAGS)
+#bitmap_factory_test_SOURCES=bitmap_factory_test.c
+#bitmap_factory_test_LDFLAGS=$(MYLDFLAGS)
 
 main_loop_test_SOURCES=main_loop_test.c
 main_loop_test_LDFLAGS=$(MYLDFLAGS)
