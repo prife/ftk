@@ -11,6 +11,13 @@
 #include "ftk_display.h"
 #include "ftk_display_rotate.h"
 
+#include "SkColor.h"
+#include "SkCanvas.h"
+#include "SkStream.h"
+#include "SkTemplates.h"
+#include "SkImageDecoder.h"
+#include "effects/SkPorterDuff.h"
+
 typedef struct _FtkJni
 {
 	JNIEnv* env;
@@ -426,42 +433,54 @@ int Android_OpenAsset(const char* filename, size_t* size)
 	return fd;
 }
 
+#if 0
 FtkBitmap* Android_LoadImage(const char* filename)
 {
-	jint width, height;
-	jint* pixels;
 	jstring file;
 	jobject image;
 	jintArray temp;
-	FtkBitmap* bitmap;
-	FtkColor bg = {0};
-	FtkColor* dst;
+	jint* pixels = NULL;
+	SkBitmap* bmp = NULL;
+	FtkBitmap* bitmap = NULL;
+	jint width = 0, height = 0;
+	SkColor* new_pixels = NULL;
+   	const char* assert_prefix = "/assets/";
 
-	//ftk_logd("%s", filename);
+   	return_val_if_fail(filename != NULL, NULL);
+
+	ftk_logi("Android_LoadImage: %s\n", filename);
+   	if(strncmp(filename, assert_prefix, strlen(assert_prefix)) == 0)
+   	{
+   		filename += strlen(assert_prefix);
+   	}
 
 	file = jni.env->NewStringUTF(filename);
 	image = jni.env->CallStaticObjectMethod(jni.activity, jni.decode_image, file);
 	jni.env->DeleteLocalRef(file);
 
-	if(image == NULL)
-	{
-		return NULL;
-	}
+	return_val_if_fail(image != NULL, NULL);
 
 	width = jni.env->CallIntMethod(image, jni.get_width);
 	height = jni.env->CallIntMethod(image, jni.get_height);
 
-	ftk_logd("%s: %dX%d", filename, width, height);
+	ftk_logi("%s: %dx%d", filename, width, height);
 
 	temp = jni.env->NewIntArray(width * height);
 	jni.env->CallVoidMethod(image, jni.get_pixels, temp, 0, width, 0, 0, width, height);
 	pixels = jni.env->GetIntArrayElements(temp, NULL);
 
-	bg.a = 0xff;
-	bitmap = ftk_bitmap_create(width, height, bg);
-	dst = ftk_bitmap_lock(bitmap);
+	size_t length = sizeof(SkColor) * width * height;
 
-	memcpy(dst, pixels, sizeof(FtkColor) * width * height);
+	new_pixels = (SkColor*)malloc(length);
+
+	if(new_pixels != NULL)
+	{
+		bmp = new SkBitmap();
+		memcpy(new_pixels, pixels, length);
+		bmp->setConfig(SkBitmap::kARGB_8888_Config, width, height, 0);
+		bmp->setPixels(new_pixels);
+		bitmap = ftk_bitmap_create_with_native(bmp);
+	}
 
 	jni.env->ReleaseIntArrayElements(temp, pixels, 0);
 	jni.env->DeleteLocalRef(temp);
@@ -469,6 +488,84 @@ FtkBitmap* Android_LoadImage(const char* filename)
 
 	return bitmap;
 }
+#else
+extern "C" SkImageDecoder* PNG_DFactory(SkStream* stream);
+
+static SkStream* FDStreamToMemStream(SkStream* stream, size_t size)
+{
+	char* buffer = (char*)malloc(size);
+	SkMemoryStream* s = new SkMemoryStream();
+	size_t ret = stream->read(buffer, size);
+	s->setMemory(buffer, size, false);
+	s->rewind();
+	free(buffer);
+
+	return s; 
+}
+
+static SkBitmap* doDecode(JNIEnv* env, SkStream* stream, size_t size)
+{
+	char* buffer = (char*)malloc(size);
+	SkMemoryStream* s = new SkMemoryStream();
+	size_t ret = stream->read(buffer, size);
+	s->setMemory(buffer, ret, false);
+	s->rewind();
+
+	SkImageDecoder* decoder = PNG_DFactory(s);
+	return_val_if_fail(decoder != NULL, NULL);
+	
+    SkAutoUnref aurs(s);
+	SkAutoTDelete<SkImageDecoder> ad(decoder);
+	
+	s->rewind();
+	SkBitmap*       bitmap = new SkBitmap;
+	if (!decoder->decode(s, bitmap, SkBitmap::kARGB_8888_Config, SkImageDecoder::kDecodePixels_Mode)) 
+	{
+		delete bitmap;
+		bitmap = NULL;
+    }
+	free(buffer);
+
+	return bitmap;
+}
+
+FtkBitmap* Android_LoadImage(const char* filename)
+{
+	int i = 0;
+   	size_t size = 0; 
+   	int descriptor = 0;
+	SkBitmap* bmp = NULL;
+	JNIEnv* env = jni.env;
+	FtkBitmap* bitmap = NULL;
+	char buffer[16] = {0};
+   	const char* assert_prefix = "/assets/";
+
+   	return_val_if_fail(filename != NULL, NULL);
+
+   	if(strncmp(filename, assert_prefix, strlen(assert_prefix)) == 0)
+   	{
+   		filename += strlen(assert_prefix);
+   	}
+
+    descriptor = Android_OpenAsset(filename, &size);
+	return_val_if_fail(descriptor >= 0, NULL);
+
+	ftk_logi("%s:%d open %s descriptor=%d size=%d\n", __func__, __LINE__, filename, descriptor, size);
+    SkFDStream* stream = new SkFDStream(descriptor, false);
+    SkAutoUnref aur(stream);
+    return_val_if_fail(stream->isValid(), NULL);
+	
+	bmp = doDecode(env, stream, size);
+	ftk_logi("%s:%d bmp=%p\n", __func__, __LINE__, bmp);
+
+	if(bmp != NULL)
+	{
+		bitmap = ftk_bitmap_create_with_native(bmp);
+	}
+
+	return bitmap;
+}
+#endif
 
 void Android_InitEGL()
 {

@@ -119,21 +119,24 @@ void    ftk_bitmap_unlock(FtkBitmap* thiz)
 
 FtkColor ftk_bitmap_get_pixel(FtkBitmap* thiz, int x, int y)
 {
-	FtkColor c = {0, 0, 0, 0};	
-	SkBitmap* bitmap = NULL;
 	SkColor sc;
-	return_val_if_fail(thiz != NULL, c);
-
-	bitmap = (SkBitmap*)thiz->data;
+	FtkColor c = {0, 0, 0, 0};	
+	return_val_if_fail(thiz != NULL && x < ftk_bitmap_width(thiz) && y < ftk_bitmap_height(thiz), c);
+	
+	SkBitmap* bitmap = (SkBitmap*)thiz->data;
 #ifdef ANDROID
-	/*TODO*/
-#else
-	sc = bitmap->getColor(x, y);
-
+	sc = *bitmap->getAddr32(x, y);
 	c.a = SkColorGetA(sc);
 	c.r = SkColorGetR(sc);
 	c.g = SkColorGetG(sc);
 	c.b = SkColorGetB(sc);
+#else
+	sc = bitmap->getColor(x, y);
+	c.a = SkColorGetA(sc);
+	c.r = SkColorGetR(sc);
+	c.g = SkColorGetG(sc);
+	c.b = SkColorGetB(sc);
+
 #endif
 
 	return c;

@@ -40,7 +40,10 @@
 #include "ftk_allocator.h"
 #include "ftk_bitmap_factory.h"
 
+#ifdef ANDROID
 using namespace android;
+#include "ftk_jni.h"
+#endif
 
 struct _FtkBitmapFactory
 {
@@ -90,6 +93,9 @@ static void destroy_bitmap(void* data)
 
 FtkBitmap* ftk_bitmap_factory_load(FtkBitmapFactory* thiz, const char* filename)
 {	
+#ifdef ANDROID
+	return Android_LoadImage(filename);
+#else
 	SkBitmap* b = new SkBitmap();
 	FtkBitmap* bmp = NULL;
 
@@ -99,6 +105,7 @@ FtkBitmap* ftk_bitmap_factory_load(FtkBitmapFactory* thiz, const char* filename)
 	}
 
 	return bmp;
+#endif
 }
 
 Ret        ftk_bitmap_factory_add_decoder(FtkBitmapFactory* thiz, FtkImageDecoder* decoder)

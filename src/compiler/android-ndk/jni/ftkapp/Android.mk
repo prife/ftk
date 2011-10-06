@@ -12,7 +12,7 @@ LOCAL_CFLAGS :=	\
 
 LOCAL_SRC_FILES := \
 	ftk_jni.cpp \
-	../../../../../src/demos/demo_entry.c
+	../../../../demos/demo_file_browser.c
 
 LOCAL_STATIC_LIBRARIES := libftk libft2
 
