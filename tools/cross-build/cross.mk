@@ -119,11 +119,11 @@ fontconfig: fontconfig-2.8.0 expat
 fontconfig_clean:
 	cd fontconfig* && rm -fr $(ARCH)
 
-packages/pixman-0.19.2.tar.gz:
-	cd packages && wget http://cairographics.org/releases/pixman-0.19.2.tar.gz
-pixman-0.19.2:packages/pixman-0.19.2.tar.gz
-	tar xf packages/pixman-0.19.2.tar.gz
-pixman:pixman-0.19.2
+packages/pixman-0.22.2.tar.gz:
+	cd packages && wget http://cairographics.org/releases/pixman-0.22.2.tar.gz
+pixman-0.22.2:packages/pixman-0.22.2.tar.gz
+	tar xf packages/pixman-0.22.2.tar.gz
+pixman:pixman-0.22.2
 	cd pixman* && mkdir $(ARCH); cd $(ARCH) && \
 	../configure --disable-gtk $(HOST_PARAM) --prefix=$(PREFIX) && \
 	make clean; make && make install DESTDIR=${STAGING} && \
@@ -131,11 +131,11 @@ pixman:pixman-0.19.2
 pixman_clean:
 	cd pixman* && rm -fr $(ARCH)
 
-packages/cairo-1.10.0.tar.gz:
-	cd packages && wget http://cairographics.org/releases/cairo-1.10.0.tar.gz
-cairo-1.10.0:packages/cairo-1.10.0.tar.gz
-	tar xf packages/cairo-1.10.0.tar.gz
-cairo: cairo-1.10.0 pixman fontconfig
+packages/cairo-1.10.2.tar.gz:
+	cd packages && wget http://cairographics.org/releases/cairo-1.10.2.tar.gz
+cairo-1.10.2:packages/cairo-1.10.2.tar.gz
+	tar xf packages/cairo-1.10.2.tar.gz
+cairo: cairo-1.10.2 pixman fontconfig
 	cd cairo* && mkdir $(ARCH); cd $(ARCH) && \
 	../configure  --enable-ft   --disable-svg  --disable-pdf  --disable-ps \
 	--disable-directfb  --disable-xlib  --disable-xlib-xrender --disable-gobject \
@@ -150,6 +150,12 @@ libftk:
 	mkdir $(ARCH);  cd $(ARCH) && \
 	../configure $(FTK_CONF_OPTION) $(WITH_BACKEND) ac_cv_func_realloc_0_nonnull=yes ac_cv_func_malloc_0_nonnull=yes $(HOST_PARAM) --prefix=$(PREFIX)  &&\
 	make clean; make && make install DESTDIR=${STAGING} && \
+	make install DESTDIR=/ 
+libftk_clean:
+	cd ftk* && rm -rf $(ARCH)
+ftkc:
+	cd ftk* && cd $(ARCH) && \
+	make && make install DESTDIR=${STAGING} && \
 	make install DESTDIR=/ 
 libftk_clean:
 	cd ftk* && rm -rf $(ARCH)
