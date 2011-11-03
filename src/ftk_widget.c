@@ -44,6 +44,7 @@
 #include "ftk_globals.h"
 #include "ftk_canvas.h"
 #include "ftk_window.h"
+#include "ftk_util.h"
 
 struct _FtkWidgetInfo
 {
