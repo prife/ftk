@@ -1,6 +1,6 @@
-#include <ftk.h>
-#include <ftk_wnd_manager.h>
-#include <ftk_display_rotate.h>
+#include "ftk.h"
+#include "ftk_wnd_manager.h"
+#include "ftk_display_rotate.h"
 
 static inline int is_mouse_event(FtkEvent* event)
 {
