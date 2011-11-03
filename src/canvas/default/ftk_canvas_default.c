@@ -131,7 +131,7 @@ static Ret ftk_rect_and(const FtkRect *r1, const FtkRect *r2, FtkRect *r)
 
 static Ret ftk_canvas_default_sync_gc(FtkCanvas* thiz)
 {
-	int size = 0;
+
 	DECL_PRIV(thiz, priv);
 	
 	if(thiz->gc.font != NULL)
