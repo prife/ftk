@@ -72,7 +72,9 @@ FtkInputMethodManager* ftk_input_method_manager_create(void)
 	{
 		thiz->current = 0;
 #if !(defined(UCOS_SIM) || defined(RT_THREAD))
+#ifdef IME_CREATE
 		ftk_input_method_manager_register(thiz, IME_CREATE());
+#endif
 #endif
 
 #ifdef USE_HANDWRITE
