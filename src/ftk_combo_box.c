@@ -44,6 +44,9 @@ typedef struct _ComboBoxPrivInfo
 	FtkWidget* entry;
 	FtkWidget* button;
 	FtkListModel* model;
+	int selected;
+	FtkListener listener;
+	void* listener_ctx;
 }PrivInfo;
 
 static Ret ftk_combo_box_on_event(FtkWidget* thiz, FtkEvent* event)
@@ -76,15 +79,23 @@ static Ret ftk_popup_on_item_clicked(void* ctx, void* list)
 	FtkListItemInfo* info = NULL;
 	int i = ftk_list_view_get_selected((FtkWidget*)list);
 	FtkListModel* model = ftk_list_view_get_model((FtkWidget*)list);
-	
+	Ret ret = RET_OK;
+
 	ftk_list_model_get_data(model, i, (void**)&info);
 	if(info != NULL)
 	{
-		ftk_entry_set_text((FtkWidget*)info->user_data, info->text);
+	    FtkWidget* thiz = (FtkWidget*)info->user_data;
+	    DECL_PRIV0(thiz, priv);
+
+		ftk_combo_box_set_text(thiz, info->text);
+
+		priv->selected = i;
+
+        ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 	}
 	ftk_widget_unref((FtkWidget*)ctx);
 
-	return RET_OK;
+	return ret;
 }
 
 static Ret ftk_combo_box_popup_rect(FtkWidget* thiz, int* x, int* y, int* w, int* h)
@@ -182,6 +193,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 	if(thiz->priv_subclass[0] != NULL)
 	{
 		int h = 0;
+		int w = 0;
 		FtkGc gc = {0};
 		DECL_PRIV0(thiz, priv);
 		thiz->on_event = ftk_combo_box_on_event;
@@ -193,6 +205,7 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 
 		priv->entry = ftk_entry_create(thiz, 0, 0, width-height, height);
 		h = ftk_widget_height(priv->entry);
+		w = ftk_widget_width(priv->entry);
 		ftk_widget_move_resize(priv->entry, 0, FTK_HALF(height-h), width - h, h);
 		ftk_widget_show(priv->entry, 1);
 
@@ -220,6 +233,8 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 		ftk_widget_resize(thiz, width, h + (FTK_V_MARGIN << 1));
 
 		priv->model = ftk_list_model_default_create(10);
+
+		priv->selected = -1;
 	}
 	else
 	{
@@ -253,6 +268,14 @@ FtkWidget* ftk_combo_box_get_entry(FtkWidget* thiz)
 	return priv->entry;
 }
 
+int ftk_combo_box_get_selected(FtkWidget* thiz)
+{
+    DECL_PRIV0(thiz, priv);
+    return_val_if_fail(thiz != NULL, -1);
+
+    return priv->selected;
+}
+
 Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 {
 	DECL_PRIV0(thiz, priv);
@@ -262,17 +285,47 @@ Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text)
 	info.type = FTK_LIST_ITEM_NORMAL;
 	info.text = (char *)text;
 	info.left_icon = icon;
-	info.user_data = priv->entry;
+	info.user_data = thiz;
 	
 	return ftk_list_model_add(priv->model, &info);
 }
 
+Ret ftk_combo_box_reset(FtkWidget* thiz)
+{
+    DECL_PRIV0(thiz, priv);
+    return_val_if_fail(thiz != NULL, RET_FAIL);
+
+    ftk_combo_box_set_text(thiz, " ");
+
+    priv->selected = -1;
+
+    return ftk_list_model_reset(priv->model);
+}
+
 Ret ftk_combo_box_remove(FtkWidget* thiz, size_t index)
 {
-	DECL_PRIV0(thiz, priv);
-	return_val_if_fail((int)index < ftk_combo_box_get_item_nr(thiz), RET_FAIL);
+    DECL_PRIV0(thiz, priv);
+    return_val_if_fail(thiz != NULL, RET_FAIL);
 
-	return ftk_list_model_remove(priv->model, index);
+    if(priv->selected == index)
+    {
+        ftk_combo_box_set_text(thiz, " ");
+
+        priv->selected = -1;
+    }
+
+    return ftk_list_model_remove(priv->model, index);
+}
+
+Ret ftk_combo_box_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
+{
+    DECL_PRIV0(thiz, priv);
+    return_val_if_fail(thiz != NULL, RET_FAIL);
+
+    priv->listener_ctx = ctx;
+    priv->listener = listener;
+
+    return RET_OK;
 }
 
 int ftk_combo_box_get_item_nr(FtkWidget* thiz)
@@ -305,4 +358,3 @@ Ret ftk_combo_box_get_item(FtkWidget* thiz, size_t index, const FtkBitmap** icon
 
 	return info != NULL ? RET_OK : RET_FAIL;
 }
-

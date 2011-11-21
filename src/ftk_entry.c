@@ -56,7 +56,7 @@ typedef struct _EntryPrivInfo
 }PrivInfo;
 
 #define FTK_ENTRY_H_MARGIN 4
-#define FTK_ENTRY_V_MARGIN  6
+#define FTK_ENTRY_V_MARGIN  8
 
 #define TB_TEXT priv->text_buffer->buffer
 #define TB_LENGTH (int)(priv->text_buffer->length)
@@ -237,6 +237,12 @@ static Ret ftk_entry_handle_key_event(FtkWidget* thiz, FtkEvent* event)
 				}
 			}
 			break;
+		}
+		case FTK_KEY_CLR:
+		{
+		    if(priv->readonly) break;
+		    ftk_entry_set_text_internal(thiz, "");
+		    break;
 		}
 		default:
 		{

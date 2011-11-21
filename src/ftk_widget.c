@@ -741,9 +741,9 @@ static void ftk_widget_validate_position_size(FtkWidget* thiz)
 		int parent_h = ftk_widget_height(parent);
 		
 		// remove by wzw.random@gmail.com.
-		// ¼ÓÈëÕâ¶Î¿ÉÄÜ»áµ¼ÖÂ¿í¡¢¸ßÓÐÎó£»
-		// ÎÒ²»Ã÷°×Õâ¶Î´úÂë×÷ÓÃ£¬¹À¼ÆÊÇÓÉÓÚÔ­À´widthÊÇunsigned intÀàÐÍ£¬ÔÚÐ¡ÓÚ0µÄÊ±ºòÌØÊâ´¦Àí£»
-		// ÕâÀï½«width¡¢heightµÄÀàÐÍ¸ÄÎªintÐÍ£¬ÒÔÏÂµÄ´úÂëÓ¦¸Ã¾Í²»ÓÃÁË¡£
+        // åŠ å…¥è¿™æ®µå¯èƒ½ä¼šå¯¼è‡´å®½ã€é«˜æœ‰è¯¯ï¼›
+        // æˆ‘ä¸æ˜Žç™½è¿™æ®µä»£ç ä½œç”¨ï¼Œä¼°è®¡æ˜¯ç”±äºŽåŽŸæ¥widthæ˜¯unsigned intç±»åž‹ï¼Œåœ¨å°äºŽ0çš„æ—¶å€™ç‰¹æ®Šå¤„ç†ï¼›
+        // è¿™é‡Œå°†widthã€heightçš„ç±»åž‹æ”¹ä¸ºintåž‹ï¼Œä»¥ä¸‹çš„ä»£ç åº”è¯¥å°±ä¸ç”¨äº†ã€‚
 //		priv->width = (priv->width + 1) & 0xfffffffe;
 //		priv->height = (priv->height + 1) & 0xfffffffe;
 
@@ -895,7 +895,7 @@ FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id)
 	return NULL;
 }
 
-#ifdef FTK_OPTIMIZE_WIDGET_PAINT
+#if defined(FTK_OPTIMIZE_WIDGET_PAINT) && (FTK_OPTIMIZE_WIDGET_PAINT > 0)
 static int ftk_rects_is_cross(const FtkRect *a, const FtkRect *b)
 {
     int minx, maxx, miny, maxy;
@@ -938,10 +938,12 @@ void ftk_widget_paint(FtkWidget* thiz, FtkRect *rects, int rect_nr)
     rect.width  = ftk_widget_width(thiz);
     rect.height = ftk_widget_height(thiz);
 
-#ifdef FTK_OPTIMIZE_WIDGET_PAINT
+#if defined(FTK_OPTIMIZE_WIDGET_PAINT) && (FTK_OPTIMIZE_WIDGET_PAINT > 0)
 
     if (rect_nr > 0 && rects != NULL)
     {
+        int i = 0;
+
         for (i = 0; i < rect_nr; i++)
         {
             if (ftk_rects_is_cross(&rect, rects + i))
@@ -1100,6 +1102,33 @@ FtkGc* ftk_widget_get_gc(FtkWidget* thiz)
 	return thiz->priv->gc+thiz->priv->state;
 }
 
+FtkWidget* ftk_widget_find_target_keyboard(FtkWidget* thiz, int x, int y)
+{
+    int left = ftk_widget_left_abs(thiz);
+    int top  = ftk_widget_top_abs(thiz);
+    int w    = ftk_widget_width(thiz);
+    int h    = ftk_widget_height(thiz);
+
+    if(!ftk_widget_is_visible(thiz))
+    {
+        return NULL;
+    }
+
+    if(x < left || y < top || (x > (left + w)) || (y > (top + h)))
+    {
+        return NULL;
+    }
+
+    if(ftk_widget_type(thiz) == FTK_KEY_BOARD)
+    {
+        return thiz;
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
 FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensitive)
 {
 	FtkWidget* target = NULL;
@@ -1118,6 +1147,20 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensit
 		return NULL;
 	}
 
+    if(thiz->children != NULL)
+    {
+        FtkWidget* iter = thiz->children;
+        while(iter != NULL)
+        {
+            if((target = ftk_widget_find_target_keyboard(iter, x, y)) != NULL)
+            {
+                return target;
+            }
+
+            iter = ftk_widget_next(iter);
+        }
+    }
+
 	if(thiz->children != NULL)
 	{
 		FtkWidget* iter = thiz->children;
@@ -1132,10 +1175,14 @@ FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensit
 		}
 	}
 	
-	if ( only_sensitive && ftk_widget_is_insensitive(thiz) )
+	if (only_sensitive && ftk_widget_is_insensitive(thiz))
+	{
 		return NULL;
+	}
 	else
+	{
 		return thiz;
+	}
 }
 
 void ftk_widget_destroy(FtkWidget* thiz)
@@ -1244,7 +1291,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz, FtkRect *rects, int rect_nr)
         priv->painting++;
         assert(parent == NULL || ftk_widget_paint_called_by_parent(thiz));
 
-#ifdef FTK_OPTIMIZE_WIDGET_PAINT
+#if defined(FTK_OPTIMIZE_WIDGET_PAINT) && (FTK_OPTIMIZE_WIDGET_PAINT > 0)
 
         if (rect_nr > 0 && rects != NULL && ftk_widget_parent(thiz) == NULL)
         {
@@ -1293,7 +1340,7 @@ Ret ftk_widget_paint_self(FtkWidget* thiz, FtkRect *rects, int rect_nr)
             ftk_canvas_clear_rect(canvas, x, y, width, height);
         }
 
-#ifdef FTK_OPTIMIZE_WIDGET_PAINT
+#if defined(FTK_OPTIMIZE_WIDGET_PAINT) && (FTK_OPTIMIZE_WIDGET_PAINT > 0)
         __paint_children:
 #endif
         bitmap = priv->gc[priv->state].bitmap;

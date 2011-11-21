@@ -74,7 +74,7 @@
 #include "ftk_android.h"
 #endif
 
-#ifdef SYLIXOS
+#ifdef SYLIXOS_LIB
 #include "ftk_sylixos.h"
 #endif
 

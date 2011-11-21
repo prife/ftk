@@ -215,9 +215,33 @@ static void ftk_source_sylixos_ad_to_abs(mouse_event_notify* notify,  FtkEvent* 
     }
 }
 
+static void ftk_source_sylixos_rel_to_abs(mouse_event_notify* notify,  FtkEvent* pevent)
+{
+    int width  = ftk_display_width(ftk_default_display());
+    int height = ftk_display_height(ftk_default_display());
+    short x = pevent->u.mouse.x;
+    short y = pevent->u.mouse.y;
+
+    x += (short)notify->xmovement;
+    y += (short)notify->ymovement;
+
+    pevent->u.mouse.x = x < 0 ? 0 : x;
+    pevent->u.mouse.y = y < 0 ? 0 : y;
+
+    if (pevent->u.mouse.x >= width)
+    {
+        pevent->u.mouse.x = width - 1;
+    }
+
+    if (pevent->u.mouse.y >= height)
+    {
+        pevent->u.mouse.y = height - 1;
+    }
+}
+
 static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
 {
-    static FtkEvent event;
+    static FtkEvent event = {0};
 
     if (notify)
     {
@@ -228,8 +252,7 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
             /*
              * relative coordinate
              */
-            event.u.mouse.x += notify->xmovement;
-            event.u.mouse.y += notify->ymovement;
+            ftk_source_sylixos_rel_to_abs(notify, &event);
         }
         else
         {
@@ -244,7 +267,7 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
             if (event.u.mouse.press)
             {
                 event.type = FTK_EVT_MOUSE_MOVE;
-                return;
+                event.u.mouse.press = 0;
             }
             else
             {
@@ -261,7 +284,8 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
             }
             else
             {
-                return;
+                event.type = FTK_EVT_MOUSE_MOVE;
+                event.u.mouse.press = 0;
             }
         }
 
@@ -396,6 +420,7 @@ FtkSource* ftk_source_sylixos_input_create(void)
         guiInputDevReg(keyboard_array, max_keyboard_num, mouse_array, max_mouse_num);
         guiInputDevKeyboardHookSet(ftk_source_sylixos_on_keyboard_event);
         guiInputDevMouseHookSet(ftk_source_sylixos_on_pointer_event);
+        API_ThreadAttrSetStackSize(&attr, 12 * 1024);
         guiInputDevProcStart(&attr);
     }
 

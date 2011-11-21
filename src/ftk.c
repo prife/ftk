@@ -429,9 +429,9 @@ static void ftk_init_panel(void)
 	}
 	ftk_status_item_set_clicked_listener(item, button_close_top_clicked, NULL);
 
-	item = ftk_status_item_create(panel, 1, 32);
-	ftk_widget_set_id(item, IDC_ICON_ITEM);
 	gc.bitmap = ftk_theme_load_image(ftk_default_theme(), "flag-32"FTK_STOCK_IMG_SUFFIX);
+	item = ftk_status_item_create(panel, 1, gc.bitmap ? min(ftk_bitmap_width(gc.bitmap), 100) : 32);
+	ftk_widget_set_id(item, IDC_ICON_ITEM);
 	if(gc.bitmap != NULL)
 	{
 		gc.mask = FTK_GC_BITMAP;

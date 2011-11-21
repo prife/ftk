@@ -46,6 +46,8 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 
+#define div_t lib_div_t
+
 #define FTK_ROOT_DIR                    "/ftk"
 #define DATA_DIR                        FTK_ROOT_DIR
 #define LOCAL_DATA_DIR                  FTK_ROOT_DIR
@@ -76,6 +78,8 @@ void ftk_assert(int cond, const char* func, const char* file, int line);
 #define assert(cond)                    ftk_assert(cond, __func__, __FILE__, __LINE__)
 #endif
 
+#define min(a,b)                        ((a) < (b) ? (a) : (b))
+
 #include "./config_ftk.h"
 
 #define FTK_PATH_DELIM                  '/'
@@ -84,6 +88,6 @@ void ftk_assert(int cond, const char* func, const char* file, int line);
 #define FTK_HAS_DLOPEN                  1
 #define FTK_HAS_LUA                     1
 
-#define FTK_OPTIMIZE_WIDGET_PAINT       1
+#define FTK_OPTIMIZE_WIDGET_PAINT       0
 
 #endif  /* FTK_SYLIXOS_H */

@@ -155,6 +155,18 @@ static Ret ftk_key_board_send_key(FtkWidget* thiz, FtkKeyBoardCell* cell)
 		{
 			code = FTK_KEY_ENTER;
 		}
+		else if(strcmp(key, "LEFT") == 0)
+		{
+		    code = FTK_KEY_LEFT;
+		}
+		else if(strcmp(key, "RIGHT") == 0)
+		{
+		    code = FTK_KEY_RIGHT;
+		}
+		else if(strcmp(key, "CLR") == 0)
+		{
+		    code = FTK_KEY_CLR;
+		}
 		else
 		{
 			assert(!"not supported key.");

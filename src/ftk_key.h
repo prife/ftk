@@ -178,7 +178,8 @@ typedef enum _FtkKey
 	FTK_KEY_WLAN        =  0xFFA6,
 	FTK_KEY_POWER       =  0xFFA7,
 	FTK_KEY_MENU        = FTK_KEY_F2,
-	FTK_KEY_CHOOSE_IME  = FTK_KEY_F4
+	FTK_KEY_CHOOSE_IME  = FTK_KEY_F4,
+	FTK_KEY_CLR         =  0xFFA8,
 }FtkKey;
 
 #define FTK_IS_DIGIT(key) ((key) >= FTK_KEY_0 && (key) <= FTK_KEY_9)

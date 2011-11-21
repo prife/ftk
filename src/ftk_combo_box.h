@@ -43,12 +43,13 @@ FtkWidget* ftk_combo_box_create(FtkWidget* parent, int x, int y, int width, int 
 const char* ftk_combo_box_get_text(FtkWidget* thiz);
 Ret ftk_combo_box_set_text(FtkWidget* thiz, const char* text);
 Ret ftk_combo_box_append(FtkWidget* thiz, FtkBitmap* icon, const char* text);
-
-Ret ftk_combo_box_remove(FtkWidget* thiz, size_t index);
 int ftk_combo_box_get_item_nr(FtkWidget* thiz);
 Ret ftk_combo_box_get_item(FtkWidget* thiz, size_t index, const FtkBitmap** icon, const char** text);
-
 FtkWidget* ftk_combo_box_get_entry(FtkWidget* thiz);
+Ret ftk_combo_box_reset(FtkWidget* thiz);
+Ret ftk_combo_box_remove(FtkWidget* thiz, size_t index);
+Ret ftk_combo_box_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+int ftk_combo_box_get_selected(FtkWidget* thiz);
 
 FTK_END_DECLS
 
