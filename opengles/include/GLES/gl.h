@@ -56,7 +56,7 @@ extern "C" {
 # define GLAPI
 #	define EGL_PLATFORM_HEADER_INCLUDE <stdlib.h>
 
-#elif defined(SYLIXOS)
+#elif defined(SYLIXOS_LIB)
 
 # define GLAPI
 #   define EGL_PLATFORM_HEADER_INCLUDE <stdlib.h>

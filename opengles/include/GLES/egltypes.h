@@ -50,7 +50,7 @@ typedef CFbsBitmap * 	NativePixmapType;
 
 #include <ftk.h>
 
-#ifndef SYLIXOS
+#ifndef SYLIXOS_LIB
 typedef int DWORD;
 #endif
 typedef FtkDisplay* NativeDisplayType;
