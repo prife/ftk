@@ -92,6 +92,8 @@ static Ret ftk_popup_on_item_clicked(void* ctx, void* list)
 		priv->selected = i;
 
         ret = FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
+
+        priv->model->listener_ctx = NULL;
 	}
 	ftk_widget_unref((FtkWidget*)ctx);
 

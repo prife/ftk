@@ -449,10 +449,13 @@ static Ret ftk_list_view_on_scroll(FtkWidget* thiz, void* obj)
 static Ret ftk_list_view_on_model_changed(void* ctx, void* obj)
 {
 	FtkWidget* thiz = (FtkWidget*)ctx;
-	(void)obj;
-	if(ftk_widget_is_visible(thiz))
+	if(thiz)
 	{
-		ftk_widget_invalidate(thiz);
+	    (void)obj;
+	    if(ftk_widget_is_visible(thiz))
+	    {
+	        ftk_widget_invalidate(thiz);
+	    }
 	}
 
 	return RET_OK;

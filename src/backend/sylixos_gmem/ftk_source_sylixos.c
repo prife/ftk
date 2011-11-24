@@ -74,6 +74,11 @@ static void ftk_source_sylixos_init_key_map(void)
         f_key_map[i] = i;
     }
 
+    f_key_map[8]             =  FTK_KEY_BACKSPACE;
+    f_key_map[9]             =  FTK_KEY_TAB;
+    f_key_map[27]            =  FTK_KEY_ESC;
+    f_key_map[13]            =  FTK_KEY_ENTER;
+
     f_key_map[K_F1]          =  FTK_KEY_F1;
     f_key_map[K_F2]          =  FTK_KEY_F2;
     f_key_map[K_F3]          =  FTK_KEY_F3;
