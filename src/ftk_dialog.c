@@ -299,6 +299,35 @@ FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height)
 	return thiz;
 }
 
+FtkWidget* ftk_sub_dialog_create_ex(FtkWidget* parent, int attr, int x, int y, int width, int height)
+{
+    FtkWidget* thiz = ftk_sub_window_create(parent, FTK_DIALOG, attr, x, y, width, height);
+    return_val_if_fail(thiz != NULL, NULL);
+
+    thiz->priv_subclass[1] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+    if(thiz->priv_subclass[1] != NULL)
+    {
+        DECL_PRIV1(thiz, priv);
+        priv->parent_on_event = thiz->on_event;
+        priv->parent_on_paint = thiz->on_paint;
+        priv->parent_destroy  = thiz->destroy;
+        thiz->on_event = ftk_dialog_on_event;
+        thiz->on_paint = ftk_dialog_on_paint;
+        thiz->destroy  = ftk_dialog_destroy;
+
+        priv->bg = ftk_theme_load_image(ftk_default_theme(), "dialog_bg"FTK_STOCK_IMG_SUFFIX);
+        priv->title_bg = ftk_theme_load_image(ftk_default_theme(), "dialog_title_bg"FTK_STOCK_IMG_SUFFIX);
+        priv->title_height = ftk_bitmap_height(priv->title_bg);
+    }
+    else
+    {
+        ftk_widget_destroy(thiz);
+        thiz = NULL;
+    }
+
+    return thiz;
+}
+
 FtkWidget* ftk_dialog_create(int x, int y, int width, int height)
 {
 	return ftk_dialog_create_ex(FTK_ATTR_AUTO_LAYOUT, x, y, width, height);

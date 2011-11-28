@@ -676,6 +676,50 @@ FtkWidget* ftk_window_create(int type, unsigned int attr, int x, int y, int widt
 	return thiz;
 }
 
+FtkWidget* ftk_sub_window_create(FtkWidget* parent, int type, unsigned int attr, int x, int y, int width, int height)
+{
+    FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
+    return_val_if_fail(thiz != NULL, NULL);
+
+    PROFILE_TIME("window create begin");
+    thiz->priv_subclass[0] = (PrivInfo*)FTK_ZALLOC(sizeof(PrivInfo));
+    if(thiz->priv_subclass[0] != NULL)
+    {
+        DECL_PRIV0(thiz, priv);
+        const char* anim_hint = "";
+
+        priv->is_opaque = 1;
+        priv->display = ftk_default_display();
+
+        thiz->on_event = ftk_window_on_event;
+        thiz->on_paint = ftk_window_on_paint;
+        thiz->destroy  = ftk_window_destroy;
+
+        switch(type)
+        {
+            case FTK_DIALOG: anim_hint = "dialog"; break;
+            case FTK_WINDOW: anim_hint = "app_window";break;
+            case FTK_WINDOW_MISC: anim_hint = "misc_window";break;
+            case FTK_MENU_PANEL: anim_hint = "menu";break;
+            default:break;
+            {
+                break;
+            }
+        }
+        ftk_window_set_animation_hint(thiz, anim_hint);
+        ftk_widget_init(thiz, type, 0, x, y, width, height, attr);
+
+        ftk_widget_append_child(parent, thiz);
+    }
+    else
+    {
+        FTK_FREE(thiz);
+    }
+    PROFILE_TIME("window create end");
+
+    return thiz;
+}
+
 Ret ftk_window_disable_update(FtkWidget* thiz)
 {
 	DECL_PRIV0(thiz, priv);

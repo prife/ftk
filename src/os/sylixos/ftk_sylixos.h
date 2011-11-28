@@ -88,6 +88,6 @@ void ftk_assert(int cond, const char* func, const char* file, int line);
 #define FTK_HAS_DLOPEN                  1
 #define FTK_HAS_LUA                     1
 
-#define FTK_OPTIMIZE_WIDGET_PAINT       1
+#define FTK_OPTIMIZE_WIDGET_PAINT       0
 
 #endif  /* FTK_SYLIXOS_H */
