@@ -252,27 +252,12 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
     {
         event.type = FTK_EVT_NOP;
 
-        if (notify->ctype == MOUSE_CTYPE_REL)
-        {
-            /*
-             * relative coordinate
-             */
-            ftk_source_sylixos_rel_to_abs(notify, &event);
-        }
-        else
-        {
-            /*
-             * absolutely coordinate
-             */
-            ftk_source_sylixos_ad_to_abs(notify, &event);
-        }
-
         if (notify->kstat & MOUSE_LEFT)
         {
             if (event.u.mouse.press)
             {
                 event.type = FTK_EVT_MOUSE_MOVE;
-                event.u.mouse.press = 0;
+                event.u.mouse.press = 1;
             }
             else
             {
@@ -291,6 +276,24 @@ static void ftk_source_sylixos_on_pointer_event(mouse_event_notify* notify)
             {
                 event.type = FTK_EVT_MOUSE_MOVE;
                 event.u.mouse.press = 0;
+            }
+        }
+
+        if (event.type != FTK_EVT_MOUSE_UP)
+        {
+            if (notify->ctype == MOUSE_CTYPE_REL)
+            {
+                /*
+                 * relative coordinate
+                 */
+                ftk_source_sylixos_rel_to_abs(notify, &event);
+            }
+            else
+            {
+                /*
+                 * absolutely coordinate
+                 */
+                ftk_source_sylixos_ad_to_abs(notify, &event);
             }
         }
 
