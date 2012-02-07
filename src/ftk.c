@@ -395,6 +395,8 @@ static Ret button_close_top_clicked(void* ctx, void* obj)
 	return RET_OK;
 }
 
+#define min(a,b) ((a) < (b) ? (a) : (b))
+
 static void ftk_init_panel(void)
 {
 	FtkGc gc;
