@@ -271,6 +271,18 @@ FtkWidget* ftk_scroll_bar_create(FtkWidget* parent, int x, int y, int width, int
 	return thiz;
 }
 
+Ret ftk_scroll_bar_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	ftk_bitmap_unref(priv->bitmap);
+	priv->bitmap = bitmap;
+	ftk_bitmap_ref(priv->bitmap);
+
+	return RET_OK;
+}
+
 Ret ftk_scroll_bar_set_param(FtkWidget* thiz, int value, int max_value, int page_delta)
 {
 	DECL_PRIV0(thiz, priv);
