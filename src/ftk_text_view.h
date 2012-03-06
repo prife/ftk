@@ -45,6 +45,10 @@ Ret ftk_text_view_set_text(FtkWidget* thiz, const char* text, int len);
 Ret ftk_text_view_insert_text(FtkWidget* thiz, size_t pos, const char* text, int len);
 Ret ftk_text_view_set_readonly(FtkWidget* thiz, int readonly);
 
+int ftk_text_view_get_total_lines(FtkWidget* thiz);
+Ret ftk_text_view_set_noborder(FtkWidget* thiz, int b); 
+Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset);
+
 FTK_END_DECLS
 
 #endif/*FTK_TEXT_VIEW_H*/

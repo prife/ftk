@@ -60,6 +60,8 @@ typedef struct _TextViewPrivInfo
 
 	int lines_offset_nr;
 	unsigned short* lines_offset;
+
+    int noborder;
 }PrivInfo;
 
 #define TEXT_VIEW_H_MARGIN    4
@@ -319,7 +321,9 @@ static Ret ftk_text_view_input_char(FtkWidget* thiz, char c)
 	return ftk_text_view_input_str(thiz, str);
 }
 
-static Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
+/*should be static ??*/
+//static Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
+Ret ftk_text_view_v_move_caret(FtkWidget* thiz, int offset)
 {
 	int caret = 0;
 	int start = 0;
@@ -638,8 +642,9 @@ static Ret ftk_text_view_on_paint(FtkWidget* thiz)
 	int font_height = 0;
 	DECL_PRIV0(thiz, priv);
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
-	
-	ftk_text_view_paint_border(thiz, canvas, x, y, width, height);
+
+    if (!priv->noborder)
+	    ftk_text_view_paint_border(thiz, canvas, x, y, width, height);
 
 	if(priv->total_lines <= 0 && TB_LENGTH > 0)
 	{
@@ -743,6 +748,24 @@ FtkWidget* ftk_text_view_create(FtkWidget* parent, int x, int y, int width, int 
 	}
 
 	return thiz;
+}
+
+Ret ftk_text_view_set_noborder(FtkWidget* thiz, int b)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->noborder = b;
+
+	return RET_OK;
+}
+
+int ftk_text_view_get_total_lines(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_OK);
+
+	return priv->total_lines;
 }
 
 Ret ftk_text_view_set_text(FtkWidget* thiz, const char* text, int len)

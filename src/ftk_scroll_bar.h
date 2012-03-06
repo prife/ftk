@@ -48,6 +48,7 @@ Ret ftk_scroll_bar_dec(FtkWidget* thiz);
 Ret ftk_scroll_bar_pageup(FtkWidget* thiz);
 Ret ftk_scroll_bar_pagedown(FtkWidget* thiz);
 Ret ftk_scroll_bar_set_value(FtkWidget* thiz, int value);
+Ret ftk_scroll_bar_set_bitmap(FtkWidget* thiz, FtkBitmap* bitmap);
 
 FTK_END_DECLS
 
