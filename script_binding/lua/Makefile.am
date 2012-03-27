@@ -31,7 +31,7 @@ libftklua_la_CFLAGS+=-I$(srcdir)/lua
 bin_PROGRAMS=ftk_run
 ftk_run_SOURCES=lua_runner.c 
 ftk_run_LDFLAGS=$(MYLDFLAGS) -L$(abs_top_builddir)/script_binding/lua/ -lftklua \
-	 $(abs_top_builddir)/script_binding/lua/lua/.libs/liblua.a
+	 $(abs_top_builddir)/script_binding/lua/lua/liblua.la
 
 if FTK_BACKEND_PSP
 ftk_run_CFLAGS=-DLUA_USE_PSP
