@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2009-10-15 Li XianJing <xianjimli@hotmail.com> created
+ * 2012-05-09 yapo <woodysu@gmail.com> modify
  *
  */
 
@@ -41,6 +42,7 @@ FtkWidget* ftk_dialog_create(int x, int y, int width, int height);
 FtkWidget* ftk_dialog_create_ex(int attr, int x, int y, int width, int height);
 FtkWidget* ftk_sub_dialog_create_ex(FtkWidget* parent, int attr, int x, int y, int width, int height);
 Ret ftk_dialog_set_icon(FtkWidget* thiz, FtkBitmap* icon);
+Ret ftk_dialog_set_bg(FtkWidget* thiz, FtkBitmap* bitmap);
 Ret ftk_dialog_hide_title(FtkWidget* thiz);
 int ftk_dialog_run(FtkWidget* thiz);
 Ret ftk_dialog_quit(FtkWidget* thiz);
