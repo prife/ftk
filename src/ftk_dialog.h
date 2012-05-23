@@ -52,6 +52,8 @@ Ret ftk_dialog_quit_after(FtkWidget* thiz, int ms);
 
 int ftk_dialog_get_title_height(void);
 
+Ret ftk_dialog_set_bg(FtkWidget* thiz, FtkBitmap* bitmap);
+
 FTK_END_DECLS
 
 #endif/*FTK_DIALOG_H*/
