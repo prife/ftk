@@ -26,7 +26,7 @@
  * History:
  * ================================================================
  * 2009-11-02 Li XianJing <xianjimli@hotmail.com> created
- *
+ * 2012-5-22  woodysu@gmail.com modified
  */
 
 #include "ftk_util.h"
@@ -429,6 +429,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	int font_height = 0;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
+	if (!priv->noborder) {
 	gc.mask = FTK_GC_FG;
 	gc.fg = ftk_theme_get_border_color(ftk_default_theme(), FTK_ENTRY, ftk_widget_state(thiz));
 	ftk_canvas_set_gc(canvas, &gc);
@@ -448,6 +449,7 @@ static Ret ftk_entry_on_paint(FtkWidget* thiz)
 	ftk_canvas_draw_vline(canvas, x + 1, y + 1, height - 2);
 	ftk_canvas_draw_vline(canvas, x + width -2, y + 1, height - 2);
 	ftk_canvas_draw_hline(canvas, x + 2, y + height - 2, width-4);
+	}
 
 	ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz)); 
 	if(HAS_TEXT(priv) || priv->tips != NULL)
@@ -541,6 +543,17 @@ FtkWidget* ftk_entry_create(FtkWidget* parent, int x, int y, int width, int heig
 
 	return thiz;
 }
+
+Ret ftk_entry_set_noborder(FtkWidget* thiz, int b)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	priv->noborder = b;
+
+	return RET_OK;
+}
+
 
 static Ret ftk_entry_compute_visible_range(FtkWidget* thiz)
 {

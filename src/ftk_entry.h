@@ -26,6 +26,7 @@
  * History:
  * ================================================================
  * 2009-11-02 Li XianJing <xianjimli@hotmail.com> created
+ * 2012-5-22  woodysu@gmail.com modify
  *
  */
 
@@ -49,6 +50,7 @@ Ret ftk_entry_set_tips(FtkWidget* thiz, const char* tips);
 Ret ftk_entry_set_input_type(FtkWidget* thiz, FtkInputType type);
 Ret ftk_entry_insert_text(FtkWidget* thiz, size_t pos, const char* text);
 Ret ftk_entry_set_readonly(FtkWidget* thiz, int readonly);
+Ret ftk_entry_set_noborder(FtkWidget* thiz, int b);
 
 FTK_END_DECLS
 
