@@ -45,6 +45,10 @@ int        ftk_check_button_get_checked(FtkWidget* thiz);
 Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked);
 Ret        ftk_check_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
 
+Ret ftk_check_button_set_image(FtkWidget* thiz, FtkBitmap* onimg, FtkBitmap* offimg);
+int ftk_check_button_is_checked(FtkWidget* thiz);
+
+
 FTK_END_DECLS
 
 #endif/*FTK_CHECK_BUTTON_H*/
