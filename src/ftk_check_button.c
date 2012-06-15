@@ -44,6 +44,8 @@ typedef struct _CheckButtonPrivInfo
 	int icon_at_right;
 	FtkListener listener;
 	void* listener_ctx;
+	FtkBitmap* onimg;  
+	FtkBitmap* offimg; 
 }PrivInfo;
 
 static Ret ftk_check_button_check(FtkWidget* thiz)
@@ -160,16 +162,24 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 	const char** bg_imgs = NULL;
 	FTK_BEGIN_PAINT(x, y, width, height, canvas);
 
-	if(priv->is_radio)
-	{
-		bg_imgs = priv->checked ? radio_bg_on_imgs : radio_bg_off_imgs;
+	if (priv->onimg && priv->offimg) { 
+		if (priv->checked)
+			bitmap = priv->onimg;
+		else
+			bitmap = priv->offimg;
 	}
-	else
-	{
-		bg_imgs = priv->checked ? check_bg_on_imgs : check_bg_off_imgs;
-	}
+	else { // orignal code
+		if(priv->is_radio)
+		{
+			bg_imgs = priv->checked ? radio_bg_on_imgs : radio_bg_off_imgs;
+		}
+		else
+		{
+			bg_imgs = priv->checked ? check_bg_on_imgs : check_bg_off_imgs;
+		}
 
-	bitmap = ftk_theme_load_image(ftk_default_theme(), bg_imgs[ftk_widget_state(thiz)]);
+		bitmap = ftk_theme_load_image(ftk_default_theme(), bg_imgs[ftk_widget_state(thiz)]);
+	} 
 	return_val_if_fail(bitmap != NULL, RET_FAIL);
 
 	icon_w = ftk_bitmap_width(bitmap);
@@ -179,6 +189,7 @@ static Ret ftk_check_button_on_paint(FtkWidget* thiz)
 	dy = (height - icon_h) / 2;
 	dx = priv->icon_at_right ? width - icon_w : 0;
 	ftk_canvas_draw_bitmap_simple(canvas, bitmap, 0, 0, icon_w, icon_h, x + dx, y + dy);
+	if (NULL == priv->onimg) 
 	ftk_bitmap_unref(bitmap);
 
 	if(ftk_widget_get_text(thiz) != NULL)
@@ -198,6 +209,8 @@ static void ftk_check_button_destroy(FtkWidget* thiz)
 	if(thiz != NULL)
 	{
 		DECL_PRIV0(thiz, priv);
+		ftk_bitmap_unref(priv->onimg);  
+		ftk_bitmap_unref(priv->offimg); 
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
@@ -248,6 +261,22 @@ int        ftk_check_button_get_checked(FtkWidget* thiz)
 	return priv->checked;
 }
 
+Ret ftk_check_button_set_image(FtkWidget* thiz, FtkBitmap* onimg, FtkBitmap* offimg)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+
+	ftk_bitmap_unref(priv->onimg);
+	ftk_bitmap_unref(priv->offimg);
+
+	priv->onimg = onimg;
+	ftk_bitmap_ref(priv->onimg);
+	priv->offimg = offimg;
+	ftk_bitmap_ref(priv->offimg);
+
+	return RET_OK;
+}
+
 Ret ftk_check_button_set_icon_position(FtkWidget* thiz, int at_right)
 {
 	DECL_PRIV0(thiz, priv);
@@ -274,6 +303,13 @@ Ret        ftk_check_button_set_checked(FtkWidget* thiz, int checked)
 	}
 
 	return RET_OK;
+}
+
+int ftk_check_button_is_checked(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(thiz != NULL, RET_FAIL);
+	return priv->checked;
 }
 
 Ret ftk_check_button_set_clicked_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
