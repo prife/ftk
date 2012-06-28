@@ -48,6 +48,7 @@ typedef struct _EntryPrivInfo
 	int   selected_start;
 	int   input_type;
 	int   readonly;
+	int	  noborder;
 	FtkPoint caret_pos;
 	FtkSource* caret_timer;
 	FtkTextBuffer* text_buffer;
