@@ -25,6 +25,7 @@
 /*
  * History:
  * ================================================================
+ * 2012-6-29  woodysu@gmail.com modified
  * 2009-10-03 Li XianJing <xianjimli@hotmail.com> created
  *
  */
@@ -71,6 +72,13 @@ static Ret ftk_font_freetype_lookup (FtkFont* thiz, unsigned short code, FtkGlyp
 	glyph->w    = priv->face->glyph->bitmap.width;
 	glyph->h    = priv->face->glyph->bitmap.rows;
 	glyph->data = priv->face->glyph->bitmap.buffer;
+    // For fix a bug-- the actual bitmap of some fonts is larger than it's font size
+	if (glyph->h > thiz->height(thiz)) {
+		ftk_logw("Bug font code: %04x\n", code);
+		glyph->h = thiz->height(thiz);
+	}
+
+
 
 	return RET_OK;
 }
