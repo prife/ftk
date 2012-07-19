@@ -55,6 +55,7 @@ struct _FtkWidgetInfo
 	int width;
 	int height;
 	int visible;
+	int hide_self;
 	FtkWrapMode wrap_mode;
 
 	int painting;
@@ -405,7 +406,8 @@ const char* ftk_widget_get_text(FtkWidget* thiz)
 		return (char*)event.u.extra;
 	}
 
-	return thiz->priv->text != NULL ? thiz->priv->text : "";
+	//return thiz->priv->text != NULL ? thiz->priv->text : "";
+	return thiz->priv->text != NULL ? thiz->priv->text : NULL; 
 }
 
 void ftk_widget_set_attr(FtkWidget* thiz, unsigned int attr)
@@ -574,6 +576,8 @@ void ftk_widget_show(FtkWidget* thiz, int visible)
 	return_if_fail(thiz != NULL && thiz->priv != NULL);
 	if(thiz->priv->visible == visible) return;
 	
+	if(thiz->priv->hide_self) return ; 
+
 	thiz->priv->visible = visible;
 	ftk_event_init(&event, visible ? FTK_EVT_SHOW : FTK_EVT_HIDE);
 
@@ -616,6 +620,13 @@ void ftk_widget_show_all(FtkWidget* thiz, int visible)
 	ftk_widget_show(thiz, visible);
 
 	return;
+}
+
+void ftk_widget_hide_self(FtkWidget* thiz, int hide)
+{
+	return_if_fail(thiz != NULL && thiz->priv != NULL);
+	thiz->priv->hide_self = hide;
+	return ;
 }
 
 void ftk_widget_set_visible(FtkWidget* thiz, int visible)

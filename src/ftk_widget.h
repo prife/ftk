@@ -130,6 +130,7 @@ FtkWidget* ftk_widget_child(FtkWidget* thiz);
 FtkWidget* ftk_widget_last_child(FtkWidget* thiz);
 FtkWidget* ftk_widget_lookup(FtkWidget* thiz, int id);
 FtkWidget* ftk_widget_find_target(FtkWidget* thiz, int x, int y, int only_sensitive);
+void ftk_widget_hide_self(FtkWidget* thiz, int hide); 
 
 void ftk_widget_paint(FtkWidget* thiz, FtkRect *rects, int rect_nr);
 void ftk_widget_destroy(FtkWidget* thiz);
