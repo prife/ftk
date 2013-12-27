@@ -1,1 +1,1 @@
-SUBDIRS=launcher desktop calculator shell filemanager common gallery music
+SUBDIRS=launcher desktop calculator shell filemanager common gallery
