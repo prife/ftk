@@ -13,6 +13,7 @@ static Ret ftk_init_input(void)
 	FtkSource* source = NULL;
 	struct dirent* iter = NULL;
 	const char* extra_input = NULL;
+	struct stat buf;
 	DIR* dir = opendir("/dev/input");
 	
 	return_val_if_fail(dir != NULL, RET_FAIL);
@@ -20,10 +21,20 @@ static Ret ftk_init_input(void)
 	tsdev = getenv("FTK_TSLIB_FILE") ? getenv("FTK_TSLIB_FILE") : FTK_TSLIB_FILE;
 	while((iter = readdir(dir)) != NULL)
 	{
-		if(iter->d_name[0] == '.') continue;
-		if(!(iter->d_type & DT_CHR)) continue;
+		if(iter->d_name[0] == '.')
+			continue;
 
 		ftk_snprintf(filename, sizeof(filename), "/dev/input/%s", iter->d_name);
+		if (stat(filename, &buf) == -1)
+		{
+			perror("stat");
+			continue;
+		}
+
+		//if(!(iter->d_type & DT_CHR)) continue;
+		if(!(buf.st_mode & S_IFCHR))
+			continue;
+
 #ifdef USE_TSLIB
 		if(strcmp(filename, tsdev) == 0)
 		{
