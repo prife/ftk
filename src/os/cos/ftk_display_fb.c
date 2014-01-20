@@ -72,7 +72,7 @@ static hw_lcd_screen_info_t info;
 
 #ifdef FTK_GDI_LDD
 #include <dlfcn.h>
-#define GDI_LIBNAME "/minidvb/lib/libmindvbui.so"
+#define GDI_LIBNAME "/minidvb/lib/libminilcd.so"
 int lib_gdi_init()
 {
     void *handle;
