@@ -35,10 +35,13 @@
 #include "ftk_display.h"
 #include <linux/input.h>
 #include "ftk_source_input.h"
+#include "cos_ir_keymap.h"
 
 #ifndef EV_SYN
 #define EV_SYN 0x00
 #endif
+
+#define EVENT_SCANCODE_MAX              0x270
 
 typedef struct _PrivInfo
 {
@@ -54,7 +57,7 @@ typedef struct _PrivInfo
 #include <linux/input.h>
 
 /*FIXME: complete the keymap table.*/
-static unsigned short s_key_map[0x100] =
+static unsigned short s_key_map[EVENT_SCANCODE_MAX] =
 {
 	[KEY_1]           =  FTK_KEY_1,
 	[KEY_2]           =  FTK_KEY_2,
@@ -137,7 +140,24 @@ static unsigned short s_key_map[0x100] =
 //	[KEY_SEND]        =  FTK_KEY_SEND,
 //	[KEY_REPLY]       =  FTK_KEY_REPLY,
 //	[KEY_SAVE]        =  FTK_KEY_SAVE,
-	[KEY_POWER]       =  FTK_KEY_POWER
+	[KEY_POWER]       =  FTK_KEY_POWER,
+        /* cos ir key map */
+	[IR_KEY_POWER]    =  FTK_KEY_POWER,
+	[IR_KEY_UP]       =  FTK_KEY_UP,
+	[IR_KEY_DOWN]     =  FTK_KEY_DOWN,
+	[IR_KEY_LEFT]     =  FTK_KEY_LEFT,
+	[IR_KEY_RIGHT]    =  FTK_KEY_RIGHT,
+	[IR_KEY_ENTER]    =  FTK_KEY_ENTER,
+	[IR_KEY_1]        =  FTK_KEY_1,
+	[IR_KEY_2]        =  FTK_KEY_2,
+	[IR_KEY_3]        =  FTK_KEY_3,
+	[IR_KEY_4]        =  FTK_KEY_4,
+	[IR_KEY_5]        =  FTK_KEY_5,
+	[IR_KEY_6]        =  FTK_KEY_6,
+	[IR_KEY_7]        =  FTK_KEY_7,
+	[IR_KEY_8]        =  FTK_KEY_8,
+	[IR_KEY_9]        =  FTK_KEY_9,
+	[IR_KEY_0]        =  FTK_KEY_0
 };
 
 static int ftk_source_input_get_fd(FtkSource* thiz)
