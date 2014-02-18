@@ -235,6 +235,17 @@ void hw_lcd_sync(void)
     hw_gl_flip();
 }
 
+void hw_lcd_sync2(int x, int y, int w, int h)
+{
+    assert(gGLSurface.data != NULL);
+
+    glBindTexture(GL_TEXTURE_2D, textures[gGLSurface.texid]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, gGLSurface.width, gGLSurface.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, gGLSurface.data);
+
+    hw_gl_blit(&gGLSurface, x, y, w, h, x, y);
+    hw_gl_flip();
+}
+
 int hw_lcd_get_cpuaddr(void **addr)
 {
     assert(gGLSurface.data != NULL);
