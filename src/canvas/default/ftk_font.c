@@ -344,6 +344,14 @@ static void		ftk_font_cache_destroy(FtkFont* thiz)
 	return;
 }
 
+/* NOTE
+ * when using freetype font engine, the fonts size is not same, for example,
+ * when setting font size to 38, some font's actually size may be 38x35, while
+ * some may be 39x37. in order to cache all these irregular font, we need a
+ * larger font cache size for each font.
+ */
+#define FONT_CACHE_SIZE(fontsize) ((fontsize) + (fontsize)/10)
+
 FtkFont* ftk_font_cache_create (FtkFont* font, int max_glyph_nr)
 {
 	FtkFont* thiz = NULL;
@@ -364,14 +372,14 @@ FtkFont* ftk_font_cache_create (FtkFont* font, int max_glyph_nr)
 
 		priv->glyph_nr = 0;
 		thiz->font_desc = font->font_desc;
-		priv->font_height = font_height;
+		priv->font_height = FONT_CACHE_SIZE(font_height);
 		priv->max_glyph_nr = max_glyph_nr;
-		priv->one_glyph_size = sizeof(FtkGlyphCache) + font_height * font_height ;
+		priv->one_glyph_size = sizeof(FtkGlyphCache) + priv->font_height * priv->font_height;
 
 		priv->glyphs = (FtkGlyph*)FTK_ZALLOC(max_glyph_nr * priv->one_glyph_size);
 		priv->glyphs_ptr = (FtkGlyph**)FTK_ZALLOC(max_glyph_nr * sizeof(FtkGlyphCache*));
 		priv->free_glyphs = priv->glyphs;
-		
+
 		ftk_logd("%s: max_glyph_nr=%d memsize=%d\n", __func__, 
 			max_glyph_nr, max_glyph_nr * priv->one_glyph_size);
 	}
