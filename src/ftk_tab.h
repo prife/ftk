@@ -36,6 +36,15 @@
 
 FTK_BEGIN_DECLS
 
+enum FtkTabpageStyle
+{
+	FTK_TABPAGE_TOP,
+	FTK_TABPAGE_LEFT,
+	FTK_TABPAGE_BOTTOM,
+	FTK_TABPAGE_RIGHT,
+};
+
+FtkWidget* ftk_tab_create_ex(FtkWidget* parent, int x, int y, int width, int height, int style);
 FtkWidget* ftk_tab_create(FtkWidget* parent, int x, int y, int width, int height);
 FtkWidget* ftk_tab_page_create(FtkWidget* parent, int x, int y, int width, int height);
 

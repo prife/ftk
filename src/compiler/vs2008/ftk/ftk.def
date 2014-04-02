@@ -404,6 +404,7 @@ ftk_strs_cat
 ftk_strtol
 ftk_tab_add_page
 ftk_tab_create
+ftk_tab_create_ex
 ftk_tab_get_active_page
 ftk_tab_get_page
 ftk_tab_get_page_count
