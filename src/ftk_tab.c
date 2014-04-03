@@ -122,6 +122,8 @@ static FtkWidget* ftk_tab_page_create_internal(FtkWidget* parent)
 	return thiz;
 }
 
+#if 0
+//TODO: fix bug
 static Ret ftk_tab_page_tab_calc_width(FtkWidget* thiz)
 {
 	int len = 0;
@@ -139,6 +141,7 @@ static Ret ftk_tab_page_tab_calc_width(FtkWidget* thiz)
 
 	return RET_OK;
 }
+#endif
 
 static Ret ftk_tab_on_event(FtkWidget* thiz, FtkEvent* event)
 {
@@ -167,7 +170,7 @@ static Ret ftk_tab_on_event(FtkWidget* thiz, FtkEvent* event)
 	if(event->type == FTK_EVT_MOVE_RESIZE || event->type == FTK_EVT_RESIZE)
 	{
 		int i = 0;
-		int y = FTK_TAB_HANDLE_HEIGHT + ftk_bitmap_height(priv->bar_pressed);
+		int y = priv->tab_height + ftk_bitmap_height(priv->bar_pressed);
 		int w = ftk_widget_width(thiz);
 		int h = ftk_widget_height(thiz) - y;
 
@@ -303,8 +306,11 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 		break;
 	}
 
-	ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER,
-		ox, oy, priv->tab_width, priv->tab_height);
+	if (bitmap != NULL)
+	{
+		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER,
+			ox, oy, priv->tab_width, priv->tab_height);
+	}
 
 	w = priv->tab_width;
 	if(page->icon != NULL)
@@ -323,7 +329,7 @@ static Ret ftk_tab_paint_one_tab(FtkWidget* thiz, int index)
 		const char* text = page->text;
 		ftk_text_layout_init(text_layout, text, -1, canvas, w);
 
-		oy = oy + FTK_HALF(FTK_TAB_HANDLE_HEIGHT);
+		oy = oy + FTK_HALF(priv->tab_height);
 		if(ftk_text_layout_get_visual_line(text_layout, &line) == RET_OK)
 		{
 			ox = ox + FTK_HALF(w - line.extent);
@@ -396,7 +402,9 @@ static void ftk_tab_destroy(FtkWidget* thiz)
 	return;
 }
 
-FtkWidget* ftk_tab_create_ex(FtkWidget* parent, int x, int y, int width, int height, int style)
+FtkWidget* ftk_tab_create_ex(FtkWidget* parent,
+        int x, int y, int width, int height,
+        int tab_width, int tab_height, int style)
 {
 	FtkWidget* thiz = (FtkWidget*)FTK_ZALLOC(sizeof(FtkWidget));
 	return_val_if_fail(thiz != NULL, NULL);
@@ -412,6 +420,9 @@ FtkWidget* ftk_tab_create_ex(FtkWidget* parent, int x, int y, int width, int hei
 		ftk_widget_init(thiz, FTK_TAB, 0,
 			x, y, width, height, FTK_ATTR_TRANSPARENT|FTK_ATTR_BG_FOUR_CORNER);
 		ftk_widget_append_child(parent, thiz);
+
+		priv->tab_width = tab_width;
+		priv->tab_height = tab_height;
 
 		priv->style = (style < FTK_TABPAGE_TOP || style > FTK_TABPAGE_RIGHT) ?
 			FTK_TABPAGE_LEFT : style;
@@ -438,7 +449,59 @@ FtkWidget* ftk_tab_create_ex(FtkWidget* parent, int x, int y, int width, int hei
 
 FtkWidget* ftk_tab_create(FtkWidget* parent, int x, int y, int width, int height)
 {
-	return ftk_tab_create_ex(parent, x, y, width, height, FTK_TABPAGE_LEFT);
+	return ftk_tab_create_ex(parent, x, y, width, height,
+            FTK_TAB_HANDLE_WIDTH, FTK_TAB_HANDLE_HEIGHT, FTK_TABPAGE_LEFT);
+}
+
+/* return the tab_width, not the widget length */
+int ftk_tab_get_width(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, -1);
+	return priv->tab_width;
+}
+
+/* return the tab_height, not the widget height */
+int ftk_tab_get_height(FtkWidget* thiz)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, -1);
+	return priv->tab_height;
+}
+
+int ftb_tab_set_img(FtkWidget* thiz, FtkBitmap* bitmap, int which)
+{
+	DECL_PRIV0(thiz, priv);
+	FtkBitmap** origin = NULL;
+	return_val_if_fail(priv != NULL, -1);
+	switch (which)
+	{
+	case FTK_TAB_IMG_NORMAL:
+		origin = &priv->normal;
+		break;
+	case FTK_TAB_IMG_PRESSED:
+		origin = &priv->pressed;
+		break;
+	case FTK_TAB_IMG_SELECTED:
+		origin = &priv->selected;
+		break;
+	case FTK_TAB_IMG_BAR_SELECTED:
+		origin = &priv->bar_selected;
+		break;
+	case FTK_TAB_IMG_BAR_PRESSED:
+		origin = &priv->bar_pressed;
+		break;
+	default:
+		break;
+	}
+
+	if (origin)
+	{
+		FTK_BITMAP_UNREF(*origin);
+		*origin = bitmap;
+	}
+
+	return 0;
 }
 
 int ftk_tab_get_page_count(FtkWidget* thiz)
@@ -492,7 +555,7 @@ Ret ftk_tab_remove_page(FtkWidget* thiz, int index)
 		priv->pages[i] = priv->pages[i+1];
 	}
 	priv->page_use_nr--;
-	ftk_tab_page_tab_calc_width(thiz);
+	//ftk_tab_page_tab_calc_width(thiz);
 
 	return RET_OK;
 }
@@ -525,7 +588,7 @@ FtkWidget* ftk_tab_add_page(FtkWidget* thiz, const char* text, FtkBitmap* icon)
 	{
 		ftk_bitmap_ref(icon);
 	}
-	ftk_tab_page_tab_calc_width(thiz);
+	//ftk_tab_page_tab_calc_width(thiz);
 	iter->page = ftk_tab_page_create_internal(thiz);
 	ftk_tab_set_active_page(thiz, priv->page_use_nr - 1);
 

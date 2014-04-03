@@ -44,7 +44,18 @@ enum FtkTabpageStyle
 	FTK_TABPAGE_RIGHT,
 };
 
-FtkWidget* ftk_tab_create_ex(FtkWidget* parent, int x, int y, int width, int height, int style);
+enum FtkTabImageType
+{
+    FTK_TAB_IMG_NORMAL,
+    FTK_TAB_IMG_PRESSED,
+    FTK_TAB_IMG_SELECTED,
+    FTK_TAB_IMG_BAR_SELECTED,
+    FTK_TAB_IMG_BAR_PRESSED,
+};
+
+FtkWidget* ftk_tab_create_ex(FtkWidget* parent,
+        int x, int y, int width, int height,
+        int tab_width, int tab_height, int style);
 FtkWidget* ftk_tab_create(FtkWidget* parent, int x, int y, int width, int height);
 FtkWidget* ftk_tab_page_create(FtkWidget* parent, int x, int y, int width, int height);
 
@@ -53,6 +64,16 @@ FtkWidget* ftk_tab_get_page(FtkWidget* thiz, int index);
 int        ftk_tab_get_page_index(FtkWidget* thiz, FtkWidget* page);
 Ret        ftk_tab_remove_page(FtkWidget* thiz, int index);
 FtkWidget* ftk_tab_add_page(FtkWidget* thiz, const char* text, FtkBitmap* icon);
+
+/*which: enum FtkTabImageType */
+int ftb_tab_set_img(FtkWidget* thiz, FtkBitmap* bitmap, int which);
+
+/**NOTE: the following is not same with 
+ *  ftk_widget_width
+ *  ftk_widget_height
+ */
+int ftk_tab_get_width(FtkWidget* thiz);
+int ftk_tab_get_height(FtkWidget* thiz);
 
 int ftk_tab_get_active_page(FtkWidget* thiz);
 Ret ftk_tab_set_active_page(FtkWidget* thiz, int index);

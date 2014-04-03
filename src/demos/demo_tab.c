@@ -52,7 +52,7 @@ static void add_page(FtkWidget* tab, const char* text, FtkBitmap* bitmap)
 	int height = 0;
 	FtkWidget* page = NULL;
 	FtkWidget* button = NULL;
-	
+
 	page = ftk_tab_add_page(tab, text, bitmap);
 	/* NOTE: set TRANSPARENT to page for dvtapp in cos */
 	ftk_widget_set_attr(page, FTK_ATTR_TRANSPARENT);
@@ -61,12 +61,12 @@ static void add_page(FtkWidget* tab, const char* text, FtkBitmap* bitmap)
 	height = ftk_widget_height(page);
 
 	button = ftk_button_create(page, 0, height/2-30, width/2, 60);
-	ftk_widget_set_text(button, text); 
+	ftk_widget_set_text(button, text);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, tab);
-	
+
 	button = ftk_button_create(page, width/2, height/2-30, width/2, 60);
-	ftk_widget_set_text(button, text); 
+	ftk_widget_set_text(button, text);
 	ftk_widget_show(button, 1);
 	ftk_button_set_clicked_listener(button, button_default_clicked, tab);
 
@@ -90,39 +90,32 @@ FTK_HIDE int FTK_MAIN(int argc, char* argv[])
 	height = ftk_widget_height(win);
 	ftk_window_set_animation_hint(win, "app_main_window");
 
-	ftk_snprintf(filename, FTK_MAX_PATH, "%s/paper.jpg", 
+	ftk_snprintf(filename, FTK_MAX_PATH, "%s/jpeg1.jpg",
 		ftk_config_get_test_data_dir(ftk_default_config()));
+	image = ftk_image_create(win, width/4, height/4, width/2 , height/2);
+	ftk_image_set_image(image, ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
 
-	image = ftk_image_create(win, 0, 0, ftk_widget_width(win), ftk_widget_height(win));
-	ftk_image_set_image(image, 
-		ftk_bitmap_factory_load(ftk_default_bitmap_factory(), filename));
-#if 1
+	//tab = ftk_tab_create(win, width/4, height/4, width/2 , height/2);
+	tab = ftk_tab_create_ex(win, width/4, height/4, width/2 , height/2, 120, 50, FTK_TABPAGE_LEFT);
+
 	bitmap = ftk_theme_load_image(ftk_default_theme(), "mime_audio"FTK_STOCK_IMG_SUFFIX);
-
-	//tab = ftk_tab_create(win, 100, 100, 400, 200);
-	//tab = ftk_tab_create_ex(win, x, y, width, height, FTK_TABPAGE_TOP);
-	//tab = ftk_tab_create_ex(win, x, y, width, height, FTK_TABPAGE_RIGHT);
-	//tab = ftk_tab_create_ex(win, x, y, width, height, FTK_TABPAGE_BOTTOM);
-	tab = ftk_tab_create_ex(win, 100, 100, 400, 200, FTK_TABPAGE_LEFT);
-
 	add_page(tab, "General", bitmap);
 	add_page(tab, "Graphic", bitmap);
 	add_page(tab, "Audio", bitmap);
 
 	ftk_tab_set_active_page(tab, 0);
-	
+
 	button = ftk_button_create(win, width/4, height - 50, width/2, 50);
-	ftk_widget_set_text(button, _("Quit")); 
+	ftk_widget_set_text(button, _("Quit"));
 	ftk_widget_show(button, 1);
 
 	ftk_button_set_clicked_listener(button, button_quit_clicked, win);
 	button = ftk_button_create(win, width/4, height - 100, width/2, 50);
-	ftk_widget_set_text(button, _("create")); 
+	ftk_widget_set_text(button, _("create"));
 	ftk_widget_show(button, 1);
 
 	ftk_button_set_clicked_listener(button, button_create_clicked, win);
-#else
-#endif
+
 	ftk_widget_show_all(win, 1);
 	FTK_QUIT_WHEN_WIDGET_CLOSE(win);
 	FTK_BITMAP_UNREF(bitmap);
