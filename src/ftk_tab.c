@@ -201,6 +201,7 @@ static Ret ftk_tab_on_event(FtkWidget* thiz, FtkEvent* event)
 			if(page != NULL && page->page->children != NULL)
 			{
 				ftk_window_set_focus(ftk_widget_toplevel(thiz), page->page->children);
+				ftk_widget_invalidate(page->page);
 			}
 			return RET_REMOVE;
 		}
