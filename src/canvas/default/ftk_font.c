@@ -349,8 +349,10 @@ static void		ftk_font_cache_destroy(FtkFont* thiz)
  * when setting font size to 38, some font's actually size may be 38x35, while
  * some may be 39x37. in order to cache all these irregular font, we need a
  * larger font cache size for each font.
+ * WARNING: must be aligned, or you may get 'Bus error' when running.
  */
-#define FONT_CACHE_SIZE(fontsize) ((fontsize) + (fontsize)/10)
+#define FTK_ALIGN(size, align)    (((size) + (align) - 1) & ~((align) - 1))
+#define FONT_CACHE_SIZE(fontsize) FTK_ALIGN((fontsize) + (fontsize)/10, 4)
 
 FtkFont* ftk_font_cache_create (FtkFont* font, int max_glyph_nr)
 {
