@@ -3,6 +3,7 @@
 #include <pthread.h>
 #include <stdarg.h>
 #include <unistd.h>
+#include "ftk_source_primary.h"
 
 #define LDR_DATA_VSPACE      50
 #define PROGRESS_BAR_HIGHT   30
@@ -126,6 +127,7 @@ int wait_response(void)
     return 0;
 }
 
+static FtkSource* minor_source;
 static int loader_ui_main(int argc, char** argv)
 {
     static const char* lab_table[] =
@@ -238,6 +240,11 @@ static int loader_ui_main(int argc, char** argv)
         ftk_main_loop_add_source(ftk_default_main_loop(), timer);
     }
 
+    {
+        minor_source = ftk_source_primary_create((FtkOnEvent)ftk_wnd_manager_queue_event, ftk_default_wnd_manager());
+        ftk_main_loop_add_source(ftk_default_main_loop(), minor_source);
+    }
+
     //run
     ftk_widget_show_all(win, 1);
 
@@ -251,7 +258,6 @@ static int loader_ui_main(int argc, char** argv)
 #include "ftk_event.h"
 #include "ftk_globals.h"
 #include "ftk_main_loop.h"
-#include "ftk_source_primary.h"
 
 static int _ldrui_set_label_text(int who, const char * string)
 {
@@ -323,7 +329,9 @@ int ldrui_set_progress(int percent)
 
     //send event
     //wait_init();
-    ftk_source_queue_event(ftk_primary_source(), &event);
+    //ftk_source_queue_event(ftk_primary_source(), &event);
+    assert(minor_source != NULL);
+    ftk_source_queue_event(minor_source, &event);
     //wait_response();
 
     return 0;
