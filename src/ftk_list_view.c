@@ -58,6 +58,10 @@ typedef struct _ListViewPrivInfo
 
 	void* listener_ctx;
 	FtkListener listener;
+
+	/* called when switching item */
+	void* switch_ctx;
+	FtkListener switch_listener;
 }PrivInfo;
 
 Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current)
@@ -95,6 +99,7 @@ Ret ftk_list_view_set_cursor(FtkWidget* thiz, int current)
 
 static Ret ftk_list_view_move_cursor(FtkWidget* thiz, int offset)
 {
+	Ret ret;
 	DECL_PRIV0(thiz, priv);
 	int total = ftk_list_model_get_total(priv->model);
 	return_val_if_fail(total > 0, RET_FAIL);
@@ -109,7 +114,9 @@ static Ret ftk_list_view_move_cursor(FtkWidget* thiz, int offset)
 		return RET_FAIL;
 	}
 
-	return ftk_list_view_set_cursor(thiz, priv->current + offset);
+	ret = ftk_list_view_set_cursor(thiz, priv->current + offset);
+	FTK_CALL_LISTENER(priv->switch_listener, priv->switch_ctx, thiz);
+	return ret;
 }
 
 static Ret ftk_list_view_set_cursor_by_pointer(FtkWidget* thiz, int x, int y)
@@ -191,10 +198,10 @@ static Ret ftk_list_view_on_key_event(FtkWidget* thiz, FtkEvent* event)
 				{
 					priv->is_active = 1;
 					ftk_list_view_set_cursor(thiz, priv->current);
+					FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 				}
 				else
 				{
-					FTK_CALL_LISTENER(priv->listener, priv->listener_ctx, thiz);
 					priv->is_active = 0;
 					ftk_list_view_set_cursor(thiz, priv->current);
 				}
@@ -346,7 +353,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 			break;
 		}
 
-		if((priv->visible_start + i) == priv->current)
+		if((priv->visible_start + i) == priv->current && ftk_widget_is_focused(thiz))
 		{
 			bitmap = priv->is_active ? priv->bg_active : priv->bg_focus;
 		}
@@ -357,7 +364,8 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 
 		dx = x + FTK_H_MARGIN;
 		w = width - 2 * FTK_H_MARGIN - scroll_bar_width;
-		ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, dx, dy, w, priv->item_height);
+		if (bitmap != NULL)
+			ftk_canvas_draw_bg_image(canvas, bitmap, FTK_BG_FOUR_CORNER, dx, dy, w, priv->item_height);
 		ftk_canvas_set_gc(canvas, ftk_widget_get_gc(thiz));
 		ftk_list_render_paint(priv->render, canvas, priv->visible_start + i, dx, dy, w, priv->item_height);
 		dy += priv->item_height;
@@ -386,9 +394,12 @@ static void ftk_list_view_destroy(FtkWidget* thiz)
 
 		ftk_list_render_destroy(priv->render);
 		ftk_list_model_unref(priv->model);
-		ftk_bitmap_unref(priv->bg_normal);
-		ftk_bitmap_unref(priv->bg_focus);
-		ftk_bitmap_unref(priv->bg_active);
+		if (priv->bg_normal)
+			ftk_bitmap_unref(priv->bg_normal);
+		if (priv->bg_focus)
+			ftk_bitmap_unref(priv->bg_focus);
+		if (priv->bg_active)
+			ftk_bitmap_unref(priv->bg_active);
 		FTK_ZFREE(priv, sizeof(PrivInfo));
 	}
 
@@ -520,6 +531,17 @@ Ret ftk_list_view_set_clicked_listener(FtkWidget* thiz, FtkListener listener, vo
 	return RET_OK;
 }
 
+Ret ftk_list_view_set_switch_listener(FtkWidget* thiz, FtkListener listener, void* ctx)
+{
+	DECL_PRIV0(thiz, priv);
+	return_val_if_fail(priv != NULL, RET_FAIL);
+
+	priv->switch_listener = listener;
+	priv->switch_ctx = ctx;
+
+	return RET_OK;
+}
+
 #include "ftk_list_model_default.h"
 #include "ftk_list_render_default.h"
 
@@ -541,3 +563,24 @@ FtkWidget* ftk_list_view_default_create(FtkWidget* parent, int x, int y, int wid
 
 	return list;
 }
+
+int ftk_list_veiw_set_image(FtkWidget* thiz,
+                            FtkBitmap* normal,
+                            FtkBitmap* focus,
+                            FtkBitmap* active)
+{
+	DECL_PRIV0(thiz, priv);
+	if (priv->bg_normal)
+		ftk_bitmap_unref(priv->bg_normal);
+	if (priv->bg_focus)
+		ftk_bitmap_unref(priv->bg_focus);
+	if (priv->bg_active)
+		ftk_bitmap_unref(priv->bg_active);
+
+	priv->bg_normal = normal;
+	priv->bg_focus = focus;
+	priv->bg_active = active;
+
+	return 0;
+}
+

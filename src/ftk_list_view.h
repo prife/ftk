@@ -51,6 +51,13 @@ Ret ftk_list_view_repaint_focus_item(FtkWidget* thiz);
 
 FtkWidget* ftk_list_view_default_create(FtkWidget* parent, int x, int y, int width, int height);
 
+int ftk_list_veiw_set_image(FtkWidget* thiz,
+                            FtkBitmap* normal,
+                            FtkBitmap* focus,
+                            FtkBitmap* active);
+
+Ret ftk_list_view_set_switch_listener(FtkWidget* thiz, FtkListener listener, void* ctx);
+
 FTK_END_DECLS
 
 #endif/*FTK_LIST_VIEW_H*/

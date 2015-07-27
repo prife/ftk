@@ -45,6 +45,8 @@
 		else\
 		{\
 			FTK_ALPHA(color, pdst, alpha);\
+			pdst->a = (((int)(color->a) + (int)(pdst->a)) > 255) ? \
+					  255 : ((int)(color->a) + (int)(pdst->a));\
 		}\
 	}while(0);
 
@@ -71,7 +73,7 @@ static FtkFontManager* font_manager_ref()
 
 	if(s_font_manager == NULL)
 	{
-		s_font_manager = ftk_font_manager_create(10);
+		s_font_manager = ftk_font_manager_create(FTK_FONTTYPE_MAX);
 	}
 
 	return s_font_manager;

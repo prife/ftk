@@ -277,6 +277,8 @@ typedef struct _FtkCommitInfo
 #define FTK_IM_PREEDITOR_MAX_ROW   5
 #define FTK_TAB_WIDTH              4
 
+
+#define FTK_FONTTYPE_MAX           16 //how many kinds of fonts supported
 #ifndef FTK_FONT_SIZE
 #define FTK_FONT_SIZE              16
 #endif

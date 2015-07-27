@@ -237,11 +237,11 @@ static Ret  ftk_wnd_manager_default_relayout_one(FtkWndManager* thiz, FtkWidget*
 		{
 			if(ftk_widget_has_attr(window, FTK_ATTR_AUTO_LAYOUT))
 			{
-				x = FTK_DIALOG_MARGIN;
-				w = ftk_display_width(ftk_default_display()) - FTK_DIALOG_MARGIN * 2; 
+				w = ftk_widget_width(window);
 				h = work_area_h < ftk_widget_height(window) ? work_area_h : ftk_widget_height(window);
+				x = (ftk_display_width(ftk_default_display()) - w) / 2;
 				y = (work_area_h - h) / 2;
-				
+
 				if(!ftk_wnd_manager_default_has_fullscreen_win(thiz))
 				{
 					y += ftk_wnd_manager_get_status_bar_height(thiz);
