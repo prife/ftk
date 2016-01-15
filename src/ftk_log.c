@@ -34,17 +34,18 @@
 
 #ifdef IPHONE
 static FILE* log_file = NULL;
-#elif defined(ANDROID) && defined(ANDROID_NDK)
-#include "ftk_jni.h"
+#elif defined(ANDROID)
+//#include "ftk_jni.h"
+#include <android/log.h>
 #endif
 
 Ret ftk_log(const char* format, va_list ap)
 {
+#if defined(ANDROID)
+       __android_log_vprint(ANDROID_LOG_INFO, "MinidvbFtk", format, ap);
+#else
 	char buffer[1024] = {0};
 	ftk_vsnprintf(buffer, sizeof(buffer), format, ap);
-
-	printf("%s", buffer);
-
 #ifdef IPHONE
 	if(log_file == NULL)
 	{
@@ -57,8 +58,9 @@ Ret ftk_log(const char* format, va_list ap)
 	}
 	fprintf(log_file, buffer);
 	fflush(log_file);
-#elif defined(ANDROID) && defined(ANDROID_NDK)
-	Android_Log(buffer);
+#else
+	printf("%s", buffer);
+#endif
 #endif
 
 	return RET_OK;
