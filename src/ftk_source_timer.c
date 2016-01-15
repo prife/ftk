@@ -48,6 +48,14 @@ static int ftk_source_timer_check(FtkSource* thiz)
 {
 	DECL_PRIV(thiz, priv);
 	int t = priv->next_time - ftk_get_relative_time();
+	/* NOTE: the system time will be Sat Jan  1 00:00:10 GMT 2000 when booting.
+	 * and it will update with the Time from ts if the cabled is connected.
+	 * This will cause ftk's exsited soft-timer work abnomally.
+	 * So, the next_time should not be large than the current time. If it does,
+	 * the STB's system time has been updated.
+	 **/
+	if (t > priv->interval)
+		return 0;
 
 	t = t < 0 ? 0 : t;
 
