@@ -317,6 +317,7 @@ typedef struct _FtkCommitInfo
 #define FTK_ZALLOC(s)      calloc(1, s)
 #define FTK_FREE(p)        if(p) {free(p); p = NULL;}
 #define FTK_ZFREE(p, size) if(p) {memset((p), 0x00, (size)); free(p); p = NULL;}
+#define FTK_STRDUP(p)      p != NULL ? strdup(p) : NULL
 #else
 #define FTK_ALLOC(s)       ftk_allocator_alloc(ftk_default_allocator(), s)
 #define FTK_REALLOC(p, s)  ftk_allocator_realloc(ftk_default_allocator(), p, s)
