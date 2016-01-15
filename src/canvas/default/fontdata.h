@@ -55,7 +55,7 @@ typedef struct _Glyph
 	unsigned char w;
 	unsigned char h;
 	unsigned short code;
-	unsigned short unused;
+	unsigned short advance_x;
 	unsigned char* data;
 }Glyph;
 

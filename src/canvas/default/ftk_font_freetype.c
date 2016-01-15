@@ -71,6 +71,7 @@ static Ret ftk_font_freetype_lookup (FtkFont* thiz, unsigned short code, FtkGlyp
 	glyph->y    = priv->face->glyph->bitmap_top;
 	glyph->w    = priv->face->glyph->bitmap.width;
 	glyph->h    = priv->face->glyph->bitmap.rows;
+	glyph->advance_x = priv->face->glyph->advance.x >> 6;
 	glyph->data = priv->face->glyph->bitmap.buffer;
     // For fix a bug-- the actual bitmap of some fonts is larger than it's font size
 	if (glyph->h > thiz->height(thiz)) {

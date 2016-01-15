@@ -839,7 +839,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 		if((x + glyph.x + glyph.w) >= right) break;
 		if((y - glyph.y + glyph.h) >= bottom) break;
 
-		x = x + glyph.x;
+		x = ox + glyph.x;
 		y = y - glyph.y;
 
 		glyph_rect.x = x;
@@ -851,7 +851,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 		{
 			for(i = rect.y - glyph_rect.y; i < rect.height; i++,y++)
 			{
-				for(j = rect.x - glyph_rect.x, x = ox; j < rect.width; j++,x++)
+				for(j = rect.x - glyph_rect.x, x = ox + glyph.x; j < rect.width; j++,x++)
 				{
 					data = glyph.data[i * glyph.w + j];
 					offset = y * priv->w + x;
@@ -868,7 +868,7 @@ static Ret ftk_canvas_default_draw_string(FtkCanvas* thiz, int x, int y,
 		}
 
 		y = oy;
-		x = ox + glyph.x + glyph.w + 1;
+		x = ox + glyph.advance_x;
 		ox = x;
 	}
 

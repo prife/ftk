@@ -62,7 +62,7 @@ typedef struct _FGlyph
 	unsigned char w;
 	unsigned char h;
 	unsigned short code;
-	unsigned short unused;
+	unsigned short advance_x;
 	unsigned offset;
 }FGlyph;
 
@@ -273,7 +273,6 @@ Ret font_data_add_glyph(FontData* thiz, Glyph* glyph)
                 thiz->glyphs[i].w = glyph->w;
                 thiz->glyphs[i].h = glyph->h;
                 thiz->glyphs[i].code = glyph->code;
-                thiz->glyphs[i].unused = glyph->unused;
 				thiz->data_size += size;
 			}
             else
@@ -307,7 +306,10 @@ Ret font_data_get_glyph(FontData* thiz, unsigned short code, Glyph* glyph)
             glyph->w = thiz->glyphs[mid].w;
             glyph->h = thiz->glyphs[mid].h;
             glyph->code = thiz->glyphs[mid].code;
-            glyph->unused = thiz->glyphs[mid].unused;
+            /* NOTE and FIXME:
+             * the tools to create pixel-font file need update, so the following
+             * ugly code can be removed */
+            glyph->advance_x = thiz->glyphs[mid].w + glyph->x + 1;
 			if(thiz->data != NULL)
 			{
 				glyph->data = (unsigned char*)(thiz->data + (int)(thiz->glyphs[mid].offset));
