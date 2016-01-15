@@ -337,7 +337,7 @@ static Ret ftk_list_view_on_paint(FtkWidget* thiz)
 		priv->visible_start = (visible_start >= 0) ? visible_start : 0;
 	}
 	
-	if(priv->current >= total)
+	if(total > 0 && priv->current >= total)
 	{
 		priv->current = total - 1;
 	}
